@@ -1,4 +1,4 @@
-# Corpora search
+# Corproc search
 
 All source code related to my thesis. 
 
