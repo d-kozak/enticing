@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Corproc search",
+  "name": "Corproc semantic search engine",
   "icons": [
     {
       "src": "favicon.ico",
