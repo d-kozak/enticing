@@ -39,10 +39,10 @@ body {
     font-size: calc(6vh + 3em);
 }
 
-.search-bar-main input {
+.search-bar-main textarea {
     margin: auto;
     padding: 0 5px;
-    /*font-size: calc(1vh + 2em);*/
+    font-size: calc(1vh + 2em);
     border: solid 1px #5c5c5c;
     border-radius: 10px;
 }

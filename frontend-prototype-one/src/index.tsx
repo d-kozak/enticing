@@ -11,11 +11,15 @@ const SearchBar = () => {
         setQuery(newQuery);
     };
 
-    const inputSize = query.length > 20 ? query.length : 20;
+
+    const maxSize = 50;
+    const minSize = 40;
+    const colCount = query.length < minSize ? minSize : (query.length > maxSize ? maxSize : query.length)
+    const rowCount = (query.length / maxSize) + 1
 
     return <div>
-        <input size={inputSize} type="text" placeholder="Search..." value={query}
-               onChange={e => onQueryChange(e.target.value)}/>
+        <textarea rows={rowCount} cols={colCount} placeholder="Search..." value={query}
+                  onChange={e => onQueryChange(e.target.value)}/>
     </div>
 }
 
