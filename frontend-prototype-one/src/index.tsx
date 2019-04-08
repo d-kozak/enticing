@@ -13,7 +13,7 @@ const SearchBar = () => {
 
 
     const maxSize = 50;
-    const minSize = 40;
+    const minSize = 30;
     const colCount = query.length < minSize ? minSize : (query.length > maxSize ? maxSize : query.length)
     const rowCount = (query.length / maxSize) + 1
 
@@ -22,11 +22,10 @@ const SearchBar = () => {
                   onChange={e => onQueryChange(e.target.value)}/>
     </div>
 }
-
 const Logo = () => <h1>Corproc search</h1>
 
 const Header = () => <div className="Header">
-    <h1>Header</h1>
+    <button>Login</button>
 </div>
 
 const App = () => {
