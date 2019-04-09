@@ -25,7 +25,6 @@ const App = () => {
     return <div>
         <CssBaseline/>
         <MenuAppBar
-            showTitle={false}
             isLoggedIn={isLoggedId}
             setLoggedIn={handleLogin}/>
         <CorprocSnackBar isOpen={snackbarState.isOpen}
