@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import './App.css';
-import MenuAppBar from "./MenuAppBar";
+import MenuAppBar from "./CorprocAppBar";
 import {CssBaseline} from "@material-ui/core";
-import CorprocSnackBar from "./SimpleSnackbar";
+import CorprocSnackBar from "./CorprocSnackbar";
 
 
 const App = () => {

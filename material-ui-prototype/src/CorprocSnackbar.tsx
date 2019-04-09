@@ -17,7 +17,7 @@ export interface CorprocSnackBarProps extends WithStyles<typeof styles> {
     message: string
 }
 
-const SimpleSnackBar = (props: CorprocSnackBarProps) => {
+const CorprocSnackbar = (props: CorprocSnackBarProps) => {
     const {isOpen, setClosed, message, classes} = props;
 
     const handleClose = (event: React.SyntheticEvent<any>, reason: string) => {
@@ -53,4 +53,4 @@ const SimpleSnackBar = (props: CorprocSnackBarProps) => {
     />
 };
 
-export default withStyles(styles, {withTheme: true})(SimpleSnackBar);
+export default withStyles(styles, {withTheme: true})(CorprocSnackbar);
