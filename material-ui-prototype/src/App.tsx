@@ -4,6 +4,7 @@ import MenuAppBar from "./CorprocAppBar";
 import {CssBaseline} from "@material-ui/core";
 import CorprocSnackBar from "./CorprocSnackbar";
 import SearchBar from "./CenteredSearchBar";
+import LinearProgress from "@material-ui/core/es/LinearProgress";
 
 
 const App = () => {
@@ -14,6 +15,7 @@ const App = () => {
         message: ''
     });
 
+    const [showProgress, setShowProgress] = useState(false);
 
     const handleLogin = (isLoggedIn: boolean) => {
         setLoggedIn(isLoggedIn);
@@ -27,7 +29,11 @@ const App = () => {
         setSnackbarState({
             isOpen: true,
             message: `Quering '${query}'`
-        })
+        });
+        setShowProgress(true);
+        setTimeout(() => {
+            setShowProgress(false);
+        }, 3000);
     };
 
     return <div>
@@ -35,6 +41,7 @@ const App = () => {
         <MenuAppBar
             isLoggedIn={isLoggedId}
             setLoggedIn={handleLogin}/>
+        {showProgress && <LinearProgress color="secondary"/>}
         <SearchBar startSearching={startSearching}/>
         <CorprocSnackBar isOpen={snackbarState.isOpen}
                          setClosed={() => setSnackbarState({...snackbarState, isOpen: false})}
