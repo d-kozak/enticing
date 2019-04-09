@@ -4,9 +4,10 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 import createStyles from "@material-ui/core/es/styles/createStyles";
 import Typography from "@material-ui/core/Typography";
 import QueryInput from "./QueryInput";
+import {Theme} from "@material-ui/core/es";
 
 
-const styles = (theme: any) => createStyles({
+const styles = (theme: Theme) => createStyles({
     mainDiv: {
         textAlign: 'center',
         position: 'fixed',

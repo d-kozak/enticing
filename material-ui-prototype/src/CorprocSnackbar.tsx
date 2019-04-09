@@ -1,11 +1,11 @@
 import React from 'react';
 import {Snackbar} from "@material-ui/core";
 import IconButton from "@material-ui/core/es/IconButton";
-import {WithStyles} from "@material-ui/core/es";
+import {Theme, WithStyles} from "@material-ui/core/es";
 import CloseIcon from '@material-ui/icons/Close';
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
-const styles = (theme: any) => ({
+const styles = (theme: Theme) => ({
     close: {
         padding: theme.spacing.unit / 2,
     },

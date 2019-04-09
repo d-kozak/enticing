@@ -4,12 +4,16 @@ import * as React from "react";
 import {useEffect, useRef, useState} from "react";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
+import './QueryInput.css';
+import {Theme} from "@material-ui/core/es";
 
-const styles = (theme: any) => createStyles({
+
+const styles = (theme: Theme) => createStyles({
     inputStyle: {
+        border: 'solid 1px #bdbdbd',
         background: '#FFF',
         marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
+        marginRight: theme.spacing.unit
     }
 });
 
@@ -31,8 +35,10 @@ const QueryInput = (props: QueryInputProps) => {
         }, 100);
     }, []);
 
+
     return <div>
         <input
+            size={50}
             ref={searchRef}
             className={classes.inputStyle}
             value={query}
