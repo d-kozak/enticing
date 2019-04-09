@@ -13,6 +13,7 @@ import Grid from '@material-ui/core/Grid';
 
 import * as Yup from 'yup';
 import {TextField} from "formik-material-ui";
+import {Redirect} from "react-router";
 
 const styles = (theme: Theme) => createStyles({
     centered: {
@@ -34,7 +35,8 @@ const styles = (theme: Theme) => createStyles({
 
 
 export interface LoginProps extends WithStyles<typeof styles> {
-
+    login: (username: string, password: string) => Promise<{}>
+    isLoggedIn: boolean
 }
 
 interface LoginFormikProps {
@@ -55,9 +57,10 @@ const LoginSchema = Yup.object().shape({
 
 
 const Login = (props: LoginProps) => {
-    const {classes} = props;
+    const {classes, login, isLoggedIn} = props;
 
     return <Paper className={classes.centered}>
+        {isLoggedIn && <Redirect to="/"/>}
         <Typography variant="h4">Sign in</Typography>
         <Formik
             initialValues={{
@@ -66,9 +69,10 @@ const Login = (props: LoginProps) => {
             }}
             validationSchema={LoginSchema}
             onSubmit={(values: LoginFormikProps, actions: FormikActions<LoginFormikProps>) => {
-                // same shape as initial values
-                console.log(values);
-                actions.setSubmitting(false);
+                login(values.login, values.password)
+                    .then(() => {
+                        actions.setSubmitting(false);
+                    });
             }}
         >
             {({isSubmitting}) => (

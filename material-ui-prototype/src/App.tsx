@@ -20,11 +20,26 @@ const App = () => {
 
     const [showProgress, setShowProgress] = useState(false);
 
-    const handleLogin = (isLoggedIn: boolean) => {
-        setLoggedIn(isLoggedIn);
+    const handleLogout = () => {
+        setLoggedIn(false);
         setSnackbarState({
             isOpen: true,
-            message: isLoggedIn ? 'Logged in' : 'Logged out'
+            message: 'Logged out'
+        });
+    }
+
+    const handleLogin = (username: string, password: string) => {
+        setShowProgress(true);
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                setShowProgress(false);
+                setSnackbarState({
+                    isOpen: true,
+                    message: 'Logged in'
+                });
+                setLoggedIn(true);
+                resolve();
+            }, 2000);
         });
     }
 
@@ -39,17 +54,18 @@ const App = () => {
         }, 3000);
     };
 
+
     return <div>
         <CssBaseline/>
         <Router>
             <MenuAppBar
                 isLoggedIn={isLoggedId}
-                setLoggedIn={handleLogin}/>
+                handleLogout={handleLogout}/>
             {showProgress && <LinearProgress color="secondary"/>}
 
             <Switch>
                 <Route path="/" exact component={() => <SearchBar startSearching={startSearching}/>}/>
-                <Route path="/login" component={Login}/>
+                <Route path="/login" component={() => <Login isLoggedIn={isLoggedId} login={handleLogin}/>}/>
                 <Route component={Unknown}/>
             </Switch>
         </Router>

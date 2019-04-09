@@ -27,11 +27,11 @@ const styles = createStyles({
 
 export interface CorprocAppBarProps extends WithStyles<typeof styles> {
     isLoggedIn: boolean,
-    setLoggedIn: (isLoggedIn: boolean) => void
+    handleLogout: () => void
 }
 
 const CorprocAppBar = (props: CorprocAppBarProps) => {
-    const {classes, isLoggedIn, setLoggedIn} = props;
+    const {classes, isLoggedIn, handleLogout: parentHandleLogout} = props;
 
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -45,20 +45,15 @@ const CorprocAppBar = (props: CorprocAppBarProps) => {
         setAnchorEl(null);
     };
 
-    const handleLogin = () => {
-        setLoggedIn(true);
-        handleClose();
-    }
-
     const handleLogout = () => {
-        setLoggedIn(false);
+        parentHandleLogout();
         handleClose();
     }
 
     const LoginLink = (props: any) => <Link to="/login" {...props} />
 
     const MainPageButtons = () => <React.Fragment>
-        {!isLoggedIn && <Button component={LoginLink} onClick={handleLogin} color="inherit">Login</Button>}
+        {!isLoggedIn && <Button component={LoginLink} color="inherit">Login</Button>}
         {isLoggedIn && <div>
             <IconButton
                 aria-owns={open ? 'menu-appbar' : undefined}
