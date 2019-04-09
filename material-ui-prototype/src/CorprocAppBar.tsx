@@ -10,6 +10,7 @@ import Menu from '@material-ui/core/Menu';
 import createStyles from "@material-ui/core/es/styles/createStyles";
 import {WithStyles} from "@material-ui/core/es";
 import {Button} from "@material-ui/core";
+import {Link} from "react-router-dom";
 
 const styles = createStyles({
     root: {
@@ -54,6 +55,7 @@ const CorprocAppBar = (props: CorprocAppBarProps) => {
         handleClose();
     }
 
+    const LoginLink = (props: any) => <Link to="/login" {...props} />
 
     return <div className={classes.root}>
         <AppBar position="static">
@@ -61,7 +63,7 @@ const CorprocAppBar = (props: CorprocAppBarProps) => {
                 <Typography variant="h6" color="inherit" className={classes.grow}>
                     Corproc Search
                 </Typography>
-                {!isLoggedIn && <Button onClick={handleLogin} color="inherit">Login</Button>}
+                {!isLoggedIn && <Button component={LoginLink} onClick={handleLogin} color="inherit">Login</Button>}
                 {isLoggedIn && <div>
                     <IconButton
                         aria-owns={open ? 'menu-appbar' : undefined}
