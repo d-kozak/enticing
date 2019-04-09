@@ -11,10 +11,14 @@ const styles = (theme: Theme) => createStyles({
     mainDiv: {
         textAlign: 'center',
         position: 'fixed',
-        top: '50%',
+        top: '40%',
         left: '50%',
         transform: 'translate(-50%, -50%)'
     },
+    title: {
+        marginBottom: '30px',
+        fontSize: 'calc(3vh + 3em)'
+    }
 });
 
 export interface CenteredSearchBar extends WithStyles<typeof styles> {
@@ -24,7 +28,7 @@ export interface CenteredSearchBar extends WithStyles<typeof styles> {
 const CenteredSearchBar = (props: CenteredSearchBar) => {
     const {classes, startSearching} = props;
     return <div className={classes.mainDiv}>
-        <Typography variant="h3">
+        <Typography className={classes.title} variant="h3">
             Corproc Search
         </Typography>
         <QueryInput startSearching={startSearching}/>

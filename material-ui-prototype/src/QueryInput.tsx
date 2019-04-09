@@ -15,7 +15,9 @@ const styles = (theme: Theme) => createStyles({
         background: '#FFF',
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit,
-        fontSize: 'calc(calc(0.1vh + 2em))'
+        fontSize: 'calc(0.1vh + 2em)',
+        borderRadius: '15px',
+        padding: '0px 10px'
     }
 });
 
