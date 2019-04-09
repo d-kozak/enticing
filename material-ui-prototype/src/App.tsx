@@ -24,7 +24,10 @@ const App = () => {
     }
 
     const startSearching = (query: string) => {
-        console.log(`Searching ${query}`)
+        setSnackbarState({
+            isOpen: true,
+            message: `Quering '${query}'`
+        })
     };
 
     return <div>

@@ -26,7 +26,6 @@ const QueryInput = (props: QueryInputProps) => {
     useEffect(() => {
         setTimeout(() => {
             if (searchRef.current) {
-                console.log('here');
                 searchRef.current.focus();
             }
         }, 100);
