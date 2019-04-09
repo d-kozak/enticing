@@ -3,6 +3,7 @@ import './App.css';
 import MenuAppBar from "./CorprocAppBar";
 import {CssBaseline} from "@material-ui/core";
 import CorprocSnackBar from "./CorprocSnackbar";
+import SearchBar from "./CenteredSearchBar";
 
 
 const App = () => {
@@ -22,11 +23,16 @@ const App = () => {
         });
     }
 
+    const startSearching = (query: string) => {
+        console.log(`Searching ${query}`)
+    };
+
     return <div>
         <CssBaseline/>
         <MenuAppBar
             isLoggedIn={isLoggedId}
             setLoggedIn={handleLogin}/>
+        <SearchBar startSearching={startSearching}/>
         <CorprocSnackBar isOpen={snackbarState.isOpen}
                          setClosed={() => setSnackbarState({...snackbarState, isOpen: false})}
                          message={snackbarState.message}
