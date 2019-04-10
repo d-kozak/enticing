@@ -11,7 +11,7 @@ export interface LoginProps extends WithStyles<typeof styles> {
 
 }
 
-const Unknown = (props: LoginProps) => {
+const UnknownRoute = (props: LoginProps) => {
     return <React.Fragment>
         <h1>Unknown</h1>
     </React.Fragment>
@@ -19,4 +19,4 @@ const Unknown = (props: LoginProps) => {
 
 export default withStyles(styles, {
     withTheme: true
-})(Unknown)
+})(UnknownRoute)

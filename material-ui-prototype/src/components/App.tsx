@@ -1,13 +1,12 @@
 import React, {useState} from 'react';
-import './App.css';
-import MenuAppBar from "./CorprocAppBar";
+import MenuAppBar from "./appbar/CorprocAppBar";
 import {CssBaseline} from "@material-ui/core";
-import CorprocSnackBar from "./CorprocSnackbar";
-import SearchBar from "./CenteredSearchBar";
+import CorprocSnackBar from "./notifiers/CorprocSnackbar";
+import SearchBar from "./searchbar/CenteredSearchBar";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import Login from "./Login";
-import Unknown from "./Unknown";
+import LoginComponent from "./maincontent/Login";
+import UnknownRoute from "./maincontent/UnknownRoute";
 
 
 const App = () => {
@@ -71,8 +70,8 @@ const App = () => {
 
             <Switch>
                 <Route path="/" exact render={() => <SearchBar startSearching={startSearching}/>}/>
-                <Route path="/login" render={() => <Login isLoggedIn={isLoggedId} login={handleLogin}/>}/>
-                <Route component={Unknown}/>
+                <Route path="/login" render={() => <LoginComponent isLoggedIn={isLoggedId} login={handleLogin}/>}/>
+                <Route component={UnknownRoute}/>
             </Switch>
         </Router>
         <CorprocSnackBar isOpen={snackbarState.isOpen}
