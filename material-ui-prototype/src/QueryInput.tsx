@@ -15,7 +15,7 @@ const styles = (theme: Theme) => createStyles({
         background: '#FFF',
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit,
-        fontSize: 'calc(0.1vh + 2em)',
+        fontSize: 'calc(0.5vh + 1.3em)',
         borderRadius: '15px',
         padding: '0px 10px'
     }
@@ -31,7 +31,18 @@ const QueryInput = (props: QueryInputProps) => {
 
     const searchRef = useRef<HTMLInputElement>(null);
 
-    const isScreenBig = useMediaQuery('(min-width:1000px)');
+    const isScreenVeryBig = useMediaQuery('(min-width:1000px)');
+    const isScreenLittleBigger = useMediaQuery('(min-width:700px)');
+    const isScreenMedium = useMediaQuery('(min-width:400px)');
+
+    let inputSize = 15;
+    if (isScreenVeryBig) {
+        inputSize = 60;
+    } else if (isScreenLittleBigger) {
+        inputSize = 40;
+    } else if (isScreenMedium) {
+        inputSize = 30;
+    }
 
     useEffect(() => {
         setTimeout(() => {
@@ -44,7 +55,7 @@ const QueryInput = (props: QueryInputProps) => {
 
     return <div>
         <input
-            size={isScreenBig ? 50 : 30}
+            size={inputSize}
             ref={searchRef}
             className={classes.inputStyle}
             value={query}
