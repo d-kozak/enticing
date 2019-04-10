@@ -73,10 +73,6 @@ const App = () => {
     };
 
     const startSearching = (query: string) => {
-        setSnackbarState({
-            isOpen: true,
-            message: `Quering '${query}'`
-        });
         setShowProgress(true);
         search(query)
             .then(results => {
