@@ -2,16 +2,20 @@ import React, {useState} from 'react';
 import MenuAppBar from "./appbar/CorprocAppBar";
 import {CssBaseline} from "@material-ui/core";
 import CorprocSnackBar from "./notifiers/CorprocSnackbar";
-import SearchBar from "./searchbar/CenteredSearchBar";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import Login from "./maincontent/Login";
 import UnknownRoute from "./maincontent/UnknownRoute";
 import SignUp from "./maincontent/SignUp";
+import {SearchResult} from "../entities/SearchResult";
+import HomeContent from "./maincontent/HomeContent";
+import search from "./mockdata/search";
 
 
 const App = () => {
     const [isLoggedId, setLoggedIn] = useState(false);
+
+    const [searchResults, setSearchResults] = useState<Array<SearchResult> | null>(null);
 
     const [snackbarState, setSnackbarState] = useState({
         isOpen: false,
@@ -74,9 +78,17 @@ const App = () => {
             message: `Quering '${query}'`
         });
         setShowProgress(true);
-        setTimeout(() => {
+        search(query)
+            .then(results => {
+                setSearchResults(results);
+            }).catch(error => {
+            setSnackbarState({
+                isOpen: true,
+                message: `Error ${error}`
+            });
+        }).finally(() => {
             setShowProgress(false);
-        }, 3000);
+        });
     };
 
 
@@ -89,7 +101,8 @@ const App = () => {
             {showProgress && <LinearProgress color="secondary"/>}
 
             <Switch>
-                <Route path="/" exact render={() => <SearchBar startSearching={startSearching}/>}/>
+                <Route path="/" exact
+                       render={() => <HomeContent startSearching={startSearching} searchResults={searchResults}/>}/>
                 <Route path="/login" render={() => <Login isLoggedIn={isLoggedId} login={handleLogin}/>}/>
                 <Route path="/signup" render={() => <SignUp isLoggedIn={isLoggedId} signUp={handleSignUp}/>}/>
                 <Route component={UnknownRoute}/>
