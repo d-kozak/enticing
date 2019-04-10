@@ -18,6 +18,7 @@ import LinearProgress from "@material-ui/core/es/LinearProgress";
 
 const styles = (theme: Theme) => createStyles({
     centered: {
+        minWidth: '200px',
         paddingTop: '0px',
         position: 'fixed',
         top: '40%',
