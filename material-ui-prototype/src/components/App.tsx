@@ -8,8 +8,9 @@ import Login from "./maincontent/Login";
 import UnknownRoute from "./maincontent/UnknownRoute";
 import SignUp from "./maincontent/SignUp";
 import {SearchResult} from "../entities/SearchResult";
-import HomeContent from "./maincontent/HomeContent";
 import search from "./mockdata/search";
+import CenteredSearchBar from "./searchbar/CenteredSearchBar";
+import Search from "./maincontent/Search";
 
 
 const App = () => {
@@ -22,7 +23,7 @@ const App = () => {
         message: ''
     });
 
-    const [showProgress, setShowProgress] = useState(false);
+    const [progressBarVisible, setShowProgressBar] = useState(false);
 
     const handleLogout = () => {
         setLoggedIn(false);
@@ -73,7 +74,7 @@ const App = () => {
     };
 
     const startSearching = (query: string) => {
-        setShowProgress(true);
+        setShowProgressBar(true);
         search(query)
             .then(results => {
                 setSearchResults(results);
@@ -83,10 +84,11 @@ const App = () => {
                 message: `Error ${error}`
             });
         }).finally(() => {
-            setShowProgress(false);
+            setShowProgressBar(false);
         });
     };
 
+    const showProgressBar = () => setShowProgressBar(true);
 
     return <React.Fragment>
         <CssBaseline/>
@@ -94,11 +96,13 @@ const App = () => {
             <MenuAppBar
                 isLoggedIn={isLoggedId}
                 handleLogout={handleLogout}/>
-            {showProgress && <LinearProgress color="secondary"/>}
+            {progressBarVisible && <LinearProgress color="secondary"/>}
 
             <Switch>
                 <Route path="/" exact
-                       render={() => <HomeContent startSearching={startSearching} searchResults={searchResults}/>}/>
+                       render={() => <CenteredSearchBar startSearching={startSearching}/>}/>
+                <Route path="/search"
+                       render={() => <Search searchResults={searchResults} showProgressBar={showProgressBar}/>}/>
                 <Route path="/login" render={() => <Login isLoggedIn={isLoggedId} login={handleLogin}/>}/>
                 <Route path="/signup" render={() => <SignUp isLoggedIn={isLoggedId} signUp={handleSignUp}/>}/>
                 <Route component={UnknownRoute}/>

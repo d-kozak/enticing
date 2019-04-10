@@ -7,11 +7,11 @@ import React from 'react';
 const styles = createStyles({});
 
 
-export interface LoginProps extends WithStyles<typeof styles> {
+export interface UnknownRouteProps extends WithStyles<typeof styles> {
 
 }
 
-const UnknownRoute = (props: LoginProps) => {
+const UnknownRoute = (props: UnknownRouteProps) => {
     return <React.Fragment>
         <h1>Unknown</h1>
     </React.Fragment>
