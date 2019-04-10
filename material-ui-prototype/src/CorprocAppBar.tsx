@@ -33,39 +33,36 @@ export interface CorprocAppBarProps extends WithStyles<typeof styles> {
 const CorprocAppBar = (props: CorprocAppBarProps) => {
     const {classes, isLoggedIn, handleLogout: parentHandleLogout} = props;
 
-    const [anchorEl, setAnchorEl] = useState(null);
+    const [isMenuOpen, setMenuOpen] = useState(false);
 
-    const isOpen = Boolean(anchorEl);
-
-    const handleMenu = (event: any) => {
-        setAnchorEl(event.currentTarget);
+    const handleMenuOpen = () => {
+        setMenuOpen(true);
     };
 
-    const handleClose = () => {
-        setAnchorEl(null);
+    const handleMenuClose = () => {
+        setMenuOpen(false);
     };
 
     const handleLogout = () => {
         parentHandleLogout();
-        handleClose();
+        handleMenuClose();
     }
 
     const LoginLink = (props: any) => <Link to="/login" {...props} />
 
-    const MainPageButtons = () => <React.Fragment>
+    const MainPageButtons = () => <div>
         {!isLoggedIn && <Button component={LoginLink} color="inherit">Login</Button>}
         {isLoggedIn && <div>
             <IconButton
                 aria-owns={open ? 'menu-appbar' : undefined}
                 aria-haspopup="true"
-                onClick={handleMenu}
+                onClick={handleMenuOpen}
                 color="inherit"
             >
                 <AccountCircle/>
             </IconButton>
             <Menu
                 id="menu-appbar"
-                anchorEl={anchorEl}
                 anchorOrigin={{
                     vertical: 'top',
                     horizontal: 'right',
@@ -74,14 +71,14 @@ const CorprocAppBar = (props: CorprocAppBarProps) => {
                     vertical: 'top',
                     horizontal: 'right',
                 }}
-                open={isOpen}
-                onClose={handleClose}
+                open={isMenuOpen}
+                onClose={handleMenuClose}
             >
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                <MenuItem onClick={handleClose}>Settings</MenuItem>
+                <MenuItem onClick={handleMenuClose}>Settings</MenuItem>
             </Menu>
         </div>}
-    </React.Fragment>
+    </div>
 
     return <div className={classes.root}>
         <AppBar position="static">
