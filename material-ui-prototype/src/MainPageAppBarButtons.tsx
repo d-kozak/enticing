@@ -1,22 +1,23 @@
-import withStyles, {WithStyles} from "@material-ui/core/es/styles/withStyles";
-import createStyles from "@material-ui/core/es/styles/createStyles";
-import {Route} from "react-router";
 import React, {useState} from "react";
 import {Button} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import {AccountCircle, Settings} from "@material-ui/icons";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import createStyles from "@material-ui/core/es/styles/createStyles";
+import {WithStyles} from "@material-ui/core/es";
 import {Link} from "react-router-dom";
+import withStyles from "@material-ui/core/es/styles/withStyles";
+
 
 const styles = createStyles({});
 
-export interface AppBarButtonsProps extends WithStyles<typeof styles> {
+export interface MainPageAppBarButtonsProps extends WithStyles<typeof styles> {
     handleLogout: () => void,
     isLoggedIn: boolean
 }
 
-const AppBarMenuButtons = (props: AppBarButtonsProps) => {
+const MainPageAppBarButtons = (props: MainPageAppBarButtonsProps) => {
     const {isLoggedIn, handleLogout: parentHandleLogout} = props;
 
     const [isMenuOpen, setMenuOpen] = useState(false);
@@ -36,7 +37,7 @@ const AppBarMenuButtons = (props: AppBarButtonsProps) => {
 
     const LoginLink = (props: any) => <Link to="/login" {...props} />
 
-    const MainPageButtons = () => <React.Fragment>
+    return <React.Fragment>
         {!isLoggedIn && <React.Fragment>
             <Button component={LoginLink} color="inherit">Login</Button>
             <IconButton
@@ -73,8 +74,6 @@ const AppBarMenuButtons = (props: AppBarButtonsProps) => {
         </React.Fragment>}
     </React.Fragment>
 
-    return <Route path="/" exact component={MainPageButtons}/>
-};
+}
 
-
-export default withStyles(styles, {withTheme: true})(AppBarMenuButtons)
+export default withStyles(styles, {withTheme: true})(MainPageAppBarButtons)

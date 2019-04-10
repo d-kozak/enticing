@@ -5,7 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import createStyles from "@material-ui/core/es/styles/createStyles";
 import {WithStyles} from "@material-ui/core/es";
-import AppBarMenuButtons from "./AppBarMenuButtons";
+import AppBarMenuButtons from "./AppBarButtons";
 
 const styles = createStyles({
     root: {
