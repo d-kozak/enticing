@@ -13,7 +13,7 @@ export interface SearchProps extends WithStyles<typeof styles> {
     showProgressBar: () => void
 }
 
-const Search = (props: SearchProps) => {
+const SearchResultPage = (props: SearchProps) => {
     const {searchResults, showProgressBar} = props;
     if (searchResults === null) {
         showProgressBar();
@@ -24,4 +24,4 @@ const Search = (props: SearchProps) => {
 
 export default withStyles(styles, {
     withTheme: true
-})(Search)
+})(SearchResultPage)

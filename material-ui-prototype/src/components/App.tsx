@@ -3,14 +3,14 @@ import MenuAppBar from "./appbar/CorprocAppBar";
 import {CssBaseline} from "@material-ui/core";
 import CorprocSnackBar from "./notifiers/CorprocSnackbar";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import {BrowserRouter as Router, Redirect, Route, Switch} from 'react-router-dom';
 import Login from "./maincontent/Login";
 import UnknownRoute from "./maincontent/UnknownRoute";
 import SignUp from "./maincontent/SignUp";
 import {SearchResult} from "../entities/SearchResult";
 import search from "./mockdata/search";
-import CenteredSearchBar from "./searchbar/CenteredSearchBar";
-import Search from "./maincontent/Search";
+import Search from "./maincontent/SearchResultPage";
+import MainPage from "./maincontent/MainPage";
 
 
 const App = () => {
@@ -74,6 +74,8 @@ const App = () => {
     };
 
     const startSearching = (query: string) => {
+        setSearchResults(null);
+        setShouldRedirectToSearchPage(true);
         setShowProgressBar(true);
         search(query)
             .then(results => {
@@ -90,6 +92,8 @@ const App = () => {
 
     const showProgressBar = () => setShowProgressBar(true);
 
+    const [shouldRedirectToSearchPage, setShouldRedirectToSearchPage] = useState(true);
+
     return <React.Fragment>
         <CssBaseline/>
         <Router>
@@ -100,9 +104,15 @@ const App = () => {
 
             <Switch>
                 <Route path="/" exact
-                       render={() => <CenteredSearchBar startSearching={startSearching}/>}/>
+                       render={() => <React.Fragment>
+                           {shouldRedirectToSearchPage && searchResults && <Redirect to="/search" push/>}
+                           <MainPage startSearching={startSearching}/>
+                       </React.Fragment>}/>
                 <Route path="/search"
-                       render={() => <Search searchResults={searchResults} showProgressBar={showProgressBar}/>}/>
+                       render={() => {
+                           setShouldRedirectToSearchPage(false);
+                           return <Search searchResults={searchResults} showProgressBar={showProgressBar}/>;
+                       }}/>
                 <Route path="/login" render={() => <Login isLoggedIn={isLoggedId} login={handleLogin}/>}/>
                 <Route path="/signup" render={() => <SignUp isLoggedIn={isLoggedId} signUp={handleSignUp}/>}/>
                 <Route component={UnknownRoute}/>
