@@ -70,8 +70,8 @@ const App = () => {
             {showProgress && <LinearProgress color="secondary"/>}
 
             <Switch>
-                <Route path="/" exact component={() => <SearchBar startSearching={startSearching}/>}/>
-                <Route path="/login" component={() => <Login isLoggedIn={isLoggedId} login={handleLogin}/>}/>
+                <Route path="/" exact render={() => <SearchBar startSearching={startSearching}/>}/>
+                <Route path="/login" render={() => <Login isLoggedIn={isLoggedId} login={handleLogin}/>}/>
                 <Route component={Unknown}/>
             </Switch>
         </Router>
