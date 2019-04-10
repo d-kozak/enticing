@@ -11,6 +11,7 @@ import createStyles from "@material-ui/core/es/styles/createStyles";
 import {WithStyles} from "@material-ui/core/es";
 import {Button} from "@material-ui/core";
 import {Link, Route} from "react-router-dom";
+import {Settings} from "@material-ui/icons";
 
 const styles = createStyles({
     root: {
@@ -51,7 +52,14 @@ const CorprocAppBar = (props: CorprocAppBarProps) => {
     const LoginLink = (props: any) => <Link to="/login" {...props} />
 
     const MainPageButtons = () => <div>
-        {!isLoggedIn && <Button component={LoginLink} color="inherit">Login</Button>}
+        {!isLoggedIn && <div>
+            <Button component={LoginLink} color="inherit">Login</Button>
+            <IconButton
+                color="inherit"
+            >
+                <Settings/>
+            </IconButton>
+        </div>}
         {isLoggedIn && <div>
             <IconButton
                 aria-owns={open ? 'menu-appbar' : undefined}
