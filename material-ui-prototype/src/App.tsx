@@ -29,16 +29,22 @@ const App = () => {
     }
 
     const handleLogin = (username: string, password: string) => {
-        setShowProgress(true);
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             setTimeout(() => {
-                setShowProgress(false);
-                setSnackbarState({
-                    isOpen: true,
-                    message: 'Logged in'
-                });
-                setLoggedIn(true);
-                resolve();
+                if (username != 'dkozak' && password != 'dkozak') {
+                    setSnackbarState({
+                        isOpen: true,
+                        message: 'Logged in'
+                    });
+                    setLoggedIn(true);
+                    resolve();
+                } else if (username == 'dkozak' && password != 'dkozak') {
+                    reject({login: 'Unknown login'});
+                } else if (username != 'dkozak' && password == 'dkozak') {
+                    reject({password: 'Invalid password'})
+                } else {
+                    reject({login: 'Unknown login'});
+                }
             }, 2000);
         });
     }
