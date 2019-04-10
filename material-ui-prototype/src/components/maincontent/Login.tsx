@@ -15,9 +15,10 @@ import * as Yup from 'yup';
 import {TextField} from "formik-material-ui";
 import {Redirect} from "react-router";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
+import LinkTo from "../utils/linkTo";
 
 const styles = (theme: Theme) => createStyles({
-    centered: {
+    mainElement: {
         minWidth: '200px',
         paddingTop: '0px',
         position: 'fixed',
@@ -51,12 +52,12 @@ interface LoginFormikProps {
 
 const LoginSchema = Yup.object().shape({
     login: Yup.string()
-        .min(2, 'Too Short!')
-        .max(50, 'Too Long!')
+        .min(5, 'Too Short!')
+        .max(32, 'Too Long!')
         .required('Required'),
     password: Yup.string()
-        .min(2, 'Too Short!')
-        .max(50, 'Too Long!')
+        .min(5, 'Too Short!')
+        .max(32, 'Too Long!')
         .required('Required'),
 });
 
@@ -66,7 +67,9 @@ const Login = (props: LoginProps) => {
 
     const [showProgress, setShowProgress] = useState(false);
 
-    return <Paper className={classes.centered} style={{paddingTop: showProgress ? '0px' : '20px'}}>
+    const SignUpLink = LinkTo("/signup");
+
+    return <Paper className={classes.mainElement} style={{paddingTop: showProgress ? '0px' : '20px'}}>
         {showProgress && <LinearProgress className={classes.progress}/>}
         {isLoggedIn && <Redirect to="/"/>}
         <Typography variant="h4">Sign in</Typography>
@@ -96,7 +99,7 @@ const Login = (props: LoginProps) => {
 
                     <Grid className={classes.loginButtonsGrid} justify="space-between" alignItems="center" container>
                         <Grid item>
-                            <Button color="primary" id="foo">
+                            <Button color="primary" id="foo" component={SignUpLink}>
                                 Sign up
                             </Button>
                         </Grid>

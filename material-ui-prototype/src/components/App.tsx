@@ -5,8 +5,9 @@ import CorprocSnackBar from "./notifiers/CorprocSnackbar";
 import SearchBar from "./searchbar/CenteredSearchBar";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import LoginComponent from "./maincontent/Login";
+import Login from "./maincontent/Login";
 import UnknownRoute from "./maincontent/UnknownRoute";
+import SignUp from "./maincontent/SignUp";
 
 
 const App = () => {
@@ -27,19 +28,19 @@ const App = () => {
         });
     }
 
-    const handleLogin = (username: string, password: string) => {
+    const handleLogin = (login: string, password: string) => {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                if (username != 'dkozak' && password != 'dkozak') {
+                if (login != 'dkozak' && password != 'dkozak') {
                     setSnackbarState({
                         isOpen: true,
                         message: 'Logged in'
                     });
                     setLoggedIn(true);
                     resolve();
-                } else if (username == 'dkozak' && password != 'dkozak') {
+                } else if (login == 'dkozak' && password != 'dkozak') {
                     reject({login: 'Unknown login'});
-                } else if (username != 'dkozak' && password == 'dkozak') {
+                } else if (login != 'dkozak' && password == 'dkozak') {
                     reject({password: 'Invalid password'})
                 } else {
                     reject({login: 'Unknown login'});
@@ -47,6 +48,25 @@ const App = () => {
             }, 2000);
         });
     }
+
+    const handleSignUp = (login: string, password: string) => {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if (login != 'dkozak') {
+                    setSnackbarState({
+                        isOpen: true,
+                        message: 'Signed up successfully'
+                    });
+                    setLoggedIn(true);
+                    resolve();
+                } else {
+                    reject({
+                        login: 'This login is already taken'
+                    });
+                }
+            }, 2000);
+        });
+    };
 
     const startSearching = (query: string) => {
         setSnackbarState({
@@ -70,7 +90,8 @@ const App = () => {
 
             <Switch>
                 <Route path="/" exact render={() => <SearchBar startSearching={startSearching}/>}/>
-                <Route path="/login" render={() => <LoginComponent isLoggedIn={isLoggedId} login={handleLogin}/>}/>
+                <Route path="/login" render={() => <Login isLoggedIn={isLoggedId} login={handleLogin}/>}/>
+                <Route path="/signup" render={() => <SignUp isLoggedIn={isLoggedId} signUp={handleSignUp}/>}/>
                 <Route component={UnknownRoute}/>
             </Switch>
         </Router>

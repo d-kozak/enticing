@@ -6,8 +6,8 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import createStyles from "@material-ui/core/es/styles/createStyles";
 import {WithStyles} from "@material-ui/core/es";
-import {Link} from "react-router-dom";
 import withStyles from "@material-ui/core/es/styles/withStyles";
+import LinkTo from "../utils/linkTo";
 
 
 const styles = createStyles({});
@@ -35,7 +35,7 @@ const MainPageAppBarButtons = (props: MainPageAppBarButtonsProps) => {
         handleMenuClose();
     }
 
-    const LoginLink = (props: any) => <Link to="/login" {...props} />
+    const LoginLink = LinkTo("/login")
 
     return <React.Fragment>
         {!isLoggedIn && <React.Fragment>
