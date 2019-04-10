@@ -61,7 +61,7 @@ const App = () => {
     };
 
 
-    return <div>
+    return <React.Fragment>
         <CssBaseline/>
         <Router>
             <MenuAppBar
@@ -79,7 +79,7 @@ const App = () => {
                          setClosed={() => setSnackbarState({...snackbarState, isOpen: false})}
                          message={snackbarState.message}
         />
-    </div>
+    </React.Fragment>
 };
 
 

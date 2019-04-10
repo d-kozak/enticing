@@ -53,7 +53,7 @@ const QueryInput = (props: QueryInputProps) => {
     }, []);
 
 
-    return <div>
+    return <React.Fragment>
         <input
             size={inputSize}
             ref={searchRef}
@@ -66,7 +66,7 @@ const QueryInput = (props: QueryInputProps) => {
                 }
             }}
         />
-    </div>
+    </React.Fragment>
 };
 
 export default withStyles(styles, {withTheme: true})(QueryInput)

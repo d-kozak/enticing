@@ -12,9 +12,9 @@ export interface LoginProps extends WithStyles<typeof styles> {
 }
 
 const Unknown = (props: LoginProps) => {
-    return <div>
+    return <React.Fragment>
         <h1>Unknown</h1>
-    </div>
+    </React.Fragment>
 };
 
 export default withStyles(styles, {
