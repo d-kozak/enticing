@@ -35,13 +35,15 @@ const MainPageAppBarButtons = (props: MainPageAppBarButtonsProps) => {
         handleMenuClose();
     }
 
-    const LoginLink = LinkTo("/login")
+    const LoginLink = LinkTo("/login");
+    const SettingsLink = LinkTo("/settings");
 
     return <React.Fragment>
         {!isLoggedIn && <React.Fragment>
             <Button component={LoginLink} color="inherit">Login</Button>
             <IconButton
                 color="inherit"
+                component={SettingsLink}
             >
                 <Settings/>
             </IconButton>
@@ -68,7 +70,7 @@ const MainPageAppBarButtons = (props: MainPageAppBarButtonsProps) => {
                 open={isMenuOpen}
                 onClose={handleMenuClose}
             >
-                <MenuItem onClick={handleMenuClose}>Settings</MenuItem>
+                <MenuItem onClick={handleMenuClose} component={SettingsLink}>Settings</MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
         </React.Fragment>}

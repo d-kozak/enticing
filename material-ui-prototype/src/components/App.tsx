@@ -11,6 +11,7 @@ import {SearchResult} from "../entities/SearchResult";
 import search from "./mockdata/search";
 import Search from "./maincontent/SearchResultPage";
 import MainPage from "./maincontent/MainPage";
+import Settings from "./maincontent/Settings";
 
 
 const App = () => {
@@ -115,6 +116,7 @@ const App = () => {
                        }}/>
                 <Route path="/login" render={() => <Login isLoggedIn={isLoggedId} login={handleLogin}/>}/>
                 <Route path="/signup" render={() => <SignUp isLoggedIn={isLoggedId} signUp={handleSignUp}/>}/>
+                <Route path="/settings" render={() => <Settings isLoggedIn={isLoggedId}/>}/>
                 <Route component={UnknownRoute}/>
             </Switch>
         </Router>
