@@ -4,18 +4,10 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React from 'react';
 import {DefaultUserSettings, UserSettings} from "../../entities/UserSettings";
-import SettingsForm from "../settings/SettingsForm";
 import DefaultSettingsPicker from "../settings/DefaultSettingsPicker";
+import SettingsHolder from "../settings/SettingsHolder";
 
-const styles = createStyles({
-    settings: {
-        minWidth: '300px',
-        position: 'fixed',
-        top: '52%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)'
-    }
-});
+const styles = createStyles({});
 
 
 export interface SettingsProps extends WithStyles<typeof styles> {
@@ -67,8 +59,8 @@ const Settings = (props: SettingsProps) => {
     const currentSettings = defaultSettingsOptions[0];
 
     if (isLoggedIn) {
-        return <SettingsForm className={classes.settings} submitForm={submitForm} currentSettings={currentSettings}
-                             mappingFiles={mappingFiles}/>
+        return <SettingsHolder submitForm={submitForm} currentSettings={currentSettings}
+                               mappingFiles={mappingFiles}/>
     } else {
         return <DefaultSettingsPicker defaultSettingsOptions={defaultSettingsOptions} mappingFiles={mappingFiles}
                                       settingsSelected={handleSettingsSelected}/>

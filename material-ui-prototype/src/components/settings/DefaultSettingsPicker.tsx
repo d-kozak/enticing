@@ -65,7 +65,8 @@ const DefaultSettingsPicker = (props: DefaultSettingsPicker) => {
                 <ExpansionPanelDetails className={classes.expansionPanelDetails}>
                     <Typography variant="body1">{settings.description}</Typography>
 
-                    <SettingsForm submitForm={handleFormSubmit} currentSettings={settings} mappingFiles={mappingFiles}/>
+                    <SettingsForm setShowProgress={() => {
+                    }} submitForm={handleFormSubmit} currentSettings={settings} mappingFiles={mappingFiles}/>
 
                     <Grid container justify="flex-end" alignItems="center">
                         <Grid item>
