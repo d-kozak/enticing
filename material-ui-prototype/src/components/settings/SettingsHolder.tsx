@@ -11,17 +11,23 @@ import SettingsForm from "./SettingsForm";
 
 const styles = createStyles({
     root: {
-        minWidth: '300px',
-        position: 'fixed',
-        top: '52%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)'
+        width: '80%',
+        margin: '20px auto'
     },
     settingsTitle: {
         textAlign: 'center'
     },
     progress: {
         marginBottom: '15px'
+    },
+    '@media (min-width:500)': {
+        root: {
+            minWidth: '300px',
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)'
+        }
     }
 });
 

@@ -19,7 +19,7 @@ import LinkTo from "../utils/linkTo";
 
 const styles = (theme: Theme) => createStyles({
     mainElement: {
-        minWidth: '200px',
+        minWidth: '250px',
         paddingTop: '0px',
         position: 'fixed',
         top: '40%',

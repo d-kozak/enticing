@@ -13,7 +13,7 @@ import Typography from "@material-ui/core/Typography";
 
 const styles = createStyles({
     mainElement: {
-        minWidth: '200px',
+        minWidth: '275px',
         paddingTop: '0px',
         paddingBottom: '10px',
         position: 'fixed',
