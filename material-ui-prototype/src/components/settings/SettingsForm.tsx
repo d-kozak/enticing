@@ -19,13 +19,7 @@ import Grid from "@material-ui/core/es/Grid";
 
 
 const styles = (theme: Theme) => createStyles({
-    settingsForm: {
-        minWidth: '300px',
-        position: 'fixed',
-        top: '52%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)'
-    },
+    settingsForm: {},
     formContent: {
         margin: '10px 15px'
     },
@@ -63,7 +57,8 @@ const styles = (theme: Theme) => createStyles({
 
 export interface SettingsForm extends WithStyles<typeof styles> {
     mappingFiles: Array<string>,
-    currentSettings: UserSettings
+    currentSettings: UserSettings,
+    className?: string
 
     submitForm(newSettings: UserSettings): Promise<{}>,
 }
@@ -91,12 +86,12 @@ const SettingsSchema = Yup.object({
 });
 
 const SettingsForm = (props: SettingsForm) => {
-    const {submitForm, currentSettings, mappingFiles, classes} = props;
+    const {submitForm, className = '', currentSettings, mappingFiles, classes} = props;
 
     const [showProgress, setShowProgress] = useState(false);
 
 
-    return <Paper className={classes.settingsForm} style={{paddingTop: showProgress ? '0px' : '20px'}}>
+    return <Paper className={className} style={{paddingTop: showProgress ? '0px' : '20px'}}>
         {showProgress && <LinearProgress className={classes.progress}/>}
         <Typography variant="h2" className={classes.settingsTitle}>Settings</Typography>
         <Formik

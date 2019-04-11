@@ -1,3 +1,5 @@
+import {DescribedElement} from "./DescribedElement";
+
 export interface UserSettings {
     mappingFile: string,
     resultsPerPage: number
@@ -5,5 +7,8 @@ export interface UserSettings {
     annotationServer: string,
     servers: Array<IpAddress>
 }
+
+
+export type DefaultUserSettings = UserSettings & DescribedElement;
 
 export type IpAddress = string
