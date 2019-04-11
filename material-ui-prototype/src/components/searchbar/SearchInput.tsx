@@ -11,6 +11,7 @@ import CodeMirror from 'react-codemirror';
 import {EditorConfiguration} from "codemirror";
 
 import './CodeMirror.css';
+import {MG4J_EQL} from "../../codemirror/LanguageMode";
 
 const styles = (theme: Theme) => createStyles({});
 
@@ -39,7 +40,8 @@ const SearchInput = (props: QueryInputProps) => {
             "Enter": () => {
                 startSearching(query);
             }
-        }
+        },
+        mode: MG4J_EQL
     }
 
     return <React.Fragment>
