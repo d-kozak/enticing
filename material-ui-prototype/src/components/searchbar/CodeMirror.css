@@ -2,4 +2,28 @@
     font-family: "Ubuntu Mono";
     line-height: 1.2em;
     height: 2em;
+    border: solid 1px gray;
+    border-radius: 10px;
+    width: 80%;
+    min-width: 300px;
 }
+
+@media (min-width: 500px) {
+    .CodeMirror {
+        min-width: 450px;
+    }
+}
+
+@media (min-width: 800px) {
+    .CodeMirror {
+        min-width: 650px;
+    }
+}
+
+
+@media (min-width: 1000px) {
+    .CodeMirror {
+        min-width: 900px;
+    }
+}
+

@@ -3,7 +3,7 @@ import * as React from "react";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 import createStyles from "@material-ui/core/es/styles/createStyles";
 import Typography from "@material-ui/core/Typography";
-import QueryInput from "./QueryInput";
+import SearchInput from "./SearchInput";
 import {Theme} from "@material-ui/core/es";
 
 
@@ -31,7 +31,7 @@ const CenteredSearchBar = (props: CenteredSearchBar) => {
         <Typography className={classes.title} variant="h3">
             Corproc Search
         </Typography>
-        <QueryInput startSearching={startSearching}/>
+        <SearchInput startSearching={startSearching}/>
     </div>
 };
 
