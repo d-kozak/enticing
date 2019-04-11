@@ -13,11 +13,50 @@ import Radio from "@material-ui/core/es/Radio";
 import Button from "@material-ui/core/es/Button";
 import Typography from "@material-ui/core/es/Typography";
 import {Theme} from "@material-ui/core/es";
+import Paper from "@material-ui/core/es/Paper";
+import Divider from '@material-ui/core/Divider';
+import Grid from "@material-ui/core/es/Grid";
 
 
 const styles = (theme: Theme) => createStyles({
+    settingsForm: {
+        minWidth: '300px',
+        position: 'fixed',
+        top: '52%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)'
+    },
+    formContent: {
+        margin: '10px 15px'
+    },
+    settingsTitle: {
+        textAlign: 'center'
+    },
+    sectionTitle: {
+        marginBottom: '5px'
+    },
+    settingsSection: {
+        margin: '10px 0px'
+    },
     noServerSetErrorMessage: {
         color: theme.palette.error.main
+    },
+    progress: {
+        marginBottom: '15px'
+    },
+    mappingFileSettingsContent: {
+        flexDirection: 'row'
+    },
+    textFieldsGroup: {
+        margin: '10px 0px',
+        display: 'flex',
+        flexWrap: 'wrap'
+    },
+    textField: {
+        margin: '5px 5px'
+    },
+    addIndexServerButton: {
+        marginTop: '10px'
     }
 });
 
@@ -57,8 +96,9 @@ const SettingsForm = (props: SettingsForm) => {
     const [showProgress, setShowProgress] = useState(false);
 
 
-    return <div>
-        {showProgress && <LinearProgress/>}
+    return <Paper className={classes.settingsForm} style={{paddingTop: showProgress ? '0px' : '20px'}}>
+        {showProgress && <LinearProgress className={classes.progress}/>}
+        <Typography variant="h2" className={classes.settingsTitle}>Settings</Typography>
         <Formik
             initialValues={currentSettings}
             validationSchema={SettingsSchema}
@@ -78,38 +118,68 @@ const SettingsForm = (props: SettingsForm) => {
                     })
             }}>
             {({isSubmitting, values, errors}) =>
-                <Form>
-                    <Typography variant="h4">Mapping file</Typography>
-                    <Field name="mappingFile" component={RadioGroup}>
-                        {
-                            mappingFiles.map((mappingFile, index) => <FormControlLabel key={index} control={<Radio/>}
-                                                                                       label={mappingFile}
-                                                                                       value={mappingFile}/>)
-                        }
-                    </Field>
-                    <Field variant="outlined" label="Results per page" name="resultsPerPage" component={TextField}
-                           type="number"/>
-                    <Field variant="outlined" label="Annotation data server" name="annotationDataServer"
-                           component={TextField}/>
-                    <Field variant="outlined" label="Annotation server" name="annotationServer" component={TextField}/>
-                    {errors.servers && !Array.isArray(errors.servers) &&
-                    <Typography className={classes.noServerSetErrorMessage} variant="body1">At least one server
-                        required</Typography>}
-                    <FieldArray name="servers" render={({push, remove}) =>
-                        <div>
-                            {values.servers.map((server, index) => <div key={index}>
-                                <Field name={`servers.${index}`} component={TextField}/>
-                                <Button color="secondary" onClick={() => remove(index)}>X</Button>
-                            </div>)}
-                            <Button color="primary" variant="outlined" onClick={() => push('')}>Add server</Button>
-                        </div>
-                    }/>
-                    {JSON.stringify(values, null, 2)}
-                    <Button variant="contained" color="primary" type="submit" disabled={isSubmitting}>Submit</Button>
+                <Form className={classes.formContent}>
+                    <Divider/>
+                    <div className={classes.settingsSection}>
+                        <Typography variant="h5" className={classes.sectionTitle}>Mapping file</Typography>
+                        <Field name="mappingFile" className={classes.mappingFileSettingsContent} component={RadioGroup}>
+                            {
+                                mappingFiles.map((mappingFile, index) => <FormControlLabel key={index}
+                                                                                           control={<Radio/>}
+                                                                                           label={mappingFile}
+                                                                                           value={mappingFile}/>)
+                            }
+                        </Field>
+                    </div>
+
+                    <Divider/>
+                    <div className={classes.settingsSection}>
+                        <Typography variant="h5" className={classes.sectionTitle}>Annotation server</Typography>
+
+                        <Field variant="outlined" label="Annotation server" name="annotationServer"
+                               component={TextField} className={classes.textField}/>
+
+                        <Field variant="outlined" label="Annotation data server" name="annotationDataServer"
+                               component={TextField} className={classes.textField}/>
+
+                    </div>
+
+                    <Divider/>
+                    <div className={classes.settingsSection}>
+                        <Typography variant="h5" className={classes.sectionTitle}>Index servers</Typography>
+                        {errors.servers && !Array.isArray(errors.servers) &&
+                        <Typography className={classes.noServerSetErrorMessage} variant="body1">At least one server
+                            required</Typography>}
+                        <FieldArray name="servers" render={({push, remove}) =>
+                            <div>
+                                {values.servers.map((server, index) => <div key={index}>
+                                    <Field name={`servers.${index}`} component={TextField}
+                                           className={classes.textField}/>
+                                    <Button color="secondary" onClick={() => remove(index)}>X</Button>
+                                </div>)}
+                                <Button className={classes.addIndexServerButton} color="primary" variant="outlined"
+                                        onClick={() => push('')}>Add server</Button>
+                            </div>
+                        }/>
+                    </div>
+
+                    <Divider/>
+                    <div className={classes.settingsSection}>
+                        <Typography variant="h5" className={classes.sectionTitle}>Others</Typography>
+                        <Field variant="outlined" label="Results per page" name="resultsPerPage" component={TextField}
+                               type="number" className={classes.textField}/>
+                    </div>
+
+                    <Grid container justify="flex-end" alignItems="center">
+                        <Grid item>
+                            <Button variant="contained" color="primary" type="submit"
+                                    disabled={isSubmitting}>Submit</Button>
+                        </Grid>
+                    </Grid>
                 </Form>
             }
         </Formik>
-    </div>
+    </Paper>
 };
 
 export default withStyles(styles, {
