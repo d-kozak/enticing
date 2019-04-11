@@ -47,12 +47,11 @@ const styles = (theme: Theme) => createStyles({
 
 
 export interface SettingsForm extends WithStyles<typeof styles> {
+    readOnly?: boolean
     mappingFiles: Array<string>,
     currentSettings: UserSettings,
-
-    submitForm(newSettings: UserSettings): Promise<{}>,
-
-    setShowProgress(showProgress: boolean): void
+    submitForm: (newSettings: UserSettings) => Promise<{}>,
+    setShowProgress: (showProgress: boolean) => void
 }
 
 // TODO try to find a simpler regex
@@ -78,12 +77,15 @@ const SettingsSchema = Yup.object({
 });
 
 const SettingsForm = (props: SettingsForm) => {
-    const {submitForm, currentSettings, setShowProgress, mappingFiles, classes} = props;
+    const {readOnly = false, submitForm, currentSettings, setShowProgress, mappingFiles, classes} = props;
 
     return <Formik
         initialValues={currentSettings}
         validationSchema={SettingsSchema}
         onSubmit={(values, actions) => {
+            if (readOnly) {
+                throw new Error('Readonly form should never be submitted');
+            }
             setShowProgress(true);
             submitForm(values)
                 .then(() => {
@@ -107,6 +109,7 @@ const SettingsForm = (props: SettingsForm) => {
                         {
                             mappingFiles.map((mappingFile, index) => <FormControlLabel key={index}
                                                                                        control={<Radio/>}
+                                                                                       disabled={readOnly}
                                                                                        label={mappingFile}
                                                                                        value={mappingFile}/>)
                         }
@@ -117,10 +120,11 @@ const SettingsForm = (props: SettingsForm) => {
                 <div className={classes.settingsSection}>
                     <Typography variant="h5" className={classes.sectionTitle}>Annotation server</Typography>
 
-                    <Field variant="outlined" label="Annotation server" name="annotationServer"
+                    <Field disabled={readOnly} variant="outlined" label="Annotation server" name="annotationServer"
                            component={TextField} className={classes.textField}/>
 
-                    <Field variant="outlined" label="Annotation data server" name="annotationDataServer"
+                    <Field disabled={readOnly} variant="outlined" label="Annotation data server"
+                           name="annotationDataServer"
                            component={TextField} className={classes.textField}/>
 
                 </div>
@@ -134,12 +138,13 @@ const SettingsForm = (props: SettingsForm) => {
                     <FieldArray name="servers" render={({push, remove}) =>
                         <div>
                             {values.servers.map((server, index) => <div key={index}>
-                                <Field name={`servers.${index}`} component={TextField}
+                                <Field disabled={readOnly} name={`servers.${index}`} component={TextField}
                                        className={classes.textField}/>
-                                <Button color="secondary" onClick={() => remove(index)}>X</Button>
+                                {!readOnly && <Button color="secondary" onClick={() => remove(index)}>X</Button>}
                             </div>)}
+                            {!readOnly &&
                             <Button className={classes.addIndexServerButton} color="primary" variant="outlined"
-                                    onClick={() => push('')}>Add server</Button>
+                                    onClick={() => push('')}>Add server</Button>}
                         </div>
                     }/>
                 </div>
@@ -147,16 +152,17 @@ const SettingsForm = (props: SettingsForm) => {
                 <Divider/>
                 <div className={classes.settingsSection}>
                     <Typography variant="h5" className={classes.sectionTitle}>Others</Typography>
-                    <Field variant="outlined" label="Results per page" name="resultsPerPage" component={TextField}
+                    <Field disabled={readOnly} variant="outlined" label="Results per page" name="resultsPerPage"
+                           component={TextField}
                            type="number" className={classes.textField}/>
                 </div>
 
-                <Grid container justify="flex-end" alignItems="center">
+                {!readOnly && <Grid container justify="flex-end" alignItems="center">
                     <Grid item>
                         <Button variant="contained" color="primary" type="submit"
                                 disabled={isSubmitting}>Submit</Button>
                     </Grid>
-                </Grid>
+                </Grid>}
             </Form>
         }
     </Formik>

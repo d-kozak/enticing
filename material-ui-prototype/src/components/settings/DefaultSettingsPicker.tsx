@@ -11,8 +11,8 @@ import ExpansionPanelSummary from "@material-ui/core/es/ExpansionPanelSummary";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Grid from "@material-ui/core/es/Grid";
 import Button from "@material-ui/core/es/Button";
-import SettingsForm from "./SettingsForm";
 import Paper from "@material-ui/core/es/Paper";
+import ReadOnlySettingsForm from "./ReadOnlySettingsForm";
 
 
 const styles = createStyles({
@@ -65,8 +65,7 @@ const DefaultSettingsPicker = (props: DefaultSettingsPicker) => {
                 <ExpansionPanelDetails className={classes.expansionPanelDetails}>
                     <Typography variant="body1">{settings.description}</Typography>
 
-                    <SettingsForm setShowProgress={() => {
-                    }} submitForm={handleFormSubmit} currentSettings={settings} mappingFiles={mappingFiles}/>
+                    <ReadOnlySettingsForm currentSettings={settings} mappingFiles={mappingFiles}/>
 
                     <Grid container justify="flex-end" alignItems="center">
                         <Grid item>
