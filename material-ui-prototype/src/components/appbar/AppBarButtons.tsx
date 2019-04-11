@@ -17,6 +17,10 @@ const AppBarButtons = (props: AppBarButtonsProps) => {
     return <Switch>
         <Route path="/" exact
                render={() => <MainPageAppBarButtons isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>}/>
+        <Route path="/search"
+               render={() => <MainPageAppBarButtons isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>}/>
+        <Route path="/settings" exact
+               render={() => <MainPageAppBarButtons isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>}/>
     </Switch>
 };
 
