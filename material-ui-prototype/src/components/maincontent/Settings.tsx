@@ -3,6 +3,7 @@ import {WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React from 'react';
+import EditableSettings from "../settings/EditableSettings";
 
 const styles = createStyles({});
 
@@ -12,9 +13,13 @@ export interface SettingsProps extends WithStyles<typeof styles> {
 }
 
 const Settings = (props: SettingsProps) => {
-    return <div>
-        <h1>Settings</h1>
-    </div>
+    const {isLoggedIn} = props;
+    if (isLoggedIn) {
+        return <EditableSettings/>
+    } else {
+        //return <DefaultSettingsPicker/>
+        return <EditableSettings/>
+    }
 };
 
 export default withStyles(styles, {

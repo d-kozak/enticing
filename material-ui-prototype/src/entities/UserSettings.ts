@@ -1,4 +1,4 @@
-export interface Settings {
+export interface UserSettings {
     mappingFile: string,
     resultsPerPage: number
     annotationDataServer: string,
