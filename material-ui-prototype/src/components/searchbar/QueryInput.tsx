@@ -4,18 +4,22 @@ import * as React from "react";
 import {useEffect, useRef, useState} from "react";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
-import './QueryInput.css';
+import 'codemirror/lib/codemirror.css';
 import {Theme} from "@material-ui/core/es";
 
-import {unstable_useMediaQuery as useMediaQuery} from '@material-ui/core/useMediaQuery';
+import CodeMirror from 'react-codemirror';
+import {EditorConfiguration} from "codemirror";
+
+import './CodeMirror.css';
 
 const styles = (theme: Theme) => createStyles({
     inputStyle: {
+        minWidth: '250px',
+        fontSize: theme.typography.caption.fontSize,
         border: 'solid 1px #bdbdbd',
         background: '#FFF',
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit,
-        fontSize: 'calc(0.5vh + 1.3em)',
         borderRadius: '15px',
         padding: '0px 10px'
     }
@@ -29,42 +33,50 @@ const QueryInput = (props: QueryInputProps) => {
     const {startSearching, classes} = props;
     const [query, setQuery] = useState('');
 
-    const searchRef = useRef<HTMLInputElement>(null);
 
-    const isScreenVeryBig = useMediaQuery('(min-width:1000px)');
-    const isScreenLittleBigger = useMediaQuery('(min-width:700px)');
-    const isScreenMedium = useMediaQuery('(min-width:400px)');
-
-    let inputSize = 15;
-    if (isScreenVeryBig) {
-        inputSize = 60;
-    } else if (isScreenLittleBigger) {
-        inputSize = 40;
-    } else if (isScreenMedium) {
-        inputSize = 30;
-    }
+    const codeMirrorRef = useRef<ReactCodeMirror.ReactCodeMirror>(null);
 
     useEffect(() => {
-        setTimeout(() => {
-            if (searchRef.current) {
-                searchRef.current.focus();
-            }
-        }, 100);
-    }, []);
+        if (codeMirrorRef.current) {
 
+            setTimeout(() => {
+                // @ts-ignore
+                const textArea = codeMirrorRef.current.textareaNode;
+                textArea.value = 'asfdhjksadjfkdslajfkldsa';
+                console.log('here');
+                console.log(textArea);
+            }, 100);
+
+            // @ts-ignore
+            const tmp = codeMirrorRef.current.getCodeMirror().getTextArea();
+            console.log(tmp);
+
+            const editor: CodeMirror.Editor = codeMirrorRef.current.getCodeMirror()
+            const enterHandler = (instance: any, event: any) => {
+                if (event.keyCode === 13) {
+                    // startSearching(query);
+                    editor.setValue(query.replace('\n', ''));
+                }
+            };
+            editor.on("keyup", enterHandler);
+            return () => {
+                editor.off("keyup", enterHandler);
+            };
+        } else {
+            console.error('code mirror ref not set');
+        }
+    }, [])
+
+    const options: EditorConfiguration = {}
 
     return <React.Fragment>
-        <input
-            size={inputSize}
-            ref={searchRef}
-            className={classes.inputStyle}
+        <CodeMirror
+            // className={classes.inputStyle}
+            ref={codeMirrorRef}
             value={query}
-            onChange={e => setQuery(e.target.value)}
-            onKeyDown={e => {
-                if (e.keyCode === 13) {
-                    startSearching(query);
-                }
-            }}
+            onChange={newQuery => setQuery(newQuery)}
+            autoFocus={true}
+            options={options}
         />
     </React.Fragment>
 };

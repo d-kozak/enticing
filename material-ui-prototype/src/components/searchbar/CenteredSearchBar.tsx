@@ -9,7 +9,6 @@ import {Theme} from "@material-ui/core/es";
 
 const styles = (theme: Theme) => createStyles({
     mainDiv: {
-        textAlign: 'center',
         position: 'fixed',
         top: '40%',
         left: '50%',
@@ -17,7 +16,8 @@ const styles = (theme: Theme) => createStyles({
     },
     title: {
         marginBottom: '30px',
-        fontSize: 'calc(3vh + 3em)'
+        fontSize: 'calc(3vh + 3em)',
+        textAlign: 'center'
     }
 });
 
