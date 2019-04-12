@@ -27,3 +27,6 @@
 - [ ] current layout centering is not very responsive, use flex or Grid instead 
 - [ ] show the 'Query:' text only on large screens
 - [ ] add redux
+
+## Known bugs
+- [ ] options for logged in user from appbar sometimes render in the wrong place
