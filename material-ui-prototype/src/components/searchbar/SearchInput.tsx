@@ -13,16 +13,21 @@ import {EditorConfiguration} from "codemirror";
 import './CodeMirror.css';
 import {MG4J_EQL} from "../../codemirror/LanguageMode";
 
-const styles = (theme: Theme) => createStyles({});
+const styles = (theme: Theme) => createStyles({
+    reactCodeMirror: {
+        width: '100%'
+    }
+});
 
 interface QueryInputProps extends WithStyles<typeof styles> {
     query: string,
     setQuery: (query: string) => void,
-    startSearching: (query: string) => void;
+    startSearching: (query: string) => void,
+    className?: string
 }
 
 const SearchInput = (props: QueryInputProps) => {
-    const {startSearching, query, setQuery} = props;
+    const {className = '', startSearching, query, setQuery, classes} = props;
 
     const codeMirrorRef = useRef<ReactCodeMirror.ReactCodeMirror>(null);
 
@@ -46,15 +51,16 @@ const SearchInput = (props: QueryInputProps) => {
         scrollbarStyle: "null"
     }
 
-    return <React.Fragment>
+    return <div className={className}>
         <CodeMirror
+            className={classes.reactCodeMirror}
             ref={codeMirrorRef}
             value={query}
             onChange={newQuery => setQuery(newQuery)}
             autoFocus={true}
             options={options}
         />
-    </React.Fragment>
+    </div>
 };
 
 export default withStyles(styles, {withTheme: true})(SearchInput)

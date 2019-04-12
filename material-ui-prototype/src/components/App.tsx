@@ -114,7 +114,8 @@ const App = () => {
                 <Route path="/search"
                        render={() => {
                            setShouldRedirectToSearchPage(false);
-                           return <Search searchResults={searchResults} showProgressBar={showProgressBar}/>;
+                           return <Search query={query} setQuery={setQuery} startSearching={startSearching}
+                                          searchResults={searchResults}/>;
                        }}/>
                 <Route path="/login" render={() => <Login isLoggedIn={isLoggedId} login={handleLogin}/>}/>
                 <Route path="/signup" render={() => <SignUp isLoggedIn={isLoggedId} signUp={handleSignUp}/>}/>
