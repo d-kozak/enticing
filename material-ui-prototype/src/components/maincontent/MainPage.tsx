@@ -9,12 +9,14 @@ const styles = createStyles({});
 
 
 export interface MainPageProps extends WithStyles<typeof styles> {
-    startSearching: (query: string) => void;
+    startSearching: (query: string) => void,
+    query: string,
+    setQuery: (query: string) => void,
 }
 
 const MainPage = (props: MainPageProps) => {
-    const {startSearching} = props;
-    return <CenteredSearchBar startSearching={startSearching}/>
+    const {startSearching, query, setQuery} = props;
+    return <CenteredSearchBar query={query} setQuery={setQuery} startSearching={startSearching}/>
 };
 
 export default withStyles(styles, {

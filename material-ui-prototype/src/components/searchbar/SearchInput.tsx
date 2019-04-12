@@ -1,7 +1,7 @@
 import createStyles from "@material-ui/core/es/styles/createStyles";
 import {WithStyles} from "@material-ui/core";
 import * as React from "react";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useRef} from "react";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import 'codemirror/lib/codemirror.css';
@@ -16,12 +16,13 @@ import {MG4J_EQL} from "../../codemirror/LanguageMode";
 const styles = (theme: Theme) => createStyles({});
 
 interface QueryInputProps extends WithStyles<typeof styles> {
+    query: string,
+    setQuery: (query: string) => void,
     startSearching: (query: string) => void;
 }
 
 const SearchInput = (props: QueryInputProps) => {
-    const {startSearching} = props;
-    const [query, setQuery] = useState('');
+    const {startSearching, query, setQuery} = props;
 
     const codeMirrorRef = useRef<ReactCodeMirror.ReactCodeMirror>(null);
 

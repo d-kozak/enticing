@@ -15,6 +15,8 @@ import Settings from "./maincontent/Settings";
 
 
 const App = () => {
+    const [query, setQuery] = useState('');
+
     const [isLoggedId, setLoggedIn] = useState(false);
 
     const [searchResults, setSearchResults] = useState<Array<SearchResult> | null>(null);
@@ -107,7 +109,7 @@ const App = () => {
                 <Route path="/" exact
                        render={() => <React.Fragment>
                            {shouldRedirectToSearchPage && searchResults && <Redirect to="/search" push/>}
-                           <MainPage startSearching={startSearching}/>
+                           <MainPage query={query} setQuery={setQuery} startSearching={startSearching}/>
                        </React.Fragment>}/>
                 <Route path="/search"
                        render={() => {
