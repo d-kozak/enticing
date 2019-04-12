@@ -1,7 +1,7 @@
 import {SearchResult} from "../../entities/SearchResult";
 
 
-const killedData: SearchResult =
+const singleResult: SearchResult =
     {
         snippet: 'The singer\'s funeral procession descended into chaos with one person killed and three injured',
         fullText: 'Thousands of mourners lined the streets as the singer\'s hearse made its way through Los Angeles. However, it quickly descended into chaos when a vehicle drove past and shot four people.\n' +
@@ -17,12 +17,15 @@ const killedData: SearchResult =
     }
 ;
 
+const resultArray: Array<SearchResult> = Array(50).fill(0)
+    .map((x, index) => ({...singleResult, snippet: singleResult.snippet + index}))
+
 const search: ((query: string) => Promise<Array<SearchResult>>) = (query) => {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             switch (query) {
                 case 'nertag:person killed':
-                    resolve(Array(50).fill(killedData));
+                    resolve(resultArray);
                     break;
                 case 'fail':
                     reject("booom!");

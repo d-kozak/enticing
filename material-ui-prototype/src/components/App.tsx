@@ -15,7 +15,7 @@ import Settings from "./maincontent/Settings";
 
 
 const App = () => {
-    const [query, setQuery] = useState('');
+    const [query, setQuery] = useState('nertag:person killed');
 
     const [isLoggedId, setLoggedIn] = useState(false);
 
