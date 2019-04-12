@@ -48,7 +48,7 @@ const search: ((query: string) => Promise<Array<SearchResult>>) = (query) => {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             switch (query) {
-                case 'nertag:person visited':
+                case 'nertag:person (visited|entered)':
                     resolve(resultArray);
                     break;
                 case 'fail':

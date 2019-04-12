@@ -50,14 +50,17 @@ interface LoginFormikProps {
     password: string
 }
 
+const minLenText = 'At least 5 characters, please';
+const maxLenText = 'Max 32 characters, please';
+
 const LoginSchema = Yup.object().shape({
     login: Yup.string()
-        .min(5, 'Too Short!')
-        .max(32, 'Too Long!')
+        .min(5, minLenText)
+        .max(32, maxLenText)
         .required('Required'),
     password: Yup.string()
-        .min(5, 'Too Short!')
-        .max(32, 'Too Long!')
+        .min(5, minLenText)
+        .max(32, maxLenText)
         .required('Required'),
 });
 
