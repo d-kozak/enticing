@@ -7,13 +7,14 @@ import {SearchResult} from "../../entities/SearchResult";
 import SearchResultItem from "./SearchResultItem";
 import Typography from "@material-ui/core/es/Typography";
 import Paper from "@material-ui/core/es/Paper";
-import SearchListPagination from "./SearchListPagination";
+import Pagination from "../pagination/Pagination";
 
 const styles = createStyles({
     root: {
         minWidth: '275px',
         width: '90%',
-        margin: '20px auto'
+        margin: '20px auto',
+        padding: '10px'
     },
     '@media (min-width:600)': {
         root: {
@@ -45,7 +46,7 @@ const SearchResultList = (props: SearchResultListProps) => {
         }
         <Typography
             variant="body1">{searchResults.length > 0 ? `Total number of snippets is ${searchResults.length}` : 'No snippets found'}</Typography>
-        <SearchListPagination currentPage={currentPage} setCurrentPage={setCurrentPage} pageCount={pageCount}/>
+        <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} pageCount={pageCount}/>
     </Paper>
 };
 
