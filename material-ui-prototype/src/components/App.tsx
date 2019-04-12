@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import MenuAppBar from "./appbar/CorprocAppBar";
 import {CssBaseline} from "@material-ui/core";
 import CorprocSnackBar from "./notifiers/CorprocSnackbar";
@@ -15,7 +15,13 @@ import Settings from "./maincontent/Settings";
 
 
 const App = () => {
-    const [query, setQuery] = useState('nertag:person killed');
+    const [query, setQuery] = useState('nertag:person visited');
+
+    useEffect(() => {
+        setTimeout(() => {
+            startSearching(query);
+        }, 100)
+    }, []);
 
     const [isLoggedId, setLoggedIn] = useState(false);
 
