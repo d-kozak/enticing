@@ -41,7 +41,8 @@ const SearchInput = (props: QueryInputProps) => {
                 startSearching(query);
             }
         },
-        mode: MG4J_EQL
+        mode: MG4J_EQL,
+        scrollbarStyle: "null"
     }
 
     return <React.Fragment>
