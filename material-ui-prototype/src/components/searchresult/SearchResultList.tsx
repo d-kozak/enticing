@@ -9,6 +9,7 @@ import Typography from "@material-ui/core/es/Typography";
 import Paper from "@material-ui/core/es/Paper";
 import Pagination from "../pagination/Pagination";
 import Divider from "@material-ui/core/es/Divider";
+import SearchResultDetailsDialog from "./detailsdialog/SearchResultFullTextDialog";
 
 const styles = createStyles({
     root: {
@@ -34,6 +35,11 @@ const SearchResultList = (props: SearchResultListProps) => {
 
     const [currentPage, setCurrentPage] = useState(0);
 
+
+    const [currentlyVisibleResultDetails, setCurrentlyVisibleResultDetails] = useState<SearchResult | null>(null);
+
+    const openDetails = (searchResult: SearchResult) => setCurrentlyVisibleResultDetails(searchResult);
+
     let pageCount = Math.floor(searchResults.length / 20);
     if (searchResults.length % 20 != 0) {
         pageCount += 1
@@ -45,12 +51,16 @@ const SearchResultList = (props: SearchResultListProps) => {
             .map(
                 (searchResult, index) => <React.Fragment key={index}>
                     {index > 0 && <Divider/>}
-                    <SearchResultItem searchResult={searchResult}/>
+                    <SearchResultItem openDetails={openDetails} searchResult={searchResult}/>
                 </React.Fragment>)
         }
         <Typography
             variant="body1">{searchResults.length > 0 ? `Total number of snippets is ${searchResults.length}` : 'No snippets found'}</Typography>
         <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} pageCount={pageCount}/>
+
+        <SearchResultDetailsDialog searchResult={currentlyVisibleResultDetails}
+                                   dialogClosed={() => setCurrentlyVisibleResultDetails(null)}/>
+
     </Paper>
 };
 

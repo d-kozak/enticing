@@ -24,13 +24,14 @@ const styles = createStyles({
 
 
 export interface SearchResultItemProps extends WithStyles<typeof styles> {
-    searchResult: SearchResult
+    searchResult: SearchResult,
+    openDetails: (searchResult: SearchResult) => void
 }
 
 const SearchResultItem = (props: SearchResultItemProps) => {
-    const {searchResult, classes} = props;
+    const {searchResult, openDetails, classes} = props;
 
-    const [showMore, setShowMore] = useState(false);
+    const [showContext, setShowContext] = useState(false);
 
     const isScreenMedium = useMediaQuery('(min-width:500px)');
 
@@ -38,8 +39,8 @@ const SearchResultItem = (props: SearchResultItemProps) => {
         className={classes.showContextBtnGrid}
         control={
             <Switch
-                checked={showMore}
-                onChange={e => setShowMore(e.target.checked)}
+                checked={showContext}
+                onChange={e => setShowContext(e.target.checked)}
                 value="checkedB"
                 color="primary"
             />
@@ -49,7 +50,7 @@ const SearchResultItem = (props: SearchResultItemProps) => {
 
     return <div className={classes.root}>
         <Typography variant="body1">
-            {showMore ? searchResult.largerText : searchResult.snippet}
+            {showContext ? searchResult.largerText : searchResult.snippet}
         </Typography>
         <Grid container justify="flex-end" alignContent="center">
 
@@ -57,7 +58,7 @@ const SearchResultItem = (props: SearchResultItemProps) => {
                 <ShowContext/>
             </Grid>}
 
-            <Button color="primary" size="small">Details</Button>
+            <Button onClick={() => openDetails(searchResult)} color="primary" size="small">Details</Button>
 
             <Button size="small">Annotations</Button>
 
