@@ -43,8 +43,10 @@ const SearchResultList = (props: SearchResultListProps) => {
         {searchResults
             .slice(currentPage * 20, currentPage * 20 + 20)
             .map(
-                (searchResult, index) => [index > 0 && <Divider/>,
-                    <SearchResultItem key={index} searchResult={searchResult}/>])
+                (searchResult, index) => <React.Fragment key={index}>
+                    {index > 0 && <Divider/>}
+                    <SearchResultItem searchResult={searchResult}/>
+                </React.Fragment>)
         }
         <Typography
             variant="body1">{searchResults.length > 0 ? `Total number of snippets is ${searchResults.length}` : 'No snippets found'}</Typography>
