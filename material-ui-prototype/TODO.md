@@ -9,6 +9,8 @@
 - [ ] SearchResult page
     - [X] show results
     - [X] enable submitting a query from this page as well
+    - [X] show annotations
+    - [ ] find a cleaner way to handle annotations, current implementation is messy
     - [ ] encode query in url (so that the search can be started )
     
 - [ ] Add some intelligence to the query input component

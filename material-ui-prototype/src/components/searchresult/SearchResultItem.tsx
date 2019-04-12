@@ -7,7 +7,6 @@ import {SearchResult} from "../../entities/SearchResult";
 import Grid from "@material-ui/core/es/Grid";
 import Switch from "@material-ui/core/es/Switch";
 import FormControlLabel from "@material-ui/core/es/FormControlLabel";
-import Typography from "@material-ui/core/es/Typography";
 import Button from "@material-ui/core/es/Button";
 
 import {unstable_useMediaQuery as useMediaQuery} from '@material-ui/core/useMediaQuery';
@@ -49,9 +48,7 @@ const SearchResultItem = (props: SearchResultItemProps) => {
     />
 
     return <div className={classes.root}>
-        <Typography variant="body1">
-            {showContext ? searchResult.largerText : searchResult.snippet}
-        </Typography>
+        {showContext ? searchResult.largerText : searchResult.snippet}
         <Grid container justify="flex-end" alignContent="center">
 
             {isScreenMedium ? <ShowContext/> : <Grid container>
