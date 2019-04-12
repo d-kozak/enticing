@@ -83,7 +83,6 @@ const App = () => {
     };
 
     const startSearching = (query: string) => {
-        setSearchResults(null);
         setShouldRedirectToSearchPage(true);
         setShowProgressBar(true);
         search(query)
