@@ -18,6 +18,8 @@
     -[ ] complex support using parser in the backend
 - [ ] Admin mode
     - [ ] add admin related buttons where necessary
-    - [ ] 
-    
-- [ ] include redux
+   
+## Features
+- [ ] current layout centering is not very responsive, use flex or Grid instead 
+- [ ] show the 'Query:' text only on large screens
+- [ ] add redux

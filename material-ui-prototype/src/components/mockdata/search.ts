@@ -47,7 +47,7 @@ const search: ((query: string) => Promise<Array<SearchResult>>) = (query) => {
                 default:
                     resolve([]);
             }
-        }, 2000)
+        }, 500)
     })
 };
 

@@ -8,6 +8,7 @@ import SearchResultItem from "./SearchResultItem";
 import Typography from "@material-ui/core/es/Typography";
 import Paper from "@material-ui/core/es/Paper";
 import Pagination from "../pagination/Pagination";
+import Divider from "@material-ui/core/es/Divider";
 
 const styles = createStyles({
     root: {
@@ -42,7 +43,8 @@ const SearchResultList = (props: SearchResultListProps) => {
         {searchResults
             .slice(currentPage * 20, currentPage * 20 + 20)
             .map(
-                (searchResult, index) => <SearchResultItem key={index} searchResult={searchResult}/>)
+                (searchResult, index) => [index > 0 && <Divider/>,
+                    <SearchResultItem key={index} searchResult={searchResult}/>])
         }
         <Typography
             variant="body1">{searchResults.length > 0 ? `Total number of snippets is ${searchResults.length}` : 'No snippets found'}</Typography>
