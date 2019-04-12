@@ -1,3 +1,6 @@
 export interface SearchResult {
-    snippet: string
+    snippet: string,
+    url: string,
+    largerText: string,
+    fullText: string
 }
