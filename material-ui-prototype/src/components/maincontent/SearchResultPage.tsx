@@ -6,6 +6,7 @@ import React from 'react';
 import SearchResultList from "../searchresult/SearchResultList";
 import {SearchResult} from "../../entities/SearchResult";
 import {Redirect} from "react-router";
+import NoResultsFound from "../searchresult/NoResultsFound";
 
 const styles = createStyles({});
 
@@ -18,6 +19,9 @@ const SearchResultPage = (props: SearchProps) => {
     const {searchResults, showProgressBar} = props;
     if (searchResults === null) {
         return <Redirect to="/"/>
+    }
+    if (searchResults.length === 0) {
+        return <NoResultsFound/>
     }
     return <SearchResultList searchResults={searchResults}/>
 };
