@@ -2,6 +2,47 @@
     color: red;
 }
 
-.cm-bracket {
-    color: blue;
+/* mbracket because bracket is taken by codemirror  */
+.cm-mbracket {
+    color: chartreuse;
+}
+
+.cm-and {
+    color: green;
+}
+
+.cm-or {
+    color: green;
+}
+
+.cm-not {
+    color: green;
+}
+
+.cm-sequence {
+    color: purple;
+}
+
+.cm-minus {
+    color: red;
+}
+
+.cm-par {
+    color: grey;
+}
+
+.cm-sent {
+    color: aqua;
+}
+
+.cm-caret {
+    color: coral;
+}
+
+.cm-dot {
+    color: darkslateblue;
+}
+
+.cm-tilde {
+    color: darkorchid;
 }

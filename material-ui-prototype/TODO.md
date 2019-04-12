@@ -11,7 +11,9 @@
     - [ ] enable submitting a query from this page as well
     
 - [ ] Add some intelligence to the query input component
-    -[ ] react-codemirror with simple lexing
+    -[X] react-codemirror with simple lexing
+    -[ ] more effective lexer
+    -[ ] entity types recognition
     -[ ] autocomplete based on entity type
     -[ ] complex support using parser in the backend
 - [ ] Admin mode
