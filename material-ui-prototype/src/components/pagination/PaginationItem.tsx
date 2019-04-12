@@ -8,11 +8,11 @@ import {Theme} from "@material-ui/core/es";
 const paginationItemCommon = (theme: Theme): CSSProperties => ({
     padding: '0px 5px',
     fontFamily: theme.typography.fontFamily,
-    fontSize: theme.typography.h5.fontSize,
+    fontSize: theme.typography.h6.fontSize,
     width: '32px',
     height: '32px',
-    textAlign: 'center'
-
+    borderRadius: '3px',
+    display: 'flex'
 });
 
 const styles = (theme: Theme) => createStyles({
@@ -39,7 +39,9 @@ export interface PaginationItemProps extends WithStyles<typeof styles> {
 const PaginationItem = (props: PaginationItemProps) => {
     const {onClick, text, classes, isActive = false} = props;
     return <div className={isActive ? classes.activeItem : classes.paginationItem} onClick={onClick}>
-        {text}
+        <div style={{margin: 'auto'}}>
+            {text}
+        </div>
     </div>
 };
 
