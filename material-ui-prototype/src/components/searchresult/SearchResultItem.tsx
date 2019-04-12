@@ -32,7 +32,7 @@ const SearchResultItem = (props: SearchResultItemProps) => {
 
     const [showMore, setShowMore] = useState(false);
 
-    const isSmall = !useMediaQuery('(min-width:500px)');
+    const isScreenMedium = useMediaQuery('(min-width:500px)');
 
     const ShowContext = () => <FormControlLabel
         className={classes.showContextBtnGrid}
@@ -53,9 +53,9 @@ const SearchResultItem = (props: SearchResultItemProps) => {
         </Typography>
         <Grid container justify="flex-end" alignContent="center">
 
-            {isSmall ? <Grid container>
+            {isScreenMedium ? <ShowContext/> : <Grid container>
                 <ShowContext/>
-            </Grid> : <ShowContext/>}
+            </Grid>}
 
             <Button color="primary" size="small">Details</Button>
 

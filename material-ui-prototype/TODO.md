@@ -7,8 +7,9 @@
     - [ ] Edit default settings (ADMIN, see ADMIN mode) 
 - [X] MainPage
 - [ ] SearchResult page
-    - [ ] show results
-    - [ ] enable submitting a query from this page as well
+    - [X] show results
+    - [X] enable submitting a query from this page as well
+    - [ ] encode query in url (so that the search can be started )
     
 - [ ] Add some intelligence to the query input component
     -[X] react-codemirror with simple lexing
@@ -19,6 +20,7 @@
 - [ ] Admin mode
     - [ ] add admin related buttons where necessary
    
+
 ## Features
 - [ ] current layout centering is not very responsive, use flex or Grid instead 
 - [ ] show the 'Query:' text only on large screens
