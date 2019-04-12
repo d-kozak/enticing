@@ -12,7 +12,8 @@ import SettingsForm from "./SettingsForm";
 const styles = createStyles({
     root: {
         width: '80%',
-        margin: '20px auto'
+        margin: '20px auto',
+        paddingBottom: '5px'
     },
     settingsTitle: {
         textAlign: 'center'
