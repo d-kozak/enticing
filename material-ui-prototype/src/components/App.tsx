@@ -33,12 +33,12 @@ const App = ({showSnackBarMessage, isAdmin, progressBarVisible}: AppProps) => {
 
             <Switch>
                 <Route path="/" exact
-                       render={() => <React.Fragment>
-                           <MainPage query={query} setQuery={setQuery}/>
+                       render={({history}) => <React.Fragment>
+                           <MainPage query={query} setQuery={setQuery} history={history}/>
                        </React.Fragment>}/>
                 <Route path="/search"
                        render={() => <Search query={query} setQuery={setQuery}/>}/>
-                <Route path="/login" render={() => <Login/>}/>
+                <Route path="/login" render={({}) => <Login/>}/>
                 <Route path="/signup" render={() => <SignUp/>}/>
                 <Route path="/settings" render={() => <Settings/>}/>
                 <AdminRoute path="/users" isAdmin={isAdmin} showSnackBarMessage={showSnackBarMessage}

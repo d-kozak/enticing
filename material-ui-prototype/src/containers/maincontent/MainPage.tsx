@@ -8,18 +8,22 @@ import {AppState} from "../../AppState";
 import {startSearchingAction} from "../../actions/QueryActions";
 import {connect} from "react-redux";
 
+import * as H from 'history';
+
 const styles = createStyles({});
 
 
 export interface MainPageProps extends WithStyles<typeof styles> {
-    startSearching: (query: string) => void,
+    startSearching: (query: string, history?: H.History) => void,
     query: string,
     setQuery: (query: string) => void,
+    history: H.History
 }
 
 const MainPage = (props: MainPageProps) => {
-    const {startSearching, query, setQuery} = props;
-    return <CenteredSearchBar query={query} setQuery={setQuery} startSearching={startSearching}/>
+    const {startSearching, query, setQuery, history} = props;
+    return <CenteredSearchBar query={query} setQuery={setQuery}
+                              startSearching={(query) => startSearching(query, history)}/>
 };
 
 
