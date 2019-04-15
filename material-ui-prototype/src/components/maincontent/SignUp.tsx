@@ -10,6 +10,9 @@ import {TextField} from "formik-material-ui";
 import Button from "@material-ui/core/es/Button";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
 import Typography from "@material-ui/core/Typography";
+import {AppState} from "../../AppState";
+import {signUpAction} from "../../actions/UserActions";
+import {connect} from "react-redux";
 
 const styles = createStyles({
     mainElement: {
@@ -31,7 +34,7 @@ const styles = createStyles({
 
 
 export interface SignUpProps extends WithStyles<typeof styles> {
-    signUp: (login: string, password: string) => Promise<{}>,
+    signUp: (login: string, password: string, onError: (errors: any) => void) => void,
     isLoggedIn: boolean
 }
 
@@ -84,13 +87,11 @@ const SignUp = (props: SignUpProps) => {
             onSubmit={(values, actions) => {
                 const {login, password1: password} = values;
                 setShowProgress(true);
-                signUp(login, password)
-                    .catch(errors => {
-                        setShowProgress(false);
-                        actions.setErrors(errors);
-                        actions.setSubmitting(false);
-                    });
-
+                signUp(login, password, errors => {
+                    setShowProgress(false);
+                    actions.setErrors(errors);
+                    actions.setSubmitting(false);
+                })
             }}
         >
             {({isSubmitting}) => <Form>
@@ -111,4 +112,12 @@ const SignUp = (props: SignUpProps) => {
 };
 
 
-export default withStyles(styles, {withTheme: true})(SignUp);
+const mapStateToProps = (state: AppState) => ({
+    isLoggedIn: state.user.isLoggedIn
+})
+
+const mapDispatchToProps = {
+    signUp: signUpAction
+};
+
+export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(SignUp));

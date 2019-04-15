@@ -5,13 +5,6 @@ type LogoutAction = {
     type: "[USER] LOGOUT"
 }
 
-type LoginRequestAction = {
-    type: "[USER] LOGIN REQUEST"
-    username: string,
-    password: string,
-    onError: (errors: any) => void
-}
-
 type LoginSuccessAction = {
     type: "[USER] LOGIN SUCCESS",
     username: string,
@@ -43,6 +36,19 @@ export const loginRequestAction = (login: string, password: string, onError: (er
             onError({password: 'Invalid password'})
         } else {
             onError({login: 'Unknown login'});
+        }
+    }, 2000);
+}
+
+export const signUpAction = (login: string, password: string, onError: (error: any) => void): ThunkResult<void> => (dispatch) => {
+    setTimeout(() => {
+        if (login != 'dkozak') {
+            dispatch(openSnackBar('Signed up successfully'))
+            dispatch(loginSuccessAction(login, false))
+        } else {
+            onError({
+                login: 'This login is already taken'
+            });
         }
     }, 2000);
 }

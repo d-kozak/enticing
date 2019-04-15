@@ -88,7 +88,7 @@ const App = ({showSnackBarMessage}: AppProps) => {
                                           searchResults={searchResults}/>;
                        }}/>
                 <Route path="/login" render={() => <Login/>}/>
-                <Route path="/signup" render={() => <SignUp isLoggedIn={isLoggedId} signUp={handleSignUp}/>}/>
+                <Route path="/signup" render={() => <SignUp/>}/>
                 <Route path="/settings" render={() => <Settings isLoggedIn={isLoggedId}/>}/>
                 <AdminRoute path="/users" isAdmin={isAdmin} showSnackBarMessage={showSnackBarMessage}
                             render={() => <UserManagement/>}/>
