@@ -3,11 +3,14 @@ import {WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React from 'react';
-import SearchResultList from "../searchresult/SearchResultList";
+import SearchResultList from "../../components/searchresult/SearchResultList";
 import {SearchResult} from "../../entities/SearchResult";
-import NoResultsFound from "../searchresult/NoResultsFound";
-import SearchInput from "../searchbar/SearchInput";
+import NoResultsFound from "../../components/searchresult/NoResultsFound";
+import SearchInput from "../../components/searchbar/SearchInput";
 import Typography from "@material-ui/core/es/Typography";
+import {AppState} from "../../AppState";
+import {startSearchingAction} from "../../actions/QueryActions";
+import {connect} from "react-redux";
 
 const styles = createStyles({
     searchDiv: {
@@ -43,6 +46,14 @@ const SearchResultPage = (props: SearchProps) => {
     </div>
 };
 
+const mapStateToProps = (state: AppState) => ({
+    searchResults: state.searchResults.searchResults
+});
+const mapDispatchToProps = {
+    startSearching: startSearchingAction
+}
+
+
 export default withStyles(styles, {
     withTheme: true
-})(SearchResultPage)
+})(connect(mapStateToProps, mapDispatchToProps)(SearchResultPage))

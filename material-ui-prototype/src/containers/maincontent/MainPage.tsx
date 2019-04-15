@@ -3,7 +3,10 @@ import {WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React from 'react';
-import CenteredSearchBar from "../searchbar/CenteredSearchBar";
+import CenteredSearchBar from "../../components/searchbar/CenteredSearchBar";
+import {AppState} from "../../AppState";
+import {startSearchingAction} from "../../actions/QueryActions";
+import {connect} from "react-redux";
 
 const styles = createStyles({});
 
@@ -19,6 +22,12 @@ const MainPage = (props: MainPageProps) => {
     return <CenteredSearchBar query={query} setQuery={setQuery} startSearching={startSearching}/>
 };
 
+
+const mapStateToProps = (state: AppState) => ({});
+const mapDispatchToProps = {
+    startSearching: startSearchingAction
+}
+
 export default withStyles(styles, {
     withTheme: true
-})(MainPage)
+})(connect(mapStateToProps, mapDispatchToProps)(MainPage))

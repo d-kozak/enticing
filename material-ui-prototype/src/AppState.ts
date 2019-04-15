@@ -1,10 +1,12 @@
+import {SearchResult} from "./entities/SearchResult";
+
 export interface AppState {
     user: UserState,
     query: QueryState,
     searchResults: SearchResultsState,
-    snackBar: SnackBarState
+    snackBar: SnackBarState,
+    progressBar: ProgressBarState
 }
-
 
 export interface UserState {
     isLoggedIn: boolean,
@@ -12,11 +14,15 @@ export interface UserState {
 }
 
 export interface QueryState {
+    lastQuery: string
+}
 
+export interface ProgressBarState {
+    isVisible: boolean
 }
 
 export interface SearchResultsState {
-
+    searchResults: Array<SearchResult> | null
 }
 
 export interface SnackBarState {

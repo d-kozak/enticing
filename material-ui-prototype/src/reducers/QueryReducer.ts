@@ -4,7 +4,9 @@ import {QueryAction} from "../actions/QueryActions";
 
 type QueryReducer = (state: QueryState | undefined, action: QueryAction) => QueryState
 
-const initialState: QueryState = {}
+const initialState: QueryState = {
+    lastQuery: ''
+}
 
 const queryReducer: QueryReducer = (state = initialState, action) => {
     return state
