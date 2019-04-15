@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import CorprocAppBar from "../containers/appbar/CorprocAppBar";
 import {CssBaseline} from "@material-ui/core";
 import CorprocSnackBar from "../containers/snackbar/CorprocSnackbar";
@@ -23,8 +23,6 @@ interface AppProps {
 }
 
 const App = ({showSnackBarMessage, isAdmin, progressBarVisible}: AppProps) => {
-    const [query, setQuery] = useState('nertag:person (visited|entered)');
-
     return <React.Fragment>
         <CssBaseline/>
         <Router>
@@ -34,10 +32,10 @@ const App = ({showSnackBarMessage, isAdmin, progressBarVisible}: AppProps) => {
             <Switch>
                 <Route path="/" exact
                        render={({history}) => <React.Fragment>
-                           <MainPage query={query} setQuery={setQuery} history={history}/>
+                           <MainPage history={history}/>
                        </React.Fragment>}/>
                 <Route path="/search"
-                       render={() => <Search query={query} setQuery={setQuery}/>}/>
+                       render={() => <Search/>}/>
                 <Route path="/login" render={({}) => <Login/>}/>
                 <Route path="/signup" render={() => <SignUp/>}/>
                 <Route path="/settings" render={() => <Settings/>}/>

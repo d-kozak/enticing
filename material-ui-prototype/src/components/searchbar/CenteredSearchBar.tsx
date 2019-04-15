@@ -23,17 +23,15 @@ const styles = (theme: Theme) => createStyles({
 
 export interface CenteredSearchBar extends WithStyles<typeof styles> {
     startSearching: (query: string) => void;
-    query: string,
-    setQuery: (query: string) => void,
 }
 
 const CenteredSearchBar = (props: CenteredSearchBar) => {
-    const {classes, startSearching, query, setQuery} = props;
+    const {classes, startSearching} = props;
     return <div className={classes.mainDiv}>
         <Typography className={classes.title} variant="h3">
             Corproc Search
         </Typography>
-        <SearchInput query={query} setQuery={setQuery} startSearching={startSearching}/>
+        <SearchInput startSearching={startSearching}/>
     </div>
 };
 
