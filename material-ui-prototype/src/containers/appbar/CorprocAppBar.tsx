@@ -41,10 +41,9 @@ const CorprocAppBar = (props: CorprocAppBarProps) => {
     </div>
 };
 
-const mapStateToProps = (state: AppState, ownProps: CorprocAppBarProps): CorprocAppBarProps => {
+const mapStateToProps = (state: AppState) => {
     const {isLoggedIn, isAdmin} = state.user;
     return {
-        ...ownProps,
         isLoggedIn,
         isAdmin
     }
@@ -54,6 +53,4 @@ const mapDispatchToProps = {
     handleLogout: logoutAction
 };
 
-const CorprocAppbarConnected = withStyles(styles, {withTheme: true})((connect(mapStateToProps, mapDispatchToProps))(CorprocAppBar));
-
-export default CorprocAppbarConnected;
+export default withStyles(styles, {withTheme: true})((connect(mapStateToProps, mapDispatchToProps))(CorprocAppBar));
