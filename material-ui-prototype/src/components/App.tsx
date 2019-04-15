@@ -12,6 +12,8 @@ import search from "./mockdata/search";
 import Search from "./maincontent/SearchResultPage";
 import MainPage from "./maincontent/MainPage";
 import Settings from "./maincontent/Settings";
+import UserManagement from "./maincontent/UserManagement";
+import AdminRoute from "./routes/AdminRoute";
 
 
 const App = () => {
@@ -102,7 +104,12 @@ const App = () => {
         });
     };
 
-    const showProgressBar = () => setShowProgressBar(true);
+    const showSnackBarMessage = (message: string) => {
+        setSnackbarState({
+            isOpen: true,
+            message
+        })
+    };
 
     const [shouldRedirectToSearchPage, setShouldRedirectToSearchPage] = useState(true);
 
@@ -130,6 +137,8 @@ const App = () => {
                 <Route path="/login" render={() => <Login isLoggedIn={isLoggedId} login={handleLogin}/>}/>
                 <Route path="/signup" render={() => <SignUp isLoggedIn={isLoggedId} signUp={handleSignUp}/>}/>
                 <Route path="/settings" render={() => <Settings isLoggedIn={isLoggedId}/>}/>
+                <AdminRoute path="/users" isAdmin={isAdmin} showSnackBarMessage={showSnackBarMessage}
+                            render={() => <UserManagement/>}/>
                 <Route component={UnknownRoute}/>
             </Switch>
         </Router>
