@@ -1,6 +1,6 @@
-import {SearchResult} from "../../entities/SearchResult";
+import {SearchResult} from "../entities/SearchResult";
 import {loremIpsumText} from "./loremIpsum";
-import AnnotatedElement from "../annotations/AnnotatedElement";
+import AnnotatedElement from "../components/annotations/AnnotatedElement";
 import * as React from "react";
 
 
