@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './components/App';
+import Root from "./containers/Root";
 import * as serviceWorker from './serviceWorker';
 // register the custom mode
 // note: since the constant MG4J_EQL is used inside the SearchBar component, the
@@ -8,7 +8,8 @@ import * as serviceWorker from './serviceWorker';
 // and therefore I am keeping this import here to make it more explicit
 import './codemirror/LanguageMode';
 
-ReactDOM.render(<App/>, document.getElementById('root'));
+
+ReactDOM.render(<Root/>, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

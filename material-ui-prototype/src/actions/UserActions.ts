@@ -1,0 +1,1 @@
+export type UserAction = { type: String }

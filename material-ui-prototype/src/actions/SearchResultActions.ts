@@ -1,0 +1,1 @@
+export type SearchResultAction = { type: String }
