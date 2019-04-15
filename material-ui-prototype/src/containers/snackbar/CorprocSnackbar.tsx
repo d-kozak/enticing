@@ -4,6 +4,9 @@ import IconButton from "@material-ui/core/es/IconButton";
 import {Theme, WithStyles} from "@material-ui/core/es";
 import CloseIcon from '@material-ui/icons/Close';
 import withStyles from "@material-ui/core/es/styles/withStyles";
+import {connect} from "react-redux";
+import {AppState} from "../../AppState";
+import {closeSnackBar} from "../../actions/SnackBarActions";
 
 const styles = (theme: Theme) => ({
     close: {
@@ -53,4 +56,17 @@ const CorprocSnackbar = (props: CorprocSnackBarProps) => {
     />
 };
 
-export default withStyles(styles, {withTheme: true})(CorprocSnackbar);
+
+const mapStateToProps = (state: AppState) => {
+    const {isOpen, message} = state.snackBar
+    return {
+        isOpen,
+        message
+    }
+}
+
+const mapDispatchToProps = {
+    setClosed: closeSnackBar
+}
+
+export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(CorprocSnackbar));

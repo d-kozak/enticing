@@ -1,22 +1,27 @@
 import React, {useState} from 'react';
 import CorprocAppBar from "../containers/appbar/CorprocAppBar";
 import {CssBaseline} from "@material-ui/core";
-import CorprocSnackBar from "./notifiers/CorprocSnackbar";
+import CorprocSnackBar from "../containers/snackbar/CorprocSnackbar";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
 import {BrowserRouter as Router, Redirect, Route, Switch} from 'react-router-dom';
 import Login from "../containers/maincontent/Login";
 import UnknownRoute from "./maincontent/UnknownRoute";
 import SignUp from "./maincontent/SignUp";
 import {SearchResult} from "../entities/SearchResult";
-import search from "./mockdata/search";
 import Search from "./maincontent/SearchResultPage";
 import MainPage from "./maincontent/MainPage";
 import Settings from "./maincontent/Settings";
 import UserManagement from "./maincontent/UserManagement";
 import AdminRoute from "./routes/AdminRoute";
+import {openSnackBar} from "../actions/SnackBarActions";
+import {connect} from "react-redux";
+import {AppState} from "../AppState";
 
+interface AppProps {
+    showSnackBarMessage: (message: string) => void
+}
 
-const App = () => {
+const App = ({showSnackBarMessage}: AppProps) => {
     const [query, setQuery] = useState('nertag:person (visited|entered)');
 
     const [isLoggedId, setLoggedIn] = useState(false);
@@ -24,63 +29,42 @@ const App = () => {
 
     const [searchResults, setSearchResults] = useState<Array<SearchResult> | null>(null);
 
-    const [snackbarState, setSnackbarState] = useState({
-        isOpen: false,
-        message: ''
-    });
-
     const [progressBarVisible, setShowProgressBar] = useState(false);
-
-    const handleLogout = () => {
-        setLoggedIn(false);
-        setIsAdmin(false);
-        setSnackbarState({
-            isOpen: true,
-            message: 'Logged out'
-        });
-    }
 
 
     const handleSignUp = (login: string, password: string) => {
         return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                if (login != 'dkozak') {
-                    setSnackbarState({
-                        isOpen: true,
-                        message: 'Signed up successfully'
-                    });
-                    setLoggedIn(true);
-                    resolve();
-                } else {
-                    reject({
-                        login: 'This login is already taken'
-                    });
-                }
-            }, 2000);
+            // setTimeout(() => {
+            //     if (login != 'dkozak') {
+            //         setSnackbarState({
+            //             isOpen: true,
+            //             message: 'Signed up successfully'
+            //         });
+            //         setLoggedIn(true);
+            //         resolve();
+            //     } else {
+            //         reject({
+            //             login: 'This login is already taken'
+            //         });
+            //     }
+            // }, 2000);
         });
     };
 
     const startSearching = (query: string) => {
-        setShouldRedirectToSearchPage(true);
-        setShowProgressBar(true);
-        search(query)
-            .then(results => {
-                setSearchResults(results);
-            }).catch(error => {
-            setSnackbarState({
-                isOpen: true,
-                message: `Error ${error}`
-            });
-        }).finally(() => {
-            setShowProgressBar(false);
-        });
-    };
-
-    const showSnackBarMessage = (message: string) => {
-        setSnackbarState({
-            isOpen: true,
-            message
-        })
+        // setShouldRedirectToSearchPage(true);
+        // setShowProgressBar(true);
+        // search(query)
+        //     .then(results => {
+        //         setSearchResults(results);
+        //     }).catch(error => {
+        //     setSnackbarState({
+        //         isOpen: true,
+        //         message: `Error ${error}`
+        //     });
+        // }).finally(() => {
+        //     setShowProgressBar(false);
+        // });
     };
 
     const [shouldRedirectToSearchPage, setShouldRedirectToSearchPage] = useState(true);
@@ -111,12 +95,14 @@ const App = () => {
                 <Route component={UnknownRoute}/>
             </Switch>
         </Router>
-        <CorprocSnackBar isOpen={snackbarState.isOpen}
-                         setClosed={() => setSnackbarState({...snackbarState, isOpen: false})}
-                         message={snackbarState.message}
-        />
+        <CorprocSnackBar/>
     </React.Fragment>
 };
 
 
-export default App;
+const mapStateToProps = (state: AppState) => ({})
+const mapDispatchToProps = {
+    showSnackBarMessage: openSnackBar
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

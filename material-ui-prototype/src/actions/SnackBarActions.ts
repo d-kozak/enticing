@@ -15,6 +15,6 @@ export const openSnackBar = (message: string): OpenSnackBarAction => ({
 })
 
 
-export const closeSnackBar = (message: string): CloseSnackBarAction => ({
+export const closeSnackBar = (): CloseSnackBarAction => ({
     type: "[SNACKBAR] CLOSE"
 })
