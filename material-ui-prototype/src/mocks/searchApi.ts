@@ -4,10 +4,12 @@ import {openSnackBar} from "../actions/SnackBarActions";
 import {hideProgressBarAction, showProgressBarAction} from "../actions/ProgressBarActions";
 import {newSearchResultsAction} from "../actions/SearchResultActions";
 import * as H from "history";
+import {queryExecutedAction} from "../actions/QueryActions";
 
 export const mockSearch = (query: string, dispatch: Dispatch, history?: H.History) => {
 
     dispatch(showProgressBarAction())
+    dispatch(queryExecutedAction(query));
     search(query)
         .then(results => {
             dispatch(newSearchResultsAction(results));

@@ -6,12 +6,14 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import 'codemirror/lib/codemirror.css';
 import {Theme} from "@material-ui/core/es";
+import {connect} from "react-redux";
 
 import CodeMirror from 'react-codemirror';
 import {EditorConfiguration} from "codemirror";
 
 import './CodeMirror.css';
 import {MG4J_EQL} from "../../codemirror/LanguageMode";
+import {AppState} from "../../AppState";
 
 const styles = (theme: Theme) => createStyles({
     reactCodeMirror: {
@@ -20,14 +22,15 @@ const styles = (theme: Theme) => createStyles({
 });
 
 interface QueryInputProps extends WithStyles<typeof styles> {
+    lastQuery: string
     startSearching: (query: string) => void,
     className?: string
 }
 
 const SearchInput = (props: QueryInputProps) => {
-    const {className = '', startSearching, classes} = props;
+    const {className = '', startSearching, classes, lastQuery} = props;
 
-    const [query, setQuery] = useState('nertag:person (visited|entered)');
+    const [query, setQuery] = useState(lastQuery);
 
     const codeMirrorRef = useRef<ReactCodeMirror.ReactCodeMirror>(null);
 
@@ -63,4 +66,8 @@ const SearchInput = (props: QueryInputProps) => {
     </div>
 };
 
-export default withStyles(styles, {withTheme: true})(SearchInput)
+const mapStateToProps = (state: AppState) => ({
+    lastQuery: state.query.lastQuery
+});
+
+export default withStyles(styles, {withTheme: true})(connect(mapStateToProps)(SearchInput))

@@ -6,7 +6,7 @@ import React from 'react';
 import SearchResultList from "../../components/searchresult/SearchResultList";
 import {SearchResult} from "../../entities/SearchResult";
 import NoResultsFound from "../../components/searchresult/NoResultsFound";
-import SearchInput from "../../components/searchbar/SearchInput";
+import SearchInput from "../searchbar/SearchInput";
 import Typography from "@material-ui/core/es/Typography";
 import {AppState} from "../../AppState";
 import {startSearchingAction} from "../../actions/QueryActions";

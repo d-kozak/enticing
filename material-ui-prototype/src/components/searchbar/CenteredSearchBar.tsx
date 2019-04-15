@@ -3,7 +3,7 @@ import * as React from "react";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 import createStyles from "@material-ui/core/es/styles/createStyles";
 import Typography from "@material-ui/core/Typography";
-import SearchInput from "./SearchInput";
+import SearchInput from "../../containers/searchbar/SearchInput";
 import {Theme} from "@material-ui/core/es";
 
 
