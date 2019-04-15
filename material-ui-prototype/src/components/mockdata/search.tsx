@@ -6,8 +6,7 @@ import * as React from "react";
 
 const firstResult: SearchResult =
     {
-        snippet: <span> <AnnotatedElement id='0' text='Ed Sheeran'
-                                          details='A british singer'/> visited Liberia and meets JD, a homeless Liberian 14-year-old boy. After Sheeran saw an older man hitting JD in public, he knew ,</span>,
+        snippet: <span> <AnnotatedElement id='0' text='Ed Sheeran' details='A british singer'/> visited Liberia and meets JD, a homeless Liberian 14-year-old boy. After Sheeran saw an older man hitting JD in public, he knew ,</span>,
         largerText: <span> 'British singer-songwriter Ed Sheeran visited West Point in <AnnotatedElement id='1'
                                                                                                          text='Monrovia'
                                                                                                          details='A place'/>, Liberia for Red Nose Day 2017. West Point is a large and dangerous slum in Liberia’s capital city. Sheeran’s Liberia visit was made possible by Red Nose Day, a fundraising campaign operated by the nonprofit organization Comic Relief. Ed Sheeran visited Liberia to work with the charity Street Child and help children living in poverty.'</span>,

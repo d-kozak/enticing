@@ -22,11 +22,12 @@
 - [ ] Admin mode
     - [ ] add admin related buttons where necessary
    
-
+<
 ## Features
 - [ ] current layout centering is not very responsive, use flex or Grid instead 
 - [ ] show the 'Query:' text only on large screens
 - [ ] add redux
+- [ ] inspect the possibility to make all progress and spinners depend on one top level element
 
 ## Known bugs
 - [ ] options for logged in user from appbar sometimes render in the wrong place

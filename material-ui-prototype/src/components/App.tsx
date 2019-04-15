@@ -18,6 +18,7 @@ const App = () => {
     const [query, setQuery] = useState('nertag:person (visited|entered)');
 
     const [isLoggedId, setLoggedIn] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     const [searchResults, setSearchResults] = useState<Array<SearchResult> | null>(null);
 
@@ -30,6 +31,7 @@ const App = () => {
 
     const handleLogout = () => {
         setLoggedIn(false);
+        setIsAdmin(false);
         setSnackbarState({
             isOpen: true,
             message: 'Logged out'
@@ -39,7 +41,15 @@ const App = () => {
     const handleLogin = (login: string, password: string) => {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                if (login != 'dkozak' && password != 'dkozak') {
+                if (login == 'admin' && password == 'admin') {
+                    setSnackbarState({
+                        isOpen: true,
+                        message: 'Logged in'
+                    });
+                    setLoggedIn(true);
+                    setIsAdmin(true);
+                    resolve();
+                } else if (login != 'dkozak' && password != 'dkozak') {
                     setSnackbarState({
                         isOpen: true,
                         message: 'Logged in'
@@ -101,6 +111,7 @@ const App = () => {
         <Router>
             <MenuAppBar
                 isLoggedIn={isLoggedId}
+                isAdmin={isAdmin}
                 handleLogout={handleLogout}/>
             {progressBarVisible && <LinearProgress color="secondary"/>}
 

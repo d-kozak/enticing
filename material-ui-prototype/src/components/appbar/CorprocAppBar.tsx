@@ -18,11 +18,12 @@ const styles = createStyles({
 
 export interface CorprocAppBarProps extends WithStyles<typeof styles> {
     isLoggedIn: boolean,
+    isAdmin: boolean,
     handleLogout: () => void
 }
 
 const CorprocAppBar = (props: CorprocAppBarProps) => {
-    const {classes, isLoggedIn, handleLogout} = props;
+    const {classes, isAdmin, isLoggedIn, handleLogout} = props;
 
 
     return <div className={classes.root}>
@@ -31,7 +32,7 @@ const CorprocAppBar = (props: CorprocAppBarProps) => {
                 <Typography variant="h6" color="inherit" className={classes.grow}>
                     Corproc Search
                 </Typography>
-                <AppBarMenuButtons isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>
+                <AppBarMenuButtons isLoggedIn={isLoggedIn} isAdmin={isAdmin} handleLogout={handleLogout}/>
             </Toolbar>
         </AppBar>
     </div>

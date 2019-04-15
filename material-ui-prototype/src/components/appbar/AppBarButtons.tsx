@@ -8,19 +8,23 @@ const styles = createStyles({});
 
 export interface AppBarButtonsProps extends WithStyles<typeof styles> {
     handleLogout: () => void,
-    isLoggedIn: boolean
+    isLoggedIn: boolean,
+    isAdmin: boolean,
 }
 
 const AppBarButtons = (props: AppBarButtonsProps) => {
-    const {isLoggedIn, handleLogout} = props;
+    const {isLoggedIn, isAdmin, handleLogout} = props;
 
     return <Switch>
         <Route path="/" exact
-               render={() => <MainPageAppBarButtons isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>}/>
+               render={() => <MainPageAppBarButtons isAdmin={isAdmin} isLoggedIn={isLoggedIn}
+                                                    handleLogout={handleLogout}/>}/>
         <Route path="/search"
-               render={() => <MainPageAppBarButtons isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>}/>
+               render={() => <MainPageAppBarButtons isAdmin={isAdmin} isLoggedIn={isLoggedIn}
+                                                    handleLogout={handleLogout}/>}/>
         <Route path="/settings" exact
-               render={() => <MainPageAppBarButtons isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>}/>
+               render={() => <MainPageAppBarButtons isAdmin={isAdmin} isLoggedIn={isLoggedIn}
+                                                    handleLogout={handleLogout}/>}/>
     </Switch>
 };
 

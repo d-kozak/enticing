@@ -14,11 +14,12 @@ const styles = createStyles({});
 
 export interface MainPageAppBarButtonsProps extends WithStyles<typeof styles> {
     handleLogout: () => void,
-    isLoggedIn: boolean
+    isLoggedIn: boolean,
+    isAdmin: boolean
 }
 
 const MainPageAppBarButtons = (props: MainPageAppBarButtonsProps) => {
-    const {isLoggedIn, handleLogout: parentHandleLogout} = props;
+    const {isLoggedIn, isAdmin, handleLogout: parentHandleLogout} = props;
 
     const [isMenuOpen, setMenuOpen] = useState(false);
 
@@ -71,6 +72,7 @@ const MainPageAppBarButtons = (props: MainPageAppBarButtonsProps) => {
                 onClose={handleMenuClose}
             >
                 <MenuItem onClick={handleMenuClose} component={SettingsLink}>Settings</MenuItem>
+                {isAdmin && <MenuItem onClick={handleMenuClose} component={LinkTo("/users")}>Manage Users</MenuItem>}
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
         </React.Fragment>}
