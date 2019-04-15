@@ -5,7 +5,10 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import createStyles from "@material-ui/core/es/styles/createStyles";
 import {WithStyles} from "@material-ui/core/es";
-import AppBarMenuButtons from "./AppBarButtons";
+import AppBarMenuButtons from "../../components/appbar/AppBarButtons";
+import {connect} from "react-redux";
+import {AppState} from "../../AppState";
+import {logoutAction} from "../../actions/UserActions";
 
 const styles = createStyles({
     root: {
@@ -38,4 +41,19 @@ const CorprocAppBar = (props: CorprocAppBarProps) => {
     </div>
 };
 
-export default withStyles(styles, {withTheme: true})(CorprocAppBar);
+const mapStateToProps = (state: AppState, ownProps: CorprocAppBarProps): CorprocAppBarProps => {
+    const {isLoggedIn, isAdmin} = state.user;
+    return {
+        ...ownProps,
+        isLoggedIn,
+        isAdmin
+    }
+}
+
+const mapDispatchToProps = {
+    handleLogout: logoutAction
+};
+
+const CorprocAppbarConnected = withStyles(styles, {withTheme: true})((connect(mapStateToProps, mapDispatchToProps))(CorprocAppBar));
+
+export default CorprocAppbarConnected;

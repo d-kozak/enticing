@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import MenuAppBar from "./appbar/CorprocAppBar";
+import CorprocAppBar from "../containers/appbar/CorprocAppBar";
 import {CssBaseline} from "@material-ui/core";
 import CorprocSnackBar from "./notifiers/CorprocSnackbar";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
@@ -116,10 +116,7 @@ const App = () => {
     return <React.Fragment>
         <CssBaseline/>
         <Router>
-            <MenuAppBar
-                isLoggedIn={isLoggedId}
-                isAdmin={isAdmin}
-                handleLogout={handleLogout}/>
+            <CorprocAppBar/>
             {progressBarVisible && <LinearProgress color="secondary"/>}
 
             <Switch>
