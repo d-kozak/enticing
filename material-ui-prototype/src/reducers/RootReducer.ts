@@ -4,6 +4,7 @@ import searchResultReducer from "./SearchResultReducer";
 import queryReducer from "./QueryReducer";
 import {AppState} from "../AppState";
 import {RootAction} from "../actions/RootAction";
+import snackBarReducer from './SnackBarReducer';
 
 type RootReducer = (state: AppState | undefined, action: RootAction) => AppState
 
@@ -11,7 +12,8 @@ const rootReducer: RootReducer = combineReducers(
     {
         user: userReducer,
         searchResults: searchResultReducer,
-        query: queryReducer
+        query: queryReducer,
+        snackBar: snackBarReducer
     }
 )
 

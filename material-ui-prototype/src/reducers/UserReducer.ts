@@ -10,6 +10,19 @@ const initialState: UserState = {
 }
 
 const userReducer: UserReducer = (state = initialState, action) => {
+    switch (action.type) {
+        case "[USER] LOGIN SUCCESS":
+            return {
+                isLoggedIn: true,
+                isAdmin: action.isAdmin
+            }
+
+        case "[USER] LOGOUT":
+            return {
+                isLoggedIn: false,
+                isAdmin: false
+            }
+    }
     return state
 }
 

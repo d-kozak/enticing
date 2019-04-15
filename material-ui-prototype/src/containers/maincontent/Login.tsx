@@ -15,7 +15,10 @@ import * as Yup from 'yup';
 import {TextField} from "formik-material-ui";
 import {Redirect} from "react-router";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
-import LinkTo from "../utils/linkTo";
+import LinkTo from "../../components/utils/linkTo";
+import {AppState} from "../../AppState";
+import {connect} from "react-redux";
+import {loginRequestAction} from "../../actions/UserActions";
 
 const styles = (theme: Theme) => createStyles({
     mainElement: {
@@ -41,7 +44,7 @@ const styles = (theme: Theme) => createStyles({
 
 
 export interface LoginProps extends WithStyles<typeof styles> {
-    login: (login: string, password: string) => Promise<{}>
+    login: (login: string, password: string, onError: (errors: any) => void) => void
     isLoggedIn: boolean
 }
 
@@ -84,12 +87,11 @@ const Login = (props: LoginProps) => {
             validationSchema={LoginSchema}
             onSubmit={(values: LoginFormikProps, actions: FormikActions<LoginFormikProps>) => {
                 setShowProgress(true);
-                login(values.login, values.password)
-                    .catch(errors => {
-                        actions.setErrors(errors);
-                        actions.setSubmitting(false);
-                        setShowProgress(false);
-                    });
+                login(values.login, values.password, errors => {
+                    actions.setErrors(errors);
+                    actions.setSubmitting(false);
+                    setShowProgress(false);
+                })
             }}
         >
             {({isSubmitting}) => (
@@ -117,6 +119,11 @@ const Login = (props: LoginProps) => {
     </Paper>
 };
 
-export default withStyles(styles, {
-    withTheme: true
-})(Login)
+
+const mapStateToProps = (state: AppState) => ({isLoggedIn: state.user.isLoggedIn})
+
+const mapDispatchToProps = {
+    login: loginRequestAction
+}
+
+export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(Login))

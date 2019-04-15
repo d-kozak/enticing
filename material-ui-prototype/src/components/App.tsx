@@ -4,7 +4,7 @@ import {CssBaseline} from "@material-ui/core";
 import CorprocSnackBar from "./notifiers/CorprocSnackbar";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
 import {BrowserRouter as Router, Redirect, Route, Switch} from 'react-router-dom';
-import Login from "./maincontent/Login";
+import Login from "../containers/maincontent/Login";
 import UnknownRoute from "./maincontent/UnknownRoute";
 import SignUp from "./maincontent/SignUp";
 import {SearchResult} from "../entities/SearchResult";
@@ -40,34 +40,6 @@ const App = () => {
         });
     }
 
-    const handleLogin = (login: string, password: string) => {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                if (login == 'admin' && password == 'admin') {
-                    setSnackbarState({
-                        isOpen: true,
-                        message: 'Logged in'
-                    });
-                    setLoggedIn(true);
-                    setIsAdmin(true);
-                    resolve();
-                } else if (login != 'dkozak' && password != 'dkozak') {
-                    setSnackbarState({
-                        isOpen: true,
-                        message: 'Logged in'
-                    });
-                    setLoggedIn(true);
-                    resolve();
-                } else if (login == 'dkozak' && password != 'dkozak') {
-                    reject({login: 'Unknown login'});
-                } else if (login != 'dkozak' && password == 'dkozak') {
-                    reject({password: 'Invalid password'})
-                } else {
-                    reject({login: 'Unknown login'});
-                }
-            }, 2000);
-        });
-    }
 
     const handleSignUp = (login: string, password: string) => {
         return new Promise((resolve, reject) => {
@@ -131,7 +103,7 @@ const App = () => {
                            return <Search query={query} setQuery={setQuery} startSearching={startSearching}
                                           searchResults={searchResults}/>;
                        }}/>
-                <Route path="/login" render={() => <Login isLoggedIn={isLoggedId} login={handleLogin}/>}/>
+                <Route path="/login" render={() => <Login/>}/>
                 <Route path="/signup" render={() => <SignUp isLoggedIn={isLoggedId} signUp={handleSignUp}/>}/>
                 <Route path="/settings" render={() => <Settings isLoggedIn={isLoggedId}/>}/>
                 <AdminRoute path="/users" isAdmin={isAdmin} showSnackBarMessage={showSnackBarMessage}

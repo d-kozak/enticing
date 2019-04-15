@@ -1,7 +1,8 @@
 export interface AppState {
     user: UserState,
     query: QueryState,
-    searchResults: SearchResultsState
+    searchResults: SearchResultsState,
+    snackBar: SnackBarState
 }
 
 
@@ -16,4 +17,9 @@ export interface QueryState {
 
 export interface SearchResultsState {
 
+}
+
+export interface SnackBarState {
+    isOpen: boolean,
+    message: string
 }
