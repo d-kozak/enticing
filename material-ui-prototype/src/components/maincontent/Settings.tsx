@@ -6,6 +6,8 @@ import React from 'react';
 import {DefaultUserSettings, UserSettings} from "../../entities/UserSettings";
 import DefaultSettingsPicker from "../settings/DefaultSettingsPicker";
 import SettingsHolder from "../settings/SettingsHolder";
+import {AppState} from "../../AppState";
+import {connect} from "react-redux";
 
 const styles = createStyles({});
 
@@ -67,6 +69,11 @@ const Settings = (props: SettingsProps) => {
     }
 };
 
+
+const mapStateToProps = (state: AppState) => ({
+    isLoggedIn: state.user.isLoggedIn
+});
+
 export default withStyles(styles, {
     withTheme: true
-})(Settings)
+})(connect(mapStateToProps)(Settings))

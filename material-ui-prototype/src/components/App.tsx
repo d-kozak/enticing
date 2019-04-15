@@ -19,37 +19,15 @@ import {AppState} from "../AppState";
 
 interface AppProps {
     showSnackBarMessage: (message: string) => void
+    isAdmin: boolean
 }
 
-const App = ({showSnackBarMessage}: AppProps) => {
+const App = ({showSnackBarMessage, isAdmin}: AppProps) => {
     const [query, setQuery] = useState('nertag:person (visited|entered)');
-
-    const [isLoggedId, setLoggedIn] = useState(false);
-    const [isAdmin, setIsAdmin] = useState(false);
 
     const [searchResults, setSearchResults] = useState<Array<SearchResult> | null>(null);
 
     const [progressBarVisible, setShowProgressBar] = useState(false);
-
-
-    const handleSignUp = (login: string, password: string) => {
-        return new Promise((resolve, reject) => {
-            // setTimeout(() => {
-            //     if (login != 'dkozak') {
-            //         setSnackbarState({
-            //             isOpen: true,
-            //             message: 'Signed up successfully'
-            //         });
-            //         setLoggedIn(true);
-            //         resolve();
-            //     } else {
-            //         reject({
-            //             login: 'This login is already taken'
-            //         });
-            //     }
-            // }, 2000);
-        });
-    };
 
     const startSearching = (query: string) => {
         // setShouldRedirectToSearchPage(true);
@@ -89,7 +67,7 @@ const App = ({showSnackBarMessage}: AppProps) => {
                        }}/>
                 <Route path="/login" render={() => <Login/>}/>
                 <Route path="/signup" render={() => <SignUp/>}/>
-                <Route path="/settings" render={() => <Settings isLoggedIn={isLoggedId}/>}/>
+                <Route path="/settings" render={() => <Settings/>}/>
                 <AdminRoute path="/users" isAdmin={isAdmin} showSnackBarMessage={showSnackBarMessage}
                             render={() => <UserManagement/>}/>
                 <Route component={UnknownRoute}/>
@@ -100,7 +78,9 @@ const App = ({showSnackBarMessage}: AppProps) => {
 };
 
 
-const mapStateToProps = (state: AppState) => ({})
+const mapStateToProps = (state: AppState) => ({
+    isAdmin: state.user.isAdmin
+})
 const mapDispatchToProps = {
     showSnackBarMessage: openSnackBar
 }
