@@ -21,12 +21,13 @@
     -[ ] complex support using parser in the backend
 - [ ] Admin mode
     - [ ] add admin related buttons where necessary
-   
-<
+- [ ] Code cleanup
+    - [ ] react-redux: create clean separation between components and containers    
+ 
 ## Features
 - [ ] current layout centering is not very responsive, use flex or Grid instead 
 - [ ] show the 'Query:' text only on large screens
-- [ ] add redux
+- [X] add redux
 - [ ] inspect the possibility to make all progress and spinners depend on one top level element
 
 ## Known bugs
