@@ -10,4 +10,5 @@ export interface Annotation {
     color: color;
     content: Array<AnnotationValue>;
     image?: string
+    type: string
 }
