@@ -13,14 +13,13 @@ const styles = createStyles({
 
 export interface AnnotatedElementProps extends WithStyles<typeof styles> {
     text: string,
-    details: string,
     id: string
 }
 
 const colors = ['blue', 'green', 'red', 'orange', 'purple'];
 
 const AnnotatedElement = (props: AnnotatedElementProps) => {
-    const {text, details, classes, id} = props;
+    const {text, classes, id} = props;
 
     const color = colors[Number(id) % colors.length];
     const style = {color}
@@ -28,7 +27,8 @@ const AnnotatedElement = (props: AnnotatedElementProps) => {
     return <React.Fragment>
         <a data-tip={true} data-for={id}><span style={style} className={classes.tooltipTrigger}>{text}</span></a>
         <ReactTooltip id={id} place="bottom" type="dark">
-            {details}
+            <h1>Tooltip</h1>
+            <p>Text</p>
         </ReactTooltip>
     </React.Fragment>
 };

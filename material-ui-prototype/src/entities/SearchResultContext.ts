@@ -1,5 +1,5 @@
 export interface SearchResultContext {
     url: string
-    text: String
+    text: string
     canExtend: boolean
 }

@@ -5,6 +5,7 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 import React from 'react';
 import Typography from "@material-ui/core/es/Typography";
 import {IndexedDocument} from "../../../entities/IndexedDocument";
+import {mockAddAnnotations} from "../../../mocks/annotations";
 
 const styles = createStyles({
     titleUrl: {
@@ -22,7 +23,7 @@ const DocumentDialogContent = (props: DialogContentProps) => {
     return <div>
         <Typography className={classes.titleUrl} variant="headline"><a
             href={document.url}>{document.url}</a></Typography>
-        <Typography variant="body1">{document.body}</Typography>
+        {mockAddAnnotations(document.body)}
     </div>
 };
 

@@ -8,6 +8,7 @@ import Grid from "@material-ui/core/es/Grid";
 import Button from "@material-ui/core/es/Button";
 
 import {unstable_useMediaQuery as useMediaQuery} from '@material-ui/core/useMediaQuery';
+import {mockAddAnnotations} from "../../mocks/annotations";
 
 
 const styles = createStyles({
@@ -37,7 +38,7 @@ const SearchResultItem = (props: SearchResultItemProps) => {
         size="small">Context</Button>
 
     return <div className={classes.root}>
-        {searchResult.snippet}
+        {mockAddAnnotations(searchResult.snippet)}
         <Grid container justify="flex-end" alignContent="center">
 
             {isScreenMedium ? <ShowContext/> : <Grid container>
