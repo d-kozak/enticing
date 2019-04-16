@@ -1,6 +1,6 @@
 import {SearchResult} from "../../entities/SearchResult";
 import {ThunkResult} from "../RootAction";
-import {mockContextExtended, mockContextRequested} from "../../mocks/searchApi";
+import {mockContextExtended, mockContextRequested} from "../../mocks/mockContextApi";
 import {SearchResultContext} from "../../entities/SearchResultContext";
 
 interface ContextLoadedAction {

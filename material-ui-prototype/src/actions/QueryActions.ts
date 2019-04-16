@@ -1,5 +1,5 @@
 import {ThunkResult} from "./RootAction";
-import {mockSearch} from "../mocks/searchApi";
+import {mockSearch} from "../mocks/mockSearchApi";
 import * as H from "history";
 
 interface QueryExecutedAction {

@@ -1,5 +1,7 @@
+import {AnnotatedText} from "./Annotation";
+
 export interface SearchResultContext {
     url: string
-    text: string
+    text: AnnotatedText
     canExtend: boolean
 }

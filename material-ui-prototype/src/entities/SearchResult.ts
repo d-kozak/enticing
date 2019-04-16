@@ -1,4 +1,6 @@
+import {AnnotatedText} from "./Annotation";
+
 export interface SearchResult {
-    snippet: string,
+    snippet: AnnotatedText,
     url: string
 }

@@ -1,7 +1,7 @@
 import {IndexedDocument} from "../../entities/IndexedDocument";
 import {SearchResult} from "../../entities/SearchResult";
 import {ThunkResult} from "../RootAction";
-import {mockDocumentRequested} from "../../mocks/searchApi";
+import {mockDocumentRequested} from "../../mocks/mockDocumentApi";
 
 interface DocumentDialogLoadedAction {
     type: '[DOCUMENT DIALOG] DOCUMENT LOADED'
