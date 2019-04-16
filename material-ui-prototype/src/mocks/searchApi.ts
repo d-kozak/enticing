@@ -8,9 +8,14 @@ import {queryExecutedAction} from "../actions/QueryActions";
 import {documentLoadedAction} from "../actions/dialog/DocumentDialogAction";
 import {SearchResult} from "../entities/SearchResult";
 import {IndexedDocument} from "../entities/IndexedDocument";
-import {loremIpsumText} from "./loremIpsum";
+import {loremIpsumLong, loremIpsumShort} from "./loremIpsum";
 import {SearchResultContext} from "../entities/SearchResultContext";
-import {contextLoadedAction} from "../actions/dialog/ContextDialogActions";
+import {
+    contextDialogHideProgressAction,
+    contextDialogShowProgressAction,
+    contextExtendedAction,
+    contextLoadedAction
+} from "../actions/dialog/ContextDialogActions";
 
 export const mockSearch = (query: string, dispatch: Dispatch, history?: H.History) => {
 
@@ -34,7 +39,7 @@ export const mockDocumentRequested = (searchResult: SearchResult, dispatch: Disp
     dispatch(showProgressBarAction())
     setTimeout(() => {
         const document: IndexedDocument = {
-            body: loremIpsumText,
+            body: loremIpsumLong,
             title: searchResult.url,
             url: searchResult.url
         };
@@ -48,9 +53,24 @@ export const mockContextRequested = (searchResult: SearchResult, dispatch: Dispa
     setTimeout(() => {
         const context: SearchResultContext = {
             text: searchResult.snippet,
-            url: searchResult.url
+            url: searchResult.url,
+            canExtend: true
         };
         dispatch(hideProgressBarAction());
         dispatch(contextLoadedAction(context));
+    }, 2000);
+};
+
+export const mockContextExtended = (context: SearchResultContext, dispatch: Dispatch) => {
+    dispatch(contextDialogShowProgressAction())
+    setTimeout(() => {
+        const canExtend = Math.random() > 0.3;
+        const newContext: SearchResultContext = {
+            text: context.text + loremIpsumShort,
+            url: context.url,
+            canExtend: canExtend
+        };
+        dispatch(contextDialogHideProgressAction())
+        dispatch(contextExtendedAction(newContext));
     }, 2000);
 };

@@ -24,7 +24,8 @@
 - [ ] Code cleanup
     - [ ] react-redux: create clean separation between components and containers    
     - [ ] ensure consistent file naming, e.g. action vs actions
-    - [ ] use string constants instead of strings in actions types(better refactoring)  
+    - [ ] use string constants instead of strings in actions types(better refactoring)
+- [ ] Add annotations, they were temporarily removed, add them back 
 ## Features
 - [ ] current layout centering is not very responsive, use flex or Grid instead 
 - [ ] show the 'Query:' text only on large screens

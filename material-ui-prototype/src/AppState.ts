@@ -50,4 +50,5 @@ export interface DocumentDialogState {
 
 export interface ContextDialogState {
     context: SearchResultContext | null
+    showProgress: boolean
 }

@@ -1,4 +1,4 @@
 export interface SearchResult {
-    snippet: any,
+    snippet: string,
     url: string
 }

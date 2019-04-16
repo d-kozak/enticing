@@ -16,9 +16,10 @@ import {AppState} from "../../../AppState";
 import {connect} from "react-redux";
 import ContextDialogContent from "./ContextDialogContent";
 import {SearchResultContext} from "../../../entities/SearchResultContext";
-import {contextDialogClosedAction} from "../../../actions/dialog/ContextDialogActions";
+import {contextDialogClosedAction, contextExtendRequestAction} from "../../../actions/dialog/ContextDialogActions";
 import Grid from "@material-ui/core/es/Grid";
 import Button from "@material-ui/core/es/Button";
+import LinearProgress from "@material-ui/core/es/LinearProgress";
 
 
 const styles = (theme: Theme) => createStyles({
@@ -35,15 +36,15 @@ const styles = (theme: Theme) => createStyles({
     },
     root: {},
     progress: {},
-    extendContextButton: {
-        margin: '10px'
-    }
+    extendContextButton: {}
 });
 
 
 export interface ContextDialogProps extends WithStyles<typeof styles> {
-    context: SearchResultContext | null
-    dialogClosed: () => void
+    context: SearchResultContext | null;
+    showProgress: boolean;
+    dialogClosed: () => void;
+    extendContext: (context: SearchResultContext) => void;
 }
 
 const DialogContent = withStyles(theme => ({
@@ -55,13 +56,14 @@ const DialogContent = withStyles(theme => ({
 
 
 const ContextDialog = (props: ContextDialogProps) => {
-    const {context, dialogClosed, classes} = props;
+    const {context, showProgress, dialogClosed, classes, extendContext} = props;
 
     return <Dialog
         open={context != null}
         onClose={dialogClosed}
     >
         <div className={classes.root}>
+            {showProgress && <LinearProgress/>}
             <MuiDialogTitle disableTypography className={classes.title}>
                 <Typography variant="h6">Context</Typography>
                 <IconButton aria-label="Close" className={classes.closeButton} onClick={dialogClosed}>
@@ -70,20 +72,24 @@ const ContextDialog = (props: ContextDialogProps) => {
             </MuiDialogTitle>
             {context !== null && <DialogContent>
                 <ContextDialogContent context={context}/>
+                <Grid container justify="flex-end">
+                    <Button disabled={!context.canExtend} onClick={() => extendContext(context)} variant="contained"
+                            color="primary"
+                            className={classes.extendContextButton}>{context.canExtend ? 'Extend' : 'Full length reached'}</Button>
+                </Grid>
             </DialogContent>}
-            <Grid container justify="flex-end">
-                <Button variant="contained" color="primary" className={classes.extendContextButton}>Extend</Button>
-            </Grid>
         </div>
     </Dialog>
 };
 
 const mapStateToProps = (state: AppState) => ({
-    context: state.dialog.contextDialog.context
+    context: state.dialog.contextDialog.context,
+    showProgress: state.dialog.contextDialog.showProgress
 });
 
 const mapDispatchToProps = {
-    dialogClosed: contextDialogClosedAction
+    dialogClosed: contextDialogClosedAction,
+    extendContext: contextExtendRequestAction
 };
 
 export default withStyles(styles, {
