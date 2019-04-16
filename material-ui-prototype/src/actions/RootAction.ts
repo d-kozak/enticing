@@ -5,7 +5,16 @@ import {ThunkAction} from "redux-thunk";
 import {AppState} from "../AppState";
 import {AdminAction} from "./AdminActions";
 import {DialogAction} from "./dialog/DialogAction";
+import {SnackBarAction} from "./SnackBarActions";
+import {ProgressBarAction} from "./ProgressBarActions";
 
-export type RootAction = QueryAction | SearchResultAction | UserAction | AdminAction | DialogAction
+export type RootAction =
+    QueryAction
+    | SearchResultAction
+    | UserAction
+    | AdminAction
+    | DialogAction
+    | SnackBarAction
+    | ProgressBarAction
 
 export type ThunkResult<R> = ThunkAction<R, AppState, undefined, RootAction>

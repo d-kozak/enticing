@@ -8,7 +8,7 @@ import {WithStyles} from "@material-ui/core/es";
 import AppBarMenuButtons from "../../components/appbar/AppBarButtonsRouter";
 import {connect} from "react-redux";
 import {AppState} from "../../AppState";
-import {logoutAction} from "../../actions/UserActions";
+import {logoutRequestAction} from "../../actions/UserActions";
 import {Link} from "react-router-dom";
 
 
@@ -58,11 +58,11 @@ const mapStateToProps = (state: AppState) => {
     return {
         isLoggedIn,
         isAdmin
-    }
+    };
 }
 
 const mapDispatchToProps = {
-    handleLogout: logoutAction
+    handleLogout: logoutRequestAction
 };
 
 export default withStyles(styles, {withTheme: true})((connect(mapStateToProps, mapDispatchToProps))(CorprocAppBar));
