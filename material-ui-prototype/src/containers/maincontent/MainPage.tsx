@@ -3,7 +3,7 @@ import {WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React from 'react';
-import CenteredSearchBar from "../../components/searchbar/CenteredSearchBar";
+import CenteredSearchBar from "../searchbar/CenteredSearchBar";
 import {AppState} from "../../AppState";
 import {startSearchingAction} from "../../actions/QueryActions";
 import {connect} from "react-redux";

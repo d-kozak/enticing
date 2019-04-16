@@ -1,11 +1,13 @@
 import {WithStyles} from "@material-ui/core";
 import * as React from "react";
+import {useState} from "react";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 import createStyles from "@material-ui/core/es/styles/createStyles";
 import Typography from "@material-ui/core/Typography";
-import SearchInput from "../../containers/searchbar/SearchInput";
+import SearchInput from "../../components/searchbar/SearchInput";
 import {Theme} from "@material-ui/core/es";
-
+import {AppState} from "../../AppState";
+import {connect} from "react-redux";
 
 const styles = (theme: Theme) => createStyles({
     mainDiv: {
@@ -23,16 +25,24 @@ const styles = (theme: Theme) => createStyles({
 
 export interface CenteredSearchBar extends WithStyles<typeof styles> {
     startSearching: (query: string) => void;
+    lastQuery: string;
 }
 
 const CenteredSearchBar = (props: CenteredSearchBar) => {
-    const {classes, startSearching} = props;
+    const {classes, startSearching, lastQuery} = props;
+
+    const [query, setQuery] = useState(lastQuery);
+
     return <div className={classes.mainDiv}>
         <Typography className={classes.title} variant="h3">
             Corproc Search
         </Typography>
-        <SearchInput startSearching={startSearching}/>
+        <SearchInput query={query} setQuery={setQuery} startSearching={startSearching}/>
     </div>
 };
 
-export default withStyles(styles, {withTheme: true})(CenteredSearchBar);
+const mapStateToProps = (state: AppState) => ({
+    lastQuery: state.query.lastQuery
+});
+
+export default withStyles(styles, {withTheme: true})(connect(mapStateToProps)(CenteredSearchBar));
