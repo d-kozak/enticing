@@ -9,7 +9,6 @@ import TableHead from "@material-ui/core/es/TableHead";
 import TableRow from "@material-ui/core/es/TableRow";
 import TableCell from "@material-ui/core/es/TableCell";
 import TableBody from "@material-ui/core/es/TableBody";
-import FormControlLabel from "@material-ui/core/es/FormControlLabel";
 import Checkbox from "@material-ui/core/es/Checkbox";
 
 
@@ -49,43 +48,33 @@ const UserTable = (props: UserTableProps) => {
     };
 
     return <Table>
-            <TableHead>
-                <TableRow>
-                    <TableCell>Login</TableCell>
-                    <TableCell align="right">Is active</TableCell>
-                    <TableCell align="right">Is admin</TableCell>
-                </TableRow>
-            </TableHead>
-            <TableBody>
-                {users.map((user, index) => <TableRow key={index}>
-                    <TableCell>{user.login}</TableCell>
-                    <TableCell align="right">
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={user.isActive}
-                                    onChange={toggleIsActive(user)}
-                                    value="checkedA"
-                                />
-                            }
-                            label="Is active"
-                        />
-                    </TableCell>
-                    <TableCell align="right">
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={user.isAdmin}
-                                    onChange={toggleIsAdmin(user)}
-                                    value="checkedA"
-                                />
-                            }
-                            label="Is admin"
-                        />
-                    </TableCell>
-                </TableRow>)}
-            </TableBody>
-        </Table>
+        <TableHead>
+            <TableRow>
+                <TableCell>Login</TableCell>
+                <TableCell align="right">Is active</TableCell>
+                <TableCell align="right">Is admin</TableCell>
+            </TableRow>
+        </TableHead>
+        <TableBody>
+            {users.map((user, index) => <TableRow key={index}>
+                <TableCell>{user.login}</TableCell>
+                <TableCell align="right">
+                    <Checkbox
+                        checked={user.isActive}
+                        onChange={toggleIsActive(user)}
+                        value="checkedA"
+                    />
+                </TableCell>
+                <TableCell align="right">
+                    <Checkbox
+                        checked={user.isAdmin}
+                        onChange={toggleIsAdmin(user)}
+                        value="checkedA"
+                    />
+                </TableCell>
+            </TableRow>)}
+        </TableBody>
+    </Table>
 };
 
 export default withStyles(styles, {
