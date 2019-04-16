@@ -2,7 +2,8 @@ import createStyles from "@material-ui/core/es/styles/createStyles";
 import {WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 import React from 'react';
-import ReactTooltip from "react-tooltip";
+import Tooltip from "@material-ui/core/es/Tooltip";
+
 
 const styles = createStyles({
     tooltipTrigger: {
@@ -25,11 +26,12 @@ const AnnotatedElement = (props: AnnotatedElementProps) => {
     const style = {color}
 
     return <React.Fragment>
-        <a data-tip={true} data-for={id}><span style={style} className={classes.tooltipTrigger}>{text}</span></a>
-        <ReactTooltip id={id} place="bottom" type="dark">
+        <Tooltip title={<div>
             <h1>Tooltip</h1>
             <p>Text</p>
-        </ReactTooltip>
+        </div>}>
+            <span style={style} className={classes.tooltipTrigger}>{text}</span>
+        </Tooltip>
     </React.Fragment>
 };
 
