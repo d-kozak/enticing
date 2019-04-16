@@ -40,7 +40,8 @@ export interface AdminState {
 }
 
 export interface DialogState {
-    documentDialog: DocumentDialogState
+    documentDialog: DocumentDialogState;
+    contextDialog: ContextDialogState;
 }
 
 export interface DocumentDialogState {
@@ -48,5 +49,5 @@ export interface DocumentDialogState {
 }
 
 export interface ContextDialogState {
-    currentContext: SearchResultContext | null
+    context: SearchResultContext | null
 }

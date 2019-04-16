@@ -13,6 +13,8 @@ import DocumentDialog from "./documentdialog/DocumentDialog";
 import {AppState} from "../../AppState";
 import {connect} from "react-redux";
 import {documentDialogRequestedAction} from "../../actions/dialog/DocumentDialogAction";
+import {contextDialogRequestedAction} from "../../actions/dialog/ContextDialogActions";
+import ContextDialog from "./contextdialog/ContextDialog";
 
 const styles = createStyles({
     root: {
@@ -31,17 +33,15 @@ const styles = createStyles({
 
 export interface SearchResultListProps extends WithStyles<typeof styles> {
     searchResults: Array<SearchResult>;
-    openWholeDocument: (searchResult: SearchResult) => void;
+    openDocumentDialog: (searchResult: SearchResult) => void;
+    openContextDialog: (searchResult: SearchResult) => void;
 }
 
 const SearchResultList = (props: SearchResultListProps) => {
-    const {searchResults, openWholeDocument, classes} = props;
+    const {searchResults, openContextDialog, openDocumentDialog, classes} = props;
 
     const [currentPage, setCurrentPage] = useState(0);
 
-
-    const openContextDialog = (searchResult: SearchResult) => {
-    };
 
     let pageCount = Math.floor(searchResults.length / 20);
     if (searchResults.length % 20 != 0) {
@@ -54,7 +54,7 @@ const SearchResultList = (props: SearchResultListProps) => {
             .map(
                 (searchResult, index) => <React.Fragment key={index}>
                     {index > 0 && <Divider/>}
-                    <SearchResultItem openWholeDocument={openWholeDocument} openContextDialog={openContextDialog}
+                    <SearchResultItem openWholeDocument={openDocumentDialog} openContextDialog={openContextDialog}
                                       searchResult={searchResult}/>
                 </React.Fragment>)
         }
@@ -63,14 +63,15 @@ const SearchResultList = (props: SearchResultListProps) => {
         <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} pageCount={pageCount}/>
 
         <DocumentDialog/>
-
+        <ContextDialog/>
     </Paper>
 };
 
 const mapStateToProps = (state: AppState) => ({});
 
 const mapDispatchToProps = {
-    openWholeDocument: documentDialogRequestedAction
+    openDocumentDialog: documentDialogRequestedAction,
+    openContextDialog: contextDialogRequestedAction
 }
 
 export default withStyles(styles, {

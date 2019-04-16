@@ -9,6 +9,8 @@ import {documentLoadedAction} from "../actions/dialog/DocumentDialogAction";
 import {SearchResult} from "../entities/SearchResult";
 import {IndexedDocument} from "../entities/IndexedDocument";
 import {loremIpsumText} from "./loremIpsum";
+import {SearchResultContext} from "../entities/SearchResultContext";
+import {contextLoadedAction} from "../actions/dialog/ContextDialogActions";
 
 export const mockSearch = (query: string, dispatch: Dispatch, history?: H.History) => {
 
@@ -38,5 +40,17 @@ export const mockDocumentRequested = (searchResult: SearchResult, dispatch: Disp
         };
         dispatch(hideProgressBarAction());
         dispatch(documentLoadedAction(document));
+    }, 2000);
+};
+
+export const mockContextRequested = (searchResult: SearchResult, dispatch: Dispatch) => {
+    dispatch(showProgressBarAction())
+    setTimeout(() => {
+        const context: SearchResultContext = {
+            text: searchResult.snippet,
+            url: searchResult.url
+        };
+        dispatch(hideProgressBarAction());
+        dispatch(contextLoadedAction(context));
     }, 2000);
 };

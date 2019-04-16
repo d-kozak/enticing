@@ -12,11 +12,13 @@ import CloseIcon from '@material-ui/icons/Close';
 import {Theme} from "@material-ui/core/es";
 
 
-import DocumentDialogContent from './DocumentDialogContent';
 import {AppState} from "../../../AppState";
-import {IndexedDocument} from "../../../entities/IndexedDocument";
-import {documentDialogClosedAction} from "../../../actions/dialog/DocumentDialogAction";
 import {connect} from "react-redux";
+import ContextDialogContent from "./ContextDialogContent";
+import {SearchResultContext} from "../../../entities/SearchResultContext";
+import {contextDialogClosedAction} from "../../../actions/dialog/ContextDialogActions";
+import Grid from "@material-ui/core/es/Grid";
+import Button from "@material-ui/core/es/Button";
 
 
 const styles = (theme: Theme) => createStyles({
@@ -32,12 +34,15 @@ const styles = (theme: Theme) => createStyles({
         color: theme.palette.grey[500],
     },
     root: {},
-    progress: {}
+    progress: {},
+    extendContextButton: {
+        margin: '10px'
+    }
 });
 
 
-export interface DocumentDialogProps extends WithStyles<typeof styles> {
-    document: IndexedDocument | null
+export interface ContextDialogProps extends WithStyles<typeof styles> {
+    context: SearchResultContext | null
     dialogClosed: () => void
 }
 
@@ -49,35 +54,38 @@ const DialogContent = withStyles(theme => ({
 }))(MuiDialogContent);
 
 
-const DocumentDialog = (props: DocumentDialogProps) => {
-    const {document, dialogClosed, classes} = props;
+const ContextDialog = (props: ContextDialogProps) => {
+    const {context, dialogClosed, classes} = props;
 
     return <Dialog
-        open={document != null}
+        open={context != null}
         onClose={dialogClosed}
     >
         <div className={classes.root}>
             <MuiDialogTitle disableTypography className={classes.title}>
-                <Typography variant="h6">Whole document</Typography>
+                <Typography variant="h6">Context</Typography>
                 <IconButton aria-label="Close" className={classes.closeButton} onClick={dialogClosed}>
                     <CloseIcon/>
                 </IconButton>
             </MuiDialogTitle>
-            {document !== null && <DialogContent>
-                <DocumentDialogContent document={document}/>
+            {context !== null && <DialogContent>
+                <ContextDialogContent context={context}/>
             </DialogContent>}
+            <Grid container justify="flex-end">
+                <Button variant="contained" color="primary" className={classes.extendContextButton}>Extend</Button>
+            </Grid>
         </div>
     </Dialog>
 };
 
 const mapStateToProps = (state: AppState) => ({
-    document: state.dialog.documentDialog.document
+    context: state.dialog.contextDialog.context
 });
 
 const mapDispatchToProps = {
-    dialogClosed: documentDialogClosedAction
+    dialogClosed: contextDialogClosedAction
 };
 
 export default withStyles(styles, {
     withTheme: true
-})(connect(mapStateToProps, mapDispatchToProps)(DocumentDialog))
+})(connect(mapStateToProps, mapDispatchToProps)(ContextDialog))
