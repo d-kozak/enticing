@@ -19,8 +19,8 @@
     -[ ] entity types recognition
     -[ ] autocomplete based on entity type
     -[ ] complex support using parser in the backend
-- [ ] Admin mode
-    - [ ] add admin related buttons where necessary
+- [X] Admin mode
+    - [X] add admin related buttons where necessary
 - [ ] Code cleanup
     - [ ] react-redux: create clean separation between components and containers    
  
