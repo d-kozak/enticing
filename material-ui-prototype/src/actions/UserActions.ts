@@ -28,5 +28,5 @@ export const loginRequestAction = (login: string, password: string, onError: (er
 
 
 export const signUpAction = (login: string, password: string, onError: (error: any) => void): ThunkResult<void> => (dispatch) => {
-    mockSignup(login, dispatch, onError);
+    mockSignup(login, password, dispatch, onError);
 };
