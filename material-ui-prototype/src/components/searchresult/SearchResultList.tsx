@@ -9,7 +9,7 @@ import Typography from "@material-ui/core/es/Typography";
 import Paper from "@material-ui/core/es/Paper";
 import Pagination from "../pagination/Pagination";
 import Divider from "@material-ui/core/es/Divider";
-import SearchResultWholeDocumentDialog from "./detailsdialog/SearchResultWholeDocumentDialog";
+import SearchResultWholeDocumentDialog from "./wholedocumentdialog/SearchResultWholeDocumentDialog";
 
 const styles = createStyles({
     root: {
