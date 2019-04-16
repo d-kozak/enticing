@@ -58,7 +58,7 @@ const DocumentDialog = (props: DocumentDialogProps) => {
     >
         <div className={classes.root}>
             <MuiDialogTitle disableTypography className={classes.title}>
-                <Typography variant="h6">Whole document</Typography>
+                <Typography variant="h6">Document</Typography>
                 <IconButton aria-label="Close" className={classes.closeButton} onClick={dialogClosed}>
                     <CloseIcon/>
                 </IconButton>
