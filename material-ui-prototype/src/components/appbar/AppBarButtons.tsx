@@ -1,32 +1,29 @@
-import withStyles, {WithStyles} from "@material-ui/core/es/styles/withStyles";
-import createStyles from "@material-ui/core/es/styles/createStyles";
-import {Route, Switch} from "react-router";
 import React from "react";
-import MainPageAppBarButtons from "./MainPageAppBarButtons";
+import createStyles from "@material-ui/core/es/styles/createStyles";
+import {WithStyles} from "@material-ui/core/es";
+import withStyles from "@material-ui/core/es/styles/withStyles";
+import NotLoggedInButtons from "./NotLoggedInButtons";
+import LoggedInButtons from "./LoggedInButtons";
+
 
 const styles = createStyles({});
 
-export interface AppBarButtonsProps extends WithStyles<typeof styles> {
+export interface MainPageAppBarButtonsProps extends WithStyles<typeof styles> {
     handleLogout: () => void,
     isLoggedIn: boolean,
-    isAdmin: boolean,
+    isAdmin: boolean
 }
 
-const AppBarButtons = (props: AppBarButtonsProps) => {
+const AppBarButtons = (props: MainPageAppBarButtonsProps) => {
     const {isLoggedIn, isAdmin, handleLogout} = props;
 
-    return <Switch>
-        <Route path="/" exact
-               render={() => <MainPageAppBarButtons isAdmin={isAdmin} isLoggedIn={isLoggedIn}
-                                                    handleLogout={handleLogout}/>}/>
-        <Route path="/search"
-               render={() => <MainPageAppBarButtons isAdmin={isAdmin} isLoggedIn={isLoggedIn}
-                                                    handleLogout={handleLogout}/>}/>
-        <Route path="/settings" exact
-               render={() => <MainPageAppBarButtons isAdmin={isAdmin} isLoggedIn={isLoggedIn}
-                                                    handleLogout={handleLogout}/>}/>
-    </Switch>
-};
+    return <React.Fragment>
+        {isLoggedIn ?
+            <LoggedInButtons isAdmin={isAdmin} handleLogout={handleLogout}/>
+            : <NotLoggedInButtons/>
+        }
+    </React.Fragment>
 
+}
 
 export default withStyles(styles, {withTheme: true})(AppBarButtons)

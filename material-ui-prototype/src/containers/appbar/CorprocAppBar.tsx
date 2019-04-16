@@ -5,7 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import createStyles from "@material-ui/core/es/styles/createStyles";
 import {WithStyles} from "@material-ui/core/es";
-import AppBarMenuButtons from "../../components/appbar/AppBarButtons";
+import AppBarMenuButtons from "../../components/appbar/AppBarButtonsRouter";
 import {connect} from "react-redux";
 import {AppState} from "../../AppState";
 import {logoutAction} from "../../actions/UserActions";

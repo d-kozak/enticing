@@ -25,6 +25,7 @@
     - [ ] react-redux: create clean separation between components and containers    
     - [ ] ensure consistent file naming, e.g. action vs actions
     - [ ] use string constants instead of strings in actions types(better refactoring)
+    - [ ] refactor the appbar components, the code is quite ugly
 - [X] Make the title in appbar work as redirect to '/'
 - [ ] Add annotations, they were temporarily removed, add them back 
 - [ ] current layout centering is not very responsive, use flex or Grid instead 
