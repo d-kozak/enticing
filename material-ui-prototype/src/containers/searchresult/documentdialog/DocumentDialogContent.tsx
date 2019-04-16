@@ -4,7 +4,7 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React from 'react';
 import Typography from "@material-ui/core/es/Typography";
-import {SearchResult} from "../../../entities/SearchResult";
+import {IndexedDocument} from "../../../entities/IndexedDocument";
 
 const styles = createStyles({
     titleUrl: {
@@ -14,18 +14,18 @@ const styles = createStyles({
 
 
 export interface DialogContentProps extends WithStyles<typeof styles> {
-    searchResult: SearchResult
+    document: IndexedDocument
 }
 
-const SearchResultWholeDocument = (props: DialogContentProps) => {
-    const {searchResult, classes} = props;
+const DocumentDialogContent = (props: DialogContentProps) => {
+    const {document, classes} = props;
     return <div>
         <Typography className={classes.titleUrl} variant="headline"><a
-            href={searchResult.url}>{searchResult.url}</a></Typography>
-        <Typography variant="body1">{searchResult.fullText}</Typography>
+            href={document.url}>{document.url}</a></Typography>
+        <Typography variant="body1">{document.body}</Typography>
     </div>
 };
 
 export default withStyles(styles, {
     withTheme: true
-})(SearchResultWholeDocument)
+})(DocumentDialogContent)

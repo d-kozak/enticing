@@ -3,7 +3,7 @@ import {WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React, {useEffect, useState} from 'react';
-import SearchResultList from "../../components/searchresult/SearchResultList";
+import SearchResultList from "../searchresult/SearchResultList";
 import {SearchResult} from "../../entities/SearchResult";
 import NoResultsFound from "../../components/searchresult/NoResultsFound";
 import SearchInput from "../../components/searchbar/SearchInput";

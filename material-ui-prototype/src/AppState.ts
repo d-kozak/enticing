@@ -1,5 +1,7 @@
 import {SearchResult} from "./entities/SearchResult";
 import {User} from "./entities/User";
+import {IndexedDocument} from "./entities/IndexedDocument";
+import {SearchResultContext} from "./entities/SearchResultContext";
 
 export interface AppState {
     user: UserState,
@@ -7,7 +9,8 @@ export interface AppState {
     searchResults: SearchResultsState,
     snackBar: SnackBarState,
     progressBar: ProgressBarState,
-    admin: AdminState
+    admin: AdminState,
+    dialog: DialogState
 }
 
 export interface UserState {
@@ -34,4 +37,16 @@ export interface SnackBarState {
 
 export interface AdminState {
     users: Array<User>
+}
+
+export interface DialogState {
+    documentDialog: DocumentDialogState
+}
+
+export interface DocumentDialogState {
+    document: IndexedDocument | null
+}
+
+export interface ContextDialogState {
+    currentContext: SearchResultContext | null
 }

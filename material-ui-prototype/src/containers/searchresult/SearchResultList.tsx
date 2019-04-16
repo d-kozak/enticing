@@ -4,15 +4,15 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React, {useState} from 'react';
 import {SearchResult} from "../../entities/SearchResult";
-import SearchResultItem from "./SearchResultItem";
+import SearchResultItem from "../../components/searchresult/SearchResultItem";
 import Typography from "@material-ui/core/es/Typography";
 import Paper from "@material-ui/core/es/Paper";
-import Pagination from "../pagination/Pagination";
+import Pagination from "../../components/pagination/Pagination";
 import Divider from "@material-ui/core/es/Divider";
-import SearchResultWholeDocumentDialog from "./wholedocumentdialog/SearchResultWholeDocumentDialog";
+import DocumentDialog from "./documentdialog/DocumentDialog";
 import {AppState} from "../../AppState";
-import {hideProgressBarAction, showProgressBarAction} from "../../actions/ProgressBarActions";
 import {connect} from "react-redux";
+import {documentDialogRequestedAction} from "../../actions/dialog/DocumentDialogAction";
 
 const styles = createStyles({
     root: {
@@ -31,24 +31,16 @@ const styles = createStyles({
 
 export interface SearchResultListProps extends WithStyles<typeof styles> {
     searchResults: Array<SearchResult>;
-
-    showProgress: () => void;
-    hideProgress: () => void;
+    openWholeDocument: (searchResult: SearchResult) => void;
 }
 
 const SearchResultList = (props: SearchResultListProps) => {
-    const {searchResults, classes, showProgress, hideProgress} = props;
+    const {searchResults, openWholeDocument, classes} = props;
 
     const [currentPage, setCurrentPage] = useState(0);
 
-    const [selectedSearchItem, setSelectedSearchItem] = useState<SearchResult | null>(null);
 
-    const openWholeDocument = (searchResult: SearchResult) => {
-        showProgress();
-        setTimeout(() => {
-            hideProgress();
-            setSelectedSearchItem(searchResult);
-        }, 2000);
+    const openContextDialog = (searchResult: SearchResult) => {
     };
 
     let pageCount = Math.floor(searchResults.length / 20);
@@ -62,15 +54,15 @@ const SearchResultList = (props: SearchResultListProps) => {
             .map(
                 (searchResult, index) => <React.Fragment key={index}>
                     {index > 0 && <Divider/>}
-                    <SearchResultItem openWholeDocument={openWholeDocument} searchResult={searchResult}/>
+                    <SearchResultItem openWholeDocument={openWholeDocument} openContextDialog={openContextDialog}
+                                      searchResult={searchResult}/>
                 </React.Fragment>)
         }
         <Typography
             variant="body1">{searchResults.length > 0 ? `Total number of snippets is ${searchResults.length}` : 'No snippets found'}</Typography>
         <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} pageCount={pageCount}/>
 
-        <SearchResultWholeDocumentDialog searchResult={selectedSearchItem}
-                                         dialogClosed={() => setSelectedSearchItem(null)}/>
+        <DocumentDialog/>
 
     </Paper>
 };
@@ -78,8 +70,7 @@ const SearchResultList = (props: SearchResultListProps) => {
 const mapStateToProps = (state: AppState) => ({});
 
 const mapDispatchToProps = {
-    showProgress: showProgressBarAction,
-    hideProgress: hideProgressBarAction
+    openWholeDocument: documentDialogRequestedAction
 }
 
 export default withStyles(styles, {

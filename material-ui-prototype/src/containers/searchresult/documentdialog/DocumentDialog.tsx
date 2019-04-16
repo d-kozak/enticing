@@ -4,7 +4,6 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React from 'react';
 import MuiDialogContent from '@material-ui/core/DialogContent';
-import {SearchResult} from "../../../entities/SearchResult";
 import Dialog from "@material-ui/core/es/Dialog";
 import Typography from "@material-ui/core/es/Typography";
 import IconButton from "@material-ui/core/es/IconButton";
@@ -13,7 +12,11 @@ import CloseIcon from '@material-ui/icons/Close';
 import {Theme} from "@material-ui/core/es";
 
 
-import SearchResultWholeDocument from './SearchResultWholeDocument';
+import DocumentDialogContent from './DocumentDialogContent';
+import {AppState} from "../../../AppState";
+import {IndexedDocument} from "../../../entities/IndexedDocument";
+import {dialogClosedAction} from "../../../actions/dialog/DocumentDialogAction";
+import {connect} from "react-redux";
 
 
 const styles = (theme: Theme) => createStyles({
@@ -37,7 +40,7 @@ const styles = (theme: Theme) => createStyles({
 
 
 export interface SearchResultDetailsDialogProps extends WithStyles<typeof styles> {
-    searchResult: SearchResult | null
+    document: IndexedDocument | null
     dialogClosed: () => void
 }
 
@@ -49,11 +52,11 @@ const DialogContent = withStyles(theme => ({
 }))(MuiDialogContent);
 
 
-const SearchResultWholeDocumentDialog = (props: SearchResultDetailsDialogProps) => {
-    const {searchResult, dialogClosed, classes} = props;
+const DocumentDialog = (props: SearchResultDetailsDialogProps) => {
+    const {document, dialogClosed, classes} = props;
 
     return <Dialog
-        open={searchResult != null}
+        open={document != null}
         onClose={dialogClosed}
     >
         <div className={classes.root}>
@@ -63,13 +66,21 @@ const SearchResultWholeDocumentDialog = (props: SearchResultDetailsDialogProps) 
                     <CloseIcon/>
                 </IconButton>
             </MuiDialogTitle>
-            {searchResult !== null && <DialogContent>
-                <SearchResultWholeDocument searchResult={searchResult}/>
+            {document !== null && <DialogContent>
+                <DocumentDialogContent document={document}/>
             </DialogContent>}
         </div>
     </Dialog>
 };
 
+const mapStateToProps = (state: AppState) => ({
+    document: state.dialog.documentDialog.document
+});
+
+const mapDispatchToProps = {
+    dialogClosed: dialogClosedAction
+};
+
 export default withStyles(styles, {
     withTheme: true
-})(SearchResultWholeDocumentDialog)
+})(connect(mapStateToProps, mapDispatchToProps)(DocumentDialog))

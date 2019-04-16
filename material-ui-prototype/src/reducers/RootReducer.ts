@@ -7,6 +7,7 @@ import {RootAction} from "../actions/RootAction";
 import snackBarReducer from './SnackBarReducer';
 import progressBarReducer from './ProgressBarReducer';
 import adminReducer from "./AdminReducer";
+import dialogReducer from "./dialog/DialogReducer";
 
 type RootReducer = (state: AppState | undefined, action: RootAction) => AppState
 
@@ -16,8 +17,9 @@ const rootReducer: RootReducer = combineReducers(
         searchResults: searchResultReducer,
         query: queryReducer,
         snackBar: snackBarReducer,
-            progressBar: progressBarReducer,
-            admin: adminReducer
+        progressBar: progressBarReducer,
+        admin: adminReducer,
+        dialog: dialogReducer
     }
 )
 

@@ -5,6 +5,10 @@ import {hideProgressBarAction, showProgressBarAction} from "../actions/ProgressB
 import {newSearchResultsAction} from "../actions/SearchResultActions";
 import * as H from "history";
 import {queryExecutedAction} from "../actions/QueryActions";
+import {documentLoadedAction} from "../actions/dialog/DocumentDialogAction";
+import {SearchResult} from "../entities/SearchResult";
+import {IndexedDocument} from "../entities/IndexedDocument";
+import {loremIpsumText} from "./loremIpsum";
 
 export const mockSearch = (query: string, dispatch: Dispatch, history?: H.History) => {
 
@@ -22,4 +26,17 @@ export const mockSearch = (query: string, dispatch: Dispatch, history?: H.Histor
         dispatch(hideProgressBarAction());
     });
 
-}
+};
+
+export const mockDocumentRequested = (searchResult: SearchResult, dispatch: Dispatch) => {
+    dispatch(showProgressBarAction())
+    setTimeout(() => {
+        const document: IndexedDocument = {
+            body: loremIpsumText,
+            title: searchResult.url,
+            url: searchResult.url
+        };
+        dispatch(hideProgressBarAction());
+        dispatch(documentLoadedAction(document));
+    }, 2000);
+};
