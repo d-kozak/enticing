@@ -2,7 +2,7 @@ import createStyles from "@material-ui/core/es/styles/createStyles";
 import {WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import {SearchResult} from "../../../entities/SearchResult";
 import Dialog from "@material-ui/core/es/Dialog";
@@ -11,8 +11,6 @@ import IconButton from "@material-ui/core/es/IconButton";
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import CloseIcon from '@material-ui/icons/Close';
 import {Theme} from "@material-ui/core/es";
-
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 import SearchResultWholeDocument from './SearchResultWholeDocument';
@@ -54,31 +52,19 @@ const DialogContent = withStyles(theme => ({
 const SearchResultWholeDocumentDialog = (props: SearchResultDetailsDialogProps) => {
     const {searchResult, dialogClosed, classes} = props;
 
-    const [visibleData, setVisibleData] = useState<SearchResult | null>(null);
-
-    useEffect(() => {
-        setTimeout(() => {
-            setVisibleData(searchResult);
-        }, 2000)
-    }, [searchResult]);
-
     return <Dialog
         open={searchResult != null}
-        onClose={() => {
-            setVisibleData(null);
-            dialogClosed();
-        }}
+        onClose={dialogClosed}
     >
         <div className={classes.root}>
             <MuiDialogTitle disableTypography className={classes.title}>
-                <Typography variant="h6">Details</Typography>
+                <Typography variant="h6">Whole document</Typography>
                 <IconButton aria-label="Close" className={classes.closeButton} onClick={dialogClosed}>
                     <CloseIcon/>
                 </IconButton>
             </MuiDialogTitle>
-            {visibleData === null && <CircularProgress className={classes.progress} color="secondary"/>}
-            {visibleData !== null && <DialogContent>
-                <SearchResultWholeDocument searchResult={visibleData}/>
+            {searchResult !== null && <DialogContent>
+                <SearchResultWholeDocument searchResult={searchResult}/>
             </DialogContent>}
         </div>
     </Dialog>

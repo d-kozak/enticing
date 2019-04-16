@@ -10,6 +10,9 @@ import Paper from "@material-ui/core/es/Paper";
 import Pagination from "../pagination/Pagination";
 import Divider from "@material-ui/core/es/Divider";
 import SearchResultWholeDocumentDialog from "./wholedocumentdialog/SearchResultWholeDocumentDialog";
+import {AppState} from "../../AppState";
+import {hideProgressBarAction, showProgressBarAction} from "../../actions/ProgressBarActions";
+import {connect} from "react-redux";
 
 const styles = createStyles({
     root: {
@@ -27,17 +30,26 @@ const styles = createStyles({
 
 
 export interface SearchResultListProps extends WithStyles<typeof styles> {
-    searchResults: Array<SearchResult>
+    searchResults: Array<SearchResult>;
+
+    showProgress: () => void;
+    hideProgress: () => void;
 }
 
 const SearchResultList = (props: SearchResultListProps) => {
-    const {searchResults, classes} = props;
+    const {searchResults, classes, showProgress, hideProgress} = props;
 
     const [currentPage, setCurrentPage] = useState(0);
 
     const [selectedSearchItem, setSelectedSearchItem] = useState<SearchResult | null>(null);
 
-    const openWholeDocument = (searchResult: SearchResult) => setSelectedSearchItem(searchResult);
+    const openWholeDocument = (searchResult: SearchResult) => {
+        showProgress();
+        setTimeout(() => {
+            hideProgress();
+            setSelectedSearchItem(searchResult);
+        }, 2000);
+    };
 
     let pageCount = Math.floor(searchResults.length / 20);
     if (searchResults.length % 20 != 0) {
@@ -63,6 +75,13 @@ const SearchResultList = (props: SearchResultListProps) => {
     </Paper>
 };
 
+const mapStateToProps = (state: AppState) => ({});
+
+const mapDispatchToProps = {
+    showProgress: showProgressBarAction,
+    hideProgress: hideProgressBarAction
+}
+
 export default withStyles(styles, {
     withTheme: true
-})(SearchResultList)
+})(connect(mapStateToProps, mapDispatchToProps)(SearchResultList))
