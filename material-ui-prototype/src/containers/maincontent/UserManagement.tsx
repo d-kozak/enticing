@@ -9,8 +9,24 @@ import {connect} from "react-redux";
 import {User} from "../../entities/User";
 import Typography from "@material-ui/core/es/Typography";
 import UserTable from "../../components/admin/UserTable";
+import Paper from "@material-ui/core/es/Paper";
+import Divider from "@material-ui/core/es/Divider";
 
-const styles = createStyles({});
+const styles = createStyles({
+    root: {
+        width: '90%',
+        margin: '20px auto',
+        paddingTop: '15px'
+    },
+    divider: {
+        margin: '15px 0px'
+    },
+    '@media (min-width:1000px)': {
+        root: {
+            width: '80%',
+        }
+    }
+});
 
 export interface UserManagementProps extends WithStyles<typeof styles> {
     users: Array<User>;
@@ -19,16 +35,17 @@ export interface UserManagementProps extends WithStyles<typeof styles> {
 }
 
 const UserManagement = (props: UserManagementProps) => {
-    const {users, loadUsers, updateUser} = props;
+    const {users, loadUsers, updateUser, classes} = props;
 
     useEffect(() => {
         loadUsers();
     }, []);
 
-    return <div>
-        <Typography variant="h2">User management</Typography>
+    return <Paper className={classes.root}>
+        <Typography align="center" variant="h2">User management</Typography>
+        <Divider className={classes.divider}/>
         <UserTable users={users} updateUser={updateUser}/>
-    </div>
+    </Paper>
 };
 
 const mapStateToProps = (state: AppState) => ({

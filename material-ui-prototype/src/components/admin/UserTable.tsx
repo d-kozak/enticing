@@ -4,7 +4,6 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React from 'react';
 import {User} from "../../entities/User";
-import Paper from "@material-ui/core/es/Paper";
 import Table from "@material-ui/core/es/Table";
 import TableHead from "@material-ui/core/es/TableHead";
 import TableRow from "@material-ui/core/es/TableRow";
@@ -49,8 +48,7 @@ const UserTable = (props: UserTableProps) => {
         });
     };
 
-    return <Paper className={classes.root}>
-        <Table>
+    return <Table>
             <TableHead>
                 <TableRow>
                     <TableCell>Login</TableCell>
@@ -88,7 +86,6 @@ const UserTable = (props: UserTableProps) => {
                 </TableRow>)}
             </TableBody>
         </Table>
-    </Paper>
 };
 
 export default withStyles(styles, {

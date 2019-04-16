@@ -72,7 +72,7 @@ const MainPageAppBarButtons = (props: MainPageAppBarButtonsProps) => {
                 onClose={handleMenuClose}
             >
                 <MenuItem onClick={handleMenuClose} component={SettingsLink}>Settings</MenuItem>
-                {isAdmin && <MenuItem onClick={handleMenuClose} component={LinkTo("/users")}>Manage Users</MenuItem>}
+                {isAdmin && <MenuItem onClick={handleMenuClose} component={LinkTo("/users")}>User management</MenuItem>}
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
         </React.Fragment>}
