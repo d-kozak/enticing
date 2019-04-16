@@ -3,34 +3,29 @@ import {WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 import React from 'react';
 import Tooltip from "@material-ui/core/es/Tooltip";
+import {Annotation} from "../../entities/Annotation";
+import AnnotationContent from "./AnnotationContent";
 
 
 const styles = createStyles({
-    tooltipTrigger: {
-        color: 'red'
-    }
+
 });
 
 
 export interface AnnotatedElementProps extends WithStyles<typeof styles> {
-    text: string,
-    id: string
+    annotation: Annotation
 }
 
-const colors = ['blue', 'green', 'red', 'orange', 'purple'];
-
 const AnnotatedElement = (props: AnnotatedElementProps) => {
-    const {text, classes, id} = props;
+    const {annotation, classes} = props;
 
-    const color = colors[Number(id) % colors.length];
-    const style = {color}
+    const style = {
+        color: annotation.color
+    }
 
     return <React.Fragment>
-        <Tooltip title={<div>
-            <h1>Tooltip</h1>
-            <p>Text</p>
-        </div>}>
-            <span style={style} className={classes.tooltipTrigger}>{text}</span>
+        <Tooltip title={<AnnotationContent annotation={annotation}/>}>
+            <span style={style}>{annotation.text} </span>
         </Tooltip>
     </React.Fragment>
 };
