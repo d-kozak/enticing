@@ -6,6 +6,7 @@ import {AppState} from "../AppState";
 import {RootAction} from "../actions/RootAction";
 import snackBarReducer from './SnackBarReducer';
 import progressBarReducer from './ProgressBarReducer';
+import adminReducer from "./AdminReducer";
 
 type RootReducer = (state: AppState | undefined, action: RootAction) => AppState
 
@@ -15,7 +16,8 @@ const rootReducer: RootReducer = combineReducers(
         searchResults: searchResultReducer,
         query: queryReducer,
         snackBar: snackBarReducer,
-        progressBar: progressBarReducer
+            progressBar: progressBarReducer,
+            admin: adminReducer
     }
 )
 

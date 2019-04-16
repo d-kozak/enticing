@@ -29,6 +29,8 @@
 - [ ] show the 'Query:' text only on large screens
 - [X] add redux
 - [ ] inspect the possibility to make all progress and spinners depend on one top level element
+- [ ] make mock API fully asynchronous
+- [ ] handle error cases when interacting with mock API 
 
 ## Known bugs
 - [ ] options for logged in user from appbar sometimes render in the wrong place

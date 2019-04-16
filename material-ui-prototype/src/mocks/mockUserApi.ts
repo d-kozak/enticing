@@ -1,15 +1,18 @@
 import {Dispatch} from "redux";
 import {openSnackBar} from "../actions/SnackBarActions";
 import {loginSuccessAction} from "../actions/UserActions";
+import {updateUserSuccessAction, usersLoadedAction} from "../actions/AdminActions";
+import {hideProgressBarAction, showProgressBarAction} from "../actions/ProgressBarActions";
+import {User} from "../entities/User";
 
 
-interface User {
+interface MockUser {
     login: string,
     password: string,
     isAdmin: boolean
 }
 
-const users = new Map<string, User>([
+const mockUsers = new Map<string, MockUser>([
     [
         'user1', {
         login: 'user1',
@@ -29,9 +32,9 @@ const users = new Map<string, User>([
 
 export const mockSignup = (login: string, password: string, dispatch: Dispatch, onError: (error: any) => void) => {
     setTimeout(() => {
-        const user = users.get(login);
+        const user = mockUsers.get(login);
         if (!user) {
-            users.set(login, {
+            mockUsers.set(login, {
                 login,
                 password,
                 isAdmin: false
@@ -48,7 +51,7 @@ export const mockSignup = (login: string, password: string, dispatch: Dispatch, 
 
 export const mockLogin = (login: string, password: string, dispatch: Dispatch, onError: (errors: any) => void) => {
     setTimeout(() => {
-        const user = users.get(login);
+        const user = mockUsers.get(login);
         if (user) {
             if (user.password === password) {
                 dispatch(openSnackBar('Logged in'));
@@ -59,5 +62,31 @@ export const mockLogin = (login: string, password: string, dispatch: Dispatch, o
         } else {
             onError({login: 'Unknown login'});
         }
+    }, 2000);
+}
+
+export const mockLoadUsers = (dispatch: Dispatch) => {
+    dispatch(showProgressBarAction());
+    setTimeout(() => {
+        const users = Array.from(mockUsers.values()).map(user => ({...user, password: ''}));
+        dispatch(hideProgressBarAction());
+        dispatch(usersLoadedAction(users));
+    }, 2000);
+}
+
+export const mockUpdateUser = (user: User, dispatch: Dispatch) => {
+    dispatch(showProgressBarAction());
+    setTimeout(() => {
+        const mockUser = mockUsers.get(user.login);
+        if (mockUser) {
+            mockUsers.set(user.login, {
+                ...mockUser,
+                ...user
+            });
+            dispatch(updateUserSuccessAction(user));
+        } else {
+            dispatch(openSnackBar(`User with login ${user.login} does not exist`));
+        }
+        dispatch(hideProgressBarAction());
     }, 2000);
 }

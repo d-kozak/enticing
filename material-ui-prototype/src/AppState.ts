@@ -1,11 +1,13 @@
 import {SearchResult} from "./entities/SearchResult";
+import {User} from "./entities/User";
 
 export interface AppState {
     user: UserState,
     query: QueryState,
     searchResults: SearchResultsState,
     snackBar: SnackBarState,
-    progressBar: ProgressBarState
+    progressBar: ProgressBarState,
+    admin: AdminState
 }
 
 export interface UserState {
@@ -28,4 +30,8 @@ export interface SearchResultsState {
 export interface SnackBarState {
     isOpen: boolean,
     message: string
+}
+
+export interface AdminState {
+    users: Array<User>
 }

@@ -1,5 +1,5 @@
 import {ThunkResult} from "./RootAction";
-import {mockLogin, mockSignup} from "../mocks/userApi";
+import {mockLogin, mockSignup} from "../mocks/mockUserApi";
 
 type LogoutAction = {
     type: "[USER] LOGOUT"

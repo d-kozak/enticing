@@ -10,7 +10,7 @@ import SignUp from "../containers/maincontent/SignUp";
 import Search from "../containers/maincontent/SearchResultPage";
 import MainPage from "../containers/maincontent/MainPage";
 import Settings from "../containers/maincontent/Settings";
-import UserManagement from "./maincontent/UserManagement";
+import UserManagement from "../containers/maincontent/UserManagement";
 import AdminRoute from "./routes/AdminRoute";
 import {openSnackBar} from "../actions/SnackBarActions";
 import {connect} from "react-redux";
