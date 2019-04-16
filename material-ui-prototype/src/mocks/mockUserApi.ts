@@ -9,7 +9,8 @@ import {User} from "../entities/User";
 interface MockUser {
     login: string,
     password: string,
-    isAdmin: boolean
+    isAdmin: boolean,
+    isActive: boolean
 }
 
 const mockUsers = new Map<string, MockUser>([
@@ -17,6 +18,15 @@ const mockUsers = new Map<string, MockUser>([
         'user1', {
         login: 'user1',
         password: 'user1',
+        isActive: true,
+        isAdmin: false
+    }
+    ],
+    [
+        'passive', {
+        login: 'passive',
+        password: 'passive',
+        isActive: false,
         isAdmin: false
     }
     ],
@@ -24,6 +34,7 @@ const mockUsers = new Map<string, MockUser>([
         'admin', {
         login: 'admin',
         password: 'admin',
+        isActive: true,
         isAdmin: true
     }
     ]
@@ -37,6 +48,7 @@ export const mockSignup = (login: string, password: string, dispatch: Dispatch, 
             mockUsers.set(login, {
                 login,
                 password,
+                isActive: true,
                 isAdmin: false
             });
             dispatch(openSnackBar('Signed up successfully'))
@@ -53,7 +65,9 @@ export const mockLogin = (login: string, password: string, dispatch: Dispatch, o
     setTimeout(() => {
         const user = mockUsers.get(login);
         if (user) {
-            if (user.password === password) {
+            if (!user.isActive) {
+                onError({login: 'Your account is not active anymore'});
+            } else if (user.password === password) {
                 dispatch(openSnackBar('Logged in'));
                 dispatch(loginSuccessAction(login, user.isAdmin));
             } else {
@@ -81,8 +95,10 @@ export const mockUpdateUser = (user: User, dispatch: Dispatch) => {
         if (mockUser) {
             mockUsers.set(user.login, {
                 ...mockUser,
-                ...user
+                ...user,
+                password: mockUser.password
             });
+            dispatch(openSnackBar(`User ${user.login} updated`));
             dispatch(updateUserSuccessAction(user));
         } else {
             dispatch(openSnackBar(`User with login ${user.login} does not exist`));
