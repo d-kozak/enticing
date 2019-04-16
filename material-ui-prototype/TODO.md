@@ -25,14 +25,13 @@
     - [ ] react-redux: create clean separation between components and containers    
     - [ ] ensure consistent file naming, e.g. action vs actions
     - [ ] use string constants instead of strings in actions types(better refactoring)
+- [X] Make the title in appbar work as redirect to '/'
 - [ ] Add annotations, they were temporarily removed, add them back 
-## Features
 - [ ] current layout centering is not very responsive, use flex or Grid instead 
 - [ ] show the 'Query:' text only on large screens
 - [X] add redux
-- [ ] inspect the possibility to make all progress and spinners depend on one top level element
-- [ ] make mock API fully asynchronous
-- [ ] handle error cases when interacting with mock API 
+- [X] inspect the possibility to make all progress and spinners depend on one top level element
+- [X] make mock API fully asynchronous 
 
 
 ## Known bugs

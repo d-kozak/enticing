@@ -9,6 +9,8 @@ import AppBarMenuButtons from "../../components/appbar/AppBarButtons";
 import {connect} from "react-redux";
 import {AppState} from "../../AppState";
 import {logoutAction} from "../../actions/UserActions";
+import {Link} from "react-router-dom";
+
 
 const styles = createStyles({
     root: {
@@ -28,13 +30,23 @@ export interface CorprocAppBarProps extends WithStyles<typeof styles> {
 const CorprocAppBar = (props: CorprocAppBarProps) => {
     const {classes, isAdmin, isLoggedIn, handleLogout} = props;
 
+    const linkRef = (node: HTMLAnchorElement | null) => {
+        if (node) {
+            node.style.textDecoration = 'none';
+            node.style.color = 'white';
+        }
+    }
 
     return <div className={classes.root}>
         <AppBar position="static">
             <Toolbar>
-                <Typography variant="h6" color="inherit" className={classes.grow}>
-                    Corproc Search
-                </Typography>
+                <div className={classes.grow}>
+                    <Link to="/" innerRef={linkRef}>
+                        <Typography variant="h6" color="inherit">
+                            Corproc Search
+                        </Typography>
+                    </Link>
+                </div>
                 <AppBarMenuButtons isLoggedIn={isLoggedIn} isAdmin={isAdmin} handleLogout={handleLogout}/>
             </Toolbar>
         </AppBar>
