@@ -9,7 +9,7 @@ import Typography from "@material-ui/core/es/Typography";
 import Paper from "@material-ui/core/es/Paper";
 import Pagination from "../pagination/Pagination";
 import Divider from "@material-ui/core/es/Divider";
-import SearchResultDetailsDialog from "./detailsdialog/SearchResultFullTextDialog";
+import SearchResultWholeDocumentDialog from "./detailsdialog/SearchResultWholeDocumentDialog";
 
 const styles = createStyles({
     root: {
@@ -35,10 +35,9 @@ const SearchResultList = (props: SearchResultListProps) => {
 
     const [currentPage, setCurrentPage] = useState(0);
 
+    const [selectedSearchItem, setSelectedSearchItem] = useState<SearchResult | null>(null);
 
-    const [currentlyVisibleResultDetails, setCurrentlyVisibleResultDetails] = useState<SearchResult | null>(null);
-
-    const openDetails = (searchResult: SearchResult) => setCurrentlyVisibleResultDetails(searchResult);
+    const openWholeDocument = (searchResult: SearchResult) => setSelectedSearchItem(searchResult);
 
     let pageCount = Math.floor(searchResults.length / 20);
     if (searchResults.length % 20 != 0) {
@@ -51,15 +50,15 @@ const SearchResultList = (props: SearchResultListProps) => {
             .map(
                 (searchResult, index) => <React.Fragment key={index}>
                     {index > 0 && <Divider/>}
-                    <SearchResultItem openDetails={openDetails} searchResult={searchResult}/>
+                    <SearchResultItem openWholeDocument={openWholeDocument} searchResult={searchResult}/>
                 </React.Fragment>)
         }
         <Typography
             variant="body1">{searchResults.length > 0 ? `Total number of snippets is ${searchResults.length}` : 'No snippets found'}</Typography>
         <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} pageCount={pageCount}/>
 
-        <SearchResultDetailsDialog searchResult={currentlyVisibleResultDetails}
-                                   dialogClosed={() => setCurrentlyVisibleResultDetails(null)}/>
+        <SearchResultWholeDocumentDialog searchResult={selectedSearchItem}
+                                         dialogClosed={() => setSelectedSearchItem(null)}/>
 
     </Paper>
 };

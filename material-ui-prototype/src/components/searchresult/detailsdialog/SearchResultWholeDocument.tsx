@@ -17,7 +17,7 @@ export interface DialogContentProps extends WithStyles<typeof styles> {
     searchResult: SearchResult
 }
 
-const SearchResultFullText = (props: DialogContentProps) => {
+const SearchResultWholeDocument = (props: DialogContentProps) => {
     const {searchResult, classes} = props;
     return <div>
         <Typography className={classes.titleUrl} variant="headline"><a
@@ -28,4 +28,4 @@ const SearchResultFullText = (props: DialogContentProps) => {
 
 export default withStyles(styles, {
     withTheme: true
-})(SearchResultFullText)
+})(SearchResultWholeDocument)

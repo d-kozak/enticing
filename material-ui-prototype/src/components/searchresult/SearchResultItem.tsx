@@ -24,11 +24,11 @@ const styles = createStyles({
 
 export interface SearchResultItemProps extends WithStyles<typeof styles> {
     searchResult: SearchResult,
-    openDetails: (searchResult: SearchResult) => void
+    openWholeDocument: (searchResult: SearchResult) => void
 }
 
 const SearchResultItem = (props: SearchResultItemProps) => {
-    const {searchResult, openDetails, classes} = props;
+    const {searchResult, openWholeDocument, classes} = props;
 
     const [showContext, setShowContext] = useState(false);
 
@@ -55,7 +55,7 @@ const SearchResultItem = (props: SearchResultItemProps) => {
                 <ShowContext/>
             </Grid>}
 
-            <Button onClick={() => openDetails(searchResult)} color="primary" size="small">Details</Button>
+            <Button onClick={() => openWholeDocument(searchResult)} color="primary" size="small">Whole document</Button>
 
             <Button size="small">Annotations</Button>
 

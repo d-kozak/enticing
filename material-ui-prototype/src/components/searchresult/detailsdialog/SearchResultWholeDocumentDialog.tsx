@@ -2,7 +2,7 @@ import createStyles from "@material-ui/core/es/styles/createStyles";
 import {WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import {SearchResult} from "../../../entities/SearchResult";
 import Dialog from "@material-ui/core/es/Dialog";
@@ -12,11 +12,14 @@ import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import CloseIcon from '@material-ui/icons/Close';
 import {Theme} from "@material-ui/core/es";
 
-import SearchResultFullText from './SearchResultFullText';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+
+import SearchResultWholeDocument from './SearchResultWholeDocument';
 
 
 const styles = (theme: Theme) => createStyles({
-    root: {
+    title: {
         borderBottom: `1px solid ${theme.palette.divider}`,
         margin: 0,
         padding: theme.spacing.unit * 2,
@@ -27,6 +30,11 @@ const styles = (theme: Theme) => createStyles({
         top: theme.spacing.unit,
         color: theme.palette.grey[500],
     },
+    root: {
+        minWidth: '250px',
+        minHeight: '500px'
+    },
+    progress: {}
 });
 
 
@@ -43,21 +51,34 @@ const DialogContent = withStyles(theme => ({
 }))(MuiDialogContent);
 
 
-const SearchResultFullTextDialog = (props: SearchResultDetailsDialogProps) => {
+const SearchResultWholeDocumentDialog = (props: SearchResultDetailsDialogProps) => {
     const {searchResult, dialogClosed, classes} = props;
+
+    const [visibleData, setVisibleData] = useState<SearchResult | null>(null);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setVisibleData(searchResult);
+        }, 2000)
+    }, [searchResult]);
+
     return <Dialog
-        open={searchResult !== null}
-        onClose={() => dialogClosed()}
+        open={searchResult != null}
+        onClose={() => {
+            setVisibleData(null);
+            dialogClosed();
+        }}
     >
-        <div>
-            <MuiDialogTitle disableTypography className={classes.root}>
+        <div className={classes.root}>
+            <MuiDialogTitle disableTypography className={classes.title}>
                 <Typography variant="h6">Details</Typography>
                 <IconButton aria-label="Close" className={classes.closeButton} onClick={dialogClosed}>
                     <CloseIcon/>
                 </IconButton>
             </MuiDialogTitle>
-            {searchResult !== null && <DialogContent>
-                <SearchResultFullText searchResult={searchResult}/>
+            {visibleData === null && <CircularProgress className={classes.progress} color="secondary"/>}
+            {visibleData !== null && <DialogContent>
+                <SearchResultWholeDocument searchResult={visibleData}/>
             </DialogContent>}
         </div>
     </Dialog>
@@ -65,4 +86,4 @@ const SearchResultFullTextDialog = (props: SearchResultDetailsDialogProps) => {
 
 export default withStyles(styles, {
     withTheme: true
-})(SearchResultFullTextDialog)
+})(SearchResultWholeDocumentDialog)
