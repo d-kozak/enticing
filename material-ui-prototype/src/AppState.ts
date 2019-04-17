@@ -2,6 +2,7 @@ import {SearchResult} from "./entities/SearchResult";
 import {User} from "./entities/User";
 import {IndexedDocument} from "./entities/IndexedDocument";
 import {SearchResultContext} from "./entities/SearchResultContext";
+import {SearchQuery} from "./entities/SearchQuery";
 
 export interface AppState {
     user: UserState,
@@ -19,7 +20,8 @@ export interface UserState {
 }
 
 export interface QueryState {
-    lastQuery: string
+    lastQuery: SearchQuery
+    useConstraints: boolean
 }
 
 export interface ProgressBarState {

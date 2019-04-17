@@ -7,6 +7,7 @@ import {hideProgressBarAction, showProgressBarAction} from "../actions/ProgressB
 import {queryExecutedAction} from "../actions/QueryActions";
 import {newSearchResultsAction} from "../actions/SearchResultActions";
 import {openSnackBar} from "../actions/SnackBarActions";
+import {SearchQuery} from "../entities/SearchQuery";
 
 
 export const firstResult: SearchResult = {
@@ -60,11 +61,11 @@ const mockExecuteQuery: ((query: string) => Promise<Array<SearchResult>>) = (que
     })
 };
 
-export const mockSearch = (query: string, dispatch: Dispatch, history?: H.History) => {
+export const mockSearch = (query: SearchQuery, dispatch: Dispatch, history?: H.History) => {
 
     dispatch(showProgressBarAction())
     dispatch(queryExecutedAction(query));
-    mockExecuteQuery(query)
+    mockExecuteQuery(query.query)
         .then(results => {
             dispatch(newSearchResultsAction(results));
             if (history) {

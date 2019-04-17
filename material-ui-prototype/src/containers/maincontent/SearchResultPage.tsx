@@ -2,15 +2,16 @@ import createStyles from "@material-ui/core/es/styles/createStyles";
 import {WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import SearchResultList from "../searchresult/SearchResultList";
 import {SearchResult} from "../../entities/SearchResult";
 import NoResultsFound from "../../components/searchresult/NoResultsFound";
-import SearchInput from "../../components/searchbar/SearchInput";
-import Typography from "@material-ui/core/es/Typography";
 import {AppState} from "../../AppState";
-import {startSearchingAction} from "../../actions/QueryActions";
+
 import {connect} from "react-redux";
+import {startSearchingAction} from "../../actions/QueryActions";
+import {SearchQuery} from "../../entities/SearchQuery";
+import SearchInput from "../searchbar/SearchInput";
 
 const styles = createStyles({
     searchDiv: {
@@ -28,27 +29,23 @@ const styles = createStyles({
 
 export interface SearchProps extends WithStyles<typeof styles> {
     searchResults: Array<SearchResult> | null;
-    startSearching: (query: string) => void;
-    lastQuery: string;
+    startSearching: (query: SearchQuery) => void;
+    lastQuery: SearchQuery;
 }
 
 const SearchResultPage = (props: SearchProps) => {
     const {searchResults, startSearching, classes, lastQuery} = props;
 
-    const [query, setQuery] = useState(lastQuery);
-
     useEffect(() => {
         if (searchResults === null) {
-            startSearching(query);
+            startSearching(lastQuery);
         }
     }, [searchResults])
 
 
     return <div>
         <div className={classes.searchDiv}>
-            <Typography className={classes.searchTitle} variant="h5">Query: </Typography>
-            <SearchInput query={query} setQuery={setQuery} startSearching={startSearching}
-                         className={classes.searchInput}/>
+            <SearchInput/>
         </div>
         {searchResults !== null && searchResults.length > 0 ? <SearchResultList searchResults={searchResults}/> :
             <NoResultsFound/>}
@@ -59,10 +56,10 @@ const mapStateToProps = (state: AppState) => ({
     searchResults: state.searchResults.searchResults,
     lastQuery: state.query.lastQuery
 });
-const mapDispatchToProps = {
-    startSearching: startSearchingAction
-}
 
+const mapDispatchToProps = {
+    startSearching: startSearchingAction,
+};
 
 export default withStyles(styles, {
     withTheme: true

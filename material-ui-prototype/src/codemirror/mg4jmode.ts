@@ -1,5 +1,5 @@
 import CodeMirror, {Mode} from 'codemirror';
-import './LanguageMode.css';
+import './tokenStyles.css';
 
 export const MG4J_EQL = 'mg4j-eql';
 

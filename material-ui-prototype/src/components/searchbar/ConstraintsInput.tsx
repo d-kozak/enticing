@@ -11,7 +11,7 @@ import CodeMirror from 'react-codemirror';
 import {EditorConfiguration} from "codemirror";
 
 import './CodeMirror.css';
-import {MG4J_EQL} from "../../codemirror/LanguageMode";
+import {CONSTRAINTS} from "../../codemirror/constraintsMode";
 
 const styles = (theme: Theme) => createStyles({
     reactCodeMirror: {
@@ -19,16 +19,15 @@ const styles = (theme: Theme) => createStyles({
     }
 });
 
-interface QueryInputProps extends WithStyles<typeof styles> {
-    query: string;
-    setQuery: (query: string) => void;
-    startSearching: (query: string) => void;
+interface ConstraintsInputProps extends WithStyles<typeof styles> {
+    constraints: string;
+    setConstraints: (newConstraints: string) => void;
+    startSearching: (constraints: string) => void;
     className?: string;
 }
 
-const SearchInput = (props: QueryInputProps) => {
-    const {className = '', startSearching, classes, query, setQuery} = props;
-
+const ConstraintsInput = (props: ConstraintsInputProps) => {
+    const {className = '', startSearching, classes, setConstraints, constraints} = props;
 
     const codeMirrorRef = useRef<ReactCodeMirror.ReactCodeMirror>(null);
 
@@ -45,10 +44,10 @@ const SearchInput = (props: QueryInputProps) => {
     const options: EditorConfiguration = {
         extraKeys: {
             "Enter": () => {
-                startSearching(query);
+                startSearching(constraints);
             }
         },
-        mode: MG4J_EQL,
+        mode: CONSTRAINTS,
         scrollbarStyle: "null"
     }
 
@@ -56,12 +55,12 @@ const SearchInput = (props: QueryInputProps) => {
         <CodeMirror
             className={classes.reactCodeMirror}
             ref={codeMirrorRef}
-            value={query}
-            onChange={newQuery => setQuery(newQuery)}
+            value={constraints}
+            onChange={constraints => setConstraints(constraints)}
             autoFocus={true}
             options={options}
         />
     </div>
 };
 
-export default withStyles(styles, {withTheme: true})(SearchInput);
+export default withStyles(styles, {withTheme: true})(ConstraintsInput);
