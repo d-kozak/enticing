@@ -39,6 +39,7 @@
 
 
 ## Known issues
+- [ ] annotations cannot be opened on mobile phone, add onClick listeners to the tooltips
 - [ ] options for logged in user from appbar sometimes render in the wrong place
 - [ ] user management page is not responsive
 - [X] tooltips sometimes mysteriously render push the text after them to the next line
