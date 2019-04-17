@@ -44,6 +44,12 @@ export interface AdminState {
 export interface DialogState {
     documentDialog: DocumentDialogState;
     contextDialog: ContextDialogState;
+    deleteUserDialog: DeleteUserDialogState
+}
+
+export interface DeleteUserDialogState {
+    userToDelete: User | null,
+    showProgress: boolean
 }
 
 export interface DocumentDialogState {

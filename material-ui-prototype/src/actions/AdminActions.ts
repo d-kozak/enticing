@@ -1,6 +1,6 @@
 import {User} from "../entities/User";
 import {ThunkResult} from "./RootAction";
-import {mockLoadUsers, mockUpdateUser} from "../mocks/mockUserApi";
+import {mockDeleteUser, mockLoadUsers, mockUpdateUser} from "../mocks/mockUserApi";
 
 interface UsersLoadedAction {
     type: '[ADMIN] USERS LOADED',
@@ -12,7 +12,12 @@ interface UpdateUserSuccessAction {
     user: User
 }
 
-export type AdminAction = UsersLoadedAction | UpdateUserSuccessAction
+interface DeleteUserSuccessAction {
+    type: '[ADMIN] DELETE USER SUCCESS',
+    user: User
+}
+
+export type AdminAction = UsersLoadedAction | UpdateUserSuccessAction | DeleteUserSuccessAction
 
 export const usersLoadedAction = (users: Array<User>): UsersLoadedAction => (
     {
@@ -27,6 +32,11 @@ export const updateUserSuccessAction = (user: User): UpdateUserSuccessAction => 
 });
 
 
+export const deleteUserSuccessAction = (user: User): DeleteUserSuccessAction => ({
+    type: "[ADMIN] DELETE USER SUCCESS",
+    user
+});
+
 export const loadUsersAction = (): ThunkResult<void> => (dispatch) => {
     mockLoadUsers(dispatch)
 };
@@ -36,3 +46,6 @@ export const updateUserAction = (user: User): ThunkResult<void> => (dispatch) =>
     mockUpdateUser(user, dispatch)
 };
 
+export const deleteUserAction = (user: User): ThunkResult<void> => dispatch => {
+    mockDeleteUser(user, dispatch);
+};

@@ -1,9 +1,14 @@
 import {Dispatch} from "redux";
 import {openSnackBar} from "../actions/SnackBarActions";
 import {loginSuccessAction} from "../actions/UserActions";
-import {updateUserSuccessAction, usersLoadedAction} from "../actions/AdminActions";
+import {deleteUserSuccessAction, updateUserSuccessAction, usersLoadedAction} from "../actions/AdminActions";
 import {hideProgressBarAction, showProgressBarAction} from "../actions/ProgressBarActions";
 import {User} from "../entities/User";
+import {
+    deleteUserDialogClosedAction,
+    deleteUserDialogHideProgressAction,
+    deleteUserDialogShowProgressAction
+} from "../actions/dialog/DeleteUserDialogActions";
 
 
 interface MockUser {
@@ -98,7 +103,7 @@ export const mockUpdateUser = (user: User, dispatch: Dispatch) => {
                 ...user,
                 password: mockUser.password
             });
-            dispatch(openSnackBar(`User ${user.login} updated`));
+            dispatch(openSnackBar(`User with login ${user.login} updated`));
             dispatch(updateUserSuccessAction(user));
         } else {
             dispatch(openSnackBar(`User with login ${user.login} does not exist`));
@@ -106,3 +111,18 @@ export const mockUpdateUser = (user: User, dispatch: Dispatch) => {
         dispatch(hideProgressBarAction());
     }, 2000);
 }
+
+
+export const mockDeleteUser = (user: User, dispatch: Dispatch) => {
+    dispatch(deleteUserDialogShowProgressAction());
+    setTimeout(() => {
+        if (mockUsers.delete(user.login)) {
+            dispatch(openSnackBar(`User with login ${user.login} deleted`));
+            dispatch(deleteUserSuccessAction(user))
+        } else {
+            dispatch(openSnackBar(`User with login ${user.login} does not exist, cannot be deleted`));
+        }
+        dispatch(deleteUserDialogHideProgressAction());
+        dispatch(deleteUserDialogClosedAction());
+    }, 2000);
+};

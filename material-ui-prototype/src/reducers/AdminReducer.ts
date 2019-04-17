@@ -20,7 +20,11 @@ const adminReducer: AdminReducer = (state = initialState, action) => {
                 .map((user) => user.login === action.user.login ? action.user : user)
             return {
                 users: updatedUsers
-            }
+            };
+        case "[ADMIN] DELETE USER SUCCESS":
+            return {
+                users: state.users.filter(user => user.login != action.user.login)
+            };
 
     }
     return state
