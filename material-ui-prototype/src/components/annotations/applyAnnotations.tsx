@@ -27,7 +27,7 @@ export const applyAnnotations = (annotatedText: AnnotatedText): React.ReactNode 
      * 2) each position is mapped to a tuple of a) normal string consisting of input[prevPosition,annotationstart-1]
      *                                          b) the annotation itself
      */
-    const annotated = enriched.map(position => <React.Fragment>
+    const annotated = enriched.map((position, index) => <React.Fragment key={index}>
         {text.substring(position.prevEnd, position.from)}
         <AnnotatedElement annotation={annotations.get(position.annotationId)!}/>
     </React.Fragment>)
