@@ -24,7 +24,7 @@ const AnnotatedElement = (props: AnnotatedElementProps) => {
     }
 
     return <React.Fragment>
-        <Tooltip title={<AnnotationContent annotation={annotation}/>}>
+        <Tooltip interactive title={<AnnotationContent annotation={annotation}/>}>
             <span style={style}>{annotation.text} </span>
         </Tooltip>
     </React.Fragment>
