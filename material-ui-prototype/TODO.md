@@ -19,6 +19,9 @@
     -[ ] entity types recognition
     -[ ] autocomplete based on entity type
     -[ ] complex support using parser in the backend
+- [ ] Constraints input
+    - [X] Add constraints input alongside query input
+    - [ ] Add basic language support for constraints 
 - [X] Admin mode
     - [X] add admin related buttons where necessary
 - [ ] Code cleanup
