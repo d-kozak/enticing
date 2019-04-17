@@ -45,7 +45,7 @@ const SearchResultItem = (props: SearchResultItemProps) => {
                 <ShowContext/>
             </Grid>}
 
-            <Button onClick={() => openWholeDocument(searchResult)} color="primary" size="small">Open document</Button>
+            <Button onClick={() => openWholeDocument(searchResult)} color="primary" size="small">Document</Button>
 
             <Button size="small">Annotations</Button>
 
