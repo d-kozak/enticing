@@ -10,7 +10,7 @@
     - [X] show results
     - [X] enable submitting a query from this page as well
     - [X] show annotations
-    - [ ] find a cleaner way to handle annotations, current implementation is messy
+    - [X] find a cleaner way to handle annotations, current implementation is messy
     - [ ] encode query in url (so that the search can be started )
     
 - [ ] Add some intelligence to the query input component
@@ -30,9 +30,9 @@
     - [ ] use string constants instead of strings in actions types(better refactoring)
     - [ ] refactor the appbar components, the code is quite ugly
 - [X] Make the title in appbar work as redirect to '/'
-- [ ] Add annotations, they were temporarily removed, add them back 
+- [X] Add annotations, they were temporarily removed, add them back 
 - [ ] current layout centering is not very responsive, use flex or Grid instead 
-- [ ] show the 'Query:' text only on large screens
+- [X] show the 'Query:' text only on large screens
 - [X] add redux
 - [X] inspect the possibility to make all progress and spinners depend on one top level element
 - [X] make mock API fully asynchronous 
