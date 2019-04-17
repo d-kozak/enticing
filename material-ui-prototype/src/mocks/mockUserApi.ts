@@ -9,6 +9,11 @@ import {
     deleteUserDialogHideProgressAction,
     deleteUserDialogShowProgressAction
 } from "../actions/dialog/DeleteUserDialogActions";
+import {
+    changePasswordDialogClosedAction,
+    changePasswordDialogHideProgressAction,
+    changePasswordDialogShowProgressAction
+} from "../actions/dialog/ChangePasswordDialogActions";
 
 
 interface MockUser {
@@ -126,3 +131,20 @@ export const mockDeleteUser = (user: User, dispatch: Dispatch) => {
         dispatch(deleteUserDialogClosedAction());
     }, 2000);
 };
+
+
+export const mockChangePassword = (user: User, newPassword: string, dispatch: Dispatch) => {
+    dispatch(changePasswordDialogShowProgressAction());
+    setTimeout(() => {
+        const userToChange = mockUsers.get(user.login);
+        if (userToChange) {
+            userToChange.password = newPassword;
+            dispatch(openSnackBar(`Changed password of user ${user.login}`));
+        } else {
+            dispatch(openSnackBar(`User with login ${user.login} does not exist, cannot change his password`));
+        }
+
+        dispatch(changePasswordDialogHideProgressAction());
+        dispatch(changePasswordDialogClosedAction());
+    }, 2000);
+}

@@ -16,6 +16,8 @@ import {connect} from "react-redux";
 import {AppState} from "../../AppState";
 import {loadUsersAction, updateUserAction} from "../../actions/AdminActions";
 import {deleteUserDialogOpenAction} from "../../actions/dialog/DeleteUserDialogActions";
+import ChangePasswordDialog from "./ChangePasswordDialog";
+import {changePasswordDialogOpenAction} from "../../actions/dialog/ChangePasswordDialogActions";
 
 
 const styles = createStyles({
@@ -35,11 +37,12 @@ export interface UserTableProps extends WithStyles<typeof styles> {
     users: Array<User>;
     loadUsers: () => void;
     updateUser: (user: User) => void;
+    changePassword: (user: User) => void;
     deleteUser: (user: User) => void;
 }
 
 const UserTable = (props: UserTableProps) => {
-    const {users, updateUser, deleteUser, loadUsers, classes} = props;
+    const {users, updateUser, deleteUser, loadUsers, classes, changePassword} = props;
 
     useEffect(() => {
         loadUsers();
@@ -57,11 +60,6 @@ const UserTable = (props: UserTableProps) => {
             ...user,
             isActive: event.target.checked
         });
-    };
-
-    const handleChangePassword = (user: User) => {
-        console.log('change');
-        console.log(user);
     };
 
     return <React.Fragment>
@@ -95,7 +93,7 @@ const UserTable = (props: UserTableProps) => {
                         />
                     </TableCell>
                     <TableCell align="right">
-                        <Button color="primary" onClick={() => handleChangePassword(user)}>Change</Button>
+                        <Button color="primary" onClick={() => changePassword(user)}>Change</Button>
                     </TableCell>
                     <TableCell align="right">
                         <Button onClick={() => deleteUser(user)} color="secondary" variant="contained">Delete</Button>
@@ -104,6 +102,7 @@ const UserTable = (props: UserTableProps) => {
             </TableBody>
         </Table>
         <DeleteUserDialog/>
+        <ChangePasswordDialog/>
     </React.Fragment>
 };
 
@@ -114,7 +113,8 @@ const mapStateToProps = (state: AppState) => ({
 const mapDispatchToProps = {
     loadUsers: loadUsersAction,
     updateUser: updateUserAction,
-    deleteUser: deleteUserDialogOpenAction
+    deleteUser: deleteUserDialogOpenAction,
+    changePassword: changePasswordDialogOpenAction
 };
 
 export default withStyles(styles, {

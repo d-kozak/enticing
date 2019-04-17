@@ -44,12 +44,18 @@ export interface AdminState {
 export interface DialogState {
     documentDialog: DocumentDialogState;
     contextDialog: ContextDialogState;
-    deleteUserDialog: DeleteUserDialogState
+    deleteUserDialog: DeleteUserDialogState;
+    changePasswordDialog: ChangePasswordDialogState
+}
+
+export interface ChangePasswordDialogState {
+    user: User | null;
+    showProgress: boolean;
 }
 
 export interface DeleteUserDialogState {
-    userToDelete: User | null,
-    showProgress: boolean
+    userToDelete: User | null;
+    showProgress: boolean;
 }
 
 export interface DocumentDialogState {

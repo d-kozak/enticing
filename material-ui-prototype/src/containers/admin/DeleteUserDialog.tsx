@@ -32,7 +32,7 @@ const DeleteUserDialog = (props: DeleteUserDialogProps) => {
             <DialogTitle id="alert-dialog-title">Delete user</DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                    Delete user with login {user ? user.login : ''}?
+                    Delete user with login {user ? user.login : ''}? All his information will be lost.
                 </DialogContentText>
             </DialogContent>
             <DialogActions>

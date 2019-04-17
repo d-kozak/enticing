@@ -1,6 +1,6 @@
 import {User} from "../entities/User";
 import {ThunkResult} from "./RootAction";
-import {mockDeleteUser, mockLoadUsers, mockUpdateUser} from "../mocks/mockUserApi";
+import {mockChangePassword, mockDeleteUser, mockLoadUsers, mockUpdateUser} from "../mocks/mockUserApi";
 
 interface UsersLoadedAction {
     type: '[ADMIN] USERS LOADED',
@@ -48,4 +48,8 @@ export const updateUserAction = (user: User): ThunkResult<void> => (dispatch) =>
 
 export const deleteUserAction = (user: User): ThunkResult<void> => dispatch => {
     mockDeleteUser(user, dispatch);
+};
+
+export const changePasswordAction = (user: User, newPassword: string): ThunkResult<void> => dispatch => {
+    mockChangePassword(user, newPassword, dispatch);
 };
