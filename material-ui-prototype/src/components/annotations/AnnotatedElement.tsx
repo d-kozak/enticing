@@ -8,7 +8,9 @@ import AnnotationContent from "./AnnotationContent";
 
 
 const styles = createStyles({
-
+    tooltip: {
+        maxWidth: '500px'
+    }
 });
 
 
@@ -23,8 +25,10 @@ const AnnotatedElement = (props: AnnotatedElementProps) => {
         color: annotation.color
     }
 
+    const tooltip = classes.tooltip;
+
     return <React.Fragment>
-        <Tooltip interactive title={<AnnotationContent annotation={annotation}/>}>
+        <Tooltip interactive classes={{tooltip}} title={<AnnotationContent annotation={annotation}/>}>
             <span style={style}>{annotation.text} </span>
         </Tooltip>
     </React.Fragment>
