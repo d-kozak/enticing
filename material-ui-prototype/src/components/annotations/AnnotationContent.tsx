@@ -26,7 +26,8 @@ const AnnotationContent = (props: AnnotationContentProps) => {
         {annotation.image && <img className={classes.image} src={annotation.image}/>}
         {annotation.content.map(
             (value, index) => <div key={index}>
-                <Typography variant="body1">{value.name}: {value.value}</Typography>
+                <Typography variant="body1">{value.name}: {value.name == 'url' ?
+                    <a href={value.value}>{value.value}</a> : value.value}</Typography>
             </div>
         )}
     </div>
