@@ -11,6 +11,7 @@ import QueryInput from "../../components/searchbar/QueryInput";
 import {SearchQuery} from "../../entities/SearchQuery";
 import {startSearchingAction, toggleUseConstrainsAction} from "../../actions/QueryActions";
 import * as H from "history";
+import ConstraintsInput from "../../components/searchbar/ConstraintsInput";
 
 const styles = createStyles({});
 
@@ -21,25 +22,27 @@ export interface SearchInputProps extends WithStyles<typeof styles> {
     startSearching: (query: SearchQuery, history?: H.History) => void;
     toggleConstraints: () => void;
     history?: H.History;
+    className?: string
 }
 
 const SearchInput = (props: SearchInputProps) => {
-    const {lastQuery, showConstraints, toggleConstraints, history, startSearching} = props;
+    const {className = '', lastQuery, showConstraints, toggleConstraints, history, startSearching: parentStartSearching} = props;
 
     const [query, setQuery] = useState<string>(lastQuery.query);
     const [constraints, setContraints] = useState<string>(lastQuery.constraints);
 
-    const queryStartSearching = (query: string) => {
+    const startSearching = () => {
         if (query.length > 0) {
-            startSearching({
+            parentStartSearching({
                 query: query,
-                constraints: constraints
+                constraints: showConstraints ? constraints : ''
             }, history);
         }
     };
 
-    return <React.Fragment>
-        <QueryInput query={query} setQuery={setQuery} startSearching={queryStartSearching}/>
+
+    return <div className={className}>
+        <QueryInput query={query} setQuery={setQuery} startSearching={startSearching}/>
         <FormControlLabel
             control={<Checkbox
                 checked={showConstraints}
@@ -48,10 +51,9 @@ const SearchInput = (props: SearchInputProps) => {
             />}
             label="Use constraints"
         />
-        {showConstraints && <div>
-            <h1>Constraints</h1>
-        </div>}
-    </React.Fragment>
+        {showConstraints &&
+        <ConstraintsInput constraints={constraints} setConstraints={setContraints} startSearching={startSearching}/>}
+    </div>
 };
 
 const mapStateToProps = (state: AppState) => ({

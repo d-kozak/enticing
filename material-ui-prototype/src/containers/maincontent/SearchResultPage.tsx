@@ -14,16 +14,9 @@ import {SearchQuery} from "../../entities/SearchQuery";
 import SearchInput from "../searchbar/SearchInput";
 
 const styles = createStyles({
-    searchDiv: {
-        width: '90%',
-        margin: '10px auto',
-        display: 'flex'
-    },
-    searchTitle: {
-        marginRight: '5px'
-    },
     searchInput: {
-        flex: 1
+        margin: '20px auto',
+        width: '90%'
     }
 });
 
@@ -34,7 +27,7 @@ export interface SearchProps extends WithStyles<typeof styles> {
 }
 
 const SearchResultPage = (props: SearchProps) => {
-    const {searchResults, startSearching, classes, lastQuery} = props;
+    const {searchResults, startSearching, lastQuery, classes} = props;
 
     useEffect(() => {
         if (searchResults === null) {
@@ -44,9 +37,7 @@ const SearchResultPage = (props: SearchProps) => {
 
 
     return <div>
-        <div className={classes.searchDiv}>
-            <SearchInput/>
-        </div>
+        <SearchInput className={classes.searchInput}/>
         {searchResults !== null && searchResults.length > 0 ? <SearchResultList searchResults={searchResults}/> :
             <NoResultsFound/>}
     </div>
