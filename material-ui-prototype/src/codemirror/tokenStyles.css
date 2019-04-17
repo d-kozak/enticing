@@ -46,3 +46,29 @@
 .cm-tilde {
     color: darkorchid;
 }
+
+
+.cm-equal {
+    color: red;
+}
+
+.cm-not-equal {
+    color: red;
+}
+
+.cm-lt {
+    color: red;
+}
+
+.cm-le {
+    color: purple;
+}
+
+.cm-gt {
+    color: red;
+}
+
+.cm-ge {
+    color: purple;
+}
+

@@ -4,12 +4,12 @@ import './tokenStyles.css';
 export const MG4J_EQL = 'mg4j-eql';
 
 
-interface Token {
+export interface Token {
     match: string | RegExp
     token: string
 }
 
-function matches(match: string | RegExp, stream: CodeMirror.StringStream): boolean {
+export function matches(match: string | RegExp, stream: CodeMirror.StringStream): boolean {
     if (typeof match === 'string') {
         return stream.match(match) != undefined
     }
