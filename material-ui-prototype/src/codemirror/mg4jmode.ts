@@ -1,20 +1,8 @@
 import CodeMirror, {Mode} from 'codemirror';
 import './tokenStyles.css';
+import {readOneToken, Token} from "./SimpleLanguageMode";
 
 export const MG4J_EQL = 'mg4j-eql';
-
-
-export interface Token {
-    match: string | RegExp
-    token: string
-}
-
-export function matches(match: string | RegExp, stream: CodeMirror.StringStream): boolean {
-    if (typeof match === 'string') {
-        return stream.match(match) != undefined
-    }
-    return stream.match(match) != null;
-}
 
 // example input :()&and|or!not-_PAR__SENT_not^.~"dafs"sadfsad
 const tokens: Array<Token> = [
@@ -39,19 +27,7 @@ const tokens: Array<Token> = [
 
 export const mg4jLanguageMode: Mode<any> = {
     token(stream: CodeMirror.StringStream): string | null {
-        // skip whitespace
-        stream.eatWhile((c) => c == ' ' || c == '\t');
-
-        for (let {match, token} of tokens) {
-            if (matches(match, stream))
-                return token;
-        }
-
-        // it is ineffective when moving by just one character in this case
-        // but this strategy handles well unfinisshed input and
-        // it is the easier thing to do until a full blown lexer is created
-        stream.next();
-        return null;
+        return readOneToken(stream, tokens);
     }
 };
 
