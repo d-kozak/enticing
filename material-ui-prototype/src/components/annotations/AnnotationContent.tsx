@@ -11,6 +11,9 @@ const styles = createStyles({
         margin: '5px',
         maxWidth: '150px',
         maxHeight: '150px',
+    },
+    attributeName: {
+        fontWeight: 'bold'
     }
 });
 
@@ -26,7 +29,8 @@ const AnnotationContent = (props: AnnotationContentProps) => {
         {annotation.image && <img className={classes.image} src={annotation.image}/>}
         {annotation.content.map(
             (value, index) => <div key={index}>
-                <Typography variant="body1">{value.name}: {value.name == 'url' ?
+                <Typography variant="body1"><span
+                    className={classes.attributeName}>{value.name}:</span> {value.name == 'url' ?
                     <a href={value.value}>{value.value}</a> : value.value}</Typography>
             </div>
         )}
