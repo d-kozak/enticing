@@ -1,6 +1,7 @@
-# Corproc search GUI prototype
+# Enticing -  frontend
 
-First GUI prototype for the semantic search engine.
+Web based frontend for the semantic search engine.
+Implemented using in Typescript using React.
 
 ## Setup
 
