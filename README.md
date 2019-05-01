@@ -1,11 +1,11 @@
-# Corproc search
+# Enticing
 
-All source code related to my thesis. 
+All source code related to the Enticing project. 
 
 ## Contents
 
-* frontend-prototype-one
-    * First design prototype of the GUI 
+* frontend
+    * Web based interface
 
 ## Authors
 * [d-kozak](https://github.com/d-kozak/)
