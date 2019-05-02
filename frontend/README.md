@@ -1,4 +1,4 @@
-# Enticing -  frontend
+# Enticing - frontend
 
 Web based frontend for the semantic search engine.
 Implemented using in Typescript using React.
