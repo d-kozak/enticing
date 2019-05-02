@@ -1,5 +1,5 @@
 import {ProgressBarState} from "../AppState";
-import {ProgressBarAction} from "../actions/ProgressBarActions";
+import {PROGRESS_BAR_HIDE, PROGRESS_BAR_SHOW, ProgressBarAction} from "../actions/ProgressBarActions";
 
 
 type ProgressBarReducer = (state: ProgressBarState | undefined, action: ProgressBarAction) => ProgressBarState
@@ -10,12 +10,12 @@ const initialState: ProgressBarState = {
 
 const progressBarReducer: ProgressBarReducer = (state = initialState, action) => {
     switch (action.type) {
-        case "[PROGRESS BAR] SHOW":
+        case PROGRESS_BAR_SHOW:
             return {
                 isVisible: true
             };
 
-        case "[PROGRESS BAR] HIDE":
+        case PROGRESS_BAR_HIDE:
             return {
                 isVisible: false
             }

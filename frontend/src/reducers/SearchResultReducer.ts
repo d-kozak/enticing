@@ -1,5 +1,5 @@
 import {SearchResultsState} from "../AppState";
-import {SearchResultAction} from "../actions/SearchResultActions";
+import {SEARCH_RESULTS_NEW, SearchResultAction} from "../actions/SearchResultActions";
 
 
 type SearchResultReducer = (state: SearchResultsState | undefined, action: SearchResultAction) => SearchResultsState
@@ -10,7 +10,7 @@ const initialState: SearchResultsState = {
 
 const searchResultReducer: SearchResultReducer = (state = initialState, action) => {
     switch (action.type) {
-        case "[SEARCH RESULTS] NEW":
+        case SEARCH_RESULTS_NEW:
             return {
                 searchResults: action.searchResults
             };

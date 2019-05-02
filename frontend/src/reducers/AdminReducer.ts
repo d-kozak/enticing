@@ -1,5 +1,10 @@
 import {AdminState} from "../AppState";
-import {AdminAction} from "../actions/AdminActions";
+import {
+    ADMIN_DELETE_USER_SUCCESS,
+    ADMIN_USER_UPDATE_SUCCESS,
+    ADMIN_USERS_LOADED,
+    AdminAction
+} from "../actions/AdminActions";
 
 
 type AdminReducer = (state: AdminState | undefined, action: AdminAction) => AdminState
@@ -11,17 +16,17 @@ const initialState: AdminState = {
 
 const adminReducer: AdminReducer = (state = initialState, action) => {
     switch (action.type) {
-        case "[ADMIN] USERS LOADED":
+        case ADMIN_USERS_LOADED:
             return {
                 users: action.users
             };
-        case "[ADMIN] UPDATE USER SUCCESS":
+        case ADMIN_USER_UPDATE_SUCCESS:
             const updatedUsers = state.users
                 .map((user) => user.login === action.user.login ? action.user : user)
             return {
                 users: updatedUsers
             };
-        case "[ADMIN] DELETE USER SUCCESS":
+        case ADMIN_DELETE_USER_SUCCESS:
             return {
                 users: state.users.filter(user => user.login != action.user.login)
             };

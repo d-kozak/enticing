@@ -1,5 +1,5 @@
 import {SnackBarState} from "../AppState";
-import {SnackBarAction} from "../actions/SnackBarActions";
+import {SNACKBAR_CLOSE, SNACKBAR_OPEN, SnackBarAction} from "../actions/SnackBarActions";
 
 
 type SnackBarReducer = (state: SnackBarState | undefined, action: SnackBarAction) => SnackBarState
@@ -11,12 +11,12 @@ const initialState: SnackBarState = {
 
 const SnackBarReducer: SnackBarReducer = (state = initialState, action) => {
     switch (action.type) {
-        case "[SNACKBAR] OPEN":
+        case SNACKBAR_OPEN:
             return {
                 isOpen: true,
                 message: action.message
             }
-        case "[SNACKBAR] CLOSE":
+        case SNACKBAR_CLOSE:
             return {
                 isOpen: false,
                 message: ''

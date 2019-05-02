@@ -3,13 +3,16 @@ import {mockSearch} from "../mocks/mockSearchApi";
 import * as H from "history";
 import {SearchQuery} from "../entities/SearchQuery";
 
+export const QUERY_EXECUTED = '[QUERY] QUERY EXECUTED';
+export const QUERY_TOGGLE_USE_CONSTRAINTS = '[QUERY] TOGGLE USE CONSTRAINTS';
+
 interface QueryExecutedAction {
-    type: '[QUERY] QUERY EXECUTED',
+    type: typeof QUERY_EXECUTED,
     query: SearchQuery
 }
 
 interface ToggleUseConstrainsAction {
-    type: '[QUERY] TOGGLE USE CONSTRAINTS'
+    type: typeof QUERY_TOGGLE_USE_CONSTRAINTS
 }
 
 export type QueryAction = QueryExecutedAction | ToggleUseConstrainsAction

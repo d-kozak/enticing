@@ -1,17 +1,20 @@
+export const PROGRESS_BAR_SHOW = '[PROGRESS BAR] SHOW';
+export const PROGRESS_BAR_HIDE = '[PROGRESS BAR] HIDE';
+
 interface ShowProgressBarAction {
-    type: '[PROGRESS BAR] SHOW'
+    type: typeof PROGRESS_BAR_SHOW
 }
 
 interface HideProgressBarAction {
-    type: '[PROGRESS BAR] HIDE'
+    type: typeof PROGRESS_BAR_HIDE
 }
 
 export type ProgressBarAction = ShowProgressBarAction | HideProgressBarAction
 
 export const showProgressBarAction = (): ShowProgressBarAction => ({
-    type: "[PROGRESS BAR] SHOW"
+    type: PROGRESS_BAR_SHOW
 });
 
 export const hideProgressBarAction = (): HideProgressBarAction => ({
-    type: "[PROGRESS BAR] HIDE"
+    type: PROGRESS_BAR_HIDE
 });

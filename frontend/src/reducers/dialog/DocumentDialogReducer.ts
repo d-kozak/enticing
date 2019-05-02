@@ -1,5 +1,9 @@
 import {DocumentDialogState} from "../../AppState";
-import {DocumentDialogAction} from "../../actions/dialog/DocumentDialogAction";
+import {
+    DOCUMENT_DIALOG_CLOSED,
+    DOCUMENT_DIALOG_DOCUMENT_LOADED,
+    DocumentDialogAction
+} from "../../actions/dialog/DocumentDialogAction";
 
 
 type DocumentDialogReducer = (state: DocumentDialogState | undefined, action: DocumentDialogAction) => DocumentDialogState
@@ -11,12 +15,12 @@ const initialState: DocumentDialogState = {
 
 const documentDialogReducer: DocumentDialogReducer = (state = initialState, action) => {
     switch (action.type) {
-        case "[DOCUMENT DIALOG] DOCUMENT LOADED":
+        case DOCUMENT_DIALOG_DOCUMENT_LOADED:
             return {
                 document: action.document
             };
 
-        case "[DOCUMENT DIALOG] CLOSED":
+        case DOCUMENT_DIALOG_CLOSED:
             return {
                 document: null
             }

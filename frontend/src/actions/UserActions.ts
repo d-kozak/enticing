@@ -2,19 +2,21 @@ import {ThunkResult} from "./RootActions";
 import {mockLogin, mockSignup} from "../mocks/mockUserApi";
 import {openSnackBar} from "./SnackBarActions";
 
-type LogoutAction = {
-    type: "[USER] LOGOUT"
-}
+export const USER_LOGOUT = "[USER] LOGOUT";
+export const USER_LOGIN_SUCCESS = "[USER] LOGIN SUCCESS";
 
+type LogoutAction = {
+    type: typeof USER_LOGOUT
+}
 type LoginSuccessAction = {
-    type: "[USER] LOGIN SUCCESS",
+    type: typeof USER_LOGIN_SUCCESS,
     username: string,
     isAdmin: boolean
 }
 
 export type UserAction = LoginSuccessAction | LogoutAction;
 
-export const logoutSuccessAction = (): LogoutAction => ({type: "[USER] LOGOUT"});
+export const logoutSuccessAction = (): LogoutAction => ({type: USER_LOGOUT});
 
 export const logoutRequestAction = (): ThunkResult<void> => dispatch => {
     dispatch(openSnackBar('Logged out'));
@@ -22,7 +24,7 @@ export const logoutRequestAction = (): ThunkResult<void> => dispatch => {
 };
 
 export const loginSuccessAction = (username: string, isAdmin: boolean): LoginSuccessAction => ({
-    type: "[USER] LOGIN SUCCESS",
+    type: USER_LOGIN_SUCCESS,
     username,
     isAdmin
 });

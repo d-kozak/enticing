@@ -1,20 +1,23 @@
+export const SNACKBAR_OPEN = '[SNACKBAR] OPEN';
+export const SNACKBAR_CLOSE = '[SNACKBAR] CLOSE';
+
 interface OpenSnackBarAction {
-    type: '[SNACKBAR] OPEN',
+    type: typeof SNACKBAR_OPEN,
     message: string
 }
 
 interface CloseSnackBarAction {
-    type: '[SNACKBAR] CLOSE',
+    type: typeof SNACKBAR_CLOSE
 }
 
 export type SnackBarAction = OpenSnackBarAction | CloseSnackBarAction
 
 export const openSnackBar = (message: string): OpenSnackBarAction => ({
-    type: "[SNACKBAR] OPEN",
+    type: SNACKBAR_OPEN,
     message
 })
 
 
 export const closeSnackBar = (): CloseSnackBarAction => ({
-    type: "[SNACKBAR] CLOSE"
+    type: SNACKBAR_CLOSE
 })
