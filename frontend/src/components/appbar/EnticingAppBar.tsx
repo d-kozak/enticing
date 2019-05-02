@@ -21,12 +21,12 @@ const styles = createStyles({
     }
 });
 
-export type CorprocAppBarProps =
+export type EnticingAppBarProps =
     WithStyles<typeof styles>
     & typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
 
-const CorprocAppBar = (props: CorprocAppBarProps) => {
+const EnticingAppBar = (props: EnticingAppBarProps) => {
     const {classes, isAdmin, isLoggedIn, handleLogout} = props;
 
     const linkRef = (node: HTMLAnchorElement | null) => {
@@ -64,4 +64,4 @@ const mapDispatchToProps = {
     handleLogout: logoutRequestAction as () => void
 };
 
-export default withStyles(styles, {withTheme: true})((connect(mapStateToProps, mapDispatchToProps))(CorprocAppBar));
+export default withStyles(styles, {withTheme: true})((connect(mapStateToProps, mapDispatchToProps))(EnticingAppBar));

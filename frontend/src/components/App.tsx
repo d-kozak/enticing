@@ -1,7 +1,7 @@
 import React from 'react';
-import CorprocAppBar from "./appbar/CorprocAppBar";
+import EnticingAppBar from "./appbar/EnticingAppBar";
 import {CssBaseline} from "@material-ui/core";
-import CorprocSnackBar from "./snackbar/CorprocSnackbar";
+import EnticingSnackbar from "./snackbar/EnticingSnackbar";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import Login from "./maincontent/Login";
@@ -22,7 +22,7 @@ const App = ({showSnackBarMessage, isAdmin, progressBarVisible}: AppProps) => {
     return <React.Fragment>
         <CssBaseline/>
         <Router>
-            <CorprocAppBar/>
+            <EnticingAppBar/>
             {progressBarVisible && <LinearProgress color="secondary"/>}
 
             <Switch>
@@ -40,7 +40,7 @@ const App = ({showSnackBarMessage, isAdmin, progressBarVisible}: AppProps) => {
                 <Route component={UnknownRoute}/>
             </Switch>
         </Router>
-        <CorprocSnackBar/>
+        <EnticingSnackbar/>
     </React.Fragment>
 };
 

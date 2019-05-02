@@ -14,12 +14,12 @@ const styles = (theme: Theme) => ({
     },
 });
 
-export type CorprocSnackBarProps =
+export type EnticingSnackBarProps =
     WithStyles<typeof styles>
     & typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
 
-const CorprocSnackbar = (props: CorprocSnackBarProps) => {
+const EnticingSnackbar = (props: EnticingSnackBarProps) => {
     const {isOpen, setClosed, message, classes} = props;
 
     const handleClose = (event: React.SyntheticEvent<any>, reason: string) => {
@@ -68,4 +68,4 @@ const mapDispatchToProps = {
     setClosed: closeSnackBar
 }
 
-export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(CorprocSnackbar));
+export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(EnticingSnackbar));
