@@ -1,5 +1,5 @@
 import {SearchResult} from "../../entities/SearchResult";
-import {ThunkResult} from "../RootAction";
+import {ThunkResult} from "../RootActions";
 import {mockContextExtended, mockContextRequested} from "../../mocks/mockContextApi";
 import {SearchResultContext} from "../../entities/SearchResultContext";
 

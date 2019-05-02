@@ -1,4 +1,4 @@
-import {ThunkResult} from "./RootAction";
+import {ThunkResult} from "./RootActions";
 import {mockLogin, mockSignup} from "../mocks/mockUserApi";
 import {openSnackBar} from "./SnackBarActions";
 

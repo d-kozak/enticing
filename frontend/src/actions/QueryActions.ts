@@ -1,4 +1,4 @@
-import {ThunkResult} from "./RootAction";
+import {ThunkResult} from "./RootActions";
 import {mockSearch} from "../mocks/mockSearchApi";
 import * as H from "history";
 import {SearchQuery} from "../entities/SearchQuery";

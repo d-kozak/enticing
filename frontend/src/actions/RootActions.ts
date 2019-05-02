@@ -4,7 +4,7 @@ import {UserAction} from "./UserActions";
 import {ThunkAction} from "redux-thunk";
 import {AppState} from "../AppState";
 import {AdminAction} from "./AdminActions";
-import {DialogAction} from "./dialog/DialogAction";
+import {DialogAction} from "./dialog/DialogActions";
 import {SnackBarAction} from "./SnackBarActions";
 import {ProgressBarAction} from "./ProgressBarActions";
 

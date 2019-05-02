@@ -1,5 +1,5 @@
 import {User} from "../entities/User";
-import {ThunkResult} from "./RootAction";
+import {ThunkResult} from "./RootActions";
 import {mockChangePassword, mockDeleteUser, mockLoadUsers, mockUpdateUser} from "../mocks/mockUserApi";
 
 interface UsersLoadedAction {

@@ -3,7 +3,7 @@ import userReducer from "./UserReducer";
 import searchResultReducer from "./SearchResultReducer";
 import queryReducer from "./QueryReducer";
 import {AppState} from "../AppState";
-import {RootAction} from "../actions/RootAction";
+import {RootAction} from "../actions/RootActions";
 import snackBarReducer from './SnackBarReducer';
 import progressBarReducer from './ProgressBarReducer';
 import adminReducer from "./AdminReducer";
