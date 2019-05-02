@@ -7,10 +7,10 @@ import {
 } from "../../actions/dialog/ChangePasswordDialogActions";
 import {User} from "../../entities/User";
 
-export interface ChangePasswordDialogState {
-    readonly user: User | null;
-    readonly showProgress: boolean;
-}
+export type ChangePasswordDialogState = Readonly<{
+    user: User | null;
+    showProgress: boolean;
+}>
 
 const initialState: ChangePasswordDialogState = {
     user: null,

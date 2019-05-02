@@ -2,10 +2,10 @@ import {ContextDialogAction} from "../../actions/dialog/ContextDialogActions";
 import {SearchResultContext} from "../../entities/SearchResultContext";
 
 
-export interface ContextDialogState {
-    readonly context: SearchResultContext | null
-    readonly showProgress: boolean
-}
+export type ContextDialogState = Readonly<{
+    context: SearchResultContext | null
+    showProgress: boolean
+}>
 
 const initialState: ContextDialogState = {
     context: null,

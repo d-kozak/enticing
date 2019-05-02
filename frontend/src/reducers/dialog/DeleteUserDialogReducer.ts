@@ -8,10 +8,10 @@ import {
 import {User} from "../../entities/User";
 
 
-export interface DeleteUserDialogState {
-    readonly userToDelete: User | null;
-    readonly showProgress: boolean;
-}
+export type DeleteUserDialogState = Readonly<{
+    userToDelete: User | null;
+    showProgress: boolean;
+}>
 
 const initialState: DeleteUserDialogState = {
     userToDelete: null,

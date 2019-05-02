@@ -6,10 +6,9 @@ import {
 import {IndexedDocument} from "../../entities/IndexedDocument";
 
 
-export interface DocumentDialogState {
-    readonly document: IndexedDocument | null
-}
-
+export type DocumentDialogState = Readonly<{
+    document: IndexedDocument | null
+}>
 
 const initialState: DocumentDialogState = {
     document: null
