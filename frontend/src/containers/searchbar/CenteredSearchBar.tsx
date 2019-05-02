@@ -29,7 +29,7 @@ const CenteredSearchBar = (props: CenteredSearchBar) => {
     const {classes, history} = props;
     return <div className={classes.mainDiv}>
         <Typography className={classes.title} variant="h3">
-            Corproc Search
+            Enticing
         </Typography>
         <SearchInput history={history}/>
     </div>

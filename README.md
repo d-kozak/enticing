@@ -1,4 +1,4 @@
-# Enticing
+#  ENTICING - Entities in Context Interface (New Generation) 
 
 All source code related to the Enticing project. 
 

@@ -43,7 +43,7 @@ const CorprocAppBar = (props: CorprocAppBarProps) => {
                 <div className={classes.grow}>
                     <Link to="/" innerRef={linkRef}>
                         <Typography variant="h6" color="inherit">
-                            Corproc Search
+                            Enticing
                         </Typography>
                     </Link>
                 </div>
