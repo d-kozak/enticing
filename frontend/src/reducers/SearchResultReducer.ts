@@ -1,16 +1,11 @@
 import {SEARCH_RESULTS_NEW, SearchResultAction} from "../actions/SearchResultActions";
 import {SearchResult} from "../entities/SearchResult";
 
-/**
- * Interface is kept instead of type inference, because 'typing' nulls is ugly
- */
-export interface SearchResultsState {
-    readonly searchResults: Array<SearchResult> | null
+const initialState = {
+    searchResults: null as Array<SearchResult> | null
 }
 
-const initialState: SearchResultsState = {
-    searchResults: null
-}
+export type SearchResultsState = Readonly<typeof initialState>
 
 type SearchResultReducer = (state: SearchResultsState | undefined, action: SearchResultAction) => SearchResultsState
 

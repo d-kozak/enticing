@@ -7,7 +7,7 @@ import {
 import {User} from "../entities/User";
 
 const initialState = {
-    users: Array<User>()
+    users: [] as Array<User>
 }
 
 export type AdminState = Readonly<typeof initialState>

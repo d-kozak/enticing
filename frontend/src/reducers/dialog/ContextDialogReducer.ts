@@ -1,16 +1,12 @@
 import {ContextDialogAction} from "../../actions/dialog/ContextDialogActions";
 import {SearchResultContext} from "../../entities/SearchResultContext";
 
-
-export type ContextDialogState = Readonly<{
-    context: SearchResultContext | null
-    showProgress: boolean
-}>
-
-const initialState: ContextDialogState = {
-    context: null,
+const initialState = {
+    context: null as SearchResultContext | null,
     showProgress: false
 }
+
+export type ContextDialogState = Readonly<typeof initialState>
 
 type ContextDialogReducer = (state: ContextDialogState | undefined, action: ContextDialogAction) => ContextDialogState
 

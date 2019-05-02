@@ -8,15 +8,12 @@ import {
 import {User} from "../../entities/User";
 
 
-export type DeleteUserDialogState = Readonly<{
-    userToDelete: User | null;
-    showProgress: boolean;
-}>
-
-const initialState: DeleteUserDialogState = {
-    userToDelete: null,
+const initialState = {
+    userToDelete: null as User | null,
     showProgress: false
 }
+
+export type DeleteUserDialogState = Readonly<typeof initialState>
 
 type DeleteUserDialogReducer = (state: DeleteUserDialogState | undefined, action: DeleteUserDialogAction) => DeleteUserDialogState
 

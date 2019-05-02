@@ -5,14 +5,11 @@ import {
 } from "../../actions/dialog/DocumentDialogAction";
 import {IndexedDocument} from "../../entities/IndexedDocument";
 
-
-export type DocumentDialogState = Readonly<{
-    document: IndexedDocument | null
-}>
-
-const initialState: DocumentDialogState = {
-    document: null
+const initialState = {
+    document: null as IndexedDocument | null
 }
+
+export type DocumentDialogState = Readonly<typeof initialState>
 
 type DocumentDialogReducer = (state: DocumentDialogState | undefined, action: DocumentDialogAction) => DocumentDialogState
 

@@ -7,15 +7,12 @@ import {
 } from "../../actions/dialog/ChangePasswordDialogActions";
 import {User} from "../../entities/User";
 
-export type ChangePasswordDialogState = Readonly<{
-    user: User | null;
-    showProgress: boolean;
-}>
-
-const initialState: ChangePasswordDialogState = {
-    user: null,
+const initialState = {
+    user: null as User | null,
     showProgress: false
 }
+
+export type ChangePasswordDialogState = Readonly<typeof initialState>
 
 type ChangePasswordDialogReducer = (state: ChangePasswordDialogState | undefined, action: ChangePasswordDialogAction) => ChangePasswordDialogState
 
