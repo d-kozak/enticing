@@ -1,18 +1,20 @@
-import {AdminState} from "../AppState";
 import {
     ADMIN_DELETE_USER_SUCCESS,
     ADMIN_USER_UPDATE_SUCCESS,
     ADMIN_USERS_LOADED,
     AdminAction
 } from "../actions/AdminActions";
+import {User} from "../entities/User";
 
-
-type AdminReducer = (state: AdminState | undefined, action: AdminAction) => AdminState
-
+export interface AdminState {
+    users: Array<User>
+}
 
 const initialState: AdminState = {
     users: []
 }
+
+type AdminReducer = (state: AdminState | undefined, action: AdminAction) => AdminState
 
 const adminReducer: AdminReducer = (state = initialState, action) => {
     switch (action.type) {

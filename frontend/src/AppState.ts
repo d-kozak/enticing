@@ -3,6 +3,7 @@ import {User} from "./entities/User";
 import {IndexedDocument} from "./entities/IndexedDocument";
 import {SearchResultContext} from "./entities/SearchResultContext";
 import {SearchQuery} from "./entities/SearchQuery";
+import {AdminState} from "./reducers/AdminReducer";
 
 export interface AppState {
     user: UserState,
@@ -35,10 +36,6 @@ export interface SearchResultsState {
 export interface SnackBarState {
     isOpen: boolean,
     message: string
-}
-
-export interface AdminState {
-    users: Array<User>
 }
 
 export interface DialogState {
