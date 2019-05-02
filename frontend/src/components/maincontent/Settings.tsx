@@ -12,9 +12,7 @@ import {connect} from "react-redux";
 const styles = createStyles({});
 
 
-export interface SettingsProps extends WithStyles<typeof styles> {
-    isLoggedIn: boolean
-}
+export type SettingsProps = WithStyles<typeof styles> & ReturnType<typeof mapStateToProps>
 
 const Settings = (props: SettingsProps) => {
     const {isLoggedIn, classes} = props;

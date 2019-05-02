@@ -15,12 +15,11 @@ import ConstraintsInput from "./ConstraintsInput";
 
 const styles = createStyles({});
 
-
-export interface SearchInputProps extends WithStyles<typeof styles> {
-    lastQuery: SearchQuery;
-    showConstraints: boolean;
-    startSearching: (query: SearchQuery, history?: H.History) => void;
-    toggleConstraints: () => void;
+export type SearchInputProps =
+    WithStyles<typeof styles>
+    & typeof mapDispatchToProps
+    & ReturnType<typeof mapStateToProps>
+    & {
     history?: H.History;
     className?: string
 }
@@ -61,11 +60,11 @@ const mapStateToProps = (state: AppState) => ({
     showConstraints: state.query.useConstraints
 });
 
-const mapPropsToDispatch = {
-    startSearching: startSearchingAction,
+const mapDispatchToProps = {
+    startSearching: startSearchingAction as (query: SearchQuery, history?: H.History) => void,
     toggleConstraints: toggleUseConstrainsAction
 };
 
 export default withStyles(styles, {
     withTheme: true
-})(connect(mapStateToProps, mapPropsToDispatch)(SearchInput))
+})(connect(mapStateToProps, mapDispatchToProps)(SearchInput))

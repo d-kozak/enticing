@@ -19,7 +19,6 @@ import createStyles from "@material-ui/core/es/styles/createStyles";
 import {WithStyles} from "@material-ui/core/es";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
-
 const styles = createStyles({
     formField: {
         display: 'block',
@@ -27,12 +26,10 @@ const styles = createStyles({
     }
 });
 
-interface DeleteUserDialogProps extends WithStyles<typeof styles> {
-    user: User | null;
-    showProgress: boolean;
-    changePassword: (user: User, newPassword: string) => void;
-    onClose: () => void
-}
+export type DeleteUserDialogProps =
+    WithStyles<typeof styles>
+    & typeof mapDispatchToProps
+    & ReturnType<typeof mapStateToProps>
 
 const minLenText = 'At least 5 characters, please';
 const maxLenText = 'Max 32 characters, please';
@@ -97,7 +94,7 @@ const mapStateToProps = (state: AppState) => ({
     user: state.dialog.changePasswordDialog.user
 });
 const mapDispatchToProps = {
-    changePassword: changePasswordAction,
+    changePassword: changePasswordAction as (user: User, newPassword: string) => void,
     onClose: changePasswordDialogClosedAction,
 };
 

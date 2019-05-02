@@ -33,11 +33,7 @@ const styles = createStyles({
 });
 
 
-export interface SignUpProps extends WithStyles<typeof styles> {
-    signUp: (login: string, password: string, onError: (errors: any) => void) => void,
-    isLoggedIn: boolean
-}
-
+export type SignUpProps = WithStyles<typeof styles> & typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>
 
 interface SignUpFormikValues {
     login: string,
@@ -117,7 +113,7 @@ const mapStateToProps = (state: AppState) => ({
 })
 
 const mapDispatchToProps = {
-    signUp: signUpAction
+    signUp: signUpAction as (login: string, password: string, onError: (errors: any) => void) => void
 };
 
 export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(SignUp));

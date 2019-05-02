@@ -40,12 +40,10 @@ const styles = (theme: Theme) => createStyles({
 });
 
 
-export interface ContextDialogProps extends WithStyles<typeof styles> {
-    context: SearchResultContext | null;
-    showProgress: boolean;
-    dialogClosed: () => void;
-    extendContext: (context: SearchResultContext) => void;
-}
+export type ContextDialogProps =
+    WithStyles<typeof styles>
+    & typeof mapDispatchToProps
+    & ReturnType<typeof mapStateToProps>
 
 const DialogContent = withStyles(theme => ({
     root: {
@@ -89,7 +87,7 @@ const mapStateToProps = (state: AppState) => ({
 
 const mapDispatchToProps = {
     dialogClosed: contextDialogClosedAction,
-    extendContext: contextExtendRequestAction
+    extendContext: contextExtendRequestAction as (context: SearchResultContext) => void
 };
 
 export default withStyles(styles, {

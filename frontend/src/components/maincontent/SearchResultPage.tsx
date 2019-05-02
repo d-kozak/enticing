@@ -4,7 +4,7 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React, {useEffect} from 'react';
 import SearchResultList from "../searchresult/SearchResultList";
-import {SearchResult} from "../../entities/SearchResult";
+import * as H from "history";
 import NoResultsFound from "../searchresult/NoResultsFound";
 import {AppState} from "../../reducers/RootReducer";
 
@@ -20,11 +20,7 @@ const styles = createStyles({
     }
 });
 
-export interface SearchProps extends WithStyles<typeof styles> {
-    searchResults: Array<SearchResult> | null;
-    startSearching: (query: SearchQuery) => void;
-    lastQuery: SearchQuery;
-}
+export type SearchProps = WithStyles<typeof styles> & typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>
 
 const SearchResultPage = (props: SearchProps) => {
     const {searchResults, startSearching, lastQuery, classes} = props;
@@ -49,7 +45,7 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 const mapDispatchToProps = {
-    startSearching: startSearchingAction,
+    startSearching: startSearchingAction as (query: SearchQuery, history?: H.History) => void
 };
 
 export default withStyles(styles, {

@@ -43,10 +43,7 @@ const styles = (theme: Theme) => createStyles({
 });
 
 
-export interface LoginProps extends WithStyles<typeof styles> {
-    login: (login: string, password: string, onError: (errors: any) => void) => void
-    isLoggedIn: boolean
-}
+export type LoginProps = WithStyles<typeof styles> & typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>
 
 interface LoginFormikProps {
     login: string,
@@ -123,7 +120,7 @@ const Login = (props: LoginProps) => {
 const mapStateToProps = (state: AppState) => ({isLoggedIn: state.user.isLoggedIn})
 
 const mapDispatchToProps = {
-    login: loginRequestAction
+    login: loginRequestAction as (login: string, password: string, onError: (errors: any) => void) => void
 }
 
 export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(Login))

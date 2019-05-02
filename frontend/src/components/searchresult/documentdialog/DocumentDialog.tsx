@@ -14,7 +14,6 @@ import {Theme} from "@material-ui/core/es";
 
 import DocumentDialogContent from './DocumentDialogContent';
 import {AppState} from "../../../reducers/RootReducer";
-import {IndexedDocument} from "../../../entities/IndexedDocument";
 import {documentDialogClosedAction} from "../../../actions/dialog/DocumentDialogAction";
 import {connect} from "react-redux";
 
@@ -36,10 +35,10 @@ const styles = (theme: Theme) => createStyles({
 });
 
 
-export interface DocumentDialogProps extends WithStyles<typeof styles> {
-    document: IndexedDocument | null
-    dialogClosed: () => void
-}
+export type DocumentDialogProps =
+    WithStyles<typeof styles>
+    & typeof mapDispatchToProps
+    & ReturnType<typeof mapStateToProps>
 
 const DialogContent = withStyles(theme => ({
     root: {

@@ -21,11 +21,10 @@ const styles = createStyles({
     }
 });
 
-export interface CorprocAppBarProps extends WithStyles<typeof styles> {
-    isLoggedIn: boolean,
-    isAdmin: boolean,
-    handleLogout: () => void
-}
+export type CorprocAppBarProps =
+    WithStyles<typeof styles>
+    & typeof mapDispatchToProps
+    & ReturnType<typeof mapStateToProps>
 
 const CorprocAppBar = (props: CorprocAppBarProps) => {
     const {classes, isAdmin, isLoggedIn, handleLogout} = props;
@@ -62,7 +61,7 @@ const mapStateToProps = (state: AppState) => {
 }
 
 const mapDispatchToProps = {
-    handleLogout: logoutRequestAction
+    handleLogout: logoutRequestAction as () => void
 };
 
 export default withStyles(styles, {withTheme: true})((connect(mapStateToProps, mapDispatchToProps))(CorprocAppBar));

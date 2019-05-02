@@ -32,14 +32,7 @@ const styles = createStyles({
     }
 });
 
-
-export interface UserTableProps extends WithStyles<typeof styles> {
-    users: Array<User>;
-    loadUsers: () => void;
-    updateUser: (user: User) => void;
-    changePassword: (user: User) => void;
-    deleteUser: (user: User) => void;
-}
+export type UserTableProps = WithStyles<typeof styles> & typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>
 
 const UserTable = (props: UserTableProps) => {
     const {users, updateUser, deleteUser, loadUsers, classes, changePassword} = props;
@@ -111,8 +104,8 @@ const mapStateToProps = (state: AppState) => ({
     users: state.admin.users
 })
 const mapDispatchToProps = {
-    loadUsers: loadUsersAction,
-    updateUser: updateUserAction,
+    loadUsers: loadUsersAction as () => void,
+    updateUser: updateUserAction as (user: User) => void,
     deleteUser: deleteUserDialogOpenAction,
     changePassword: changePasswordDialogOpenAction
 };

@@ -12,12 +12,7 @@ import {LinearProgress} from "@material-ui/core";
 import {deleteUserAction} from "../../actions/AdminActions";
 import {deleteUserDialogClosedAction} from "../../actions/dialog/DeleteUserDialogActions";
 
-interface DeleteUserDialogProps {
-    user: User | null;
-    showProgress: boolean
-    deleteUser: (user: User) => void;
-    onClose: () => void
-}
+export type DeleteUserDialogProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>
 
 const DeleteUserDialog = (props: DeleteUserDialogProps) => {
     const {user, deleteUser, onClose, showProgress} = props;
@@ -52,7 +47,7 @@ const mapStateToProps = (state: AppState) => ({
     user: state.dialog.deleteUserDialog.userToDelete
 });
 const mapDispatchToProps = {
-    deleteUser: deleteUserAction,
+    deleteUser: deleteUserAction as (user: User) => void,
     onClose: deleteUserDialogClosedAction
 };
 export default connect(mapStateToProps, mapDispatchToProps)(DeleteUserDialog);

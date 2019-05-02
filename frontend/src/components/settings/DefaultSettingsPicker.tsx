@@ -38,13 +38,6 @@ const styles = createStyles({
     }
 });
 
-
-const handleFormSubmit = () => {
-    const msg = 'should NEVER be called!';
-    alert(msg);
-    return new Promise((resolve, reject) => reject(msg));
-};
-
 export interface DefaultSettingsPicker extends WithStyles<typeof styles> {
     defaultSettingsOptions: Array<DefaultUserSettings>,
     mappingFiles: Array<string>

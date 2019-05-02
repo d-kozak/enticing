@@ -31,10 +31,12 @@ const styles = createStyles({
 });
 
 
-export interface SearchResultListProps extends WithStyles<typeof styles> {
+export type SearchResultListProps =
+    WithStyles<typeof styles>
+    & typeof mapDispatchToProps
+    & ReturnType<typeof mapStateToProps>
+    & {
     searchResults: Array<SearchResult>;
-    openDocumentDialog: (searchResult: SearchResult) => void;
-    openContextDialog: (searchResult: SearchResult) => void;
 }
 
 const SearchResultList = (props: SearchResultListProps) => {
@@ -70,8 +72,8 @@ const SearchResultList = (props: SearchResultListProps) => {
 const mapStateToProps = (state: AppState) => ({});
 
 const mapDispatchToProps = {
-    openDocumentDialog: documentDialogRequestedAction,
-    openContextDialog: contextDialogRequestedAction
+    openDocumentDialog: documentDialogRequestedAction as (searchResult: SearchResult) => void,
+    openContextDialog: contextDialogRequestedAction as (searchResult: SearchResult) => void
 }
 
 export default withStyles(styles, {

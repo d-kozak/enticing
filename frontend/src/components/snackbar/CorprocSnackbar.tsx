@@ -14,11 +14,10 @@ const styles = (theme: Theme) => ({
     },
 });
 
-export interface CorprocSnackBarProps extends WithStyles<typeof styles> {
-    isOpen: boolean,
-    setClosed: () => void,
-    message: string
-}
+export type CorprocSnackBarProps =
+    WithStyles<typeof styles>
+    & typeof mapDispatchToProps
+    & ReturnType<typeof mapStateToProps>
 
 const CorprocSnackbar = (props: CorprocSnackBarProps) => {
     const {isOpen, setClosed, message, classes} = props;

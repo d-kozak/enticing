@@ -16,11 +16,7 @@ import {openSnackBar} from "../actions/SnackBarActions";
 import {connect} from "react-redux";
 import {AppState} from "../reducers/RootReducer";
 
-interface AppProps {
-    showSnackBarMessage: (message: string) => void
-    isAdmin: boolean,
-    progressBarVisible: boolean
-}
+type AppProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>
 
 const App = ({showSnackBarMessage, isAdmin, progressBarVisible}: AppProps) => {
     return <React.Fragment>
