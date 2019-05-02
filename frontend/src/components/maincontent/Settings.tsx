@@ -4,8 +4,8 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React from 'react';
 import {DefaultUserSettings, UserSettings} from "../../entities/UserSettings";
-import DefaultSettingsPicker from "../../components/settings/DefaultSettingsPicker";
-import SettingsHolder from "../../components/settings/SettingsHolder";
+import DefaultSettingsPicker from "../settings/DefaultSettingsPicker";
+import SettingsHolder from "../settings/SettingsHolder";
 import {AppState} from "../../AppState";
 import {connect} from "react-redux";
 

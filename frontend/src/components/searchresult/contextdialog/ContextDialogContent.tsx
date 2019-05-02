@@ -5,7 +5,7 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 import React from 'react';
 import Typography from "@material-ui/core/es/Typography";
 import {SearchResultContext} from "../../../entities/SearchResultContext";
-import {applyAnnotations} from "../../../components/annotations/applyAnnotations";
+import {applyAnnotations} from "../../annotations/applyAnnotations";
 
 const styles = createStyles({
     titleUrl: {

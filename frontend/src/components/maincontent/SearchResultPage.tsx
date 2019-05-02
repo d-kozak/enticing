@@ -5,7 +5,7 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 import React, {useEffect} from 'react';
 import SearchResultList from "../searchresult/SearchResultList";
 import {SearchResult} from "../../entities/SearchResult";
-import NoResultsFound from "../../components/searchresult/NoResultsFound";
+import NoResultsFound from "../searchresult/NoResultsFound";
 import {AppState} from "../../AppState";
 
 import {connect} from "react-redux";

@@ -4,10 +4,10 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React, {useState} from 'react';
 import {SearchResult} from "../../entities/SearchResult";
-import SearchResultItem from "../../components/searchresult/SearchResultItem";
+import SearchResultItem from "./SearchResultItem";
 import Typography from "@material-ui/core/es/Typography";
 import Paper from "@material-ui/core/es/Paper";
-import Pagination from "../../components/pagination/Pagination";
+import Pagination from "../pagination/Pagination";
 import Divider from "@material-ui/core/es/Divider";
 import DocumentDialog from "./documentdialog/DocumentDialog";
 import {AppState} from "../../AppState";

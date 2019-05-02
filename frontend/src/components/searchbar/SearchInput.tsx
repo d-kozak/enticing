@@ -7,11 +7,11 @@ import {connect} from "react-redux";
 import {AppState} from "../../AppState";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/es/Checkbox";
-import QueryInput from "../../components/searchbar/QueryInput";
+import QueryInput from "./QueryInput";
 import {SearchQuery} from "../../entities/SearchQuery";
 import {startSearchingAction, toggleUseConstrainsAction} from "../../actions/QueryActions";
 import * as H from "history";
-import ConstraintsInput from "../../components/searchbar/ConstraintsInput";
+import ConstraintsInput from "./ConstraintsInput";
 
 const styles = createStyles({});
 

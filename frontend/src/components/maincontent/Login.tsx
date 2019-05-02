@@ -15,7 +15,7 @@ import * as Yup from 'yup';
 import {TextField} from "formik-material-ui";
 import {Redirect} from "react-router";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
-import LinkTo from "../../components/utils/linkTo";
+import LinkTo from "../utils/linkTo";
 import {AppState} from "../../AppState";
 import {connect} from "react-redux";
 import {loginRequestAction} from "../../actions/UserActions";
