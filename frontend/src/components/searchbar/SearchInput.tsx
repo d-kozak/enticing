@@ -4,7 +4,7 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React, {useState} from 'react';
 import {connect} from "react-redux";
-import {AppState} from "../../AppState";
+import {AppState} from "../../reducers/RootReducer";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/es/Checkbox";
 import QueryInput from "./QueryInput";

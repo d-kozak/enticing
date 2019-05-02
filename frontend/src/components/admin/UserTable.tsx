@@ -13,7 +13,7 @@ import Checkbox from "@material-ui/core/es/Checkbox";
 import Button from "@material-ui/core/es/Button";
 import DeleteUserDialog from "./DeleteUserDialog";
 import {connect} from "react-redux";
-import {AppState} from "../../AppState";
+import {AppState} from "../../reducers/RootReducer";
 import {loadUsersAction, updateUserAction} from "../../actions/AdminActions";
 import {deleteUserDialogOpenAction} from "../../actions/dialog/DeleteUserDialogActions";
 import ChangePasswordDialog from "./ChangePasswordDialog";

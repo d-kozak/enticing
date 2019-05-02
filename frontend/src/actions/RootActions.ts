@@ -2,7 +2,7 @@ import {QueryAction} from "./QueryActions";
 import {SearchResultAction} from "./SearchResultActions";
 import {UserAction} from "./UserActions";
 import {ThunkAction} from "redux-thunk";
-import {AppState} from "../AppState";
+import {AppState} from "../reducers/RootReducer";
 import {AdminAction} from "./AdminActions";
 import {DialogAction} from "./dialog/DialogActions";
 import {SnackBarAction} from "./SnackBarActions";

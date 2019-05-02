@@ -7,7 +7,7 @@ import createStyles from "@material-ui/core/es/styles/createStyles";
 import {WithStyles} from "@material-ui/core/es";
 import AppBarMenuButtons from "./AppBarButtonsRouter";
 import {connect} from "react-redux";
-import {AppState} from "../../AppState";
+import {AppState} from "../../reducers/RootReducer";
 import {logoutRequestAction} from "../../actions/UserActions";
 import {Link} from "react-router-dom";
 

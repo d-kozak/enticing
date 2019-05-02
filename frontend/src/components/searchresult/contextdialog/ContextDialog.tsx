@@ -12,7 +12,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import {Theme} from "@material-ui/core/es";
 
 
-import {AppState} from "../../../AppState";
+import {AppState} from "../../../reducers/RootReducer";
 import {connect} from "react-redux";
 import ContextDialogContent from "./ContextDialogContent";
 import {SearchResultContext} from "../../../entities/SearchResultContext";

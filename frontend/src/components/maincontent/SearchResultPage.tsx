@@ -6,7 +6,7 @@ import React, {useEffect} from 'react';
 import SearchResultList from "../searchresult/SearchResultList";
 import {SearchResult} from "../../entities/SearchResult";
 import NoResultsFound from "../searchresult/NoResultsFound";
-import {AppState} from "../../AppState";
+import {AppState} from "../../reducers/RootReducer";
 
 import {connect} from "react-redux";
 import {startSearchingAction} from "../../actions/QueryActions";

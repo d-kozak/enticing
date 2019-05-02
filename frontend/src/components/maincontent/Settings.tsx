@@ -6,7 +6,7 @@ import React from 'react';
 import {DefaultUserSettings, UserSettings} from "../../entities/UserSettings";
 import DefaultSettingsPicker from "../settings/DefaultSettingsPicker";
 import SettingsHolder from "../settings/SettingsHolder";
-import {AppState} from "../../AppState";
+import {AppState} from "../../reducers/RootReducer";
 import {connect} from "react-redux";
 
 const styles = createStyles({});

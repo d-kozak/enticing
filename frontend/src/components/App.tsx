@@ -14,7 +14,7 @@ import UserManagement from "./maincontent/UserManagement";
 import AdminRoute from "./routes/AdminRoute";
 import {openSnackBar} from "../actions/SnackBarActions";
 import {connect} from "react-redux";
-import {AppState} from "../AppState";
+import {AppState} from "../reducers/RootReducer";
 
 interface AppProps {
     showSnackBarMessage: (message: string) => void
