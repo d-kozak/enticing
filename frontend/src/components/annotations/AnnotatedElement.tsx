@@ -1,11 +1,12 @@
 import createStyles from "@material-ui/core/es/styles/createStyles";
 import {WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/es/styles/withStyles";
-import React from 'react';
+import React, {useState} from 'react';
 import Tooltip from "@material-ui/core/es/Tooltip";
 import {Annotation} from "../../entities/Annotation";
 import AnnotationContent from "./AnnotationContent";
 import {Theme} from "@material-ui/core/es";
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 
 const styles = (theme: Theme) => createStyles({
@@ -24,6 +25,8 @@ export interface AnnotatedElementProps extends WithStyles<typeof styles> {
 const AnnotatedElement = (props: AnnotatedElementProps) => {
     const {annotation, classes} = props;
 
+    const [isOpen, setOpen] = useState(false)
+
     const style = {
         color: annotation.color
     }
@@ -31,9 +34,12 @@ const AnnotatedElement = (props: AnnotatedElementProps) => {
     const tooltip = classes.tooltip;
 
     return <React.Fragment>
-        <Tooltip interactive classes={{tooltip}} title={<AnnotationContent annotation={annotation}/>}>
-            <span style={style}>{annotation.text} </span>
-        </Tooltip>
+        <ClickAwayListener onClickAway={() => setOpen(false)}>
+            <Tooltip classes={{tooltip}}
+                     title={<AnnotationContent annotation={annotation}/>}>
+                <span style={style}>{annotation.text} </span>
+            </Tooltip>
+        </ClickAwayListener>
     </React.Fragment>
 };
 
