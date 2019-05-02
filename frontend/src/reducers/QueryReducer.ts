@@ -1,16 +1,16 @@
-import {QueryState} from "../AppState";
 import {QUERY_EXECUTED, QUERY_TOGGLE_USE_CONSTRAINTS, QueryAction} from "../actions/QueryActions";
 
-
-type QueryReducer = (state: QueryState | undefined, action: QueryAction) => QueryState
-
-const initialState: QueryState = {
+const initialState = {
     useConstraints: false,
     lastQuery: {
         query: 'nertag:person (visited|entered)',
         constraints: ''
     }
 }
+
+export type QueryState = Readonly<typeof initialState>
+
+type QueryReducer = (state: QueryState | undefined, action: QueryAction) => QueryState
 
 const queryReducer: QueryReducer = (state = initialState, action) => {
     switch (action.type) {

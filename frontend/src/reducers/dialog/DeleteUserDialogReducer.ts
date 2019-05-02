@@ -1,4 +1,3 @@
-import {DeleteUserDialogState} from "../../AppState";
 import {
     DELETE_USER_DIALOG_CLOSED,
     DELETE_USER_DIALOG_HIDE_PROGRESS,
@@ -6,15 +5,21 @@ import {
     DELETE_USER_DIALOG_SHOW_PROGRESS,
     DeleteUserDialogAction
 } from "../../actions/dialog/DeleteUserDialogActions";
+import {User} from "../../entities/User";
 
 
-type DeleteUserDialogReducer = (state: DeleteUserDialogState | undefined, action: DeleteUserDialogAction) => DeleteUserDialogState
-
+export interface DeleteUserDialogState {
+    readonly userToDelete: User | null;
+    readonly showProgress: boolean;
+}
 
 const initialState: DeleteUserDialogState = {
     userToDelete: null,
     showProgress: false
 }
+
+type DeleteUserDialogReducer = (state: DeleteUserDialogState | undefined, action: DeleteUserDialogAction) => DeleteUserDialogState
+
 
 const deleteUserDialogReducer: DeleteUserDialogReducer = (state = initialState, action) => {
     switch (action.type) {

@@ -6,11 +6,11 @@ import {
 } from "../actions/AdminActions";
 import {User} from "../entities/User";
 
-export type AdminState = Readonly<typeof initialState>
-
 const initialState = {
     users: Array<User>()
 }
+
+export type AdminState = Readonly<typeof initialState>
 
 type AdminReducer = (state: AdminState | undefined, action: AdminAction) => AdminState
 

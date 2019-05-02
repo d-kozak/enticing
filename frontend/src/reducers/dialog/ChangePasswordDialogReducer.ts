@@ -1,4 +1,3 @@
-import {ChangePasswordDialogState} from "../../AppState";
 import {
     CHANGE_PASSWORD_DIALOG_CLOSE,
     CHANGE_PASSWORD_DIALOG_HIDE_PROGRESS,
@@ -6,15 +5,19 @@ import {
     CHANGE_PASSWORD_DIALOG_SHOW_PROGRESS,
     ChangePasswordDialogAction
 } from "../../actions/dialog/ChangePasswordDialogActions";
+import {User} from "../../entities/User";
 
-
-type ChangePasswordDialogReducer = (state: ChangePasswordDialogState | undefined, action: ChangePasswordDialogAction) => ChangePasswordDialogState
-
+export interface ChangePasswordDialogState {
+    readonly user: User | null;
+    readonly showProgress: boolean;
+}
 
 const initialState: ChangePasswordDialogState = {
     user: null,
     showProgress: false
 }
+
+type ChangePasswordDialogReducer = (state: ChangePasswordDialogState | undefined, action: ChangePasswordDialogAction) => ChangePasswordDialogState
 
 const changePasswordDialogReducer: ChangePasswordDialogReducer = (state = initialState, action) => {
     switch (action.type) {

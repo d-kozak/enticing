@@ -1,13 +1,14 @@
-import {SnackBarState} from "../AppState";
 import {SNACKBAR_CLOSE, SNACKBAR_OPEN, SnackBarAction} from "../actions/SnackBarActions";
 
 
-type SnackBarReducer = (state: SnackBarState | undefined, action: SnackBarAction) => SnackBarState
-
-const initialState: SnackBarState = {
+const initialState = {
     isOpen: false,
     message: ''
 }
+
+export type SnackBarState = Readonly<typeof initialState>
+
+type SnackBarReducer = (state: SnackBarState | undefined, action: SnackBarAction) => SnackBarState
 
 const SnackBarReducer: SnackBarReducer = (state = initialState, action) => {
     switch (action.type) {

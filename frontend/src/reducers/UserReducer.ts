@@ -1,13 +1,13 @@
-import {UserState} from "../AppState";
 import {USER_LOGIN_SUCCESS, USER_LOGOUT, UserAction} from "../actions/UserActions";
 
-
-type UserReducer = (state: UserState | undefined, action: UserAction) => UserState
-
-const initialState: UserState = {
+const initialState = {
     isLoggedIn: false,
     isAdmin: false
 }
+
+export type UserState = Readonly<typeof initialState>
+
+type UserReducer = (state: UserState | undefined, action: UserAction) => UserState
 
 const userReducer: UserReducer = (state = initialState, action) => {
     switch (action.type) {

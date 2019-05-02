@@ -1,14 +1,18 @@
-import {ContextDialogState} from "../../AppState";
 import {ContextDialogAction} from "../../actions/dialog/ContextDialogActions";
+import {SearchResultContext} from "../../entities/SearchResultContext";
 
 
-type ContextDialogReducer = (state: ContextDialogState | undefined, action: ContextDialogAction) => ContextDialogState
-
+export interface ContextDialogState {
+    readonly context: SearchResultContext | null
+    readonly showProgress: boolean
+}
 
 const initialState: ContextDialogState = {
     context: null,
     showProgress: false
 }
+
+type ContextDialogReducer = (state: ContextDialogState | undefined, action: ContextDialogAction) => ContextDialogState
 
 const contextDialogReducer: ContextDialogReducer = (state = initialState, action) => {
     switch (action.type) {

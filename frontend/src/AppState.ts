@@ -1,9 +1,10 @@
-import {SearchResult} from "./entities/SearchResult";
-import {User} from "./entities/User";
-import {IndexedDocument} from "./entities/IndexedDocument";
-import {SearchResultContext} from "./entities/SearchResultContext";
-import {SearchQuery} from "./entities/SearchQuery";
 import {AdminState} from "./reducers/AdminReducer";
+import {UserState} from "./reducers/UserReducer";
+import {QueryState} from "./reducers/QueryReducer";
+import {ProgressBarState} from "./reducers/ProgressBarReducer";
+import {SearchResultsState} from "./reducers/SearchResultReducer";
+import {SnackBarState} from "./reducers/SnackBarReducer";
+import {DialogState} from "./reducers/dialog/DialogReducer";
 
 export interface AppState {
     user: UserState,
@@ -15,51 +16,3 @@ export interface AppState {
     dialog: DialogState
 }
 
-export interface UserState {
-    isLoggedIn: boolean,
-    isAdmin: boolean
-}
-
-export interface QueryState {
-    lastQuery: SearchQuery
-    useConstraints: boolean
-}
-
-export interface ProgressBarState {
-    isVisible: boolean
-}
-
-export interface SearchResultsState {
-    searchResults: Array<SearchResult> | null
-}
-
-export interface SnackBarState {
-    isOpen: boolean,
-    message: string
-}
-
-export interface DialogState {
-    documentDialog: DocumentDialogState;
-    contextDialog: ContextDialogState;
-    deleteUserDialog: DeleteUserDialogState;
-    changePasswordDialog: ChangePasswordDialogState
-}
-
-export interface ChangePasswordDialogState {
-    user: User | null;
-    showProgress: boolean;
-}
-
-export interface DeleteUserDialogState {
-    userToDelete: User | null;
-    showProgress: boolean;
-}
-
-export interface DocumentDialogState {
-    document: IndexedDocument | null
-}
-
-export interface ContextDialogState {
-    context: SearchResultContext | null
-    showProgress: boolean
-}

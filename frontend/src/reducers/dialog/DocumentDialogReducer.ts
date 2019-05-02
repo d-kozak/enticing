@@ -1,17 +1,21 @@
-import {DocumentDialogState} from "../../AppState";
 import {
     DOCUMENT_DIALOG_CLOSED,
     DOCUMENT_DIALOG_DOCUMENT_LOADED,
     DocumentDialogAction
 } from "../../actions/dialog/DocumentDialogAction";
+import {IndexedDocument} from "../../entities/IndexedDocument";
 
 
-type DocumentDialogReducer = (state: DocumentDialogState | undefined, action: DocumentDialogAction) => DocumentDialogState
+export interface DocumentDialogState {
+    readonly document: IndexedDocument | null
+}
 
 
 const initialState: DocumentDialogState = {
     document: null
 }
+
+type DocumentDialogReducer = (state: DocumentDialogState | undefined, action: DocumentDialogAction) => DocumentDialogState
 
 const documentDialogReducer: DocumentDialogReducer = (state = initialState, action) => {
     switch (action.type) {
