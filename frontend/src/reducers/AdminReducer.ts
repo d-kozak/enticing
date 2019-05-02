@@ -6,12 +6,10 @@ import {
 } from "../actions/AdminActions";
 import {User} from "../entities/User";
 
-export interface AdminState {
-    users: Array<User>
-}
+export type AdminState = Readonly<typeof initialState>
 
-const initialState: AdminState = {
-    users: []
+const initialState = {
+    users: Array<User>()
 }
 
 type AdminReducer = (state: AdminState | undefined, action: AdminAction) => AdminState
