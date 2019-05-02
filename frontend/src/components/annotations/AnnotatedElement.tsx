@@ -26,6 +26,17 @@ const AnnotatedElement = (props: AnnotatedElementProps) => {
     const {annotation, classes} = props;
 
     const [isOpen, setOpen] = useState(false)
+    let shouldClose = true;
+
+    const handleMouseLeave = () => {
+        if (shouldClose) {
+            setTimeout(() => {
+                if (shouldClose) {
+                    setOpen(false)
+                }
+            }, 250);
+        }
+    };
 
     const style = {
         color: annotation.color
@@ -33,10 +44,26 @@ const AnnotatedElement = (props: AnnotatedElementProps) => {
 
     const tooltip = classes.tooltip;
 
+
     return <React.Fragment>
         <ClickAwayListener onClickAway={() => setOpen(false)}>
             <Tooltip classes={{tooltip}}
-                     title={<AnnotationContent annotation={annotation}/>}>
+                     open={isOpen}
+                     interactive
+                     disableHoverListener
+                     onClick={() => setOpen(true)}
+                     onMouseEnter={() => setOpen(true)}
+                     onMouseLeave={handleMouseLeave}
+                     onClose={handleMouseLeave}
+                     title={<div onMouseEnter={() => {
+                         shouldClose = false;
+                     }} onMouseLeave={() => {
+                         shouldClose = true;
+                         setOpen(false);
+                     }}>
+                         <AnnotationContent annotation={annotation}/>
+                     </div>}
+            >
                 <span style={style}>{annotation.text} </span>
             </Tooltip>
         </ClickAwayListener>
