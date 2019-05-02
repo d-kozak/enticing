@@ -25,6 +25,8 @@ export interface AnnotatedElementProps extends WithStyles<typeof styles> {
 const AnnotatedElement = (props: AnnotatedElementProps) => {
     const {annotation, classes} = props;
 
+    // custom open-close handling was implemented so that it works on mobile phones as well,
+    // hover does not work there by itself, clicks are necessary
     const [isOpen, setOpen] = useState(false)
     let shouldClose = true;
 
