@@ -9,6 +9,10 @@ import Button from "@material-ui/core/es/Button";
 
 import {unstable_useMediaQuery as useMediaQuery} from '@material-ui/core/useMediaQuery';
 import {applyAnnotations} from "../annotations/applyAnnotations";
+import Tooltip from "@material-ui/core/Tooltip";
+import {AppState} from "../../reducers/RootReducer";
+import {connect} from "react-redux";
+import {contextExtensionRequestAction} from "../../actions/ContextActions";
 
 
 const styles = createStyles({
@@ -21,27 +25,39 @@ const styles = createStyles({
 });
 
 
-export interface SearchResultItemProps extends WithStyles<typeof styles> {
+export type  SearchResultItemProps = WithStyles<typeof styles> & typeof mapDispatchToProps
+    & ReturnType<typeof mapStateToProps> & {
     searchResult: SearchResult,
     openWholeDocument: (searchResult: SearchResult) => void
 }
 
 const SearchResultItem = (props: SearchResultItemProps) => {
-    const {searchResult, openWholeDocument, classes} = props;
+    const {searchResult, requestContextExtension, openWholeDocument, classes} = props;
 
     const isScreenMedium = useMediaQuery('(min-width:500px)');
 
-    const ShowContext = () => <Button
-        onClick={() => alert('disabled')}
-        color="primary"
-        size="small">Context</Button>
+    const ShowContextButton = () => <React.Fragment>
+        {searchResult.canExtend ? <Button
+            onClick={() => requestContextExtension(searchResult)}
+            color="primary"
+            size="small">Context</Button> : <Tooltip title="Full length reached">
+            <span>
+                <Button
+                    disabled={true}
+                    color="primary"
+                    size="small">Context
+                </Button>
+            </span>
+        </Tooltip>}
+
+    </React.Fragment>
 
     return <div className={classes.root}>
         {applyAnnotations(searchResult.snippet)}
         <Grid container justify="flex-end" alignContent="center">
 
-            {isScreenMedium ? <ShowContext/> : <Grid container>
-                <ShowContext/>
+            {isScreenMedium ? <ShowContextButton/> : <Grid container>
+                <ShowContextButton/>
             </Grid>}
 
             <Button onClick={() => openWholeDocument(searchResult)} color="primary" size="small">Document</Button>
@@ -54,6 +70,14 @@ const SearchResultItem = (props: SearchResultItemProps) => {
     </div>
 };
 
+
+const mapStateToProps = (state: AppState) => ({});
+
+const mapDispatchToProps = {
+    requestContextExtension: contextExtensionRequestAction as (searchResult: SearchResult) => void
+}
+
+
 export default withStyles(styles, {
     withTheme: true
-})(SearchResultItem)
+})(connect(mapStateToProps, mapDispatchToProps)(SearchResultItem))

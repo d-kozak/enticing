@@ -1,4 +1,4 @@
-import {SEARCH_RESULTS_NEW, SearchResultAction} from "../actions/SearchResultActions";
+import {SEARCH_RESULT_UPDATED, SEARCH_RESULTS_NEW, SearchResultAction} from "../actions/SearchResultActions";
 import {SearchResult} from "../entities/SearchResult";
 
 const initialState = {
@@ -15,6 +15,14 @@ const searchResultReducer: SearchResultReducer = (state = initialState, action) 
             return {
                 searchResults: action.searchResults
             };
+        case SEARCH_RESULT_UPDATED:
+            if (!state.searchResults) {
+                throw new Error("Invalid state, cannot update a single result when no results are in the state");
+            }
+            return {
+                searchResults: state.searchResults
+                    .map(item => item.id === action.searchResult.id ? action.searchResult : item)
+            }
     }
     return state
 }
