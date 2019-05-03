@@ -5,11 +5,10 @@ import store from "./store";
 import App from "./components/App";
 import * as serviceWorker from './serviceWorker';
 // register the custom mode
-// note: since the constants MG4J_EQL and CONSTRAINTS are used inside the SearchBar component, the
-// language modules would be registered anyways, but I consider that as a side effect
-// and therefore I am keeping these imports here to make it more explicit
+// note: since the constant MG4J_EQL is used inside the SearchBar component, the
+// language module would be registered anyways, but I consider that as a side effect
+// and therefore I am keeping the import here to make it more explicit
 import './codemirror/mg4jmode';
-import './codemirror/constraintsMode';
 
 
 const Root = () => <Provider store={store}>

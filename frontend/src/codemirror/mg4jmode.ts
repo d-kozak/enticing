@@ -4,8 +4,9 @@ import {readOneToken, Token} from "./SimpleLanguageMode";
 
 export const MG4J_EQL = 'mg4j-eql';
 
-// example input :()&and|or!not-_PAR__SENT_not^.~"dafs"sadfsad
+// example input :()&and|or!not-_PAR__SENT_not^.~"dafs"sadfsad &&
 const tokens: Array<Token> = [
+    {match: '&&', token: 'contraints'},
     {match: ':', token: 'colon'},
     {match: ')', token: 'mbracket'},
     {match: '(', token: 'mbracket'},
@@ -22,6 +23,12 @@ const tokens: Array<Token> = [
     {match: '^', token: 'caret'},
     {match: '.', token: 'dot'},
     {match: '~', token: 'tilde'},
+    {match: '<=', token: 'le'},
+    {match: '<', token: 'lt'},
+    {match: '>=', token: 'ge'},
+    {match: '>', token: 'gt'},
+    {match: '=', token: 'equal'},
+    {match: '!=', token: 'not-equal'},
     {match: /^".*?"/, token: 'sequence'}
 ]
 

@@ -2,6 +2,10 @@
     color: red;
 }
 
+.cm-contraints {
+    color: purple;
+}
+
 /* mbracket because bracket is taken by codemirror  */
 .cm-mbracket {
     color: darkorchid;

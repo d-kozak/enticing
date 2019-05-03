@@ -11,7 +11,7 @@ import CodeMirror from 'react-codemirror';
 import {EditorConfiguration} from "codemirror";
 
 import './CodeMirror.css';
-import {CONSTRAINTS} from "../../codemirror/constraintsMode";
+import {MG4J_EQL} from "../../codemirror/mg4jmode";
 
 const styles = (theme: Theme) => createStyles({
     reactCodeMirror: {
@@ -19,15 +19,16 @@ const styles = (theme: Theme) => createStyles({
     }
 });
 
-interface ConstraintsInputProps extends WithStyles<typeof styles> {
-    constraints: string;
-    setConstraints: (newConstraints: string) => void;
-    startSearching: (constraints: string) => void;
+interface CMInputWrapperProps extends WithStyles<typeof styles> {
+    query: string;
+    setQuery: (query: string) => void;
+    startSearching: (query: string) => void;
     className?: string;
 }
 
-const ConstraintsInput = (props: ConstraintsInputProps) => {
-    const {className = '', startSearching, classes, setConstraints, constraints} = props;
+const CMInputWrapper = (props: CMInputWrapperProps) => {
+    const {className = '', startSearching, classes, query, setQuery} = props;
+
 
     const codeMirrorRef = useRef<ReactCodeMirror.ReactCodeMirror>(null);
 
@@ -44,10 +45,10 @@ const ConstraintsInput = (props: ConstraintsInputProps) => {
     const options: EditorConfiguration = {
         extraKeys: {
             "Enter": () => {
-                startSearching(constraints);
+                startSearching(query);
             }
         },
-        mode: CONSTRAINTS,
+        mode: MG4J_EQL,
         scrollbarStyle: "null"
     }
 
@@ -55,12 +56,12 @@ const ConstraintsInput = (props: ConstraintsInputProps) => {
         <CodeMirror
             className={classes.reactCodeMirror}
             ref={codeMirrorRef}
-            value={constraints}
-            onChange={constraints => setConstraints(constraints)}
+            value={query}
+            onChange={newQuery => setQuery(newQuery)}
             autoFocus={true}
             options={options}
         />
     </div>
 };
 
-export default withStyles(styles, {withTheme: true})(ConstraintsInput);
+export default withStyles(styles, {withTheme: true})(CMInputWrapper);

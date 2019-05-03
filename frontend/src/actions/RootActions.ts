@@ -1,4 +1,3 @@
-import {QueryAction} from "./QueryActions";
 import {SearchResultAction} from "./SearchResultActions";
 import {UserAction} from "./UserActions";
 import {ThunkAction} from "redux-thunk";
@@ -9,8 +8,7 @@ import {SnackBarAction} from "./SnackBarActions";
 import {ProgressBarAction} from "./ProgressBarActions";
 
 export type RootAction =
-    QueryAction
-    | SearchResultAction
+    SearchResultAction
     | UserAction
     | AdminAction
     | DialogAction

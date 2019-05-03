@@ -5,13 +5,11 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 import React, {useState} from 'react';
 import {connect} from "react-redux";
 import {AppState} from "../../reducers/RootReducer";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/es/Checkbox";
-import QueryInput from "./QueryInput";
+
+import CMInputWrapper from "./CMInputWrapper";
 import {SearchQuery} from "../../entities/SearchQuery";
-import {startSearchingAction, toggleUseConstrainsAction} from "../../actions/QueryActions";
+import {startSearchingAction} from "../../actions/QueryActions";
 import * as H from "history";
-import ConstraintsInput from "./ConstraintsInput";
 
 const styles = createStyles({});
 
@@ -21,48 +19,31 @@ export type SearchInputProps =
     & ReturnType<typeof mapStateToProps>
     & {
     history?: H.History;
-    className?: string
+    className?: string;
+    initialQuery?: string;
 }
 
 const SearchInput = (props: SearchInputProps) => {
-    const {className = '', lastQuery, showConstraints, toggleConstraints, history, startSearching: parentStartSearching} = props;
+    const {className = '', initialQuery = '', history, startSearching: parentStartSearching} = props;
 
-    const [query, setQuery] = useState<string>(lastQuery.query);
-    const [constraints, setContraints] = useState<string>(lastQuery.constraints);
+    const [query, setQuery] = useState<string>(initialQuery);
 
     const startSearching = () => {
         if (query.length > 0) {
-            parentStartSearching({
-                query: query,
-                constraints: showConstraints ? constraints : ''
-            }, history);
+            parentStartSearching(query, history);
         }
     };
 
 
     return <div className={className}>
-        <QueryInput query={query} setQuery={setQuery} startSearching={startSearching}/>
-        <FormControlLabel
-            control={<Checkbox
-                checked={showConstraints}
-                onChange={() => toggleConstraints()}
-                value="Use constraints"
-            />}
-            label="Use constraints"
-        />
-        {showConstraints &&
-        <ConstraintsInput constraints={constraints} setConstraints={setContraints} startSearching={startSearching}/>}
+        <CMInputWrapper query={query} setQuery={setQuery} startSearching={startSearching}/>
     </div>
 };
 
-const mapStateToProps = (state: AppState) => ({
-    lastQuery: state.query.lastQuery,
-    showConstraints: state.query.useConstraints
-});
+const mapStateToProps = (state: AppState) => ({});
 
 const mapDispatchToProps = {
-    startSearching: startSearchingAction as (query: SearchQuery, history?: H.History) => void,
-    toggleConstraints: toggleUseConstrainsAction
+    startSearching: startSearchingAction as (query: SearchQuery, history?: H.History) => void
 };
 
 export default withStyles(styles, {

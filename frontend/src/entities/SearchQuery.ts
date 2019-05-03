@@ -1,4 +1,1 @@
-export interface SearchQuery {
-    query: string,
-    constraints: string
-}
+export type SearchQuery = string

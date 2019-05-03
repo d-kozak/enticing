@@ -30,17 +30,19 @@ export type SearchPageProps =
 }
 
 const SearchPage = (props: SearchPageProps) => {
-    const {searchResults, startSearching, lastQuery, classes, history} = props;
+    const {searchResults, startSearching, classes, history} = props;
+
+    const query = 'foo!';
 
     useEffect(() => {
         if (searchResults === null) {
-            startSearching(lastQuery);
+            startSearching(query);
         }
     }, [searchResults])
 
 
     return <div>
-        <SearchInput className={classes.searchInput} history={history}/>
+        <SearchInput className={classes.searchInput} history={history} initialQuery={query}/>
         {searchResults !== null && searchResults.length > 0 ? <SearchResultList searchResults={searchResults}/> :
             <NoResultsFound/>}
     </div>
@@ -48,7 +50,6 @@ const SearchPage = (props: SearchPageProps) => {
 
 const mapStateToProps = (state: AppState) => ({
     searchResults: state.searchResults.searchResults,
-    lastQuery: state.query.lastQuery
 });
 
 const mapDispatchToProps = {

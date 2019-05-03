@@ -4,7 +4,6 @@ import {DonaldTrump, EdSheeran, KarlovyVary} from "./mockAnnotations";
 import {Dispatch} from "redux";
 import * as H from "history";
 import {hideProgressBarAction, showProgressBarAction} from "../actions/ProgressBarActions";
-import {queryExecutedAction} from "../actions/QueryActions";
 import {newSearchResultsAction} from "../actions/SearchResultActions";
 import {openSnackBar} from "../actions/SnackBarActions";
 import {SearchQuery} from "../entities/SearchQuery";
@@ -26,7 +25,7 @@ const secondResult: SearchResult = {
         positions: [{annotationId: 2, from: 10, to: 22}]
     },
     url: 'https://www.mysanantonio.com/news/local/article/President-Trump-arrives-in-San-Antonio-for-13756986.php'
-}
+};
 
 const thirdResult: SearchResult = {
     snippet: {
@@ -35,7 +34,7 @@ const thirdResult: SearchResult = {
         positions: [{annotationId: 3, from: 114, to: 127}]
     },
     url: 'https://www.thun.cz/en/article/238-visit-of-mr--president-milos-zeman.html'
-}
+};
 
 const results = [firstResult, secondResult, thirdResult];
 const randomResult = () => results[Math.floor(Math.random() * results.length) % results.length]
@@ -64,10 +63,9 @@ const mockExecuteQuery: ((query: string) => Promise<Array<SearchResult>>) = (que
 export const mockSearch = (query: SearchQuery, dispatch: Dispatch, history?: H.History) => {
 
     dispatch(showProgressBarAction())
-    dispatch(queryExecutedAction(query));
-    mockExecuteQuery(query.query)
+    mockExecuteQuery(query)
         .then(results => {
-            const encodedQuery = encodeURI(query.query)
+            const encodedQuery = encodeURI(query)
             dispatch(newSearchResultsAction(results));
             if (history) {
                 history.push(`/search?query=${encodedQuery}`);
