@@ -12,6 +12,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Grid from "@material-ui/core/es/Grid";
 import Button from "@material-ui/core/es/Button";
 import Paper from "@material-ui/core/es/Paper";
+import SettingsDetails from "./SettingsDetails";
 
 
 const styles = createStyles({
@@ -50,13 +51,10 @@ const DefaultSettingsPicker = (props: DefaultSettingsPicker) => {
             settings</Typography>
         {defaultSettingsOptions.map((settings, index) => <ExpansionPanel key={index}>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-                    <Typography variant="h4">{settings.title}</Typography>
+                    <Typography variant="h5">{settings.title} - {settings.description}</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className={classes.expansionPanelDetails}>
-                    <Typography variant="body1">{settings.description}</Typography>
-
-                    {JSON.stringify(settings, null, 4)}
-
+                    <SettingsDetails settings={settings}/>
                     <Grid container justify="flex-end" alignItems="center">
                         <Grid item>
                             <Button onClick={() => settingsSelected(index)} variant="contained" color="primary"
