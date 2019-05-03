@@ -31,7 +31,7 @@ const App = ({showSnackBarMessage, isAdmin, progressBarVisible}: AppProps) => {
                            <MainPage history={history}/>
                        </React.Fragment>}/>
                 <Route path="/search"
-                       render={({history}) => <SearchPage history={history}/>}/>
+                       render={({history, location}) => <SearchPage history={history} location={location}/>}/>
                 <Route path="/login" render={({}) => <Login/>}/>
                 <Route path="/signup" render={() => <SignUp/>}/>
                 <Route path="/settings" render={() => <Settings/>}/>

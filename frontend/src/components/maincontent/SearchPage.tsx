@@ -26,13 +26,14 @@ export type SearchPageProps =
     & typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
     & {
-    history: H.History
+    history: H.History,
+    location: H.Location
 }
 
 const SearchPage = (props: SearchPageProps) => {
-    const {searchResults, startSearching, classes, history} = props;
-
-    const query = 'foo!';
+    const {searchResults, startSearching, classes, history, location} = props;
+    const params = new URLSearchParams(location.search);
+    const query = params.get('query') || '';
 
     useEffect(() => {
         if (searchResults === null) {
