@@ -37,8 +37,8 @@ const Settings = (props: SettingsProps) => {
         {
             title: 'Basic',
             description: 'Initial most intuitive config',
-            annotationDataServer: "10.10.10.10:42",
-            annotationServer: "192.168.0.25:666",
+            annotationDataServer: "server1.com:42/foo",
+            annotationServer: "localhost:666",
             resultsPerPage: 42,
             servers: ['localhost:4200']
         },
