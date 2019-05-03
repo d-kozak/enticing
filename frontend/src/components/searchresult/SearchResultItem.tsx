@@ -24,16 +24,15 @@ const styles = createStyles({
 export interface SearchResultItemProps extends WithStyles<typeof styles> {
     searchResult: SearchResult,
     openWholeDocument: (searchResult: SearchResult) => void
-    openContextDialog: (searchResult: SearchResult) => void
 }
 
 const SearchResultItem = (props: SearchResultItemProps) => {
-    const {searchResult, openWholeDocument, openContextDialog, classes} = props;
+    const {searchResult, openWholeDocument, classes} = props;
 
     const isScreenMedium = useMediaQuery('(min-width:500px)');
 
     const ShowContext = () => <Button
-        onClick={() => openContextDialog(searchResult)}
+        onClick={() => alert('disabled')}
         color="primary"
         size="small">Context</Button>
 

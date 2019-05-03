@@ -12,3 +12,5 @@ export const loremIpsumLong = 'Lorem ipsum dolor sit amet, consectetuer adipisci
 
 export const loremIpsumShort = 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam ornare wisi eu metus. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Duis pulvinar. Duis condimentum augue id magna semper rutrum. Morbi leo mi, nonummy eget tristique non, rhoncus non leo. Aliquam erat volutpat. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Maecenas libero. Integer vulputate sem a nibh rutrum consequat. Aliquam erat volutpat. Aliquam id dolor. Mauris metus. Quisque tincidunt scelerisque libero. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Fusce tellus. In enim a arcu imperdiet malesuada.\n' +
     '\n';
+
+export const loremOneSentece = 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.';

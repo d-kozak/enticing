@@ -13,8 +13,6 @@ import DocumentDialog from "./documentdialog/DocumentDialog";
 import {AppState} from "../../reducers/RootReducer";
 import {connect} from "react-redux";
 import {documentDialogRequestedAction} from "../../actions/dialog/DocumentDialogAction";
-import {contextDialogRequestedAction} from "../../actions/dialog/ContextDialogActions";
-import ContextDialog from "./contextdialog/ContextDialog";
 
 const styles = createStyles({
     root: {
@@ -40,7 +38,7 @@ export type SearchResultListProps =
 }
 
 const SearchResultList = (props: SearchResultListProps) => {
-    const {searchResults, openContextDialog, openDocumentDialog, classes} = props;
+    const {searchResults, openDocumentDialog, classes} = props;
 
     const [currentPage, setCurrentPage] = useState(0);
 
@@ -56,7 +54,7 @@ const SearchResultList = (props: SearchResultListProps) => {
             .map(
                 (searchResult, index) => <React.Fragment key={index}>
                     {index > 0 && <Divider/>}
-                    <SearchResultItem openWholeDocument={openDocumentDialog} openContextDialog={openContextDialog}
+                    <SearchResultItem openWholeDocument={openDocumentDialog}
                                       searchResult={searchResult}/>
                 </React.Fragment>)
         }
@@ -65,15 +63,13 @@ const SearchResultList = (props: SearchResultListProps) => {
         <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} pageCount={pageCount}/>
 
         <DocumentDialog/>
-        <ContextDialog/>
     </Paper>
 };
 
 const mapStateToProps = (state: AppState) => ({});
 
 const mapDispatchToProps = {
-    openDocumentDialog: documentDialogRequestedAction as (searchResult: SearchResult) => void,
-    openContextDialog: contextDialogRequestedAction as (searchResult: SearchResult) => void
+    openDocumentDialog: documentDialogRequestedAction as (searchResult: SearchResult) => void
 }
 
 export default withStyles(styles, {
