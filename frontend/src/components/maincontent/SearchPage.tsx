@@ -4,7 +4,6 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React, {useEffect} from 'react';
 import SearchResultList from "../searchresult/SearchResultList";
-import * as H from "history";
 import NoResultsFound from "../searchresult/NoResultsFound";
 import {AppState} from "../../reducers/RootReducer";
 
@@ -13,6 +12,8 @@ import {startSearchingAction} from "../../actions/QueryActions";
 import {SearchQuery} from "../../entities/SearchQuery";
 import SearchInput from "../searchbar/SearchInput";
 
+import * as H from 'history';
+
 const styles = createStyles({
     searchInput: {
         margin: '20px auto',
@@ -20,10 +21,16 @@ const styles = createStyles({
     }
 });
 
-export type SearchProps = WithStyles<typeof styles> & typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>
+export type SearchPageProps =
+    WithStyles<typeof styles>
+    & typeof mapDispatchToProps
+    & ReturnType<typeof mapStateToProps>
+    & {
+    history: H.History
+}
 
-const SearchResultPage = (props: SearchProps) => {
-    const {searchResults, startSearching, lastQuery, classes} = props;
+const SearchPage = (props: SearchPageProps) => {
+    const {searchResults, startSearching, lastQuery, classes, history} = props;
 
     useEffect(() => {
         if (searchResults === null) {
@@ -33,7 +40,7 @@ const SearchResultPage = (props: SearchProps) => {
 
 
     return <div>
-        <SearchInput className={classes.searchInput}/>
+        <SearchInput className={classes.searchInput} history={history}/>
         {searchResults !== null && searchResults.length > 0 ? <SearchResultList searchResults={searchResults}/> :
             <NoResultsFound/>}
     </div>
@@ -50,4 +57,4 @@ const mapDispatchToProps = {
 
 export default withStyles(styles, {
     withTheme: true
-})(connect(mapStateToProps, mapDispatchToProps)(SearchResultPage))
+})(connect(mapStateToProps, mapDispatchToProps)(SearchPage))

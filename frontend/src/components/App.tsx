@@ -7,7 +7,7 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import Login from "./maincontent/Login";
 import UnknownRoute from "./maincontent/UnknownRoute";
 import SignUp from "./maincontent/SignUp";
-import Search from "./maincontent/SearchResultPage";
+import SearchPage from "./maincontent/SearchPage";
 import MainPage from "./maincontent/MainPage";
 import Settings from "./maincontent/Settings";
 import UserManagement from "./maincontent/UserManagement";
@@ -31,7 +31,7 @@ const App = ({showSnackBarMessage, isAdmin, progressBarVisible}: AppProps) => {
                            <MainPage history={history}/>
                        </React.Fragment>}/>
                 <Route path="/search"
-                       render={() => <Search/>}/>
+                       render={({history}) => <SearchPage history={history}/>}/>
                 <Route path="/login" render={({}) => <Login/>}/>
                 <Route path="/signup" render={() => <SignUp/>}/>
                 <Route path="/settings" render={() => <Settings/>}/>
