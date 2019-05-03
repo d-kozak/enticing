@@ -67,9 +67,10 @@ export const mockSearch = (query: SearchQuery, dispatch: Dispatch, history?: H.H
     dispatch(queryExecutedAction(query));
     mockExecuteQuery(query.query)
         .then(results => {
+            const encodedQuery = encodeURI(query.query)
             dispatch(newSearchResultsAction(results));
             if (history) {
-                history.push('/search');
+                history.push(`/search?query=${encodedQuery}`);
             }
         }).catch(error => {
         dispatch(openSnackBar(`Error ${error}`));
