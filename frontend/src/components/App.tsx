@@ -37,7 +37,7 @@ const App = ({showSnackBarMessage, isAdmin, progressBarVisible}: AppProps) => {
                 <Route path="/settings" render={() => <Settings/>}/>
                 <AdminRoute path="/users" isAdmin={isAdmin} showSnackBarMessage={showSnackBarMessage}
                             render={() => <UserManagement/>}/>
-                <Route component={UnknownRoute}/>
+                <Route path="/:path" render={({match}) => <UnknownRoute path={match.params.path}/>}/>
             </Switch>
         </Router>
         <EnticingSnackbar/>
