@@ -4,7 +4,6 @@ import {UserSettings} from "../../entities/UserSettings";
 
 
 export interface ReadOnlySettingsFormProps {
-    mappingFiles: Array<string>,
     currentSettings: UserSettings
 }
 
@@ -12,7 +11,7 @@ export interface ReadOnlySettingsFormProps {
 const errorMsg = 'This form should be readOnly, no callbacks should ever be called from it';
 
 const ReadOnlySettingsForm = (props: ReadOnlySettingsFormProps) => {
-    const {mappingFiles, currentSettings} = props;
+    const {currentSettings} = props;
 
     const submitForm = () => new Promise((resolve, reject) => {
         reject(errorMsg);
@@ -23,7 +22,7 @@ const ReadOnlySettingsForm = (props: ReadOnlySettingsFormProps) => {
         throw new Error(errorMsg);
     }
 
-    return <SettingsForm readOnly={true} mappingFiles={mappingFiles} currentSettings={currentSettings}
+    return <SettingsForm readOnly={true} currentSettings={currentSettings}
                          submitForm={submitForm} setShowProgress={setShowProgress}/>
 };
 

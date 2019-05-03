@@ -33,15 +33,12 @@ const Settings = (props: SettingsProps) => {
         alert(`Settings ${defaultSettingsOptions[index].title} selected `);
     };
 
-    const mappingFiles = ['mappingA.xml', 'goodMapping.xml', 'crazyMapping.xml'];
-
     const defaultSettingsOptions: Array<DefaultUserSettings> = [
         {
             title: 'Basic',
             description: 'Initial most intuitive config',
             annotationDataServer: "10.10.10.10:42",
             annotationServer: "192.168.0.25:666",
-            mappingFile: 'mappingA.xml',
             resultsPerPage: 42,
             servers: ['localhost:4200']
         },
@@ -50,7 +47,6 @@ const Settings = (props: SettingsProps) => {
             description: 'High performance config',
             annotationDataServer: "10.10.10.10:42",
             annotationServer: "192.168.0.25:666",
-            mappingFile: 'mappingA.xml',
             resultsPerPage: 42,
             servers: ['localhost:4200', 'localhost:9000', '8.8.8.8:2000']
         }
@@ -59,10 +55,9 @@ const Settings = (props: SettingsProps) => {
     const currentSettings = defaultSettingsOptions[0];
 
     if (isLoggedIn) {
-        return <SettingsHolder submitForm={submitForm} currentSettings={currentSettings}
-                               mappingFiles={mappingFiles}/>
+        return <SettingsHolder submitForm={submitForm} currentSettings={currentSettings}/>
     } else {
-        return <DefaultSettingsPicker defaultSettingsOptions={defaultSettingsOptions} mappingFiles={mappingFiles}
+        return <DefaultSettingsPicker defaultSettingsOptions={defaultSettingsOptions}
                                       settingsSelected={handleSettingsSelected}/>
     }
 };

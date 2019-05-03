@@ -40,13 +40,11 @@ const styles = createStyles({
 
 export interface DefaultSettingsPicker extends WithStyles<typeof styles> {
     defaultSettingsOptions: Array<DefaultUserSettings>,
-    mappingFiles: Array<string>
-
     settingsSelected(index: number): void
 }
 
 const DefaultSettingsPicker = (props: DefaultSettingsPicker) => {
-    const {mappingFiles, settingsSelected, defaultSettingsOptions, classes} = props;
+    const {settingsSelected, defaultSettingsOptions, classes} = props;
     return <Paper className={classes.rootElement}>
         <Typography variant="h2" className={classes.settingsTitle}>Settings</Typography>
         <Typography variant="body1" className={classes.settingsText}>You can choose one of the predefined
@@ -58,7 +56,7 @@ const DefaultSettingsPicker = (props: DefaultSettingsPicker) => {
                 <ExpansionPanelDetails className={classes.expansionPanelDetails}>
                     <Typography variant="body1">{settings.description}</Typography>
 
-                    <ReadOnlySettingsForm currentSettings={settings} mappingFiles={mappingFiles}/>
+                    <ReadOnlySettingsForm currentSettings={settings}/>
 
                     <Grid container justify="flex-end" alignItems="center">
                         <Grid item>

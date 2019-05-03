@@ -34,21 +34,20 @@ const styles = createStyles({
 
 
 export interface SettingsHolderProps extends WithStyles<typeof styles> {
-    mappingFiles: Array<string>,
     currentSettings: UserSettings,
 
     submitForm(newSettings: UserSettings): Promise<{}>,
 }
 
 const SettingsHolder = (props: SettingsHolderProps) => {
-    const {classes, mappingFiles, currentSettings, submitForm} = props;
+    const {classes, currentSettings, submitForm} = props;
 
     const [showProgress, setShowProgress] = useState(false);
 
     return <Paper className={classes.root} style={{paddingTop: showProgress ? '0px' : '20px'}}>
         {showProgress && <LinearProgress className={classes.progress}/>}
         <Typography variant="h2" className={classes.settingsTitle}>Settings</Typography>
-        <SettingsForm mappingFiles={mappingFiles} currentSettings={currentSettings} submitForm={submitForm}
+        <SettingsForm currentSettings={currentSettings} submitForm={submitForm}
                       setShowProgress={setShowProgress}/>
     </Paper>
 };

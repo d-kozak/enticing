@@ -1,7 +1,6 @@
 import {DescribedElement} from "./DescribedElement";
 
 export interface UserSettings {
-    mappingFile: string,
     resultsPerPage: number
     annotationDataServer: string,
     annotationServer: string,

@@ -6,9 +6,7 @@ import React from 'react';
 import {UserSettings} from "../../entities/UserSettings";
 import {Field, FieldArray, Form, Formik} from "formik";
 import * as Yup from 'yup';
-import {RadioGroup, TextField} from "formik-material-ui";
-import FormControlLabel from "@material-ui/core/es/FormControlLabel";
-import Radio from "@material-ui/core/es/Radio";
+import {TextField} from "formik-material-ui";
 import Button from "@material-ui/core/es/Button";
 import Typography from "@material-ui/core/es/Typography";
 import {Theme} from "@material-ui/core/es";
@@ -48,7 +46,6 @@ const styles = (theme: Theme) => createStyles({
 
 export interface SettingsForm extends WithStyles<typeof styles> {
     readOnly?: boolean
-    mappingFiles: Array<string>,
     currentSettings: UserSettings,
     submitForm: (newSettings: UserSettings) => Promise<{}>,
     setShowProgress: (showProgress: boolean) => void
@@ -59,8 +56,6 @@ const ipAddressRegex = /^(((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-
 const ipAddressFail = 'Please provide a valid ip address';
 
 const SettingsSchema = Yup.object({
-    'mappingFile': Yup.string()
-        .required('Mapping file is required'),
     'resultsPerPage': Yup.number()
         .positive('Results per page should be a positive number')
         .required('Please specify results per page'),
@@ -77,7 +72,7 @@ const SettingsSchema = Yup.object({
 });
 
 const SettingsForm = (props: SettingsForm) => {
-    const {readOnly = false, submitForm, currentSettings, setShowProgress, mappingFiles, classes} = props;
+    const {readOnly = false, submitForm, currentSettings, setShowProgress, classes} = props;
 
     return <Formik
         initialValues={currentSettings}
@@ -102,20 +97,6 @@ const SettingsForm = (props: SettingsForm) => {
         }}>
         {({isSubmitting, values, errors}) =>
             <Form className={classes.formContent}>
-                <Divider/>
-                <div className={classes.settingsSection}>
-                    <Typography variant="h5" className={classes.sectionTitle}>Mapping file</Typography>
-                    <Field name="mappingFile" className={classes.mappingFileSettingsContent} component={RadioGroup}>
-                        {
-                            mappingFiles.map((mappingFile, index) => <FormControlLabel key={index}
-                                                                                       control={<Radio/>}
-                                                                                       disabled={readOnly}
-                                                                                       label={mappingFile}
-                                                                                       value={mappingFile}/>)
-                        }
-                    </Field>
-                </div>
-
                 <Divider/>
                 <div className={classes.settingsSection}>
                     <Typography variant="h5" className={classes.sectionTitle}>Annotation server</Typography>
