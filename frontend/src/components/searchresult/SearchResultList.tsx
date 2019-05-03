@@ -54,7 +54,7 @@ const SearchResultList = (props: SearchResultListProps) => {
             .map(
                 (searchResult, index) => <React.Fragment key={index}>
                     {index > 0 && <Divider/>}
-                    <SearchResultItem openWholeDocument={openDocumentDialog}
+                    <SearchResultItem openDocument={openDocumentDialog}
                                       searchResult={searchResult}/>
                 </React.Fragment>)
         }
