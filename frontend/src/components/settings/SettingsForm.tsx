@@ -45,7 +45,6 @@ const styles = (theme: Theme) => createStyles({
 
 
 export interface SettingsForm extends WithStyles<typeof styles> {
-    readOnly?: boolean
     currentSettings: UserSettings,
     submitForm: (newSettings: UserSettings) => Promise<{}>,
     setShowProgress: (showProgress: boolean) => void
@@ -72,15 +71,12 @@ const SettingsSchema = Yup.object({
 });
 
 const SettingsForm = (props: SettingsForm) => {
-    const {readOnly = false, submitForm, currentSettings, setShowProgress, classes} = props;
+    const {submitForm, currentSettings, setShowProgress, classes} = props;
 
     return <Formik
         initialValues={currentSettings}
         validationSchema={SettingsSchema}
         onSubmit={(values, actions) => {
-            if (readOnly) {
-                throw new Error('Readonly form should never be submitted');
-            }
             setShowProgress(true);
             submitForm(values)
                 .then(() => {
@@ -101,10 +97,10 @@ const SettingsForm = (props: SettingsForm) => {
                 <div className={classes.settingsSection}>
                     <Typography variant="h5" className={classes.sectionTitle}>Annotation server</Typography>
 
-                    <Field disabled={readOnly} variant="outlined" label="Annotation server" name="annotationServer"
+                    <Field variant="outlined" label="Annotation server" name="annotationServer"
                            component={TextField} className={classes.textField}/>
 
-                    <Field disabled={readOnly} variant="outlined" label="Annotation data server"
+                    <Field variant="outlined" label="Annotation data server"
                            name="annotationDataServer"
                            component={TextField} className={classes.textField}/>
 
@@ -119,13 +115,13 @@ const SettingsForm = (props: SettingsForm) => {
                     <FieldArray name="servers" render={({push, remove}) =>
                         <div>
                             {values.servers.map((server, index) => <div key={index}>
-                                <Field disabled={readOnly} name={`servers.${index}`} component={TextField}
+                                <Field name={`servers.${index}`} component={TextField}
                                        className={classes.textField}/>
-                                {!readOnly && <Button color="secondary" onClick={() => remove(index)}>X</Button>}
+                                <Button color="secondary" onClick={() => remove(index)}>X</Button>
                             </div>)}
-                            {!readOnly &&
+
                             <Button className={classes.addIndexServerButton} color="primary" variant="outlined"
-                                    onClick={() => push('')}>Add server</Button>}
+                                    onClick={() => push('')}>Add server</Button>
                         </div>
                     }/>
                 </div>
@@ -133,17 +129,17 @@ const SettingsForm = (props: SettingsForm) => {
                 <Divider/>
                 <div className={classes.settingsSection}>
                     <Typography variant="h5" className={classes.sectionTitle}>Others</Typography>
-                    <Field disabled={readOnly} variant="outlined" label="Results per page" name="resultsPerPage"
+                    <Field variant="outlined" label="Results per page" name="resultsPerPage"
                            component={TextField}
                            type="number" className={classes.textField}/>
                 </div>
 
-                {!readOnly && <Grid container justify="flex-end" alignItems="center">
+                <Grid container justify="flex-end" alignItems="center">
                     <Grid item>
                         <Button variant="contained" color="primary" type="submit"
                                 disabled={isSubmitting}>Submit</Button>
                     </Grid>
-                </Grid>}
+                </Grid>
             </Form>
         }
     </Formik>
