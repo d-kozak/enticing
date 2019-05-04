@@ -1,22 +1,35 @@
 import {ThunkResult} from "./RootActions";
-import {mockLogin, mockSignup} from "../mocks/mockUserApi";
+import {mockLogin, mockSignup, mockUserSettingsSelectedRequest} from "../mocks/mockUserApi";
 import {openSnackBar} from "./SnackBarActions";
+import {SearchSettings} from "../entities/SearchSettings";
 
 export const USER_LOGOUT = "[USER] LOGOUT";
 export const USER_LOGIN_SUCCESS = "[USER] LOGIN SUCCESS";
+export const USER_SEARCH_SETTINGS_SELECTED_SUCCESS = "[USER] SETTINGS SELECTED SUCCESS";
 
-type LogoutAction = {
+interface LogoutAction {
     type: typeof USER_LOGOUT
 }
-type LoginSuccessAction = {
+
+interface LoginSuccessAction {
     type: typeof USER_LOGIN_SUCCESS,
     username: string,
     isAdmin: boolean
 }
 
-export type UserAction = LoginSuccessAction | LogoutAction;
+interface UserSearchSettingsSelectedSuccessAction {
+    type: typeof USER_SEARCH_SETTINGS_SELECTED_SUCCESS,
+    settings: SearchSettings
+}
+
+export type UserAction = LoginSuccessAction | LogoutAction | UserSearchSettingsSelectedSuccessAction;
 
 export const logoutSuccessAction = (): LogoutAction => ({type: USER_LOGOUT});
+
+export const userSearchSettingsSelectedSuccessAction = (settings: SearchSettings): UserSearchSettingsSelectedSuccessAction => ({
+    type: USER_SEARCH_SETTINGS_SELECTED_SUCCESS,
+    settings
+});
 
 export const logoutRequestAction = (): ThunkResult<void> => dispatch => {
     dispatch(openSnackBar('Logged out'));
@@ -29,6 +42,9 @@ export const loginSuccessAction = (username: string, isAdmin: boolean): LoginSuc
     isAdmin
 });
 
+export const searchSettingsSelectedRequestAction = (settings: SearchSettings): ThunkResult<void> => (dispatch) => {
+    mockUserSettingsSelectedRequest(settings, dispatch);
+};
 
 export const loginRequestAction = (login: string, password: string, onError: (errors: any) => void): ThunkResult<void> => (dispatch) => {
     mockLogin(login, password, dispatch, onError);

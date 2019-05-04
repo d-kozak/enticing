@@ -8,6 +8,7 @@ import Typography from "@material-ui/core/es/Typography";
 import Paper from "@material-ui/core/es/Paper";
 import {UserSettings} from "../../entities/UserSettings";
 import SettingsForm from "./SettingsForm";
+import {SearchSettings} from "../../entities/SearchSettings";
 
 const styles = createStyles({
     root: {
@@ -34,7 +35,7 @@ const styles = createStyles({
 
 
 export interface SettingsHolderProps extends WithStyles<typeof styles> {
-    currentSettings: UserSettings,
+    currentSettings: UserSettings & SearchSettings,
 
     submitForm(newSettings: UserSettings): Promise<{}>,
 }

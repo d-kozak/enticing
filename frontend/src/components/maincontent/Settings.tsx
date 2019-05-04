@@ -3,11 +3,12 @@ import {WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React from 'react';
-import {DefaultUserSettings, UserSettings} from "../../entities/UserSettings";
+import {UserSettings} from "../../entities/UserSettings";
 import DefaultSettingsPicker from "../settings/DefaultSettingsPicker";
 import SettingsHolder from "../settings/SettingsHolder";
 import {AppState} from "../../reducers/RootReducer";
 import {connect} from "react-redux";
+import {SearchSettings} from "../../entities/SearchSettings";
 
 const styles = createStyles({});
 
@@ -30,21 +31,23 @@ const Settings = (props: SettingsProps) => {
     }
 
     const handleSettingsSelected = (index: number) => {
-        alert(`Settings ${defaultSettingsOptions[index].title} selected `);
+        alert(`Settings ${defaultSettingsOptions[index].name} selected `);
     };
 
-    const defaultSettingsOptions: Array<DefaultUserSettings> = [
+    const defaultSettingsOptions: Array<UserSettings & SearchSettings> = [
         {
-            title: 'Basic',
-            description: 'Initial most intuitive config',
+            id: 0,
+            isDefault: true,
+            name: 'Initial most intuitive config',
             annotationDataServer: "server1.com:42/foo",
             annotationServer: "localhost:666",
             resultsPerPage: 42,
             servers: ['localhost:4200']
         },
         {
-            title: 'Fast',
-            description: 'High performance config',
+            id: 1,
+            isDefault: false,
+            name: 'High performance config',
             annotationDataServer: "10.10.10.10:42",
             annotationServer: "192.168.0.25:666",
             resultsPerPage: 42,

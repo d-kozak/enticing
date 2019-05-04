@@ -6,6 +6,8 @@ import {AdminAction} from "./AdminActions";
 import {DialogAction} from "./dialog/DialogActions";
 import {SnackBarAction} from "./SnackBarActions";
 import {ProgressBarAction} from "./ProgressBarActions";
+import {SearchSettingsAction} from "./SearchSettingsActions";
+import {UserSettingsAction} from "./UserSettingsActions";
 
 export type RootAction =
     SearchResultAction
@@ -14,5 +16,7 @@ export type RootAction =
     | DialogAction
     | SnackBarAction
     | ProgressBarAction
+    | SearchSettingsAction
+    | UserSettingsAction;
 
 export type ThunkResult<R> = ThunkAction<R, AppState, undefined, RootAction>

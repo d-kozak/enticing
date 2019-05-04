@@ -3,7 +3,6 @@ import {WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React from 'react';
-import {DefaultUserSettings} from "../../entities/UserSettings";
 import ExpansionPanel from "@material-ui/core/es/ExpansionPanel";
 import Typography from "@material-ui/core/es/Typography";
 import ExpansionPanelDetails from "@material-ui/core/es/ExpansionPanelDetails";
@@ -13,6 +12,8 @@ import Grid from "@material-ui/core/es/Grid";
 import Button from "@material-ui/core/es/Button";
 import Paper from "@material-ui/core/es/Paper";
 import SettingsDetails from "./SettingsDetails";
+import {UserSettings} from "../../entities/UserSettings";
+import {SearchSettings} from "../../entities/SearchSettings";
 
 
 const styles = createStyles({
@@ -39,7 +40,7 @@ const styles = createStyles({
 });
 
 export interface DefaultSettingsPicker extends WithStyles<typeof styles> {
-    defaultSettingsOptions: Array<DefaultUserSettings>,
+    defaultSettingsOptions: Array<UserSettings & SearchSettings>,
     settingsSelected(index: number): void
 }
 
@@ -51,7 +52,7 @@ const DefaultSettingsPicker = (props: DefaultSettingsPicker) => {
             settings</Typography>
         {defaultSettingsOptions.map((settings, index) => <ExpansionPanel key={index}>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-                    <Typography variant="h5">{settings.title} - {settings.description}</Typography>
+                    <Typography variant="h5">{settings.name}</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className={classes.expansionPanelDetails}>
                     <SettingsDetails settings={settings}/>

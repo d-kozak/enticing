@@ -8,6 +8,8 @@ import progressBarReducer from './ProgressBarReducer';
 import adminReducer from "./AdminReducer";
 import dialogReducer from "./dialog/DialogReducer";
 import {StateFromReducers} from "./StateFromReducers";
+import userSettingsReducer from "./UserSettingsReducer";
+import searchSettingsReducer from "./SearchSettingsReducer";
 
 const reducers = {
     user: userReducer,
@@ -15,6 +17,8 @@ const reducers = {
     snackBar: snackBarReducer,
     progressBar: progressBarReducer,
     admin: adminReducer,
+    userSettings: userSettingsReducer,
+    searchSettings: searchSettingsReducer,
     dialog: dialogReducer
 };
 

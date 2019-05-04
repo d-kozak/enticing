@@ -3,13 +3,14 @@ import {Theme, WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
 import {AppState} from "../../reducers/RootReducer";
 import {connect} from "react-redux";
-import {DefaultUserSettings} from "../../entities/UserSettings";
 import React, {useState} from 'react';
 import List from "@material-ui/core/List";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItem from "@material-ui/core/ListItem";
 import Collapse from "@material-ui/core/Collapse";
 import {ExpandLess, ExpandMore} from "@material-ui/icons";
+import {UserSettings} from "../../entities/UserSettings";
+import {SearchSettings} from "../../entities/SearchSettings";
 
 
 const styles = (theme: Theme) => createStyles({});
@@ -19,7 +20,7 @@ type SettingsDetailsProps =
     & ReturnType<typeof mapStateToProps>
     & typeof mapDispatchToProps
     & {
-    settings: DefaultUserSettings
+    settings: UserSettings & SearchSettings
 }
 
 const SettingsDetails = (props: SettingsDetailsProps) => {

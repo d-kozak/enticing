@@ -1,6 +1,6 @@
 import {Dispatch} from "redux";
 import {openSnackBar} from "../actions/SnackBarActions";
-import {loginSuccessAction} from "../actions/UserActions";
+import {loginSuccessAction, userSearchSettingsSelectedSuccessAction} from "../actions/UserActions";
 import {deleteUserSuccessAction, updateUserSuccessAction, usersLoadedAction} from "../actions/AdminActions";
 import {hideProgressBarAction, showProgressBarAction} from "../actions/ProgressBarActions";
 import {User} from "../entities/User";
@@ -14,18 +14,17 @@ import {
     changePasswordDialogHideProgressAction,
     changePasswordDialogShowProgressAction
 } from "../actions/dialog/ChangePasswordDialogActions";
+import {SearchSettings} from "../entities/SearchSettings";
 
 
-interface MockUser {
-    login: string,
+interface MockUser extends User {
     password: string,
-    isAdmin: boolean,
-    isActive: boolean
 }
 
 const mockUsers = new Map<string, MockUser>([
     [
         'user1', {
+        id: 0,
         login: 'user1',
         password: 'user1',
         isActive: true,
@@ -34,6 +33,7 @@ const mockUsers = new Map<string, MockUser>([
     ],
     [
         'passive', {
+        id: 1,
         login: 'passive',
         password: 'passive',
         isActive: false,
@@ -42,6 +42,7 @@ const mockUsers = new Map<string, MockUser>([
     ],
     [
         'admin', {
+        id: 2,
         login: 'admin',
         password: 'admin',
         isActive: true,
@@ -50,12 +51,14 @@ const mockUsers = new Map<string, MockUser>([
     ]
 ]);
 
+let counter = 3
 
 export const mockSignup = (login: string, password: string, dispatch: Dispatch, onError: (error: any) => void) => {
     setTimeout(() => {
         const user = mockUsers.get(login);
         if (!user) {
             mockUsers.set(login, {
+                id: counter++,
                 login,
                 password,
                 isActive: true,
@@ -148,3 +151,11 @@ export const mockChangePassword = (user: User, newPassword: string, dispatch: Di
         dispatch(changePasswordDialogClosedAction());
     }, 2000);
 }
+
+export const mockUserSettingsSelectedRequest = (settings: SearchSettings, dispatch: Dispatch) => {
+    dispatch(showProgressBarAction());
+    setTimeout(() => {
+        dispatch(userSearchSettingsSelectedSuccessAction(settings));
+        dispatch(hideProgressBarAction());
+    }, 2000);
+};

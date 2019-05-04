@@ -12,6 +12,7 @@ import Typography from "@material-ui/core/es/Typography";
 import {Theme} from "@material-ui/core/es";
 import Divider from '@material-ui/core/Divider';
 import Grid from "@material-ui/core/es/Grid";
+import {SearchSettings} from "../../entities/SearchSettings";
 
 
 const styles = (theme: Theme) => createStyles({
@@ -45,8 +46,8 @@ const styles = (theme: Theme) => createStyles({
 
 
 export interface SettingsForm extends WithStyles<typeof styles> {
-    currentSettings: UserSettings,
-    submitForm: (newSettings: UserSettings) => Promise<{}>,
+    currentSettings: UserSettings & SearchSettings,
+    submitForm: (newSettings: UserSettings & SearchSettings) => Promise<{}>,
     setShowProgress: (showProgress: boolean) => void
 }
 
