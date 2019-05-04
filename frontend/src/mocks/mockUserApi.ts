@@ -15,6 +15,8 @@ import {
     changePasswordDialogShowProgressAction
 } from "../actions/dialog/ChangePasswordDialogActions";
 import {SearchSettings} from "../entities/SearchSettings";
+import {userSettingsLoadedAction, userSettingsUpdatedAction} from "../actions/UserSettingsActions";
+import {UserSettings} from "../entities/UserSettings";
 
 
 interface MockUser extends User {
@@ -156,6 +158,26 @@ export const mockUserSettingsSelectedRequest = (settings: SearchSettings, dispat
     dispatch(showProgressBarAction());
     setTimeout(() => {
         dispatch(userSearchSettingsSelectedSuccessAction(settings));
+        dispatch(hideProgressBarAction());
+    }, 2000);
+};
+
+export const mockUserSettingsRequest = (dispatch: Dispatch) => {
+    dispatch(showProgressBarAction());
+    setTimeout(() => {
+        dispatch(userSettingsLoadedAction({
+            resultsPerPage: 42
+        }));
+        dispatch(hideProgressBarAction());
+    }, 2000);
+};
+
+export const mockUserSettingsUpdate = (dispatch: Dispatch, settings: UserSettings, oneDone: () => void) => {
+    dispatch(showProgressBarAction());
+    setTimeout(() => {
+        dispatch(userSettingsUpdatedAction(settings));
+        oneDone();
+        dispatch(openSnackBar('User settings updated'));
         dispatch(hideProgressBarAction());
     }, 2000);
 };

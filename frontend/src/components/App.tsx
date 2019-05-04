@@ -9,12 +9,12 @@ import UnknownRoute from "./maincontent/UnknownRoute";
 import SignUp from "./maincontent/SignUp";
 import SearchPage from "./maincontent/SearchPage";
 import MainPage from "./maincontent/MainPage";
-import Settings from "./maincontent/Settings";
 import UserManagement from "./maincontent/UserManagement";
 import AdminRoute from "./routes/AdminRoute";
 import {openSnackBar} from "../actions/SnackBarActions";
 import {connect} from "react-redux";
 import {AppState} from "../reducers/RootReducer";
+import UserSettings from "./maincontent/UserSettings";
 
 type AppProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>
 
@@ -34,7 +34,7 @@ const App = ({showSnackBarMessage, isAdmin, progressBarVisible}: AppProps) => {
                        render={({history, location}) => <SearchPage history={history} location={location}/>}/>
                 <Route path="/login" render={({}) => <Login/>}/>
                 <Route path="/signup" render={() => <SignUp/>}/>
-                <Route path="/settings" render={() => <Settings/>}/>
+                <Route path="/settings" render={() => <UserSettings/>}/>
                 <AdminRoute path="/users" isAdmin={isAdmin} showSnackBarMessage={showSnackBarMessage}
                             render={() => <UserManagement/>}/>
                 <Route path="/:path" render={({match}) => <UnknownRoute path={match.params.path}/>}/>
