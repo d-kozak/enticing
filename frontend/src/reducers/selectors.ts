@@ -1,6 +1,10 @@
-import {SearchSettings} from "../entities/SearchSettings";
+import {createSelector} from "reselect";
+import {AppState} from "./RootReducer";
 
-export const selectedSearchSettingsIndex = (searchSettings: Array<SearchSettings>, selectedSettings: number | null): number => {
+const searchSettingsSelector = (state: AppState) => state.searchSettings.settings;
+const selectedSettingsSelector = (state: AppState) => state.user.selectedSettings;
+
+export const selectedSearchSettingsIndexSelector = createSelector(searchSettingsSelector, selectedSettingsSelector, (searchSettings, selectedSettings) => {
     if (selectedSettings == null) {
         for (let i in searchSettings) {
             if (searchSettings[i].isDefault) {
@@ -15,4 +19,4 @@ export const selectedSearchSettingsIndex = (searchSettings: Array<SearchSettings
         }
     }
     return 0
-};
+});

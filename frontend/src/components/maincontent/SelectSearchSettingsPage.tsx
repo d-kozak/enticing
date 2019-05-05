@@ -16,7 +16,7 @@ import {AppState} from "../../reducers/RootReducer";
 import {searchSettingsSelectedRequestAction} from "../../actions/UserActions";
 import {SearchSettings} from "../../entities/SearchSettings";
 import {connect} from "react-redux";
-import {selectedSearchSettingsIndex} from "../../reducers/selectors";
+import {selectedSearchSettingsIndexSelector} from "../../reducers/selectors";
 import Chip from "@material-ui/core/Chip";
 import DoneIcon from '@material-ui/icons/Done';
 
@@ -83,7 +83,7 @@ const SelectSearchSettingsPage = (props: SelectSearchSettingsPageProps) => {
 
 const mapStateToProps = (state: AppState) => ({
     searchSettings: state.searchSettings.settings,
-    selectedSearchSettingsIndex: selectedSearchSettingsIndex(state.searchSettings.settings, state.user.selectedSettings)
+    selectedSearchSettingsIndex: selectedSearchSettingsIndexSelector(state)
 });
 const mapDispatchToProps = {
     selectSearchSettings: searchSettingsSelectedRequestAction as (settings: SearchSettings) => void

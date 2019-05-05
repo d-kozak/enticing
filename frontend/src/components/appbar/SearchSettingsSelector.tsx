@@ -13,7 +13,7 @@ import Typography from "@material-ui/core/Typography";
 import {SearchSettings} from "../../entities/SearchSettings";
 import {searchSettingsSelectedRequestAction} from "../../actions/UserActions";
 import LinkTo from "../utils/linkTo";
-import {selectedSearchSettingsIndex} from "../../reducers/selectors";
+import {selectedSearchSettingsIndexSelector} from "../../reducers/selectors";
 
 
 const styles = (theme: Theme) => createStyles({
@@ -80,7 +80,7 @@ const SearchSettingsSelector = (props: SearchSettingsSelectorProps) => {
 
 const mapStateToProps = (state: AppState) => ({
     searchSettings: state.searchSettings.settings,
-    selectedSearchSettingsIndex: selectedSearchSettingsIndex(state.searchSettings.settings, state.user.selectedSettings)
+    selectedSearchSettingsIndex: selectedSearchSettingsIndexSelector(state)
 });
 const mapDispatchToProps = {
     selectSearchSettings: searchSettingsSelectedRequestAction as (settings: SearchSettings) => void
