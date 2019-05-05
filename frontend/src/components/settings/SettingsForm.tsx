@@ -3,16 +3,18 @@ import {WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React from 'react';
-import {UserSettings} from "../../entities/UserSettings";
 import {Field, FieldArray, Form, Formik} from "formik";
 import * as Yup from 'yup';
 import {TextField} from "formik-material-ui";
-import Button from "@material-ui/core/es/Button";
+import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/es/Typography";
 import {Theme} from "@material-ui/core/es";
 import Divider from '@material-ui/core/Divider';
 import Grid from "@material-ui/core/es/Grid";
 import {SearchSettings} from "../../entities/SearchSettings";
+import {AppState} from "../../reducers/RootReducer";
+import {updateSearchSettingsRequestAction} from "../../actions/SearchSettingsActions";
+import {connect} from "react-redux";
 
 
 const styles = (theme: Theme) => createStyles({
@@ -45,10 +47,12 @@ const styles = (theme: Theme) => createStyles({
 });
 
 
-export interface SettingsForm extends WithStyles<typeof styles> {
-    currentSettings: UserSettings & SearchSettings,
-    submitForm: (newSettings: UserSettings & SearchSettings) => Promise<{}>,
-    setShowProgress: (showProgress: boolean) => void
+export type SettingsFormProps =
+    WithStyles<typeof styles>
+    & ReturnType<typeof mapStateToProps>
+    & typeof mapDispatchToProps
+    & {
+    settings: SearchSettings
 }
 
 // TODO try to find simpler regexes, if possible
@@ -58,10 +62,7 @@ const ipAddressFail = 'Please provide a valid ip address';
 const urlRegex = /((([-\w]+\.)+[\w-]+)|((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))|localhost)(:\d+)?([\w-/]*)$/;
 const urlRegexFail = 'Please provide a valid url';
 
-const SettingsSchema = Yup.object({
-    'resultsPerPage': Yup.number()
-        .positive('Results per page should be a positive number')
-        .required('Please specify results per page'),
+const SettingsSchema = Yup.object().shape({
     'annotationDataServer': Yup.string()
         .matches(urlRegex, urlRegexFail)
         .required('URL is required'),
@@ -71,29 +72,22 @@ const SettingsSchema = Yup.object({
     'servers': Yup.array(Yup.string()
         .matches(ipAddressRegex, ipAddressFail))
         .min(1)
-
 });
 
-const SettingsForm = (props: SettingsForm) => {
-    const {submitForm, currentSettings, setShowProgress, classes} = props;
+const SettingsForm = (props: SettingsFormProps) => {
+    const {updateSettings, settings, classes} = props;
 
     return <Formik
-        initialValues={currentSettings}
+        initialValues={settings}
         validationSchema={SettingsSchema}
         onSubmit={(values, actions) => {
-            setShowProgress(true);
-            submitForm(values)
-                .then(() => {
-                    actions.setSubmitting(false);
-                    setShowProgress(false);
-                    alert('submit');
-                })
-                .catch(errors => {
-                    actions.setErrors(errors);
-                    actions.setSubmitting(false);
-                    setShowProgress(false);
-                    alert('fail');
-                })
+            console.log('submit');
+            updateSettings(values, () => {
+                actions.setSubmitting(false);
+            }, (errors) => {
+                actions.setErrors(errors);
+                actions.setSubmitting(false);
+            });
         }}>
         {({isSubmitting, values, errors}) =>
             <Form className={classes.formContent}>
@@ -130,18 +124,10 @@ const SettingsForm = (props: SettingsForm) => {
                     }/>
                 </div>
 
-                <Divider/>
-                <div className={classes.settingsSection}>
-                    <Typography variant="h5" className={classes.sectionTitle}>Others</Typography>
-                    <Field variant="outlined" label="Results per page" name="resultsPerPage"
-                           component={TextField}
-                           type="number" className={classes.textField}/>
-                </div>
-
                 <Grid container justify="flex-end" alignItems="center">
                     <Grid item>
                         <Button variant="contained" color="primary" type="submit"
-                                disabled={isSubmitting}>Submit</Button>
+                                disabled={isSubmitting}>Save</Button>
                     </Grid>
                 </Grid>
             </Form>
@@ -149,6 +135,11 @@ const SettingsForm = (props: SettingsForm) => {
     </Formik>
 };
 
+const mapStateToProps = (state: AppState) => ({});
+const mapDispatchToProps = {
+    updateSettings: updateSearchSettingsRequestAction as (newSettings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void
+};
+
 export default withStyles(styles, {
     withTheme: true
-})(SettingsForm)
+})(connect(mapStateToProps, mapDispatchToProps)(SettingsForm))

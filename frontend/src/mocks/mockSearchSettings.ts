@@ -1,7 +1,7 @@
 import {SearchSettings} from "../entities/SearchSettings";
 import {Dispatch} from "redux";
 import {hideProgressBarAction, showProgressBarAction} from "../actions/ProgressBarActions";
-import {searchSettingsLoadedAction} from "../actions/SearchSettingsActions";
+import {searchSettingsLoadedAction, searchSettingsUpdatedAction} from "../actions/SearchSettingsActions";
 import {openSnackBar} from "../actions/SnackBarActions";
 
 const searchSettings: Array<SearchSettings> = [
@@ -11,7 +11,7 @@ const searchSettings: Array<SearchSettings> = [
         name: 'Test index',
         annotationDataServer: "server1.com:42/test",
         annotationServer: "localhost:666",
-        servers: ['test.com:4200']
+        servers: ['10.10.10.10']
     },
     {
         id: 1,
@@ -31,11 +31,22 @@ const searchSettings: Array<SearchSettings> = [
     }
 ];
 
-export const mockLoadSettings = (dispatch: Dispatch) => {
+export const mockLoadSearchSettings = (dispatch: Dispatch) => {
     dispatch(showProgressBarAction());
     setTimeout(() => {
         dispatch(searchSettingsLoadedAction(searchSettings));
         dispatch(openSnackBar('Configurations loaded'));
         dispatch(hideProgressBarAction());
+    }, 2000);
+}
+
+export const mockUpdateSearchSettings = (dispatch: Dispatch, newSettings: SearchSettings, onDone: () => void) => {
+    console.log('here');
+    dispatch(showProgressBarAction());
+    setTimeout(() => {
+        dispatch(searchSettingsUpdatedAction(newSettings))
+        dispatch(openSnackBar(`Search settings ${newSettings.name} updated`));
+        dispatch(hideProgressBarAction());
+        onDone();
     }, 2000);
 }

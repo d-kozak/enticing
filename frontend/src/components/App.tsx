@@ -16,7 +16,7 @@ import {connect} from "react-redux";
 import {AppState} from "../reducers/RootReducer";
 import UserSettings from "./maincontent/UserSettings";
 import {loadSearchSettingsAction} from "../actions/SearchSettingsActions";
-import SelectSearchSettingsPage from "./maincontent/SelectSearchSettingsPage";
+import SelectSearchSettingsPage from "./maincontent/SearchSettingsPage";
 
 type AppProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>
 

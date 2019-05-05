@@ -29,7 +29,7 @@ type SearchSettingsSelectorProps =
     & {}
 
 const SearchSettingsSelector = (props: SearchSettingsSelectorProps) => {
-    const {classes, searchSettings, selectSearchSettings, selectedSearchSettingsIndex} = props;
+    const {classes, isAdmin, searchSettings, selectSearchSettings, selectedSearchSettingsIndex} = props;
 
     const [anchorElem, setAnchorElem] = useState<HTMLElement | null>(null)
 
@@ -71,7 +71,7 @@ const SearchSettingsSelector = (props: SearchSettingsSelectorProps) => {
                 </MenuItem>
             ))}
             <MenuItem onClick={() => setAnchorElem(null)} component={LinkTo("/search-settings")}>
-                Show details
+                {isAdmin ? 'Edit settings' : 'Show details'}
             </MenuItem>
         </Menu>
     </div>
@@ -79,6 +79,7 @@ const SearchSettingsSelector = (props: SearchSettingsSelectorProps) => {
 
 
 const mapStateToProps = (state: AppState) => ({
+    isAdmin: state.user.isAdmin,
     searchSettings: state.searchSettings.settings,
     selectedSearchSettingsIndex: selectedSearchSettingsIndexSelector(state)
 });

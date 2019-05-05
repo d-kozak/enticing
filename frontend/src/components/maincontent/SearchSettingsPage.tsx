@@ -19,6 +19,7 @@ import {connect} from "react-redux";
 import {selectedSearchSettingsIndexSelector} from "../../reducers/selectors";
 import Chip from "@material-ui/core/Chip";
 import DoneIcon from '@material-ui/icons/Done';
+import SettingsForm from "../settings/SettingsForm";
 
 const styles = (theme: Theme) => createStyles({
     rootElement: {
@@ -38,22 +39,19 @@ const styles = (theme: Theme) => createStyles({
         margin: '15px',
         textAlign: 'center'
     },
-    settingsText: {
-        margin: '5px'
-    },
     chip: {
         margin: '0px 5px',
     },
 });
 
-export type SelectSearchSettingsPageProps =
+export type SearchSettingsPageProps =
     WithStyles<typeof styles>
     & ReturnType<typeof mapStateToProps>
     & typeof mapDispatchToProps
     & {}
 
-const SelectSearchSettingsPage = (props: SelectSearchSettingsPageProps) => {
-    const {classes, searchSettings, selectSearchSettings, selectedSearchSettingsIndex} = props;
+const SearchSettingsPage = (props: SearchSettingsPageProps) => {
+    const {classes, searchSettings, selectSearchSettings, selectedSearchSettingsIndex, isAdmin} = props;
     return <Paper className={classes.rootElement}>
         <Typography variant="h2" className={classes.settingsTitle}>Search Settings</Typography>
         {searchSettings.map((settings, index) => <ExpansionPanel key={index}>
@@ -67,7 +65,7 @@ const SelectSearchSettingsPage = (props: SelectSearchSettingsPageProps) => {
                     />}
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className={classes.expansionPanelDetails}>
-                    <SettingsDetails settings={settings}/>
+                    {isAdmin ? <SettingsForm settings={settings}/> : <SettingsDetails settings={settings}/>}
                     <Grid container justify="flex-end" alignItems="center">
                         <Grid item>
                             <Button disabled={index === selectedSearchSettingsIndex}
@@ -82,6 +80,7 @@ const SelectSearchSettingsPage = (props: SelectSearchSettingsPageProps) => {
 };
 
 const mapStateToProps = (state: AppState) => ({
+    isAdmin: state.user.isAdmin,
     searchSettings: state.searchSettings.settings,
     selectedSearchSettingsIndex: selectedSearchSettingsIndexSelector(state)
 });
@@ -91,4 +90,4 @@ const mapDispatchToProps = {
 
 export default withStyles(styles, {
     withTheme: true
-})(connect(mapStateToProps, mapDispatchToProps)(SelectSearchSettingsPage))
+})(connect(mapStateToProps, mapDispatchToProps)(SearchSettingsPage))
