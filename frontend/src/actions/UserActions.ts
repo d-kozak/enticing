@@ -1,6 +1,7 @@
 import {ThunkResult} from "./RootActions";
 import {mockLogin, mockLogout, mockSignup, mockUserSettingsSelectedRequest} from "../mocks/mockUserApi";
 import {SearchSettings} from "../entities/SearchSettings";
+import {User} from "../entities/User";
 
 export const USER_LOGOUT = "[USER] LOGOUT";
 export const USER_LOGIN_SUCCESS = "[USER] LOGIN SUCCESS";
@@ -12,8 +13,7 @@ interface LogoutAction {
 
 interface LoginSuccessAction {
     type: typeof USER_LOGIN_SUCCESS,
-    username: string,
-    isAdmin: boolean
+    user: User
 }
 
 interface UserSearchSettingsSelectedSuccessAction {
@@ -34,10 +34,9 @@ export const logoutRequestAction = (): ThunkResult<void> => dispatch => {
     mockLogout(dispatch);
 };
 
-export const loginSuccessAction = (username: string, isAdmin: boolean): LoginSuccessAction => ({
+export const loginSuccessAction = (user: User): LoginSuccessAction => ({
     type: USER_LOGIN_SUCCESS,
-    username,
-    isAdmin
+    user
 });
 
 export const searchSettingsSelectedRequestAction = (settings: SearchSettings): ThunkResult<void> => (dispatch) => {

@@ -17,6 +17,7 @@ import {AppState} from "../reducers/RootReducer";
 import UserSettings from "./maincontent/UserSettings";
 import {loadSearchSettingsAction} from "../actions/SearchSettingsActions";
 import SelectSearchSettingsPage from "./maincontent/SearchSettingsPage";
+import {isAdminSelector} from "../reducers/selectors";
 
 type AppProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>
 
@@ -55,7 +56,7 @@ const App = ({loadSearchSettings, showSnackBarMessage, isAdmin, progressBarVisib
 
 
 const mapStateToProps = (state: AppState) => ({
-    isAdmin: state.user.isAdmin,
+    isAdmin: isAdminSelector(state),
     progressBarVisible: state.progressBar.isVisible
 })
 const mapDispatchToProps = {

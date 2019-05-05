@@ -31,7 +31,8 @@ const mockUsers = new Map<string, MockUser>([
         login: 'user1',
         password: 'user1',
         isActive: true,
-        isAdmin: false
+        isAdmin: false,
+        selectedSettings: null
     }
     ],
     [
@@ -40,7 +41,8 @@ const mockUsers = new Map<string, MockUser>([
         login: 'passive',
         password: 'passive',
         isActive: false,
-        isAdmin: false
+        isAdmin: false,
+        selectedSettings: null
     }
     ],
     [
@@ -49,7 +51,8 @@ const mockUsers = new Map<string, MockUser>([
         login: 'admin',
         password: 'admin',
         isActive: true,
-        isAdmin: true
+        isAdmin: true,
+        selectedSettings: null
     }
     ]
 ]);
@@ -60,15 +63,17 @@ export const mockSignup = (login: string, password: string, dispatch: Dispatch, 
     setTimeout(() => {
         const user = mockUsers.get(login);
         if (!user) {
-            mockUsers.set(login, {
+            const newUser = {
                 id: counter++,
                 login,
                 password,
                 isActive: true,
-                isAdmin: false
-            });
+                isAdmin: false,
+                selectedSettings: null
+            };
+            mockUsers.set(login, newUser);
             dispatch(openSnackBar('Signed up successfully'))
-            dispatch(loginSuccessAction(login, false))
+            dispatch(loginSuccessAction(newUser))
         } else {
             onError({
                 login: 'This login is already taken'
@@ -89,7 +94,7 @@ export const mockLogin = (login: string, password: string, dispatch: Dispatch, o
                 // @ts-ignore
                 dispatch(loadSearchSettingsAction(user.isAdmin));
 
-                dispatch(loginSuccessAction(login, user.isAdmin));
+                dispatch(loginSuccessAction(user));
             } else {
                 onError({password: 'Invalid password'});
             }

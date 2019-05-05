@@ -1,8 +1,22 @@
 import {createSelector} from "reselect";
 import {AppState} from "./RootReducer";
 
+export const isAdminSelector = (state: AppState) => {
+    if (state.userState.user !== null) {
+        return state.userState.user.isAdmin;
+    }
+    return false;
+}
+
+export const isLoggedInSelector = (state: AppState) => state.userState.user !== null
+
 const searchSettingsSelector = (state: AppState) => state.searchSettings.settings;
-const selectedSettingsSelector = (state: AppState) => state.user.selectedSettings;
+
+const selectedSettingsSelector = (state: AppState) => {
+    if (state.userState.user !== null) {
+        return state.userState.user.selectedSettings;
+    } else return null;
+}
 
 export const selectedSearchSettingsIndexSelector = createSelector(searchSettingsSelector, selectedSettingsSelector, (searchSettings, selectedSettings) => {
     if (selectedSettings == null) {

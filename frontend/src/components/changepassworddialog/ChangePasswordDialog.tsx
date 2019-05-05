@@ -25,7 +25,7 @@ const styles = createStyles({
     }
 });
 
-export type DeleteUserDialogProps =
+export type ChangePasswordDialogProps =
     WithStyles<typeof styles>
     & typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
@@ -49,7 +49,7 @@ const changePasswordValidation = Yup.object({
         .oneOf([Yup.ref('password'), null], 'Passwords do not match')
 });
 
-const DeleteUserDialog = (props: DeleteUserDialogProps) => {
+const ChangePasswordDialog = (props: ChangePasswordDialogProps) => {
     const {user, changePassword, onClose, showProgress, classes} = props;
     return <div>
         <Dialog
@@ -100,4 +100,4 @@ const mapDispatchToProps = {
     onClose: changePasswordDialogClosedAction,
 };
 
-export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(DeleteUserDialog));
+export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(ChangePasswordDialog));

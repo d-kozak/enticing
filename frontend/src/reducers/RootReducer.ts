@@ -12,7 +12,7 @@ import userSettingsReducer from "./UserSettingsReducer";
 import searchSettingsReducer from "./SearchSettingsReducer";
 
 const reducers = {
-    user: userReducer,
+    userState: userReducer,
     searchResults: searchResultReducer,
     snackBar: snackBarReducer,
     progressBar: progressBarReducer,

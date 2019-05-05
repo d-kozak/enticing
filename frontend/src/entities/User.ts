@@ -3,4 +3,5 @@ export interface User {
     login: string,
     isActive: boolean,
     isAdmin: boolean,
+    selectedSettings: number | null
 }

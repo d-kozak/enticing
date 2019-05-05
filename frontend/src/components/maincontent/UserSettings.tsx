@@ -14,6 +14,10 @@ import {UserSettings as UserSettingsModel} from "../../entities/UserSettings";
 import {TextField} from "formik-material-ui";
 import Grid from "@material-ui/core/es/Grid";
 import Button from "@material-ui/core/es/Button";
+import ChangePasswordDialog from "../changepassworddialog/ChangePasswordDialog";
+import {changePasswordDialogOpenAction} from "../../actions/dialog/ChangePasswordDialogActions";
+import {changePasswordAction} from "../../actions/AdminActions";
+import {User} from "../../entities/User";
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -43,7 +47,7 @@ const schema = Yup.object({
 });
 
 const UserSettings = (props: UserSettingsProps) => {
-    const {classes, userSettings, updateUserSettings} = props;
+    const {classes, userSettings, updateUserSettings, openChangePasswordDialog, changePassword} = props;
     return <Paper className={classes.root}>
         <Typography variant="h3" className={classes.title}>User settings</Typography>
         <Formik
@@ -71,6 +75,7 @@ const UserSettings = (props: UserSettingsProps) => {
                 </Form>
             }
         </Formik>
+        <ChangePasswordDialog changePassword={changePassword}/>
     </Paper>
 };
 
@@ -79,6 +84,8 @@ const mapStateToProps = (state: AppState) => ({
     userSettings: state.userSettings
 });
 const mapDispatchToProps = {
+    openChangePasswordDialog: changePasswordDialogOpenAction,
+    changePassword: changePasswordAction as (user: User, newPassword: string) => void,
     updateUserSettings: userSettingsUpdateRequestAction as (settings: UserSettingsModel, onDone: () => void, onError: () => void) => void
 };
 

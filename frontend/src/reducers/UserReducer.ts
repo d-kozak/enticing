@@ -4,11 +4,10 @@ import {
     USER_SEARCH_SETTINGS_SELECTED_SUCCESS,
     UserAction
 } from "../actions/UserActions";
+import {User} from "../entities/User";
 
 const initialState = {
-    isLoggedIn: false,
-    isAdmin: false,
-    selectedSettings: null as number | null
+    user: null as User | null
 }
 
 export type UserState = Readonly<typeof initialState>
@@ -19,17 +18,10 @@ const userReducer: UserReducer = (state = initialState, action) => {
     switch (action.type) {
         case USER_LOGIN_SUCCESS:
             return {
-                ...state,
-                isLoggedIn: true,
-                isAdmin: action.isAdmin
+                user: action.user
             }
-
         case USER_LOGOUT:
-            return {
-                ...state,
-                isLoggedIn: false,
-                isAdmin: false
-            }
+            return {user: null}
         case USER_SEARCH_SETTINGS_SELECTED_SUCCESS:
             return {
                 ...state,

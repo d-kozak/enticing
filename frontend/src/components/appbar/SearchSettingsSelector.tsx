@@ -13,7 +13,7 @@ import Typography from "@material-ui/core/Typography";
 import {SearchSettings} from "../../entities/SearchSettings";
 import {searchSettingsSelectedRequestAction} from "../../actions/UserActions";
 import LinkTo from "../utils/linkTo";
-import {selectedSearchSettingsIndexSelector} from "../../reducers/selectors";
+import {isAdminSelector, selectedSearchSettingsIndexSelector} from "../../reducers/selectors";
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import EditIcon from '@material-ui/icons/Edit';
 import InfoIcon from '@material-ui/icons/Info';
@@ -93,7 +93,7 @@ const SearchSettingsSelector = (props: SearchSettingsSelectorProps) => {
 
 
 const mapStateToProps = (state: AppState) => ({
-    isAdmin: state.user.isAdmin,
+    isAdmin: isAdminSelector(state),
     searchSettings: state.searchSettings.settings,
     selectedSearchSettingsIndex: selectedSearchSettingsIndexSelector(state)
 });

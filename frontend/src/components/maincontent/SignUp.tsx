@@ -13,6 +13,7 @@ import Typography from "@material-ui/core/Typography";
 import {AppState} from "../../reducers/RootReducer";
 import {signUpAction} from "../../actions/UserActions";
 import {connect} from "react-redux";
+import {isLoggedInSelector} from "../../reducers/selectors";
 
 const styles = createStyles({
     mainElement: {
@@ -109,7 +110,7 @@ const SignUp = (props: SignUpProps) => {
 
 
 const mapStateToProps = (state: AppState) => ({
-    isLoggedIn: state.user.isLoggedIn
+    isLoggedIn: isLoggedInSelector(state)
 })
 
 const mapDispatchToProps = {
