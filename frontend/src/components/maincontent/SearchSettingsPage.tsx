@@ -81,6 +81,7 @@ const SearchSettingsPage = (props: SearchSettingsPageProps) => {
                         className={classes.chip}
                         color="secondary"
                     />}
+                    {settings.isDefault && <Chip label="Default" className={classes.chip}/>}
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className={classes.expansionPanelDetails}>
                     {isAdmin ? <SettingsForm settings={settings}/> : <SettingsDetails settings={settings}/>}

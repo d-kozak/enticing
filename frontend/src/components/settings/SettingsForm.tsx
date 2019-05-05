@@ -1,6 +1,5 @@
 import createStyles from "@material-ui/core/es/styles/createStyles";
 import {WithStyles} from "@material-ui/core";
-import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React, {useState} from 'react';
 import {Field, FieldArray, Form, Formik} from "formik";
@@ -12,12 +11,6 @@ import {Theme} from "@material-ui/core/es";
 import Divider from '@material-ui/core/Divider';
 import Grid from "@material-ui/core/es/Grid";
 import {SearchSettings} from "../../entities/SearchSettings";
-import {AppState} from "../../reducers/RootReducer";
-import {
-    removeSearchSettingsRequestAction,
-    updateSearchSettingsRequestAction
-} from "../../actions/SearchSettingsActions";
-import {connect} from "react-redux";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -90,7 +83,7 @@ const SettingsSchema = Yup.object().shape({
 });
 
 const SettingsForm = (props: SettingsFormProps) => {
-    const {updateSettings, settings, classes, removeSettings} = props;
+    const {updateSettings, makeDefault, settings, classes, removeSettings} = props;
 
     const [showProgress, setShowProgress] = useState(false);
 
@@ -172,18 +165,29 @@ const SettingsForm = (props: SettingsFormProps) => {
                             Delete
                         </Button>
                     </Grid>
-                </Grid>
-            </Form>
-        }
-    </Formik>
+                    {!settings.isDefault && <Grid item>
+                        <Button
+                            onClick={() => {
+                                setShowProgress(true);
+                                makeDefault(settings, () => setShowProgress(false), () => setShowProgress(false));
+                            }}
+                                className={classes.formButton} color="primary">
+                                Make default
+                                </Button>
+                                </Grid>}
+                                </Grid>
+                                </Form>
+                                }
+                                </Formik>
 };
 
-const mapStateToProps = (state: AppState) => ({});
+                                const mapStateToProps = (state: AppState) => ({});
 const mapDispatchToProps = {
-    updateSettings: updateSearchSettingsRequestAction as (newSettings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void,
-    removeSettings: removeSearchSettingsRequestAction as (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void
+                                updateSettings: updateSearchSettingsRequestAction as (newSettings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void,
+                                removeSettings: removeSearchSettingsRequestAction as (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void,
+                                makeDefault: changeDefaultSearchSettingsRequestAction as (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void
 };
 
-export default withStyles(styles, {
-    withTheme: true
+                                export default withStyles(styles, {
+                                withTheme: true
 })(connect(mapStateToProps, mapDispatchToProps)(SettingsForm))

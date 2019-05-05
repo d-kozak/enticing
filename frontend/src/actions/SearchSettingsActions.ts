@@ -2,6 +2,7 @@ import {SearchSettings} from "../entities/SearchSettings";
 import {ThunkResult} from "./RootActions";
 import {
     mockAddSearchSettings,
+    mockChangeDefaultSearchSettings,
     mockLoadSearchSettings,
     mockRemoveSearchSettings,
     mockUpdateSearchSettings
@@ -11,6 +12,7 @@ export const SEARCH_SETTINGS_LOADED = "[SEARCH SETTINGS] LOADED";
 export const SEARCH_SETTINGS_ADDED = "[SEARCH SETTINGS] ADDED";
 export const SEARCH_SETTINGS_UPDATED = "[SEARCH SETTINGS] UPDATED";
 export const SEARCH_SETTINGS_REMOVED = "[SEARCH SETTINGS] REMOVED";
+export const SEARCH_SETTINGS_NEW_DEFAULT = "[SEARCH SETTINGS] NEW DEFAULT";
 
 interface SearchSettingsLoadedAction {
     type: typeof SEARCH_SETTINGS_LOADED,
@@ -32,11 +34,17 @@ interface SearchSettingsRemovedAction {
     settings: SearchSettings
 }
 
+interface SearchSettingsNewDefaultAction {
+    type: typeof SEARCH_SETTINGS_NEW_DEFAULT,
+    settings: SearchSettings
+}
+
 export type SearchSettingsAction =
     SearchSettingsLoadedAction
     | SearchSettingsAddedAction
     | SearchSettingsUpdatedAction
-    | SearchSettingsRemovedAction;
+    | SearchSettingsRemovedAction
+    | SearchSettingsNewDefaultAction;
 
 export const searchSettingsLoadedAction = (settings: Array<SearchSettings>): SearchSettingsLoadedAction => ({
     type: SEARCH_SETTINGS_LOADED,
@@ -58,6 +66,11 @@ export const searchSettingsRemovedAction = (settings: SearchSettings): SearchSet
     settings
 });
 
+export const searchSettingsNewDefaultAction = (settings: SearchSettings): SearchSettingsNewDefaultAction => ({
+    type: SEARCH_SETTINGS_NEW_DEFAULT,
+    settings
+});
+
 export const loadSearchSettingsAction = (isAdmin: boolean): ThunkResult<void> => (dispatch) => {
     mockLoadSearchSettings(dispatch, isAdmin)
 }
@@ -72,6 +85,11 @@ export const addSearchSettingsRequestAction = (): ThunkResult<void> => (dispatch
 
 export const removeSearchSettingsRequestAction = (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void): ThunkResult<void> => (dispatch) => {
     mockRemoveSearchSettings(dispatch, settings, onDone);
+};
+
+
+export const changeDefaultSearchSettingsRequestAction = (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void): ThunkResult<void> => (dispatch) => {
+    mockChangeDefaultSearchSettings(dispatch, settings, onDone);
 };
 
 

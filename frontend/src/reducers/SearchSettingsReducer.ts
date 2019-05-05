@@ -1,6 +1,7 @@
 import {
     SEARCH_SETTINGS_ADDED,
     SEARCH_SETTINGS_LOADED,
+    SEARCH_SETTINGS_NEW_DEFAULT,
     SEARCH_SETTINGS_REMOVED,
     SEARCH_SETTINGS_UPDATED,
     SearchSettingsAction
@@ -33,6 +34,10 @@ const searchSettingsReducer: SearchSettingsReducer = (state = initialState, acti
             return {
                 settings: state.settings.filter(item => item.id != action.settings.id)
             };
+        case SEARCH_SETTINGS_NEW_DEFAULT:
+            return {
+                settings: state.settings.map(item => ({...item, isDefault: item.id === action.settings.id}))
+            }
     }
     return state;
 };

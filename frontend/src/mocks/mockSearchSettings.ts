@@ -4,6 +4,7 @@ import {hideProgressBarAction, showProgressBarAction} from "../actions/ProgressB
 import {
     searchSettingsAddedAction,
     searchSettingsLoadedAction,
+    searchSettingsNewDefaultAction,
     searchSettingsRemovedAction,
     searchSettingsUpdatedAction
 } from "../actions/SearchSettingsActions";
@@ -64,6 +65,15 @@ export const mockRemoveSearchSettings = (dispatch: Dispatch, newSettings: Search
         onDone();
     }, 2000);
 }
+
+export const mockChangeDefaultSearchSettings = (dispatch: Dispatch, settings: SearchSettings, onDone: () => void) => {
+    setTimeout(() => {
+        dispatch(searchSettingsNewDefaultAction(settings))
+        dispatch(openSnackBar(`Search settings ${settings.name} were made default`));
+        onDone();
+    }, 2000);
+}
+
 
 let counter = 3;
 
