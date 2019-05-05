@@ -20,6 +20,7 @@ import {selectedSearchSettingsIndexSelector} from "../../reducers/selectors";
 import Chip from "@material-ui/core/Chip";
 import DoneIcon from '@material-ui/icons/Done';
 import SettingsForm from "../settings/SettingsForm";
+import {addSearchSettingsRequestAction} from "../../actions/SearchSettingsActions";
 
 const styles = (theme: Theme) => createStyles({
     rootElement: {
@@ -57,10 +58,10 @@ export type SearchSettingsPageProps =
     & {}
 
 const SearchSettingsPage = (props: SearchSettingsPageProps) => {
-    const {classes, searchSettings, selectSearchSettings, selectedSearchSettingsIndex, isAdmin} = props;
+    const {classes, searchSettings, selectSearchSettings, selectedSearchSettingsIndex, addSearchSettings, isAdmin} = props;
     return <Paper className={classes.rootElement}>
         <Typography variant="h2" className={classes.settingsTitle}>Search Settings</Typography>
-        {searchSettings.map((settings, index) => <ExpansionPanel key={index}>
+        {searchSettings.map((settings, index) => <ExpansionPanel key={settings.id}>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
                     <Typography variant="h5">{settings.name}</Typography>
                     {index === selectedSearchSettingsIndex && <Chip
@@ -81,13 +82,19 @@ const SearchSettingsPage = (props: SearchSettingsPageProps) => {
                         <Grid item>
                             <Button
                                 disabled={index === selectedSearchSettingsIndex}
-                                    onClick={() => selectSearchSettings(settings)} variant="contained" color="primary"
-                                    type="submit">{index !== selectedSearchSettingsIndex ? 'Select' : 'Already selected'}</Button>
+                                onClick={() => selectSearchSettings(settings)} variant="contained" color="primary"
+                                type="submit">{index !== selectedSearchSettingsIndex ? 'Select' : 'Already selected'}</Button>
                         </Grid>
                     </Grid>
                 </ExpansionPanelDetails>
             </ExpansionPanel>
         )}
+        {isAdmin && <Grid container justify="flex-end" alignItems="center">
+            <Grid item>
+                <Button className={classes.formButton} onClick={() => addSearchSettings()} variant="contained"
+                        color="primary">Add</Button>
+            </Grid>
+        </Grid>}
     </Paper>
 };
 
@@ -97,6 +104,7 @@ const mapStateToProps = (state: AppState) => ({
     selectedSearchSettingsIndex: selectedSearchSettingsIndexSelector(state)
 });
 const mapDispatchToProps = {
+    addSearchSettings: addSearchSettingsRequestAction as () => void,
     selectSearchSettings: searchSettingsSelectedRequestAction as (settings: SearchSettings) => void
 };
 

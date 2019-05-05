@@ -19,6 +19,8 @@ import {
 } from "../../actions/SearchSettingsActions";
 import {connect} from "react-redux";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
+import SaveIcon from '@material-ui/icons/Save';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 
 const styles = (theme: Theme) => createStyles({
@@ -51,7 +53,11 @@ const styles = (theme: Theme) => createStyles({
     formButton: {
         margin: '5px'
     },
-    progress: {}
+    progress: {},
+    iconSmall: {
+        margin: '0px 5px 0px 0px',
+        fontSize: 20,
+    }
 });
 
 
@@ -150,14 +156,21 @@ const SettingsForm = (props: SettingsFormProps) => {
                 <Grid container justify="flex-end" alignItems="center">
                     <Grid item>
                         <Button className={classes.formButton} variant="contained" color="primary" type="submit"
-                                disabled={isSubmitting}>Save</Button>
+                                disabled={isSubmitting}>
+                            <SaveIcon className={classes.iconSmall}/>
+                            Save
+                        </Button>
                     </Grid>
                     <Grid item>
                         <Button
                             onClick={() => {
                                 setShowProgress(true);
-                                removeSettings(settings, () => setShowProgress(false), () => setShowProgress(false));
-                            }} className={classes.formButton} variant="contained" color="secondary">Delete</Button>
+                                removeSettings(settings, () => {
+                                }, () => setShowProgress(false));
+                            }} className={classes.formButton} variant="contained" color="secondary">
+                            <DeleteIcon className={classes.iconSmall}/>
+                            Delete
+                        </Button>
                     </Grid>
                 </Grid>
             </Form>

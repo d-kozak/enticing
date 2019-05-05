@@ -1,6 +1,11 @@
 import {SearchSettings} from "../entities/SearchSettings";
 import {ThunkResult} from "./RootActions";
-import {mockLoadSearchSettings, mockRemoveSearchSettings, mockUpdateSearchSettings} from "../mocks/mockSearchSettings";
+import {
+    mockAddSearchSettings,
+    mockLoadSearchSettings,
+    mockRemoveSearchSettings,
+    mockUpdateSearchSettings
+} from "../mocks/mockSearchSettings";
 
 export const SEARCH_SETTINGS_LOADED = "[SEARCH SETTINGS] LOADED";
 export const SEARCH_SETTINGS_ADDED = "[SEARCH SETTINGS] ADDED";
@@ -61,7 +66,13 @@ export const updateSearchSettingsRequestAction = (newSettings: SearchSettings, o
     mockUpdateSearchSettings(dispatch, newSettings, onDone);
 };
 
+export const addSearchSettingsRequestAction = (): ThunkResult<void> => (dispatch) => {
+    mockAddSearchSettings(dispatch);
+};
+
 export const removeSearchSettingsRequestAction = (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void): ThunkResult<void> => (dispatch) => {
     mockRemoveSearchSettings(dispatch, settings, onDone);
 };
+
+
 
