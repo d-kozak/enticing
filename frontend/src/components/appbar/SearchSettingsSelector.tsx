@@ -15,6 +15,9 @@ import {searchSettingsSelectedRequestAction} from "../../actions/UserActions";
 import LinkTo from "../utils/linkTo";
 import {selectedSearchSettingsIndexSelector} from "../../reducers/selectors";
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import EditIcon from '@material-ui/icons/Edit';
+import InfoIcon from '@material-ui/icons/Info';
+import Divider from "@material-ui/core/Divider";
 
 
 const styles = (theme: Theme) => createStyles({
@@ -78,8 +81,11 @@ const SearchSettingsSelector = (props: SearchSettingsSelectorProps) => {
                     {settings.name}
                 </MenuItem>
             ))}
+            <Divider/>
             <MenuItem onClick={() => setAnchorElem(null)} component={LinkTo("/search-settings")}>
-                {isAdmin ? 'Edit settings' : 'Show details'}
+                {isAdmin ?
+                    [<EditIcon className={classes.iconSmall}/>, 'Edit'] : [<InfoIcon
+                        className={classes.iconSmall}/>, 'Show details']}
             </MenuItem>
         </Menu>
     </div>
