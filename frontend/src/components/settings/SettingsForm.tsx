@@ -2,10 +2,10 @@ import createStyles from "@material-ui/core/es/styles/createStyles";
 import {WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
-import React from 'react';
+import React, {useState} from 'react';
 import {Field, FieldArray, Form, Formik} from "formik";
 import * as Yup from 'yup';
-import {TextField} from "formik-material-ui";
+import {Switch, TextField} from "formik-material-ui";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/es/Typography";
 import {Theme} from "@material-ui/core/es";
@@ -15,6 +15,7 @@ import {SearchSettings} from "../../entities/SearchSettings";
 import {AppState} from "../../reducers/RootReducer";
 import {updateSearchSettingsRequestAction} from "../../actions/SearchSettingsActions";
 import {connect} from "react-redux";
+import LinearProgress from "@material-ui/core/es/LinearProgress";
 
 
 const styles = (theme: Theme) => createStyles({
@@ -43,7 +44,11 @@ const styles = (theme: Theme) => createStyles({
     },
     addIndexServerButton: {
         marginTop: '10px'
-    }
+    },
+    formButton: {
+        margin: '5px'
+    },
+    progress: {}
 });
 
 
@@ -63,6 +68,7 @@ const urlRegex = /((([-\w]+\.)+[\w-]+)|((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.
 const urlRegexFail = 'Please provide a valid url';
 
 const SettingsSchema = Yup.object().shape({
+    'name': Yup.string().required('Name cannot be empty'),
     'annotationDataServer': Yup.string()
         .matches(urlRegex, urlRegexFail)
         .required('URL is required'),
@@ -77,21 +83,35 @@ const SettingsSchema = Yup.object().shape({
 const SettingsForm = (props: SettingsFormProps) => {
     const {updateSettings, settings, classes} = props;
 
+    const [showProgress, setShowProgress] = useState(false);
+
     return <Formik
         initialValues={settings}
         validationSchema={SettingsSchema}
         onSubmit={(values, actions) => {
-            console.log('submit');
+            setShowProgress(true);
             updateSettings(values, () => {
+                setShowProgress(false);
                 actions.setSubmitting(false);
             }, (errors) => {
                 actions.setErrors(errors);
+                setShowProgress(false);
                 actions.setSubmitting(false);
             });
         }}>
         {({isSubmitting, values, errors}) =>
             <Form className={classes.formContent}>
+                {showProgress && <LinearProgress className={classes.progress}/>}
+                <div className={classes.settingsSection}>
+                    <Typography variant="h5" className={classes.sectionTitle}>Common</Typography>
+                    <Field variant="outlined" label="Name" name="name"
+                           component={TextField} className={classes.textField}/>
+                    <br/>
+                    <Typography variant="body1">Is private?</Typography>
+                    <Field label="Private" name="isPrivate" component={Switch}/>
+                </div>
                 <Divider/>
+
                 <div className={classes.settingsSection}>
                     <Typography variant="h5" className={classes.sectionTitle}>Annotation server</Typography>
 
@@ -126,7 +146,7 @@ const SettingsForm = (props: SettingsFormProps) => {
 
                 <Grid container justify="flex-end" alignItems="center">
                     <Grid item>
-                        <Button variant="contained" color="primary" type="submit"
+                        <Button className={classes.formButton} variant="contained" color="primary" type="submit"
                                 disabled={isSubmitting}>Save</Button>
                     </Grid>
                 </Grid>

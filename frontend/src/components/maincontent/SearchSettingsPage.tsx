@@ -42,6 +42,12 @@ const styles = (theme: Theme) => createStyles({
     chip: {
         margin: '0px 5px',
     },
+    formButton: {
+        margin: '5px'
+    },
+    grow: {
+        flexGrow: 1,
+    }
 });
 
 export type SearchSettingsPageProps =
@@ -73,7 +79,8 @@ const SearchSettingsPage = (props: SearchSettingsPageProps) => {
                     {isAdmin ? <SettingsForm settings={settings}/> : <SettingsDetails settings={settings}/>}
                     <Grid container justify="flex-end" alignItems="center">
                         <Grid item>
-                            <Button disabled={index === selectedSearchSettingsIndex}
+                            <Button
+                                disabled={index === selectedSearchSettingsIndex}
                                     onClick={() => selectSearchSettings(settings)} variant="contained" color="primary"
                                     type="submit">{index !== selectedSearchSettingsIndex ? 'Select' : 'Already selected'}</Button>
                         </Grid>

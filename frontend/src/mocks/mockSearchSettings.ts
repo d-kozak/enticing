@@ -45,12 +45,9 @@ export const mockLoadSearchSettings = (dispatch: Dispatch, isAdmin: boolean) => 
 }
 
 export const mockUpdateSearchSettings = (dispatch: Dispatch, newSettings: SearchSettings, onDone: () => void) => {
-    console.log('here');
-    dispatch(showProgressBarAction());
     setTimeout(() => {
         dispatch(searchSettingsUpdatedAction(newSettings))
         dispatch(openSnackBar(`Search settings ${newSettings.name} updated`));
-        dispatch(hideProgressBarAction());
         onDone();
     }, 2000);
 }
