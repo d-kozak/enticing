@@ -10,6 +10,7 @@ import {connect} from "react-redux";
 import {AppState} from "../../reducers/RootReducer";
 import {logoutRequestAction} from "../../actions/UserActions";
 import {Link} from "react-router-dom";
+import SearchSettingsSelector from "./SearchSettingsSelector";
 
 
 const styles = createStyles({
@@ -46,6 +47,7 @@ const EnticingAppBar = (props: EnticingAppBarProps) => {
                         </Typography>
                     </Link>
                 </div>
+                <SearchSettingsSelector/>
                 <AppBarMenuButtons isLoggedIn={isLoggedIn} isAdmin={isAdmin} handleLogout={handleLogout}/>
             </Toolbar>
         </AppBar>
