@@ -20,7 +20,16 @@ const styles = (theme: Theme) => createStyles({
         position: 'fixed',
         top: '50%',
         left: '50%',
-        transform: 'translate(-50%, -50%)',
+        transform: 'translate(-50%, -50%)'
+    },
+    submitButton: {
+        margin: '10px'
+    },
+    title: {
+        margin: '10px'
+    },
+    formField: {
+        margin: '0px 10px'
     }
 });
 
@@ -36,7 +45,7 @@ const schema = Yup.object({
 const UserSettings = (props: UserSettingsProps) => {
     const {classes, userSettings, updateUserSettings} = props;
     return <Paper className={classes.root}>
-        <Typography variant="h3">User settings</Typography>
+        <Typography variant="h3" className={classes.title}>User settings</Typography>
         <Formik
             initialValues={userSettings}
             onSubmit={(values, actions) => {
@@ -49,14 +58,14 @@ const UserSettings = (props: UserSettingsProps) => {
         >
             {({isSubmitting}) =>
                 <Form>
-                    <Typography variant="h5">Others</Typography>
                     <Field variant="outlined" label="Results per page" name="resultsPerPage"
+                           className={classes.formField}
                            component={TextField}
                            type="number"/>
                     <Grid container justify="flex-end" alignItems="center">
                         <Grid item>
-                            <Button variant="contained" color="primary" type="submit"
-                                    disabled={isSubmitting}>Submit</Button>
+                            <Button variant="contained" color="primary" type="submit" className={classes.submitButton}
+                                    disabled={isSubmitting}>Save</Button>
                         </Grid>
                     </Grid>
                 </Form>
