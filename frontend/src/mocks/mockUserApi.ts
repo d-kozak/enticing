@@ -158,6 +158,7 @@ export const mockUserSettingsSelectedRequest = (settings: SearchSettings, dispat
     dispatch(showProgressBarAction());
     setTimeout(() => {
         dispatch(userSearchSettingsSelectedSuccessAction(settings));
+        dispatch(openSnackBar(`Selected configuration ${settings.name}`));
         dispatch(hideProgressBarAction());
     }, 2000);
 };

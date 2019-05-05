@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import EnticingAppBar from "./appbar/EnticingAppBar";
 import {CssBaseline} from "@material-ui/core";
 import EnticingSnackbar from "./snackbar/EnticingSnackbar";
@@ -15,10 +15,17 @@ import {openSnackBar} from "../actions/SnackBarActions";
 import {connect} from "react-redux";
 import {AppState} from "../reducers/RootReducer";
 import UserSettings from "./maincontent/UserSettings";
+import {loadSearchSettingsAction} from "../actions/SearchSettingsActions";
 
 type AppProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>
 
-const App = ({showSnackBarMessage, isAdmin, progressBarVisible}: AppProps) => {
+const App = ({loadSearchSettings, showSnackBarMessage, isAdmin, progressBarVisible}: AppProps) => {
+
+    useEffect(() => {
+        loadSearchSettings();
+    }, []);
+
+
     return <React.Fragment>
         <CssBaseline/>
         <Router>
@@ -50,7 +57,8 @@ const mapStateToProps = (state: AppState) => ({
     progressBarVisible: state.progressBar.isVisible
 })
 const mapDispatchToProps = {
-    showSnackBarMessage: openSnackBar
+    showSnackBarMessage: openSnackBar,
+    loadSearchSettings: loadSearchSettingsAction as () => void
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

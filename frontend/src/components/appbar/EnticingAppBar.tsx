@@ -28,7 +28,7 @@ export type EnticingAppBarProps =
     & ReturnType<typeof mapStateToProps>
 
 const EnticingAppBar = (props: EnticingAppBarProps) => {
-    const {classes, isAdmin, isLoggedIn, handleLogout} = props;
+    const {classes, isAdmin, isLoggedIn, handleLogout, searchSettings} = props;
 
     const linkRef = (node: HTMLAnchorElement | null) => {
         if (node) {
@@ -47,7 +47,7 @@ const EnticingAppBar = (props: EnticingAppBarProps) => {
                         </Typography>
                     </Link>
                 </div>
-                <SearchSettingsSelector/>
+                {searchSettings.length > 0 && <SearchSettingsSelector/>}
                 <AppBarMenuButtons isLoggedIn={isLoggedIn} isAdmin={isAdmin} handleLogout={handleLogout}/>
             </Toolbar>
         </AppBar>
@@ -58,7 +58,8 @@ const mapStateToProps = (state: AppState) => {
     const {isLoggedIn, isAdmin} = state.user;
     return {
         isLoggedIn,
-        isAdmin
+        isAdmin,
+        searchSettings: state.searchSettings.settings
     };
 }
 

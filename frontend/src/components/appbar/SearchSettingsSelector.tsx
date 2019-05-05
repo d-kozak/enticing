@@ -10,6 +10,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
+import {SearchSettings} from "../../entities/SearchSettings";
+import {searchSettingsSelectedRequestAction} from "../../actions/UserActions";
 
 
 const styles = (theme: Theme) => createStyles({
@@ -24,19 +26,29 @@ type SearchSettingsSelectorProps =
     & typeof mapDispatchToProps
     & {}
 
-const options = [
-    'Select Search Settings',
-    'Test index',
-    'Wikipedia 2018',
-    'CC-2017',
-];
+const calculateSelectedIndex = (searchSettings: Array<SearchSettings>, selectedSettings: number | null): number => {
+    if (selectedSettings == null) {
+        for (let i in searchSettings) {
+            if (searchSettings[i].isDefault) {
+                return Number(i)
+            }
+        }
+        return 0
+    }
+    for (let i in searchSettings) {
+        if (searchSettings[i].id == selectedSettings) {
+            return Number(i)
+        }
+    }
+    return 0
+}
 
 const SearchSettingsSelector = (props: SearchSettingsSelectorProps) => {
-    const {classes} = props;
+    const {classes, searchSettings, selectedSettings, selectSearchSettings} = props;
 
     const [anchorElem, setAnchorElem] = useState<HTMLElement | null>(null)
-    const [selectedIndex, setSelectedIndex] = useState(1)
 
+    const selectedIndex = calculateSelectedIndex(searchSettings, selectedSettings);
 
     return <div>
         <List component="nav">
@@ -49,7 +61,8 @@ const SearchSettingsSelector = (props: SearchSettingsSelectorProps) => {
             >
                 <Typography variant="button" color="inherit">Using: </Typography>
                 <ListItemText className={classes.listItem}>
-                    <Typography variant="button" color="inherit">{options[selectedIndex]}</Typography>
+                    {selectedIndex < searchSettings.length && <Typography variant="button"
+                                                                          color="inherit">{searchSettings[selectedIndex].name}</Typography>}
                 </ListItemText>
             </ListItem>
         </List>
@@ -59,17 +72,19 @@ const SearchSettingsSelector = (props: SearchSettingsSelectorProps) => {
             open={anchorElem !== null}
             onClose={() => setAnchorElem(null)}
         >
-            {options.map((option, index) => (
+            <MenuItem disabled={true}>
+                Select configuration
+            </MenuItem>
+            {searchSettings.map((settings, index) => (
                 <MenuItem
-                    key={option}
-                    disabled={index === 0}
+                    key={index}
                     selected={index === selectedIndex}
                     onClick={() => {
-                        setSelectedIndex(index);
+                        selectSearchSettings(settings)
                         setAnchorElem(null);
                     }}
                 >
-                    {option}
+                    {settings.name}
                 </MenuItem>
             ))}
         </Menu>
@@ -77,7 +92,12 @@ const SearchSettingsSelector = (props: SearchSettingsSelectorProps) => {
 };
 
 
-const mapStateToProps = (state: AppState) => ({});
-const mapDispatchToProps = {};
+const mapStateToProps = (state: AppState) => ({
+    searchSettings: state.searchSettings.settings,
+    selectedSettings: state.user.selectedSettings
+});
+const mapDispatchToProps = {
+    selectSearchSettings: searchSettingsSelectedRequestAction as (settings: SearchSettings) => void
+};
 
 export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(SearchSettingsSelector));
