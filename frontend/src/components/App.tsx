@@ -16,6 +16,7 @@ import {connect} from "react-redux";
 import {AppState} from "../reducers/RootReducer";
 import UserSettings from "./maincontent/UserSettings";
 import {loadSearchSettingsAction} from "../actions/SearchSettingsActions";
+import SelectSearchSettingsPage from "./maincontent/SelectSearchSettingsPage";
 
 type AppProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>
 
@@ -41,6 +42,7 @@ const App = ({loadSearchSettings, showSnackBarMessage, isAdmin, progressBarVisib
                        render={({history, location}) => <SearchPage history={history} location={location}/>}/>
                 <Route path="/login" render={({}) => <Login/>}/>
                 <Route path="/signup" render={() => <SignUp/>}/>
+                <Route path="/search-settings" render={() => <SelectSearchSettingsPage/>}/>
                 <Route path="/settings" render={() => <UserSettings/>}/>
                 <AdminRoute path="/users" isAdmin={isAdmin} showSnackBarMessage={showSnackBarMessage}
                             render={() => <UserManagement/>}/>

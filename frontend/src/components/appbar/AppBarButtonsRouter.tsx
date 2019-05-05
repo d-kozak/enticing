@@ -19,7 +19,7 @@ const AppBarButtonsRouter = (props: AppBarButtonsProps) => {
 
     const LoginLink = LinkTo("/login");
     return <Switch>
-        <Route path={["/", "/search", "/settings", "/users"]} exact
+        <Route path={["/", "/search", "/settings", "/users", "/search-settings"]} exact
                render={() => isLoggedIn ? <CommonAppBarButtons isAdmin={isAdmin} handleLogout={handleLogout}/> :
                    <Button component={LoginLink} color="inherit">Login</Button>}/>}/>
     </Switch>

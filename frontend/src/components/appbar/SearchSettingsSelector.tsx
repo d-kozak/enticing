@@ -12,6 +12,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
 import {SearchSettings} from "../../entities/SearchSettings";
 import {searchSettingsSelectedRequestAction} from "../../actions/UserActions";
+import LinkTo from "../utils/linkTo";
 
 
 const styles = (theme: Theme) => createStyles({
@@ -87,6 +88,9 @@ const SearchSettingsSelector = (props: SearchSettingsSelectorProps) => {
                     {settings.name}
                 </MenuItem>
             ))}
+            <MenuItem onClick={() => setAnchorElem(null)} component={LinkTo("/search-settings")}>
+                Show details
+            </MenuItem>
         </Menu>
     </div>
 };

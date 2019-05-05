@@ -4,7 +4,7 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React from 'react';
 import {UserSettings} from "../../entities/UserSettings";
-import DefaultSettingsPicker from "../settings/DefaultSettingsPicker";
+import DefaultSettingsPicker from "./SelectSearchSettingsPage";
 import SettingsHolder from "../settings/SettingsHolder";
 import {AppState} from "../../reducers/RootReducer";
 import {connect} from "react-redux";
@@ -60,8 +60,7 @@ const Settings = (props: SettingsProps) => {
     if (isLoggedIn) {
         return <SettingsHolder submitForm={submitForm} currentSettings={currentSettings}/>
     } else {
-        return <DefaultSettingsPicker defaultSettingsOptions={defaultSettingsOptions}
-                                      settingsSelected={handleSettingsSelected}/>
+        return <DefaultSettingsPicker/>
     }
 };
 

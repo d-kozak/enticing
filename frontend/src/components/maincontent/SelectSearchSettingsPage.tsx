@@ -11,9 +11,11 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Grid from "@material-ui/core/es/Grid";
 import Button from "@material-ui/core/es/Button";
 import Paper from "@material-ui/core/es/Paper";
-import SettingsDetails from "./SettingsDetails";
-import {UserSettings} from "../../entities/UserSettings";
+import SettingsDetails from "../settings/SettingsDetails";
+import {AppState} from "../../reducers/RootReducer";
+import {searchSettingsSelectedRequestAction} from "../../actions/UserActions";
 import {SearchSettings} from "../../entities/SearchSettings";
+import {connect} from "react-redux";
 
 
 const styles = createStyles({
@@ -39,18 +41,17 @@ const styles = createStyles({
     }
 });
 
-export interface DefaultSettingsPicker extends WithStyles<typeof styles> {
-    defaultSettingsOptions: Array<UserSettings & SearchSettings>,
-    settingsSelected(index: number): void
-}
+export type SelectSearchSettingsPageProps =
+    WithStyles<typeof styles>
+    & ReturnType<typeof mapStateToProps>
+    & typeof mapDispatchToProps
+    & {}
 
-const DefaultSettingsPicker = (props: DefaultSettingsPicker) => {
-    const {settingsSelected, defaultSettingsOptions, classes} = props;
+const SelectSearchSettingsPage = (props: SelectSearchSettingsPageProps) => {
+    const {classes, searchSettings, selectSearchSettings} = props;
     return <Paper className={classes.rootElement}>
-        <Typography variant="h2" className={classes.settingsTitle}>Settings</Typography>
-        <Typography variant="body1" className={classes.settingsText}>You can choose one of the predefined
-            settings</Typography>
-        {defaultSettingsOptions.map((settings, index) => <ExpansionPanel key={index}>
+        <Typography variant="h2" className={classes.settingsTitle}>Search Settings</Typography>
+        {searchSettings.map((settings, index) => <ExpansionPanel key={index}>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
                     <Typography variant="h5">{settings.name}</Typography>
                 </ExpansionPanelSummary>
@@ -58,7 +59,7 @@ const DefaultSettingsPicker = (props: DefaultSettingsPicker) => {
                     <SettingsDetails settings={settings}/>
                     <Grid container justify="flex-end" alignItems="center">
                         <Grid item>
-                            <Button onClick={() => settingsSelected(index)} variant="contained" color="primary"
+                            <Button onClick={() => selectSearchSettings(settings)} variant="contained" color="primary"
                                     type="submit">Apply</Button>
                         </Grid>
                     </Grid>
@@ -68,6 +69,14 @@ const DefaultSettingsPicker = (props: DefaultSettingsPicker) => {
     </Paper>
 };
 
+const mapStateToProps = (state: AppState) => ({
+    searchSettings: state.searchSettings.settings,
+    selectedSettings: state.user.selectedSettings
+});
+const mapDispatchToProps = {
+    selectSearchSettings: searchSettingsSelectedRequestAction as (settings: SearchSettings) => void
+};
+
 export default withStyles(styles, {
     withTheme: true
-})(DefaultSettingsPicker)
+})(connect(mapStateToProps, mapDispatchToProps)(SelectSearchSettingsPage))

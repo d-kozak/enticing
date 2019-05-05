@@ -9,7 +9,6 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItem from "@material-ui/core/ListItem";
 import Collapse from "@material-ui/core/Collapse";
 import {ExpandLess, ExpandMore} from "@material-ui/icons";
-import {UserSettings} from "../../entities/UserSettings";
 import {SearchSettings} from "../../entities/SearchSettings";
 
 
@@ -20,7 +19,7 @@ type SettingsDetailsProps =
     & ReturnType<typeof mapStateToProps>
     & typeof mapDispatchToProps
     & {
-    settings: UserSettings & SearchSettings
+    settings: SearchSettings
 }
 
 const SettingsDetails = (props: SettingsDetailsProps) => {
@@ -32,7 +31,6 @@ const SettingsDetails = (props: SettingsDetailsProps) => {
         component="nav">
         <ListItem><ListItemText>Annotation server: {settings.annotationServer}</ListItemText></ListItem>
         <ListItem><ListItemText>Annotation data server: {settings.annotationDataServer}</ListItemText></ListItem>
-        <ListItem><ListItemText>Results per page: {settings.resultsPerPage}</ListItemText></ListItem>
         <ListItem button onClick={() => setServersOpen(!serversOpen)}>
             <ListItemText>Index servers</ListItemText>
             {serversOpen ? <ExpandLess/> : <ExpandMore/>}
@@ -40,7 +38,7 @@ const SettingsDetails = (props: SettingsDetailsProps) => {
         <Collapse in={serversOpen} timeout="auto" unmountOnExit>
             <List disablePadding>
                 {settings.servers.map((server, index) => <ListItem key={index}>
-                    <ListItemText>Server: {server}</ListItemText>
+                    <ListItemText>{server}</ListItemText>
                 </ListItem>)}
             </List>
         </Collapse>
