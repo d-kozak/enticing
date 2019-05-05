@@ -19,6 +19,7 @@ import {connect} from "react-redux";
 import {selectedSearchSettingsIndexSelector} from "../../reducers/selectors";
 import Chip from "@material-ui/core/Chip";
 import DoneIcon from '@material-ui/icons/Done';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import SettingsForm from "../settings/SettingsForm";
 import {addSearchSettingsRequestAction} from "../../actions/SearchSettingsActions";
 
@@ -48,6 +49,10 @@ const styles = (theme: Theme) => createStyles({
     },
     grow: {
         flexGrow: 1,
+    },
+    iconSmall: {
+        margin: '0px 5px 0px 0px',
+        fontSize: 20,
     }
 });
 
@@ -71,6 +76,7 @@ const SearchSettingsPage = (props: SearchSettingsPageProps) => {
                         color="primary"
                     />}
                     {settings.isPrivate && <Chip
+                        icon={<VisibilityOffIcon/>}
                         label="Private"
                         className={classes.chip}
                         color="secondary"
@@ -83,7 +89,9 @@ const SearchSettingsPage = (props: SearchSettingsPageProps) => {
                             <Button
                                 disabled={index === selectedSearchSettingsIndex}
                                 onClick={() => selectSearchSettings(settings)} variant="contained" color="primary"
-                                type="submit">{index !== selectedSearchSettingsIndex ? 'Select' : 'Already selected'}</Button>
+                                type="submit"><DoneIcon
+                                className={classes.iconSmall}/>{index !== selectedSearchSettingsIndex ? 'Select' : 'Already selected'}
+                            </Button>
                         </Grid>
                     </Grid>
                 </ExpansionPanelDetails>

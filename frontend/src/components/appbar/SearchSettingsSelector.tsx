@@ -14,11 +14,16 @@ import {SearchSettings} from "../../entities/SearchSettings";
 import {searchSettingsSelectedRequestAction} from "../../actions/UserActions";
 import LinkTo from "../utils/linkTo";
 import {selectedSearchSettingsIndexSelector} from "../../reducers/selectors";
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 
 
 const styles = (theme: Theme) => createStyles({
     listItem: {
         color: "white"
+    },
+    iconSmall: {
+        margin: '0px 5px 0px 0px',
+        fontSize: 20,
     }
 });
 
@@ -42,6 +47,8 @@ const SearchSettingsSelector = (props: SearchSettingsSelectorProps) => {
                 aria-label="Search Settings"
                 onClick={(event) => setAnchorElem(event.currentTarget)}
             >
+                {searchSettings[selectedSearchSettingsIndex].isPrivate &&
+                <VisibilityOffIcon className={classes.iconSmall}/>}
                 <Typography variant="button" color="inherit">Using: </Typography>
                 <ListItemText className={classes.listItem}>
                     {selectedSearchSettingsIndex < searchSettings.length && <Typography variant="button"
@@ -67,6 +74,7 @@ const SearchSettingsSelector = (props: SearchSettingsSelectorProps) => {
                         setAnchorElem(null);
                     }}
                 >
+                    {settings.isPrivate && <VisibilityOffIcon className={classes.iconSmall}/>}
                     {settings.name}
                 </MenuItem>
             ))}
