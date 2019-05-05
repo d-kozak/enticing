@@ -9,9 +9,14 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import Typography from "@material-ui/core/Typography";
 
 
-const styles = (theme: Theme) => createStyles({});
+const styles = (theme: Theme) => createStyles({
+    listItem: {
+        color: "white"
+    }
+});
 
 type SearchSettingsSelectorProps =
     WithStyles<typeof styles>
@@ -20,14 +25,14 @@ type SearchSettingsSelectorProps =
     & {}
 
 const options = [
-    'Show some love to Material-UI',
-    'Show all notification content',
-    'Hide sensitive notification content',
-    'Hide all notification content',
+    'Select Search Settings',
+    'Test index',
+    'Wikipedia 2018',
+    'CC-2017',
 ];
 
 const SearchSettingsSelector = (props: SearchSettingsSelectorProps) => {
-    const {} = props;
+    const {classes} = props;
 
     const [anchorElem, setAnchorElem] = useState<HTMLElement | null>(null)
     const [selectedIndex, setSelectedIndex] = useState(1)
@@ -39,13 +44,13 @@ const SearchSettingsSelector = (props: SearchSettingsSelectorProps) => {
                 button
                 aria-haspopup="true"
                 aria-controls="lock-menu"
-                aria-label="When device is locked"
+                aria-label="Search Settings"
                 onClick={(event) => setAnchorElem(event.currentTarget)}
             >
-                <ListItemText
-                    primary="When device is locked"
-                    secondary={options[selectedIndex]}
-                />
+                <Typography variant="button" color="inherit">Using: </Typography>
+                <ListItemText className={classes.listItem}>
+                    <Typography variant="button" color="inherit">{options[selectedIndex]}</Typography>
+                </ListItemText>
             </ListItem>
         </List>
         <Menu
