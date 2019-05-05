@@ -23,7 +23,7 @@ type AppProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>
 const App = ({loadSearchSettings, showSnackBarMessage, isAdmin, progressBarVisible}: AppProps) => {
 
     useEffect(() => {
-        loadSearchSettings();
+        loadSearchSettings(isAdmin);
     }, []);
 
 
@@ -60,7 +60,7 @@ const mapStateToProps = (state: AppState) => ({
 })
 const mapDispatchToProps = {
     showSnackBarMessage: openSnackBar,
-    loadSearchSettings: loadSearchSettingsAction as () => void
+    loadSearchSettings: loadSearchSettingsAction as (isAdmin: boolean) => void
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

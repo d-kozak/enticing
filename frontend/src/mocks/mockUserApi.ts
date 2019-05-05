@@ -1,6 +1,6 @@
 import {Dispatch} from "redux";
 import {openSnackBar} from "../actions/SnackBarActions";
-import {loginSuccessAction, userSearchSettingsSelectedSuccessAction} from "../actions/UserActions";
+import {loginSuccessAction, logoutSuccessAction, userSearchSettingsSelectedSuccessAction} from "../actions/UserActions";
 import {deleteUserSuccessAction, updateUserSuccessAction, usersLoadedAction} from "../actions/AdminActions";
 import {hideProgressBarAction, showProgressBarAction} from "../actions/ProgressBarActions";
 import {User} from "../entities/User";
@@ -17,6 +17,7 @@ import {
 import {SearchSettings} from "../entities/SearchSettings";
 import {userSettingsLoadedAction, userSettingsUpdatedAction} from "../actions/UserSettingsActions";
 import {UserSettings} from "../entities/UserSettings";
+import {loadSearchSettingsAction} from "../actions/SearchSettingsActions";
 
 
 interface MockUser extends User {
@@ -84,6 +85,10 @@ export const mockLogin = (login: string, password: string, dispatch: Dispatch, o
                 onError({login: 'Your account is not active anymore'});
             } else if (user.password === password) {
                 dispatch(openSnackBar('Logged in'));
+
+                // @ts-ignore
+                dispatch(loadSearchSettingsAction(user.isAdmin));
+
                 dispatch(loginSuccessAction(login, user.isAdmin));
             } else {
                 onError({password: 'Invalid password'});
@@ -92,6 +97,13 @@ export const mockLogin = (login: string, password: string, dispatch: Dispatch, o
             onError({login: 'Unknown login'});
         }
     }, 2000);
+}
+
+export const mockLogout = (dispatch: Dispatch) => {
+    dispatch(openSnackBar('Logged out'));
+    // @ts-ignore
+    dispatch(loadSearchSettingsAction(false));
+    dispatch(logoutSuccessAction());
 }
 
 export const mockLoadUsers = (dispatch: Dispatch) => {

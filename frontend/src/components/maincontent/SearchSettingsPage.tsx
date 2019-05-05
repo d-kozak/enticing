@@ -63,6 +63,11 @@ const SearchSettingsPage = (props: SearchSettingsPageProps) => {
                         className={classes.chip}
                         color="primary"
                     />}
+                    {settings.isPrivate && <Chip
+                        label="Private"
+                        className={classes.chip}
+                        color="secondary"
+                    />}
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className={classes.expansionPanelDetails}>
                     {isAdmin ? <SettingsForm settings={settings}/> : <SettingsDetails settings={settings}/>}

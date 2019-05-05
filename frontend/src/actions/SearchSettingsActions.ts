@@ -53,8 +53,8 @@ export const searchSettingsRemovedAction = (settings: SearchSettings): SearchSet
     settings
 });
 
-export const loadSearchSettingsAction = (): ThunkResult<void> => (dispatch) => {
-    mockLoadSearchSettings(dispatch)
+export const loadSearchSettingsAction = (isAdmin: boolean): ThunkResult<void> => (dispatch) => {
+    mockLoadSearchSettings(dispatch, isAdmin)
 }
 
 export const updateSearchSettingsRequestAction = (newSettings: SearchSettings, onDone: () => void, onError: (errors: any) => void): ThunkResult<void> => (dispatch) => {

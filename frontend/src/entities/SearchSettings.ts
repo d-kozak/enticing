@@ -2,6 +2,7 @@ export interface SearchSettings {
     id: number,
     name: string,
     isDefault: boolean,
+    isPrivate: boolean,
     annotationDataServer: Url,
     annotationServer: Url,
     servers: Array<IpAddress>
