@@ -14,9 +14,9 @@ import Button from "@material-ui/core/es/Button";
 import DeleteUserDialog from "./DeleteUserDialog";
 import {connect} from "react-redux";
 import {AppState} from "../../reducers/RootReducer";
-import {loadUsersAction, updateUserAction} from "../../actions/AdminActions";
+import {changePasswordAction, loadUsersAction, updateUserAction} from "../../actions/AdminActions";
 import {deleteUserDialogOpenAction} from "../../actions/dialog/DeleteUserDialogActions";
-import ChangePasswordDialog from "./ChangePasswordDialog";
+import ChangePasswordDialog from "../changepassworddialog/ChangePasswordDialog";
 import {changePasswordDialogOpenAction} from "../../actions/dialog/ChangePasswordDialogActions";
 
 
@@ -35,7 +35,7 @@ const styles = createStyles({
 export type UserTableProps = WithStyles<typeof styles> & typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>
 
 const UserTable = (props: UserTableProps) => {
-    const {users, updateUser, deleteUser, loadUsers, classes, changePassword} = props;
+    const {users, updateUser, deleteUser, loadUsers, classes, changePassword, openChangePasswordDialog} = props;
 
     useEffect(() => {
         loadUsers();
@@ -86,7 +86,7 @@ const UserTable = (props: UserTableProps) => {
                         />
                     </TableCell>
                     <TableCell align="right">
-                        <Button color="primary" onClick={() => changePassword(user)}>Change</Button>
+                        <Button color="primary" onClick={() => openChangePasswordDialog(user)}>Change</Button>
                     </TableCell>
                     <TableCell align="right">
                         <Button onClick={() => deleteUser(user)} color="secondary" variant="contained">Delete</Button>
@@ -95,7 +95,7 @@ const UserTable = (props: UserTableProps) => {
             </TableBody>
         </Table>
         <DeleteUserDialog/>
-        <ChangePasswordDialog/>
+        <ChangePasswordDialog changePassword={changePassword}/>
     </React.Fragment>
 };
 
@@ -107,7 +107,8 @@ const mapDispatchToProps = {
     loadUsers: loadUsersAction as () => void,
     updateUser: updateUserAction as (user: User) => void,
     deleteUser: deleteUserDialogOpenAction,
-    changePassword: changePasswordDialogOpenAction
+    openChangePasswordDialog: changePasswordDialogOpenAction,
+    changePassword: changePasswordAction as (user: User, newPassword: string) => void
 };
 
 export default withStyles(styles, {

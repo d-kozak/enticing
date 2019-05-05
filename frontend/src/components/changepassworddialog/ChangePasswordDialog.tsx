@@ -9,7 +9,6 @@ import {User} from "../../entities/User";
 import {AppState} from "../../reducers/RootReducer";
 import {connect} from "react-redux";
 import {LinearProgress} from "@material-ui/core";
-import {changePasswordAction} from "../../actions/AdminActions";
 import {changePasswordDialogClosedAction} from "../../actions/dialog/ChangePasswordDialogActions";
 import {Field, Form, Formik} from "formik";
 
@@ -30,6 +29,10 @@ export type DeleteUserDialogProps =
     WithStyles<typeof styles>
     & typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
+    &
+    {
+        changePassword: (user: User, newPassword: string) => void
+    }
 
 const minLenText = 'At least 5 characters, please';
 const maxLenText = 'Max 32 characters, please';
@@ -63,7 +66,7 @@ const DeleteUserDialog = (props: DeleteUserDialogProps) => {
                     }}>
                 {({isSubmitting}) => (
                     <Form>
-                        <DialogTitle id="alert-dialog-title">Change password of {user ? user.login : ''}</DialogTitle>
+                        <DialogTitle id="alert-dialog-title">Change password</DialogTitle>
                         <DialogContent>
                             <DialogContentText id="alert-dialog-description">
                                 <Field className={classes.formField} variant="outlined" type="password" name="password"
@@ -94,7 +97,6 @@ const mapStateToProps = (state: AppState) => ({
     user: state.dialog.changePasswordDialog.user
 });
 const mapDispatchToProps = {
-    changePassword: changePasswordAction as (user: User, newPassword: string) => void,
     onClose: changePasswordDialogClosedAction,
 };
 
