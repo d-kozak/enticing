@@ -14,7 +14,14 @@ import {SearchSettings} from "../../entities/SearchSettings";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
-
+import {AppState} from "../../reducers/RootReducer";
+import withStyles from "@material-ui/core/styles/withStyles";
+import {connect} from "react-redux";
+import {
+    changeDefaultSearchSettingsRequestAction,
+    removeSearchSettingsRequestAction,
+    updateSearchSettingsRequestAction
+} from '../../actions/SearchSettingsActions'
 
 const styles = (theme: Theme) => createStyles({
     formContent: {
@@ -171,23 +178,23 @@ const SettingsForm = (props: SettingsFormProps) => {
                                 setShowProgress(true);
                                 makeDefault(settings, () => setShowProgress(false), () => setShowProgress(false));
                             }}
-                                className={classes.formButton} color="primary">
-                                Make default
-                                </Button>
-                                </Grid>}
-                                </Grid>
-                                </Form>
-                                }
-                                </Formik>
+                            className={classes.formButton} color="primary">
+                            Make default
+                        </Button>
+                    </Grid>}
+                </Grid>
+            </Form>
+        }
+    </Formik>
 };
 
-                                const mapStateToProps = (state: AppState) => ({});
+const mapStateToProps = (state: AppState) => ({});
 const mapDispatchToProps = {
-                                updateSettings: updateSearchSettingsRequestAction as (newSettings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void,
-                                removeSettings: removeSearchSettingsRequestAction as (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void,
-                                makeDefault: changeDefaultSearchSettingsRequestAction as (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void
+    updateSettings: updateSearchSettingsRequestAction as (newSettings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void,
+    removeSettings: removeSearchSettingsRequestAction as (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void,
+    makeDefault: changeDefaultSearchSettingsRequestAction as (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void
 };
 
-                                export default withStyles(styles, {
-                                withTheme: true
+export default withStyles(styles, {
+    withTheme: true
 })(connect(mapStateToProps, mapDispatchToProps)(SettingsForm))
