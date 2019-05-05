@@ -84,8 +84,11 @@ const SearchSettingsSelector = (props: SearchSettingsSelectorProps) => {
             <Divider/>
             <MenuItem onClick={() => setAnchorElem(null)} component={LinkTo("/search-settings")}>
                 {isAdmin ?
-                    [<EditIcon className={classes.iconSmall}/>, 'Edit'] : [<InfoIcon
-                        className={classes.iconSmall}/>, 'Show details']}
+                    <React.Fragment>
+                        <EditIcon className={classes.iconSmall}/> Edit
+                    </React.Fragment> : <React.Fragment>
+                        <InfoIcon className={classes.iconSmall}/> Show details
+                    </React.Fragment>}
             </MenuItem>
         </Menu>
     </div>
