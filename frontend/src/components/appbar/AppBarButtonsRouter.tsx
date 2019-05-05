@@ -2,7 +2,9 @@ import withStyles, {WithStyles} from "@material-ui/core/es/styles/withStyles";
 import createStyles from "@material-ui/core/es/styles/createStyles";
 import {Route, Switch} from "react-router";
 import React from "react";
-import MainPageAppBarButtons from "./AppBarButtons";
+import CommonAppBarButtons from "./CommonAppBarButtons";
+import LinkTo from "../utils/linkTo";
+import Button from "@material-ui/core/es/Button";
 
 const styles = createStyles({});
 
@@ -15,10 +17,11 @@ export interface AppBarButtonsProps extends WithStyles<typeof styles> {
 const AppBarButtonsRouter = (props: AppBarButtonsProps) => {
     const {isLoggedIn, isAdmin, handleLogout} = props;
 
+    const LoginLink = LinkTo("/login");
     return <Switch>
         <Route path={["/", "/search", "/settings", "/users"]} exact
-               render={() => <MainPageAppBarButtons isAdmin={isAdmin} isLoggedIn={isLoggedIn}
-                                                    handleLogout={handleLogout}/>}/>
+               render={() => isLoggedIn ? <CommonAppBarButtons isAdmin={isAdmin} handleLogout={handleLogout}/> :
+                   <Button component={LoginLink} color="inherit">Login</Button>}/>}/>
     </Switch>
 };
 

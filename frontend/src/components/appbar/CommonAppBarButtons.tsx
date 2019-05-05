@@ -12,12 +12,12 @@ import LinkTo from "../utils/linkTo";
 const styles = createStyles({});
 
 
-export interface LoggedInButtonsProps extends WithStyles<typeof styles> {
+export interface CommonAppBarButtonsProps extends WithStyles<typeof styles> {
     handleLogout: () => void,
     isAdmin: boolean
 }
 
-const LoggedInButtons = (props: LoggedInButtonsProps) => {
+const CommonAppBarButtons = (props: CommonAppBarButtonsProps) => {
     const {isAdmin, handleLogout: parentHandleLogout} = props;
     const [isMenuOpen, setMenuOpen] = useState(false);
     const handleMenuOpen = () => {
@@ -66,4 +66,4 @@ const LoggedInButtons = (props: LoggedInButtonsProps) => {
 
 export default withStyles(styles, {
     withTheme: true
-})(LoggedInButtons)
+})(CommonAppBarButtons)
