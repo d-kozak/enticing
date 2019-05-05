@@ -13,7 +13,10 @@ import Divider from '@material-ui/core/Divider';
 import Grid from "@material-ui/core/es/Grid";
 import {SearchSettings} from "../../entities/SearchSettings";
 import {AppState} from "../../reducers/RootReducer";
-import {updateSearchSettingsRequestAction} from "../../actions/SearchSettingsActions";
+import {
+    removeSearchSettingsRequestAction,
+    updateSearchSettingsRequestAction
+} from "../../actions/SearchSettingsActions";
 import {connect} from "react-redux";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
 
@@ -81,7 +84,7 @@ const SettingsSchema = Yup.object().shape({
 });
 
 const SettingsForm = (props: SettingsFormProps) => {
-    const {updateSettings, settings, classes} = props;
+    const {updateSettings, settings, classes, removeSettings} = props;
 
     const [showProgress, setShowProgress] = useState(false);
 
@@ -149,6 +152,13 @@ const SettingsForm = (props: SettingsFormProps) => {
                         <Button className={classes.formButton} variant="contained" color="primary" type="submit"
                                 disabled={isSubmitting}>Save</Button>
                     </Grid>
+                    <Grid item>
+                        <Button
+                            onClick={() => {
+                                setShowProgress(true);
+                                removeSettings(settings, () => setShowProgress(false), () => setShowProgress(false));
+                            }} className={classes.formButton} variant="contained" color="secondary">Delete</Button>
+                    </Grid>
                 </Grid>
             </Form>
         }
@@ -157,7 +167,8 @@ const SettingsForm = (props: SettingsFormProps) => {
 
 const mapStateToProps = (state: AppState) => ({});
 const mapDispatchToProps = {
-    updateSettings: updateSearchSettingsRequestAction as (newSettings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void
+    updateSettings: updateSearchSettingsRequestAction as (newSettings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void,
+    removeSettings: removeSearchSettingsRequestAction as (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void
 };
 
 export default withStyles(styles, {

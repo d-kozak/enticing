@@ -1,7 +1,11 @@
 import {SearchSettings} from "../entities/SearchSettings";
 import {Dispatch} from "redux";
 import {hideProgressBarAction, showProgressBarAction} from "../actions/ProgressBarActions";
-import {searchSettingsLoadedAction, searchSettingsUpdatedAction} from "../actions/SearchSettingsActions";
+import {
+    searchSettingsLoadedAction,
+    searchSettingsRemovedAction,
+    searchSettingsUpdatedAction
+} from "../actions/SearchSettingsActions";
 import {openSnackBar} from "../actions/SnackBarActions";
 
 const searchSettings: Array<SearchSettings> = [
@@ -48,6 +52,14 @@ export const mockUpdateSearchSettings = (dispatch: Dispatch, newSettings: Search
     setTimeout(() => {
         dispatch(searchSettingsUpdatedAction(newSettings))
         dispatch(openSnackBar(`Search settings ${newSettings.name} updated`));
+        onDone();
+    }, 2000);
+}
+
+export const mockRemoveSearchSettings = (dispatch: Dispatch, newSettings: SearchSettings, onDone: () => void) => {
+    setTimeout(() => {
+        dispatch(searchSettingsRemovedAction(newSettings))
+        dispatch(openSnackBar(`Search settings ${newSettings.name} removed`));
         onDone();
     }, 2000);
 }
