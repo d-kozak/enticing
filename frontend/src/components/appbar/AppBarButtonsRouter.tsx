@@ -16,16 +16,7 @@ const AppBarButtonsRouter = (props: AppBarButtonsProps) => {
     const {isLoggedIn, isAdmin, handleLogout} = props;
 
     return <Switch>
-        <Route path="/" exact
-               render={() => <MainPageAppBarButtons isAdmin={isAdmin} isLoggedIn={isLoggedIn}
-                                                    handleLogout={handleLogout}/>}/>
-        <Route path="/search"
-               render={() => <MainPageAppBarButtons isAdmin={isAdmin} isLoggedIn={isLoggedIn}
-                                                    handleLogout={handleLogout}/>}/>
-        <Route path="/settings" exact
-               render={() => <MainPageAppBarButtons isAdmin={isAdmin} isLoggedIn={isLoggedIn}
-                                                    handleLogout={handleLogout}/>}/>
-        <Route path="/users" exact
+        <Route path={["/", "/search", "/settings", "/users"]} exact
                render={() => <MainPageAppBarButtons isAdmin={isAdmin} isLoggedIn={isLoggedIn}
                                                     handleLogout={handleLogout}/>}/>
     </Switch>
