@@ -1,6 +1,5 @@
-package cz.vutbr.fit.knot.enticing.webserver.config
+package cz.vutbr.fit.knot.enticing.webserver.controller
 
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,9 +10,9 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@WebMvcTest
+@WebMvcTest(secure = false)
 @ExtendWith(SpringExtension::class)
-class SecurityConfigTest {
+internal class UserControllerTest {
 
     @Autowired
     lateinit var mockMvc: MockMvc
@@ -22,24 +21,8 @@ class SecurityConfigTest {
     lateinit var apiBasePath: String
 
     @Test
-    fun `Root url is accessible`() {
-        mockMvc.perform(get("/"))
+    fun `Endpoint exists`() {
+        mockMvc.perform(get("$apiBasePath/user"))
                 .andExpect(status().isOk)
-    }
-
-    @Test
-    fun `Icon url is accessible`() {
-        mockMvc.perform(get("/favicon.ico"))
-                .andExpect(status().isOk)
-    }
-
-    @Nested
-    inner class User {
-
-        @Test
-        fun `User endpoint is not accessible if not logged in`() {
-            mockMvc.perform(get("$apiBasePath/user"))
-                    .andExpect(status().`is`(403))
-        }
     }
 }
