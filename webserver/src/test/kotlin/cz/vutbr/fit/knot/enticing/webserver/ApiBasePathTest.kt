@@ -9,7 +9,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @WebMvcTest
 @ExtendWith(SpringExtension::class)
-class ApiBasePathTest {
+internal class ApiBasePathTest {
 
     @Value("\${api.base.path}")
     lateinit var basePath: String

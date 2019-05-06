@@ -9,7 +9,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
-class WebserverApplicationTests {
+internal class WebserverApplicationTests {
 
     @Test
     fun contextLoads() {

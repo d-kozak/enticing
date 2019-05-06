@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @WebMvcTest
 @ExtendWith(SpringExtension::class)
-class SecurityConfigTest {
+internal class SecurityConfigTest {
 
     @Autowired
     lateinit var mockMvc: MockMvc
