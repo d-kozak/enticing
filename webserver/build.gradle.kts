@@ -31,6 +31,7 @@ dependencies {
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.h2database:h2")
     runtimeOnly("org.postgresql:postgresql")
+    implementation("commons-dbcp:commons-dbcp:1.4")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         // exclude junit4 that would be otherwise added as transitive dependency
         exclude("junit", "junit")
