@@ -1,5 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.entity
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
@@ -13,11 +15,18 @@ class EnticingUser(login: String = "", password: String = "") : UserDetails {
     @Id
     @GeneratedValue
     var id: Long = 0
+
     var login: String = login
+
+    @JsonIgnore
     var encryptedPassword: String = password
+
+    @JsonProperty("isActive")
     var isActive: Boolean = true
+
     @ElementCollection
     var roles: MutableSet<String> = mutableSetOf()
+
     var selectedSettings: Long? = null
 
 
@@ -27,6 +36,7 @@ class EnticingUser(login: String = "", password: String = "") : UserDetails {
             .toMutableSet()
 
 
+    @JsonIgnore
     override fun isEnabled(): Boolean = isActive
 
     override fun getUsername(): String = login
@@ -47,14 +57,17 @@ class EnticingUser(login: String = "", password: String = "") : UserDetails {
     }
 
 
+    @JsonIgnore
     override fun isCredentialsNonExpired(): Boolean {
         throw NotImplementedError("An operation is not implemented")
     }
 
+    @JsonIgnore
     override fun isAccountNonExpired(): Boolean {
         throw NotImplementedError("An operation is not implemented")
     }
 
+    @JsonIgnore
     override fun isAccountNonLocked(): Boolean {
         throw NotImplementedError("An operation is not implemented")
     }
