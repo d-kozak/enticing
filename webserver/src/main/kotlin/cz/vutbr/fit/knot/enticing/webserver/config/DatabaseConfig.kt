@@ -29,7 +29,13 @@ class DatabaseConfig {
     }
 
     class DatabaseUrlIsSetCondition : Condition {
-        override fun matches(context: ConditionContext, metadata: AnnotatedTypeMetadata): Boolean = System.getenv("DATABASE_URL") != null
+        private val logger = LoggerFactory.getLogger(DatabaseUrlIsSetCondition::class.java)
+
+        override fun matches(context: ConditionContext, metadata: AnnotatedTypeMetadata): Boolean = (System.getenv("DATABASE_URL") != null).apply {
+            if (!this) {
+                logger.warn("DATABASE_URL is not set, in memory database will be used instead of postgres")
+            }
+        }
     }
 
 }
