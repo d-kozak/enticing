@@ -12,13 +12,10 @@ import java.util.*
 
 @ExtendWith(SpringExtension::class)
 @DataJpaTest
-class EnticingUserRepositoryTest {
-
-    @Autowired
-    lateinit var entityManager: TestEntityManager
-
-    @Autowired
-    lateinit var userRepository: EnticingUserRepository
+class EnticingUserRepositoryTest(
+        @Autowired val entityManager: TestEntityManager,
+        @Autowired val userRepository: EnticingUserRepository
+) {
 
     @Test
     fun `findByLogin no one should be found`() {

@@ -9,11 +9,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @WebMvcTest
 @ExtendWith(SpringExtension::class)
-internal class ApiBasePathTest {
-
-    @Value("\${api.base.path}")
-    lateinit var basePath: String
-
+internal class ApiBasePathTest(
+        @Value("\${api.base.path}") val basePath: String) {
     @Test
     fun `Property api base path is set`() {
         Assertions.assertThat(basePath)

@@ -10,10 +10,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
 @DataJpaTest
-internal class EnticingUserJpaTest {
-
-    @Autowired
-    lateinit var entityManager: TestEntityManager
+internal class EnticingUserJpaTest(
+        @Autowired val entityManager: TestEntityManager
+) {
 
     @Test
     fun `Test persist`() {

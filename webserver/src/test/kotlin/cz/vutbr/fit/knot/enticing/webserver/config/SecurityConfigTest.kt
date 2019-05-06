@@ -13,13 +13,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @WebMvcTest
 @ExtendWith(SpringExtension::class)
-internal class SecurityConfigTest {
-
-    @Autowired
-    lateinit var mockMvc: MockMvc
-
-    @Value("\${api.base.path}")
-    lateinit var apiBasePath: String
+internal class SecurityConfigTest(
+        @Autowired val mockMvc: MockMvc,
+        @Value("\${api.base.path}") val apiBasePath: String
+) {
 
     @Test
     fun `Root url is accessible`() {

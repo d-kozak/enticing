@@ -12,9 +12,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 @WebMvcTest
 @ExtendWith(SpringExtension::class)
-internal class WebConfigTest {
-    @Autowired
-    lateinit var mockMvc: MockMvc
+internal class WebConfigTest(@Autowired val mockMvc: MockMvc) {
 
     @Test
     fun `Paths that should be handled by frontend are delegated to index`() {

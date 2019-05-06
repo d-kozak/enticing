@@ -12,13 +12,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @WebMvcTest(secure = false)
 @ExtendWith(SpringExtension::class)
-internal class UserControllerTest {
-
-    @Autowired
-    lateinit var mockMvc: MockMvc
-
-    @Value("\${api.base.path}")
-    lateinit var apiBasePath: String
+internal class UserControllerTest(
+        @Autowired val mockMvc: MockMvc,
+        @Value("\${api.base.path}") val apiBasePath: String
+) {
 
     @Test
     fun `Endpoint exists`() {
