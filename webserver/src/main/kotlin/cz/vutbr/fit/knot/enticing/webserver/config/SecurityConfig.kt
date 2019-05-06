@@ -9,7 +9,7 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
         http.authorizeRequests()
-                .antMatchers("/*")
+                .antMatchers("/*", "/static/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

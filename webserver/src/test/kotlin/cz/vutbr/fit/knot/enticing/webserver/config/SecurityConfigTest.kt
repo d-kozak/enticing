@@ -33,6 +33,18 @@ class SecurityConfigTest {
                 .andExpect(status().isOk)
     }
 
+    @Test
+    fun `static css folder is accessible`() {
+        mockMvc.perform(get("/static/css"))
+                .andExpect(status().isOk)
+    }
+
+    @Test
+    fun `static js folder is accessible`() {
+        mockMvc.perform(get("/static/js"))
+                .andExpect(status().isOk)
+    }
+
     @Nested
     inner class User {
 
