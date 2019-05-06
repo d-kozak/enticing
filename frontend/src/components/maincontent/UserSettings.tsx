@@ -16,21 +16,28 @@ import Grid from "@material-ui/core/es/Grid";
 import Button from "@material-ui/core/es/Button";
 import ChangePasswordDialog from "../changepassworddialog/ChangePasswordDialog";
 import {changePasswordDialogOpenAction} from "../../actions/dialog/ChangePasswordDialogActions";
-import {changePasswordAction} from "../../actions/AdminActions";
+import {changeUserPasswordRequestAction} from "../../actions/UserActions";
 import {User} from "../../entities/User";
+import {isLoggedInSelector} from "../../reducers/selectors";
+import {Redirect} from "react-router";
+import Divider from "@material-ui/core/Divider";
 
 const styles = (theme: Theme) => createStyles({
     root: {
+        minWidth: '300px',
         position: 'fixed',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)'
     },
-    submitButton: {
+    formButton: {
         margin: '10px'
     },
     title: {
         margin: '10px'
+    },
+    divider: {
+        margin: '0px 10px'
     },
     formField: {
         margin: '0px 10px'
@@ -47,7 +54,12 @@ const schema = Yup.object({
 });
 
 const UserSettings = (props: UserSettingsProps) => {
-    const {classes, userSettings, updateUserSettings, openChangePasswordDialog, changePassword} = props;
+    const {isLoggedIn, user, classes, userSettings, updateUserSettings, openChangePasswordDialog, changePassword} = props;
+
+    if (!isLoggedIn) {
+        return <Redirect to="/"/>
+    }
+
     return <Paper className={classes.root}>
         <Typography variant="h3" className={classes.title}>User settings</Typography>
         <Formik
@@ -62,13 +74,22 @@ const UserSettings = (props: UserSettingsProps) => {
         >
             {({isSubmitting}) =>
                 <Form>
+                    <Divider className={classes.divider}/>
+                    <Typography className={classes.title} variant="h5">Searching</Typography>
                     <Field variant="outlined" label="Results per page" name="resultsPerPage"
                            className={classes.formField}
                            component={TextField}
                            type="number"/>
+                    <Divider className={classes.divider}/>
+                    <Grid container justify="flex-start" alignItems="center">
+                        <Grid item>
+                            <Button onClick={() => openChangePasswordDialog(user)} variant="contained" color="secondary"
+                                    className={classes.formButton}>Change password</Button>
+                        </Grid>
+                    </Grid>
                     <Grid container justify="flex-end" alignItems="center">
                         <Grid item>
-                            <Button variant="contained" color="primary" type="submit" className={classes.submitButton}
+                            <Button variant="contained" color="primary" type="submit" className={classes.formButton}
                                     disabled={isSubmitting}>Save</Button>
                         </Grid>
                     </Grid>
@@ -81,11 +102,13 @@ const UserSettings = (props: UserSettingsProps) => {
 
 
 const mapStateToProps = (state: AppState) => ({
-    userSettings: state.userSettings
+    isLoggedIn: isLoggedInSelector(state),
+    userSettings: state.userSettings,
+    user: state.userState.user!
 });
 const mapDispatchToProps = {
     openChangePasswordDialog: changePasswordDialogOpenAction,
-    changePassword: changePasswordAction as (user: User, newPassword: string) => void,
+    changePassword: changeUserPasswordRequestAction as (user: User, newPassword: string) => void,
     updateUserSettings: userSettingsUpdateRequestAction as (settings: UserSettingsModel, onDone: () => void, onError: () => void) => void
 };
 

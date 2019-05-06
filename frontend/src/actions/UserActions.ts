@@ -1,5 +1,11 @@
 import {ThunkResult} from "./RootActions";
-import {mockLogin, mockLogout, mockSignup, mockUserSettingsSelectedRequest} from "../mocks/mockUserApi";
+import {
+    mockChangePassword,
+    mockLogin,
+    mockLogout,
+    mockSignup,
+    mockUserSettingsSelectedRequest
+} from "../mocks/mockUserApi";
 import {SearchSettings} from "../entities/SearchSettings";
 import {User} from "../entities/User";
 
@@ -50,4 +56,8 @@ export const loginRequestAction = (login: string, password: string, onError: (er
 
 export const signUpAction = (login: string, password: string, onError: (error: any) => void): ThunkResult<void> => (dispatch) => {
     mockSignup(login, password, dispatch, onError);
+};
+
+export const changeUserPasswordRequestAction = (user: User, newPassword: string): ThunkResult<void> => (dispatch) => {
+    mockChangePassword(user, newPassword, dispatch);
 };
