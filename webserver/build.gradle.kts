@@ -31,8 +31,14 @@ dependencies {
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.h2database:h2")
     runtimeOnly("org.postgresql:postgresql")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        // exclude junit4 that would be otherwise added as transitive dependency
+        exclude("junit", "junit")
+    }
     testImplementation("org.springframework.security:spring-security-test")
+
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.3.2")
+    testCompile("org.junit.jupiter:junit-jupiter-engine:5.3.2")
 }
 
 configure<JavaPluginConvention> {
