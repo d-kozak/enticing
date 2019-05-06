@@ -16,6 +16,8 @@ buildscript {
 apply plugin: 'base'
 apply plugin: 'com.moowork.node'
 
+group = "cz.vutbr.knot.enticing"
+version = "0.0.1-SNAPSHOT"
 
 node {
     version = '10.14.1'

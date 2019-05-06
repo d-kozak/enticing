@@ -1,2 +1,2 @@
 rootProject.name = "enticing"
-include("frontend")
+include("frontend", "webserver")
