@@ -36,6 +36,7 @@ dependencies {
         // exclude junit4 that would be otherwise added as transitive dependency
         exclude("junit", "junit")
     }
+    testImplementation("io.mockk:mockk:1.9")
     testImplementation("org.springframework.security:spring-security-test")
 
     testCompile("org.junit.jupiter:junit-jupiter-api:5.3.2")
