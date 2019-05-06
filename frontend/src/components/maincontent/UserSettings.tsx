@@ -3,7 +3,7 @@ import {Theme, WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
 import {AppState} from "../../reducers/RootReducer";
 import {connect} from "react-redux";
-import React from 'react';
+import React, {useState} from 'react';
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import * as Yup from 'yup';
@@ -21,6 +21,7 @@ import {User} from "../../entities/User";
 import {isLoggedInSelector} from "../../reducers/selectors";
 import {Redirect} from "react-router";
 import Divider from "@material-ui/core/Divider";
+import LinearProgress from "@material-ui/core/es/LinearProgress";
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -41,6 +42,9 @@ const styles = (theme: Theme) => createStyles({
     },
     formField: {
         margin: '0px 10px'
+    },
+    progress: {
+        //  marginBottom: '15px'
     }
 });
 
@@ -60,14 +64,20 @@ const UserSettings = (props: UserSettingsProps) => {
         return <Redirect to="/"/>
     }
 
+    const [showProgress, setShowProgress] = useState(false);
+
     return <Paper className={classes.root}>
+        {showProgress && <LinearProgress className={classes.progress}/>}
         <Typography variant="h3" className={classes.title}>User settings</Typography>
         <Formik
             initialValues={userSettings}
             onSubmit={(values, actions) => {
+                setShowProgress(true);
                 updateUserSettings(values, () => {
                     actions.setSubmitting(false);
+                    setShowProgress(false);
                 }, () => {
+                    setShowProgress(false);
                 });
             }}
             validationSchema={schema}

@@ -191,11 +191,9 @@ export const mockUserSettingsRequest = (dispatch: Dispatch) => {
 };
 
 export const mockUserSettingsUpdate = (dispatch: Dispatch, settings: UserSettings, oneDone: () => void) => {
-    dispatch(showProgressBarAction());
     setTimeout(() => {
         dispatch(userSettingsUpdatedAction(settings));
         oneDone();
         dispatch(openSnackBar('User settings updated'));
-        dispatch(hideProgressBarAction());
     }, 2000);
 };
