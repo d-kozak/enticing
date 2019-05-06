@@ -3,12 +3,20 @@ package cz.vutbr.fit.knot.enticing.webserver.entity
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
+import javax.persistence.ElementCollection
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
 
+@Entity
 class EnticingUser(login: String = "", password: String = "") : UserDetails {
+    @Id
+    @GeneratedValue
     var id: Long = 0
     var login: String = login
     var encryptedPassword: String = password
     var isActive: Boolean = true
+    @ElementCollection
     var roles: MutableSet<String> = mutableSetOf()
     var selectedSettings: Long? = null
 
