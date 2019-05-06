@@ -6,6 +6,19 @@ All source code related to the Enticing project.
 
 * frontend
     * Web based interface
+* webserver
+    * Spring Boot application that serves the frontend
+
+## Build
+Production build
+```
+gradle stage
+```
+
+Run locally
+```
+gradle bootRun
+```
 
 ## Authors
 * [d-kozak](https://github.com/d-kozak/)
