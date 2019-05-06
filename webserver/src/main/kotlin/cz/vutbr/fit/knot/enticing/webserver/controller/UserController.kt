@@ -1,13 +1,18 @@
 package cz.vutbr.fit.knot.enticing.webserver.controller
 
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import cz.vutbr.fit.knot.enticing.webserver.entity.EnticingUser
+import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("\${api.base.path}/user")
-class UserController {
+class UserController(private val userService: EnticingUserService) {
 
     @GetMapping
     fun get() = "user"
+
+    @PostMapping
+    fun createUser(@RequestBody user: EnticingUser) {
+        userService.saveUser(user)
+    }
 }
