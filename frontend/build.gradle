@@ -1,0 +1,62 @@
+/*
+ * TODO migrate to kotlin dsl when you figure out how to handle the node plugin there
+ */
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath 'com.moowork.gradle:gradle-node-plugin:1.2.0'
+    }
+}
+
+apply plugin: 'base'
+apply plugin: 'com.moowork.node'
+
+
+node {
+    version = '10.14.1'
+    npmVersion = '6.4.1'
+    download = true
+}
+
+npm_run_build {
+    inputs.files fileTree("public")
+    inputs.files fileTree("src")
+    inputs.file 'package.json'
+    inputs.file 'package-lock.json'
+    outputs.dir 'build'
+}
+
+
+
+task packageApp(type: Zip) {
+    dependsOn npm_run_build
+    baseName 'cz.vutbr.fit.knot.enticing.frontend'
+    extension 'jar'
+    destinationDir file("${projectDir}/jar")
+    from('build') {
+        // optional path under which output will be visible in Java classpath, e.g. static resources path
+        into 'static'
+    }
+}
+
+configurations {
+    npmResources
+}
+
+configurations.default.extendsFrom(configurations.npmResources)
+
+artifacts {
+    npmResources(packageApp.archivePath) {
+        builtBy packageApp
+        type "jar"
+    }
+}
+
+clean {
+    delete packageApp.archivePath
+}

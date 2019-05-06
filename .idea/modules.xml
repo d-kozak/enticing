@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/enticing.iml" filepath="$PROJECT_DIR$/.idea/enticing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/frontend/enticing.frontend.iml" filepath="$PROJECT_DIR$/.idea/modules/frontend/enticing.frontend.iml" />
     </modules>
   </component>
 </project>
