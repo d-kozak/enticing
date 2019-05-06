@@ -29,7 +29,7 @@ class EnticingUser(login: String = "", password: String = "") : UserDetails {
 
     var selectedSettings: Long? = null
 
-
+    @JsonIgnore
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> = roles
             .asSequence()
             .map { SimpleGrantedAuthority(it) }
@@ -39,8 +39,10 @@ class EnticingUser(login: String = "", password: String = "") : UserDetails {
     @JsonIgnore
     override fun isEnabled(): Boolean = isActive
 
+    @JsonIgnore
     override fun getUsername(): String = login
 
+    @JsonIgnore
     override fun getPassword(): String = encryptedPassword
 
     override fun equals(other: Any?): Boolean {

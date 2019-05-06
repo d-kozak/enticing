@@ -15,4 +15,12 @@ class EnticingEntityJacksonTest {
                 .contains("id", "login", "isActive", "roles", "selectedSettings")
                 .doesNotContain("encryptedPassword")
     }
+
+    @Test
+    fun bothWays() {
+        val user = EnticingUser("Pepa")
+        val serialized = mapper.writeValueAsString(user)
+        val reconstructedUser: EnticingUser = mapper.readerFor(EnticingUser::class.java).readValue(serialized)
+        assertThat(user).isEqualTo(reconstructedUser)
+    }
 }
