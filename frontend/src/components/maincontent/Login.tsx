@@ -121,7 +121,7 @@ const Login = (props: LoginProps) => {
 const mapStateToProps = (state: AppState) => ({isLoggedIn: isLoggedInSelector(state)})
 
 const mapDispatchToProps = {
-    login: loginRequestAction as (login: string, password: string, onError: (errors: any) => void) => void
+    login: loginRequestAction as (login: string, password: string, onError: (errors: { login?: string, password?: string }) => void) => void
 }
 
 export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(Login))
