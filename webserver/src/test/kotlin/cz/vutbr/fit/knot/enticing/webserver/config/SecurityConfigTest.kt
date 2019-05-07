@@ -80,6 +80,12 @@ internal class SecurityConfigTest(
 
 
         @Test
+        fun `Logout is accessible`() {
+            mockMvc.perform(get("$apiBasePath/logout"))
+                    .andExpect(status().isOk)
+        }
+
+        @Test
         fun `Root url is accessible`() {
             mockMvc.perform(get("/"))
                     .andExpect(status().isOk)

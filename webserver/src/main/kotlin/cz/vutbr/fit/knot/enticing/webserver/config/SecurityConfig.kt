@@ -4,6 +4,7 @@ import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpStatus
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache
 import org.springframework.util.StringUtils
 import javax.servlet.http.HttpServletRequest
@@ -39,6 +41,10 @@ class SecurityConfig(
                 .loginProcessingUrl("$apiBasePath/login")
                 .successHandler(authenticationSuccessHandler())
                 .failureHandler(authenticationFailureHandler())
+                .and()
+                .logout()
+                .logoutUrl("$apiBasePath/logout")
+                .logoutSuccessHandler(HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK))
     }
 
     override fun configure(auth: AuthenticationManagerBuilder) {
