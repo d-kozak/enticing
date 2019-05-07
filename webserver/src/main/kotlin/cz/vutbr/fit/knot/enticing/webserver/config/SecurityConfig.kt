@@ -1,23 +1,82 @@
 package cz.vutbr.fit.knot.enticing.webserver.config
 
+import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+import org.springframework.security.core.Authentication
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.web.AuthenticationEntryPoint
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache
+import org.springframework.util.StringUtils
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
 @Configuration
-class SecurityConfig : WebSecurityConfigurerAdapter() {
+class SecurityConfig(
+        val userService: EnticingUserService,
+        @Value("\${api.base.path}") val apiBasePath: String
+) : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
-        http.authorizeRequests()
-                .antMatchers("/*", "/static/**")
+        http.csrf().disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPoint())
+                .and()
+                .authorizeRequests()
+                .antMatchers("/*", "/static/**", "$apiBasePath/login")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
+                .and()
+                .formLogin()
+                .loginProcessingUrl("$apiBasePath/login")
+                .successHandler(authenticationSuccessHandler())
+                .failureHandler(authenticationFailureHandler())
+    }
+
+    override fun configure(auth: AuthenticationManagerBuilder) {
+        auth.userDetailsService(userService)
     }
 
     @Bean
     fun encoder(): PasswordEncoder = BCryptPasswordEncoder(11)
+
+    @Bean
+    fun authenticationEntryPoint() = AuthenticationEntryPoint { _, response, _ ->
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
+                "Unauthorized")
+    }
+
+    @Bean
+    fun authenticationSuccessHandler() = object : SimpleUrlAuthenticationSuccessHandler() {
+
+        var requestCache = HttpSessionRequestCache()
+
+        override fun onAuthenticationSuccess(request: HttpServletRequest, response: HttpServletResponse?, authentication: Authentication) {
+            val savedRequest = requestCache.getRequest(request, response)
+
+            if (savedRequest == null) {
+                clearAuthenticationAttributes(request)
+                return
+            }
+            val targetUrlParam = targetUrlParameter
+            if (isAlwaysUseDefaultTargetUrl || targetUrlParam != null && StringUtils.hasText(request.getParameter(targetUrlParam))) {
+                requestCache.removeRequest(request, response)
+                clearAuthenticationAttributes(request)
+                return
+            }
+
+            clearAuthenticationAttributes(request)
+        }
+    }
+
+    @Bean
+    fun authenticationFailureHandler() = SimpleUrlAuthenticationFailureHandler()
 }

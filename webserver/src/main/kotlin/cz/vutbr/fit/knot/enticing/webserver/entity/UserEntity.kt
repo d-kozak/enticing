@@ -49,19 +49,12 @@ class UserEntity(
     }
 
 
-    override fun isCredentialsNonExpired(): Boolean {
-        throw NotImplementedError("An operation is not implemented")
-    }
+    override fun isCredentialsNonExpired(): Boolean = active
+
+    override fun isAccountNonExpired(): Boolean = active
 
 
-    override fun isAccountNonExpired(): Boolean {
-        throw NotImplementedError("An operation is not implemented")
-    }
-
-
-    override fun isAccountNonLocked(): Boolean {
-        throw NotImplementedError("An operation is not implemented")
-    }
+    override fun isAccountNonLocked(): Boolean = active
 
     override fun toString(): String {
         return "UserEntity(id=$id, login='$login', active=$active, roles=$roles, selectedSettings=$selectedSettings)"
