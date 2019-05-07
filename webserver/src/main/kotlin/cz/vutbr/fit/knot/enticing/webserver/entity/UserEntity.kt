@@ -1,7 +1,5 @@
 package cz.vutbr.fit.knot.enticing.webserver.entity
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
@@ -11,43 +9,35 @@ import javax.persistence.GeneratedValue
 import javax.persistence.Id
 
 @Entity
-class EnticingUser(login: String = "", password: String = "") : UserDetails {
-    @Id
-    @GeneratedValue
-    var id: Long = 0
+class UserEntity(
+        @Id
+        @GeneratedValue
+        var id: Long = 0,
+        var login: String = "",
+        var encryptedPassword: String = "",
+        var active: Boolean = true,
+        @ElementCollection
+        var roles: Set<String> = setOf(),
+        var selectedSettings: Long? = null
+) : UserDetails {
 
-    var login: String = login
-
-    @JsonIgnore
-    var encryptedPassword: String = password
-
-    @JsonProperty("isActive")
-    var isActive: Boolean = true
-
-    @ElementCollection
-    var roles: MutableSet<String> = mutableSetOf()
-
-    var selectedSettings: Long? = null
-
-    @JsonIgnore
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> = roles
             .asSequence()
             .map { SimpleGrantedAuthority(it) }
             .toMutableSet()
 
 
-    @JsonIgnore
-    override fun isEnabled(): Boolean = isActive
+    override fun isEnabled(): Boolean = active
 
-    @JsonIgnore
+
     override fun getUsername(): String = login
 
-    @JsonIgnore
+
     override fun getPassword(): String = encryptedPassword
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is EnticingUser) return false
+        if (other !is UserEntity) return false
 
         if (login != other.login) return false
 
@@ -59,22 +49,21 @@ class EnticingUser(login: String = "", password: String = "") : UserDetails {
     }
 
 
-    @JsonIgnore
     override fun isCredentialsNonExpired(): Boolean {
         throw NotImplementedError("An operation is not implemented")
     }
 
-    @JsonIgnore
+
     override fun isAccountNonExpired(): Boolean {
         throw NotImplementedError("An operation is not implemented")
     }
 
-    @JsonIgnore
+
     override fun isAccountNonLocked(): Boolean {
         throw NotImplementedError("An operation is not implemented")
     }
 
     override fun toString(): String {
-        return "EnticingUser(id=$id, login='$login', isActive=$isActive, roles=$roles, selectedSettings=$selectedSettings)"
+        return "UserEntity(id=$id, login='$login', active=$active, roles=$roles, selectedSettings=$selectedSettings)"
     }
 }

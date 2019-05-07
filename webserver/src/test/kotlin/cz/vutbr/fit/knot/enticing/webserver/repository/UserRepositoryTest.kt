@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver.repository
 
-import cz.vutbr.fit.knot.enticing.webserver.entity.EnticingUser
+import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -12,9 +12,9 @@ import java.util.*
 
 @ExtendWith(SpringExtension::class)
 @DataJpaTest
-class EnticingUserRepositoryTest(
+class UserRepositoryTest(
         @Autowired val entityManager: TestEntityManager,
-        @Autowired val userRepository: EnticingUserRepository
+        @Autowired val userRepository: UserRepository
 ) {
 
     @Test
@@ -25,7 +25,7 @@ class EnticingUserRepositoryTest(
 
     @Test
     fun `findByLogin one user should be found`() {
-        entityManager.persistFlushFind(EnticingUser("dkozak"))
+        entityManager.persistFlushFind(UserEntity(login = "dkozak"))
         assertThat(userRepository.findByLogin("dkozak"))
                 .isNotNull
                 .extracting { it!!.login }
@@ -34,10 +34,10 @@ class EnticingUserRepositoryTest(
 
     @Test
     fun `Verify that save updates entity when the same id is used`() {
-        val user = entityManager.persistFlushFind(EnticingUser("abc"))
+        val user = entityManager.persistFlushFind(UserEntity(login = "abc"))
         assertThat(userRepository.findAll().size).isEqualTo(1)
 
-        val userInNewRequest = EnticingUser("bcd").apply { id = user.id }
+        val userInNewRequest = UserEntity(login = "bcd").apply { id = user.id }
 
         userRepository.save(userInNewRequest)
         assertThat(userRepository.findAll().size).isEqualTo(1)

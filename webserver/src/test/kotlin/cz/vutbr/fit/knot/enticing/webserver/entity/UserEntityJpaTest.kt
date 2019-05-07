@@ -10,13 +10,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
 @DataJpaTest
-internal class EnticingUserJpaTest(
+internal class UserEntityJpaTest(
         @Autowired val entityManager: TestEntityManager
 ) {
 
     @Test
     fun `Test persist`() {
-        val user = EnticingUser("dkozak")
+        val user = UserEntity()
         assertThat(entityManager.persistFlushFind(user))
                 .extracting { it.id }
                 .isNotEqualTo(0)

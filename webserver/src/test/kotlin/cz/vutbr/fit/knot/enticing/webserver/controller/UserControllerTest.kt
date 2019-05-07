@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import cz.vutbr.fit.knot.enticing.webserver.entity.EnticingUser
+import cz.vutbr.fit.knot.enticing.webserver.dto.UserWithPassword
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -35,11 +35,14 @@ internal class UserControllerTest(
 
     @Test
     fun `Create user`() {
-        val user = EnticingUser("Pepa").apply {
-            roles = mutableSetOf("ADMIN")
-            isActive = false
-            selectedSettings = 42
-        }
+        val user = UserWithPassword(
+                id = 0,
+                login = "Pepa",
+                password = "123",
+                roles = mutableSetOf("ADMIN"),
+                active = false,
+                selectedSettings = 42
+        )
         val serialized = ObjectMapper().writeValueAsString(user)
         mockMvc.perform(post("$apiBasePath/user")
                 .content(serialized)
@@ -47,6 +50,6 @@ internal class UserControllerTest(
                 .andExpect(status().isOk)
 
         Mockito.verify(userService)
-                .saveUser(EnticingUser("Pepa"))
+                .saveUser(user)
     }
 }
