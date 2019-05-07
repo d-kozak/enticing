@@ -11,12 +11,13 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.security.core.userdetails.UsernameNotFoundException
-
+import org.springframework.security.crypto.password.PasswordEncoder
 
 internal class EnticingUserServiceTest {
 
+    private val mockEncoder = mockk<PasswordEncoder>()
     private val userRepositoryMock = mockk<UserRepository>()
-    private val userService = EnticingUserService(userRepositoryMock)
+    private val userService = EnticingUserService(userRepositoryMock, mockEncoder)
 
     @Test
     fun `loadUserByUsername Test`() {
@@ -35,10 +36,12 @@ internal class EnticingUserServiceTest {
     fun `saveNewUser test`() {
 
         every { userRepositoryMock.save(UserEntity(login = "cat123")) } returns UserEntity(login = "cat123")
+        every { mockEncoder.encode(any()) } returns "foo"
 
         val newUser = UserWithPassword(0, "cat123", "123")
         userService.saveUser(newUser)
-        verify(exactly = 1) { userRepositoryMock.save(UserEntity(login = "cat123")) }
+        verify(exactly = 1) { mockEncoder.encode("123") }
+        verify(exactly = 1) { userRepositoryMock.save(UserEntity(login = "cat123", encryptedPassword = "foo")) }
     }
 
     @Test

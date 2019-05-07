@@ -6,16 +6,19 @@ import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
-class EnticingUserService(private val userRepository: UserRepository) : UserDetailsService {
+class EnticingUserService(private val userRepository: UserRepository, private val encoder: PasswordEncoder) : UserDetailsService {
 
     override fun loadUserByUsername(username: String): UserDetails = userRepository.findByLogin(username)
             ?: throw UsernameNotFoundException("UserSpecification with login $username not found")
 
     fun saveUser(newUser: UserWithPassword) {
-        userRepository.save(newUser.toEntity())
+        val userEntity = newUser.toEntity()
+        userEntity.encryptedPassword = encoder.encode(newUser.password)
+        userRepository.save(userEntity)
     }
 
     fun deleteUser(user: User) {
