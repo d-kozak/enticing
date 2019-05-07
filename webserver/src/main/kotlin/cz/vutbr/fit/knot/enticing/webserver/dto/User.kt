@@ -1,14 +1,18 @@
 package cz.vutbr.fit.knot.enticing.webserver.dto
 
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
+import javax.validation.constraints.NotEmpty
 
 open class User(
         val id: Long = 0,
-        val login: String = "",
+        login: String = "",
         val active: Boolean = true,
         val roles: Set<String> = emptySet(),
         val selectedSettings: Long? = null
 ) {
+
+    @NotEmpty
+    val login: String = login
 
     open fun toEntity(): UserEntity = UserEntity(id, login, "", active, roles, selectedSettings)
 
@@ -42,10 +46,13 @@ open class User(
 
 class UserWithPassword(id: Long = 0,
                        login: String = "",
-                       val password: String = "",
+                       password: String,
                        active: Boolean = true,
                        roles: Set<String> = emptySet(),
                        selectedSettings: Long? = null) : User(id, login, active, roles, selectedSettings) {
+
+    @NotEmpty
+    val password: String = password
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

@@ -6,13 +6,14 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("\${api.base.path}/user")
 class UserController(private val userService: EnticingUserService) {
 
     @PostMapping
-    fun signup(@RequestBody user: UserWithPassword) {
+    fun signup(@RequestBody @Valid user: UserWithPassword) {
         userService.saveUser(user)
     }
 }

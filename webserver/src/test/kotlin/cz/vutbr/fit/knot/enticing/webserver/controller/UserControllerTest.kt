@@ -44,5 +44,46 @@ internal class UserControllerTest(
 
         Mockito.verify(userService)
                 .saveUser(user)
+        Mockito.clearInvocations(userService)
+    }
+
+    @Test
+    fun `Empty login for signup should fail`() {
+        val user = UserWithPassword(
+                id = 0,
+                login = "",
+                password = "123",
+                roles = mutableSetOf("ADMIN"),
+                active = false,
+                selectedSettings = 42
+        )
+        val serialized = ObjectMapper().writeValueAsString(user)
+        mockMvc.perform(post("$apiBasePath/user")
+                .content(serialized)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().`is`(400))
+
+        Mockito.verifyZeroInteractions(userService)
+        Mockito.clearInvocations(userService)
+    }
+
+    @Test
+    fun `Empty password for signup should fail`() {
+        val user = UserWithPassword(
+                id = 0,
+                login = "123",
+                password = "",
+                roles = mutableSetOf("ADMIN"),
+                active = false,
+                selectedSettings = 42
+        )
+        val serialized = ObjectMapper().writeValueAsString(user)
+        mockMvc.perform(post("$apiBasePath/user")
+                .content(serialized)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().`is`(400))
+
+        Mockito.verifyZeroInteractions(userService)
+        Mockito.clearInvocations(userService)
     }
 }
