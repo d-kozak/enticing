@@ -32,7 +32,7 @@ class SecurityConfig(
                 .authenticationEntryPoint(authenticationEntryPoint())
                 .and()
                 .authorizeRequests()
-                .antMatchers("/*", "/static/**", "$apiBasePath/login")
+                .antMatchers("/*", "/static/**", "$apiBasePath/login", "$apiBasePath/user")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

@@ -1,5 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.config
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import cz.vutbr.fit.knot.enticing.webserver.dto.UserWithPassword
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
 import org.junit.jupiter.api.Nested
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
+import org.springframework.http.MediaType
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
@@ -113,8 +116,17 @@ internal class SecurityConfigTest(
         inner class User {
 
             @Test
-            fun `User endpoint is not accessible if not logged in`() {
-                mockMvc.perform(get("$apiBasePath/user"))
+            fun `Signup is accessible`() {
+                val user = UserWithPassword(login = "dkozak", password = "pass")
+                mockMvc.perform(post("$apiBasePath/user")
+                        .content(ObjectMapper().writeValueAsString(user))
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk)
+            }
+
+            @Test
+            fun `UserSettings endpoint is not accessible if not logged in`() {
+                mockMvc.perform(get("$apiBasePath/user-settings"))
                         .andExpect(status().`is`(401))
             }
         }
