@@ -25,7 +25,7 @@ class UserRepositoryTest(
 
     @Test
     fun `findByLogin one user should be found`() {
-        entityManager.persistFlushFind(UserEntity(login = "dkozak"))
+        entityManager.persistFlushFind(UserEntity(login = "dkozak", encryptedPassword = "aaa"))
         assertThat(userRepository.findByLogin("dkozak"))
                 .isNotNull
                 .extracting { it!!.login }
@@ -34,10 +34,10 @@ class UserRepositoryTest(
 
     @Test
     fun `Verify that save updates entity when the same id is used`() {
-        val user = entityManager.persistFlushFind(UserEntity(login = "abc"))
+        val user = entityManager.persistFlushFind(UserEntity(login = "abc", encryptedPassword = "vbb"))
         assertThat(userRepository.findAll().size).isEqualTo(1)
 
-        val userInNewRequest = UserEntity(login = "bcd").apply { id = user.id }
+        val userInNewRequest = UserEntity(login = "bcd", encryptedPassword = "aaa").apply { id = user.id }
 
         userRepository.save(userInNewRequest)
         assertThat(userRepository.findAll().size).isEqualTo(1)

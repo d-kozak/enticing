@@ -3,23 +3,32 @@ package cz.vutbr.fit.knot.enticing.webserver.entity
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
-import javax.persistence.ElementCollection
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
+import javax.persistence.*
+import javax.validation.constraints.NotEmpty
 
 @Entity
 class UserEntity(
-        @Id
-        @GeneratedValue
-        var id: Long = 0,
-        var login: String = "",
-        var encryptedPassword: String = "",
-        var active: Boolean = true,
-        @ElementCollection
-        var roles: Set<String> = setOf(),
-        var selectedSettings: Long? = null
+        id: Long = 0,
+        login: String = "",
+        encryptedPassword: String = "",
+        active: Boolean = true,
+        roles: Set<String> = setOf(),
+        selectedSettings: Long? = null
 ) : UserDetails {
+
+    @Id
+    @GeneratedValue
+    var id: Long = id
+    @NotEmpty
+    @Column(unique = true)
+    var login: String = login
+    @NotEmpty
+    var encryptedPassword: String = encryptedPassword
+    var active: Boolean = active
+    @ElementCollection
+    var roles: Set<String> = roles
+    var selectedSettings: Long? = selectedSettings
+
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> = roles
             .asSequence()

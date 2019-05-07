@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @WebMvcTest
-@Import()
+@Import(PasswordEncoderConfiguration::class)
 @ExtendWith(SpringExtension::class)
 internal class SecurityConfigTest(
         @Autowired val mockMvc: MockMvc,
