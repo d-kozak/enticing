@@ -1,0 +1,1 @@
+export const useMockApi = (): boolean => process.env.REACT_APP_MOCK_API !== undefined

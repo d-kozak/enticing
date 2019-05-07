@@ -8,6 +8,8 @@ import {
 } from "../mocks/mockUserApi";
 import {SearchSettings} from "../entities/SearchSettings";
 import {User} from "../entities/User";
+import axios from "axios";
+import {useMockApi} from "../globals";
 
 export const USER_LOGOUT = "[USER] LOGOUT";
 export const USER_LOGIN_SUCCESS = "[USER] LOGIN SUCCESS";
@@ -50,7 +52,19 @@ export const searchSettingsSelectedRequestAction = (settings: SearchSettings): T
 };
 
 export const loginRequestAction = (login: string, password: string, onError: (errors: any) => void): ThunkResult<void> => (dispatch) => {
-    mockLogin(login, password, dispatch, onError);
+    if (useMockApi()) {
+        mockLogin(login, password, dispatch, onError);
+        return;
+    }
+    axios.post("/api/v1/login", JSON.stringify({
+        username: login,
+        password
+    })).then(smth => console.log(smth))
+        .catch(error => {
+            console.error("failure");
+            console.error(error)
+            onError({});
+        });
 };
 
 

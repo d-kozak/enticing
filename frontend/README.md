@@ -21,6 +21,9 @@ Production build
 npm run build
 ```
 
+## Configuration
+If you wish to run the app against mock API, set the environment variable REACT_APP_MOCK_API. Otherwise real API will be used. 
+
 ## Author
 * [d-kozak](https://github.com/d-kozak/)
     * contact: [dkozak94@gmail.com](mailto:dkozak94@gmail.com)
