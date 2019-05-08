@@ -10,6 +10,8 @@ import {SearchSettings} from "../entities/SearchSettings";
 import {User} from "../entities/User";
 import axios from "axios";
 import {API_BASE_PATH, useMockApi} from "../globals";
+import {openSnackBar} from "./SnackBarActions";
+import {loadSearchSettingsAction} from "./SearchSettingsActions";
 
 export const USER_LOGOUT = "[USER] LOGOUT";
 export const USER_LOGIN_SUCCESS = "[USER] LOGIN SUCCESS";
@@ -56,17 +58,28 @@ export const loginRequestAction = (login: string, password: string, onError: (er
         mockLogin(login, password, dispatch, onError);
         return;
     }
-    axios.post(`${API_BASE_PATH}/login`, JSON.stringify({
-        username: login,
-        password
-    })).then(smth => console.log(smth))
-        .catch(error => {
-            if (error && (error.login || error.password)) {
-                onError(error);
-            } else {
-                onError({login: 'Invalid login or password'});
-            }
-        });
+    const formData = new FormData()
+    formData.set("username", login)
+    formData.set("password", password)
+
+    axios.post(`${API_BASE_PATH}/login`, formData)
+        .then(response => {
+            return axios.get<User>(`${API_BASE_PATH}/user`)
+        }).then(response => {
+        dispatch(loginSuccessAction(response.data));
+
+        dispatch(openSnackBar('Logged in'));
+        // @ts-ignore
+        dispatch(loadSearchSettingsAction(response.data.isAdmin));
+
+
+    }).catch(error => {
+        if (error && (error.login || error.password)) {
+            onError(error);
+        } else {
+            onError({login: 'Invalid login or password'});
+        }
+    });
 };
 
 
@@ -75,10 +88,12 @@ export const signUpAction = (login: string, password: string, onError: (error: a
         mockSignup(login, password, dispatch, onError);
         return;
     }
-    axios.post(`${API_BASE_PATH}/user`, JSON.stringify({
+    axios.post(`${API_BASE_PATH}/user`, {
         login, password
-    })).then(() => {
-            console.log('time to log in');
+    }).then(() => {
+        dispatch(loginRequestAction(login, password, () => {
+            dispatch(openSnackBar('Signup was successful, but subsequent login failed, please try to log in manually'))
+        }))
         }
     ).catch(error => {
             console.error(error);
