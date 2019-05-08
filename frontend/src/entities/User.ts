@@ -1,7 +1,10 @@
+import {UserSettings} from "./UserSettings";
+
 export interface User {
     id: number,
     login: string,
     isActive: boolean,
-    isAdmin: boolean,
-    selectedSettings: number | null
+    roles: Set<String>,
+    selectedSettings: number | null,
+    userSettings: UserSettings
 }

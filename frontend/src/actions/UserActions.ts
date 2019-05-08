@@ -4,6 +4,7 @@ import {
     mockLogin,
     mockLogout,
     mockSignup,
+    mockUpdateUserSettings,
     mockUserSettingsSelectedRequest
 } from "../mocks/mockUserApi";
 import {SearchSettings} from "../entities/SearchSettings";
@@ -12,9 +13,11 @@ import axios from "axios";
 import {API_BASE_PATH, useMockApi} from "../globals";
 import {openSnackBar} from "./SnackBarActions";
 import {loadSearchSettingsAction} from "./SearchSettingsActions";
+import {UserSettings as UserSettingsModel, UserSettings} from "../entities/UserSettings";
 
 export const USER_LOGOUT = "[USER] LOGOUT";
 export const USER_LOGIN_SUCCESS = "[USER] LOGIN SUCCESS";
+export const USER_SETTINGS_UPDATED = "[USER] SETTINGS UPDATED";
 export const USER_SEARCH_SETTINGS_SELECTED_SUCCESS = "[USER] SETTINGS SELECTED SUCCESS";
 
 interface LogoutAction {
@@ -26,12 +29,21 @@ interface LoginSuccessAction {
     user: User
 }
 
+interface UserSettingsUpdatedAction {
+    type: typeof USER_SETTINGS_UPDATED,
+    userSettings: UserSettings
+}
+
 interface UserSearchSettingsSelectedSuccessAction {
     type: typeof USER_SEARCH_SETTINGS_SELECTED_SUCCESS,
     settings: SearchSettings
 }
 
-export type UserAction = LoginSuccessAction | LogoutAction | UserSearchSettingsSelectedSuccessAction;
+export type UserAction =
+    LoginSuccessAction
+    | LogoutAction
+    | UserSettingsUpdatedAction
+    | UserSearchSettingsSelectedSuccessAction;
 
 export const logoutSuccessAction = (): LogoutAction => ({type: USER_LOGOUT});
 
@@ -39,6 +51,11 @@ export const userSearchSettingsSelectedSuccessAction = (settings: SearchSettings
     type: USER_SEARCH_SETTINGS_SELECTED_SUCCESS,
     settings
 });
+
+export const userSettingsUpdatedAction = (userSettings: UserSettings): UserSettingsUpdatedAction => ({
+    type: USER_SETTINGS_UPDATED,
+    userSettings
+})
 
 export const logoutRequestAction = (): ThunkResult<void> => dispatch => {
     mockLogout(dispatch);
@@ -64,12 +81,12 @@ export const loginRequestAction = (login: string, password: string, onError: (er
 
     axios.post(`${API_BASE_PATH}/login`, formData)
         .then(response => {
-        dispatch(loginSuccessAction(response.data));
+            dispatch(loginSuccessAction(response.data));
 
-        dispatch(openSnackBar('Logged in'));
-        // @ts-ignore
-        dispatch(loadSearchSettingsAction(response.data.isAdmin));
-    }).catch(error => {
+            dispatch(openSnackBar('Logged in'));
+            // @ts-ignore
+            dispatch(loadSearchSettingsAction(response.data.isAdmin));
+        }).catch(error => {
         if (error && (error.login || error.password)) {
             onError(error);
         } else {
@@ -97,6 +114,10 @@ export const signUpAction = (login: string, password: string, onError: (error: a
         }
     )
 };
+
+export const userSettingsUpdateRequest = (settings: UserSettingsModel, onDone: () => void, onError: () => void): ThunkResult<void> => (dispatch) => {
+    mockUpdateUserSettings(settings, onDone, dispatch)
+}
 
 export const changeUserPasswordRequestAction = (user: User, newPassword: string): ThunkResult<void> => (dispatch) => {
     mockChangePassword(user, newPassword, dispatch);

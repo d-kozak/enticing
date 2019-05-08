@@ -18,6 +18,7 @@ import UserSettings from "./maincontent/UserSettings";
 import {loadSearchSettingsAction} from "../actions/SearchSettingsActions";
 import SelectSearchSettingsPage from "./maincontent/SearchSettingsPage";
 import {isAdminSelector} from "../reducers/selectors";
+import UserRoute from "./routes/UserRoute";
 
 type AppProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>
 
@@ -44,7 +45,7 @@ const App = ({loadSearchSettings, showSnackBarMessage, isAdmin, progressBarVisib
                 <Route path="/login" render={({}) => <Login/>}/>
                 <Route path="/signup" render={() => <SignUp/>}/>
                 <Route path="/search-settings" render={() => <SelectSearchSettingsPage/>}/>
-                <Route path="/settings" render={() => <UserSettings/>}/>
+                <UserRoute path="/settings" render={() => <UserSettings/>}/>
                 <AdminRoute path="/users" isAdmin={isAdmin} showSnackBarMessage={showSnackBarMessage}
                             render={() => <UserManagement/>}/>
                 <Route path="/:path" render={({match}) => <UnknownRoute path={match.params.path}/>}/>

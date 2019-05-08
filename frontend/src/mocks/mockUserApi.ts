@@ -1,6 +1,11 @@
 import {Dispatch} from "redux";
 import {openSnackBar} from "../actions/SnackBarActions";
-import {loginSuccessAction, logoutSuccessAction, userSearchSettingsSelectedSuccessAction} from "../actions/UserActions";
+import {
+    loginSuccessAction,
+    logoutSuccessAction,
+    userSearchSettingsSelectedSuccessAction,
+    userSettingsUpdatedAction
+} from "../actions/UserActions";
 import {deleteUserSuccessAction, updateUserSuccessAction, usersLoadedAction} from "../actions/AdminActions";
 import {hideProgressBarAction, showProgressBarAction} from "../actions/ProgressBarActions";
 import {User} from "../entities/User";
@@ -15,9 +20,8 @@ import {
     changePasswordDialogShowProgressAction
 } from "../actions/dialog/ChangePasswordDialogActions";
 import {SearchSettings} from "../entities/SearchSettings";
-import {userSettingsLoadedAction, userSettingsUpdatedAction} from "../actions/UserSettingsActions";
-import {UserSettings} from "../entities/UserSettings";
 import {loadSearchSettingsAction} from "../actions/SearchSettingsActions";
+import {UserSettings as UserSettingsModel} from "../entities/UserSettings";
 
 
 interface MockUser extends User {
@@ -31,8 +35,11 @@ const mockUsers = new Map<string, MockUser>([
         login: 'user1',
         password: 'user1',
         isActive: true,
-        isAdmin: false,
-        selectedSettings: null
+        roles: new Set(),
+        selectedSettings: null,
+        userSettings: {
+            resultsPerPage: 20
+        }
     }
     ],
     [
@@ -41,8 +48,11 @@ const mockUsers = new Map<string, MockUser>([
         login: 'passive',
         password: 'passive',
         isActive: false,
-        isAdmin: false,
-        selectedSettings: null
+        roles: new Set(),
+        selectedSettings: null,
+        userSettings: {
+            resultsPerPage: 25
+        }
     }
     ],
     [
@@ -51,8 +61,11 @@ const mockUsers = new Map<string, MockUser>([
         login: 'admin',
         password: 'admin',
         isActive: true,
-        isAdmin: true,
-        selectedSettings: null
+        roles: new Set(['ADMIN']),
+        selectedSettings: null,
+        userSettings: {
+            resultsPerPage: 50
+        }
     }
     ]
 ]);
@@ -68,8 +81,11 @@ export const mockSignup = (login: string, password: string, dispatch: Dispatch, 
                 login,
                 password,
                 isActive: true,
-                isAdmin: false,
-                selectedSettings: null
+                roles: new Set(),
+                selectedSettings: null,
+                userSettings: {
+                    resultsPerPage: 20
+                }
             };
             mockUsers.set(login, newUser);
             dispatch(openSnackBar('Signed up successfully'))
@@ -155,6 +171,14 @@ export const mockDeleteUser = (user: User, dispatch: Dispatch) => {
 };
 
 
+export const mockUpdateUserSettings = (settings: UserSettingsModel, onDone: () => void, dispatch: Dispatch) => {
+    setTimeout(() => {
+        dispatch(userSettingsUpdatedAction(settings));
+        dispatch(openSnackBar("User settings updated"));
+        onDone()
+    }, 2000);
+}
+
 export const mockChangePassword = (user: User, newPassword: string, dispatch: Dispatch) => {
     dispatch(changePasswordDialogShowProgressAction());
     setTimeout(() => {
@@ -177,23 +201,5 @@ export const mockUserSettingsSelectedRequest = (settings: SearchSettings, dispat
         dispatch(userSearchSettingsSelectedSuccessAction(settings));
         dispatch(openSnackBar(`Selected configuration ${settings.name}`));
         dispatch(hideProgressBarAction());
-    }, 2000);
-};
-
-export const mockUserSettingsRequest = (dispatch: Dispatch) => {
-    dispatch(showProgressBarAction());
-    setTimeout(() => {
-        dispatch(userSettingsLoadedAction({
-            resultsPerPage: 42
-        }));
-        dispatch(hideProgressBarAction());
-    }, 2000);
-};
-
-export const mockUserSettingsUpdate = (dispatch: Dispatch, settings: UserSettings, oneDone: () => void) => {
-    setTimeout(() => {
-        dispatch(userSettingsUpdatedAction(settings));
-        oneDone();
-        dispatch(openSnackBar('User settings updated'));
     }, 2000);
 };

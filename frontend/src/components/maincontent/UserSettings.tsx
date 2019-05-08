@@ -7,7 +7,6 @@ import React, {useState} from 'react';
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import * as Yup from 'yup';
-import {userSettingsUpdateRequestAction} from "../../actions/UserSettingsActions";
 import {Field, Form, Formik} from "formik";
 
 import {UserSettings as UserSettingsModel} from "../../entities/UserSettings";
@@ -16,7 +15,7 @@ import Grid from "@material-ui/core/es/Grid";
 import Button from "@material-ui/core/es/Button";
 import ChangePasswordDialog from "../changepassworddialog/ChangePasswordDialog";
 import {changePasswordDialogOpenAction} from "../../actions/dialog/ChangePasswordDialogActions";
-import {changeUserPasswordRequestAction} from "../../actions/UserActions";
+import {changeUserPasswordRequestAction, userSettingsUpdateRequest} from "../../actions/UserActions";
 import {User} from "../../entities/User";
 import {isLoggedInSelector} from "../../reducers/selectors";
 import {Redirect} from "react-router";
@@ -113,13 +112,13 @@ const UserSettings = (props: UserSettingsProps) => {
 
 const mapStateToProps = (state: AppState) => ({
     isLoggedIn: isLoggedInSelector(state),
-    userSettings: state.userSettings,
+    userSettings: state.userState.user!.userSettings,
     user: state.userState.user!
 });
 const mapDispatchToProps = {
     openChangePasswordDialog: changePasswordDialogOpenAction,
     changePassword: changeUserPasswordRequestAction as (user: User, newPassword: string) => void,
-    updateUserSettings: userSettingsUpdateRequestAction as (settings: UserSettingsModel, onDone: () => void, onError: () => void) => void
+    updateUserSettings: userSettingsUpdateRequest as (settings: UserSettingsModel, onDone: () => void, onError: () => void) => void
 };
 
 export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(UserSettings));
