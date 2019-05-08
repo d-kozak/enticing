@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver.dto
 
+import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
 import javax.validation.Valid
 import javax.validation.constraints.NotEmpty
@@ -20,13 +21,17 @@ data class User(
         get() = roles.contains("ADMIN")
 }
 
-fun User.toEntity(): UserEntity = UserEntity(id, login, "", active, roles, selectedSettings, userSettings.toEmbeddable())
+/**
+ * Selected settings not handled by this conversion, database access is necessary
+ */
+fun User.toEntity(searchSettings: SearchSettings? = null): UserEntity = UserEntity(id, login, "", active, roles, userSettings.toEmbeddable(), searchSettings)
+
 fun UserEntity.toUser(): User = User(
         id = this.id,
         login = this.login,
         roles = this.roles,
         active = this.active,
-        selectedSettings = this.selectedSettings,
+        selectedSettings = this.selectedSettings?.id,
         userSettings = this.userSettings.toDto())
 
 data class UserSettings(

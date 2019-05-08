@@ -23,13 +23,14 @@ class EnticingUserService(private val userRepository: UserRepository, private va
     }
 
     /**
-     * Updates everything except from the password
+     * Updates everything except from the password and selected settings. These two are updated separately
      */
     fun updateUser(user: User) {
         requireCanEditUser(user)
         val originalEntity = userRepository.findById(user.id).orElseThrow { IllegalArgumentException("No user with id ${user.id}") }
         val updatedEntity = user.toEntity()
         updatedEntity.encryptedPassword = originalEntity.encryptedPassword
+        updatedEntity.selectedSettings = originalEntity.selectedSettings
         userRepository.save(updatedEntity)
     }
 
@@ -52,7 +53,7 @@ class EnticingUserService(private val userRepository: UserRepository, private va
     fun selectSettings(searchSettingsId: Long) {
         val searchSettings = searchSettingsRepository.findById(searchSettingsId).orElseThrow { IllegalArgumentException("No settings with id $searchSettingsId found") }
         val currentUser = userRepository.findById(currentUser!!.id).orElseThrow { IllegalArgumentException("User not located in db") }
-        currentUser.selectedSettings = searchSettingsId
+        currentUser.selectedSettings = searchSettings
         userRepository.save(currentUser)
     }
 

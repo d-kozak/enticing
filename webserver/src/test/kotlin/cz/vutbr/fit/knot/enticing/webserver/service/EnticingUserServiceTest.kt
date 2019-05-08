@@ -57,11 +57,12 @@ internal class EnticingUserServiceTest {
     fun `update user test`() {
         val userEntityCapture = slot<UserEntity>()
 
-        val originalEntity = UserEntity(id = 123, login = "baz", active = true, encryptedPassword = "abc", roles = setOf("R"), selectedSettings = 10, userSettings = UserSettings(33))
+        val selectedSettings = SearchSettings(id = 20, name = "config1")
+        val originalEntity = UserEntity(id = 123, login = "baz", active = true, encryptedPassword = "abc", roles = setOf("R"), selectedSettings = selectedSettings, userSettings = UserSettings(33))
         every { userRepositoryMock.findById(123) } returns Optional.of(originalEntity)
         every { userRepositoryMock.save(capture(userEntityCapture)) } returns UserEntity(login = "abc")
 
-        val user = User(123, "abc", active = false, roles = setOf("R2"), selectedSettings = 11, userSettings = cz.vutbr.fit.knot.enticing.webserver.dto.UserSettings(22))
+        val user = User(123, "abc", active = false, roles = setOf("R2"), selectedSettings = 20, userSettings = cz.vutbr.fit.knot.enticing.webserver.dto.UserSettings(22))
         withAuthentication(originalEntity) {
             userService.updateUser(user)
         }
@@ -74,7 +75,7 @@ internal class EnticingUserServiceTest {
         assertThat(user.login).isEqualTo(capturedEntity.login)
         assertThat(user.active).isEqualTo(capturedEntity.active)
         assertThat(user.roles).isEqualTo(capturedEntity.roles)
-        assertThat(user.selectedSettings).isEqualTo(capturedEntity.selectedSettings)
+        assertThat(user.selectedSettings).isEqualTo(capturedEntity.selectedSettings?.id)
         assertThat(user.userSettings.resultsPerPage).isEqualTo(capturedEntity.userSettings.resultsPerPage)
         assertThat("abc").isEqualTo(capturedEntity.encryptedPassword)
     }
@@ -90,7 +91,7 @@ internal class EnticingUserServiceTest {
 
     @Test
     fun `update user test cannot update another user because not admin`() {
-        val originalEntity = UserEntity(id = 123, login = "baz", active = true, encryptedPassword = "abc", roles = setOf("R"), selectedSettings = 10, userSettings = UserSettings(33))
+        val originalEntity = UserEntity(id = 123, login = "baz", active = true, encryptedPassword = "abc", roles = setOf("R"), selectedSettings = null, userSettings = UserSettings(33))
 
         withAuthentication(originalEntity) {
             assertThrows<InsufficientRoleException> {
@@ -104,12 +105,12 @@ internal class EnticingUserServiceTest {
     @Test
     fun `update user test can update another entity when admin`() {
         val userEntityCapture = slot<UserEntity>()
-        val originalEntity = UserEntity(id = 123, login = "baz", active = true, encryptedPassword = "abc", roles = setOf("ADMIN"), selectedSettings = 10, userSettings = UserSettings(33))
+        val originalEntity = UserEntity(id = 123, login = "baz", active = true, encryptedPassword = "abc", roles = setOf("ADMIN"), selectedSettings = null, userSettings = UserSettings(33))
 
         every { userRepositoryMock.findById(10) } returns Optional.of(originalEntity)
         every { userRepositoryMock.save(capture(userEntityCapture)) } returns UserEntity(login = "abc")
 
-        val user = User(10, "donald", active = false, roles = setOf("R2"), selectedSettings = 11, userSettings = cz.vutbr.fit.knot.enticing.webserver.dto.UserSettings(22))
+        val user = User(10, "donald", active = false, roles = setOf("R2"), selectedSettings = null, userSettings = cz.vutbr.fit.knot.enticing.webserver.dto.UserSettings(22))
         withAuthentication(originalEntity) {
             userService.updateUser(user)
         }

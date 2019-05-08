@@ -20,10 +20,11 @@ class UserEntity(
         var active: Boolean = true,
         @field:ElementCollection(fetch = FetchType.EAGER)
         var roles: Set<String> = emptySet(),
-        var selectedSettings: Long? = null,
         @field:Embedded
         @field:Valid
-        var userSettings: UserSettings = UserSettings()
+        var userSettings: UserSettings = UserSettings(),
+        @OneToOne
+        var selectedSettings: SearchSettings? = null
 ) : UserDetails {
 
 
