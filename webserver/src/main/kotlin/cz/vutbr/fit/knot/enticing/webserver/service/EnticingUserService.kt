@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.enticing.webserver.service
 
 import cz.vutbr.fit.knot.enticing.webserver.dto.*
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
+import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
@@ -11,7 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
-class EnticingUserService(private val userRepository: UserRepository, private val encoder: PasswordEncoder) : UserDetailsService {
+class EnticingUserService(private val userRepository: UserRepository, private val encoder: PasswordEncoder, private val searchSettingsRepository: SearchSettingsRepository) : UserDetailsService {
 
     override fun loadUserByUsername(username: String): UserDetails = userRepository.findByLogin(username)
             ?: throw UsernameNotFoundException("UserSpecification with login $username not found")
@@ -46,6 +47,13 @@ class EnticingUserService(private val userRepository: UserRepository, private va
         }
         userEntity.encryptedPassword = encoder.encode(userCredentials.newPassword)
         userRepository.save(userEntity)
+    }
+
+    fun selectSettings(searchSettingsId: Long) {
+        val searchSettings = searchSettingsRepository.findById(searchSettingsId).orElseThrow { IllegalArgumentException("No settings with id $searchSettingsId found") }
+        val currentUser = userRepository.findById(currentUser!!.id).orElseThrow { IllegalArgumentException("User not located in db") }
+        currentUser.selectedSettings = searchSettingsId
+        userRepository.save(currentUser)
     }
 
     private fun requireCanEditUser(user: User) {

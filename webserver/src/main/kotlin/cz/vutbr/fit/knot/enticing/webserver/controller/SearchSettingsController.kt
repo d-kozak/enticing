@@ -2,10 +2,17 @@ package cz.vutbr.fit.knot.enticing.webserver.controller
 
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
+import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
 import org.springframework.web.bind.annotation.*
 
-@RestController("\${api.base.path}/search-settings")
-class SearchSettingsController(private val searchSettingsRepository: SearchSettingsRepository) {
+@RestController
+@RequestMapping("\${api.base.path}/search-settings")
+class SearchSettingsController(private val searchSettingsRepository: SearchSettingsRepository, private val userService: EnticingUserService) {
+
+    @GetMapping("/select/{id}")
+    fun select(@PathVariable id: Long) {
+        userService.selectSettings(id)
+    }
 
     @GetMapping
     fun getAll() = searchSettingsRepository.findAll()

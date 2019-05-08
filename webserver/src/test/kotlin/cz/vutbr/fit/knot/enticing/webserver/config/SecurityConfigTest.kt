@@ -206,6 +206,18 @@ internal class SecurityConfigTest(
                 }
             }
 
+            @Test
+            fun `Selecting is not accessible when not logged in`() {
+                mockMvc.perform(get("$apiBasePath/search-settings/select/1"))
+                        .andExpect(status().`is`(401))
+            }
+
+            @WithMockUser
+            @Test
+            fun `Selecting is accessible when logged in`() {
+                mockMvc.perform(get("$apiBasePath/search-settings/select/1"))
+                        .andExpect(status().`is`(200))
+            }
 
         }
     }

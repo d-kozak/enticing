@@ -1,8 +1,10 @@
 package cz.vutbr.fit.knot.enticing.webserver.service
 
 import cz.vutbr.fit.knot.enticing.webserver.dto.*
+import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserSettings
+import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import cz.vutbr.fit.knot.enticing.webserver.utils.withAuthentication
 import io.mockk.every
@@ -19,9 +21,10 @@ import java.util.*
 
 internal class EnticingUserServiceTest {
 
+    private val searchSettingsRepositoryMock = mockk<SearchSettingsRepository>()
     private val userRepositoryMock = mockk<UserRepository>()
     private val encoder = BCryptPasswordEncoder(11)
-    private val userService = EnticingUserService(userRepositoryMock, encoder)
+    private val userService = EnticingUserService(userRepositoryMock, encoder, searchSettingsRepositoryMock)
 
     @Test
     fun `loadUserByUsername Test`() {
@@ -252,5 +255,21 @@ internal class EnticingUserServiceTest {
             assertThat(userService.currentUser)
                     .isEqualTo(dummyUserEntity.toUser())
         }
+    }
+
+    @Test
+    fun `Select settings test`() {
+        val userCapture = slot<UserEntity>()
+        val user = UserEntity(id = 11, login = "pepa")
+        every { searchSettingsRepositoryMock.findById(42) } returns Optional.of(SearchSettings(id = 42))
+        every { userRepositoryMock.findById(11) } returns Optional.of(user)
+        every { userRepositoryMock.save(capture(userCapture)) } returns user
+        withAuthentication(user) {
+            userService.selectSettings(42)
+        }
+        verify(exactly = 1) { searchSettingsRepositoryMock.findById(42) }
+        verify(exactly = 1) { userRepositoryMock.findById(11) }
+        verify(exactly = 1) { userRepositoryMock.save(UserEntity(login = "pepa")) }
+        assertThat(user.selectedSettings).isNotNull()
     }
 }

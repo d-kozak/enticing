@@ -75,4 +75,11 @@ internal class SearchSettingsControllerTest(
         Mockito.verify(searchSettingsRepository).delete(searchSettings)
         Mockito.clearInvocations(searchSettingsRepository)
     }
+
+    @Test
+    fun select() {
+        mockMvc.perform(get("$apiBasePath/search-settings/select/33"))
+                .andExpect(status().isOk)
+        Mockito.verify(userService).selectSettings(33)
+    }
 }
