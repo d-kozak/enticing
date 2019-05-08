@@ -24,6 +24,8 @@ class SecurityConfig(
 
     override fun configure(http: HttpSecurity) {
         http.csrf().disable()
+                .cors()
+                .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint())
                 .and()
