@@ -8,26 +8,20 @@ import javax.validation.constraints.NotEmpty
 
 @Entity
 class UserEntity(
-        id: Long = 0,
-        login: String = "",
-        encryptedPassword: String = "",
-        active: Boolean = true,
-        roles: Set<String> = setOf(),
-        selectedSettings: Long? = null
+        @field:Id
+        @field:GeneratedValue
+        var id: Long = 0,
+        @field:NotEmpty
+        @field:Column(unique = true)
+        var login: String = "",
+        @field:NotEmpty
+        var encryptedPassword: String = "",
+        var active: Boolean = true,
+        @field:ElementCollection
+        var roles: Set<String> = emptySet(),
+        var selectedSettings: Long? = null
 ) : UserDetails {
 
-    @Id
-    @GeneratedValue
-    var id: Long = id
-    @NotEmpty
-    @Column(unique = true)
-    var login: String = login
-    @NotEmpty
-    var encryptedPassword: String = encryptedPassword
-    var active: Boolean = active
-    @ElementCollection
-    var roles: Set<String> = roles
-    var selectedSettings: Long? = selectedSettings
 
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> = roles
