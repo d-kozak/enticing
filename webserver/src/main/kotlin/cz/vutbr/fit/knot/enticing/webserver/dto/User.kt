@@ -41,3 +41,12 @@ data class UserCredentials(
         @field:NotEmpty
         val password: String
 )
+
+data class ChangePasswordCredentials(
+        @field:NotEmpty
+        val login: String,
+        @field:NotEmpty
+        val oldPassword: String,
+        @field:NotEmpty
+        val newPassword: String
+)

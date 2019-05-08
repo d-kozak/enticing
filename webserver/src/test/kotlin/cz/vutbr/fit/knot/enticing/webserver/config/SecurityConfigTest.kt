@@ -125,8 +125,8 @@ internal class SecurityConfigTest(
             }
 
             @Test
-            fun `UserSettings endpoint is not accessible if not logged in`() {
-                mockMvc.perform(get("$apiBasePath/user-settings"))
+            fun `User endpoint is not accessible if not logged in`() {
+                mockMvc.perform(get("$apiBasePath/user"))
                         .andExpect(status().`is`(401))
             }
         }

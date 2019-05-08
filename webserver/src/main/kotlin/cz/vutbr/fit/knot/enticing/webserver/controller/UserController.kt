@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver.controller
 
+import cz.vutbr.fit.knot.enticing.webserver.dto.ChangePasswordCredentials
 import cz.vutbr.fit.knot.enticing.webserver.dto.User
 import cz.vutbr.fit.knot.enticing.webserver.dto.UserCredentials
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
@@ -10,6 +11,11 @@ import javax.validation.Valid
 @RequestMapping("\${api.base.path}/user")
 class UserController(private val userService: EnticingUserService) {
 
+    @GetMapping
+    fun get(): User? {
+        return userService.getCurrentUser()
+    }
+
     @PostMapping
     fun signup(@RequestBody @Valid user: UserCredentials) {
         userService.saveUser(user)
@@ -18,6 +24,11 @@ class UserController(private val userService: EnticingUserService) {
     @PutMapping
     fun update(@RequestBody @Valid user: User) {
         userService.updateUser(user)
+    }
+
+    @PutMapping("/password")
+    fun changePassword(@RequestBody changePasswordCredentials: ChangePasswordCredentials) {
+        userService.changePassword(changePasswordCredentials)
     }
 
     @DeleteMapping

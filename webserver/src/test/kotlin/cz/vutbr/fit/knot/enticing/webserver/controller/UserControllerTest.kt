@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import cz.vutbr.fit.knot.enticing.webserver.dto.ChangePasswordCredentials
 import cz.vutbr.fit.knot.enticing.webserver.dto.User
 import cz.vutbr.fit.knot.enticing.webserver.dto.UserCredentials
 import cz.vutbr.fit.knot.enticing.webserver.dto.UserSettings
@@ -16,6 +17,7 @@ import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @WebMvcTest(secure = false)
@@ -39,6 +41,20 @@ internal class UserControllerTest(
 
         Mockito.verify(userService)
                 .saveUser(user)
+        Mockito.clearInvocations(userService)
+    }
+
+    @Test
+    fun `Get user test`() {
+        val dummyUser = User(login = "ferda")
+        val serialized = ObjectMapper().writeValueAsString(dummyUser)
+        Mockito.`when`(userService.getCurrentUser()).thenReturn(dummyUser)
+
+        mockMvc.perform(get("$apiBasePath/user"))
+                .andExpect(status().isOk)
+                .andExpect(MockMvcResultMatchers.content().string(serialized))
+
+        Mockito.verify(userService).getCurrentUser()
         Mockito.clearInvocations(userService)
     }
 
@@ -147,6 +163,20 @@ internal class UserControllerTest(
                 .andExpect(status().`is`(400))
 
         Mockito.verifyZeroInteractions(userService)
+        Mockito.clearInvocations(userService)
+    }
+
+    @Test
+    fun `Change password test`() {
+        val userCredentials = ChangePasswordCredentials("xxx", "oldPass", "newPass")
+        val serialized = ObjectMapper().writeValueAsString(userCredentials)
+        mockMvc.perform(put("$apiBasePath/user/password")
+                .content(serialized)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk)
+
+        Mockito.verify(userService)
+                .changePassword(userCredentials)
         Mockito.clearInvocations(userService)
     }
 }
