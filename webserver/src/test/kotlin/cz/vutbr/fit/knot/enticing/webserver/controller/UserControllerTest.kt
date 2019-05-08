@@ -1,7 +1,9 @@
 package cz.vutbr.fit.knot.enticing.webserver.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import cz.vutbr.fit.knot.enticing.webserver.dto.User
 import cz.vutbr.fit.knot.enticing.webserver.dto.UserCredentials
+import cz.vutbr.fit.knot.enticing.webserver.dto.UserSettings
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -14,6 +16,7 @@ import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @WebMvcTest(secure = false)
@@ -58,6 +61,60 @@ internal class UserControllerTest(
         val user = UserCredentials("123", "")
         val serialized = ObjectMapper().writeValueAsString(user)
         mockMvc.perform(post("$apiBasePath/user")
+                .content(serialized)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().`is`(400))
+
+        Mockito.verifyZeroInteractions(userService)
+        Mockito.clearInvocations(userService)
+    }
+
+
+    @Test
+    fun `Update user test`() {
+        val user = User(10, "foo", userSettings = UserSettings(11))
+        val serialized = ObjectMapper().writeValueAsString(user)
+        mockMvc.perform(put("$apiBasePath/user")
+                .content(serialized)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk)
+        Mockito.verify(userService)
+                .updateUser(user)
+        Mockito.clearInvocations(userService)
+    }
+
+    @Test
+    fun `Update user should fail for zero id`() {
+        val user = User(0, "foo", userSettings = UserSettings(11))
+        val serialized = ObjectMapper().writeValueAsString(user)
+        mockMvc.perform(put("$apiBasePath/user")
+                .content(serialized)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().`is`(400))
+
+        Mockito.verifyZeroInteractions(userService)
+        Mockito.clearInvocations(userService)
+    }
+
+    @Test
+    fun `Update user should fail for empty login`() {
+        val user = User(11, "", userSettings = UserSettings(11))
+        val serialized = ObjectMapper().writeValueAsString(user)
+        mockMvc.perform(put("$apiBasePath/user")
+                .content(serialized)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().`is`(400))
+
+        Mockito.verifyZeroInteractions(userService)
+        Mockito.clearInvocations(userService)
+    }
+
+
+    @Test
+    fun `Update user should fail for negative results per page`() {
+        val user = User(11, "aaa", userSettings = UserSettings(-1))
+        val serialized = ObjectMapper().writeValueAsString(user)
+        mockMvc.perform(put("$apiBasePath/user")
                 .content(serialized)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().`is`(400))
