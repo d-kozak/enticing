@@ -14,6 +14,9 @@ import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import java.util.*
@@ -273,4 +276,17 @@ internal class EnticingUserServiceTest {
         verify(exactly = 1) { userRepositoryMock.save(UserEntity(login = "pepa")) }
         assertThat(user.selectedSettings).isNotNull()
     }
+
+    @Test
+    fun `Current user should be null if the entity is not of type UserEntity`() {
+        val authentication: Authentication = UsernamePasswordAuthenticationToken("someString", "foo")
+        assertThat(SecurityContextHolder.getContext().authentication).isNull()
+        SecurityContextHolder.getContext().authentication = authentication
+        try {
+            val user = userService.currentUser
+        } finally {
+            SecurityContextHolder.getContext().authentication = null
+        }
+    }
+
 }

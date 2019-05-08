@@ -4,6 +4,7 @@ import cz.vutbr.fit.knot.enticing.webserver.dto.*
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
+import org.slf4j.LoggerFactory
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class EnticingUserService(private val userRepository: UserRepository, private val encoder: PasswordEncoder, private val searchSettingsRepository: SearchSettingsRepository) : UserDetailsService {
+
+    private val logger = LoggerFactory.getLogger(EnticingUserService::class.java)
 
     override fun loadUserByUsername(username: String): UserDetails = userRepository.findByLogin(username)
             ?: throw UsernameNotFoundException("UserSpecification with login $username not found")
@@ -66,6 +69,14 @@ class EnticingUserService(private val userRepository: UserRepository, private va
     private fun canEditUser(targetUser: User): Boolean = currentUser != null && (currentUser!!.isAdmin || currentUser!!.id == targetUser.id)
 
     val currentUser: User?
-        get() = (SecurityContextHolder.getContext().authentication?.principal as UserEntity?)?.toUser()
+        get() {
+            val principal = SecurityContextHolder.getContext().authentication?.principal
+            return if (principal != null) {
+                if (principal is UserEntity) principal.toUser() else {
+                    logger.warn("Stored principal $principal in not of type UserEntity")
+                    null
+                }
+            } else null
+        }
 
 }
