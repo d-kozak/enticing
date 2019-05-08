@@ -25,6 +25,7 @@ class EnticingUserService(private val userRepository: UserRepository, private va
      * Updates everything except from the password
      */
     fun updateUser(user: User) {
+        requireCanEditUser(user)
         val originalEntity = userRepository.findById(user.id).orElseThrow { IllegalArgumentException("No user with id ${user.id}") }
         val updatedEntity = user.toEntity()
         updatedEntity.encryptedPassword = originalEntity.encryptedPassword
@@ -39,7 +40,8 @@ class EnticingUserService(private val userRepository: UserRepository, private va
     fun changePassword(userCredentials: ChangePasswordCredentials) {
         val userEntity = userRepository.findByLogin(userCredentials.login)
                 ?: throw IllegalArgumentException("Unknown login ${userCredentials.login}")
-        if (!encoder.matches(userCredentials.oldPassword, userEntity.encryptedPassword)) {
+        requireCanEditUser(userEntity.toUser())
+        if (!encoder.matches(userCredentials.oldPassword, userEntity.encryptedPassword) && !currentUser!!.isAdmin) {
             throw IllegalArgumentException("Invalid password")
         }
         userEntity.encryptedPassword = encoder.encode(userCredentials.newPassword)
