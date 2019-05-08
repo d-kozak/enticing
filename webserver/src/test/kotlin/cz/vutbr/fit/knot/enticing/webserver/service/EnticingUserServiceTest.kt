@@ -128,7 +128,7 @@ internal class EnticingUserServiceTest {
     fun `Get user test`() {
         val dummyUserEntity = UserEntity(login = "Honza")
         SecurityContextHolder.getContext().authentication = UsernamePasswordAuthenticationToken(dummyUserEntity, "A")
-        assertThat(userService.getCurrentUser())
+        assertThat(userService.currentUser)
                 .isEqualTo(dummyUserEntity.toUser())
         SecurityContextHolder.getContext().authentication = null
 

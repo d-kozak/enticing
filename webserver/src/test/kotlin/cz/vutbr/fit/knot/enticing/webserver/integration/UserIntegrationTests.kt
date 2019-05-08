@@ -45,7 +45,7 @@ class UserIntegrationTests(
         val userEntity = userRepository.findByLogin("Pepa") ?: throw AssertionError("user not found in the database")
         assertThat(userEntity.active).isTrue()
         assertThat(encoder.matches("123", userEntity.encryptedPassword))
-        assertThat(userService.getCurrentUser()).isNull()
+        assertThat(userService.currentUser).isNull()
 
     }
 

@@ -48,13 +48,13 @@ internal class UserControllerTest(
     fun `Get user test`() {
         val dummyUser = User(login = "ferda")
         val serialized = ObjectMapper().writeValueAsString(dummyUser)
-        Mockito.`when`(userService.getCurrentUser()).thenReturn(dummyUser)
+        Mockito.`when`(userService.currentUser).thenReturn(dummyUser)
 
         mockMvc.perform(get("$apiBasePath/user"))
                 .andExpect(status().isOk)
                 .andExpect(MockMvcResultMatchers.content().string(serialized))
 
-        Mockito.verify(userService).getCurrentUser()
+        Mockito.verify(userService).currentUser
         Mockito.clearInvocations(userService)
     }
 

@@ -13,7 +13,7 @@ class UserController(private val userService: EnticingUserService) {
 
     @GetMapping
     fun get(): User? {
-        return userService.getCurrentUser()
+        return userService.currentUser
     }
 
     @PostMapping
