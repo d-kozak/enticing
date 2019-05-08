@@ -6,16 +6,17 @@ import javax.validation.constraints.NotEmpty
 
 @Entity
 class SearchSettings(
-        @Id
-        @GeneratedValue
+        @field:Id
+        @field:GeneratedValue
         var id: Long = 0,
         @field:NotEmpty
         var name: String = "",
+        @field:Column(name = "is_default")
         var default: Boolean = false,
         var private: Boolean = true,
         var annotationDataServer: String = "",
         var annotationServer: String = "",
-        @ElementCollection(fetch = FetchType.EAGER)
+        @field:ElementCollection(fetch = FetchType.EAGER)
         var servers: Set<String> = setOf()
 ) {
 
