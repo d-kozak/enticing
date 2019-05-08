@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import cz.vutbr.fit.knot.enticing.webserver.dto.UserCredentials
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -38,12 +39,18 @@ internal class SecurityConfigTest(
 
         @Test
         fun `Try to login with valid username`() {
-            Mockito.`when`(userService.loadUserByUsername("dkozak")).thenReturn(UserEntity(login = "dkozak", encryptedPassword = encoder.encode("pass")))
+            val userEntity = UserEntity(login = "dkozak", encryptedPassword = encoder.encode("pass"))
+            Mockito.`when`(userService.loadUserByUsername("dkozak")).thenReturn(userEntity)
 
             mockMvc.perform(post("$apiBasePath/login")
                     .param("username", "dkozak")
-                    .param("password", "pass")
-            ).andExpect(status().isOk)
+                    .param("password", "pass"))
+                    .andExpect(status().`is`(302))
+                    .andDo {
+                        val locationHeader = it.response.getHeader("Location")
+                                ?: throw AssertionError("Location header not set")
+                        assertThat(locationHeader).endsWith("$apiBasePath/user")
+                    }
 
             Mockito.verify(userService).loadUserByUsername("dkozak")
             Mockito.clearInvocations(userService)

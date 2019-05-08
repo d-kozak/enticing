@@ -64,15 +64,11 @@ export const loginRequestAction = (login: string, password: string, onError: (er
 
     axios.post(`${API_BASE_PATH}/login`, formData)
         .then(response => {
-            return axios.get<User>(`${API_BASE_PATH}/user`)
-        }).then(response => {
         dispatch(loginSuccessAction(response.data));
 
         dispatch(openSnackBar('Logged in'));
         // @ts-ignore
         dispatch(loadSearchSettingsAction(response.data.isAdmin));
-
-
     }).catch(error => {
         if (error && (error.login || error.password)) {
             onError(error);
