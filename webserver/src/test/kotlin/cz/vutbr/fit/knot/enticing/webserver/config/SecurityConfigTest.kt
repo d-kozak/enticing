@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.enticing.webserver.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import cz.vutbr.fit.knot.enticing.webserver.dto.UserCredentials
+import cz.vutbr.fit.knot.enticing.webserver.dto.toUser
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
 import org.assertj.core.api.Assertions.assertThat
@@ -18,8 +19,7 @@ import org.springframework.http.MediaType
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @WebMvcTest
@@ -129,6 +129,19 @@ internal class SecurityConfigTest(
                         .content(ObjectMapper().writeValueAsString(user))
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk)
+            }
+
+            @Test
+            fun `Update is accessible`() {
+                val userEntity = UserEntity(id = 42, login = "login")
+                val userDto = userEntity.toUser()
+
+                mockMvc.perform(put("$apiBasePath/user")
+                        .content(ObjectMapper().writeValueAsString(userDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk)
+
+                Mockito.verify(userService).updateUser(userDto)
             }
         }
     }

@@ -32,6 +32,7 @@ class EnticingUserService(private val userRepository: UserRepository, private va
     }
 
     fun deleteUser(user: User) {
+        requireCanEditUser(user)
         userRepository.delete(user.toEntity())
     }
 
@@ -44,6 +45,14 @@ class EnticingUserService(private val userRepository: UserRepository, private va
         userEntity.encryptedPassword = encoder.encode(userCredentials.newPassword)
         userRepository.save(userEntity)
     }
+
+    private fun requireCanEditUser(user: User) {
+        if (!canEditUser(user)) {
+            throw InsufficientRoleException("User $currentUser cannot edit user $user")
+        }
+    }
+
+    private fun canEditUser(targetUser: User): Boolean = currentUser != null && (currentUser!!.isAdmin || currentUser!!.id == targetUser.id)
 
     val currentUser: User?
         get() = (SecurityContextHolder.getContext().authentication?.principal as UserEntity?)?.toUser()

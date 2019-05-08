@@ -29,4 +29,12 @@ internal class UserConversionTest {
         assertThat(user.selectedSettings).isEqualTo(userEntity.selectedSettings)
         assertThat(user.userSettings.resultsPerPage).isEqualTo(userEntity.userSettings.resultsPerPage)
     }
+
+    @Test
+    fun `Is admin test`() {
+        val user = User(1, "111", roles = setOf())
+        assertThat(user.isAdmin).isFalse()
+        val admin = User(1, "111", roles = setOf("ADMIN"))
+        assertThat(admin.isAdmin).isTrue()
+    }
 }

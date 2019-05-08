@@ -1,12 +1,10 @@
 package cz.vutbr.fit.knot.enticing.webserver.service
 
-import cz.vutbr.fit.knot.enticing.webserver.dto.ChangePasswordCredentials
-import cz.vutbr.fit.knot.enticing.webserver.dto.User
-import cz.vutbr.fit.knot.enticing.webserver.dto.UserCredentials
-import cz.vutbr.fit.knot.enticing.webserver.dto.toUser
+import cz.vutbr.fit.knot.enticing.webserver.dto.*
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserSettings
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
+import cz.vutbr.fit.knot.enticing.webserver.utils.withAuthentication
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -14,8 +12,6 @@ import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import java.util.*
@@ -80,13 +76,40 @@ internal class EnticingUserServiceTest {
 
     @Test
     fun `delete user test`() {
-        every { userRepositoryMock.delete(UserEntity(id = 123, login = "123")) } returns Unit
+        val userEntity = UserEntity(id = 123, login = "123")
+        every { userRepositoryMock.delete(userEntity) } returns Unit
 
-        val user = User(0, "123")
-        userService.deleteUser(user)
+        withAuthentication(userEntity) {
+            val user = userEntity.toUser()
+            userService.deleteUser(user)
+        }
 
-        verify(exactly = 1) { userRepositoryMock.delete(UserEntity(login = "123")) }
+        verify(exactly = 1) { userRepositoryMock.delete(userEntity) }
     }
+
+    @Test
+    fun `delete user test cannot delete user with different id because not logged in`() {
+        val user = User(0, "123")
+        assertThrows<InsufficientRoleException> {
+            userService.deleteUser(user)
+        }
+
+    }
+
+    @Test
+    fun `delete user test can delete different user because is admin`() {
+        val admin = UserEntity(id = 123, login = "123", roles = setOf("ADMIN"))
+        val ruda = User(id = 2, login = "ruda")
+        every { userRepositoryMock.delete(ruda.toEntity()) } returns Unit
+
+
+        withAuthentication(admin) {
+            userService.deleteUser(ruda)
+        }
+
+        verify(exactly = 1) { userRepositoryMock.delete(ruda.toEntity()) }
+    }
+
 
     @Test
     fun `change password test`() {
@@ -127,10 +150,14 @@ internal class EnticingUserServiceTest {
     @Test
     fun `Get user test`() {
         val dummyUserEntity = UserEntity(login = "Honza")
-        SecurityContextHolder.getContext().authentication = UsernamePasswordAuthenticationToken(dummyUserEntity, "A")
-        assertThat(userService.currentUser)
-                .isEqualTo(dummyUserEntity.toUser())
-        SecurityContextHolder.getContext().authentication = null
+        withAuthentication(dummyUserEntity) {
+            assertThat(userService.currentUser)
+                    .isEqualTo(dummyUserEntity.toUser())
+        }
+    }
 
+    @Test
+    fun `Update user test cannot update someone else`() {
+        val currentUser = UserEntity()
     }
 }

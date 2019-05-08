@@ -15,7 +15,10 @@ data class User(
         val selectedSettings: Long? = null,
         @field:Valid
         val userSettings: UserSettings = UserSettings()
-)
+) {
+    val isAdmin: Boolean
+        get() = roles.contains("ADMIN")
+}
 
 fun User.toEntity(): UserEntity = UserEntity(id, login, "", active, roles, selectedSettings, userSettings.toEmbeddable())
 fun UserEntity.toUser(): User = User(
