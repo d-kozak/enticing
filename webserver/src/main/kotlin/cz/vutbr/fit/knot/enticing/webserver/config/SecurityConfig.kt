@@ -4,6 +4,7 @@ import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -30,7 +31,13 @@ class SecurityConfig(
                 .authenticationEntryPoint(authenticationEntryPoint())
                 .and()
                 .authorizeRequests()
-                .antMatchers("/*", "/static/**", "$apiBasePath/login", "$apiBasePath/user")
+                .antMatchers(HttpMethod.POST, "$apiBasePath/search-settings")
+                .hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "$apiBasePath/search-settings")
+                .hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "$apiBasePath/search-settings")
+                .hasRole("ADMIN")
+                .antMatchers("/*", "/static/**", "$apiBasePath/login", "$apiBasePath/user", "$apiBasePath/search-settings")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
