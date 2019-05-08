@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver.controller
 
-import cz.vutbr.fit.knot.enticing.webserver.dto.UserWithPassword
+import cz.vutbr.fit.knot.enticing.webserver.dto.UserCredentials
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -13,7 +13,7 @@ import javax.validation.Valid
 class UserController(private val userService: EnticingUserService) {
 
     @PostMapping
-    fun signup(@RequestBody @Valid user: UserWithPassword) {
+    fun signup(@RequestBody @Valid user: UserCredentials) {
         userService.saveUser(user)
     }
 }

@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.service
 
 import cz.vutbr.fit.knot.enticing.webserver.dto.User
-import cz.vutbr.fit.knot.enticing.webserver.dto.UserWithPassword
+import cz.vutbr.fit.knot.enticing.webserver.dto.UserCredentials
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import io.mockk.every
@@ -38,7 +38,7 @@ internal class EnticingUserServiceTest {
         every { userRepositoryMock.save(UserEntity(login = "cat123")) } returns UserEntity(login = "cat123")
         every { mockEncoder.encode(any()) } returns "foo"
 
-        val newUser = UserWithPassword(0, "cat123", "123")
+        val newUser = UserCredentials("cat123", "123")
         userService.saveUser(newUser)
         verify(exactly = 1) { mockEncoder.encode("123") }
         verify(exactly = 1) { userRepositoryMock.save(UserEntity(login = "cat123", encryptedPassword = "foo")) }

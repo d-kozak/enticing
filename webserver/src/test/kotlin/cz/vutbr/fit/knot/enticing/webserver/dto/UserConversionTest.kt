@@ -20,16 +20,6 @@ internal class UserConversionTest {
         val entity = user.toEntity()
         assertNoInformationLost(user, entity)
     }
-
-    @Test
-    fun `From dto with password to entity`() {
-        val user = UserWithPassword(1, "111", "abc", false, setOf("FOO"), selectedSettings = 10)
-        val entity = user.toEntity()
-        assertNoInformationLost(user, entity)
-        assertThat(user.password)
-                .isEqualTo(entity.encryptedPassword)
-    }
-
     private fun assertNoInformationLost(user: User, userEntity: UserEntity) {
         assertThat(user.login).isEqualTo(userEntity.login)
         assertThat(user.id).isEqualTo(userEntity.id)

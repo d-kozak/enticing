@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import cz.vutbr.fit.knot.enticing.webserver.dto.UserWithPassword
+import cz.vutbr.fit.knot.enticing.webserver.dto.UserCredentials
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
 import org.junit.jupiter.api.Nested
@@ -117,7 +117,7 @@ internal class SecurityConfigTest(
 
             @Test
             fun `Signup is accessible`() {
-                val user = UserWithPassword(login = "dkozak", password = "pass")
+                val user = UserCredentials("dkozak", "pass")
                 mockMvc.perform(post("$apiBasePath/user")
                         .content(ObjectMapper().writeValueAsString(user))
                         .contentType(MediaType.APPLICATION_JSON))

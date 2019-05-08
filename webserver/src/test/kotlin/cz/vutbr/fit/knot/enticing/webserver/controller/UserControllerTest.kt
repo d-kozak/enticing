@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import cz.vutbr.fit.knot.enticing.webserver.dto.UserWithPassword
+import cz.vutbr.fit.knot.enticing.webserver.dto.UserCredentials
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -28,14 +28,7 @@ internal class UserControllerTest(
 
     @Test
     fun `Signup test`() {
-        val user = UserWithPassword(
-                id = 0,
-                login = "Pepa",
-                password = "123",
-                roles = mutableSetOf("ADMIN"),
-                active = false,
-                selectedSettings = 42
-        )
+        val user = UserCredentials("Pepa", "123")
         val serialized = ObjectMapper().writeValueAsString(user)
         mockMvc.perform(post("$apiBasePath/user")
                 .content(serialized)
@@ -49,14 +42,7 @@ internal class UserControllerTest(
 
     @Test
     fun `Empty login for signup should fail`() {
-        val user = UserWithPassword(
-                id = 0,
-                login = "",
-                password = "123",
-                roles = mutableSetOf("ADMIN"),
-                active = false,
-                selectedSettings = 42
-        )
+        val user = UserCredentials("", "123")
         val serialized = ObjectMapper().writeValueAsString(user)
         mockMvc.perform(post("$apiBasePath/user")
                 .content(serialized)
@@ -69,14 +55,7 @@ internal class UserControllerTest(
 
     @Test
     fun `Empty password for signup should fail`() {
-        val user = UserWithPassword(
-                id = 0,
-                login = "123",
-                password = "",
-                roles = mutableSetOf("ADMIN"),
-                active = false,
-                selectedSettings = 42
-        )
+        val user = UserCredentials("123", "")
         val serialized = ObjectMapper().writeValueAsString(user)
         mockMvc.perform(post("$apiBasePath/user")
                 .content(serialized)
