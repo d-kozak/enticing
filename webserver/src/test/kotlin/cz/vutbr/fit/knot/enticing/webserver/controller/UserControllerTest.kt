@@ -15,8 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @WebMvcTest(secure = false)
@@ -115,6 +114,34 @@ internal class UserControllerTest(
         val user = User(11, "aaa", userSettings = UserSettings(-1))
         val serialized = ObjectMapper().writeValueAsString(user)
         mockMvc.perform(put("$apiBasePath/user")
+                .content(serialized)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().`is`(400))
+
+        Mockito.verifyZeroInteractions(userService)
+        Mockito.clearInvocations(userService)
+    }
+
+
+    @Test
+    fun `Delete user test`() {
+        val user = User(11, "aaa")
+        val serialized = ObjectMapper().writeValueAsString(user)
+        mockMvc.perform(delete("$apiBasePath/user")
+                .content(serialized)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk)
+
+        Mockito.verify(userService)
+                .deleteUser(user)
+        Mockito.clearInvocations(userService)
+    }
+
+    @Test
+    fun `Delete user test should fail for zero id`() {
+        val user = User(0, "aaa")
+        val serialized = ObjectMapper().writeValueAsString(user)
+        mockMvc.perform(delete("$apiBasePath/user")
                 .content(serialized)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().`is`(400))

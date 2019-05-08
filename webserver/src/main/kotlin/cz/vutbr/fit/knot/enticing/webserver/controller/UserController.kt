@@ -19,4 +19,9 @@ class UserController(private val userService: EnticingUserService) {
     fun update(@RequestBody @Valid user: User) {
         userService.updateUser(user)
     }
+
+    @DeleteMapping
+    fun delete(@RequestBody @Valid user: User) {
+        userService.deleteUser(user)
+    }
 }
