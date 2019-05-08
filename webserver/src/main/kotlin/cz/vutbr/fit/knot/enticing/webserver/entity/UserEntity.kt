@@ -4,6 +4,7 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import javax.persistence.*
+import javax.validation.Valid
 import javax.validation.constraints.NotEmpty
 
 @Entity
@@ -19,7 +20,10 @@ class UserEntity(
         var active: Boolean = true,
         @field:ElementCollection
         var roles: Set<String> = emptySet(),
-        var selectedSettings: Long? = null
+        var selectedSettings: Long? = null,
+        @field:Embedded
+        @field:Valid
+        var userSettings: UserSettings = UserSettings()
 ) : UserDetails {
 
 
@@ -60,6 +64,6 @@ class UserEntity(
     override fun isAccountNonLocked(): Boolean = active
 
     override fun toString(): String {
-        return "UserEntity(id=$id, login='$login', active=$active, roles=$roles, selectedSettings=$selectedSettings)"
+        return "UserEntity(id=$id, login='$login', active=$active, roles=$roles,selectedSettings=$selectedSettings,userSettings=$userSettings)"
     }
 }
