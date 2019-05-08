@@ -46,6 +46,6 @@ class EnticingUserService(private val userRepository: UserRepository, private va
     }
 
     fun getCurrentUser(): User? {
-        return (SecurityContextHolder.getContext().authentication.principal as UserEntity).toUser()
+        return (SecurityContextHolder.getContext().authentication?.principal as UserEntity?)?.toUser()
     }
 }

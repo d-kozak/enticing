@@ -123,12 +123,6 @@ internal class SecurityConfigTest(
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk)
             }
-
-            @Test
-            fun `User endpoint is not accessible if not logged in`() {
-                mockMvc.perform(get("$apiBasePath/user"))
-                        .andExpect(status().`is`(401))
-            }
         }
     }
 

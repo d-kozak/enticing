@@ -21,7 +21,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import java.util.*
 
 
-
 internal class EnticingUserServiceTest {
 
     private val userRepositoryMock = mockk<UserRepository>()
@@ -131,6 +130,7 @@ internal class EnticingUserServiceTest {
         SecurityContextHolder.getContext().authentication = UsernamePasswordAuthenticationToken(dummyUserEntity, "A")
         assertThat(userService.getCurrentUser())
                 .isEqualTo(dummyUserEntity.toUser())
+        SecurityContextHolder.getContext().authentication = null
 
     }
 }

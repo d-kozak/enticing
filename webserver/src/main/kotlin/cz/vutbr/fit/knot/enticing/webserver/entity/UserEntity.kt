@@ -18,7 +18,7 @@ class UserEntity(
         @field:NotEmpty
         var encryptedPassword: String = "",
         var active: Boolean = true,
-        @field:ElementCollection
+        @field:ElementCollection(fetch = FetchType.EAGER)
         var roles: Set<String> = emptySet(),
         var selectedSettings: Long? = null,
         @field:Embedded
