@@ -48,7 +48,6 @@ data class UserCredentials(
 data class ChangePasswordCredentials(
         @field:NotEmpty
         val login: String,
-        @field:NotEmpty
         val oldPassword: String,
         @field:NotEmpty
         val newPassword: String

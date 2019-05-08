@@ -179,4 +179,40 @@ internal class UserControllerTest(
                 .changePassword(userCredentials)
         Mockito.clearInvocations(userService)
     }
+
+    @Test
+    fun `Change password test should pass for empty old password can can change it this way`() {
+        val userCredentials = ChangePasswordCredentials("xxx", "", "newPass")
+        val serialized = ObjectMapper().writeValueAsString(userCredentials)
+        mockMvc.perform(put("$apiBasePath/user/password")
+                .content(serialized)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk)
+
+        Mockito.verify(userService)
+                .changePassword(userCredentials)
+        Mockito.clearInvocations(userService)
+    }
+
+    @Test
+    fun `Change password test should fail for empty login`() {
+        val userCredentials = ChangePasswordCredentials("", "oldPass", "newPass")
+        val serialized = ObjectMapper().writeValueAsString(userCredentials)
+        mockMvc.perform(put("$apiBasePath/user/password")
+                .content(serialized)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().`is`(400))
+
+    }
+
+    @Test
+    fun `Change password test should fail for empty new password`() {
+        val userCredentials = ChangePasswordCredentials("login", "oldPass", "")
+        val serialized = ObjectMapper().writeValueAsString(userCredentials)
+        mockMvc.perform(put("$apiBasePath/user/password")
+                .content(serialized)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().`is`(400))
+
+    }
 }

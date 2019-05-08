@@ -27,7 +27,7 @@ class UserController(private val userService: EnticingUserService) {
     }
 
     @PutMapping("/password")
-    fun changePassword(@RequestBody changePasswordCredentials: ChangePasswordCredentials) {
+    fun changePassword(@RequestBody @Valid changePasswordCredentials: ChangePasswordCredentials) {
         userService.changePassword(changePasswordCredentials)
     }
 
