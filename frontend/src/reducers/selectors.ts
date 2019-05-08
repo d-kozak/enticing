@@ -17,7 +17,7 @@ const selectedSettingsSelector = (state: AppState) => state.userState.selectedSe
 export const selectedSearchSettingsIndexSelector = createSelector(searchSettingsSelector, selectedSettingsSelector, (searchSettings, selectedSettings) => {
     if (selectedSettings == null) {
         for (let i in searchSettings) {
-            if (searchSettings[i].isDefault) {
+            if (searchSettings[i].default) {
                 return Number(i)
             }
         }

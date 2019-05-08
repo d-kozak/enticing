@@ -50,7 +50,7 @@ const SearchSettingsSelector = (props: SearchSettingsSelectorProps) => {
                 aria-label="Search Settings"
                 onClick={(event) => setAnchorElem(event.currentTarget)}
             >
-                {searchSettings[selectedSearchSettingsIndex].isPrivate &&
+                {searchSettings[selectedSearchSettingsIndex].private &&
                 <VisibilityOffIcon className={classes.iconSmall}/>}
                 <Typography variant="button" color="inherit">Using: </Typography>
                 <ListItemText className={classes.listItem}>
@@ -77,7 +77,7 @@ const SearchSettingsSelector = (props: SearchSettingsSelectorProps) => {
                         setAnchorElem(null);
                     }}
                 >
-                    {settings.isPrivate && <VisibilityOffIcon className={classes.iconSmall}/>}
+                    {settings.private && <VisibilityOffIcon className={classes.iconSmall}/>}
                     {settings.name}
                 </MenuItem>
             ))}

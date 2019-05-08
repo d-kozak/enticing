@@ -36,7 +36,7 @@ const searchSettingsReducer: SearchSettingsReducer = (state = initialState, acti
             };
         case SEARCH_SETTINGS_NEW_DEFAULT:
             return {
-                settings: state.settings.map(item => ({...item, isDefault: item.id === action.settings.id}))
+                settings: state.settings.map(item => ({...item, default: item.id === action.settings.id}))
             }
     }
     return state;

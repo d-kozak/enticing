@@ -172,7 +172,7 @@ const SettingsForm = (props: SettingsFormProps) => {
                             Delete
                         </Button>
                     </Grid>
-                    {!settings.isDefault && <Grid item>
+                    {!settings.default && <Grid item>
                         <Button
                             onClick={() => {
                                 setShowProgress(true);
