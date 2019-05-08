@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import javax.persistence.PersistenceException
 import javax.validation.ConstraintViolationException
 
 @ExtendWith(SpringExtension::class)
@@ -40,5 +41,11 @@ class UserSettingsJpaTest(
         assertThrows<ConstraintViolationException> {
             entityManager.persistFlushFind(user)
         }
+    }
+
+    @Test
+    fun `Should fail for not unique name`() {
+        entityManager.persistFlushFind(SearchSettings(name = "abc"))
+        assertThrows<PersistenceException> { entityManager.persistFlushFind(SearchSettings(name = "abc")) }
     }
 }

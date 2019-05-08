@@ -10,6 +10,7 @@ class SearchSettings(
         @field:GeneratedValue
         var id: Long = 0,
         @field:NotEmpty
+        @field:Column(unique = true)
         var name: String = "",
         @field:Column(name = "is_default")
         var default: Boolean = false,
