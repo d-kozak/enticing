@@ -14,6 +14,7 @@ import {API_BASE_PATH, useMockApi} from "../globals";
 import {openSnackBar} from "./SnackBarActions";
 import {loadSearchSettingsAction} from "./SearchSettingsActions";
 import {UserSettings as UserSettingsModel, UserSettings} from "../entities/UserSettings";
+import {hideProgressBarAction, showProgressBarAction} from "./ProgressBarActions";
 
 export const USER_LOGOUT = "[USER] LOGOUT";
 export const USER_LOGIN_SUCCESS = "[USER] LOGIN SUCCESS";
@@ -58,7 +59,23 @@ export const userSettingsUpdatedAction = (userSettings: UserSettings): UserSetti
 })
 
 export const logoutRequestAction = (): ThunkResult<void> => dispatch => {
-    mockLogout(dispatch);
+    if (useMockApi()) {
+        mockLogout(dispatch);
+        return
+    }
+    dispatch(showProgressBarAction());
+    axios.get(`${API_BASE_PATH}/logout`)
+        .then(() => {
+            dispatch(openSnackBar('Logged out'));
+            // @ts-ignore
+            dispatch(loadSearchSettingsAction(false));
+            dispatch(logoutSuccessAction());
+            dispatch(hideProgressBarAction());
+        })
+        .catch(error => {
+            dispatch(openSnackBar('Could not logout'));
+            dispatch(hideProgressBarAction());
+        });
 };
 
 export const loginSuccessAction = (user: User): LoginSuccessAction => ({
