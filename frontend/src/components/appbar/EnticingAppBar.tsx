@@ -11,7 +11,7 @@ import {AppState} from "../../reducers/RootReducer";
 import {logoutRequestAction} from "../../actions/UserActions";
 import {Link} from "react-router-dom";
 import SearchSettingsSelector from "./SearchSettingsSelector";
-import {isAdminSelector, isLoggedInSelector} from "../../reducers/selectors";
+import {isAdminSelector} from "../../reducers/selectors";
 
 
 const styles = createStyles({
@@ -29,7 +29,7 @@ export type EnticingAppBarProps =
     & ReturnType<typeof mapStateToProps>
 
 const EnticingAppBar = (props: EnticingAppBarProps) => {
-    const {classes, isAdmin, isLoggedIn, handleLogout, searchSettings} = props;
+    const {classes, user, isAdmin, handleLogout, searchSettings} = props;
 
     const linkRef = (node: HTMLAnchorElement | null) => {
         if (node) {
@@ -49,16 +49,17 @@ const EnticingAppBar = (props: EnticingAppBarProps) => {
                     </Link>
                 </div>
                 {searchSettings.length > 0 && <SearchSettingsSelector/>}
-                <AppBarMenuButtons isLoggedIn={isLoggedIn} isAdmin={isAdmin} handleLogout={handleLogout}/>
+                <AppBarMenuButtons isLoggedIn={user !== null} isAdmin={isAdmin} handleLogout={handleLogout}/>
+                {user && <Typography variant="body1" color="inherit">{user.login}</Typography>}
             </Toolbar>
         </AppBar>
     </div>
 };
 
 const mapStateToProps = (state: AppState) => ({
-    isLoggedIn: isLoggedInSelector(state),
+    user: state.userState.user,
     isAdmin: isAdminSelector(state),
-        searchSettings: state.searchSettings.settings
+    searchSettings: state.searchSettings.settings
 });
 
 const mapDispatchToProps = {
