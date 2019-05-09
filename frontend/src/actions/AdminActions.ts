@@ -5,6 +5,11 @@ import {API_BASE_PATH, useMockApi} from "../globals";
 import axios from "axios";
 import {hideProgressBarAction, showProgressBarAction} from "./ProgressBarActions";
 import {openSnackBar} from "./SnackBarActions";
+import {
+    changePasswordDialogClosedAction,
+    changePasswordDialogHideProgressAction,
+    changePasswordDialogShowProgressAction
+} from "./dialog/ChangePasswordDialogActions";
 
 export const ADMIN_USERS_LOADED = '[ADMIN] USERS LOADED';
 export const ADMIN_USER_UPDATE_SUCCESS = '[ADMIN] UPDATE USER SUCCESS';
@@ -85,5 +90,23 @@ export const deleteUserAction = (user: User): ThunkResult<void> => dispatch => {
 };
 
 export const changePasswordAction = (user: User, newPassword: string): ThunkResult<void> => dispatch => {
-    mockChangePassword(user, newPassword, dispatch);
+    if (useMockApi()) {
+        mockChangePassword(user, newPassword, dispatch);
+        return;
+    }
+    dispatch(changePasswordDialogShowProgressAction());
+    axios.put(`${API_BASE_PATH}/user/password`, {
+        login: user.login,
+        newPassword,
+        oldPassword: ''
+    }, {withCredentials: true})
+        .then(() => {
+            dispatch(openSnackBar(`Changed password of user ${user.login}`));
+            dispatch(changePasswordDialogHideProgressAction());
+            dispatch(changePasswordDialogClosedAction());
+        })
+        .catch(() => {
+            dispatch(openSnackBar(`Failed to change password of ${user.login}`));
+            dispatch(changePasswordDialogHideProgressAction());
+        });
 };
