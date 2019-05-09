@@ -10,6 +10,11 @@ import {
     changePasswordDialogHideProgressAction,
     changePasswordDialogShowProgressAction
 } from "./dialog/ChangePasswordDialogActions";
+import {
+    deleteUserDialogClosedAction,
+    deleteUserDialogHideProgressAction,
+    deleteUserDialogShowProgressAction
+} from "./dialog/DeleteUserDialogActions";
 
 export const ADMIN_USERS_LOADED = '[ADMIN] USERS LOADED';
 export const ADMIN_USER_UPDATE_SUCCESS = '[ADMIN] UPDATE USER SUCCESS';
@@ -86,7 +91,22 @@ export const updateUserAction = (user: User): ThunkResult<void> => (dispatch) =>
 };
 
 export const deleteUserAction = (user: User): ThunkResult<void> => dispatch => {
-    mockDeleteUser(user, dispatch);
+    if (useMockApi()) {
+        mockDeleteUser(user, dispatch);
+        return;
+    }
+    dispatch(deleteUserDialogShowProgressAction());
+    axios.delete(`${API_BASE_PATH}/user/${user.id}`, {withCredentials: true})
+        .then(() => {
+            dispatch(openSnackBar(`User with login ${user.login} deleted`));
+            dispatch(deleteUserSuccessAction(user))
+            dispatch(deleteUserDialogHideProgressAction());
+            dispatch(deleteUserDialogClosedAction());
+        })
+        .catch(() => {
+            dispatch(openSnackBar(`Could not delete user with ${user.login}`));
+            dispatch(deleteUserDialogHideProgressAction());
+        })
 };
 
 export const changePasswordAction = (user: User, newPassword: string): ThunkResult<void> => dispatch => {
