@@ -5,22 +5,22 @@ import React from "react";
 import CommonAppBarButtons from "./CommonAppBarButtons";
 import LinkTo from "../utils/linkTo";
 import Button from "@material-ui/core/es/Button";
+import {User} from "../../entities/User";
 
 const styles = createStyles({});
 
 export interface AppBarButtonsProps extends WithStyles<typeof styles> {
     handleLogout: () => void,
-    isLoggedIn: boolean,
-    isAdmin: boolean,
+    user: User | null
 }
 
 const AppBarButtonsRouter = (props: AppBarButtonsProps) => {
-    const {isLoggedIn, isAdmin, handleLogout} = props;
+    const {user, handleLogout} = props;
 
     const LoginLink = LinkTo("/login");
     return <Switch>
         <Route path={["/", "/search", "/settings", "/users", "/search-settings"]} exact
-               render={() => isLoggedIn ? <CommonAppBarButtons isAdmin={isAdmin} handleLogout={handleLogout}/> :
+               render={() => user !== null ? <CommonAppBarButtons user={user} handleLogout={handleLogout}/> :
                    <Button component={LoginLink} color="inherit">Login</Button>}/>}/>
     </Switch>
 };

@@ -8,17 +8,24 @@ import {AccountCircle} from "@material-ui/icons";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import LinkTo from "../utils/linkTo";
+import Typography from "@material-ui/core/Typography";
+import {User} from "../../entities/User";
 
-const styles = createStyles({});
+const styles = createStyles({
+    userLogin: {
+        margin: '0px 10px'
+    }
+});
 
 
 export interface CommonAppBarButtonsProps extends WithStyles<typeof styles> {
     handleLogout: () => void,
-    isAdmin: boolean
+    user: User
 }
 
 const CommonAppBarButtons = (props: CommonAppBarButtonsProps) => {
-    const {isAdmin, handleLogout: parentHandleLogout} = props;
+    const {user, handleLogout: parentHandleLogout, classes} = props;
+    const isAdmin = user.roles.indexOf("ADMIN") != -1;
     const [isMenuOpen, setMenuOpen] = useState(false);
     const handleMenuOpen = () => {
         setMenuOpen(true);
@@ -43,6 +50,7 @@ const CommonAppBarButtons = (props: CommonAppBarButtonsProps) => {
             color="inherit"
         >
             <AccountCircle/>
+            <Typography className={classes.userLogin} variant="body1" color="inherit">{user.login}</Typography>
         </IconButton>
         <Menu
             id="menu-appbar"

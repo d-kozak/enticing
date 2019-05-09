@@ -49,8 +49,7 @@ const EnticingAppBar = (props: EnticingAppBarProps) => {
                     </Link>
                 </div>
                 {searchSettings.length > 0 && <SearchSettingsSelector/>}
-                <AppBarMenuButtons isLoggedIn={user !== null} isAdmin={isAdmin} handleLogout={handleLogout}/>
-                {user && <Typography variant="body1" color="inherit">{user.login}</Typography>}
+                <AppBarMenuButtons user={user} handleLogout={handleLogout}/>
             </Toolbar>
         </AppBar>
     </div>
