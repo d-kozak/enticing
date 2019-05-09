@@ -87,7 +87,7 @@ export const loginRequestAction = (login: string, password: string, onError: (er
 
             dispatch(openSnackBar('Logged in'));
             // @ts-ignore
-            dispatch(loadSearchSettingsAction(response.data.isAdmin));
+            dispatch(loadSearchSettingsAction(user.roles.has("ADMIN")));
         }).catch(error => {
         if (error && (error.login || error.password)) {
             onError(error);
@@ -116,6 +116,22 @@ export const signUpAction = (login: string, password: string, onError: (error: a
         }
     )
 };
+
+export const attemptLoginAction = (): ThunkResult<void> => (dispatch) => {
+    axios.get<User>(`${API_BASE_PATH}/user`, {withCredentials: true})
+        .then(response => {
+            const user = response.data;
+            user.roles = new Set(user.roles) // transform array into set
+            dispatch(loginSuccessAction(user));
+            // @ts-ignore
+            dispatch(loadSearchSettingsAction(user.roles.has("ADMIN")));
+        })
+        .catch(() => {
+            // load search settings even when not logged in
+            dispatch(loadSearchSettingsAction(false));
+        });
+}
+
 
 export const userSettingsUpdateRequest = (settings: UserSettingsModel, onDone: () => void, onError: () => void): ThunkResult<void> => (dispatch) => {
     mockUpdateUserSettings(settings, onDone, dispatch)
