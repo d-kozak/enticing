@@ -79,7 +79,7 @@ export const loginRequestAction = (login: string, password: string, onError: (er
     formData.set("username", login)
     formData.set("password", password)
 
-    axios.post<User>(`${API_BASE_PATH}/login`, formData)
+    axios.post<User>(`${API_BASE_PATH}/login`, formData, {withCredentials: true})
         .then(response => {
             const user = response.data
             user.roles = new Set(user.roles) // transform array into set
