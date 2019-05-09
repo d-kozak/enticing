@@ -31,7 +31,7 @@ class UserEntity(
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> = roles
             .asSequence()
-            .map { SimpleGrantedAuthority(it) }
+            .map { SimpleGrantedAuthority("ROLE_$it") }
             .toMutableSet()
 
 

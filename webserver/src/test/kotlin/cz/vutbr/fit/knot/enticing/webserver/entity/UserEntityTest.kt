@@ -44,7 +44,7 @@ internal class UserEntityTest {
         assertThat(userDetails.username).isEqualTo("dkozak")
         assertThat(userDetails.password).isEqualTo("encrypted")
         assertThat(userDetails.isEnabled).isTrue()
-        assertThat(userDetails.authorities).isEqualTo(setOf(SimpleGrantedAuthority("USER")))
+        assertThat(userDetails.authorities).isEqualTo(setOf(SimpleGrantedAuthority("ROLE_USER")))
 
         user.active = false
         assertThat(userDetails.isEnabled).isFalse()
