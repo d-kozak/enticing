@@ -135,6 +135,11 @@ export const signUpAction = (login: string, password: string, onError: (error: a
 };
 
 export const attemptLoginAction = (): ThunkResult<void> => (dispatch) => {
+    if (useMockApi()) {
+        // login should fail, just load search actions
+        dispatch(loadSearchSettingsAction(false));
+        return;
+    }
     axios.get<User>(`${API_BASE_PATH}/user`, {withCredentials: true})
         .then(response => {
             const user = response.data;
@@ -166,6 +171,6 @@ export const userSettingsUpdateRequest = (user: User, onDone: () => void, onErro
         });
 }
 
-export const changeUserPasswordRequestAction = (user: User, newPassword: string): ThunkResult<void> => (dispatch) => {
+export const changeUserPasswordRequestAction = (user: User, oldPassword: String, newPassword: string): ThunkResult<void> => (dispatch) => {
     mockChangePassword(user, newPassword, dispatch);
 };

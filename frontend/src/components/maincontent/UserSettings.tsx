@@ -108,7 +108,7 @@ const UserSettings = (props: UserSettingsProps) => {
                 </Form>
             }
         </Formik>
-        <ChangePasswordDialog changePassword={changePassword}/>
+        <ChangePasswordDialog changePassword={changePassword} askForOldPassword={true}/>
     </Paper>
 };
 
@@ -120,7 +120,7 @@ const mapStateToProps = (state: AppState) => ({
 });
 const mapDispatchToProps = {
     openChangePasswordDialog: changePasswordDialogOpenAction,
-    changePassword: changeUserPasswordRequestAction as (user: User, newPassword: string) => void,
+    changePassword: changeUserPasswordRequestAction as (user: User, oldPassword: String, newPassword: string) => void,
     updateUserSettings: userSettingsUpdateRequest as (settings: User, onDone: () => void, onError: () => void) => void
 };
 

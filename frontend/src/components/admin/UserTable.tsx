@@ -95,7 +95,8 @@ const UserTable = (props: UserTableProps) => {
             </TableBody>
         </Table>
         <DeleteUserDialog/>
-        <ChangePasswordDialog changePassword={changePassword}/>
+        <ChangePasswordDialog changePassword={(user, _, newPassword) => changePassword(user, newPassword)}
+                              askForOldPassword={false}/>
     </React.Fragment>
 };
 
