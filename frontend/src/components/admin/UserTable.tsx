@@ -51,7 +51,7 @@ const UserTable = (props: UserTableProps) => {
     const toggleIsActive = (user: User) => (event: React.ChangeEvent<HTMLInputElement>) => {
         updateUser({
             ...user,
-            isActive: event.target.checked
+            active: event.target.checked
         });
     };
 
@@ -71,7 +71,7 @@ const UserTable = (props: UserTableProps) => {
                     <TableCell>{user.login}</TableCell>
                     <TableCell align="right">
                         <Checkbox
-                            checked={user.isActive}
+                            checked={user.active}
                             onChange={toggleIsActive(user)}
                             value="checkedA"
                             color="primary"

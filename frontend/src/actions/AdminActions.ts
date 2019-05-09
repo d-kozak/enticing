@@ -1,6 +1,10 @@
 import {User} from "../entities/User";
 import {ThunkResult} from "./RootActions";
 import {mockChangePassword, mockDeleteUser, mockLoadUsers, mockUpdateUser} from "../mocks/mockUserApi";
+import {API_BASE_PATH, useMockApi} from "../globals";
+import axios from "axios";
+import {hideProgressBarAction, showProgressBarAction} from "./ProgressBarActions";
+import {openSnackBar} from "./SnackBarActions";
 
 export const ADMIN_USERS_LOADED = '[ADMIN] USERS LOADED';
 export const ADMIN_USER_UPDATE_SUCCESS = '[ADMIN] UPDATE USER SUCCESS';
@@ -39,12 +43,41 @@ export const deleteUserSuccessAction = (user: User): DeleteUserSuccessAction => 
 });
 
 export const loadUsersAction = (): ThunkResult<void> => (dispatch) => {
-    mockLoadUsers(dispatch)
+    if (useMockApi()) {
+        mockLoadUsers(dispatch)
+        return;
+    }
+    dispatch(showProgressBarAction());
+    axios.get<Array<User>>(`${API_BASE_PATH}/user/all`, {withCredentials: true})
+        .then(
+            response => {
+                dispatch(usersLoadedAction(response.data));
+                dispatch(hideProgressBarAction());
+            }
+        )
+        .catch(() => {
+            dispatch(openSnackBar('Could not load users'))
+            dispatch(hideProgressBarAction());
+        })
 };
 
 
 export const updateUserAction = (user: User): ThunkResult<void> => (dispatch) => {
-    mockUpdateUser(user, dispatch)
+    if (useMockApi()) {
+        mockUpdateUser(user, dispatch)
+        return;
+    }
+    dispatch(showProgressBarAction());
+    axios.put(`${API_BASE_PATH}/user`, user, {withCredentials: true})
+        .then(() => {
+            dispatch(openSnackBar(`User with login ${user.login} updated`));
+            dispatch(updateUserSuccessAction(user));
+            dispatch(hideProgressBarAction());
+        })
+        .catch(() => {
+            dispatch(openSnackBar(`Failed to updated user${user.login}`));
+            dispatch(hideProgressBarAction());
+        })
 };
 
 export const deleteUserAction = (user: User): ThunkResult<void> => dispatch => {

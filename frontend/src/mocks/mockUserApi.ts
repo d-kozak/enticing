@@ -34,7 +34,7 @@ const mockUsers = new Map<string, MockUser>([
         id: 0,
         login: 'user1',
         password: 'user1',
-        isActive: true,
+        active: true,
         roles: [],
         selectedSettings: null,
         userSettings: {
@@ -47,7 +47,7 @@ const mockUsers = new Map<string, MockUser>([
         id: 1,
         login: 'passive',
         password: 'passive',
-        isActive: false,
+        active: false,
         roles: [],
         selectedSettings: null,
         userSettings: {
@@ -60,7 +60,7 @@ const mockUsers = new Map<string, MockUser>([
         id: 2,
         login: 'admin',
         password: 'admin',
-        isActive: true,
+        active: true,
         roles: ['ADMIN'],
         selectedSettings: null,
         userSettings: {
@@ -80,7 +80,7 @@ export const mockSignup = (login: string, password: string, dispatch: Dispatch, 
                 id: counter++,
                 login,
                 password,
-                isActive: true,
+                active: true,
                 roles: [],
                 selectedSettings: null,
                 userSettings: {
@@ -102,7 +102,7 @@ export const mockLogin = (login: string, password: string, dispatch: Dispatch, o
     setTimeout(() => {
         const user = mockUsers.get(login);
         if (user) {
-            if (!user.isActive) {
+            if (!user.active) {
                 onError({login: 'Your account is not active anymore'});
             } else if (user.password === password) {
                 dispatch(openSnackBar('Logged in'));
