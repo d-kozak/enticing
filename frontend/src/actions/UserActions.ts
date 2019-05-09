@@ -104,13 +104,14 @@ export const loginRequestAction = (login: string, password: string, onError: (er
             dispatch(openSnackBar('Logged in'));
             // @ts-ignore
             dispatch(loadSearchSettingsAction(user.roles.has("ADMIN")));
-        }).catch(error => {
-        if (error && (error.login || error.password)) {
-            onError(error);
-        } else {
-            onError({login: 'Invalid login or password'});
-        }
-    });
+        })
+        .catch(error => {
+            if (error && (error.login || error.password)) {
+                onError(error);
+            } else {
+                onError({login: 'Invalid login or password'});
+            }
+        });
 };
 
 

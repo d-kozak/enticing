@@ -69,13 +69,16 @@ const LoginSchema = Yup.object().shape({
 const Login = (props: LoginProps) => {
     const {classes, login, isLoggedIn} = props;
 
+    if (isLoggedIn) {
+        return <Redirect to="/"/>
+    }
+
     const [showProgress, setShowProgress] = useState(false);
 
     const SignUpLink = LinkTo("/signup");
 
     return <Paper className={classes.mainElement} style={{paddingTop: showProgress ? '0px' : '20px'}}>
         {showProgress && <LinearProgress className={classes.progress}/>}
-        {isLoggedIn && <Redirect to="/"/>}
         <Typography variant="h4">Sign in</Typography>
         <Formik
             initialValues={{
