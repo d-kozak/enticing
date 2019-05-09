@@ -138,8 +138,23 @@ internal class SecurityConfigTest(
                         .andExpect(status().isOk)
             }
 
+
             @Test
-            fun `Update is accessible`() {
+            @WithMockUser
+            fun `Get is accessible when logged in`() {
+                mockMvc.perform(get("$apiBasePath/user"))
+                        .andExpect(status().isOk)
+            }
+
+            @Test
+            fun `Get is not accessible when not logged in`() {
+                mockMvc.perform(get("$apiBasePath/user"))
+                        .andExpect(status().`is`(401))
+            }
+
+            @Test
+            @WithMockUser
+            fun `Update is accessible when logged in`() {
                 val userEntity = UserEntity(id = 42, login = "login")
                 val userDto = userEntity.toUser()
 
@@ -149,6 +164,20 @@ internal class SecurityConfigTest(
                         .andExpect(status().isOk)
 
                 Mockito.verify(userService).updateUser(userDto)
+                Mockito.clearInvocations(userService)
+            }
+
+            @Test
+            fun `Update is not accessible when not logged in`() {
+                val userEntity = UserEntity(id = 42, login = "login")
+                val userDto = userEntity.toUser()
+
+                mockMvc.perform(put("$apiBasePath/user")
+                        .content(ObjectMapper().writeValueAsString(userDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().`is`(401))
+                Mockito.verifyZeroInteractions(userService)
+                Mockito.clearInvocations(userService)
             }
         }
 
