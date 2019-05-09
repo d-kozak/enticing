@@ -15,6 +15,11 @@ import {openSnackBar} from "./SnackBarActions";
 import {loadSearchSettingsAction} from "./SearchSettingsActions";
 import {UserSettings} from "../entities/UserSettings";
 import {hideProgressBarAction, showProgressBarAction} from "./ProgressBarActions";
+import {
+    changePasswordDialogClosedAction,
+    changePasswordDialogHideProgressAction,
+    changePasswordDialogShowProgressAction
+} from "./dialog/ChangePasswordDialogActions";
 
 export const USER_LOGOUT = "[USER] LOGOUT";
 export const USER_LOGIN_SUCCESS = "[USER] LOGIN SUCCESS";
@@ -172,5 +177,23 @@ export const userSettingsUpdateRequest = (user: User, onDone: () => void, onErro
 }
 
 export const changeUserPasswordRequestAction = (user: User, oldPassword: String, newPassword: string): ThunkResult<void> => (dispatch) => {
-    mockChangePassword(user, newPassword, dispatch);
+    if (useMockApi()) {
+        mockChangePassword(user, newPassword, dispatch);
+        return;
+    }
+    dispatch(changePasswordDialogShowProgressAction());
+    axios.put(`${API_BASE_PATH}/user/password`, {
+        login: user.login,
+        oldPassword,
+        newPassword
+    }, {withCredentials: true})
+        .then(() => {
+            dispatch(openSnackBar(`Password changed successfully`));
+            dispatch(changePasswordDialogHideProgressAction());
+            dispatch(changePasswordDialogClosedAction());
+        })
+        .catch(() => {
+            dispatch(openSnackBar(`Could  not change password`));
+            dispatch(changePasswordDialogHideProgressAction());
+        })
 };
