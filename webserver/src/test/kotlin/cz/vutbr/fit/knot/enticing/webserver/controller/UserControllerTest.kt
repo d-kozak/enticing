@@ -145,28 +145,11 @@ internal class UserControllerTest(
 
     @Test
     fun `Delete user test`() {
-        val user = User(11, "aaa")
-        val serialized = ObjectMapper().writeValueAsString(user)
-        mockMvc.perform(delete("$apiBasePath/user")
-                .content(serialized)
-                .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(delete("$apiBasePath/user/11"))
                 .andExpect(status().isOk)
 
         Mockito.verify(userService)
-                .deleteUser(user)
-        Mockito.clearInvocations(userService)
-    }
-
-    @Test
-    fun `Delete user test should fail for zero id`() {
-        val user = User(0, "aaa")
-        val serialized = ObjectMapper().writeValueAsString(user)
-        mockMvc.perform(delete("$apiBasePath/user")
-                .content(serialized)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().`is`(400))
-
-        Mockito.verifyZeroInteractions(userService)
+                .deleteUser(11)
         Mockito.clearInvocations(userService)
     }
 

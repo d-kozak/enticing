@@ -137,20 +137,22 @@ internal class EnticingUserServiceTest {
     fun `delete user test`() {
         val userEntity = UserEntity(id = 123, login = "123")
         every { userRepositoryMock.delete(userEntity) } returns Unit
+        every { userRepositoryMock.findById(123) } returns Optional.of(userEntity)
 
         withAuthentication(userEntity) {
-            val user = userEntity.toUser()
-            userService.deleteUser(user)
+            userService.deleteUser(123)
         }
 
         verify(exactly = 1) { userRepositoryMock.delete(userEntity) }
+        verify(exactly = 1) { userRepositoryMock.findById(123) }
     }
 
     @Test
-    fun `delete user test cannot delete user with different id because not logged in`() {
+    fun `delete user test cannot delete user because not logged in`() {
         val user = User(0, "123")
+        every { userRepositoryMock.findById(0) } returns Optional.of(user.toEntity())
         assertThrows<InsufficientRoleException> {
-            userService.deleteUser(user)
+            userService.deleteUser(0)
         }
     }
 
@@ -158,9 +160,10 @@ internal class EnticingUserServiceTest {
     fun `delete user test cannot delete user because not admin`() {
         val user = User(0, "123")
         val auth = UserEntity(id = 2, login = "john")
+        every { userRepositoryMock.findById(0) } returns Optional.of(user.toEntity())
         withAuthentication(auth) {
             assertThrows<InsufficientRoleException> {
-                userService.deleteUser(user)
+                userService.deleteUser(0)
             }
         }
     }
@@ -169,14 +172,16 @@ internal class EnticingUserServiceTest {
     fun `delete user test can delete different user because is admin`() {
         val admin = UserEntity(id = 123, login = "123", roles = setOf("ADMIN"))
         val ruda = User(id = 2, login = "ruda")
+        every { userRepositoryMock.findById(2) } returns Optional.of(ruda.toEntity())
         every { userRepositoryMock.delete(ruda.toEntity()) } returns Unit
 
 
         withAuthentication(admin) {
-            userService.deleteUser(ruda)
+            userService.deleteUser(2)
         }
 
         verify(exactly = 1) { userRepositoryMock.delete(ruda.toEntity()) }
+        verify(exactly = 1) { userRepositoryMock.findById(2) }
     }
 
 

@@ -34,8 +34,8 @@ class UserController(private val userService: EnticingUserService) {
         userService.changePassword(changePasswordCredentials)
     }
 
-    @DeleteMapping
-    fun delete(@RequestBody @Valid user: User) {
-        userService.deleteUser(user)
+    @DeleteMapping("/{userId}")
+    fun delete(@PathVariable userId: Long) {
+        userService.deleteUser(userId)
     }
 }

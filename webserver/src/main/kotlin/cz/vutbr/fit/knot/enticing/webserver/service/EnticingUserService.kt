@@ -37,9 +37,10 @@ class EnticingUserService(private val userRepository: UserRepository, private va
         userRepository.save(updatedEntity)
     }
 
-    fun deleteUser(user: User) {
-        requireCanEditUser(user)
-        userRepository.delete(user.toEntity())
+    fun deleteUser(userId: Long) {
+        val userEntity = userRepository.findById(userId).orElseThrow { java.lang.IllegalArgumentException("No user with id $userId") }
+        requireCanEditUser(userEntity.toUser())
+        userRepository.delete(userEntity)
     }
 
     fun changePassword(userCredentials: ChangePasswordCredentials) {

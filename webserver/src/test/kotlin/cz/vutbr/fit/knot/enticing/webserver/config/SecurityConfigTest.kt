@@ -179,6 +179,19 @@ internal class SecurityConfigTest(
                 Mockito.verifyZeroInteractions(userService)
                 Mockito.clearInvocations(userService)
             }
+
+            @Test
+            fun `Delete is not accessible when not logged in`() {
+                mockMvc.perform(delete("$apiBasePath/user/1"))
+                        .andExpect(status().`is`(401))
+            }
+
+            @Test
+            @WithMockUser
+            fun `Delete is accessible when logged in`() {
+                mockMvc.perform(delete("$apiBasePath/user/1"))
+                        .andExpect(status().isOk)
+            }
         }
 
         @Nested
@@ -203,7 +216,6 @@ internal class SecurityConfigTest(
                 mockMvc.perform(get("$apiBasePath/user/all"))
                         .andExpect(status().`is`(200))
             }
-
 
         }
 
