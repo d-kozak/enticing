@@ -101,14 +101,14 @@ export const loginRequestAction = (login: string, password: string, onError: (er
     formData.set("username", login)
     formData.set("password", password)
 
-    axios.post<User>(`${API_BASE_PATH}/login`, formData, {withCredentials: true})
+    axios.post(`${API_BASE_PATH}/login`, formData, {withCredentials: true})
         .then(response => {
             const user = response.data
             dispatch(loginSuccessAction(user));
 
             dispatch(openSnackBar('Logged in'));
             // @ts-ignore
-            dispatch(loadSearchSettingsAction(user.roles.has("ADMIN")));
+            dispatch(loadSearchSettingsAction(user.roles.indexOf("ADMIN") != -1));
         })
         .catch(error => {
             if (error && (error.login || error.password)) {
@@ -150,7 +150,7 @@ export const attemptLoginAction = (): ThunkResult<void> => (dispatch) => {
             const user = response.data;
             dispatch(loginSuccessAction(user));
             // @ts-ignore
-            dispatch(loadSearchSettingsAction(user.roles.has("ADMIN")));
+            dispatch(loadSearchSettingsAction(user.roles.indexOf("ADMIN") != -1));
         })
         .catch(() => {
             // load search settings even when not logged in
