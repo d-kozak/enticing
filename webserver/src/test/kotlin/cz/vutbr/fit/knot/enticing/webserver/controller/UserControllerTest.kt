@@ -219,4 +219,18 @@ internal class UserControllerTest(
                 .andExpect(status().`is`(400))
 
     }
+
+    @Test
+    fun `Get all users`() {
+        val users = listOf(User(login = "ferda"), User(login = "brouk pytlik"), User(login = "krakonos"))
+        val serialized = ObjectMapper().writeValueAsString(users)
+        Mockito.`when`(userService.getAllUsers()).thenReturn(users)
+
+        mockMvc.perform(get("$apiBasePath/user/all"))
+                .andExpect(status().isOk)
+                .andExpect(MockMvcResultMatchers.content().string(serialized))
+
+        Mockito.verify(userService).getAllUsers()
+        Mockito.clearInvocations(userService)
+    }
 }

@@ -182,6 +182,32 @@ internal class SecurityConfigTest(
         }
 
         @Nested
+        inner class Admin {
+
+            @Test
+            fun `Get all users not accessible when not logged in`() {
+                mockMvc.perform(get("$apiBasePath/user/all"))
+                        .andExpect(status().`is`(401))
+            }
+
+            @Test
+            @WithMockUser
+            fun `Get all users not accessible when not admin`() {
+                mockMvc.perform(get("$apiBasePath/user/all"))
+                        .andExpect(status().`is`(403))
+            }
+
+            @Test
+            @WithMockUser(roles = ["ADMIN"])
+            fun `Get all users accessible for admin`() {
+                mockMvc.perform(get("$apiBasePath/user/all"))
+                        .andExpect(status().`is`(200))
+            }
+
+
+        }
+
+        @Nested
         inner class SearchSettingsTest {
 
             @Test

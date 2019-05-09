@@ -289,4 +289,15 @@ internal class EnticingUserServiceTest {
         }
     }
 
+    @Test
+    fun `Get all users`() {
+        val users = listOf(UserEntity(login = "ferda"), UserEntity(login = "brouk pytlik"), UserEntity(login = "krakonos"))
+        every { userRepositoryMock.findAll() } returns users
+
+        assertThat(userService.getAllUsers())
+                .isEqualTo(users.map(UserEntity::toUser))
+
+        verify(exactly = 1) { userRepositoryMock.findAll() }
+    }
+
 }

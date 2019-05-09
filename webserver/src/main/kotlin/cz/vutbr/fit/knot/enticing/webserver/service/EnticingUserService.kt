@@ -53,6 +53,8 @@ class EnticingUserService(private val userRepository: UserRepository, private va
         userRepository.save(userEntity)
     }
 
+    fun getAllUsers(): List<User> = userRepository.findAll().map(UserEntity::toUser)
+
     fun selectSettings(searchSettingsId: Long) {
         val searchSettings = searchSettingsRepository.findById(searchSettingsId).orElseThrow { IllegalArgumentException("No settings with id $searchSettingsId found") }
         val currentUser = userRepository.findById(currentUser!!.id).orElseThrow { IllegalArgumentException("User not located in db") }

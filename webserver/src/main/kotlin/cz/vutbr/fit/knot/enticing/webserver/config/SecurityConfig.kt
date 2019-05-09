@@ -31,6 +31,8 @@ class SecurityConfig(
                 .authenticationEntryPoint(authenticationEntryPoint())
                 .and()
                 .authorizeRequests()
+                .antMatchers("$apiBasePath/user/all")
+                .hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "$apiBasePath/search-settings")
                 .hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT, "$apiBasePath/search-settings")

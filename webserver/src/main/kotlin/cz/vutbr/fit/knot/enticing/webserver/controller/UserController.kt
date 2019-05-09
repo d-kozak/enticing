@@ -16,6 +16,9 @@ class UserController(private val userService: EnticingUserService) {
         return userService.currentUser
     }
 
+    @GetMapping("/all")
+    fun getAll(): List<User> = userService.getAllUsers()
+
     @PostMapping
     fun signup(@RequestBody @Valid user: UserCredentials) {
         userService.saveUser(user)
