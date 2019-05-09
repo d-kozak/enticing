@@ -4,7 +4,7 @@ export interface User {
     id: number,
     login: string,
     isActive: boolean,
-    roles: Set<String>,
+    roles: Array<String>,
     selectedSettings: number | null,
     userSettings: UserSettings
 }

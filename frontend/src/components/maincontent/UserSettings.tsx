@@ -8,8 +8,6 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import * as Yup from 'yup';
 import {Field, Form, Formik} from "formik";
-
-import {UserSettings as UserSettingsModel} from "../../entities/UserSettings";
 import {TextField} from "formik-material-ui";
 import Grid from "@material-ui/core/es/Grid";
 import Button from "@material-ui/core/es/Button";
@@ -59,7 +57,7 @@ const schema = Yup.object({
 const UserSettings = (props: UserSettingsProps) => {
     const {isLoggedIn, user, classes, userSettings, updateUserSettings, openChangePasswordDialog, changePassword} = props;
 
-    if (!isLoggedIn) {
+    if (!isLoggedIn || !userSettings) {
         return <Redirect to="/"/>
     }
 
@@ -72,7 +70,12 @@ const UserSettings = (props: UserSettingsProps) => {
             initialValues={userSettings}
             onSubmit={(values, actions) => {
                 setShowProgress(true);
-                updateUserSettings(values, () => {
+
+                const newUserInfo = {
+                    ...user,
+                    userSettings: values
+                }
+                updateUserSettings(newUserInfo, () => {
                     actions.setSubmitting(false);
                     setShowProgress(false);
                 }, () => {
@@ -112,13 +115,13 @@ const UserSettings = (props: UserSettingsProps) => {
 
 const mapStateToProps = (state: AppState) => ({
     isLoggedIn: isLoggedInSelector(state),
-    userSettings: state.userState.user!.userSettings,
+    userSettings: (state.userState.user && state.userState.user.userSettings) || undefined,
     user: state.userState.user!
 });
 const mapDispatchToProps = {
     openChangePasswordDialog: changePasswordDialogOpenAction,
     changePassword: changeUserPasswordRequestAction as (user: User, newPassword: string) => void,
-    updateUserSettings: userSettingsUpdateRequest as (settings: UserSettingsModel, onDone: () => void, onError: () => void) => void
+    updateUserSettings: userSettingsUpdateRequest as (settings: User, onDone: () => void, onError: () => void) => void
 };
 
 export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(UserSettings));

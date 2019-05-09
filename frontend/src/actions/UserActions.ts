@@ -13,7 +13,7 @@ import axios from "axios";
 import {API_BASE_PATH, useMockApi} from "../globals";
 import {openSnackBar} from "./SnackBarActions";
 import {loadSearchSettingsAction} from "./SearchSettingsActions";
-import {UserSettings as UserSettingsModel, UserSettings} from "../entities/UserSettings";
+import {UserSettings} from "../entities/UserSettings";
 import {hideProgressBarAction, showProgressBarAction} from "./ProgressBarActions";
 
 export const USER_LOGOUT = "[USER] LOGOUT";
@@ -99,7 +99,6 @@ export const loginRequestAction = (login: string, password: string, onError: (er
     axios.post<User>(`${API_BASE_PATH}/login`, formData, {withCredentials: true})
         .then(response => {
             const user = response.data
-            user.roles = new Set(user.roles) // transform array into set
             dispatch(loginSuccessAction(user));
 
             dispatch(openSnackBar('Logged in'));
@@ -138,7 +137,6 @@ export const attemptLoginAction = (): ThunkResult<void> => (dispatch) => {
     axios.get<User>(`${API_BASE_PATH}/user`, {withCredentials: true})
         .then(response => {
             const user = response.data;
-            user.roles = new Set(user.roles) // transform array into set
             dispatch(loginSuccessAction(user));
             // @ts-ignore
             dispatch(loadSearchSettingsAction(user.roles.has("ADMIN")));
@@ -150,8 +148,21 @@ export const attemptLoginAction = (): ThunkResult<void> => (dispatch) => {
 }
 
 
-export const userSettingsUpdateRequest = (settings: UserSettingsModel, onDone: () => void, onError: () => void): ThunkResult<void> => (dispatch) => {
-    mockUpdateUserSettings(settings, onDone, dispatch)
+export const userSettingsUpdateRequest = (user: User, onDone: () => void, onError: () => void): ThunkResult<void> => (dispatch) => {
+    if (useMockApi()) {
+        mockUpdateUserSettings(user.userSettings, onDone, dispatch);
+        return;
+    }
+    axios.put(`${API_BASE_PATH}/user`, user, {withCredentials: true})
+        .then(() => {
+            dispatch(userSettingsUpdatedAction(user.userSettings));
+            dispatch(openSnackBar("User settings updated"));
+            onDone();
+        })
+        .catch(() => {
+            dispatch(openSnackBar("Could not update user settings"));
+            onError();
+        });
 }
 
 export const changeUserPasswordRequestAction = (user: User, newPassword: string): ThunkResult<void> => (dispatch) => {

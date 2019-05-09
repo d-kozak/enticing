@@ -3,7 +3,7 @@ import {AppState} from "./RootReducer";
 
 export const isAdminSelector = (state: AppState) => {
     if (state.userState.user !== null) {
-        return state.userState.user.roles.has("ADMIN");
+        return state.userState.user.roles.indexOf("ADMIN") != -1;
     }
     return false;
 }

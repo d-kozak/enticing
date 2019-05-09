@@ -44,7 +44,7 @@ const UserTable = (props: UserTableProps) => {
     const toggleIsAdmin = (user: User) => (event: React.ChangeEvent<HTMLInputElement>) => {
         updateUser({
             ...user,
-            roles: new Set(event.target.checked ? ["ADMIN"] : [])
+            roles: event.target.checked ? ["ADMIN"] : []
         });
     };
 
@@ -79,7 +79,7 @@ const UserTable = (props: UserTableProps) => {
                     </TableCell>
                     <TableCell align="right">
                         <Checkbox
-                            checked={user.roles.has("ADMIN")}
+                            checked={user.roles.indexOf("ADMIN") != -1}
                             onChange={toggleIsAdmin(user)}
                             value="checkedA"
                             color="secondary"

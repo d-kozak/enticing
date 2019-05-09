@@ -35,7 +35,7 @@ const mockUsers = new Map<string, MockUser>([
         login: 'user1',
         password: 'user1',
         isActive: true,
-        roles: new Set(),
+        roles: [],
         selectedSettings: null,
         userSettings: {
             resultsPerPage: 20
@@ -48,7 +48,7 @@ const mockUsers = new Map<string, MockUser>([
         login: 'passive',
         password: 'passive',
         isActive: false,
-        roles: new Set(),
+        roles: [],
         selectedSettings: null,
         userSettings: {
             resultsPerPage: 25
@@ -61,7 +61,7 @@ const mockUsers = new Map<string, MockUser>([
         login: 'admin',
         password: 'admin',
         isActive: true,
-        roles: new Set(['ADMIN']),
+        roles: ['ADMIN'],
         selectedSettings: null,
         userSettings: {
             resultsPerPage: 50
@@ -81,7 +81,7 @@ export const mockSignup = (login: string, password: string, dispatch: Dispatch, 
                 login,
                 password,
                 isActive: true,
-                roles: new Set(),
+                roles: [],
                 selectedSettings: null,
                 userSettings: {
                     resultsPerPage: 20
