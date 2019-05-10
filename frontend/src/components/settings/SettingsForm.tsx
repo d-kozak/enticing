@@ -20,6 +20,7 @@ import {connect} from "react-redux";
 import {
     changeDefaultSearchSettingsRequestAction,
     removeSearchSettingsRequestAction,
+    saveNewSearchSettingsAction,
     updateSearchSettingsRequestAction
 } from '../../actions/SearchSettingsActions'
 
@@ -90,7 +91,7 @@ const SettingsSchema = Yup.object().shape({
 });
 
 const SettingsForm = (props: SettingsFormProps) => {
-    const {updateSettings, makeDefault, settings, classes, removeSettings} = props;
+    const {saveSettings, updateSettings, makeDefault, settings, classes, removeSettings} = props;
 
     const [showProgress, setShowProgress] = useState(false);
 
@@ -98,8 +99,9 @@ const SettingsForm = (props: SettingsFormProps) => {
         initialValues={settings}
         validationSchema={SettingsSchema}
         onSubmit={(values, actions) => {
+            const submitAction = settings.isTransient ? saveSettings : updateSettings;
             setShowProgress(true);
-            updateSettings(values, () => {
+            submitAction(values, () => {
                 setShowProgress(false);
                 actions.setSubmitting(false);
             }, (errors) => {
@@ -117,7 +119,7 @@ const SettingsForm = (props: SettingsFormProps) => {
                            component={TextField} className={classes.textField}/>
                     <br/>
                     <Typography variant="body1">Is private?</Typography>
-                    <Field label="Private" name="isPrivate" component={Switch}/>
+                    <Field label="Private" name="private" component={Switch}/>
                 </div>
                 <Divider/>
 
@@ -161,7 +163,8 @@ const SettingsForm = (props: SettingsFormProps) => {
                             Save
                         </Button>
                     </Grid>
-                    <Grid item>
+
+                    {!settings.isTransient && <Grid item>
                         <Button
                             onClick={() => {
                                 setShowProgress(true);
@@ -171,8 +174,8 @@ const SettingsForm = (props: SettingsFormProps) => {
                             <DeleteIcon className={classes.iconSmall}/>
                             Delete
                         </Button>
-                    </Grid>
-                    {!settings.default && <Grid item>
+                    </Grid>}
+                    {!settings.default && !settings.isTransient && <Grid item>
                         <Button
                             onClick={() => {
                                 setShowProgress(true);
@@ -190,7 +193,8 @@ const SettingsForm = (props: SettingsFormProps) => {
 
 const mapStateToProps = (state: AppState) => ({});
 const mapDispatchToProps = {
-    updateSettings: updateSearchSettingsRequestAction as (newSettings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void,
+    saveSettings: saveNewSearchSettingsAction as (newSettings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void,
+    updateSettings: updateSearchSettingsRequestAction as (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void,
     removeSettings: removeSearchSettingsRequestAction as (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void,
     makeDefault: changeDefaultSearchSettingsRequestAction as (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void
 };

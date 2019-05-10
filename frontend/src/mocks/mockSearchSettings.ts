@@ -2,7 +2,6 @@ import {SearchSettings} from "../entities/SearchSettings";
 import {Dispatch} from "redux";
 import {hideProgressBarAction, showProgressBarAction} from "../actions/ProgressBarActions";
 import {
-    searchSettingsAddedAction,
     searchSettingsLoadedAction,
     searchSettingsNewDefaultAction,
     searchSettingsRemovedAction,
@@ -74,23 +73,15 @@ export const mockChangeDefaultSearchSettings = (dispatch: Dispatch, settings: Se
     }, 2000);
 }
 
-
 let counter = 3;
 
-export const mockAddSearchSettings = (dispatch: Dispatch) => {
+export const mockSaveNewSearchSettings = (dispatch: Dispatch, searchSettings: SearchSettings, onDone: () => void) => {
     dispatch(showProgressBarAction());
     setTimeout(() => {
-        const newSettings: SearchSettings = {
-            id: counter++,
-            name: 'new',
-            private: true,
-            default: false,
-            annotationDataServer: '',
-            annotationServer: '',
-            servers: []
-        };
-        dispatch(searchSettingsAddedAction(newSettings));
-        dispatch(openSnackBar('New settings added'));
+        dispatch(openSnackBar(`New settings ${searchSettings.name} added`));
+        searchSettings.id = counter++
+        dispatch(searchSettingsUpdatedAction(searchSettings));
+        onDone();
         dispatch(hideProgressBarAction());
     }, 2000);
 }

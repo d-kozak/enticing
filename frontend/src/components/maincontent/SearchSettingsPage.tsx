@@ -21,7 +21,7 @@ import Chip from "@material-ui/core/Chip";
 import DoneIcon from '@material-ui/icons/Done';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import SettingsForm from "../settings/SettingsForm";
-import {addSearchSettingsRequestAction} from "../../actions/SearchSettingsActions";
+import {addEmptySearchSettingsRequestAction} from "../../actions/SearchSettingsActions";
 
 const styles = (theme: Theme) => createStyles({
     rootElement: {
@@ -68,7 +68,7 @@ const SearchSettingsPage = (props: SearchSettingsPageProps) => {
         <Typography variant="h2" className={classes.settingsTitle}>Search Settings</Typography>
         {searchSettings.map((settings, index) => <ExpansionPanel key={settings.id}>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-                    <Typography variant="h5">{settings.name}</Typography>
+                    <Typography variant="h5">{settings.isTransient ? 'New settings' : settings.name}</Typography>
                     {index === selectedSearchSettingsIndex && <Chip
                         icon={<DoneIcon/>}
                         label="Selected"
@@ -113,7 +113,7 @@ const mapStateToProps = (state: AppState) => ({
     selectedSearchSettingsIndex: selectedSearchSettingsIndexSelector(state)
 });
 const mapDispatchToProps = {
-    addSearchSettings: addSearchSettingsRequestAction as () => void,
+    addSearchSettings: addEmptySearchSettingsRequestAction as () => void,
     selectSearchSettings: searchSettingsSelectedRequestAction as (settings: SearchSettings) => void
 };
 

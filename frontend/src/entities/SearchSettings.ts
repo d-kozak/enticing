@@ -8,7 +8,11 @@ export interface SearchSettings {
     private: boolean,
     annotationDataServer: Url,
     annotationServer: Url,
-    servers: Array<IpAddress>
+    servers: Array<IpAddress>,
+    /**
+     * true only for new search settings before they are saved in the backend
+     */
+    isTransient?: boolean
 }
 
 export type IpAddress = string;

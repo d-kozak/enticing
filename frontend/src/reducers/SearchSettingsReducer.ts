@@ -23,10 +23,22 @@ const searchSettingsReducer: SearchSettingsReducer = (state = initialState, acti
                 settings: action.settings
             };
         case SEARCH_SETTINGS_ADDED:
+            if (state.settings.find(setting => setting.isTransient == true)) {
+                throw new Error("Cannot create second transient settings.")
+            }
             return {
                 settings: [...state.settings, action.settings]
             };
         case SEARCH_SETTINGS_UPDATED:
+            if (action.settings.isTransient) {
+                const newSettings: SearchSettings = {
+                    ...action.settings,
+                    isTransient: false
+                }
+                return {
+                    settings: state.settings.map((item => item.isTransient ? newSettings : item))
+                }
+            }
             return {
                 settings: state.settings.map((item => item.id === action.settings.id ? action.settings : item))
             };
