@@ -18,7 +18,7 @@ internal class SearchSettingsJpaTest(
 
     @Test
     fun `test insert`() {
-        val settingsOne = SearchSettings(0, "foo")
+        val settingsOne = SearchSettings(0, "foo", annotationServer = "foo.baz", annotationDataServer = "baz.paz", servers = setOf("127.0.0.1"))
         assertThat(entityManager.persistFlushFind(settingsOne))
                 .extracting { it.id }
                 .isNotEqualTo(0)

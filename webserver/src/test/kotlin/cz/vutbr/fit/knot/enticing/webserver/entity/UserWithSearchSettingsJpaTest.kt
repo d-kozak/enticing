@@ -17,8 +17,8 @@ class UserWithSearchSettingsJpaTest(
 ) {
 
     @Test
-    fun `persis both`() {
-        val searchSettings = entityManager.persistFlushFind(SearchSettings(name = "settings1"))
+    fun `persist both`() {
+        val searchSettings = entityManager.persistFlushFind(SearchSettings(0, "foo", annotationServer = "foo.baz", annotationDataServer = "baz.paz", servers = setOf("127.0.0.1")))
         assertThat(searchSettings.id).isNotEqualTo(0)
         val user = entityManager.persistAndFlush(UserEntity(login = "John", encryptedPassword = "abc", selectedSettings = searchSettings))
         assertThat(user.id).isNotEqualTo(0)

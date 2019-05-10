@@ -1,7 +1,9 @@
 package cz.vutbr.fit.knot.enticing.webserver.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import cz.vutbr.fit.knot.enticing.webserver.dto.ImportedSearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.dto.UserCredentials
+import cz.vutbr.fit.knot.enticing.webserver.dto.toEntity
 import cz.vutbr.fit.knot.enticing.webserver.dto.toUser
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
@@ -226,6 +228,7 @@ internal class SecurityConfigTest(
             fun `Get is accessible`() {
                 mockMvc.perform(get("$apiBasePath/search-settings"))
                         .andExpect(status().isOk)
+                Mockito.clearInvocations(searchSettingsRepository)
             }
 
             @Test
@@ -257,8 +260,50 @@ internal class SecurityConfigTest(
 
             @WithMockUser(roles = ["ADMIN"])
             @Test
+            fun `Importing is accessible for admin`() {
+                val importedSettings = ImportedSearchSettings("import", "foo.com", "baz.com", setOf("127.0.0.1:20"))
+                val searchSettings = importedSettings.toEntity()
+                Mockito.`when`(searchSettingsRepository.save(searchSettings)).thenReturn(searchSettings)
+                mockMvc.perform(post("$apiBasePath/search-settings/import")
+                        .content(ObjectMapper().writeValueAsString(importedSettings))
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk)
+
+                Mockito.clearInvocations(searchSettingsRepository)
+            }
+
+            @Test
+            fun `Importing is not accessible when not logged in`() {
+                val importedSettings = ImportedSearchSettings("import", "foo.com", "baz.com", setOf("127.0.0.1:20"))
+
+                mockMvc.perform(post("$apiBasePath/search-settings/import")
+                        .content(ObjectMapper().writeValueAsString(importedSettings))
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().`is`(401))
+
+                Mockito.verifyZeroInteractions(searchSettingsRepository)
+                Mockito.clearInvocations(searchSettingsRepository)
+            }
+
+
+            @WithMockUser
+            @Test
+            fun `Importing is not accessible for not admin`() {
+                val importedSettings = ImportedSearchSettings("import", "foo.com", "baz.com", setOf("127.0.0.1:20"))
+
+                mockMvc.perform(post("$apiBasePath/search-settings/import")
+                        .content(ObjectMapper().writeValueAsString(importedSettings))
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().`is`(403))
+
+                Mockito.verifyZeroInteractions(searchSettingsRepository)
+                Mockito.clearInvocations(searchSettingsRepository)
+            }
+
+            @WithMockUser(roles = ["ADMIN"])
+            @Test
             fun `Post put delete require admin role success`() {
-                val searchSettings = SearchSettings(1, "foo")
+                val searchSettings = SearchSettings(1, "foo", annotationServer = "foo.baz", annotationDataServer = "baz.paz", servers = setOf("127.0.0.1"))
                 Mockito.`when`(searchSettingsRepository.save(searchSettings)).thenReturn(searchSettings)
                 val methods: List<(String) -> MockHttpServletRequestBuilder> = listOf(
                         { path: String -> post(path) },

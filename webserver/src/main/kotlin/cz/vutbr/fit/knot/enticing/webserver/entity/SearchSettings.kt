@@ -15,9 +15,12 @@ class SearchSettings(
         @field:Column(name = "is_default")
         var default: Boolean = false,
         var private: Boolean = true,
+        @field:NotEmpty
         var annotationDataServer: String = "",
+        @field:NotEmpty
         var annotationServer: String = "",
         @field:ElementCollection(fetch = FetchType.EAGER)
+        @field:NotEmpty
         var servers: Set<String> = setOf()
 ) {
 

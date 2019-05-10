@@ -45,7 +45,8 @@ class UserSettingsJpaTest(
 
     @Test
     fun `Should fail for not unique name`() {
-        entityManager.persistFlushFind(SearchSettings(name = "abc"))
-        assertThrows<PersistenceException> { entityManager.persistFlushFind(SearchSettings(name = "abc")) }
+        val searchSettings = SearchSettings(0, "foo", annotationServer = "foo.baz", annotationDataServer = "baz.paz", servers = setOf("127.0.0.1"))
+        entityManager.persistFlushFind(searchSettings)
+        assertThrows<PersistenceException> { entityManager.persistFlushFind(searchSettings) }
     }
 }
