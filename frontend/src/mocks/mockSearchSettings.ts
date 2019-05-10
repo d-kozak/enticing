@@ -76,12 +76,10 @@ export const mockChangeDefaultSearchSettings = (dispatch: Dispatch, settings: Se
 let counter = 3;
 
 export const mockSaveNewSearchSettings = (dispatch: Dispatch, searchSettings: SearchSettings, onDone: () => void) => {
-    dispatch(showProgressBarAction());
     setTimeout(() => {
         dispatch(openSnackBar(`New settings ${searchSettings.name} added`));
         searchSettings.id = counter++
         dispatch(searchSettingsUpdatedAction(searchSettings));
         onDone();
-        dispatch(hideProgressBarAction());
     }, 2000);
 }

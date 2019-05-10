@@ -21,6 +21,7 @@ import {
     changeDefaultSearchSettingsRequestAction,
     removeSearchSettingsRequestAction,
     saveNewSearchSettingsAction,
+    searchSettingsAddingCancelledAction,
     updateSearchSettingsRequestAction
 } from '../../actions/SearchSettingsActions'
 
@@ -91,7 +92,7 @@ const SettingsSchema = Yup.object().shape({
 });
 
 const SettingsForm = (props: SettingsFormProps) => {
-    const {saveSettings, updateSettings, makeDefault, settings, classes, removeSettings} = props;
+    const {saveSettings, updateSettings, makeDefault, settings, classes, removeSettings, cancelAdding} = props;
 
     const [showProgress, setShowProgress] = useState(false);
 
@@ -156,6 +157,10 @@ const SettingsForm = (props: SettingsFormProps) => {
                 </div>
 
                 <Grid container justify="flex-end" alignItems="center">
+                    {settings.isTransient &&
+                    <Button onClick={cancelAdding} className={classes.formButton} disabled={isSubmitting}>
+                        Cancel
+                    </Button>}
                     <Grid item>
                         <Button className={classes.formButton} variant="contained" color="primary" type="submit"
                                 disabled={isSubmitting}>
@@ -196,7 +201,8 @@ const mapDispatchToProps = {
     saveSettings: saveNewSearchSettingsAction as (newSettings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void,
     updateSettings: updateSearchSettingsRequestAction as (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void,
     removeSettings: removeSearchSettingsRequestAction as (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void,
-    makeDefault: changeDefaultSearchSettingsRequestAction as (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void
+    makeDefault: changeDefaultSearchSettingsRequestAction as (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void,
+    cancelAdding: searchSettingsAddingCancelledAction
 };
 
 export default withStyles(styles, {

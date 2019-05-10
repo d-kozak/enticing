@@ -30,3 +30,7 @@ export const selectedSearchSettingsIndexSelector = createSelector(searchSettings
     }
     return 0
 });
+
+
+export const newSearchSettingsSelector = createSelector(searchSettingsSelector,
+    (searchSettings) => searchSettings.find(item => item.isTransient == true))

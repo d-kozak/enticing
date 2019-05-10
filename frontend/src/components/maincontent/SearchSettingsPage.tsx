@@ -22,6 +22,7 @@ import DoneIcon from '@material-ui/icons/Done';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import SettingsForm from "../settings/SettingsForm";
 import {addEmptySearchSettingsRequestAction} from "../../actions/SearchSettingsActions";
+import NewSearchSettingsDialog from "../settings/NewSettingsDialog";
 
 const styles = (theme: Theme) => createStyles({
     rootElement: {
@@ -66,9 +67,11 @@ const SearchSettingsPage = (props: SearchSettingsPageProps) => {
     const {classes, searchSettings, selectSearchSettings, selectedSearchSettingsIndex, addSearchSettings, isAdmin} = props;
     return <Paper className={classes.rootElement}>
         <Typography variant="h2" className={classes.settingsTitle}>Search Settings</Typography>
-        {searchSettings.map((settings, index) => <ExpansionPanel key={settings.id}>
+        {searchSettings
+            .filter(settings => !settings.isTransient)
+            .map((settings, index) => <ExpansionPanel key={settings.id}>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-                    <Typography variant="h5">{settings.isTransient ? 'New settings' : settings.name}</Typography>
+                    <Typography variant="h5">{settings.name}</Typography>
                     {index === selectedSearchSettingsIndex && <Chip
                         icon={<DoneIcon/>}
                         label="Selected"
@@ -104,6 +107,7 @@ const SearchSettingsPage = (props: SearchSettingsPageProps) => {
                         color="primary">Add</Button>
             </Grid>
         </Grid>}
+        <NewSearchSettingsDialog/>
     </Paper>
 };
 

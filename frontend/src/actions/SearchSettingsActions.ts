@@ -13,6 +13,7 @@ export const SEARCH_SETTINGS_ADDED = "[SEARCH SETTINGS] ADDED";
 export const SEARCH_SETTINGS_UPDATED = "[SEARCH SETTINGS] UPDATED";
 export const SEARCH_SETTINGS_REMOVED = "[SEARCH SETTINGS] REMOVED";
 export const SEARCH_SETTINGS_NEW_DEFAULT = "[SEARCH SETTINGS] NEW DEFAULT";
+export const SEARCH_SETTINGS_ADDING_CANCELLED = "[SEARCH SETTINGS] ADDING CANCELLED"
 
 interface SearchSettingsLoadedAction {
     type: typeof SEARCH_SETTINGS_LOADED,
@@ -39,12 +40,17 @@ interface SearchSettingsNewDefaultAction {
     settings: SearchSettings
 }
 
+interface SearchSettingsAddingCancelledAction {
+    type: typeof SEARCH_SETTINGS_ADDING_CANCELLED
+}
+
 export type SearchSettingsAction =
     SearchSettingsLoadedAction
     | SearchSettingsAddedAction
     | SearchSettingsUpdatedAction
     | SearchSettingsRemovedAction
-    | SearchSettingsNewDefaultAction;
+    | SearchSettingsNewDefaultAction
+    | SearchSettingsAddingCancelledAction;
 
 export const searchSettingsLoadedAction = (settings: Array<SearchSettings>): SearchSettingsLoadedAction => ({
     type: SEARCH_SETTINGS_LOADED,
@@ -70,6 +76,10 @@ export const searchSettingsNewDefaultAction = (settings: SearchSettings): Search
     type: SEARCH_SETTINGS_NEW_DEFAULT,
     settings
 });
+
+export const searchSettingsAddingCancelledAction = (): SearchSettingsAddingCancelledAction => ({
+    type: SEARCH_SETTINGS_ADDING_CANCELLED
+})
 
 export const loadSearchSettingsAction = (isAdmin: boolean): ThunkResult<void> => (dispatch) => {
     mockLoadSearchSettings(dispatch, isAdmin)
