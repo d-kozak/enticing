@@ -1,8 +1,11 @@
 package cz.vutbr.fit.knot.enticing.webserver.entity
 
+import cz.vutbr.fit.knot.enticing.webserver.entity.ipaddress.IpAddressCollection
 import javax.persistence.*
 import javax.validation.constraints.NotEmpty
+import javax.validation.constraints.Pattern
 
+const val urlRegex = """((([-\w]+\.)+[\w-]+)|((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))|localhost)(:\d+)?([\w-/]*)${'$'}"""
 
 @Entity
 class SearchSettings(
@@ -16,11 +19,14 @@ class SearchSettings(
         var default: Boolean = false,
         var private: Boolean = true,
         @field:NotEmpty
+        @field:Pattern(regexp = urlRegex)
         var annotationDataServer: String = "",
         @field:NotEmpty
+        @field:Pattern(regexp = urlRegex)
         var annotationServer: String = "",
         @field:ElementCollection(fetch = FetchType.EAGER)
         @field:NotEmpty
+        @field:IpAddressCollection
         var servers: Set<String> = setOf()
 ) {
 

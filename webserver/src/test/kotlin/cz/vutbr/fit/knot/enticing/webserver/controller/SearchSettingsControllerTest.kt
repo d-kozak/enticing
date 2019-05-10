@@ -83,9 +83,11 @@ internal class SearchSettingsControllerTest(
         val name = SearchSettings(name = "", annotationDataServer = "foo.com", annotationServer = "baz.com", servers = setOf("127.0.0.1:20"))
         val annotationDataServer = SearchSettings(name = "foo", annotationDataServer = "", annotationServer = "foo.baz", servers = setOf("127.0.0.1:20"))
         val annotationServer = SearchSettings(name = "foo", annotationDataServer = "foo.com", annotationServer = "", servers = setOf("127.0.0.1:20"))
-        val roles = SearchSettings(name = "foo", annotationDataServer = "foo.com", annotationServer = "baz.com", servers = setOf())
-
-        val invalid = listOf(name, annotationDataServer, annotationServer, roles)
+        val servers = SearchSettings(name = "foo", annotationDataServer = "foo.com", annotationServer = "baz.com", servers = setOf())
+        val invalidAnnotationDataServer = SearchSettings(name = "foo", annotationDataServer = "asdfdsa", annotationServer = "baz.com", servers = setOf("127.0.0.1:20"))
+        val invalidAnnotationServer = SearchSettings(name = "foo", annotationDataServer = "foo.com", annotationServer = "afsdsa", servers = setOf("127.0.0.1:20"))
+        val invalidServers = SearchSettings(name = "foo", annotationDataServer = "foo.com", annotationServer = "baz.com", servers = setOf("10.10."))
+        val invalid = listOf(name, annotationDataServer, annotationServer, servers, invalidAnnotationDataServer, invalidAnnotationServer, invalidServers)
         for (settings in invalid) {
             mockMvc.perform(post("$apiBasePath/search-settings")
                     .content(ObjectMapper().writeValueAsString(settings))
