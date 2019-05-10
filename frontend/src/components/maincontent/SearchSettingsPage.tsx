@@ -21,8 +21,10 @@ import Chip from "@material-ui/core/Chip";
 import DoneIcon from '@material-ui/icons/Done';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import SettingsForm from "../settings/SettingsForm";
-import {addEmptySearchSettingsRequestAction} from "../../actions/SearchSettingsActions";
+import {addEmptySearchSettingsRequestAction, loadSettingsFromFileAction} from "../../actions/SearchSettingsActions";
 import NewSearchSettingsDialog from "../settings/NewSettingsDialog";
+import FolderOpenIcon from "@material-ui/icons/FolderOpen";
+import {FilePicker} from 'react-file-picker';
 
 const styles = (theme: Theme) => createStyles({
     rootElement: {
@@ -64,47 +66,59 @@ export type SearchSettingsPageProps =
     & {}
 
 const SearchSettingsPage = (props: SearchSettingsPageProps) => {
-    const {classes, searchSettings, selectSearchSettings, selectedSearchSettingsIndex, addSearchSettings, isAdmin} = props;
+    const {classes, searchSettings, loadFile, selectSearchSettings, selectedSearchSettingsIndex, addSearchSettings, isAdmin} = props;
     return <Paper className={classes.rootElement}>
         <Typography variant="h2" className={classes.settingsTitle}>Search Settings</Typography>
         {searchSettings
             .filter(settings => !settings.isTransient)
             .map((settings, index) => <ExpansionPanel key={settings.id}>
-                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-                    <Typography variant="h5">{settings.name}</Typography>
-                    {index === selectedSearchSettingsIndex && <Chip
-                        icon={<DoneIcon/>}
-                        label="Selected"
-                        className={classes.chip}
-                        color="primary"
-                    />}
-                    {settings.private && <Chip
-                        icon={<VisibilityOffIcon/>}
-                        label="Private"
-                        className={classes.chip}
-                        color="secondary"
-                    />}
-                    {settings.default && <Chip label="Default" className={classes.chip}/>}
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails className={classes.expansionPanelDetails}>
-                    {isAdmin ? <SettingsForm settings={settings}/> : <SettingsDetails settings={settings}/>}
-                    <Grid container justify="flex-end" alignItems="center">
-                        <Grid item>
-                            <Button
-                                disabled={index === selectedSearchSettingsIndex}
-                                onClick={() => selectSearchSettings(settings)} variant="contained" color="primary"
-                                type="submit"><DoneIcon
-                                className={classes.iconSmall}/>{index !== selectedSearchSettingsIndex ? 'Select' : 'Already selected'}
-                            </Button>
+                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
+                        <Typography variant="h5">{settings.name}</Typography>
+                        {index === selectedSearchSettingsIndex && <Chip
+                            icon={<DoneIcon/>}
+                            label="Selected"
+                            className={classes.chip}
+                            color="primary"
+                        />}
+                        {settings.private && <Chip
+                            icon={<VisibilityOffIcon/>}
+                            label="Private"
+                            className={classes.chip}
+                            color="secondary"
+                        />}
+                        {settings.default && <Chip label="Default" className={classes.chip}/>}
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails className={classes.expansionPanelDetails}>
+                        {isAdmin ? <SettingsForm settings={settings}/> : <SettingsDetails settings={settings}/>}
+                        <Grid container justify="flex-end" alignItems="center">
+                            <Grid item>
+                                <Button
+                                    disabled={index === selectedSearchSettingsIndex}
+                                    onClick={() => selectSearchSettings(settings)} variant="contained" color="primary"
+                                    type="submit"><DoneIcon
+                                    className={classes.iconSmall}/>{index !== selectedSearchSettingsIndex ? 'Select' : 'Already selected'}
+                                </Button>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
-        )}
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+            )}
         {isAdmin && <Grid container justify="flex-end" alignItems="center">
             <Grid item>
                 <Button className={classes.formButton} onClick={() => addSearchSettings()} variant="contained"
                         color="primary">Add</Button>
+            </Grid>
+            <Grid>
+                <FilePicker
+                    extensions={['json']}
+                    onChange={loadFile}
+                    onError={errMsg => console.error(errMsg)}>
+                    <Button className={classes.formButton} onClick={() => addSearchSettings()} variant="contained"
+                            color="primary">
+                        <FolderOpenIcon className={classes.iconSmall}/>
+                        Import
+                    </Button>
+                </FilePicker>
             </Grid>
         </Grid>}
         <NewSearchSettingsDialog/>
@@ -118,6 +132,7 @@ const mapStateToProps = (state: AppState) => ({
 });
 const mapDispatchToProps = {
     addSearchSettings: addEmptySearchSettingsRequestAction as () => void,
+    loadFile: loadSettingsFromFileAction as (file: File) => void,
     selectSearchSettings: searchSettingsSelectedRequestAction as (settings: SearchSettings) => void
 };
 

@@ -1,12 +1,16 @@
-import {SearchSettings} from "../entities/SearchSettings";
+import {isSearchSettingsContent, SearchSettings} from "../entities/SearchSettings";
 import {ThunkResult} from "./RootActions";
 import {
     mockChangeDefaultSearchSettings,
     mockLoadSearchSettings,
     mockRemoveSearchSettings,
     mockSaveNewSearchSettings,
-    mockUpdateSearchSettings
+    mockUpdateSearchSettings,
+    mockUploadSettings
 } from "../mocks/mockSearchSettings";
+import {uploadFile} from "../utils/file";
+import {useMockApi} from "../globals";
+import {openSnackBar} from "./SnackBarActions";
 
 export const SEARCH_SETTINGS_LOADED = "[SEARCH SETTINGS] LOADED";
 export const SEARCH_SETTINGS_ADDED = "[SEARCH SETTINGS] ADDED";
@@ -101,6 +105,26 @@ export const addEmptySearchSettingsRequestAction = (): ThunkResult<void> => (dis
         isTransient: true
     };
     dispatch(searchSettingsAddedAction(newSettings));
+};
+
+export const loadSettingsFromFileAction = (file: File): ThunkResult<void> => (dispatch) => {
+    uploadFile(file, content => {
+        try {
+            const settings = JSON.parse(content);
+            if (isSearchSettingsContent(settings)) {
+                if (useMockApi()) {
+                    mockUploadSettings(settings, dispatch)
+                }
+            } else {
+                dispatch(openSnackBar(`File ${file.name} does not contains valid settings`));
+                console.error(settings);
+            }
+        } catch (e) {
+            if (e instanceof SyntaxError) {
+                dispatch(openSnackBar(`File ${file.name} does not contains valid JSON`));
+            } else throw e;
+        }
+    });
 };
 
 export const saveNewSearchSettingsAction = (searchSettings: SearchSettings, onDone: () => void, onError: (errors: any) => void): ThunkResult<void> => (dispatch) => {

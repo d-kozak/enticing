@@ -1,7 +1,8 @@
-import {SearchSettings} from "../entities/SearchSettings";
+import {SearchSettings, SearchSettingsContent} from "../entities/SearchSettings";
 import {Dispatch} from "redux";
 import {hideProgressBarAction, showProgressBarAction} from "../actions/ProgressBarActions";
 import {
+    searchSettingsAddedAction,
     searchSettingsLoadedAction,
     searchSettingsNewDefaultAction,
     searchSettingsRemovedAction,
@@ -82,4 +83,18 @@ export const mockSaveNewSearchSettings = (dispatch: Dispatch, searchSettings: Se
         dispatch(searchSettingsUpdatedAction(searchSettings));
         onDone();
     }, 2000);
+}
+
+export const mockUploadSettings = (settings: SearchSettingsContent, dispatch: Dispatch) => {
+    dispatch(showProgressBarAction());
+    setTimeout(() => {
+        const newSettings: SearchSettings = {
+            ...settings,
+            id: counter++,
+            private: true,
+            default: false
+        }
+        dispatch(searchSettingsAddedAction(newSettings))
+        dispatch(hideProgressBarAction());
+    }, 2000)
 }

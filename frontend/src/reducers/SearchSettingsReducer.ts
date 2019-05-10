@@ -24,7 +24,7 @@ const searchSettingsReducer: SearchSettingsReducer = (state = initialState, acti
                 settings: action.settings
             };
         case SEARCH_SETTINGS_ADDED:
-            if (state.settings.find(setting => setting.isTransient == true)) {
+            if (action.settings.isTransient && state.settings.find(setting => setting.isTransient == true)) {
                 throw new Error("Cannot create second transient settings.")
             }
             return {

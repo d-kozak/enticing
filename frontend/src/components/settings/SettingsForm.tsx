@@ -24,6 +24,7 @@ import {
     searchSettingsAddingCancelledAction,
     updateSearchSettingsRequestAction
 } from '../../actions/SearchSettingsActions'
+import {downloadFile} from '../../utils/file';
 
 const styles = (theme: Theme) => createStyles({
     formContent: {
@@ -90,7 +91,6 @@ const SettingsSchema = Yup.object().shape({
         .matches(ipAddressRegex, ipAddressFail))
         .min(1)
 });
-
 const SettingsForm = (props: SettingsFormProps) => {
     const {saveSettings, updateSettings, makeDefault, settings, classes, removeSettings, cancelAdding} = props;
 
@@ -164,7 +164,6 @@ const SettingsForm = (props: SettingsFormProps) => {
                     <Grid item>
                         <Button className={classes.formButton} variant="contained" color="primary" type="submit"
                                 disabled={isSubmitting}>
-                            <SaveIcon className={classes.iconSmall}/>
                             Save
                         </Button>
                     </Grid>
@@ -188,6 +187,14 @@ const SettingsForm = (props: SettingsFormProps) => {
                             }}
                             className={classes.formButton} color="primary">
                             Make default
+                        </Button>
+                    </Grid>}
+                    {!settings.isTransient && <Grid item>
+                        <Button
+                            onClick={() => downloadFile(`${settings.name.replace(/\s+/, '_')}.search.settings.json`, JSON.stringify(settings, ["name", "annotationDataServer", "annotationServer", "servers"], 4))}
+                            className={classes.formButton} color="primary">
+                            <SaveIcon className={classes.iconSmall}/>
+                            Download
                         </Button>
                     </Grid>}
                 </Grid>
