@@ -7,11 +7,12 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version "1.3.21"
 }
 
-apply(plugin = "io.spring.dependency-management")
+apply plugin:  "io.spring.dependency-management"
 
 
 group = "cz.vutbr.knot.enticing"
 version = "0.0.1-SNAPSHOT"
+sourceCompatibility= "1.8"
 
 repositories {
     mavenCentral()
@@ -34,7 +35,7 @@ dependencies {
     implementation("commons-dbcp:commons-dbcp:1.4")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         // exclude junit4 that would be otherwise added as transitive dependency
-        exclude("junit", "junit")
+        exclude group: "junit", module: "junit"
     }
     testImplementation("io.mockk:mockk:1.9")
     testImplementation("org.springframework.security:spring-security-test")
@@ -43,18 +44,13 @@ dependencies {
     testRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.2")
 }
 
-configure<JavaPluginConvention> {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
-
-tasks.withType<Test> {
+test {
     useJUnitPlatform()
 }
 
-tasks.withType<KotlinCompile> {
+tasks.withType(KotlinCompile) {
     kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
+        freeCompilerArgs = ["-Xjsr305=strict"]
         jvmTarget = "1.8"
     }
 }

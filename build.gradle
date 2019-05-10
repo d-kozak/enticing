@@ -1,0 +1,7 @@
+/**
+ * Task executed by Heroku for building the app
+ */
+task("stage") {
+    dependsOn "frontend:packageApp" 
+    dependsOn "webserver:bootJar"
+}
