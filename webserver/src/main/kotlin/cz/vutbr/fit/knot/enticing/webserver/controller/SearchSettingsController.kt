@@ -5,6 +5,8 @@ import cz.vutbr.fit.knot.enticing.webserver.dto.toEntity
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
@@ -30,7 +32,10 @@ class SearchSettingsController(private val searchSettingsRepository: SearchSetti
     }
 
     @GetMapping
-    fun getAll() = searchSettingsRepository.findAll()
+    fun getAll(authentication: Authentication?) = if (authentication?.authorities?.contains(SimpleGrantedAuthority("ROLE_ADMIN")) == true)
+        searchSettingsRepository.findAll()
+    else searchSettingsRepository.findByPrivateIsFalse()
+
 
     @PostMapping("/import")
     fun import(@RequestBody @Valid searchSettings: ImportedSearchSettings) = searchSettingsRepository.save(searchSettings.toEntity())

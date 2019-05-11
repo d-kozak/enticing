@@ -52,11 +52,11 @@ internal class SearchSettingsControllerTest(
     @Test
     fun `read all`() {
         val searchSettings = listOf(SearchSettings(1, "foo"), SearchSettings(2, "bar"), SearchSettings(3, "baz"))
-        Mockito.`when`(searchSettingsRepository.findAll()).thenReturn(searchSettings)
+        Mockito.`when`(searchSettingsRepository.findByPrivateIsFalse()).thenReturn(searchSettings)
         mockMvc.perform(get("$apiBasePath/search-settings"))
                 .andExpect(status().isOk)
                 .andExpect(content().json(ObjectMapper().writeValueAsString(searchSettings)))
-        Mockito.verify(searchSettingsRepository).findAll()
+        Mockito.verify(searchSettingsRepository).findByPrivateIsFalse()
         Mockito.clearInvocations(searchSettingsRepository)
     }
 
@@ -219,5 +219,4 @@ internal class SearchSettingsControllerTest(
 
         Mockito.clearInvocations(searchSettingsRepository)
     }
-
 }
