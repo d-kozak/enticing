@@ -4,4 +4,5 @@ import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface SearchSettingsRepository : JpaRepository<SearchSettings, Long> {
+    fun findByDefaultIsTrue(): SearchSettings?
 }

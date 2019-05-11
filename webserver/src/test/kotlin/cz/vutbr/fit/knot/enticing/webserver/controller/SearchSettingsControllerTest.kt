@@ -6,8 +6,10 @@ import cz.vutbr.fit.knot.enticing.webserver.dto.toEntity
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,6 +22,8 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import java.util.*
+
 
 @WebMvcTest(secure = false)
 @ExtendWith(SpringExtension::class)
@@ -146,4 +150,72 @@ internal class SearchSettingsControllerTest(
         }
         Mockito.clearInvocations(searchSettingsRepository)
     }
+
+    @Test
+    fun `Change default no previous default`() {
+        val searchSettings = SearchSettings(id = 1, name = "foo")
+        val capture = ArgumentCaptor.forClass(SearchSettings::class.java)
+        Mockito.`when`(searchSettingsRepository.findByDefaultIsTrue())
+                .thenReturn(null)
+        Mockito.`when`(searchSettingsRepository.findById(1))
+                .thenReturn(Optional.of(searchSettings))
+        Mockito.`when`(searchSettingsRepository.save(capture.capture()))
+                .thenReturn(searchSettings)
+
+        mockMvc.perform(put("$apiBasePath/search-settings/default/1"))
+                .andExpect(status().`is`(200))
+
+        Mockito.verify(searchSettingsRepository).findByDefaultIsTrue()
+        Mockito.verify(searchSettingsRepository).findById(1)
+        Mockito.verify(searchSettingsRepository).save(searchSettings)
+
+        assertThat(searchSettings.default)
+                .isTrue()
+        assertThat(capture)
+                .extracting { it.value.default }
+                .isEqualTo(true)
+        assertThat(capture)
+                .extracting { it.value.name }
+                .isEqualTo("foo")
+
+    }
+
+    @Test
+    fun `Change default with previous`() {
+        val previousDefault = SearchSettings(id = 3, name = "prevDefault", default = true)
+        val searchSettings = SearchSettings(id = 1, name = "foo")
+        val capture = ArgumentCaptor.forClass(SearchSettings::class.java)
+        Mockito.`when`(searchSettingsRepository.findByDefaultIsTrue())
+                .thenReturn(previousDefault)
+        Mockito.`when`(searchSettingsRepository.findById(1))
+                .thenReturn(Optional.of(searchSettings))
+        Mockito.`when`(searchSettingsRepository.save(capture.capture()))
+                .thenReturn(searchSettings)
+
+        mockMvc.perform(put("$apiBasePath/search-settings/default/1"))
+                .andExpect(status().`is`(200))
+
+        Mockito.verify(searchSettingsRepository).findByDefaultIsTrue()
+        Mockito.verify(searchSettingsRepository).findById(1)
+        Mockito.verify(searchSettingsRepository).save(previousDefault)
+        Mockito.verify(searchSettingsRepository).save(searchSettings)
+
+        assertThat(searchSettings.default)
+                .isTrue()
+        assertThat(capture.allValues)
+                .hasSize(2)
+        val old = capture.allValues[0]
+        assertThat(old.default)
+                .isFalse()
+        assertThat(old.name)
+                .isEqualTo("prevDefault")
+
+        val new = capture.allValues[1]
+        assertThat(new.default)
+                .isTrue()
+        assertThat(new.name)
+                .isEqualTo("foo")
+
+    }
+
 }

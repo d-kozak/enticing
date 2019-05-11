@@ -17,6 +17,18 @@ class SearchSettingsController(private val searchSettingsRepository: SearchSetti
         userService.selectSettings(id)
     }
 
+    @PutMapping("default/{id}")
+    fun selectDefault(@PathVariable id: Long) {
+        val previousDefault = searchSettingsRepository.findByDefaultIsTrue()
+        if (previousDefault != null) {
+            previousDefault.default = false
+            searchSettingsRepository.save(previousDefault)
+        }
+        val newDefault = searchSettingsRepository.findById(id).orElseThrow { IllegalArgumentException("Unknown id $id") }
+        newDefault.default = true
+        searchSettingsRepository.save(newDefault)
+    }
+
     @GetMapping
     fun getAll() = searchSettingsRepository.findAll()
 

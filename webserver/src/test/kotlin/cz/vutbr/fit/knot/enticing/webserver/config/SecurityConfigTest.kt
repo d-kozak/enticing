@@ -319,6 +319,26 @@ internal class SecurityConfigTest(
                 mockMvc.perform(delete("$apiBasePath/search-settings/1"))
                         .andExpect(status().`is`(200))
             }
+
+            @Test
+            fun `Make default not accessible when not logged in`() {
+                mockMvc.perform(put("$apiBasePath/search-settings/default/1"))
+                        .andExpect(status().`is`(401))
+            }
+
+            @Test
+            @WithMockUser
+            fun `Make default not accessible when not admin`() {
+                mockMvc.perform(put("$apiBasePath/search-settings/default/1"))
+                        .andExpect(status().`is`(403))
+            }
+
+            @Test
+            @WithMockUser(roles = ["ADMIN"])
+            fun `Make default accessible for admin`() {
+                mockMvc.perform(put("$apiBasePath/search-settings/default/1"))
+                        .andExpect(status().`is`(200))
+            }
         }
 
         @Test
