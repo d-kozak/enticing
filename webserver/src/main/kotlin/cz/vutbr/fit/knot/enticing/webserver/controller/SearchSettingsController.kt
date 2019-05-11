@@ -17,7 +17,7 @@ class SearchSettingsController(private val searchSettingsRepository: SearchSetti
         userService.selectSettings(id)
     }
 
-    @PutMapping("default/{id}")
+    @PutMapping("/default/{id}")
     fun selectDefault(@PathVariable id: Long) {
         val previousDefault = searchSettingsRepository.findByDefaultIsTrue()
         if (previousDefault != null) {

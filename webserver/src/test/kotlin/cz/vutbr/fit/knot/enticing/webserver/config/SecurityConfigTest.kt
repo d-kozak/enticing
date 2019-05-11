@@ -27,6 +27,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import java.util.*
 
 @WebMvcTest
 @Import(PasswordEncoderConfiguration::class)
@@ -336,8 +337,14 @@ internal class SecurityConfigTest(
             @Test
             @WithMockUser(roles = ["ADMIN"])
             fun `Make default accessible for admin`() {
+                val dummy = SearchSettings(0, "foo", annotationServer = "foo.baz", annotationDataServer = "baz.paz", servers = setOf("127.0.0.1"), default = true)
+                Mockito.`when`(searchSettingsRepository.findById(1))
+                        .thenReturn(Optional.of(dummy))
+
                 mockMvc.perform(put("$apiBasePath/search-settings/default/1"))
                         .andExpect(status().`is`(200))
+
+                Mockito.clearInvocations(searchSettingsRepository)
             }
         }
 

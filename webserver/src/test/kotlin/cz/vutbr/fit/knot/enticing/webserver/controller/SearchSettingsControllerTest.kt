@@ -178,6 +178,7 @@ internal class SearchSettingsControllerTest(
                 .extracting { it.value.name }
                 .isEqualTo("foo")
 
+        Mockito.clearInvocations(searchSettingsRepository)
     }
 
     @Test
@@ -216,6 +217,7 @@ internal class SearchSettingsControllerTest(
         assertThat(new.name)
                 .isEqualTo("foo")
 
+        Mockito.clearInvocations(searchSettingsRepository)
     }
 
 }
