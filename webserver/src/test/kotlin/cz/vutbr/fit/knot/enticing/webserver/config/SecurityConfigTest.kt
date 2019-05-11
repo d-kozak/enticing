@@ -305,34 +305,36 @@ internal class SecurityConfigTest(
             fun `Post put delete require admin role success`() {
                 val searchSettings = SearchSettings(1, "foo", annotationServer = "foo.baz", annotationDataServer = "baz.paz", servers = setOf("127.0.0.1"))
                 Mockito.`when`(searchSettingsRepository.save(searchSettings)).thenReturn(searchSettings)
-                val methods: List<(String) -> MockHttpServletRequestBuilder> = listOf(
-                        { path: String -> post(path) },
-                        { path: String -> put(path) },
-                        { path: String -> delete(path) }
-                )
-                for (method in methods) {
-                    mockMvc.perform(method("$apiBasePath/search-settings")
-                            .content(ObjectMapper().writeValueAsString(searchSettings))
-                            .contentType(MediaType.APPLICATION_JSON))
-                            .andExpect(status().`is`(200))
-                }
-            }
 
-            @Test
-            fun `Selecting is not accessible when not logged in`() {
-                mockMvc.perform(get("$apiBasePath/search-settings/select/1"))
-                        .andExpect(status().`is`(401))
-            }
+                mockMvc.perform(post("$apiBasePath/search-settings")
+                        .content(ObjectMapper().writeValueAsString(searchSettings))
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().`is`(200))
 
-            @WithMockUser
-            @Test
-            fun `Selecting is accessible when logged in`() {
-                mockMvc.perform(get("$apiBasePath/search-settings/select/1"))
+                mockMvc.perform(put("$apiBasePath/search-settings")
+                        .content(ObjectMapper().writeValueAsString(searchSettings))
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().`is`(200))
+
+                mockMvc.perform(delete("$apiBasePath/search-settings/1"))
                         .andExpect(status().`is`(200))
             }
-
         }
+
+        @Test
+        fun `Selecting is not accessible when not logged in`() {
+            mockMvc.perform(get("$apiBasePath/search-settings/select/1"))
+                    .andExpect(status().`is`(401))
+        }
+
+        @WithMockUser
+        @Test
+        fun `Selecting is accessible when logged in`() {
+            mockMvc.perform(get("$apiBasePath/search-settings/select/1"))
+                    .andExpect(status().`is`(200))
+        }
+
     }
-
-
 }
+
+

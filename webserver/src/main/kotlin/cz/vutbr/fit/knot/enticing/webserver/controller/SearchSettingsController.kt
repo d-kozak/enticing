@@ -29,6 +29,6 @@ class SearchSettingsController(private val searchSettingsRepository: SearchSetti
     @PutMapping
     fun update(@RequestBody @Valid searchSettings: SearchSettings) = searchSettingsRepository.save(searchSettings)
 
-    @DeleteMapping
-    fun delete(@RequestBody searchSettings: SearchSettings) = searchSettingsRepository.delete(searchSettings)
+    @DeleteMapping("/{id}")
+    fun delete(@PathVariable id: Long) = searchSettingsRepository.deleteById(id)
 }

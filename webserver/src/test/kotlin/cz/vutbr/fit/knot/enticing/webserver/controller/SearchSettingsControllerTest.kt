@@ -70,12 +70,9 @@ internal class SearchSettingsControllerTest(
 
     @Test
     fun delete() {
-        val searchSettings = SearchSettings(1, "foo")
-        mockMvc.perform(delete("$apiBasePath/search-settings")
-                .content(ObjectMapper().writeValueAsString(searchSettings))
-                .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(delete("$apiBasePath/search-settings/1"))
                 .andExpect(status().isOk)
-        Mockito.verify(searchSettingsRepository).delete(searchSettings)
+        Mockito.verify(searchSettingsRepository).deleteById(1)
         Mockito.clearInvocations(searchSettingsRepository)
     }
 
