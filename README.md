@@ -2,6 +2,8 @@
 master [![buddy pipeline](https://app.buddy.works/dkozak94/enticing/pipelines/pipeline/187183/badge.svg?token=4cd61eabc6a41d23dbc621b88f3c255e343107f39aa165e546de09fa05955e67 "buddy pipeline")](https://app.buddy.works/dkozak94/enticing/pipelines/pipeline/187183)
 release [![buddy pipeline](https://app.buddy.works/dkozak94/enticing/pipelines/pipeline/187243/badge.svg?token=4cd61eabc6a41d23dbc621b88f3c255e343107f39aa165e546de09fa05955e67 "buddy pipeline")](https://app.buddy.works/dkozak94/enticing/pipelines/pipeline/187243)
 
+App deployed at [enticing.herokuapp.com](https://enticing.herokuapp.com/)
+
 All source code related to the Enticing project. 
 
 ## Contents
