@@ -8,6 +8,7 @@ import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -88,18 +89,24 @@ internal class SearchSettingsControllerTest(
         val invalidAnnotationServer = SearchSettings(name = "foo", annotationDataServer = "foo.com", annotationServer = "afsdsa", servers = setOf("127.0.0.1:20"))
         val invalidServers = SearchSettings(name = "foo", annotationDataServer = "foo.com", annotationServer = "baz.com", servers = setOf("10.10."))
         val invalid = listOf(name, annotationDataServer, annotationServer, servers, invalidAnnotationDataServer, invalidAnnotationServer, invalidServers)
+
+        Mockito.`when`(searchSettingsRepository.save<SearchSettings>(any())).thenThrow(UnsupportedOperationException())
+
         for (settings in invalid) {
+            println("Testing with $settings")
+            println("POST")
             mockMvc.perform(post("$apiBasePath/search-settings")
                     .content(ObjectMapper().writeValueAsString(settings))
                     .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().`is`(400))
             Mockito.verifyZeroInteractions(searchSettingsRepository)
-
+            println("PUT")
             mockMvc.perform(put("$apiBasePath/search-settings")
                     .content(ObjectMapper().writeValueAsString(settings))
                     .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().`is`(400))
             Mockito.verifyZeroInteractions(searchSettingsRepository)
+            println("=====")
         }
         Mockito.clearInvocations(searchSettingsRepository)
 
