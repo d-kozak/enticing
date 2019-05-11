@@ -5,6 +5,7 @@ import cz.vutbr.fit.knot.enticing.webserver.dto.ImportedSearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.dto.toEntity
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
+import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -34,6 +35,9 @@ internal class SearchSettingsControllerTest(
 
     @MockBean
     lateinit var searchSettingsRepository: SearchSettingsRepository
+
+    @MockBean
+    lateinit var userRepository: UserRepository
 
     @MockBean
     lateinit var userService: EnticingUserService
@@ -74,8 +78,14 @@ internal class SearchSettingsControllerTest(
 
     @Test
     fun delete() {
+        val searchSettings = SearchSettings(1, "foo", annotationServer = "foo.baz", annotationDataServer = "baz.paz", servers = setOf("127.0.0.1"))
+        Mockito.`when`(searchSettingsRepository.findById(1)).thenReturn(Optional.of(searchSettings))
+
         mockMvc.perform(delete("$apiBasePath/search-settings/1"))
                 .andExpect(status().isOk)
+
+        Mockito.verify(searchSettingsRepository).findById(1)
+        Mockito.verify(userRepository).detachSettingsFromAllUsers(searchSettings)
         Mockito.verify(searchSettingsRepository).deleteById(1)
         Mockito.clearInvocations(searchSettingsRepository)
     }

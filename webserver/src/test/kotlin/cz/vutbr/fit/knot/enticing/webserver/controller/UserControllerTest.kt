@@ -6,6 +6,7 @@ import cz.vutbr.fit.knot.enticing.webserver.dto.User
 import cz.vutbr.fit.knot.enticing.webserver.dto.UserCredentials
 import cz.vutbr.fit.knot.enticing.webserver.dto.UserSettings
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
+import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -30,6 +31,9 @@ internal class UserControllerTest(
 
     @MockBean
     lateinit var userService: EnticingUserService
+
+    @MockBean
+    lateinit var userRepository: UserRepository
 
     @MockBean
     lateinit var searchSettingsRepository: SearchSettingsRepository

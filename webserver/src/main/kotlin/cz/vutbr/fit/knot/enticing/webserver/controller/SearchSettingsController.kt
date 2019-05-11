@@ -4,6 +4,7 @@ import cz.vutbr.fit.knot.enticing.webserver.dto.ImportedSearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.dto.toEntity
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
+import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -12,7 +13,7 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping("\${api.base.path}/search-settings")
-class SearchSettingsController(private val searchSettingsRepository: SearchSettingsRepository, private val userService: EnticingUserService) {
+class SearchSettingsController(private val searchSettingsRepository: SearchSettingsRepository, private val userService: EnticingUserService, private val userRepository: UserRepository) {
 
     @GetMapping("/select/{id}")
     fun select(@PathVariable id: Long) {
@@ -47,5 +48,10 @@ class SearchSettingsController(private val searchSettingsRepository: SearchSetti
     fun update(@RequestBody @Valid searchSettings: SearchSettings) = searchSettingsRepository.save(searchSettings)
 
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: Long) = searchSettingsRepository.deleteById(id)
+    fun delete(@PathVariable id: Long) {
+        val searchSettings = searchSettingsRepository.findById(id).orElseThrow { java.lang.IllegalArgumentException("No settings with id $id found") }
+        userRepository.detachSettingsFromAllUsers(searchSettings)
+        searchSettingsRepository.deleteById(id)
+
+    }
 }

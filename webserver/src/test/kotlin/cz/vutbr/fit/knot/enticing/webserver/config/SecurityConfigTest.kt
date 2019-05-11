@@ -8,6 +8,7 @@ import cz.vutbr.fit.knot.enticing.webserver.dto.toUser
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
+import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
@@ -40,6 +41,9 @@ internal class SecurityConfigTest(
 
     @MockBean
     lateinit var userService: EnticingUserService
+
+    @MockBean
+    lateinit var userRepository: UserRepository
 
     @MockBean
     lateinit var searchSettingsRepository: SearchSettingsRepository
@@ -306,6 +310,7 @@ internal class SecurityConfigTest(
             fun `Post put delete require admin role success`() {
                 val searchSettings = SearchSettings(1, "foo", annotationServer = "foo.baz", annotationDataServer = "baz.paz", servers = setOf("127.0.0.1"))
                 Mockito.`when`(searchSettingsRepository.save(searchSettings)).thenReturn(searchSettings)
+                Mockito.`when`(searchSettingsRepository.findById(1)).thenReturn(Optional.of(searchSettings))
 
                 mockMvc.perform(post("$apiBasePath/search-settings")
                         .content(ObjectMapper().writeValueAsString(searchSettings))
@@ -319,6 +324,7 @@ internal class SecurityConfigTest(
 
                 mockMvc.perform(delete("$apiBasePath/search-settings/1"))
                         .andExpect(status().`is`(200))
+                Mockito.clearInvocations(searchSettingsRepository)
             }
 
             @Test

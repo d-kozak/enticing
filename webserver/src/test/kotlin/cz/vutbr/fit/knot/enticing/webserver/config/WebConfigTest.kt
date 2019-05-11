@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.config
 
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
+import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -22,6 +23,9 @@ internal class WebConfigTest(@Autowired val mockMvc: MockMvc) {
 
     @MockBean
     lateinit var searchSettingsRepository: SearchSettingsRepository
+
+    @MockBean
+    lateinit var userRepository: UserRepository
 
     @Test
     fun `Paths that should be handled by frontend are delegated to index`() {

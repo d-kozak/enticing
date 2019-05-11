@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver.repository
 
+import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -14,7 +15,8 @@ import java.util.*
 @DataJpaTest
 class UserRepositoryTest(
         @Autowired val entityManager: TestEntityManager,
-        @Autowired val userRepository: UserRepository
+        @Autowired val userRepository: UserRepository,
+        @Autowired val searchSettingsRepository: SearchSettingsRepository
 ) {
 
     @Test
@@ -45,5 +47,27 @@ class UserRepositoryTest(
                 .map { it.login }
                 .isEqualTo(Optional.of("bcd"))
 
+    }
+
+
+    @Test
+    fun `detach settings from user`() {
+        val settingsToDelete = searchSettingsRepository.save(SearchSettings(0, "to delete", annotationServer = "foo.baz", annotationDataServer = "baz.paz", servers = setOf("127.0.0.1")))
+        val settingsThatStay = SearchSettings(0, "please dont leave me", annotationServer = "foo.baz", annotationDataServer = "baz.paz", servers = setOf("127.0.0.1"))
+
+        searchSettingsRepository.save(settingsThatStay)
+
+        userRepository.save(UserEntity(login = "user1", encryptedPassword = "aaa", selectedSettings = settingsThatStay))
+        userRepository.save(UserEntity(login = "user2", encryptedPassword = "aaa", selectedSettings = settingsToDelete))
+        userRepository.save(UserEntity(login = "user3", encryptedPassword = "aaa", selectedSettings = settingsThatStay))
+
+        userRepository.detachSettingsFromAllUsers(settingsToDelete)
+        searchSettingsRepository.delete(settingsToDelete)
+
+        val invalid = userRepository.findAll()
+                .filter { it.selectedSettings?.id == settingsToDelete.id }
+        if (invalid.isNotEmpty()) {
+            throw AssertionError("Following settings has stale selected settings $invalid")
+        }
     }
 }
