@@ -13,7 +13,7 @@ import Typography from "@material-ui/core/Typography";
 import {SearchSettings} from "../../entities/SearchSettings";
 import {searchSettingsSelectedRequestAction} from "../../actions/UserActions";
 import LinkTo from "../utils/linkTo";
-import {isAdminSelector, selectedSearchSettingsIndexSelector} from "../../reducers/selectors";
+import {isAdminSelector, isLoggedInSelector, selectedSearchSettingsIndexSelector} from "../../reducers/selectors";
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import EditIcon from '@material-ui/icons/Edit';
 import InfoIcon from '@material-ui/icons/Info';
@@ -37,7 +37,7 @@ type SearchSettingsSelectorProps =
     & {}
 
 const SearchSettingsSelector = (props: SearchSettingsSelectorProps) => {
-    const {classes, isAdmin, searchSettings, selectSearchSettings, selectedSearchSettingsIndex} = props;
+    const {classes, isAdmin, isLoggedIn, searchSettings, selectSearchSettings, selectedSearchSettingsIndex} = props;
 
     const [anchorElem, setAnchorElem] = useState<HTMLElement | null>(null)
 
@@ -73,7 +73,7 @@ const SearchSettingsSelector = (props: SearchSettingsSelectorProps) => {
                     key={index}
                     selected={index === selectedSearchSettingsIndex}
                     onClick={() => {
-                        selectSearchSettings(settings)
+                        selectSearchSettings(settings, selectedSearchSettingsIndex, isLoggedIn)
                         setAnchorElem(null);
                     }}
                 >
@@ -97,11 +97,12 @@ const SearchSettingsSelector = (props: SearchSettingsSelectorProps) => {
 
 const mapStateToProps = (state: AppState) => ({
     isAdmin: isAdminSelector(state),
+    isLoggedIn: isLoggedInSelector(state),
     searchSettings: state.searchSettings.settings,
     selectedSearchSettingsIndex: selectedSearchSettingsIndexSelector(state)
 });
 const mapDispatchToProps = {
-    selectSearchSettings: searchSettingsSelectedRequestAction as (settings: SearchSettings) => void
+    selectSearchSettings: searchSettingsSelectedRequestAction as (settings: SearchSettings, previousSelectedIndex: number, isLoggedIn: boolean) => void
 };
 
 export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(SearchSettingsSelector));

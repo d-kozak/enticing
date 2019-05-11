@@ -54,9 +54,8 @@ const EnticingAppBar = (props: EnticingAppBarProps) => {
                 {searchSettings.length == 0 && <Link innerRef={clearDecorationsRef} to="/search-settings">
                     <IconButton color="inherit">
                         <WarningIcon/>
-                        <Typography style={{margin: '5px'}} color="textSecondary" variant="h6">No search settings
+                        <Typography style={{margin: '5px'}} color="inherit" variant="body1">No search settings
                             available</Typography>
-                        <WarningIcon/>
                     </IconButton>
                 </Link>}
                 <AppBarButtonsRouter user={user} handleLogout={handleLogout}/>

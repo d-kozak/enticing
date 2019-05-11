@@ -9,8 +9,10 @@ import {
     mockUploadSettings
 } from "../mocks/mockSearchSettings";
 import {uploadFile} from "../utils/file";
-import {useMockApi} from "../globals";
+import {API_BASE_PATH, useMockApi} from "../globals";
 import {openSnackBar} from "./SnackBarActions";
+import axios from "axios";
+import {hideProgressBarAction, showProgressBarAction} from "./ProgressBarActions";
 
 export const SEARCH_SETTINGS_LOADED = "[SEARCH SETTINGS] LOADED";
 export const SEARCH_SETTINGS_ADDED = "[SEARCH SETTINGS] ADDED";
@@ -86,12 +88,40 @@ export const searchSettingsAddingCancelledAction = (): SearchSettingsAddingCance
 })
 
 export const loadSearchSettingsAction = (isAdmin: boolean): ThunkResult<void> => (dispatch) => {
-    mockLoadSearchSettings(dispatch, isAdmin)
+    if (useMockApi()) {
+        mockLoadSearchSettings(dispatch, isAdmin);
+        return;
+    }
+    axios.get<Array<SearchSettings>>(`${API_BASE_PATH}/search-settings`, {withCredentials: true})
+        .then(response => {
+            const searchSettings = response.data;
+            dispatch(searchSettingsLoadedAction(searchSettings));
+            if (searchSettings.length == 0) {
+                dispatch(openSnackBar('No search settings loaded'));
+            }
+        })
+        .catch(() => {
+            dispatch(openSnackBar('Could not load configurations'));
+        });
 }
 
-export const updateSearchSettingsRequestAction = (newSettings: SearchSettings, onDone: () => void, onError: (errors: any) => void): ThunkResult<void> => (dispatch) => {
-    mockUpdateSearchSettings(dispatch, newSettings, onDone);
+export const updateSearchSettingsRequestAction = (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void): ThunkResult<void> => (dispatch) => {
+    if (useMockApi()) {
+        mockUpdateSearchSettings(dispatch, settings, onDone);
+        return;
+    }
+    axios.put(`${API_BASE_PATH}/search-settings`, settings, {withCredentials: true})
+        .then(() => {
+            dispatch(searchSettingsUpdatedAction(settings))
+            dispatch(openSnackBar(`Search settings ${settings.name} updated`));
+            onDone();
+        })
+        .catch(() => {
+            dispatch(openSnackBar(`Failed to updated ${settings.name}`));
+            onError({});
+        });
 };
+
 
 export const addEmptySearchSettingsRequestAction = (): ThunkResult<void> => (dispatch) => {
     const newSettings: SearchSettings = {
@@ -113,8 +143,19 @@ export const loadSettingsFromFileAction = (file: File): ThunkResult<void> => (di
             const settings = JSON.parse(content);
             if (isSearchSettingsContent(settings)) {
                 if (useMockApi()) {
-                    mockUploadSettings(settings, dispatch)
+                    mockUploadSettings(settings, dispatch);
+                    return;
                 }
+                dispatch(showProgressBarAction());
+                axios.post<SearchSettings>(`${API_BASE_PATH}/search-settings/import`, settings, {withCredentials: true})
+                    .then((response) => {
+                        dispatch(searchSettingsAddedAction(response.data))
+                        dispatch(hideProgressBarAction());
+                    })
+                    .catch(() => {
+                        dispatch(openSnackBar(`Could not import settings ${settings.name}`));
+                        dispatch(hideProgressBarAction());
+                    })
             } else {
                 dispatch(openSnackBar(`File ${file.name} does not contains valid settings`));
                 console.error(settings);
@@ -128,16 +169,53 @@ export const loadSettingsFromFileAction = (file: File): ThunkResult<void> => (di
 };
 
 export const saveNewSearchSettingsAction = (searchSettings: SearchSettings, onDone: () => void, onError: (errors: any) => void): ThunkResult<void> => (dispatch) => {
-    mockSaveNewSearchSettings(dispatch, searchSettings, onDone);
+    if (useMockApi()) {
+        mockSaveNewSearchSettings(dispatch, searchSettings, onDone);
+        return;
+    }
+    axios.post<SearchSettings>(`${API_BASE_PATH}/search-settings`, searchSettings, {withCredentials: true})
+        .then((response) => {
+            dispatch(openSnackBar(`Search settings ${searchSettings.name} added`));
+            response.data.isTransient = true; // reducer has to recognize this as a newly added search settings
+            dispatch(searchSettingsUpdatedAction(response.data));
+        })
+        .catch(() => {
+            onError({});
+            dispatch(openSnackBar(`Adding search settings ${searchSettings.name} failed`));
+        })
 }
 
 export const removeSearchSettingsRequestAction = (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void): ThunkResult<void> => (dispatch) => {
-    mockRemoveSearchSettings(dispatch, settings, onDone);
+    if (useMockApi()) {
+        mockRemoveSearchSettings(dispatch, settings, onDone);
+        return;
+    }
+    axios.delete(`${API_BASE_PATH}/search-settings/${settings.id}`, {withCredentials: true})
+        .then(() => {
+            dispatch(searchSettingsRemovedAction(settings))
+            dispatch(openSnackBar(`Search settings ${settings.name} removed`));
+        }).catch(() => {
+        dispatch(openSnackBar(`Failed to remove search settings ${settings.name}`));
+        onError({})
+    })
 };
 
 
 export const changeDefaultSearchSettingsRequestAction = (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void): ThunkResult<void> => (dispatch) => {
-    mockChangeDefaultSearchSettings(dispatch, settings, onDone);
+    if (useMockApi()) {
+        mockChangeDefaultSearchSettings(dispatch, settings, onDone);
+        return;
+    }
+    axios.put(`${API_BASE_PATH}/search-settings/default/${settings.id}`, null, {withCredentials: true})
+        .then(() => {
+            dispatch(searchSettingsNewDefaultAction(settings))
+            dispatch(openSnackBar(`Search settings ${settings.name} were made default`));
+            onDone();
+        })
+        .catch(() => {
+            dispatch(openSnackBar(`Could not make ${settings.name} default`));
+            onError({})
+        })
 };
 
 

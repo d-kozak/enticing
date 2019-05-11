@@ -42,7 +42,7 @@ interface UserSettingsUpdatedAction {
 
 interface UserSearchSettingsSelectedSuccessAction {
     type: typeof USER_SEARCH_SETTINGS_SELECTED_SUCCESS,
-    settings: SearchSettings
+    settings: SearchSettings | number
 }
 
 export type UserAction =
@@ -53,7 +53,7 @@ export type UserAction =
 
 export const logoutSuccessAction = (): LogoutAction => ({type: USER_LOGOUT});
 
-export const userSearchSettingsSelectedSuccessAction = (settings: SearchSettings): UserSearchSettingsSelectedSuccessAction => ({
+export const userSearchSettingsSelectedSuccessAction = (settings: SearchSettings | number): UserSearchSettingsSelectedSuccessAction => ({
     type: USER_SEARCH_SETTINGS_SELECTED_SUCCESS,
     settings
 });
@@ -88,8 +88,20 @@ export const loginSuccessAction = (user: User): LoginSuccessAction => ({
     user
 });
 
-export const searchSettingsSelectedRequestAction = (settings: SearchSettings): ThunkResult<void> => (dispatch) => {
-    mockUserSettingsSelectedRequest(settings, dispatch);
+export const searchSettingsSelectedRequestAction = (settings: SearchSettings, previousSelectedIndex: number, isLoggedIn: boolean): ThunkResult<void> => (dispatch) => {
+    if (useMockApi()) {
+        mockUserSettingsSelectedRequest(settings, dispatch);
+        return;
+    }
+    dispatch(userSearchSettingsSelectedSuccessAction(settings));
+    if (isLoggedIn) {
+        axios.get(`${API_BASE_PATH}/search-settings/select/${settings.id}`, {withCredentials: true})
+            .catch(() => {
+                dispatch(openSnackBar(`Failed to select settings ${settings.name}`));
+                // rollback to previously selected
+                dispatch(userSearchSettingsSelectedSuccessAction(previousSelectedIndex));
+            })
+    }
 };
 
 export const loginRequestAction = (login: string, password: string, onError: (errors: { login?: string, password?: string }) => void): ThunkResult<void> => (dispatch) => {

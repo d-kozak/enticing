@@ -40,7 +40,7 @@ const userReducer: UserReducer = (state = initialState, action) => {
         case USER_SEARCH_SETTINGS_SELECTED_SUCCESS:
             return {
                 ...state,
-                selectedSettings: action.settings.id
+                selectedSettings: typeof action.settings == 'number' ? action.settings : action.settings.id
             };
     }
     return state

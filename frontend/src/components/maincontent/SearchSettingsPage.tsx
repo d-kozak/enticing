@@ -16,7 +16,7 @@ import {AppState} from "../../reducers/RootReducer";
 import {searchSettingsSelectedRequestAction} from "../../actions/UserActions";
 import {SearchSettings} from "../../entities/SearchSettings";
 import {connect} from "react-redux";
-import {isAdminSelector, selectedSearchSettingsIndexSelector} from "../../reducers/selectors";
+import {isAdminSelector, isLoggedInSelector, selectedSearchSettingsIndexSelector} from "../../reducers/selectors";
 import Chip from "@material-ui/core/Chip";
 import DoneIcon from '@material-ui/icons/Done';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
@@ -66,12 +66,12 @@ export type SearchSettingsPageProps =
     & {}
 
 const SearchSettingsPage = (props: SearchSettingsPageProps) => {
-    const {classes, searchSettings, loadFile, selectSearchSettings, selectedSearchSettingsIndex, addSearchSettings, isAdmin} = props;
+    const {classes, isLoggedIn, searchSettings, loadFile, selectSearchSettings, selectedSearchSettingsIndex, addSearchSettings, isAdmin} = props;
     return <Paper className={classes.rootElement}>
         <Typography variant="h2" className={classes.settingsTitle}>Search Settings</Typography>
         {searchSettings
             .filter(settings => !settings.isTransient)
-            .map((settings, index) => <ExpansionPanel key={settings.id}>
+            .map((settings, index) => <ExpansionPanel key={`${index}-${settings.id}-${settings.name}`}>
                     <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
                         <Typography variant="h5">{settings.name}</Typography>
                         {index === selectedSearchSettingsIndex && <Chip
@@ -94,7 +94,8 @@ const SearchSettingsPage = (props: SearchSettingsPageProps) => {
                             <Grid item>
                                 <Button
                                     disabled={index === selectedSearchSettingsIndex}
-                                    onClick={() => selectSearchSettings(settings)} variant="contained" color="primary"
+                                    onClick={() => selectSearchSettings(settings, selectedSearchSettingsIndex, isLoggedIn)}
+                                    variant="contained" color="primary"
                                     type="submit"><DoneIcon
                                     className={classes.iconSmall}/>{index !== selectedSearchSettingsIndex ? 'Select' : 'Already selected'}
                                 </Button>
@@ -127,13 +128,14 @@ const SearchSettingsPage = (props: SearchSettingsPageProps) => {
 
 const mapStateToProps = (state: AppState) => ({
     isAdmin: isAdminSelector(state),
+    isLoggedIn: isLoggedInSelector(state),
     searchSettings: state.searchSettings.settings,
     selectedSearchSettingsIndex: selectedSearchSettingsIndexSelector(state)
 });
 const mapDispatchToProps = {
     addSearchSettings: addEmptySearchSettingsRequestAction as () => void,
     loadFile: loadSettingsFromFileAction as (file: File) => void,
-    selectSearchSettings: searchSettingsSelectedRequestAction as (settings: SearchSettings) => void
+    selectSearchSettings: searchSettingsSelectedRequestAction as (settings: SearchSettings, previousSelectedIndex: number, isLoggedIn: boolean) => void
 };
 
 export default withStyles(styles, {
