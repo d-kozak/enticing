@@ -1,0 +1,31 @@
+package cz.vutbr.fit.knot.enticing.webserver.init
+
+import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
+import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
+import org.slf4j.LoggerFactory
+import org.springframework.boot.ApplicationArguments
+import org.springframework.boot.ApplicationRunner
+import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.stereotype.Component
+import java.util.*
+
+@Component
+class AddAdminRunner(
+        val userRepository: UserRepository,
+        val encoder: PasswordEncoder
+) : ApplicationRunner {
+
+    private val logger = LoggerFactory.getLogger(AddAdminRunner::class.java)
+
+    override fun run(args: ApplicationArguments?) {
+        val admins = userRepository.findAllAdmins()
+        if (admins.isEmpty()) {
+            val rawPassword = UUID.randomUUID().toString()
+            val randomNumber = (Math.random() * 100).toInt()
+            val login = "admin$randomNumber"
+            val newAdmin = UserEntity(login = login, encryptedPassword = encoder.encode(rawPassword), roles = setOf("ADMIN"))
+            userRepository.save(newAdmin)
+            logger.warn("No admin user found in the database, creating new admin with login ${newAdmin.login} and password $rawPassword")
+        }
+    }
+}
