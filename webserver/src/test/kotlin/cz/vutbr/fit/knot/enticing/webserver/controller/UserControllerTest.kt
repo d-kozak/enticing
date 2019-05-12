@@ -8,6 +8,7 @@ import cz.vutbr.fit.knot.enticing.webserver.dto.UserSettings
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
+import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
@@ -37,6 +38,9 @@ internal class UserControllerTest(
 
     @MockBean
     lateinit var searchSettingsRepository: SearchSettingsRepository
+
+    @MockBean
+    lateinit var queryService: QueryService
 
     @Test
     fun `Signup test`() {

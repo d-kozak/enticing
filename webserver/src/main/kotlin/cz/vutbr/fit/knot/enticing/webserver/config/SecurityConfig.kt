@@ -41,7 +41,12 @@ class SecurityConfig(
                 .hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "$apiBasePath/user")
                 .permitAll()
-                .antMatchers("/*", "/static/**", "$apiBasePath/login", "$apiBasePath/search-settings")
+                .antMatchers("/*",
+                        "/static/**",
+                        "$apiBasePath/login",
+                        "$apiBasePath/search-settings",
+                        "$apiBasePath/query",
+                        "$apiBasePath/query/*")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

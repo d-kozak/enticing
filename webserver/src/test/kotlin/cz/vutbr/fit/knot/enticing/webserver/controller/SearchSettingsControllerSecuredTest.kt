@@ -5,6 +5,7 @@ import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
+import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
@@ -34,6 +35,9 @@ class SearchSettingsControllerSecuredTest(
 
     @MockBean
     lateinit var userRepository: UserRepository
+
+    @MockBean
+    lateinit var queryService: QueryService
 
     @Test
     fun `When not logged in only non private setting should be visible`() {

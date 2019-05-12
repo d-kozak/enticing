@@ -10,6 +10,7 @@ import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
+import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -28,6 +29,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import java.net.URLEncoder
 import java.util.*
 
 @WebMvcTest
@@ -47,6 +49,9 @@ internal class SecurityConfigTest(
 
     @MockBean
     lateinit var searchSettingsRepository: SearchSettingsRepository
+
+    @MockBean
+    lateinit var queryService: QueryService
 
     @Nested
     inner class Login {
@@ -367,6 +372,34 @@ internal class SecurityConfigTest(
                     .andExpect(status().`is`(200))
         }
 
+    }
+
+    @Nested
+    inner class Query {
+
+        @Test
+        fun `Query is always accessible`() {
+            val query = URLEncoder.encode("ahoj cau", "UTF-8")
+            val selectedSettings = 1
+            mockMvc.perform(get("$apiBasePath/query?query=$query&settings=$selectedSettings"))
+                    .andExpect(status().isOk)
+        }
+
+        @Test
+        fun `Context is always accessible`() {
+            val docId = 1
+            val size = 42
+            val location = 201
+            mockMvc.perform(get("$apiBasePath/query/context?docId=$docId&location=$location&size=$size"))
+                    .andExpect(status().isOk)
+        }
+
+        @Test
+        fun `Document is always accessible`() {
+            val docId = 1
+            mockMvc.perform(get("$apiBasePath/query/document?docId=$docId"))
+                    .andExpect(status().isOk)
+        }
     }
 }
 

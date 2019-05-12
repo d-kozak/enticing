@@ -3,6 +3,7 @@ package cz.vutbr.fit.knot.enticing.webserver
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
+import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -24,6 +25,9 @@ internal class ApiBasePathTest(
 
     @MockBean
     lateinit var userRepository: UserRepository
+
+    @MockBean
+    lateinit var queryService: QueryService
 
     @Test
     fun `Property api base path is set`() {
