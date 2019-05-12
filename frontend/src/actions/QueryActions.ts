@@ -16,6 +16,14 @@ export const objectToIntMap = (obj: any): Map<number, any> => {
     return map
 }
 
+export const transformSearchResult = (item: any) => {
+    for (let id in item.snippet.annotations) {
+        const annotation = item.snippet.annotations[id]
+        annotation.content = new Map(Object.entries(annotation.content))
+    }
+    item.snippet.annotations = objectToIntMap(item.snippet.annotations);
+}
+
 export const startSearchingAction = (query: SearchQuery, selectedSettings: Number, history?: H.History): ThunkResult<void> => (dispatch) => {
     const encodedQuery = encodeURI(query)
     if (useMockApi()) {
@@ -30,13 +38,8 @@ export const startSearchingAction = (query: SearchQuery, selectedSettings: Numbe
         },
         withCredentials: true
     }).then(response => {
-        console.log(response);
         response.data.forEach((item: any, index: Number) => {
-            for (let id in item.snippet.annotations) {
-                const annotation = item.snippet.annotations[id]
-                annotation.content = new Map(Object.entries(annotation.content))
-            }
-            item.snippet.annotations = objectToIntMap(item.snippet.annotations);
+            transformSearchResult(item)
             item.id = index;
         })
         dispatch(newSearchResultsAction(response.data));

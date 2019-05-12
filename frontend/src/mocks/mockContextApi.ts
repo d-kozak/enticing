@@ -10,6 +10,7 @@ export const mockContextRequested = (searchResult: SearchResult, dispatch: Dispa
     dispatch(showProgressBarAction())
     setTimeout(() => {
         const updatedResult: SearchResult = {
+            ...searchResult,
             id: searchResult.id,
             url: searchResult.url,
             snippet: extendText(searchResult.snippet),

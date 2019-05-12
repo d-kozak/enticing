@@ -1,7 +1,33 @@
 import {SearchResult} from "../entities/SearchResult";
 import {ThunkResult} from "./RootActions";
 import {mockContextRequested} from "../mocks/mockContextApi";
+import {API_BASE_PATH, useMockApi} from "../globals";
+
+import axios from "axios";
+import {hideProgressBarAction, showProgressBarAction} from "./ProgressBarActions";
+import {searchResultUpdatedAction} from "./SearchResultActions";
+import {transformSearchResult} from "./QueryActions";
 
 export const contextExtensionRequestAction = (searchResult: SearchResult): ThunkResult<void> => dispatch => {
-    mockContextRequested(searchResult, dispatch)
+    if (useMockApi()) {
+        mockContextRequested(searchResult, dispatch);
+        return;
+    }
+    dispatch(showProgressBarAction())
+    axios.get(`${API_BASE_PATH}/query/context`, {
+        params: {
+            docId: searchResult.docId,
+            size: searchResult.size,
+            location: searchResult.location
+        },
+        withCredentials: true
+    }).then((response) => {
+        transformSearchResult(response.data);
+        const updatedResult = {...searchResult, ...response.data}
+        updatedResult.snippet.text = searchResult.snippet.text + response.data.snippet.text;
+        dispatch(searchResultUpdatedAction(updatedResult))
+        dispatch(hideProgressBarAction());
+    }).catch(() => {
+        dispatch(hideProgressBarAction());
+    })
 };
