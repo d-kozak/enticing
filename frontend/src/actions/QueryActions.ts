@@ -31,12 +31,13 @@ export const startSearchingAction = (query: SearchQuery, selectedSettings: Numbe
         withCredentials: true
     }).then(response => {
         console.log(response);
-        response.data.forEach((item: any) => {
+        response.data.forEach((item: any, index: Number) => {
             for (let id in item.snippet.annotations) {
                 const annotation = item.snippet.annotations[id]
                 annotation.content = new Map(Object.entries(annotation.content))
             }
             item.snippet.annotations = objectToIntMap(item.snippet.annotations);
+            item.id = index;
         })
         dispatch(newSearchResultsAction(response.data));
         dispatch(hideProgressBarAction());
