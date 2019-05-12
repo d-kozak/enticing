@@ -19,11 +19,13 @@ const styles = (theme: Theme) => createStyles({
 
 
 export interface AnnotatedElementProps extends WithStyles<typeof styles> {
-    annotation: Annotation
+    annotation: Annotation,
+    text: string,
+    color: string
 }
 
 const AnnotatedElement = (props: AnnotatedElementProps) => {
-    const {annotation, classes} = props;
+    const {annotation, text, color, classes} = props;
 
     // custom open-close handling was implemented so that it works on mobile phones as well,
     // hover does not work there by itself, clicks are necessary
@@ -41,7 +43,7 @@ const AnnotatedElement = (props: AnnotatedElementProps) => {
     };
 
     const style = {
-        color: annotation.color
+        color
     }
 
     const tooltip = classes.tooltip;
@@ -66,7 +68,7 @@ const AnnotatedElement = (props: AnnotatedElementProps) => {
                          <AnnotationContent annotation={annotation}/>
                      </div>}
             >
-                <span style={style}>{annotation.text} </span>
+                <span style={style}>{text}</span>
             </Tooltip>
         </ClickAwayListener>
     </React.Fragment>

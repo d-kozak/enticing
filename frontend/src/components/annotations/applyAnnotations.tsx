@@ -29,7 +29,8 @@ export const applyAnnotations = (annotatedText: AnnotatedText): React.ReactNode 
      */
     const annotated = enriched.map((position, index) => <React.Fragment key={index}>
         {text.substring(position.prevEnd, position.from)}
-        <AnnotatedElement annotation={annotations.get(position.annotationId)!}/>
+        <AnnotatedElement text={text.substring(position.from, position.to)} color="red"
+                          annotation={annotations.get(position.annotationId)!}/>
     </React.Fragment>)
 
     /**

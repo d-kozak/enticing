@@ -2,16 +2,11 @@ import {dumpMap} from "../utils/dumps";
 
 export type color = 'blue' | 'green' | 'red' | 'orange' | 'purple';
 
-export interface AnnotationValue {
-    name: string;
-    value: string
-}
-
 export interface Annotation {
     id: number;
     text: string;
     color: color;
-    content: Array<AnnotationValue>;
+    content: Map<string, string>;
     image?: string;
     type: string;
 }

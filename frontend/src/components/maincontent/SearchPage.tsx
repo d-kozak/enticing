@@ -13,6 +13,7 @@ import {SearchQuery} from "../../entities/SearchQuery";
 import SearchInput from "../searchbar/SearchInput";
 
 import * as H from 'history';
+import {selectedSearchSettingsIndexSelector} from "../../reducers/selectors";
 
 const styles = createStyles({
     searchInput: {
@@ -31,13 +32,13 @@ export type SearchPageProps =
 }
 
 const SearchPage = (props: SearchPageProps) => {
-    const {searchResults, startSearching, classes, history, location} = props;
+    const {searchResults, startSearching, classes, selectedSettings, history, location} = props;
     const params = new URLSearchParams(location.search);
     const query = params.get('query') || '';
 
     useEffect(() => {
         if (searchResults === null) {
-            startSearching(query);
+            startSearching(query, selectedSettings);
         }
     }, [searchResults])
 
@@ -51,10 +52,11 @@ const SearchPage = (props: SearchPageProps) => {
 
 const mapStateToProps = (state: AppState) => ({
     searchResults: state.searchResults.searchResults,
+    selectedSettings: selectedSearchSettingsIndexSelector(state)
 });
 
 const mapDispatchToProps = {
-    startSearching: startSearchingAction as (query: SearchQuery, history?: H.History) => void
+    startSearching: startSearchingAction as (query: SearchQuery, selectedSettings: Number, history?: H.History) => void
 };
 
 export default withStyles(styles, {

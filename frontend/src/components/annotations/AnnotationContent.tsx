@@ -27,11 +27,11 @@ const AnnotationContent = (props: AnnotationContentProps) => {
     return <div>
         <Typography variant="h4">{annotation.type}</Typography>
         {annotation.image && <img className={classes.image} src={annotation.image}/>}
-        {annotation.content.map(
-            (value, index) => <div key={index}>
+        {Array.from(annotation.content).map(
+            ([name, value], index) => <div key={index}>
                 <Typography variant="body1"><span
-                    className={classes.attributeName}>{value.name}:</span> {value.name == 'url' ?
-                    <a href={value.value}>{value.value}</a> : value.value}</Typography>
+                    className={classes.attributeName}>{name}:</span> {name == 'url' ?
+                    <a href={value}>{value}</a> : value}</Typography>
             </div>
         )}
     </div>
