@@ -1,5 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.controller
 
+import cz.vutbr.fit.knot.enticing.webserver.dto.IndexedDocument
+import cz.vutbr.fit.knot.enticing.webserver.dto.SearchResult
 import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -12,11 +14,11 @@ import java.net.URLDecoder
 class QueryController(private val queryService: QueryService) {
 
     @GetMapping
-    fun query(@RequestParam query: String, @RequestParam settings: Long) = queryService.query(URLDecoder.decode(query, "UTF-8"), settings)
+    fun query(@RequestParam query: String, @RequestParam settings: Long): List<SearchResult> = queryService.query(URLDecoder.decode(query, "UTF-8"), settings)
 
     @GetMapping("/context")
-    fun context(@RequestParam docId: Long, @RequestParam size: Long, @RequestParam location: Long) = queryService.context(docId, location, size)
+    fun context(@RequestParam docId: Long, @RequestParam size: Long, @RequestParam location: Long): SearchResult = queryService.context(docId, location, size)
 
     @GetMapping("/document")
-    fun document(@RequestParam docId: Long) = queryService.document(docId)
+    fun document(@RequestParam docId: Long): IndexedDocument = queryService.document(docId)
 }

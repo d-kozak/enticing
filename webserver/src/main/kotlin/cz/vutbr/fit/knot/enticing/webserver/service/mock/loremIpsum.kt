@@ -1,5 +1,11 @@
 package cz.vutbr.fit.knot.enticing.webserver.service.mock
 
+import cz.vutbr.fit.knot.enticing.webserver.dto.AnnotatedText
+import cz.vutbr.fit.knot.enticing.webserver.dto.IndexedDocument
+
+
+val loremOneSentence = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+
 val documentText = """
     Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed vel lectus. Donec odio tempus molestie, porttitor ut, iaculis quis, sem. Integer imperdiet lectus quis justo. In enim a arcu imperdiet malesuada. Fusce suscipit libero eget elit. Etiam bibendum elit eget erat. Maecenas libero. Aenean fermentum risus id tortor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nullam faucibus mi quis velit. Praesent dapibus. Maecenas aliquet accumsan leo. Vivamus ac leo pretium faucibus.
 
@@ -11,3 +17,15 @@ Nullam sapien sem, ornare ac, nonummy non, lobortis a enim. Mauris dolor felis, 
 
 Curabitur bibendum justo non orci. Donec ipsum massa, ullamcorper in, auctor et, scelerisque sed, est. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean fermentum risus id tortor. Aliquam erat volutpat. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec iaculis gravida nulla. Cras pede libero, dapibus nec, pretium sit amet, tempor quis. Etiam dictum tincidunt diam. In enim a arcu imperdiet malesuada. Suspendisse nisl. Nullam faucibus mi quis velit. Nulla non lectus sed nisl molestie malesuada. Nulla turpis magna, cursus sit amet, suscipit a, interdum id, felis. Mauris metus. Etiam egestas wisi a erat.
 """.trimIndent()
+
+
+val dummyDocument = IndexedDocument(
+        1,
+        "Document One",
+        "https://www.google.com",
+        AnnotatedText(
+                documentText,
+                emptyMap(),
+                emptyList()
+        )
+)

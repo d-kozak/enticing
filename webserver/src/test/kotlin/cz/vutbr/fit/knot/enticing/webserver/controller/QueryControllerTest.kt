@@ -1,9 +1,12 @@
 package cz.vutbr.fit.knot.enticing.webserver.controller
 
+import cz.vutbr.fit.knot.enticing.webserver.dto.toJson
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
 import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
+import cz.vutbr.fit.knot.enticing.webserver.service.mock.dummyDocument
+import cz.vutbr.fit.knot.enticing.webserver.service.mock.firstResult
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
@@ -43,11 +46,12 @@ internal class QueryControllerTest(
         val query = URLEncoder.encode("ahoj cau", "UTF-8")
         val selectedSettings = 1
 
-        Mockito.`when`(queryService.query("ahoj cau", 1)).thenReturn("foo")
+        val dummyResult = listOf(firstResult)
+        Mockito.`when`(queryService.query("ahoj cau", 1)).thenReturn(dummyResult)
 
         mockMvc.perform(MockMvcRequestBuilders.get("$apiBasePath/query?query=$query&settings=$selectedSettings"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
-                .andExpect(content().string("foo"))
+                .andExpect(content().string(dummyResult.toJson()))
         Mockito.verify(queryService).query("ahoj cau", 1)
         Mockito.clearInvocations(queryService)
     }
@@ -58,11 +62,11 @@ internal class QueryControllerTest(
         val size = 42
         val location = 201
 
-        Mockito.`when`(queryService.context(1, 201, 42)).thenReturn("bar")
+        Mockito.`when`(queryService.context(1, 201, 42)).thenReturn(firstResult)
 
         mockMvc.perform(MockMvcRequestBuilders.get("$apiBasePath/query/context?docId=$docId&location=$location&size=$size"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
-                .andExpect(content().string("bar"))
+                .andExpect(content().string(firstResult.toJson()))
 
 
         Mockito.verify(queryService).context(1, 201, 42)
@@ -73,11 +77,11 @@ internal class QueryControllerTest(
     fun document() {
         val docId = 1
 
-        Mockito.`when`(queryService.document(1)).thenReturn("baz")
+        Mockito.`when`(queryService.document(1)).thenReturn(dummyDocument)
 
         mockMvc.perform(MockMvcRequestBuilders.get("$apiBasePath/query/document?docId=$docId"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
-                .andExpect(content().string("baz"))
+                .andExpect(content().string(dummyDocument.toJson()))
 
 
         Mockito.verify(queryService).document(1)
