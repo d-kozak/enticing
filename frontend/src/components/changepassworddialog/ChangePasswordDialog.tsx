@@ -35,21 +35,21 @@ export type ChangePasswordDialogProps =
     }
 
 const minLenText = 'At least 5 characters, please';
-const maxLenText = 'Max 32 characters, please';
+const maxLenText = 'Max 64 characters, please';
 
 const changePasswordValidation = Yup.object({
     oldPassword: Yup.string()
         .required('Please write your old password')
         .min(5, minLenText)
-        .max(32, maxLenText),
+        .max(64, maxLenText),
     newPassword: Yup.string()
         .required('Please write password')
         .min(5, minLenText)
-        .max(32, maxLenText),
+        .max(64, maxLenText),
     repeat: Yup.string()
         .required('Please write password again')
         .min(5, minLenText)
-        .max(32, maxLenText)
+        .max(64, maxLenText)
         .oneOf([Yup.ref('newPassword'), null], 'Passwords do not match')
 });
 

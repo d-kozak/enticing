@@ -118,7 +118,7 @@ export const changePasswordAction = (user: User, newPassword: string): ThunkResu
     axios.put(`${API_BASE_PATH}/user/password`, {
         login: user.login,
         newPassword,
-        oldPassword: ''
+        oldPassword: 'NULL_PASSWORD'
     }, {withCredentials: true})
         .then(() => {
             dispatch(openSnackBar(`Changed password of user ${user.login}`));

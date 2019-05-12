@@ -43,21 +43,21 @@ interface SignUpFormikValues {
 }
 
 const minLenText = 'At least 5 characters, please';
-const maxLenText = 'Max 32 characters, please';
+const maxLenText = 'Max 64 characters, please';
 
 const SignUpSchema = Yup.object({
     login: Yup.string()
         .required('Please write your login')
         .min(5, minLenText)
-        .max(32, maxLenText),
+        .max(64, maxLenText),
     password1: Yup.string()
         .required('Please write your password')
         .min(5, minLenText)
-        .max(32, maxLenText),
+        .max(64, maxLenText),
     password2: Yup.string()
         .required('Please write your password again')
         .min(5, minLenText)
-        .max(32, maxLenText)
+        .max(64, maxLenText)
         .oneOf([Yup.ref('password1'), null], 'Passwords do not match')
 });
 

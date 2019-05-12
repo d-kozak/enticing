@@ -6,13 +6,14 @@ import org.springframework.security.core.userdetails.UserDetails
 import javax.persistence.*
 import javax.validation.Valid
 import javax.validation.constraints.NotEmpty
+import javax.validation.constraints.Size
 
 @Entity
 class UserEntity(
         @field:Id
         @field:GeneratedValue
         var id: Long = 0,
-        @field:NotEmpty
+        @field:Size(min = 5, max = 64)
         @field:Column(unique = true)
         var login: String = "",
         @field:NotEmpty

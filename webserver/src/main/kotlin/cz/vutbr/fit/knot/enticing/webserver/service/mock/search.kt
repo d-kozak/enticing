@@ -47,5 +47,5 @@ val thirdResult = SearchResult(
 val results = listOf(firstResult, secondResult, thirdResult)
 fun randomResult() = results[Math.floor(Math.random() * results.size).toInt()]
 
-val allResults = Array(50) { i -> randomResult().copy(canExtend = Math.random() > 0.3) }.toList()
+val allResults = Array(50) { randomResult().copy(canExtend = Math.random() > 0.3) }.toList()
 

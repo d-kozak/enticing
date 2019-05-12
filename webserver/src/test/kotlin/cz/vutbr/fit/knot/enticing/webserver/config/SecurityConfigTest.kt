@@ -143,7 +143,7 @@ internal class SecurityConfigTest(
 
             @Test
             fun `Signup is accessible`() {
-                val user = UserCredentials("dkozak", "pass")
+                val user = UserCredentials("dkozak", "pass12")
                 mockMvc.perform(post("$apiBasePath/user")
                         .content(ObjectMapper().writeValueAsString(user))
                         .contentType(MediaType.APPLICATION_JSON))

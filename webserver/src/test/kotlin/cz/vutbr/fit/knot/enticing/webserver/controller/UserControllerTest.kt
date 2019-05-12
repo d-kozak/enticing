@@ -44,7 +44,7 @@ internal class UserControllerTest(
 
     @Test
     fun `Signup test`() {
-        val user = UserCredentials("Pepa", "123")
+        val user = UserCredentials("Pepa1", "12345")
         val serialized = ObjectMapper().writeValueAsString(user)
         mockMvc.perform(post("$apiBasePath/user")
                 .content(serialized)
@@ -99,7 +99,7 @@ internal class UserControllerTest(
 
     @Test
     fun `Update user test`() {
-        val user = User(10, "foo", userSettings = UserSettings(11))
+        val user = User(10, "foo12", userSettings = UserSettings(11))
         val serialized = ObjectMapper().writeValueAsString(user)
         mockMvc.perform(put("$apiBasePath/user")
                 .content(serialized)
@@ -163,7 +163,7 @@ internal class UserControllerTest(
 
     @Test
     fun `Change password test`() {
-        val userCredentials = ChangePasswordCredentials("xxx", "oldPass", "newPass")
+        val userCredentials = ChangePasswordCredentials("xxxxx", "oldPass", "newPass")
         val serialized = ObjectMapper().writeValueAsString(userCredentials)
         mockMvc.perform(put("$apiBasePath/user/password")
                 .content(serialized)
@@ -177,7 +177,7 @@ internal class UserControllerTest(
 
     @Test
     fun `Change password test should pass for empty old password can can change it this way`() {
-        val userCredentials = ChangePasswordCredentials("xxx", "", "newPass")
+        val userCredentials = ChangePasswordCredentials("xxxxx", "NULL_PASS", "newPass")
         val serialized = ObjectMapper().writeValueAsString(userCredentials)
         mockMvc.perform(put("$apiBasePath/user/password")
                 .content(serialized)

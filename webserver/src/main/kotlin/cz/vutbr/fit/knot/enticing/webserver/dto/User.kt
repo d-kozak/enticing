@@ -3,13 +3,13 @@ package cz.vutbr.fit.knot.enticing.webserver.dto
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
 import javax.validation.Valid
-import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Positive
+import javax.validation.constraints.Size
 
 data class User(
         @field:Positive
         val id: Long = 0,
-        @field:NotEmpty
+        @field:Size(min = 5, max = 64)
         val login: String,
         val active: Boolean = true,
         val roles: Set<String> = emptySet(),
@@ -44,16 +44,17 @@ fun cz.vutbr.fit.knot.enticing.webserver.entity.UserSettings.toDto() = UserSetti
 
 
 data class UserCredentials(
-        @field:NotEmpty
+        @field:Size(min = 5, max = 64)
         val login: String,
-        @field:NotEmpty
+        @field:Size(min = 5, max = 64)
         val password: String
 )
 
 data class ChangePasswordCredentials(
-        @field:NotEmpty
+        @field:Size(min = 5, max = 64)
         val login: String,
+        @field:Size(min = 5, max = 64)
         val oldPassword: String,
-        @field:NotEmpty
+        @field:Size(min = 5, max = 64)
         val newPassword: String
 )
