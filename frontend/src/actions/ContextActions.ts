@@ -7,6 +7,7 @@ import axios from "axios";
 import {hideProgressBarAction, showProgressBarAction} from "./ProgressBarActions";
 import {searchResultUpdatedAction} from "./SearchResultActions";
 import {transformSearchResult} from "./QueryActions";
+import {openSnackBar} from "./SnackBarActions";
 
 export const contextExtensionRequestAction = (searchResult: SearchResult): ThunkResult<void> => dispatch => {
     if (useMockApi()) {
@@ -28,6 +29,7 @@ export const contextExtensionRequestAction = (searchResult: SearchResult): Thunk
         dispatch(searchResultUpdatedAction(updatedResult))
         dispatch(hideProgressBarAction());
     }).catch(() => {
+        dispatch(openSnackBar('Could not extend context'));
         dispatch(hideProgressBarAction());
     })
 };

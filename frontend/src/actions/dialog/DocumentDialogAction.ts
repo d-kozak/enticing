@@ -2,6 +2,10 @@ import {IndexedDocument} from "../../entities/IndexedDocument";
 import {SearchResult} from "../../entities/SearchResult";
 import {ThunkResult} from "../RootActions";
 import {mockDocumentRequested} from "../../mocks/mockDocumentApi";
+import {API_BASE_PATH, useMockApi} from "../../globals";
+import axios from "axios";
+import {hideProgressBarAction, showProgressBarAction} from "../ProgressBarActions";
+import {openSnackBar} from "../SnackBarActions";
 
 export const DOCUMENT_DIALOG_DOCUMENT_LOADED = '[DOCUMENT DIALOG] DOCUMENT LOADED';
 export const DOCUMENT_DIALOG_CLOSED = '[DOCUMENT DIALOG] CLOSED';
@@ -28,5 +32,21 @@ export const documentDialogClosedAction = (): DialogClosedAction => ({
 });
 
 export const documentDialogRequestedAction = (searchResult: SearchResult): ThunkResult<void> => dispatch => {
-    mockDocumentRequested(searchResult, dispatch);
+    if (useMockApi()) {
+        mockDocumentRequested(searchResult, dispatch);
+        return;
+    }
+    dispatch(showProgressBarAction())
+    axios.get(`${API_BASE_PATH}/query/document`, {
+        params: {
+            docId: searchResult.docId
+        },
+        withCredentials: true
+    }).then(response => {
+        dispatch(hideProgressBarAction());
+        dispatch(documentLoadedAction(response.data));
+    }).catch(() => {
+        dispatch(openSnackBar('Could not load document'))
+        dispatch(hideProgressBarAction());
+    })
 };
