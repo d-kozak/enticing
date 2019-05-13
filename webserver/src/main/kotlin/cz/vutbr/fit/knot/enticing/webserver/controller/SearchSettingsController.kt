@@ -3,6 +3,7 @@ package cz.vutbr.fit.knot.enticing.webserver.controller
 import cz.vutbr.fit.knot.enticing.webserver.dto.ImportedSearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.dto.toEntity
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
+import cz.vutbr.fit.knot.enticing.webserver.exception.ValueNotUniqueException
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
@@ -42,7 +43,11 @@ class SearchSettingsController(private val searchSettingsRepository: SearchSetti
     fun import(@RequestBody @Valid searchSettings: ImportedSearchSettings) = searchSettingsRepository.save(searchSettings.toEntity())
 
     @PostMapping
-    fun create(@RequestBody @Valid searchSettings: SearchSettings) = searchSettingsRepository.save(searchSettings)
+    fun create(@RequestBody @Valid searchSettings: SearchSettings): SearchSettings {
+        if (searchSettingsRepository.existsByName(searchSettings.name))
+            throw ValueNotUniqueException("name", "Name ${searchSettings.name} is already taken")
+        return searchSettingsRepository.save(searchSettings)
+    }
 
     @PutMapping
     fun update(@RequestBody @Valid searchSettings: SearchSettings) = searchSettingsRepository.save(searchSettings)

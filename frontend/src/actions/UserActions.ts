@@ -20,6 +20,7 @@ import {
     changePasswordDialogHideProgressAction,
     changePasswordDialogShowProgressAction
 } from "./dialog/ChangePasswordDialogActions";
+import {parseValidationErrors} from "./errors";
 
 export const USER_LOGOUT = "[USER] LOGOUT";
 export const USER_LOGIN_SUCCESS = "[USER] LOGIN SUCCESS";
@@ -104,7 +105,7 @@ export const searchSettingsSelectedRequestAction = (settings: SearchSettings, pr
     }
 };
 
-export const loginRequestAction = (login: string, password: string, onError: (errors: { login?: string, password?: string }) => void): ThunkResult<void> => (dispatch) => {
+export const loginRequestAction = (login: string, password: string, onError: (errors: any) => void): ThunkResult<void> => (dispatch) => {
     if (useMockApi()) {
         mockLogin(login, password, dispatch, onError);
         return;
@@ -123,10 +124,11 @@ export const loginRequestAction = (login: string, password: string, onError: (er
             dispatch(loadSearchSettingsAction(user.roles.indexOf("ADMIN") != -1));
         })
         .catch(error => {
-            if (error && (error.login || error.password)) {
-                onError(error);
-            } else {
+            if (error.response.data.status === 401) {
                 onError({login: 'Invalid login or password'});
+            } else {
+                dispatch(openSnackBar('Could not log in'));
+                onError({});
             }
         });
 };
@@ -145,8 +147,12 @@ export const signUpAction = (login: string, password: string, onError: (error: a
         }))
         }
     ).catch(error => {
-            console.error(error);
-            onError(error);
+        if (error.response.data.status === 400) {
+            onError(parseValidationErrors(error));
+        } else {
+            dispatch(openSnackBar('Could not log in'));
+            onError({});
+        }
         }
     )
 };

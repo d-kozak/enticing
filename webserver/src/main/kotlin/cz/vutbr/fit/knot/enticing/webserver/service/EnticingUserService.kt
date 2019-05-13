@@ -2,6 +2,8 @@ package cz.vutbr.fit.knot.enticing.webserver.service
 
 import cz.vutbr.fit.knot.enticing.webserver.dto.*
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
+import cz.vutbr.fit.knot.enticing.webserver.exception.InsufficientRoleException
+import cz.vutbr.fit.knot.enticing.webserver.exception.ValueNotUniqueException
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import org.slf4j.LoggerFactory
@@ -22,11 +24,16 @@ class EnticingUserService(private val userRepository: UserRepository, private va
 
     fun saveUser(newUser: UserCredentials) {
         val (login, password) = newUser
+        if (userRepository.existsByLogin(login))
+            throw ValueNotUniqueException("login", "Login $login is already taken")
+
         userRepository.save(UserEntity(login = login, encryptedPassword = encoder.encode(password)))
     }
 
     fun saveUser(newUser: CreateUserRequest): User {
         val (login, password, roles) = newUser
+        if (userRepository.existsByLogin(login))
+            throw ValueNotUniqueException("login", "Login $login is already taken")
         return userRepository.save(UserEntity(login = login, encryptedPassword = encoder.encode(password), roles = roles)).toUser()
     }
 

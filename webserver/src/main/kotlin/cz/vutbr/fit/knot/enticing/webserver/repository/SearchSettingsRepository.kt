@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface SearchSettingsRepository : JpaRepository<SearchSettings, Long> {
     fun findByDefaultIsTrue(): SearchSettings?
     fun findByPrivateIsFalse(): List<SearchSettings>
+    fun existsByName(name: String): Boolean
 }

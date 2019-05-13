@@ -14,4 +14,6 @@ interface UserRepository : JpaRepository<UserEntity, Long> {
     @Modifying(clearAutomatically = true)
     @Query("update UserEntity u set u.selectedSettings=null where u.selectedSettings = :settings")
     fun detachSettingsFromAllUsers(@Param("settings") settings: SearchSettings)
+
+    fun existsByLogin(s: String): Boolean
 }

@@ -15,6 +15,7 @@ import {
     deleteUserDialogHideProgressAction,
     deleteUserDialogShowProgressAction
 } from "./dialog/DeleteUserDialogActions";
+import {parseValidationErrors} from "./errors";
 
 export const ADMIN_USERS_LOADED = '[ADMIN] USERS LOADED';
 export const ADMIN_USER_UPDATE_SUCCESS = '[ADMIN] UPDATE USER SUCCESS';
@@ -157,7 +158,9 @@ export const createNewUserActionRequest = (login: string, password: string, role
             dispatch(createUserSuccessAction(response.data))
             onDone();
         })
-        .catch(() => {
-            onError({});
+        .catch((response) => {
+            const errors = response.response.data.status === 400 ? parseValidationErrors(response) : {}
+            onError(errors);
+            dispatch(openSnackBar(`Failed to create user ${login}`));
         })
 }

@@ -31,11 +31,13 @@ internal class AddAdminRunnerTest {
         val runner = AddAdminRunner(userRepository, encoder)
         val slot = slot<UserEntity>()
         every { userRepository.findAllAdmins() } returns listOf()
+        every { userRepository.existsByLogin(any()) } returns false
         every { userRepository.save(capture(slot)) } returns UserEntity(login = "foo")
         every { encoder.encode(any()) } returns "encoded"
 
         runner.run(null)
 
+        verify(exactly = 1) { userRepository.existsByLogin(any()) }
         verify(exactly = 1) { userRepository.findAllAdmins() }
         verify(exactly = 1) { encoder.encode(any()) }
         verify(exactly = 1) { userRepository.save<UserEntity>(any()) }

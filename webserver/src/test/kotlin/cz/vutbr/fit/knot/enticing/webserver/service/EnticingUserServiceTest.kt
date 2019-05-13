@@ -4,6 +4,8 @@ import cz.vutbr.fit.knot.enticing.webserver.dto.*
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserSettings
+import cz.vutbr.fit.knot.enticing.webserver.exception.InsufficientRoleException
+import cz.vutbr.fit.knot.enticing.webserver.exception.ValueNotUniqueException
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import cz.vutbr.fit.knot.enticing.webserver.utils.withAuthentication
@@ -46,15 +48,28 @@ internal class EnticingUserServiceTest {
     fun `saveNewUser test`() {
         val userEntityCapture = slot<UserEntity>()
         every { userRepositoryMock.save(capture(userEntityCapture)) } returns UserEntity()
+        every { userRepositoryMock.existsByLogin("cat123") } returns false
 
         val newUser = UserCredentials("cat123", "123")
         userService.saveUser(newUser)
 
         verify(exactly = 1) { userRepositoryMock.save(UserEntity(login = "cat123")) }
+        verify(exactly = 1) { userRepositoryMock.existsByLogin("cat123") }
         assertThat(userEntityCapture.isCaptured).isTrue()
         val capturedEntity = userEntityCapture.captured
         assertThat(encoder.matches("123", capturedEntity.encryptedPassword)).isTrue()
     }
+
+    @Test
+    fun `saveNewUser test should fail login not unique`() {
+        every { userRepositoryMock.existsByLogin("cat123") } returns true
+
+        val newUser = UserCredentials("cat123", "123")
+        assertThrows<ValueNotUniqueException> { userService.saveUser(newUser) }
+
+        verify(exactly = 1) { userRepositoryMock.existsByLogin("cat123") }
+    }
+
 
     @Test
     fun `update user test`() {
@@ -310,13 +325,27 @@ internal class EnticingUserServiceTest {
         val user = CreateUserRequest("john5", "foo12", setOf("ADMIN"))
         val userCapture = slot<UserEntity>()
         every { userRepositoryMock.save(capture(userCapture)) } returns UserEntity(login = "foooo")
+        every { userRepositoryMock.existsByLogin("john5") } returns false
 
         userService.saveUser(user)
 
         verify(exactly = 1) { userRepositoryMock.save(UserEntity(login = "john5")) }
+        verify(exactly = 1) { userRepositoryMock.existsByLogin("john5") }
         assertThat(userCapture.isCaptured).isTrue()
         assertThat(encoder.matches("foo12", userCapture.captured.encryptedPassword)).isTrue()
         assertThat(userCapture.captured.roles.contains("ADMIN")).isTrue()
+    }
+
+    @Test
+    fun `Create new user test should fail because login is taken`() {
+        val user = CreateUserRequest("john5", "foo12", setOf("ADMIN"))
+
+        every { userRepositoryMock.existsByLogin("john5") } returns true
+        assertThrows<ValueNotUniqueException> { userService.saveUser(user) }
+
+
+        verify(exactly = 1) { userRepositoryMock.existsByLogin("john5") }
+
     }
 
     @Test
@@ -324,10 +353,12 @@ internal class EnticingUserServiceTest {
         val user = CreateUserRequest("john5", "foo12", setOf())
         val userCapture = slot<UserEntity>()
         every { userRepositoryMock.save(capture(userCapture)) } returns UserEntity(login = "foooo")
+        every { userRepositoryMock.existsByLogin("john5") } returns false
 
         userService.saveUser(user)
 
         verify(exactly = 1) { userRepositoryMock.save(UserEntity(login = "john5")) }
+        verify(exactly = 1) { userRepositoryMock.existsByLogin("john5") }
         assertThat(userCapture.isCaptured).isTrue()
         assertThat(encoder.matches("foo12", userCapture.captured.encryptedPassword)).isTrue()
         assertThat(userCapture.captured.roles.contains("ADMIN")).isFalse()

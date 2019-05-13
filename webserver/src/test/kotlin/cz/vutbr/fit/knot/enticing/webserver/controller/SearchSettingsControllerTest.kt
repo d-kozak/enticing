@@ -50,12 +50,27 @@ internal class SearchSettingsControllerTest(
     fun create() {
         val searchSettings = SearchSettings(1, "foo", annotationServer = "foo.baz", annotationDataServer = "baz.paz", servers = setOf("127.0.0.1"))
         Mockito.`when`(searchSettingsRepository.save(searchSettings)).thenReturn(searchSettings)
+        Mockito.`when`(searchSettingsRepository.existsByName("foo")).thenReturn(false)
         mockMvc.perform(post("$apiBasePath/search-settings").content(ObjectMapper().writeValueAsString(searchSettings))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk)
         Mockito.verify(searchSettingsRepository).save(searchSettings)
+        Mockito.verify(searchSettingsRepository).existsByName("foo")
         Mockito.clearInvocations(searchSettingsRepository)
     }
+
+    @Test
+    fun `create should fail name not unique`() {
+        val searchSettings = SearchSettings(1, "foo", annotationServer = "foo.baz", annotationDataServer = "baz.paz", servers = setOf("127.0.0.1"))
+        Mockito.`when`(searchSettingsRepository.save(searchSettings)).thenReturn(searchSettings)
+        Mockito.`when`(searchSettingsRepository.existsByName("foo")).thenReturn(true)
+        mockMvc.perform(post("$apiBasePath/search-settings").content(ObjectMapper().writeValueAsString(searchSettings))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().`is`(400))
+        Mockito.verify(searchSettingsRepository).existsByName("foo")
+        Mockito.clearInvocations(searchSettingsRepository)
+    }
+
 
     @Test
     fun `read all`() {

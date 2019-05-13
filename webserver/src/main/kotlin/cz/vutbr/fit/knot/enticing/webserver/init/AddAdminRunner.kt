@@ -21,11 +21,15 @@ class AddAdminRunner(
         val admins = userRepository.findAllAdmins()
         if (admins.isEmpty()) {
             val rawPassword = UUID.randomUUID().toString()
-            val randomNumber = (Math.random() * 100).toInt()
-            val login = "admin$randomNumber"
+            var login = "admin${randomInt()}"
+            while (userRepository.existsByLogin(login)) {
+                login += "${randomInt()}"
+            }
             val newAdmin = UserEntity(login = login, encryptedPassword = encoder.encode(rawPassword), roles = setOf("ADMIN"))
             userRepository.save(newAdmin)
             logger.warn("No admin user found in the database, creating new admin with login ${newAdmin.login} and password $rawPassword")
         }
     }
+
+    private fun randomInt() = (Math.random() * 100).toInt()
 }

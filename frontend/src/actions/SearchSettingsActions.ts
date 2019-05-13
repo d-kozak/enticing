@@ -13,6 +13,7 @@ import {API_BASE_PATH, useMockApi} from "../globals";
 import {openSnackBar} from "./SnackBarActions";
 import axios from "axios";
 import {hideProgressBarAction, showProgressBarAction} from "./ProgressBarActions";
+import {parseValidationErrors} from "./errors";
 
 export const SEARCH_SETTINGS_LOADED = "[SEARCH SETTINGS] LOADED";
 export const SEARCH_SETTINGS_ADDED = "[SEARCH SETTINGS] ADDED";
@@ -116,9 +117,10 @@ export const updateSearchSettingsRequestAction = (settings: SearchSettings, onDo
             dispatch(openSnackBar(`Search settings ${settings.name} updated`));
             onDone();
         })
-        .catch(() => {
+        .catch((response) => {
+            const errors = response.response.data.status === 400 ? parseValidationErrors(response) : {}
+            onError(errors);
             dispatch(openSnackBar(`Failed to updated ${settings.name}`));
-            onError({});
         });
 };
 
@@ -152,8 +154,13 @@ export const loadSettingsFromFileAction = (file: File): ThunkResult<void> => (di
                         dispatch(searchSettingsAddedAction(response.data))
                         dispatch(hideProgressBarAction());
                     })
-                    .catch(() => {
-                        dispatch(openSnackBar(`Could not import settings ${settings.name}`));
+                    .catch((response) => {
+                        if (response.response.data.status == 400) {
+                            dispatch(openSnackBar(`Could not import settings  - they are not valid`));
+                            console.error(parseValidationErrors(response));
+                        } else {
+                            dispatch(openSnackBar(`Could not import settings ${settings.name}`));
+                        }
                         dispatch(hideProgressBarAction());
                     })
             } else {
@@ -179,8 +186,9 @@ export const saveNewSearchSettingsAction = (searchSettings: SearchSettings, onDo
             response.data.isTransient = true; // reducer has to recognize this as a newly added search settings
             dispatch(searchSettingsUpdatedAction(response.data));
         })
-        .catch(() => {
-            onError({});
+        .catch((response) => {
+            const errors = response.response.data.status === 400 ? parseValidationErrors(response) : {}
+            onError(errors);
             dispatch(openSnackBar(`Adding search settings ${searchSettings.name} failed`));
         })
 }
