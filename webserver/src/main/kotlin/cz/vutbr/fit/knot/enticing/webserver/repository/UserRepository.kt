@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param
 
 interface UserRepository : JpaRepository<UserEntity, Long> {
     fun findByLogin(login: String): UserEntity?
-    @Query("select user from UserEntity user where 'admin' member of user.roles")
+    @Query("select user from UserEntity user where 'ADMIN' member of user.roles")
     fun findAllAdmins(): List<UserEntity>
     @Modifying(clearAutomatically = true)
     @Query("update UserEntity u set u.selectedSettings=null where u.selectedSettings = :settings")

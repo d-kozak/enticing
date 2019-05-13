@@ -70,4 +70,22 @@ class UserRepositoryTest(
             throw AssertionError("Following settings has stale selected settings $invalid")
         }
     }
+
+    @Test
+    fun `existsByLogin test`() {
+        entityManager.persistFlushFind(UserEntity(login = "abc12", encryptedPassword = "vbb"))
+        assertThat(userRepository.existsByLogin("abc12")).isTrue()
+        assertThat(userRepository.existsByLogin("abc123")).isFalse()
+    }
+
+    @Test
+    fun `findAllAdmins test`() {
+        entityManager.persistFlushFind(UserEntity(login = "abc12", encryptedPassword = "vbb"))
+        assertThat(userRepository.findAllAdmins()).isEmpty()
+        entityManager.persistFlushFind(UserEntity(login = "admin", encryptedPassword = "vbb", roles = setOf("ADMIN")))
+        assertThat(userRepository.findAllAdmins()).isNotEmpty
+        assertThat(userRepository.findAllAdmins()[0]).extracting {
+            it.login
+        }.isEqualTo("admin")
+    }
 }
