@@ -305,4 +305,32 @@ internal class EnticingUserServiceTest {
         verify(exactly = 1) { userRepositoryMock.findAll() }
     }
 
+    @Test
+    fun `Create new user test should create admin`() {
+        val user = CreateUserRequest("john5", "foo12", setOf("ADMIN"))
+        val userCapture = slot<UserEntity>()
+        every { userRepositoryMock.save(capture(userCapture)) } returns UserEntity(login = "foooo")
+
+        userService.saveUser(user)
+
+        verify(exactly = 1) { userRepositoryMock.save(UserEntity(login = "john5")) }
+        assertThat(userCapture.isCaptured).isTrue()
+        assertThat(encoder.matches("foo12", userCapture.captured.encryptedPassword)).isTrue()
+        assertThat(userCapture.captured.roles.contains("ADMIN")).isTrue()
+    }
+
+    @Test
+    fun `Create new user test should create normal user`() {
+        val user = CreateUserRequest("john5", "foo12", setOf())
+        val userCapture = slot<UserEntity>()
+        every { userRepositoryMock.save(capture(userCapture)) } returns UserEntity(login = "foooo")
+
+        userService.saveUser(user)
+
+        verify(exactly = 1) { userRepositoryMock.save(UserEntity(login = "john5")) }
+        assertThat(userCapture.isCaptured).isTrue()
+        assertThat(encoder.matches("foo12", userCapture.captured.encryptedPassword)).isTrue()
+        assertThat(userCapture.captured.roles.contains("ADMIN")).isFalse()
+    }
+
 }

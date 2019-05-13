@@ -25,6 +25,11 @@ class EnticingUserService(private val userRepository: UserRepository, private va
         userRepository.save(UserEntity(login = login, encryptedPassword = encoder.encode(password)))
     }
 
+    fun saveUser(newUser: CreateUserRequest): User {
+        val (login, password, roles) = newUser
+        return userRepository.save(UserEntity(login = login, encryptedPassword = encoder.encode(password), roles = roles)).toUser()
+    }
+
     /**
      * Updates everything except from the password and selected settings. These two are updated separately
      */

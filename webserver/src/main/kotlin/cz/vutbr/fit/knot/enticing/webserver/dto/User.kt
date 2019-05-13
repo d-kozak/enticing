@@ -58,3 +58,11 @@ data class ChangePasswordCredentials(
         @field:Size(min = 5, max = 64)
         val newPassword: String
 )
+
+data class CreateUserRequest(
+        @field:Size(min = 5, max = 64)
+        val login: String,
+        @field:Size(min = 5, max = 64)
+        val password: String,
+        val roles: Set<String>
+)

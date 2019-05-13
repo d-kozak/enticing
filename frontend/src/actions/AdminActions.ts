@@ -19,10 +19,16 @@ import {
 export const ADMIN_USERS_LOADED = '[ADMIN] USERS LOADED';
 export const ADMIN_USER_UPDATE_SUCCESS = '[ADMIN] UPDATE USER SUCCESS';
 export const ADMIN_DELETE_USER_SUCCESS = '[ADMIN] DELETE USER SUCCESS';
+export const ADMIN_USER_CREATE_SUCCESS = '[ADMIN] CREATE USER SUCCESS';
 
 interface UsersLoadedAction {
     type: typeof ADMIN_USERS_LOADED,
     users: Array<User>
+}
+
+interface CreateUserSuccessAction {
+    type: typeof ADMIN_USER_CREATE_SUCCESS,
+    user: User
 }
 
 interface UpdateUserSuccessAction {
@@ -35,11 +41,20 @@ interface DeleteUserSuccessAction {
     user: User
 }
 
-export type AdminAction = UsersLoadedAction | UpdateUserSuccessAction | DeleteUserSuccessAction
+export type AdminAction =
+    UsersLoadedAction
+    | CreateUserSuccessAction
+    | UpdateUserSuccessAction
+    | DeleteUserSuccessAction
 
 export const usersLoadedAction = (users: Array<User>): UsersLoadedAction => ({
     type: ADMIN_USERS_LOADED,
     users
+});
+
+export const createUserSuccessAction = (user: User): CreateUserSuccessAction => ({
+    type: ADMIN_USER_CREATE_SUCCESS,
+    user
 });
 
 export const updateUserSuccessAction = (user: User): UpdateUserSuccessAction => ({
@@ -130,3 +145,19 @@ export const changePasswordAction = (user: User, newPassword: string): ThunkResu
             dispatch(changePasswordDialogHideProgressAction());
         });
 };
+
+export const createNewUserActionRequest = (login: string, password: string, roles: Array<string>, onDone: () => void, onError: (errors: any) => void): ThunkResult<void> => dispatch => {
+    axios.post<User>(`${API_BASE_PATH}/user/add`, {
+        login,
+        password,
+        roles
+    }, {withCredentials: true})
+        .then(response => {
+            dispatch(openSnackBar(`Created user ${login}`));
+            dispatch(createUserSuccessAction(response.data))
+            onDone();
+        })
+        .catch(() => {
+            onError({});
+        })
+}

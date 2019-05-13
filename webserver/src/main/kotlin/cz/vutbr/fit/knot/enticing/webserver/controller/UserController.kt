@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.controller
 
 import cz.vutbr.fit.knot.enticing.webserver.dto.ChangePasswordCredentials
+import cz.vutbr.fit.knot.enticing.webserver.dto.CreateUserRequest
 import cz.vutbr.fit.knot.enticing.webserver.dto.User
 import cz.vutbr.fit.knot.enticing.webserver.dto.UserCredentials
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
@@ -23,6 +24,9 @@ class UserController(private val userService: EnticingUserService) {
     fun signup(@RequestBody @Valid user: UserCredentials) {
         userService.saveUser(user)
     }
+
+    @PostMapping("/add")
+    fun create(@RequestBody @Valid createUserRequest: CreateUserRequest) = userService.saveUser(createUserRequest)
 
     @PutMapping
     fun update(@RequestBody @Valid user: User) {

@@ -1,10 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import cz.vutbr.fit.knot.enticing.webserver.dto.ImportedSearchSettings
-import cz.vutbr.fit.knot.enticing.webserver.dto.UserCredentials
-import cz.vutbr.fit.knot.enticing.webserver.dto.toEntity
-import cz.vutbr.fit.knot.enticing.webserver.dto.toUser
+import cz.vutbr.fit.knot.enticing.webserver.dto.*
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
@@ -227,6 +224,35 @@ internal class SecurityConfigTest(
             fun `Get all users accessible for admin`() {
                 mockMvc.perform(get("$apiBasePath/user/all"))
                         .andExpect(status().`is`(200))
+            }
+
+            @Test
+            fun `Create new user is not when not logged in`() {
+                val user = CreateUserRequest("john5", "foo12", setOf())
+                mockMvc.perform(post("$apiBasePath/user/add")
+                        .content(user.toJson())
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().`is`(401))
+            }
+
+            @Test
+            @WithMockUser
+            fun `Create new user is not accessible for not admin`() {
+                val user = CreateUserRequest("john5", "foo12", setOf())
+                mockMvc.perform(post("$apiBasePath/user/add")
+                        .content(user.toJson())
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().`is`(403))
+            }
+
+            @Test
+            @WithMockUser(roles = ["ADMIN"])
+            fun `Create new user is accessible for admin`() {
+                val user = CreateUserRequest("john5", "foo12", setOf())
+                mockMvc.perform(post("$apiBasePath/user/add").content(user.toJson())
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk)
+                Mockito.clearInvocations(userService)
             }
 
         }

@@ -1,5 +1,6 @@
 import {
     ADMIN_DELETE_USER_SUCCESS,
+    ADMIN_USER_CREATE_SUCCESS,
     ADMIN_USER_UPDATE_SUCCESS,
     ADMIN_USERS_LOADED,
     AdminAction
@@ -30,6 +31,11 @@ const adminReducer: AdminReducer = (state = initialState, action) => {
             return {
                 users: state.users.filter(user => user.login != action.user.login)
             };
+
+        case ADMIN_USER_CREATE_SUCCESS:
+            return {
+                users: [...state.users, action.user]
+            }
 
     }
     return state

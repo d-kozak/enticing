@@ -1,10 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import cz.vutbr.fit.knot.enticing.webserver.dto.ChangePasswordCredentials
-import cz.vutbr.fit.knot.enticing.webserver.dto.User
-import cz.vutbr.fit.knot.enticing.webserver.dto.UserCredentials
-import cz.vutbr.fit.knot.enticing.webserver.dto.UserSettings
+import cz.vutbr.fit.knot.enticing.webserver.dto.*
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
@@ -21,6 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @WebMvcTest(secure = false)
@@ -223,5 +221,40 @@ internal class UserControllerTest(
 
         Mockito.verify(userService).getAllUsers()
         Mockito.clearInvocations(userService)
+    }
+
+    @Test
+    fun `Create new user`() {
+        val user = CreateUserRequest("john5", "foo12", setOf())
+        val userDto = User(1, "john5", true, setOf())
+        Mockito.`when`(userService.saveUser(user)).thenReturn(userDto)
+        mockMvc.perform(post("$apiBasePath/user/add").content(user.toJson())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk)
+                .andExpect(content().string(userDto.toJson()))
+        Mockito.verify(userService).saveUser(user)
+        Mockito.clearInvocations(userService)
+    }
+
+    @Test
+    fun `Create new user should fail for invalid login`() {
+        val user = CreateUserRequest("john", "foo12", setOf())
+        mockMvc.perform(post("$apiBasePath/user/add").content(user.toJson())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().`is`(400))
+        Mockito.verifyZeroInteractions(userService)
+        Mockito.clearInvocations(userService)
+
+    }
+
+    @Test
+    fun `Create new user should fail for invalid password`() {
+        val user = CreateUserRequest("john5", "foo1", setOf())
+        mockMvc.perform(post("$apiBasePath/user/add").content(user.toJson())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().`is`(400))
+        Mockito.verifyZeroInteractions(userService)
+        Mockito.clearInvocations(userService)
+
     }
 }
