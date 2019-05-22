@@ -23,13 +23,19 @@ const styles = createStyles({
         position: 'fixed',
         top: '40%',
         left: '50%',
-        transform: 'translate(-50%, -50%)',
+        transform: 'translate(-50%, -25%)',
         textAlign: 'center'
     }, formField: {
-        display: 'block',
-        margin: '10px 30px'
+        margin: '0px 30px'
     }, progress: {
         marginBottom: '15px'
+    },
+    '@media (min-height:800px)': {
+        mainElement: {
+            transform: 'translate(-50%, -50%)'
+        }, formField: {
+            margin: '10px 30px'
+        }
     }
 });
 

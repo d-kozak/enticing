@@ -24,12 +24,12 @@ import {isLoggedInSelector} from "../../reducers/selectors";
 const styles = (theme: Theme) => createStyles({
     mainElement: {
         minWidth: '250px',
-        paddingTop: '0px',
+        textAlign: 'center',
         position: 'fixed',
         top: '40%',
         left: '50%',
-        transform: 'translate(-50%, -50%)',
-        textAlign: 'center'
+        paddingTop: '0px',
+        transform: 'translate(-50%, -25%)'
     },
     formField: {
         display: 'block',
@@ -40,6 +40,11 @@ const styles = (theme: Theme) => createStyles({
     },
     progress: {
         marginBottom: '15px'
+    },
+    '@media (min-height:800px)': {
+        mainElement: {
+            transform: 'translate(-50%, -50%)'
+        }
     }
 });
 
