@@ -4,7 +4,7 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React from 'react';
 import {SearchResult} from "../../entities/SearchResult";
-import {applyAnnotations} from "../annotations/applyAnnotations";
+import {enrichText} from "../annotations/applyAnnotations";
 import {AppState} from "../../reducers/RootReducer";
 import {connect} from "react-redux";
 import {contextExtensionRequestAction} from "../../actions/ContextActions";
@@ -36,7 +36,7 @@ const SearchResultItem = (props: SearchResultItemProps) => {
         <ShowDocumentButton searchResult={searchResult} openDocument={openDocument}/>
         <GotoSourceButton searchResult={searchResult}/>
 
-        {applyAnnotations(searchResult.snippet)}
+        {enrichText(searchResult.snippet)}
     </div>
 };
 

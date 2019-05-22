@@ -17,6 +17,12 @@ export interface AnnotationPosition {
     to: number;
 }
 
+export interface QueryMapping {
+    from: number,
+    to: number,
+    query: string
+}
+
 /**
  *
  * Represents annotated text
@@ -32,6 +38,7 @@ export interface AnnotatedText {
     text: string;
     annotations: Map<number, Annotation>;
     positions: Array<AnnotationPosition>;
+    queryMapping: Array<QueryMapping>;
 }
 
 
@@ -42,7 +49,7 @@ export interface AnnotatedText {
  * @throws Error if invalid
  */
 export const validateAnnotatedText = (annotatedText: AnnotatedText): void => {
-    const {positions, annotations} = annotatedText;
+    const {positions, annotations, queryMapping} = annotatedText;
     for (let i in annotatedText.positions) {
         const index = Number(i);
         const position = positions[index];
@@ -55,6 +62,15 @@ export const validateAnnotatedText = (annotatedText: AnnotatedText): void => {
             () => `annotation with id ${position.annotationId} not found in ${dumpMap(annotations)}`
         );
 
+    }
+    for (let i in queryMapping) {
+        const index = Number(i);
+        const mapping = queryMapping[index];
+        assert(mapping.from < mapping.to, () => `mapping.from must be smaller than mapping.to, in ${mapping}`);
+        if (index < queryMapping.length - 1) {
+            const next = queryMapping[index + 1];
+            assert(mapping.to <= next.from, () => `mapping.to must be smaller than next.from, in ${mapping},${next}`);
+        }
     }
 };
 

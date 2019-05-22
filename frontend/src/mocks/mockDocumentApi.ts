@@ -14,7 +14,8 @@ export const mockDocumentRequested = (searchResult: SearchResult, dispatch: Disp
             body: {
                 text: loremIpsumLong,
                 annotations: new Map([[1, EdSheeran]]),
-                positions: [{annotationId: 1, from: 99, to: 109}]
+                positions: [{annotationId: 1, from: 99, to: 109}],
+                queryMapping: []
             },
             title: searchResult.url,
             url: searchResult.url
