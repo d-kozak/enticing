@@ -15,7 +15,7 @@ class QueryService {
             if ("nertag:person (visited|entered)" == query) allResults else emptyList()
 
 
-    fun context(documentId: Long, location: Long, size: Long): SearchResult = SearchResult(documentId, location, size + 10, AnnotatedText(loremOneSentence, emptyMap(), emptyList()), "foo", Math.random() > 0.4)
+    fun context(documentId: Long, location: Long, size: Long): SearchResult = SearchResult(documentId, location, size + 10, AnnotatedText(loremOneSentence, emptyMap(), emptyList(), emptyList()), "foo", Math.random() > 0.4)
 
     fun document(documentId: Long): IndexedDocument = dummyDocument
 }

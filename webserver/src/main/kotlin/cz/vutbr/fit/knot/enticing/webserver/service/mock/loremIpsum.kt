@@ -26,6 +26,7 @@ val dummyDocument = IndexedDocument(
         AnnotatedText(
                 documentText,
                 emptyMap(),
+                emptyList(),
                 emptyList()
         )
 )
