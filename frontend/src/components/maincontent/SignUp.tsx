@@ -26,6 +26,7 @@ const styles = createStyles({
         transform: 'translate(-50%, -25%)',
         textAlign: 'center'
     }, formField: {
+        display: 'block',
         margin: '0px 30px'
     }, progress: {
         marginBottom: '15px'
