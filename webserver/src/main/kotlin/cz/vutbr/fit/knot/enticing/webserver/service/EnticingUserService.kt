@@ -3,6 +3,7 @@ package cz.vutbr.fit.knot.enticing.webserver.service
 import cz.vutbr.fit.knot.enticing.webserver.dto.*
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
 import cz.vutbr.fit.knot.enticing.webserver.exception.InsufficientRoleException
+import cz.vutbr.fit.knot.enticing.webserver.exception.InvalidPasswordException
 import cz.vutbr.fit.knot.enticing.webserver.exception.ValueNotUniqueException
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
@@ -60,7 +61,7 @@ class EnticingUserService(private val userRepository: UserRepository, private va
                 ?: throw IllegalArgumentException("Unknown login ${userCredentials.login}")
         requireCanEditUser(userEntity.toUser())
         if (!encoder.matches(userCredentials.oldPassword, userEntity.encryptedPassword) && !currentUser!!.isAdmin) {
-            throw IllegalArgumentException("Invalid password")
+            throw InvalidPasswordException("Invalid password")
         }
         userEntity.encryptedPassword = encoder.encode(userCredentials.newPassword)
         userRepository.save(userEntity)

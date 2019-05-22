@@ -5,6 +5,7 @@ import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserSettings
 import cz.vutbr.fit.knot.enticing.webserver.exception.InsufficientRoleException
+import cz.vutbr.fit.knot.enticing.webserver.exception.InvalidPasswordException
 import cz.vutbr.fit.knot.enticing.webserver.exception.ValueNotUniqueException
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
@@ -241,7 +242,7 @@ internal class EnticingUserServiceTest {
         every { userRepositoryMock.save(capture(userEntityCapture)) } returns UserEntity(login = "testLogin")
 
         withAuthentication(userEntity) {
-            assertThrows<IllegalArgumentException> {
+            assertThrows<InvalidPasswordException> {
                 userService.changePassword(ChangePasswordCredentials("testLogin", "invalid", "newPass"))
             }
         }

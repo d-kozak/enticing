@@ -194,7 +194,7 @@ export const userSettingsUpdateRequest = (user: User, onDone: () => void, onErro
         });
 }
 
-export const changeUserPasswordRequestAction = (user: User, oldPassword: String, newPassword: string): ThunkResult<void> => (dispatch) => {
+export const changeUserPasswordRequestAction = (user: User, oldPassword: String, newPassword: string, onError: (errors: any) => void): ThunkResult<void> => (dispatch) => {
     if (useMockApi()) {
         mockChangePassword(user, newPassword, dispatch);
         return;
@@ -210,7 +210,10 @@ export const changeUserPasswordRequestAction = (user: User, oldPassword: String,
             dispatch(changePasswordDialogHideProgressAction());
             dispatch(changePasswordDialogClosedAction());
         })
-        .catch(() => {
+        .catch(error => {
+            if (error.response.data.status === 400) {
+                onError(parseValidationErrors(error));
+            }
             dispatch(openSnackBar(`Could  not change password`));
             dispatch(changePasswordDialogHideProgressAction());
         })

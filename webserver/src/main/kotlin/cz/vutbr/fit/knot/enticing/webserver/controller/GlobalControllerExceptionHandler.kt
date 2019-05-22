@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.controller
 
 import cz.vutbr.fit.knot.enticing.webserver.dto.toJson
+import cz.vutbr.fit.knot.enticing.webserver.exception.InvalidPasswordException
 import cz.vutbr.fit.knot.enticing.webserver.exception.ValueNotUniqueException
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
@@ -16,6 +17,12 @@ class GlobalControllerExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException::class)
     fun handleConstrainViolation(e: Exception) {
 
+    }
+
+    @ExceptionHandler(InvalidPasswordException::class)
+    fun invalidPasswordException(exception: InvalidPasswordException, response: HttpServletResponse) {
+        val messageMap = mapOf("errors" to listOf(mapOf("field" to "oldPassword", "defaultMessage" to exception.message)))
+        response.sendError(HttpStatus.BAD_REQUEST.value(), messageMap.toJson())
     }
 
     @ExceptionHandler(ValueNotUniqueException::class)

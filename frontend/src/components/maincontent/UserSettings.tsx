@@ -120,7 +120,7 @@ const mapStateToProps = (state: AppState) => ({
 });
 const mapDispatchToProps = {
     openChangePasswordDialog: changePasswordDialogOpenAction,
-    changePassword: changeUserPasswordRequestAction as (user: User, oldPassword: String, newPassword: string) => void,
+    changePassword: changeUserPasswordRequestAction as (user: User, oldPassword: String, newPassword: string, onError: (errors: any) => void) => void,
     updateUserSettings: userSettingsUpdateRequest as (settings: User, onDone: () => void, onError: () => void) => void
 };
 

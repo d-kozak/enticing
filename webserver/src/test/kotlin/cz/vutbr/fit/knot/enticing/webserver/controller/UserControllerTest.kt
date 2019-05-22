@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.enticing.webserver.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import cz.vutbr.fit.knot.enticing.webserver.dto.*
+import cz.vutbr.fit.knot.enticing.webserver.exception.InvalidPasswordException
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
@@ -167,6 +168,21 @@ internal class UserControllerTest(
                 .content(serialized)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk)
+
+        Mockito.verify(userService)
+                .changePassword(userCredentials)
+        Mockito.clearInvocations(userService)
+    }
+
+    @Test
+    fun `Change password should return 400 when invalid old password`() {
+        val userCredentials = ChangePasswordCredentials("xxxxx", "oldPass", "newPass")
+        val serialized = ObjectMapper().writeValueAsString(userCredentials)
+        Mockito.`when`(userService.changePassword(userCredentials)).thenThrow(InvalidPasswordException(""))
+        mockMvc.perform(put("$apiBasePath/user/password")
+                .content(serialized)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().`is`(400))
 
         Mockito.verify(userService)
                 .changePassword(userCredentials)

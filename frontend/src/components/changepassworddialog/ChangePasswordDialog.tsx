@@ -30,7 +30,7 @@ export type ChangePasswordDialogProps =
     & ReturnType<typeof mapStateToProps>
     &
     {
-        changePassword: (user: User, oldPassword: String, newPassword: string) => void,
+        changePassword: (user: User, oldPassword: String, newPassword: string, onError: (errors: any) => void) => void,
         askForOldPassword: boolean
     }
 
@@ -65,8 +65,11 @@ const ChangePasswordDialog = (props: ChangePasswordDialogProps) => {
             {showProgress && <LinearProgress/>}
             <Formik initialValues={{oldPassword: askForOldPassword ? '' : 'dummy', newPassword: '', repeat: ''}}
                     validationSchema={changePasswordValidation}
-                    onSubmit={(values) => {
-                        changePassword(user!, values.oldPassword, values.newPassword);
+                    onSubmit={(values, actions) => {
+                        changePassword(user!, values.oldPassword, values.newPassword, errors => {
+                            actions.setSubmitting(false)
+                            actions.setErrors(errors);
+                        });
                     }}>
                 {({isSubmitting}) => (
                     <Form>
