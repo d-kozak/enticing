@@ -26,13 +26,13 @@ export interface CommonAppBarButtonsProps extends WithStyles<typeof styles> {
 const CommonAppBarButtons = (props: CommonAppBarButtonsProps) => {
     const {user, handleLogout: parentHandleLogout, classes} = props;
     const isAdmin = user.roles.indexOf("ADMIN") != -1;
-    const [isMenuOpen, setMenuOpen] = useState(false);
-    const handleMenuOpen = () => {
-        setMenuOpen(true);
+    const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
+    const handleMenuOpen = (event: any) => {
+        setAnchorElement(event.currentTarget);
     };
 
     const handleMenuClose = () => {
-        setMenuOpen(false);
+        setAnchorElement(null);
     };
 
     const handleLogout = () => {
@@ -62,7 +62,8 @@ const CommonAppBarButtons = (props: CommonAppBarButtonsProps) => {
                 vertical: 'top',
                 horizontal: 'right',
             }}
-            open={isMenuOpen}
+            anchorEl={anchorElement}
+            open={Boolean(anchorElement)}
             onClose={handleMenuClose}
         >
             <MenuItem onClick={handleMenuClose} component={SettingsLink}>Settings</MenuItem>
