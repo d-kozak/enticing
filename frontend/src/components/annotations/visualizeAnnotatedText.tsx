@@ -4,11 +4,15 @@ import React from "react";
 import AnnotatedElement from "./AnnotatedElement";
 import EnrichedText from "./EnrichedText";
 
+
+const colors = ["red", "green", "blue"];
+
 export const visualizeElem = (elem: ProcessedAnnotatedText, annotations: Map<number, Annotation>): React.ReactNode => {
     if (typeof elem === "string") {
         return elem;
     } else if (elem instanceof TextWithAnnotation) {
-        return <AnnotatedElement annotation={annotations.get(elem.annotationId)!} text={elem.text} color="blue"/>
+        const color = colors[elem.annotationId % colors.length]
+        return <AnnotatedElement annotation={annotations.get(elem.annotationId)!} text={elem.text} color={color}/>
     } else {
         const content = <React.Fragment>
             {elem.text.map(i => visualizeElem(i, annotations))}

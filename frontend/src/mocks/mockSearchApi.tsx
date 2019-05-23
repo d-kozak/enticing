@@ -18,7 +18,7 @@ export const firstResult: SearchResult = {
         text: "Ed Sheeran visited Liberia and meets JD, a homeless Liberian 14-year-old boy. After Sheeran saw an older man hitting JD in public, he knew",
         annotations: new Map([[1, EdSheeran]]),
         positions: [{annotationId: 1, from: 0, to: 10}],
-        queryMapping: [{from: 0, to: 10, query: "foo"}]
+        queryMapping: [{from: 0, to: 10, query: "nertag:person"}]
     },
     url: 'https://www.borgenmagazine.com/ed-sheeran-visited-liberia/',
     canExtend: true
@@ -33,7 +33,7 @@ export const secondResult: SearchResult = {
         text: "President Donald Trump visited San Antonio for a closed-door fundraiser at The Argyle, the exclusive dinner club in Alamo Heights. Air Force ...",
         annotations: new Map([[2, DonaldTrump]]),
         positions: [{annotationId: 2, from: 10, to: 22}],
-        queryMapping: [{from: 0, to: 16, query: "President Donald"}]
+        queryMapping: [{from: 0, to: 16, query: "nertag:person"}]
     },
     url: 'https://www.mysanantonio.com/news/local/article/President-Trump-arrives-in-San-Antonio-for-13756986.php',
     canExtend: true
@@ -48,7 +48,7 @@ export const thirdResult: SearchResult = {
         text: "The president of the Czech republic Milos Zeman visited a porcelain factory Thun 1794 within his two-day visit to Karlovy Vary region. The president met with ...",
         annotations: new Map([[3, KarlovyVary]]),
         positions: [{annotationId: 3, from: 114, to: 127}],
-        queryMapping: [{from: 117, to: 140, query: "foo"}]
+        queryMapping: [{from: 117, to: 140, query: "nertag:place"}]
     },
     url: 'https://www.thun.cz/en/article/238-visit-of-mr--president-milos-zeman.html',
     canExtend: true

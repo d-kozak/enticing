@@ -14,6 +14,7 @@ describe("process annotated text", () => {
             return;
         }
         expect(first.text.length).toBe(1)
+        expect(first.decoration.text).toBe("nertag:person")
         const annotation = first.text[0];
         if (!(annotation instanceof TextWithAnnotation)) {
             fail('expecting text with annotation');
@@ -38,6 +39,7 @@ describe("process annotated text", () => {
             fail('expecting text with decoration');
             return;
         }
+        expect(decoration.decoration.text).toBe("nertag:person")
         expect(decoration.text.length).toBe(2)
         {
             const [decorationText, decorationAnnotation] = decoration.text;
