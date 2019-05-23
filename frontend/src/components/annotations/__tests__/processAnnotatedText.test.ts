@@ -1,6 +1,6 @@
 import {firstResult, secondResult, thirdResult} from "../../../mocks/mockSearchApi";
 import {processAnnotatedText, splitAnnotations} from "../processAnnotatedText";
-import {TextWithAnnotation, TextWithDecoration} from "../ProcessedAnnotatedText";
+import {Decoration, TextWithAnnotation, TextWithDecoration} from "../ProcessedAnnotatedText";
 
 describe("process annotated text", () => {
     it("ed sheeran full process", () => {
@@ -8,26 +8,15 @@ describe("process annotated text", () => {
         const [, processed] = processAnnotatedText(edSheeran.snippet);
         expect(processed.length).toBe(2)
         const [first, second] = processed;
-        expect(first instanceof TextWithDecoration).toBe(true)
-        if (!(first instanceof TextWithDecoration)) {
-            fail('expecting text with decoration');
-            return;
-        }
-        expect(first.text.length).toBe(1)
-        expect(first.decoration.text).toBe("nertag:person")
-        const annotation = first.text[0];
-        if (!(annotation instanceof TextWithAnnotation)) {
-            fail('expecting text with annotation');
-            return;
-        }
-        expect(annotation.annotationId).toBe(1)
-        expect(annotation.text).toBe("Ed Sheeran");
 
-        if (typeof second !== "string") {
-            fail('expecting string');
-            return;
-        }
-        expect(second).toBe(" visited Liberia and meets JD, a homeless Liberian 14-year-old boy. After Sheeran saw an older man hitting JD in public, he knew")
+        const expectedFirst = new TextWithDecoration(
+            [new TextWithAnnotation("Ed Sheeran", 1)],
+            new Decoration("nertag:person")
+        );
+        const expectedSecond = " visited Liberia and meets JD, a homeless Liberian 14-year-old boy. After Sheeran saw an older man hitting JD in public, he knew"
+
+        expect(first).toEqual(expectedFirst)
+        expect(second).toEqual(expectedSecond)
     })
 
     it("donald trump full process", () => {
@@ -35,33 +24,19 @@ describe("process annotated text", () => {
         const [, processed] = processAnnotatedText(donaldTrump.snippet);
         expect(processed.length).toBe(3)
         const [decoration, annotation, text] = processed;
-        if (!(decoration instanceof TextWithDecoration)) {
-            fail('expecting text with decoration');
-            return;
-        }
-        expect(decoration.decoration.text).toBe("nertag:person")
-        expect(decoration.text.length).toBe(2)
-        {
-            const [decorationText, decorationAnnotation] = decoration.text;
-            if (typeof decorationText !== "string") {
-                fail("expecting string");
-                return;
-            }
-            expect(decorationText).toBe("President ")
-            if (!(decorationAnnotation instanceof TextWithAnnotation)) {
-                fail("expecting test with annotation");
-                return;
-            }
-            expect(decorationAnnotation.text).toBe("Donald")
-            expect(decorationAnnotation.annotationId).toBe(2)
-        }
-        if (!(annotation instanceof TextWithAnnotation)) {
-            fail("expecting text with annotation");
-            return;
-        }
-        expect(annotation.text).toBe(" Trump")
-        expect(annotation.annotationId).toBe(2)
-        expect(text).toBe(" visited San Antonio for a closed-door fundraiser at The Argyle, the exclusive dinner club in Alamo Heights. Air Force ...")
+
+        const expectedDecoration = new TextWithDecoration(
+            ["President ", new TextWithAnnotation("Donald", 2)],
+            new Decoration("nertag:person")
+        );
+        const expectedAnnotation = new TextWithAnnotation(" Trump", 2)
+        const expectedText = " visited San Antonio for a closed-door fundraiser at The Argyle, the exclusive dinner club in Alamo Heights. Air Force ..."
+
+
+        expect(decoration).toEqual(expectedDecoration)
+        expect(annotation).toEqual(expectedAnnotation)
+        expect(text).toEqual(expectedText)
+
     });
 
     it("split annotations ed", () => {
@@ -99,17 +74,4 @@ describe("process annotated text", () => {
         expect(position2.to).toBe(127)
 
     })
-
 });
-
-describe("dto test", () => {
-    it("text with annotation equals", () => {
-        const a = new TextWithAnnotation('foo', 1)
-        const b = new TextWithAnnotation('foo', 1)
-        const c = new TextWithAnnotation('foo2', 1)
-        const d = new TextWithAnnotation('foo2', 2)
-        expect(a.equals(b)).toBe(true)
-        expect(a.equals(c)).toBe(false)
-        expect(d.equals(c)).toBe(false)
-    });
-})

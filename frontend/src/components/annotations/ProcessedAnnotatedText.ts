@@ -26,12 +26,6 @@ export class TextWithAnnotation {
         this.annotationId = annotationId;
     }
 
-    equals(other: any) {
-        if (!(other instanceof TextWithAnnotation)) return false
-        if (other.text !== this.text) return false
-        return other.annotationId === this.annotationId;
-    }
-
 }
 
 export type ProcessedAnnotatedText = string | TextWithDecoration | TextWithAnnotation
