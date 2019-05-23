@@ -12,11 +12,13 @@ const styles = (theme: Theme) => createStyles({
 
 type EnrichedTextProps = WithStyles<typeof styles> & {
     content: React.ReactNode
+    decoration: string,
 }
 
 const EnrichedText = (props: EnrichedTextProps) => {
-    const {classes, content} = props;
+    const {classes, content, decoration} = props;
     return <span className={classes.mapping}>
+        decoration:{decoration}
         {content}
     </span>
 };

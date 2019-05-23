@@ -1,13 +1,37 @@
 import {AnnotatedText, AnnotationPosition, QueryMapping, validateAnnotatedText} from "../../entities/Annotation";
-import React from "react";
-import AnnotatedElement from "./AnnotatedElement";
-import EnrichedText from "./EnrichedText";
+import {Decoration, ProcessedAnnotatedText, TextWithAnnotation, TextWithDecoration} from "./ProcessedAnnotatedText";
 
-export const enrichText = (annotatedText: AnnotatedText): React.ReactNode => {
+
+const isNotEmpty = (text: ProcessedAnnotatedText): boolean => {
+    if (typeof text === "string")
+        return text.length > 0;
+    else if (text instanceof TextWithAnnotation) {
+        return text.text.length > 0;
+    } else {
+        return text.text.length > 0 && text.text.every(isNotEmpty);
+    }
+}
+
+export const removeEmpty = (text: Array<ProcessedAnnotatedText>): Array<ProcessedAnnotatedText> => {
+    return text.map(
+        elem => {
+            if (elem instanceof TextWithDecoration) {
+                const newText = elem.text.filter(isNotEmpty)
+                return new TextWithDecoration(newText, elem.decoration)
+            } else {
+                return elem;
+            }
+        }
+    ).filter(isNotEmpty)
+
+
+}
+
+export const processAnnotatedText = (annotatedText: AnnotatedText): [AnnotatedText, Array<ProcessedAnnotatedText>] => {
     validateAnnotatedText(annotatedText);
     const modifiedText = splitAnnotations(annotatedText);
-    return applyAnnotations(modifiedText, [0, modifiedText.text.length]);
-    // return applyQueryMapping(modifiedText);
+    const processed = processQueryMapping(modifiedText)
+    return [modifiedText, removeEmpty(processed)];
 }
 
 export const splitAnnotations = (annotatedText: AnnotatedText): AnnotatedText => {
@@ -15,7 +39,7 @@ export const splitAnnotations = (annotatedText: AnnotatedText): AnnotatedText =>
     return {...annotatedText, positions: updatedPositions}
 }
 
-const splitAnnotation = (position: AnnotationPosition, queryMapping: Array<QueryMapping>): Array<AnnotationPosition> => {
+export const splitAnnotation = (position: AnnotationPosition, queryMapping: Array<QueryMapping>): Array<AnnotationPosition> => {
     const {from, to, annotationId} = position;
 
     for (let mapping of queryMapping) {
@@ -47,28 +71,24 @@ const splitAnnotation = (position: AnnotationPosition, queryMapping: Array<Query
     return [position];
 }
 
-export const applyQueryMapping = (annotatedText: AnnotatedText): React.ReactNode => {
+export const processQueryMapping = (annotatedText: AnnotatedText): Array<ProcessedAnnotatedText> => {
     const {text, queryMapping} = annotatedText;
     if (queryMapping.length == 0)
-        return applyAnnotations(annotatedText, [0, text.length]);
+        return processAnnotations(annotatedText, [0, text.length]);
 
     const enriched = queryMapping.map((position, index) => ({
         ...position,
         prevEnd: index > 0 ? queryMapping[index - 1].to : 0
     }))
 
-    const annotated = enriched.map((position, index) => <React.Fragment key={index}>
-        {applyAnnotations(annotatedText, [position.prevEnd, position.from])}
-        <EnrichedText content={applyAnnotations(annotatedText, [position.from, position.to])}/>
-    </React.Fragment>)
+    const annotated = enriched.flatMap((position, index) => [
+        ...processAnnotations(annotatedText, [position.prevEnd, position.from]),
+        new TextWithDecoration(processAnnotations(annotatedText, [position.from, position.to]), new Decoration(position.query))
+    ])
 
     const lastPosition = queryMapping[queryMapping.length - 1];
-
-    return <React.Fragment>
-        {annotated}
-        {applyAnnotations(annotatedText, [lastPosition.to, text.length])}
-    </React.Fragment>
-
+    annotated.push(...processAnnotations(annotatedText, [lastPosition.to, text.length]))
+    return annotated;
 };
 
 /**
@@ -78,11 +98,11 @@ export const applyQueryMapping = (annotatedText: AnnotatedText): React.ReactNode
  *
  * @see AnnotatedText
  */
-export const applyAnnotations = (annotatedText: AnnotatedText, interval: [Number, Number]): React.ReactNode => {
-    const {text, annotations, positions} = annotatedText;
-    const processedPositions = positions.filter(position => position.from >= interval[0] && position.to < interval[1]);
+export const processAnnotations = (annotatedText: AnnotatedText, interval: [number, number]): Array<string | TextWithAnnotation> => {
+    const {text, positions} = annotatedText;
+    const processedPositions = positions.filter(position => position.from >= interval[0] && position.to <= interval[1]);
     if (processedPositions.length == 0) {
-        return annotatedText.text
+        return [annotatedText.text.substring(interval[0], interval[1])]
     }
 
     /**
@@ -90,27 +110,26 @@ export const applyAnnotations = (annotatedText: AnnotatedText, interval: [Number
      * */
     const enriched = processedPositions.map((position, index) => ({
         ...position,
-        prevEnd: index > 0 ? positions[index - 1].to : 0
+        prevEnd: index > 0 ? positions[index - 1].to : interval[0]
     }));
 
     /**
      * 2) each position is mapped to a tuple of a) normal string consisting of input[prevPosition,annotationstart-1]
      *                                          b) the annotation itself
      */
-    const annotated = enriched.map((position, index) => <React.Fragment key={index}>
-        {text.substring(position.prevEnd, position.from)}
-        <AnnotatedElement text={text.substring(position.from, position.to)} color="red"
-                          annotation={annotations.get(position.annotationId)!}/>
-    </React.Fragment>)
+    const annotated = enriched.flatMap((position, index) => [
+        text.substring(position.prevEnd, position.from),
+        new TextWithAnnotation(text.substring(position.from, position.to), position.annotationId)
+    ]);
 
     /**
      * 3) append the remaining text
      */
     const lastPosition = positions[positions.length - 1];
 
-    return <React.Fragment>
-        {annotated}
-        {text.substring(lastPosition.to)}
-    </React.Fragment>
+    if (lastPosition.to < interval[1])
+        annotated.push(text.substring(lastPosition.to, interval[1]))
+
+    return annotated;
 };
 
