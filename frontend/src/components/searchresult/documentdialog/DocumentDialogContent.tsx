@@ -5,8 +5,7 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 import React from 'react';
 import Typography from "@material-ui/core/es/Typography";
 import {IndexedDocument} from "../../../entities/IndexedDocument";
-import {processAnnotatedText} from "../../annotations/processAnnotatedText";
-import {visualizeAnnotatedText} from "../../annotations/visualizeAnnotatedText";
+import AnnotatedTextComponent from "../../annotations/AnnotatedTextComponent";
 
 const styles = createStyles({
     titleUrl: {
@@ -22,12 +21,10 @@ export interface DialogContentProps extends WithStyles<typeof styles> {
 const DocumentDialogContent = (props: DialogContentProps) => {
     const {document, classes} = props;
 
-    const [annotation, processedText] = processAnnotatedText(document.body);
-
     return <div>
         <Typography className={classes.titleUrl} variant="headline"><a
             href={document.url}>{document.url}</a></Typography>
-        {visualizeAnnotatedText(processedText, annotation.annotations)}
+        <AnnotatedTextComponent text={document.body}/>
     </div>
 };
 

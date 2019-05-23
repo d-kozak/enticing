@@ -18,13 +18,13 @@ const styles = (theme: Theme) => createStyles({
 });
 
 
-export interface AnnotatedElementProps extends WithStyles<typeof styles> {
+export interface AnnotationTooltipProps extends WithStyles<typeof styles> {
     annotation: Annotation,
     text: string,
     color: string
 }
 
-const AnnotatedElement = (props: AnnotatedElementProps) => {
+const AnnotationTooltip = (props: AnnotationTooltipProps) => {
     const {annotation, text, color, classes} = props;
 
     // custom open-close handling was implemented so that it works on mobile phones as well,
@@ -76,4 +76,4 @@ const AnnotatedElement = (props: AnnotatedElementProps) => {
 
 export default withStyles(styles, {
     withTheme: true
-})(AnnotatedElement)
+})(AnnotationTooltip)

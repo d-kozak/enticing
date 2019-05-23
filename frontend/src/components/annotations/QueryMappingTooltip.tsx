@@ -9,7 +9,11 @@ import Typography from "@material-ui/core/es/Typography";
 const styles = (theme: Theme) => createStyles({
     mapping: {
         fontWeight: "bold",
-        margin: '0px 5px'
+        padding: '0px 3px',
+        margin: '0px 10px',
+        borderLeft: '1px solid black',
+        borderRight: '1px solid black',
+        borderRadius: '5px'
     },
     tooltip: {
         backgroundColor: theme.palette.common.white,
@@ -17,12 +21,12 @@ const styles = (theme: Theme) => createStyles({
     }
 });
 
-type EnrichedTextProps = WithStyles<typeof styles> & {
+type QueryMappingTooltipProps = WithStyles<typeof styles> & {
     content: React.ReactNode
     decoration: string,
 }
 
-const EnrichedText = (props: EnrichedTextProps) => {
+const QueryMappingTooltip = (props: QueryMappingTooltipProps) => {
     const {classes, content, decoration} = props;
 
     const tooltip = classes.tooltip;
@@ -39,4 +43,4 @@ const EnrichedText = (props: EnrichedTextProps) => {
 };
 
 
-export default withStyles(styles, {withTheme: true})(EnrichedText);
+export default withStyles(styles, {withTheme: true})(QueryMappingTooltip);

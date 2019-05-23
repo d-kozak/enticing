@@ -4,7 +4,6 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React from 'react';
 import {SearchResult} from "../../entities/SearchResult";
-import {processAnnotatedText} from "../annotations/processAnnotatedText";
 import {AppState} from "../../reducers/RootReducer";
 import {connect} from "react-redux";
 import {contextExtensionRequestAction} from "../../actions/ContextActions";
@@ -12,7 +11,7 @@ import {GotoSourceButton} from "./searchresultitembuttons/GotoSourceButton";
 import {ShowDocumentButton} from "./searchresultitembuttons/ShowDocumentButton";
 import {EditContextButton} from "./searchresultitembuttons/EditContextButton";
 import {EditAnnotationsButton} from "./searchresultitembuttons/EditAnnotationsButton";
-import {visualizeAnnotatedText} from "../annotations/visualizeAnnotatedText";
+import AnnotatedTextComponent from "../annotations/AnnotatedTextComponent";
 
 
 const styles = createStyles({
@@ -31,14 +30,12 @@ export type  SearchResultItemProps = WithStyles<typeof styles> & typeof mapDispa
 const SearchResultItem = (props: SearchResultItemProps) => {
     const {searchResult, requestContextExtension, openDocument, classes} = props;
 
-    const [annotation, processedText] = processAnnotatedText(searchResult.snippet);
-
     return <div className={classes.root}>
         <EditContextButton searchResult={searchResult} requestContextExtension={requestContextExtension}/>
         <EditAnnotationsButton/>
         <ShowDocumentButton searchResult={searchResult} openDocument={openDocument}/>
         <GotoSourceButton searchResult={searchResult}/>
-        {visualizeAnnotatedText(processedText, annotation.annotations)}
+        <AnnotatedTextComponent text={searchResult.snippet}/>
     </div>
 };
 

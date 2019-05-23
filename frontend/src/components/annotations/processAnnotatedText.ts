@@ -81,7 +81,7 @@ export const processQueryMapping = (annotatedText: AnnotatedText): Array<Process
         prevEnd: index > 0 ? queryMapping[index - 1].to : 0
     }))
 
-    const annotated = enriched.flatMap((position, index) => [
+    const annotated = enriched.flatMap(position => [
         ...processAnnotations(annotatedText, [position.prevEnd, position.from]),
         new TextWithDecoration(processAnnotations(annotatedText, [position.from, position.to]), new Decoration(position.query))
     ])
@@ -117,7 +117,7 @@ export const processAnnotations = (annotatedText: AnnotatedText, interval: [numb
      * 2) each position is mapped to a tuple of a) normal string consisting of input[prevPosition,annotationstart-1]
      *                                          b) the annotation itself
      */
-    const annotated = enriched.flatMap((position, index) => [
+    const annotated = enriched.flatMap(position => [
         text.substring(position.prevEnd, position.from),
         new TextWithAnnotation(text.substring(position.from, position.to), position.annotationId)
     ]);
