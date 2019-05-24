@@ -1,4 +1,4 @@
-// Generated from /home/dkozak/projects/knot/enticing/mg4j-compiler/src/main/kotlin/cz/vutbr/fit/knot/enticing/mg4j/compiler/Mg4j.g4 by ANTLR 4.7.2
+// Generated from /home/dkozak/projects/knot/enticing/mg4j-compiler/src/main/kotlin/cz/vutbr/fit/knot/enticing/mg4j/compiler/Mg4jEql.g4 by ANTLR 4.7.2
 package cz.vutbr.fit.knot.enticing.mg4j.compiler;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -6,18 +6,18 @@ import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 /**
- * This class provides an empty implementation of {@link Mg4jListener},
+ * This class provides an empty implementation of {@link Mg4jEqlListener},
  * which can be extended to create a listener which only needs to handle a subset
  * of the available methods.
  */
-public class Mg4jBaseListener implements Mg4jListener {
+public class Mg4jEqlBaseListener implements Mg4jEqlListener {
     /**
      * {@inheritDoc}
      *
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void enterExpression(Mg4jParser.ExpressionContext ctx) {
+    public void enterQuery(Mg4jEqlParser.QueryContext ctx) {
     }
 
     /**
@@ -26,7 +26,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void exitExpression(Mg4jParser.ExpressionContext ctx) {
+    public void exitQuery(Mg4jEqlParser.QueryContext ctx) {
     }
 
     /**
@@ -35,7 +35,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void enterQuery(Mg4jParser.QueryContext ctx) {
+    public void enterSequence(Mg4jEqlParser.SequenceContext ctx) {
     }
 
     /**
@@ -44,7 +44,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void exitQuery(Mg4jParser.QueryContext ctx) {
+    public void exitSequence(Mg4jEqlParser.SequenceContext ctx) {
     }
 
     /**
@@ -53,7 +53,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void enterQueryNode(Mg4jParser.QueryNodeContext ctx) {
+    public void enterParen(Mg4jEqlParser.ParenContext ctx) {
     }
 
     /**
@@ -62,7 +62,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void exitQueryNode(Mg4jParser.QueryNodeContext ctx) {
+    public void exitParen(Mg4jEqlParser.ParenContext ctx) {
     }
 
     /**
@@ -71,7 +71,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void enterIndexTerm(Mg4jParser.IndexTermContext ctx) {
+    public void enterNertag(Mg4jEqlParser.NertagContext ctx) {
     }
 
     /**
@@ -80,7 +80,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void exitIndexTerm(Mg4jParser.IndexTermContext ctx) {
+    public void exitNertag(Mg4jEqlParser.NertagContext ctx) {
     }
 
     /**
@@ -89,7 +89,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void enterSimpleNode(Mg4jParser.SimpleNodeContext ctx) {
+    public void enterOrderOperation(Mg4jEqlParser.OrderOperationContext ctx) {
     }
 
     /**
@@ -98,7 +98,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void exitSimpleNode(Mg4jParser.SimpleNodeContext ctx) {
+    public void exitOrderOperation(Mg4jEqlParser.OrderOperationContext ctx) {
     }
 
     /**
@@ -107,7 +107,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void enterNertagSem(Mg4jParser.NertagSemContext ctx) {
+    public void enterBinaryOperation(Mg4jEqlParser.BinaryOperationContext ctx) {
     }
 
     /**
@@ -116,7 +116,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void exitNertagSem(Mg4jParser.NertagSemContext ctx) {
+    public void exitBinaryOperation(Mg4jEqlParser.BinaryOperationContext ctx) {
     }
 
     /**
@@ -125,7 +125,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void enterSem(Mg4jParser.SemContext ctx) {
+    public void enterUnaryOperation(Mg4jEqlParser.UnaryOperationContext ctx) {
     }
 
     /**
@@ -134,7 +134,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void exitSem(Mg4jParser.SemContext ctx) {
+    public void exitUnaryOperation(Mg4jEqlParser.UnaryOperationContext ctx) {
     }
 
     /**
@@ -143,7 +143,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void enterProximity(Mg4jParser.ProximityContext ctx) {
+    public void enterWord(Mg4jEqlParser.WordContext ctx) {
     }
 
     /**
@@ -152,7 +152,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void exitProximity(Mg4jParser.ProximityContext ctx) {
+    public void exitWord(Mg4jEqlParser.WordContext ctx) {
     }
 
     /**
@@ -161,7 +161,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void enterIndex(Mg4jParser.IndexContext ctx) {
+    public void enterPar(Mg4jEqlParser.ParContext ctx) {
     }
 
     /**
@@ -170,7 +170,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void exitIndex(Mg4jParser.IndexContext ctx) {
+    public void exitPar(Mg4jEqlParser.ParContext ctx) {
     }
 
     /**
@@ -179,7 +179,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void enterDiff(Mg4jParser.DiffContext ctx) {
+    public void enterSent(Mg4jEqlParser.SentContext ctx) {
     }
 
     /**
@@ -188,7 +188,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void exitDiff(Mg4jParser.DiffContext ctx) {
+    public void exitSent(Mg4jEqlParser.SentContext ctx) {
     }
 
     /**
@@ -197,7 +197,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void enterQueryReference(Mg4jParser.QueryReferenceContext ctx) {
+    public void enterProximity(Mg4jEqlParser.ProximityContext ctx) {
     }
 
     /**
@@ -206,7 +206,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void exitQueryReference(Mg4jParser.QueryReferenceContext ctx) {
+    public void exitProximity(Mg4jEqlParser.ProximityContext ctx) {
     }
 
     /**
@@ -215,7 +215,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void enterSequence(Mg4jParser.SequenceContext ctx) {
+    public void enterAttribute(Mg4jEqlParser.AttributeContext ctx) {
     }
 
     /**
@@ -224,7 +224,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void exitSequence(Mg4jParser.SequenceContext ctx) {
+    public void exitAttribute(Mg4jEqlParser.AttributeContext ctx) {
     }
 
     /**
@@ -233,7 +233,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void enterArb(Mg4jParser.ArbContext ctx) {
+    public void enterConstraint(Mg4jEqlParser.ConstraintContext ctx) {
     }
 
     /**
@@ -242,7 +242,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void exitArb(Mg4jParser.ArbContext ctx) {
+    public void exitConstraint(Mg4jEqlParser.ConstraintContext ctx) {
     }
 
     /**
@@ -251,7 +251,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void enterArbTerm(Mg4jParser.ArbTermContext ctx) {
+    public void enterReference(Mg4jEqlParser.ReferenceContext ctx) {
     }
 
     /**
@@ -260,7 +260,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void exitArbTerm(Mg4jParser.ArbTermContext ctx) {
+    public void exitReference(Mg4jEqlParser.ReferenceContext ctx) {
     }
 
     /**
@@ -269,7 +269,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void enterArbTermLast(Mg4jParser.ArbTermLastContext ctx) {
+    public void enterRelOp(Mg4jEqlParser.RelOpContext ctx) {
     }
 
     /**
@@ -278,7 +278,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void exitArbTermLast(Mg4jParser.ArbTermLastContext ctx) {
+    public void exitRelOp(Mg4jEqlParser.RelOpContext ctx) {
     }
 
     /**
@@ -287,7 +287,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void enterArbTermWithOp(Mg4jParser.ArbTermWithOpContext ctx) {
+    public void enterBinaryOp(Mg4jEqlParser.BinaryOpContext ctx) {
     }
 
     /**
@@ -296,7 +296,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void exitArbTermWithOp(Mg4jParser.ArbTermWithOpContext ctx) {
+    public void exitBinaryOp(Mg4jEqlParser.BinaryOpContext ctx) {
     }
 
     /**
@@ -305,7 +305,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void enterNodeWithoutReference(Mg4jParser.NodeWithoutReferenceContext ctx) {
+    public void enterUnaryOp(Mg4jEqlParser.UnaryOpContext ctx) {
     }
 
     /**
@@ -314,115 +314,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void exitNodeWithoutReference(Mg4jParser.NodeWithoutReferenceContext ctx) {
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void enterConstraintNode(Mg4jParser.ConstraintNodeContext ctx) {
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void exitConstraintNode(Mg4jParser.ConstraintNodeContext ctx) {
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void enterConstraint(Mg4jParser.ConstraintContext ctx) {
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void exitConstraint(Mg4jParser.ConstraintContext ctx) {
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void enterReference(Mg4jParser.ReferenceContext ctx) {
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void exitReference(Mg4jParser.ReferenceContext ctx) {
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void enterBinaryOp(Mg4jParser.BinaryOpContext ctx) {
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void exitBinaryOp(Mg4jParser.BinaryOpContext ctx) {
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void enterUnaryOp(Mg4jParser.UnaryOpContext ctx) {
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void exitUnaryOp(Mg4jParser.UnaryOpContext ctx) {
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void enterRelOp(Mg4jParser.RelOpContext ctx) {
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void exitRelOp(Mg4jParser.RelOpContext ctx) {
+    public void exitUnaryOp(Mg4jEqlParser.UnaryOpContext ctx) {
     }
 
     /**

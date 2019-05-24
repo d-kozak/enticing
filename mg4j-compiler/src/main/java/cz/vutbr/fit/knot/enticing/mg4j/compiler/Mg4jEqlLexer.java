@@ -1,4 +1,4 @@
-// Generated from /home/dkozak/projects/knot/enticing/mg4j-compiler/src/main/kotlin/cz/vutbr/fit/knot/enticing/mg4j/compiler/Mg4j.g4 by ANTLR 4.7.2
+// Generated from /home/dkozak/projects/knot/enticing/mg4j-compiler/src/main/kotlin/cz/vutbr/fit/knot/enticing/mg4j/compiler/Mg4jEql.g4 by ANTLR 4.7.2
 package cz.vutbr.fit.knot.enticing.mg4j.compiler;
 
 import org.antlr.v4.runtime.*;
@@ -9,11 +9,11 @@ import org.antlr.v4.runtime.atn.PredictionContextCache;
 import org.antlr.v4.runtime.dfa.DFA;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
-public class Mg4jLexer extends Lexer {
+public class Mg4jEqlLexer extends Lexer {
     public static final int
             MINUS = 1, COLON = 2, EXPONENT = 3, SIMILARITY = 4, SENT = 5, PAR = 6, QUOTATION = 7,
-            SEP = 8, EQ = 9, NEQ = 10, LT = 11, LE = 12, GT = 13, GE = 14, PAREN_LEFT = 15, PAREN_RIGHT = 16,
-            DOT = 17, OR = 18, AND = 19, NOT = 20, NUMBER = 21, WORD = 22, WS = 23;
+            SEPARATOR = 8, EQ = 9, NEQ = 10, LT = 11, LE = 12, GT = 13, GE = 14, PAREN_LEFT = 15,
+            PAREN_RIGHT = 16, DOT = 17, OR = 18, AND = 19, NOT = 20, NUMBER = 21, WORD = 22, WS = 23;
     public static final String[] ruleNames = makeRuleNames();
     /**
      * @deprecated Use {@link #VOCABULARY} instead.
@@ -93,7 +93,7 @@ public class Mg4jLexer extends Lexer {
         }
     }
 
-    public Mg4jLexer(CharStream input) {
+    public Mg4jEqlLexer(CharStream input) {
         super(input);
         _interp = new LexerATNSimulator(this, _ATN, _decisionToDFA, _sharedContextCache);
     }
@@ -101,7 +101,7 @@ public class Mg4jLexer extends Lexer {
     private static String[] makeRuleNames() {
         return new String[]{
                 "MINUS", "COLON", "EXPONENT", "SIMILARITY", "SENT", "PAR", "QUOTATION",
-                "SEP", "EQ", "NEQ", "LT", "LE", "GT", "GE", "PAREN_LEFT", "PAREN_RIGHT",
+                "SEPARATOR", "EQ", "NEQ", "LT", "LE", "GT", "GE", "PAREN_LEFT", "PAREN_RIGHT",
                 "DOT", "OR", "AND", "NOT", "NUMBER", "WORD", "WS"
         };
     }
@@ -116,7 +116,7 @@ public class Mg4jLexer extends Lexer {
     private static String[] makeSymbolicNames() {
         return new String[]{
                 null, "MINUS", "COLON", "EXPONENT", "SIMILARITY", "SENT", "PAR", "QUOTATION",
-                "SEP", "EQ", "NEQ", "LT", "LE", "GT", "GE", "PAREN_LEFT", "PAREN_RIGHT",
+                "SEPARATOR", "EQ", "NEQ", "LT", "LE", "GT", "GE", "PAREN_LEFT", "PAREN_RIGHT",
                 "DOT", "OR", "AND", "NOT", "NUMBER", "WORD", "WS"
         };
     }
@@ -135,7 +135,7 @@ public class Mg4jLexer extends Lexer {
 
     @Override
     public String getGrammarFileName() {
-        return "Mg4j.g4";
+        return "Mg4jEql.g4";
     }
 
     @Override

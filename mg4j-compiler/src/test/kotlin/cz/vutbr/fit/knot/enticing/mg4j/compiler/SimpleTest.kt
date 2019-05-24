@@ -8,24 +8,14 @@ class SimpleTest {
 
     @Test
     fun simple() {
-        val inputStream = CharStreams.fromString("1.person = pepa and 2.person < john & 2.am < foo")
-        val lexer = Mg4jLexer(inputStream)
+        val input = "(id:ahoj cau) ~ 5 foocko:foo:bar^(bar.baz:10)^(bar.baz2:al) & (nertag:person (foo baz) - _SENT_) < aaaa (\"baz baz bar\") - _PAR_ && foocko.name < foo & id.name > bar"
+        val inputStream = CharStreams.fromString(input)
+        val lexer = Mg4jEqlLexer(inputStream)
         val tokenStream = CommonTokenStream(lexer)
-        val parser = Mg4jParser(tokenStream)
+        val parser = Mg4jEqlParser(tokenStream)
 
-        val ast = parser.node()
+        val ast = parser.query()
         println(ast)
     }
 
-    @Test
-    fun `With error`() {
-        // missing John
-        val inputStream = CharStreams.fromString("1.person = pepa and 2.person <  & 2.am < foo")
-        val lexer = Mg4jLexer(inputStream)
-        val tokenStream = CommonTokenStream(lexer)
-        val parser = Mg4jParser(tokenStream)
-
-        val ast = parser.node()
-        println(ast)
-    }
 }
