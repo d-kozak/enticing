@@ -10,9 +10,4 @@ class HelloTest {
     fun `Hello test`() {
         assertThat(hello()).isEqualTo("hello")
     }
-
-    @Test
-    fun fail() {
-        throw AssertionError()
-    }
 }
