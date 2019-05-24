@@ -26,9 +26,6 @@ indexTerm
 
 simpleNode
     : PAREN_LEFT simpleNode PAREN_RIGHT
-    | simpleNode binaryOp simpleNode
-    | unaryOp simpleNode
-    | simpleNode simpleNode
     | WORD
     ;
 
