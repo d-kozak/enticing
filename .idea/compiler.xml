@@ -2,6 +2,8 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
+      <module name="enticing.mg4j-compiler.main" target="1.8" />
+      <module name="enticing.mg4j-compiler.test" target="1.8" />
       <module name="enticing.webserver.main" target="1.8" />
       <module name="enticing.webserver.test" target="1.8" />
     </bytecodeTargetLevel>

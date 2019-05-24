@@ -4,6 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/enticing.iml" filepath="$PROJECT_DIR$/.idea/enticing.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/frontend/enticing.frontend.iml" filepath="$PROJECT_DIR$/.idea/modules/frontend/enticing.frontend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mg4j-compiler/enticing.mg4j-compiler.iml" filepath="$PROJECT_DIR$/.idea/modules/mg4j-compiler/enticing.mg4j-compiler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mg4j-compiler/enticing.mg4j-compiler.main.iml" filepath="$PROJECT_DIR$/.idea/modules/mg4j-compiler/enticing.mg4j-compiler.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mg4j-compiler/enticing.mg4j-compiler.test.iml" filepath="$PROJECT_DIR$/.idea/modules/mg4j-compiler/enticing.mg4j-compiler.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/webserver/enticing.webserver.iml" filepath="$PROJECT_DIR$/.idea/modules/webserver/enticing.webserver.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/webserver/enticing.webserver.main.iml" filepath="$PROJECT_DIR$/.idea/modules/webserver/enticing.webserver.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/webserver/enticing.webserver.test.iml" filepath="$PROJECT_DIR$/.idea/modules/webserver/enticing.webserver.test.iml" />

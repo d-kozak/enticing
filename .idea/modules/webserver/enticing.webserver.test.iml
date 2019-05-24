@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module external.linked.project.id=":webserver:test" external.linked.project.path="$MODULE_DIR$/../../../webserver" external.root.project.path="$MODULE_DIR$/../../.." external.system.id="GRADLE" external.system.module.group="cz.vutbr.knot.enticing" external.system.module.type="sourceSet" external.system.module.version="0.0.1-SNAPSHOT" type="JAVA_MODULE" version="4">
+  <component name="ExternalSystem" linkedProjectPath="$MODULE_DIR$/../../.." rootProjectPath="$MODULE_DIR$/../../.." />
   <component name="FacetManager">
     <facet type="Spring" name="Spring">
       <configuration />
@@ -64,10 +65,13 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../webserver/src/test">
       <sourceFolder url="file://$MODULE_DIR$/../../../webserver/src/test/kotlin" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../webserver/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../webserver/src/test/resources" type="java-test-resource" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="enticing.webserver.main" />
+    <orderEntry type="module" module-name="enticing.mg4j-compiler.main" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-actuator:2.1.4.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-data-jpa:2.1.4.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-security:2.1.4.RELEASE" level="project" />
