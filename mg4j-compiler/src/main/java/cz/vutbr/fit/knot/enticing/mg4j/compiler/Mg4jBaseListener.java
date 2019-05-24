@@ -17,6 +17,24 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
+    public void enterExpression(Mg4jParser.ExpressionContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void exitExpression(Mg4jParser.ExpressionContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
     public void enterQuery(Mg4jParser.QueryContext ctx) {
     }
 
@@ -35,7 +53,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void enterNode(Mg4jParser.NodeContext ctx) {
+    public void enterQueryNode(Mg4jParser.QueryNodeContext ctx) {
     }
 
     /**
@@ -44,7 +62,277 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void exitNode(Mg4jParser.NodeContext ctx) {
+    public void exitQueryNode(Mg4jParser.QueryNodeContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void enterIndexTerm(Mg4jParser.IndexTermContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void exitIndexTerm(Mg4jParser.IndexTermContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void enterSimpleNode(Mg4jParser.SimpleNodeContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void exitSimpleNode(Mg4jParser.SimpleNodeContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void enterNertagSem(Mg4jParser.NertagSemContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void exitNertagSem(Mg4jParser.NertagSemContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void enterSem(Mg4jParser.SemContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void exitSem(Mg4jParser.SemContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void enterProximity(Mg4jParser.ProximityContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void exitProximity(Mg4jParser.ProximityContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void enterIndex(Mg4jParser.IndexContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void exitIndex(Mg4jParser.IndexContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void enterDiff(Mg4jParser.DiffContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void exitDiff(Mg4jParser.DiffContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void enterQueryReference(Mg4jParser.QueryReferenceContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void exitQueryReference(Mg4jParser.QueryReferenceContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void enterSequence(Mg4jParser.SequenceContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void exitSequence(Mg4jParser.SequenceContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void enterArb(Mg4jParser.ArbContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void exitArb(Mg4jParser.ArbContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void enterArbTerm(Mg4jParser.ArbTermContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void exitArbTerm(Mg4jParser.ArbTermContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void enterArbTermLast(Mg4jParser.ArbTermLastContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void exitArbTermLast(Mg4jParser.ArbTermLastContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void enterArbTermWithOp(Mg4jParser.ArbTermWithOpContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void exitArbTermWithOp(Mg4jParser.ArbTermWithOpContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void enterNodeWithoutReference(Mg4jParser.NodeWithoutReferenceContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void exitNodeWithoutReference(Mg4jParser.NodeWithoutReferenceContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void enterConstraintNode(Mg4jParser.ConstraintNodeContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void exitConstraintNode(Mg4jParser.ConstraintNodeContext ctx) {
     }
 
     /**
@@ -89,7 +377,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void enterBoolOp(Mg4jParser.BoolOpContext ctx) {
+    public void enterBinaryOp(Mg4jParser.BinaryOpContext ctx) {
     }
 
     /**
@@ -98,7 +386,7 @@ public class Mg4jBaseListener implements Mg4jListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void exitBoolOp(Mg4jParser.BoolOpContext ctx) {
+    public void exitBinaryOp(Mg4jParser.BinaryOpContext ctx) {
     }
 
     /**
