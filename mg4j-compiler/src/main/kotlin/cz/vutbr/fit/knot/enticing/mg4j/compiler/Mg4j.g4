@@ -165,6 +165,6 @@ OR: '|' | 'or';
 AND: '&' | 'and';
 NOT: '!' | 'not';
 NUMBER : [0-9]+;
-WORD : [a-zA-Z0-9]+;
+WORD : [a-zA-Z0-9_]+;
 
 WS : [ \t] -> skip;
