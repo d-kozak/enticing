@@ -14,5 +14,5 @@ class Mg4jCompilerController(
 ) {
 
     @GetMapping
-    fun get(@RequestParam query: String) = compilerService.parseQuery(URLDecoder.decode(query, "UTF-8"))
+    fun get(@RequestParam query: String) = compilerService.parseQuery(URLDecoder.decode(query, "UTF-8")).errors
 }

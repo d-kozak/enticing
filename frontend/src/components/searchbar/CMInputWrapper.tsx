@@ -7,6 +7,8 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 import 'codemirror/lib/codemirror.css';
 import {Theme} from "@material-ui/core/es";
 
+import axios from "axios";
+
 import CodeMirror from 'react-codemirror';
 import {EditorConfiguration} from "codemirror";
 
@@ -14,6 +16,7 @@ import './CodeMirror.css';
 import {MG4J_EQL} from "../../codemirror/mg4jmode";
 
 import debounce from "debounce";
+import {API_BASE_PATH} from "../../globals";
 
 const styles = (theme: Theme) => createStyles({
     reactCodeMirror: {
@@ -28,9 +31,35 @@ interface CMInputWrapperProps extends WithStyles<typeof styles> {
     className?: string;
 }
 
+
+const analyzeQuery = debounce((query: string, doc: CodeMirror.Doc) => {
+    axios.get<Array<{ from: number, to: number, message: string }>>(`${API_BASE_PATH}/compiler?query=${encodeURI(query)}`)
+        .then(result => {
+            const errors = result.data;
+
+            for (let mark of doc.getAllMarks()) {
+                mark.clear();
+            }
+
+            for (let error of errors) {
+                const from = {
+                    line: 0,
+                    ch: error.from
+                };
+                const to = {
+                    line: 0,
+                    ch: error.to + 1
+                };
+                doc.markText(from, to, {
+                    className: 'syntaxError',
+                    title: error.message
+                });
+            }
+        });
+}, 400);
+
 const CMInputWrapper = (props: CMInputWrapperProps) => {
     const {className = '', startSearching, classes, query, setQuery} = props;
-
 
     const codeMirrorRef = useRef<ReactCodeMirror.ReactCodeMirror>(null);
 
@@ -38,30 +67,20 @@ const CMInputWrapper = (props: CMInputWrapperProps) => {
         if (codeMirrorRef.current) {
             const codeMirror = codeMirrorRef.current;
             const editor: CodeMirror.Editor = codeMirror.getCodeMirror()
-
-            editor.getDoc()
-                .markText({ch: 1, line: 0}, {ch: 4, line: 0}, {
-                    className: 'syntaxError',
-                    title: 'foo bar baz'
-                })
-
         } else {
             console.error('code mirror ref not set');
         }
-    }, [])
+    }, []);
 
-
-    const syntaxAnalysis = debounce((query: string) => {
-        console.log("syntax analysis");
-    }, 400)
 
 
     const queryChanged = (query: string) => {
-        setQuery(query)
-        syntaxAnalysis(query);
+        setQuery(query);
+        if (codeMirrorRef.current) {
+            const doc = codeMirrorRef.current.getCodeMirror().getDoc();
+            analyzeQuery(query, doc);
+        }
     }
-
-
 
     const options: EditorConfiguration = {
         extraKeys: {

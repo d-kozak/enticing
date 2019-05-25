@@ -17,7 +17,9 @@ class ErrorListener : BaseErrorListener() {
 
     override fun syntaxError(recognizer: Recognizer<*, *>?, offendingSymbol: Any?, line: Int, charPositionInLine: Int, msg: String, e: RecognitionException?) {
         val token = offendingSymbol as Token
-        _errors.add(SyntaxError(msg, token.startIndex, token.stopIndex))
+        val from = Math.min(token.startIndex, token.stopIndex)
+        val to = Math.min(token.startIndex, token.stopIndex)
+        _errors.add(SyntaxError(msg, from, to))
     }
 
 }
