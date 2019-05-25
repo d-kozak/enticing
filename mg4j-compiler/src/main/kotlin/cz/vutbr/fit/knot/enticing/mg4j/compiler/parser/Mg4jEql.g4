@@ -25,7 +25,7 @@ attribute
 
 constraint
     : PAREN_LEFT constraint PAREN_RIGHT
-    | reference relOp constraint
+    | reference relOp reference
     | reference relOp WORD
     | constraint binaryOp constraint
     | unaryOp constraint

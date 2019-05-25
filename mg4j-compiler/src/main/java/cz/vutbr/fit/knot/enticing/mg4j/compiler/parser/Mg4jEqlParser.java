@@ -59,7 +59,7 @@ public class Mg4jEqlParser extends Parser {
                     "\2\2Z[\7\3\2\2[_\7\7\2\2\\]\7\6\2\2]_\7\27\2\2^X\3\2\2\2^Z\3\2\2\2^\\" +
                     "\3\2\2\2_\7\3\2\2\2`a\7\21\2\2ab\7\30\2\2bc\7\23\2\2cd\7\30\2\2de\7\4" +
                     "\2\2ef\t\2\2\2fg\7\22\2\2g\t\3\2\2\2hi\b\6\1\2ij\7\21\2\2jk\5\n\6\2kl" +
-                    "\7\22\2\2ly\3\2\2\2mn\5\f\7\2no\5\16\b\2op\5\n\6\6py\3\2\2\2qr\5\f\7\2" +
+                    "\7\22\2\2ly\3\2\2\2mn\5\f\7\2no\5\16\b\2op\5\f\7\2py\3\2\2\2qr\5\f\7\2" +
                     "rs\5\16\b\2st\7\30\2\2ty\3\2\2\2uv\5\22\n\2vw\5\n\6\3wy\3\2\2\2xh\3\2" +
                     "\2\2xm\3\2\2\2xq\3\2\2\2xu\3\2\2\2y\u0080\3\2\2\2z{\f\4\2\2{|\5\20\t\2" +
                     "|}\5\n\6\5}\177\3\2\2\2~z\3\2\2\2\177\u0082\3\2\2\2\u0080~\3\2\2\2\u0080" +
@@ -533,7 +533,7 @@ public class Mg4jEqlParser extends Parser {
                         setState(108);
                         relOp();
                         setState(109);
-                        constraint(4);
+                        reference();
                     }
                     break;
                     case 3: {
@@ -1231,8 +1231,12 @@ public class Mg4jEqlParser extends Parser {
             return getToken(Mg4jEqlParser.PAREN_RIGHT, 0);
         }
 
-        public ReferenceContext reference() {
-            return getRuleContext(ReferenceContext.class, 0);
+        public List<ReferenceContext> reference() {
+            return getRuleContexts(ReferenceContext.class);
+        }
+
+        public ReferenceContext reference(int i) {
+            return getRuleContext(ReferenceContext.class, i);
         }
 
         public RelOpContext relOp() {
