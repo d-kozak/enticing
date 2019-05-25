@@ -41,7 +41,8 @@ const CMInputWrapper = (props: CMInputWrapperProps) => {
 
             editor.getDoc()
                 .markText({ch: 1, line: 0}, {ch: 4, line: 0}, {
-                    className: 'syntaxError'
+                    className: 'syntaxError',
+                    title: 'foo bar baz'
                 })
 
         } else {

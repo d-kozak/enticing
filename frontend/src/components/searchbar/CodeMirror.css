@@ -9,9 +9,8 @@
 }
 
 .syntaxError {
-    color: red;
-    font-weight: bold;
-    text-decoration: underline;
+    padding-bottom: 2px;
+    background: url("https://try.kotlinlang.org/static/images/wavyline-red.gif") repeat-x 100% 100%;
 }
 
 @media (min-width: 500px) {
