@@ -8,6 +8,12 @@
     min-width: 300px;
 }
 
+.syntaxError {
+    color: red;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
 @media (min-width: 500px) {
     .CodeMirror {
         min-width: 450px;

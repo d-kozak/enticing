@@ -13,6 +13,8 @@ import {EditorConfiguration} from "codemirror";
 import './CodeMirror.css';
 import {MG4J_EQL} from "../../codemirror/mg4jmode";
 
+import debounce from "debounce";
+
 const styles = (theme: Theme) => createStyles({
     reactCodeMirror: {
         width: '100%'
@@ -37,10 +39,28 @@ const CMInputWrapper = (props: CMInputWrapperProps) => {
             const codeMirror = codeMirrorRef.current;
             const editor: CodeMirror.Editor = codeMirror.getCodeMirror()
 
+            editor.getDoc()
+                .markText({ch: 1, line: 0}, {ch: 4, line: 0}, {
+                    className: 'syntaxError'
+                })
+
         } else {
             console.error('code mirror ref not set');
         }
     }, [])
+
+
+    const syntaxAnalysis = debounce((query: string) => {
+        console.log("syntax analysis");
+    }, 400)
+
+
+    const queryChanged = (query: string) => {
+        setQuery(query)
+        syntaxAnalysis(query);
+    }
+
+
 
     const options: EditorConfiguration = {
         extraKeys: {
@@ -57,7 +77,7 @@ const CMInputWrapper = (props: CMInputWrapperProps) => {
             className={classes.reactCodeMirror}
             ref={codeMirrorRef}
             value={query}
-            onChange={newQuery => setQuery(newQuery)}
+            onChange={newQuery => queryChanged(newQuery)}
             autoFocus={true}
             options={options}
         />
