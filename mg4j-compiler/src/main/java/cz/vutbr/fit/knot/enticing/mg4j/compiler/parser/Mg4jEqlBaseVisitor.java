@@ -1,5 +1,5 @@
-// Generated from /home/dkozak/projects/knot/enticing/mg4j-compiler/src/main/kotlin/cz/vutbr/fit/knot/enticing/mg4j/compiler/Mg4jEql.g4 by ANTLR 4.7.2
-package cz.vutbr.fit.knot.enticing.mg4j.compiler;
+// Generated from /home/dkozak/projects/knot/enticing/mg4j-compiler/src/main/kotlin/cz/vutbr/fit/knot/enticing/mg4j/compiler/parser/Mg4jEql.g4 by ANTLR 4.7.2
+package cz.vutbr.fit.knot.enticing.mg4j.compiler.parser;
 
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 

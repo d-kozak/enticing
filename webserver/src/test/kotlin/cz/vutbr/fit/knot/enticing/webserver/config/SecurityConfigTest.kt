@@ -7,6 +7,7 @@ import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
+import cz.vutbr.fit.knot.enticing.webserver.service.Mg4jCompilerService
 import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
@@ -37,6 +38,9 @@ internal class SecurityConfigTest(
         @Autowired val encoder: PasswordEncoder,
         @Value("\${api.base.path}") val apiBasePath: String
 ) {
+
+    @MockBean
+    lateinit var compilerService: Mg4jCompilerService
 
     @MockBean
     lateinit var userService: EnticingUserService
@@ -424,6 +428,16 @@ internal class SecurityConfigTest(
         fun `Document is always accessible`() {
             val docId = 1
             mockMvc.perform(get("$apiBasePath/query/document?docId=$docId"))
+                    .andExpect(status().isOk)
+        }
+    }
+
+    @Nested
+    inner class Mg4j {
+        @Test
+        fun `Parser endpoint is always accessible`() {
+            val query = URLEncoder.encode("nertag:person (killed|visited)", "UTF-8")
+            mockMvc.perform(get("$apiBasePath/compiler?query=$query"))
                     .andExpect(status().isOk)
         }
     }

@@ -5,6 +5,7 @@ import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
+import cz.vutbr.fit.knot.enticing.webserver.service.Mg4jCompilerService
 import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -26,6 +27,9 @@ class SearchSettingsControllerSecuredTest(
         @Autowired val mockMvc: MockMvc,
         @Value("\${api.base.path}") val apiBasePath: String
 ) {
+
+    @MockBean
+    lateinit var compilerService: Mg4jCompilerService
 
     @MockBean
     lateinit var searchSettingsRepository: SearchSettingsRepository

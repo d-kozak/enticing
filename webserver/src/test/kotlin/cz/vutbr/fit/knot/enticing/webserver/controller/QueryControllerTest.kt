@@ -4,6 +4,7 @@ import cz.vutbr.fit.knot.enticing.webserver.dto.toJson
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
+import cz.vutbr.fit.knot.enticing.webserver.service.Mg4jCompilerService
 import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
 import cz.vutbr.fit.knot.enticing.webserver.service.mock.dummyDocument
 import cz.vutbr.fit.knot.enticing.webserver.service.mock.firstResult
@@ -27,6 +28,9 @@ internal class QueryControllerTest(
         @Autowired val mockMvc: MockMvc,
         @Value("\${api.base.path}") val apiBasePath: String
 ) {
+
+    @MockBean
+    lateinit var compilerService: Mg4jCompilerService
 
     @MockBean
     lateinit var userService: EnticingUserService
