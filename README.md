@@ -19,14 +19,20 @@ The whole repository is a gradle multi-project consisting of the following subpr
     * Currently contains only DTOs between webserver and indexserver(to be done)
 
 ## Build
+### Webserver & frontend
 Production build
 ```
 gradle stage
 ```
-
 Run locally
 ```
 gradle bootRun
+```
+
+## Test
+Execute all tests
+```
+gradle test --info
 ```
 
 ## Authors
