@@ -6,12 +6,17 @@ App deployed at [enticing.herokuapp.com](https://enticing.herokuapp.com/)
 
 All source code related to the Enticing project. 
 
-## Contents
-
+## Modules
+The whole repository is a gradle multi-project project consisting of the following subprojects.
 * frontend
-    * Web based interface
+    * Web interface implemented in Typescript in React
 * webserver
-    * Spring Boot application that serves the frontend
+    * Spring Boot application that serves the frontend and communicates with other backend components
+* mg4j-compiler
+    * All code connected with parsing, analyzing and translating mg4j-eql
+* dto
+    * Data transfer objects for communicating between components of the system.
+    * Currently contains only DTOs between webserver and indexserver(to be done)
 
 ## Build
 Production build
