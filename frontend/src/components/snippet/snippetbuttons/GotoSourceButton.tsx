@@ -9,7 +9,7 @@ interface GotoSourceButtonProps {
 }
 
 export const GotoSourceButton = ({searchResult}: GotoSourceButtonProps) => <Tooltip title='Go to the source'>
-    <IconButton onClick={() => document.location.href = searchResult.url}>
+    <IconButton onClick={() => window.open(searchResult.url, "_blank")}>
         <LinkIcon fontSize="small"/>
     </IconButton>
 </Tooltip>
