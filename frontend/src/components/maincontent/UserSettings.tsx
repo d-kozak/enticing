@@ -19,6 +19,7 @@ import {isLoggedInSelector} from "../../reducers/selectors";
 import {Redirect} from "react-router";
 import Divider from "@material-ui/core/Divider";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
+import * as H from "history";
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -45,7 +46,9 @@ const styles = (theme: Theme) => createStyles({
     }
 });
 
-type UserSettingsProps = WithStyles<typeof styles> & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {}
+type UserSettingsProps = WithStyles<typeof styles> & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {
+    history: H.History
+}
 
 const schema = Yup.object({
     resultsPerPage: Yup.number()
@@ -55,7 +58,7 @@ const schema = Yup.object({
 });
 
 const UserSettings = (props: UserSettingsProps) => {
-    const {isLoggedIn, user, classes, userSettings, updateUserSettings, openChangePasswordDialog, changePassword} = props;
+    const {isLoggedIn, history, user, classes, userSettings, updateUserSettings, openChangePasswordDialog, changePassword} = props;
 
     if (!isLoggedIn || !userSettings) {
         return <Redirect to="/"/>
@@ -78,7 +81,9 @@ const UserSettings = (props: UserSettingsProps) => {
                 updateUserSettings(newUserInfo, () => {
                     actions.setSubmitting(false);
                     setShowProgress(false);
+                    history.push('/');
                 }, () => {
+                    actions.setSubmitting(false);
                     setShowProgress(false);
                 });
             }}
