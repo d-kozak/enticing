@@ -1,5 +1,5 @@
 import {IndexedDocument} from "../../entities/IndexedDocument";
-import {SearchResult} from "../../entities/SearchResult";
+import {Snippet} from "../../entities/Snippet";
 import {ThunkResult} from "../RootActions";
 import {mockDocumentRequested} from "../../mocks/mockDocumentApi";
 import {API_BASE_PATH, useMockApi} from "../../globals";
@@ -31,7 +31,7 @@ export const documentDialogClosedAction = (): DialogClosedAction => ({
     type: DOCUMENT_DIALOG_CLOSED
 });
 
-export const documentDialogRequestedAction = (searchResult: SearchResult): ThunkResult<void> => dispatch => {
+export const documentDialogRequestedAction = (searchResult: Snippet): ThunkResult<void> => dispatch => {
     if (useMockApi()) {
         mockDocumentRequested(searchResult, dispatch);
         return;

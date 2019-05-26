@@ -1,4 +1,4 @@
-import {SearchResult} from "../entities/SearchResult";
+import {Snippet} from "../entities/Snippet";
 import * as React from "react";
 import {DonaldTrump, EdSheeran, KarlovyVary} from "./mockAnnotations";
 import {Dispatch} from "redux";
@@ -9,7 +9,7 @@ import {openSnackBar} from "../actions/SnackBarActions";
 import {SearchQuery} from "../entities/SearchQuery";
 
 
-export const firstResult: SearchResult = {
+export const firstResult: Snippet = {
     id: 0,
     docId: "c87d744d-62cc-49be-82e4-8ee3a4e91873",
     location: 0,
@@ -24,7 +24,7 @@ export const firstResult: SearchResult = {
     canExtend: true
 };
 
-export const secondResult: SearchResult = {
+export const secondResult: Snippet = {
     id: 1,
     docId: "9bd44ee8-563f-4a49-a5b0-ab2ffa1fe0e7",
     location: 0,
@@ -39,7 +39,7 @@ export const secondResult: SearchResult = {
     canExtend: true
 };
 
-export const thirdResult: SearchResult = {
+export const thirdResult: Snippet = {
     id: 2,
     docId: "93dc171e-247b-47e1-806d-42f6839a07a4",
     location: 0,
@@ -57,11 +57,11 @@ export const thirdResult: SearchResult = {
 const results = [firstResult, secondResult, thirdResult];
 const randomResult = () => results[Math.floor(Math.random() * results.length) % results.length]
 
-const resultArray: Array<SearchResult> = Array(50)
+const resultArray: Array<Snippet> = Array(50)
     .fill(null)
     .map((_, index) => ({...randomResult(), id: index, canExtend: Math.random() > 0.3}))
 
-const mockExecuteQuery: ((query: string) => Promise<Array<SearchResult>>) = (query) => {
+const mockExecuteQuery: ((query: string) => Promise<Array<Snippet>>) = (query) => {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             switch (query) {

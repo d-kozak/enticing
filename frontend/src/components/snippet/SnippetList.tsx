@@ -3,8 +3,8 @@ import {WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React, {useState} from 'react';
-import {SearchResult} from "../../entities/SearchResult";
-import SearchResultItem from "./SearchResultItem";
+import {Snippet} from "../../entities/Snippet";
+import SearchResultItem from "./SnippetComponent";
 import Typography from "@material-ui/core/es/Typography";
 import Paper from "@material-ui/core/es/Paper";
 import Pagination from "../pagination/Pagination";
@@ -29,37 +29,37 @@ const styles = createStyles({
 });
 
 
-export type SearchResultListProps =
+export type SnippetListProps =
     WithStyles<typeof styles>
     & typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
     & {
-    searchResults: Array<SearchResult>;
+    snippet: Array<Snippet>;
 }
 
-const SearchResultList = (props: SearchResultListProps) => {
-    const {searchResults, openDocumentDialog, classes} = props;
+const SnippetList = (props: SnippetListProps) => {
+    const {snippet, openDocumentDialog, classes} = props;
 
     const [currentPage, setCurrentPage] = useState(0);
 
 
-    let pageCount = Math.floor(searchResults.length / 20);
-    if (searchResults.length % 20 != 0) {
+    let pageCount = Math.floor(snippet.length / 20);
+    if (snippet.length % 20 != 0) {
         pageCount += 1
     }
 
     return <Paper className={classes.root}>
-        {searchResults
+        {snippet
             .slice(currentPage * 20, currentPage * 20 + 20)
             .map(
                 (searchResult, index) => <React.Fragment key={index}>
                     {index > 0 && <Divider/>}
                     <SearchResultItem openDocument={openDocumentDialog}
-                                      searchResult={searchResult}/>
+                                      snippet={searchResult}/>
                 </React.Fragment>)
         }
         <Typography
-            variant="body1">{searchResults.length > 0 ? `Total number of snippets is ${searchResults.length}` : 'No snippets found'}</Typography>
+            variant="body1">{snippet.length > 0 ? `Total number of snippets is ${snippet.length}` : 'No snippets found'}</Typography>
         <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} pageCount={pageCount}/>
 
         <DocumentDialog/>
@@ -69,9 +69,9 @@ const SearchResultList = (props: SearchResultListProps) => {
 const mapStateToProps = (state: AppState) => ({});
 
 const mapDispatchToProps = {
-    openDocumentDialog: documentDialogRequestedAction as (searchResult: SearchResult) => void
+    openDocumentDialog: documentDialogRequestedAction as (searchResult: Snippet) => void
 }
 
 export default withStyles(styles, {
     withTheme: true
-})(connect(mapStateToProps, mapDispatchToProps)(SearchResultList))
+})(connect(mapStateToProps, mapDispatchToProps)(SnippetList))

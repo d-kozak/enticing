@@ -3,11 +3,11 @@ package cz.vutbr.fit.knot.enticing.webserver.service.mock
 import cz.vutbr.fit.knot.enticing.dto.response.AnnotatedText
 import cz.vutbr.fit.knot.enticing.dto.response.AnnotationPosition
 import cz.vutbr.fit.knot.enticing.dto.response.QueryMapping
-import cz.vutbr.fit.knot.enticing.dto.response.SearchResult
+import cz.vutbr.fit.knot.enticing.dto.response.Snippet
 import java.util.*
 
 
-val firstResult = SearchResult(
+val firstResult = Snippet(
         docId = UUID.randomUUID(),
         host = "foo.baz",
         collection = "col1",
@@ -23,7 +23,7 @@ val firstResult = SearchResult(
         canExtend = true
 )
 
-val secondResult = SearchResult(
+val secondResult = Snippet(
         docId = UUID.randomUUID(),
         location = 0,
         host = "foo.baz",
@@ -39,7 +39,7 @@ val secondResult = SearchResult(
         canExtend = true
 )
 
-val thirdResult = SearchResult(
+val thirdResult = Snippet(
         docId = UUID.randomUUID(),
         location = 0,
         host = "foo.baz",

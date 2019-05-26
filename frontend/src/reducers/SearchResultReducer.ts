@@ -1,8 +1,8 @@
 import {SEARCH_RESULT_UPDATED, SEARCH_RESULTS_NEW, SearchResultAction} from "../actions/SearchResultActions";
-import {SearchResult} from "../entities/SearchResult";
+import {Snippet} from "../entities/Snippet";
 
 const initialState = {
-    searchResults: null as Array<SearchResult> | null
+    snippets: null as Array<Snippet> | null
 }
 
 export type SearchResultsState = Readonly<typeof initialState>
@@ -13,15 +13,15 @@ const searchResultReducer: SearchResultReducer = (state = initialState, action) 
     switch (action.type) {
         case SEARCH_RESULTS_NEW:
             return {
-                searchResults: action.searchResults
+                snippets: action.snippets
             };
         case SEARCH_RESULT_UPDATED:
-            if (!state.searchResults) {
+            if (!state.snippets) {
                 throw new Error("Invalid state, cannot update a single result when no results are in the state");
             }
             return {
-                searchResults: state.searchResults
-                    .map(item => item.id === action.searchResult.id ? action.searchResult : item)
+                snippets: state.snippets
+                    .map(item => item.id === action.snippet.id ? action.snippet : item)
             }
     }
     return state

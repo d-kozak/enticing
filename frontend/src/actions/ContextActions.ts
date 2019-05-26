@@ -1,4 +1,4 @@
-import {SearchResult} from "../entities/SearchResult";
+import {Snippet} from "../entities/Snippet";
 import {ThunkResult} from "./RootActions";
 import {mockContextRequested} from "../mocks/mockContextApi";
 import {API_BASE_PATH, useMockApi} from "../globals";
@@ -9,7 +9,7 @@ import {searchResultUpdatedAction} from "./SearchResultActions";
 import {transformSearchResult} from "./QueryActions";
 import {openSnackBar} from "./SnackBarActions";
 
-export const contextExtensionRequestAction = (searchResult: SearchResult): ThunkResult<void> => dispatch => {
+export const contextExtensionRequestAction = (searchResult: Snippet): ThunkResult<void> => dispatch => {
     if (useMockApi()) {
         mockContextRequested(searchResult, dispatch);
         return;

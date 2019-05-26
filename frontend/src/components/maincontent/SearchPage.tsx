@@ -3,8 +3,8 @@ import {WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React, {useEffect} from 'react';
-import SearchResultList from "../searchresult/SearchResultList";
-import NoResultsFound from "../searchresult/NoResultsFound";
+import SearchResultList from "../snippet/SnippetList";
+import NoResultsFound from "../snippet/NoResultsFound";
 import {AppState} from "../../reducers/RootReducer";
 
 import {connect} from "react-redux";
@@ -32,26 +32,26 @@ export type SearchPageProps =
 }
 
 const SearchPage = (props: SearchPageProps) => {
-    const {searchResults, startSearching, classes, selectedSettings, history, location} = props;
+    const {snippets, startSearching, classes, selectedSettings, history, location} = props;
     const params = new URLSearchParams(location.search);
     const query = params.get('query') || '';
 
     useEffect(() => {
-        if (searchResults === null) {
+        if (snippets === null) {
             startSearching(query, selectedSettings);
         }
-    }, [searchResults])
+    }, [snippets])
 
 
     return <div>
         <SearchInput className={classes.searchInput} history={history} initialQuery={query}/>
-        {searchResults !== null && searchResults.length > 0 ? <SearchResultList searchResults={searchResults}/> :
+        {snippets !== null && snippets.length > 0 ? <SearchResultList snippet={snippets}/> :
             <NoResultsFound/>}
     </div>
 };
 
 const mapStateToProps = (state: AppState) => ({
-    searchResults: state.searchResults.searchResults,
+    snippets: state.searchResult.snippets,
     selectedSettings: selectedSearchSettingsIndexSelector(state)
 });
 

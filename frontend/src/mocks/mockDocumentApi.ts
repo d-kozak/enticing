@@ -1,13 +1,13 @@
 import {Dispatch} from "redux";
 import {hideProgressBarAction, showProgressBarAction} from "../actions/ProgressBarActions";
 import {documentLoadedAction} from "../actions/dialog/DocumentDialogAction";
-import {SearchResult} from "../entities/SearchResult";
+import {Snippet} from "../entities/Snippet";
 import {IndexedDocument} from "../entities/IndexedDocument";
 import {loremIpsumLong} from "./loremIpsum";
 import {EdSheeran} from "./mockAnnotations";
 
 
-export const mockDocumentRequested = (searchResult: SearchResult, dispatch: Dispatch) => {
+export const mockDocumentRequested = (searchResult: Snippet, dispatch: Dispatch) => {
     dispatch(showProgressBarAction())
     setTimeout(() => {
         const document: IndexedDocument = {

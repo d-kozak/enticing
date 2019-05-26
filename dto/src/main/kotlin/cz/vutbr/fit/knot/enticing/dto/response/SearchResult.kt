@@ -6,8 +6,9 @@ import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Pattern
 import javax.validation.constraints.Positive
 
+sealed class SearchResult(val snippets: List<Snippet>)
 
-data class SearchResult(
+data class Snippet(
         @field:NotEmpty
         val host: String,
         @field:NotEmpty
@@ -23,5 +24,3 @@ data class SearchResult(
         val snippet: AnnotatedText,
         val canExtend: Boolean
 )
-
-

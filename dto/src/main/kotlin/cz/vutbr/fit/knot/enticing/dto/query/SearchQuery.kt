@@ -5,7 +5,7 @@ import cz.vutbr.fit.knot.enticing.mg4j.compiler.ast.QueryNode
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Positive
 
-data class SnippetsQuery(
+data class SearchQuery(
         @field:Positive
         val snippetsCount: Int,
         val query: QueryNode,

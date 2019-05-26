@@ -1,4 +1,4 @@
-import {SearchResult} from "../entities/SearchResult";
+import {Snippet} from "../entities/Snippet";
 import {Dispatch} from "redux";
 import {hideProgressBarAction, showProgressBarAction} from "../actions/ProgressBarActions";
 import {AnnotatedText} from "../entities/Annotation";
@@ -6,10 +6,10 @@ import {loremOneSentece} from "./loremIpsum";
 import {searchResultUpdatedAction} from "../actions/SearchResultActions";
 
 
-export const mockContextRequested = (searchResult: SearchResult, dispatch: Dispatch) => {
+export const mockContextRequested = (searchResult: Snippet, dispatch: Dispatch) => {
     dispatch(showProgressBarAction())
     setTimeout(() => {
-        const updatedResult: SearchResult = {
+        const updatedResult: Snippet = {
             ...searchResult,
             id: searchResult.id,
             url: searchResult.url,

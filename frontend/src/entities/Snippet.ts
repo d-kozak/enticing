@@ -1,6 +1,6 @@
 import {AnnotatedText} from "./Annotation";
 
-export interface SearchResult {
+export interface Snippet {
     id: number,
     docId: string, // UUID - not specified exactly, because it is not part of standard javascript library and the frontent does not really need to understand it anyway
     location: number,
