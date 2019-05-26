@@ -16,7 +16,7 @@ import './CodeMirror.css';
 import {MG4J_EQL} from "../../codemirror/mg4jmode";
 
 import debounce from "debounce";
-import {API_BASE_PATH} from "../../globals";
+import {API_BASE_PATH, useMockApi} from "../../globals";
 
 const styles = (theme: Theme) => createStyles({
     reactCodeMirror: {
@@ -76,7 +76,7 @@ const CMInputWrapper = (props: CMInputWrapperProps) => {
 
     const queryChanged = (query: string) => {
         setQuery(query);
-        if (codeMirrorRef.current) {
+        if (codeMirrorRef.current && !useMockApi()) {
             const doc = codeMirrorRef.current.getCodeMirror().getDoc();
             analyzeQuery(query, doc);
         }
