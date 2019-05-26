@@ -20,6 +20,7 @@ import {Redirect} from "react-router";
 import Divider from "@material-ui/core/Divider";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
 import * as H from "history";
+import LinkTo from "../utils/linkTo";
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -105,6 +106,9 @@ const UserSettings = (props: UserSettingsProps) => {
                         </Grid>
                     </Grid>
                     <Grid container justify="flex-end" alignItems="center">
+                        <Grid item>
+                            <Button component={LinkTo("/")}>Cancel</Button>
+                        </Grid>
                         <Grid item>
                             <Button variant="contained" color="primary" type="submit" className={classes.formButton}
                                     disabled={isSubmitting}>Save</Button>
