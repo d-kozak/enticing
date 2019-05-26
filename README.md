@@ -7,7 +7,7 @@ App deployed at [enticing.herokuapp.com](https://enticing.herokuapp.com/)
 All source code related to the Enticing project. 
 
 ## Modules
-The whole repository is a gradle multi-project project consisting of the following subprojects.
+The whole repository is a gradle multi-project consisting of the following subprojects.
 * frontend
     * Web interface implemented in Typescript in React
 * webserver
