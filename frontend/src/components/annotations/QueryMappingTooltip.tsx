@@ -10,10 +10,7 @@ const styles = (theme: Theme) => createStyles({
     mapping: {
         fontWeight: "bold",
         padding: '0px 3px',
-        margin: '0px 10px',
-        borderLeft: '1px solid black',
-        borderRight: '1px solid black',
-        borderRadius: '5px'
+        margin: '0px 10px'
     },
     tooltip: {
         backgroundColor: theme.palette.common.white,
