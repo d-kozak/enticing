@@ -22,6 +22,7 @@ sealed class NertagsFormat {
     data class DetailedDefinition(val nertags: Map<String, List<String>>)
 }
 
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 sealed class AttributesFormat {
     data class SimpleDefinition(val def: String) : AttributesFormat()
     data class DetailedDefinition(val attributes: List<String>) : AttributesFormat()

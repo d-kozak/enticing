@@ -1,6 +1,8 @@
 package cz.vutbr.fit.knot.enticing.webserver.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import cz.vutbr.fit.knot.enticing.dto.utils.toJson
+
 import cz.vutbr.fit.knot.enticing.mg4j.compiler.ast.MockNode
 import cz.vutbr.fit.knot.enticing.mg4j.compiler.dto.ParsedQuery
 import cz.vutbr.fit.knot.enticing.webserver.dto.*

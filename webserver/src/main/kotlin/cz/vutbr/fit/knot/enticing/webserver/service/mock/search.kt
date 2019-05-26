@@ -1,9 +1,9 @@
 package cz.vutbr.fit.knot.enticing.webserver.service.mock
 
-import cz.vutbr.fit.knot.enticing.webserver.dto.AnnotatedText
-import cz.vutbr.fit.knot.enticing.webserver.dto.AnnotationPosition
-import cz.vutbr.fit.knot.enticing.webserver.dto.QueryMapping
-import cz.vutbr.fit.knot.enticing.webserver.dto.SearchResult
+import cz.vutbr.fit.knot.enticing.dto.AnnotatedText
+import cz.vutbr.fit.knot.enticing.dto.AnnotationPosition
+import cz.vutbr.fit.knot.enticing.dto.QueryMapping
+import cz.vutbr.fit.knot.enticing.dto.SearchResult
 
 
 val firstResult = SearchResult(

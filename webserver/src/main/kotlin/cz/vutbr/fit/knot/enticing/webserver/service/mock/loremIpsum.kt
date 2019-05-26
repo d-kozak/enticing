@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.service.mock
 
-import cz.vutbr.fit.knot.enticing.webserver.dto.AnnotatedText
-import cz.vutbr.fit.knot.enticing.webserver.dto.IndexedDocument
+import cz.vutbr.fit.knot.enticing.dto.AnnotatedText
+import cz.vutbr.fit.knot.enticing.dto.IndexedDocument
 
 
 val loremOneSentence = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit."

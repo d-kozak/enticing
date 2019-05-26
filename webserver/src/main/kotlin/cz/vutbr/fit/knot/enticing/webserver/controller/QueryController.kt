@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.controller
 
-import cz.vutbr.fit.knot.enticing.webserver.dto.IndexedDocument
-import cz.vutbr.fit.knot.enticing.webserver.dto.SearchResult
+import cz.vutbr.fit.knot.enticing.dto.IndexedDocument
+import cz.vutbr.fit.knot.enticing.dto.SearchResult
 import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping

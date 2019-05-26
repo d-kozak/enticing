@@ -1,8 +1,8 @@
 package cz.vutbr.fit.knot.enticing.webserver.service
 
-import cz.vutbr.fit.knot.enticing.webserver.dto.AnnotatedText
-import cz.vutbr.fit.knot.enticing.webserver.dto.IndexedDocument
-import cz.vutbr.fit.knot.enticing.webserver.dto.SearchResult
+import cz.vutbr.fit.knot.enticing.dto.AnnotatedText
+import cz.vutbr.fit.knot.enticing.dto.IndexedDocument
+import cz.vutbr.fit.knot.enticing.dto.SearchResult
 import cz.vutbr.fit.knot.enticing.webserver.service.mock.allResults
 import cz.vutbr.fit.knot.enticing.webserver.service.mock.dummyDocument
 import cz.vutbr.fit.knot.enticing.webserver.service.mock.loremOneSentence
