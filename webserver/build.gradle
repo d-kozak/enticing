@@ -21,6 +21,7 @@ repositories {
 dependencies {
     runtimeOnly(project(":frontend"))
     implementation(project(":mg4j-compiler"))
+    implementation(project(":dto"))
     
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")

@@ -1,3 +1,3 @@
 rootProject.name = "enticing"
-include "frontend", "webserver","mg4j-compiler"
+include "frontend", "webserver", "mg4j-compiler","dto"
 
