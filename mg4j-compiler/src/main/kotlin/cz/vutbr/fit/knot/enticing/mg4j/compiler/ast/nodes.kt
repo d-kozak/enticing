@@ -9,6 +9,7 @@ sealed class QueryElem : AstNode {
     data class Word(val value: String) : QueryElem()
     data class Index(val index: String, val value: String, val attributes: List<Attribute>) : QueryElem()
     data class Order(val left: QueryElem, val right: QueryElem, val limitation: Limitation? = null) : QueryElem()
+    data class Paren(val elems: List<QueryElem>) : QueryElem()
     data class BinaryOperation(val operator: LogicBinaryOperator, val left: QueryElem, val right: QueryElem, val limitation: Limitation? = null) : QueryElem()
     data class UnaryOperation(val operator: LogicUnaryOperator, val child: QueryElem) : QueryElem()
     data class ErrorQueryElem(val message: String = "") : QueryElem()
