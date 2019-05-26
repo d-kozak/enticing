@@ -1,11 +1,11 @@
 package cz.vutbr.fit.knot.enticing.webserver.entity
 
+import cz.vutbr.fit.knot.enticing.dto.utils.regex.urlRegex
 import cz.vutbr.fit.knot.enticing.webserver.entity.ipaddress.IpAddressCollection
 import javax.persistence.*
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Pattern
 
-const val urlRegex = """((([-\w]+\.)+[\w-]+)|((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))|localhost)(:\d+)?([\w-/]*)${'$'}"""
 
 @Entity
 class SearchSettings(

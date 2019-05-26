@@ -1,6 +1,8 @@
 package cz.vutbr.fit.knot.enticing.webserver.controller
 
 
+import cz.vutbr.fit.knot.enticing.dto.query.ContextExtensionQuery
+import cz.vutbr.fit.knot.enticing.dto.query.DocumentQuery
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
@@ -16,12 +18,14 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import java.net.URLEncoder
+import java.util.*
 
 @WebMvcTest
 @ExtendWith(SpringExtension::class)
@@ -63,33 +67,35 @@ internal class QueryControllerTest(
 
     @Test
     fun context() {
-        val docId = 1
-        val size = 42
-        val location = 201
+        val query = ContextExtensionQuery("foo.baz", "col1", UUID.randomUUID(), 201, 42)
 
-        Mockito.`when`(queryService.context(1, 201, 42)).thenReturn(firstResult)
+        Mockito.`when`(queryService.context(query)).thenReturn(firstResult)
 
-        mockMvc.perform(MockMvcRequestBuilders.get("$apiBasePath/query/context?docId=$docId&location=$location&size=$size"))
+        mockMvc.perform(MockMvcRequestBuilders.post("$apiBasePath/query/context")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(query.toJson()))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(content().string(firstResult.toJson()))
 
 
-        Mockito.verify(queryService).context(1, 201, 42)
+        Mockito.verify(queryService).context(query)
         Mockito.clearInvocations(queryService)
     }
 
     @Test
     fun document() {
-        val docId = 1
+        val query = DocumentQuery(UUID.randomUUID())
 
-        Mockito.`when`(queryService.document(1)).thenReturn(dummyDocument)
+        Mockito.`when`(queryService.document(query)).thenReturn(dummyDocument)
 
-        mockMvc.perform(MockMvcRequestBuilders.get("$apiBasePath/query/document?docId=$docId"))
+        mockMvc.perform(MockMvcRequestBuilders.post("$apiBasePath/query/document")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(query.toJson()))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(content().string(dummyDocument.toJson()))
 
 
-        Mockito.verify(queryService).document(1)
+        Mockito.verify(queryService).document(query)
         Mockito.clearInvocations(queryService)
     }
 }

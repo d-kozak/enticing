@@ -1,6 +1,8 @@
 package cz.vutbr.fit.knot.enticing.webserver.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import cz.vutbr.fit.knot.enticing.dto.query.ContextExtensionQuery
+import cz.vutbr.fit.knot.enticing.dto.query.DocumentQuery
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 
 import cz.vutbr.fit.knot.enticing.mg4j.compiler.ast.MockNode
@@ -421,17 +423,19 @@ internal class SecurityConfigTest(
 
         @Test
         fun `Context is always accessible`() {
-            val docId = 1
-            val size = 42
-            val location = 201
-            mockMvc.perform(get("$apiBasePath/query/context?docId=$docId&location=$location&size=$size"))
+            val query = ContextExtensionQuery("foo.baz", "col1", UUID.randomUUID(), 201, 42)
+            mockMvc.perform(post("$apiBasePath/query/context")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(query.toJson()))
                     .andExpect(status().isOk)
         }
 
         @Test
         fun `Document is always accessible`() {
-            val docId = 1
-            mockMvc.perform(get("$apiBasePath/query/document?docId=$docId"))
+            val query = DocumentQuery(UUID.randomUUID())
+            mockMvc.perform(post("$apiBasePath/query/document")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(query.toJson()))
                     .andExpect(status().isOk)
         }
     }

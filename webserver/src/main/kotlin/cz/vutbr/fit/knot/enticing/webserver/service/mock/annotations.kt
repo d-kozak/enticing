@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver.service.mock
 
-import cz.vutbr.fit.knot.enticing.dto.Annotation
+import cz.vutbr.fit.knot.enticing.dto.response.Annotation
 
 val EdSheeran = Annotation(
         id = 1,

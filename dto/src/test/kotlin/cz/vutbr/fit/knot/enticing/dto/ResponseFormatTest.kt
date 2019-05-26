@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.dto
 
+import cz.vutbr.fit.knot.enticing.dto.query.NertagsFormat
 import cz.vutbr.fit.knot.enticing.dto.utils.toDto
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import org.assertj.core.api.Assertions.assertThat

@@ -1,8 +1,10 @@
 package cz.vutbr.fit.knot.enticing.webserver.service
 
-import cz.vutbr.fit.knot.enticing.dto.AnnotatedText
-import cz.vutbr.fit.knot.enticing.dto.IndexedDocument
-import cz.vutbr.fit.knot.enticing.dto.SearchResult
+import cz.vutbr.fit.knot.enticing.dto.query.ContextExtensionQuery
+import cz.vutbr.fit.knot.enticing.dto.query.DocumentQuery
+import cz.vutbr.fit.knot.enticing.dto.response.AnnotatedText
+import cz.vutbr.fit.knot.enticing.dto.response.IndexedDocument
+import cz.vutbr.fit.knot.enticing.dto.response.SearchResult
 import cz.vutbr.fit.knot.enticing.webserver.service.mock.allResults
 import cz.vutbr.fit.knot.enticing.webserver.service.mock.dummyDocument
 import cz.vutbr.fit.knot.enticing.webserver.service.mock.loremOneSentence
@@ -15,7 +17,7 @@ class QueryService {
             if ("nertag:person (visited|entered)" == query) allResults else emptyList()
 
 
-    fun context(documentId: Long, location: Long, size: Long): SearchResult = SearchResult(documentId, location, size + 10, AnnotatedText(loremOneSentence, emptyMap(), emptyList(), emptyList()), "foo", Math.random() > 0.4)
+    fun context(query: ContextExtensionQuery): SearchResult = SearchResult(query.host, query.collection, query.docId, query.location, query.size + 10, "http://www.google.com", AnnotatedText(loremOneSentence, emptyMap(), emptyList(), emptyList()), Math.random() > 0.4)
 
-    fun document(documentId: Long): IndexedDocument = dummyDocument
+    fun document(query: DocumentQuery): IndexedDocument = dummyDocument
 }

@@ -1,13 +1,16 @@
 package cz.vutbr.fit.knot.enticing.webserver.service.mock
 
-import cz.vutbr.fit.knot.enticing.dto.AnnotatedText
-import cz.vutbr.fit.knot.enticing.dto.AnnotationPosition
-import cz.vutbr.fit.knot.enticing.dto.QueryMapping
-import cz.vutbr.fit.knot.enticing.dto.SearchResult
+import cz.vutbr.fit.knot.enticing.dto.response.AnnotatedText
+import cz.vutbr.fit.knot.enticing.dto.response.AnnotationPosition
+import cz.vutbr.fit.knot.enticing.dto.response.QueryMapping
+import cz.vutbr.fit.knot.enticing.dto.response.SearchResult
+import java.util.*
 
 
 val firstResult = SearchResult(
-        docId = 0,
+        docId = UUID.randomUUID(),
+        host = "foo.baz",
+        collection = "col1",
         location = 0,
         size = 42,
         snippet = AnnotatedText(
@@ -21,8 +24,10 @@ val firstResult = SearchResult(
 )
 
 val secondResult = SearchResult(
-        docId = 1,
+        docId = UUID.randomUUID(),
         location = 0,
+        host = "foo.baz",
+        collection = "col1",
         size = 42,
         snippet = AnnotatedText(
                 text = "President Donald Trump visited San Antonio for a closed-door fundraiser at The Argyle, the exclusive dinner club in Alamo Heights. Air Force ...",
@@ -35,8 +40,10 @@ val secondResult = SearchResult(
 )
 
 val thirdResult = SearchResult(
-        docId = 2,
+        docId = UUID.randomUUID(),
         location = 0,
+        host = "foo.baz",
+        collection = "col1",
         size = 42,
         snippet = AnnotatedText(
                 text = "The president of the Czech republic Milos Zeman visited a porcelain factory Thun 1794 within his two-day visit to Karlovy Vary region. The president met with ...",

@@ -1,7 +1,8 @@
 package cz.vutbr.fit.knot.enticing.webserver.service.mock
 
-import cz.vutbr.fit.knot.enticing.dto.AnnotatedText
-import cz.vutbr.fit.knot.enticing.dto.IndexedDocument
+import cz.vutbr.fit.knot.enticing.dto.response.AnnotatedText
+import cz.vutbr.fit.knot.enticing.dto.response.IndexedDocument
+import java.util.*
 
 
 val loremOneSentence = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit."
@@ -20,7 +21,7 @@ Curabitur bibendum justo non orci. Donec ipsum massa, ullamcorper in, auctor et,
 
 
 val dummyDocument = IndexedDocument(
-        1,
+        UUID.randomUUID(),
         "Document One",
         "https://www.google.com",
         AnnotatedText(

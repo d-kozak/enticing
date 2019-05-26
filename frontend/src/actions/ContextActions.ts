@@ -15,12 +15,7 @@ export const contextExtensionRequestAction = (searchResult: SearchResult): Thunk
         return;
     }
     dispatch(showProgressBarAction())
-    axios.get(`${API_BASE_PATH}/query/context`, {
-        params: {
-            docId: searchResult.docId,
-            size: searchResult.size,
-            location: searchResult.location
-        },
+    axios.post(`${API_BASE_PATH}/query/context`, searchResult, {
         withCredentials: true
     }).then((response) => {
         transformSearchResult(response.data);

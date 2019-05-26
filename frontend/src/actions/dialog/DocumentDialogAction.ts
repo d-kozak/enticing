@@ -37,10 +37,7 @@ export const documentDialogRequestedAction = (searchResult: SearchResult): Thunk
         return;
     }
     dispatch(showProgressBarAction())
-    axios.get(`${API_BASE_PATH}/query/document`, {
-        params: {
-            docId: searchResult.docId
-        },
+    axios.post(`${API_BASE_PATH}/query/document`, {docId: searchResult.docId}, {
         withCredentials: true
     }).then(response => {
         dispatch(hideProgressBarAction());

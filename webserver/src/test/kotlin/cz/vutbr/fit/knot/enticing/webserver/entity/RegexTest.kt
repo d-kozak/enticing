@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver.entity
 
+import cz.vutbr.fit.knot.enticing.dto.utils.regex.urlRegex
 import cz.vutbr.fit.knot.enticing.webserver.entity.ipaddress.ipRegex
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
