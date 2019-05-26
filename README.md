@@ -15,7 +15,7 @@ The whole repository is a gradle multi-project consisting of the following subpr
 * mg4j-compiler
     * All code connected with parsing, analyzing and translating mg4j-eql
 * dto
-    * Data transfer objects for communicating between components of the system.
+    * Data transfer objects for communicating between components of the backend
     * Currently contains only DTOs between webserver and indexserver(to be done)
 
 ## Build
