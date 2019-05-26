@@ -12,8 +12,14 @@ repositories {
 }
 
 dependencies {
+    implementation(project(":mg4j-compiler"))
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "javax.validation:validation-api:2.0.1.Final"
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8")
+    implementation("com.fasterxml.jackson.core:jackson-annotations:2.9.8")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.9.8")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.9.8")
 
     testImplementation("io.mockk:mockk:1.9")
     testCompile("org.assertj:assertj-core:3.11.1")
