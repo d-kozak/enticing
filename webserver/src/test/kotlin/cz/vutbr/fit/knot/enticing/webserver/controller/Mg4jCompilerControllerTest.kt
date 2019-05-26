@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver.controller
 
-import cz.vutbr.fit.knot.enticing.mg4j.compiler.ast.ErrorNode
+import cz.vutbr.fit.knot.enticing.mg4j.compiler.ast.MockNode
 import cz.vutbr.fit.knot.enticing.mg4j.compiler.dto.ParsedQuery
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
@@ -48,7 +48,7 @@ internal class Mg4jCompilerControllerTest(
     @Test
     fun `get calls compiler service`() {
 
-        val dummyDto = ParsedQuery(ErrorNode("foo"))
+        val dummyDto = ParsedQuery(MockNode())
         Mockito.`when`(compilerService.parseQuery("nertag:person (killed|visited)"))
                 .thenReturn(dummyDto)
 

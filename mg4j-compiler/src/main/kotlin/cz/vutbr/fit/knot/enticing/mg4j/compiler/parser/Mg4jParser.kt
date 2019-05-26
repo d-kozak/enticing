@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.mg4j.compiler.parser
 
-import cz.vutbr.fit.knot.enticing.mg4j.compiler.ast.ErrorNode
+import cz.vutbr.fit.knot.enticing.mg4j.compiler.ast.MockNode
 import cz.vutbr.fit.knot.enticing.mg4j.compiler.dto.ParsedQuery
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
@@ -16,7 +16,7 @@ class Mg4jParser {
                 }.let {
                     it.query()
                 }
-        val root = ErrorNode("ast node implemented yet")
+        val root = MockNode("ast node implemented yet")
         return ParsedQuery(root, errorListener.errors)
     }
 

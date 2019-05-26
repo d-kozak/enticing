@@ -30,43 +30,41 @@ public class Mg4jEqlParser extends Parser {
     @Deprecated
     public static final String[] tokenNames;
     public static final String _serializedATN =
-            "\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\31\u008e\4\2\t\2" +
+            "\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\31\u0089\4\2\t\2" +
                     "\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\3\2\7" +
                     "\2\26\n\2\f\2\16\2\31\13\2\3\2\3\2\5\2\35\n\2\3\2\3\2\3\3\3\3\3\3\6\3" +
                     "$\n\3\r\3\16\3%\3\3\3\3\3\3\3\3\5\3,\n\3\3\3\3\3\3\3\5\3\61\n\3\3\3\3" +
-                    "\3\3\3\3\3\3\3\7\38\n\3\f\3\16\3;\13\3\3\3\3\3\7\3?\n\3\f\3\16\3B\13\3" +
-                    "\3\3\3\3\5\3F\n\3\3\3\3\3\3\3\5\3K\n\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\7\3" +
-                    "T\n\3\f\3\16\3W\13\3\3\4\3\4\3\4\3\4\3\4\3\4\5\4_\n\4\3\5\3\5\3\5\3\5" +
-                    "\3\5\3\5\3\5\3\5\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3" +
-                    "\6\3\6\3\6\5\6y\n\6\3\6\3\6\3\6\3\6\7\6\177\n\6\f\6\16\6\u0082\13\6\3" +
-                    "\7\3\7\3\7\3\7\3\b\3\b\3\t\3\t\3\n\3\n\3\n\2\4\4\n\13\2\4\6\b\n\f\16\20" +
-                    "\22\2\5\3\2\27\30\3\2\13\20\3\2\24\25\2\u0098\2\27\3\2\2\2\4J\3\2\2\2" +
-                    "\6^\3\2\2\2\b`\3\2\2\2\nx\3\2\2\2\f\u0083\3\2\2\2\16\u0087\3\2\2\2\20" +
-                    "\u0089\3\2\2\2\22\u008b\3\2\2\2\24\26\5\4\3\2\25\24\3\2\2\2\26\31\3\2" +
-                    "\2\2\27\25\3\2\2\2\27\30\3\2\2\2\30\34\3\2\2\2\31\27\3\2\2\2\32\33\7\n" +
-                    "\2\2\33\35\5\n\6\2\34\32\3\2\2\2\34\35\3\2\2\2\35\36\3\2\2\2\36\37\7\2" +
-                    "\2\3\37\3\3\2\2\2 !\b\3\1\2!#\7\t\2\2\"$\5\4\3\2#\"\3\2\2\2$%\3\2\2\2" +
-                    "%#\3\2\2\2%&\3\2\2\2&\'\3\2\2\2\'(\7\t\2\2(K\3\2\2\2)*\7\30\2\2*,\7\4" +
-                    "\2\2+)\3\2\2\2+,\3\2\2\2,-\3\2\2\2-K\7\30\2\2./\7\30\2\2/\61\7\4\2\2\60" +
-                    ".\3\2\2\2\60\61\3\2\2\2\61\62\3\2\2\2\62\63\7\30\2\2\63\64\7\4\2\2\64" +
-                    "9\7\30\2\2\65\66\7\5\2\2\668\5\b\5\2\67\65\3\2\2\28;\3\2\2\29\67\3\2\2" +
-                    "\29:\3\2\2\2:K\3\2\2\2;9\3\2\2\2<@\7\21\2\2=?\5\4\3\2>=\3\2\2\2?B\3\2" +
-                    "\2\2@>\3\2\2\2@A\3\2\2\2AC\3\2\2\2B@\3\2\2\2CE\7\22\2\2DF\5\6\4\2ED\3" +
-                    "\2\2\2EF\3\2\2\2FK\3\2\2\2GH\5\22\n\2HI\5\4\3\3IK\3\2\2\2J \3\2\2\2J+" +
-                    "\3\2\2\2J\60\3\2\2\2J<\3\2\2\2JG\3\2\2\2KU\3\2\2\2LM\f\5\2\2MN\7\r\2\2" +
-                    "NT\5\4\3\6OP\f\4\2\2PQ\5\20\t\2QR\5\4\3\5RT\3\2\2\2SL\3\2\2\2SO\3\2\2" +
-                    "\2TW\3\2\2\2US\3\2\2\2UV\3\2\2\2V\5\3\2\2\2WU\3\2\2\2XY\7\3\2\2Y_\7\b" +
-                    "\2\2Z[\7\3\2\2[_\7\7\2\2\\]\7\6\2\2]_\7\27\2\2^X\3\2\2\2^Z\3\2\2\2^\\" +
-                    "\3\2\2\2_\7\3\2\2\2`a\7\21\2\2ab\7\30\2\2bc\7\23\2\2cd\7\30\2\2de\7\4" +
-                    "\2\2ef\t\2\2\2fg\7\22\2\2g\t\3\2\2\2hi\b\6\1\2ij\7\21\2\2jk\5\n\6\2kl" +
-                    "\7\22\2\2ly\3\2\2\2mn\5\f\7\2no\5\16\b\2op\5\f\7\2py\3\2\2\2qr\5\f\7\2" +
-                    "rs\5\16\b\2st\7\30\2\2ty\3\2\2\2uv\5\22\n\2vw\5\n\6\3wy\3\2\2\2xh\3\2" +
-                    "\2\2xm\3\2\2\2xq\3\2\2\2xu\3\2\2\2y\u0080\3\2\2\2z{\f\4\2\2{|\5\20\t\2" +
-                    "|}\5\n\6\5}\177\3\2\2\2~z\3\2\2\2\177\u0082\3\2\2\2\u0080~\3\2\2\2\u0080" +
-                    "\u0081\3\2\2\2\u0081\13\3\2\2\2\u0082\u0080\3\2\2\2\u0083\u0084\7\30\2" +
-                    "\2\u0084\u0085\7\23\2\2\u0085\u0086\7\30\2\2\u0086\r\3\2\2\2\u0087\u0088" +
-                    "\t\3\2\2\u0088\17\3\2\2\2\u0089\u008a\t\4\2\2\u008a\21\3\2\2\2\u008b\u008c" +
-                    "\7\26\2\2\u008c\23\3\2\2\2\20\27\34%+\609@EJSU^x\u0080";
+                    "\3\3\3\3\3\3\3\7\38\n\3\f\3\16\3;\13\3\3\3\3\3\3\3\3\3\5\3A\n\3\3\3\3" +
+                    "\3\3\3\5\3F\n\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\7\3O\n\3\f\3\16\3R\13\3\3" +
+                    "\4\3\4\3\4\3\4\3\4\3\4\5\4Z\n\4\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\6\3" +
+                    "\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\5\6t\n\6\3" +
+                    "\6\3\6\3\6\3\6\7\6z\n\6\f\6\16\6}\13\6\3\7\3\7\3\7\3\7\3\b\3\b\3\t\3\t" +
+                    "\3\n\3\n\3\n\2\4\4\n\13\2\4\6\b\n\f\16\20\22\2\5\3\2\27\30\3\2\13\20\3" +
+                    "\2\24\25\2\u0092\2\27\3\2\2\2\4E\3\2\2\2\6Y\3\2\2\2\b[\3\2\2\2\ns\3\2" +
+                    "\2\2\f~\3\2\2\2\16\u0082\3\2\2\2\20\u0084\3\2\2\2\22\u0086\3\2\2\2\24" +
+                    "\26\5\4\3\2\25\24\3\2\2\2\26\31\3\2\2\2\27\25\3\2\2\2\27\30\3\2\2\2\30" +
+                    "\34\3\2\2\2\31\27\3\2\2\2\32\33\7\n\2\2\33\35\5\n\6\2\34\32\3\2\2\2\34" +
+                    "\35\3\2\2\2\35\36\3\2\2\2\36\37\7\2\2\3\37\3\3\2\2\2 !\b\3\1\2!#\7\t\2" +
+                    "\2\"$\5\4\3\2#\"\3\2\2\2$%\3\2\2\2%#\3\2\2\2%&\3\2\2\2&\'\3\2\2\2\'(\7" +
+                    "\t\2\2(F\3\2\2\2)*\7\30\2\2*,\7\4\2\2+)\3\2\2\2+,\3\2\2\2,-\3\2\2\2-F" +
+                    "\7\30\2\2./\7\30\2\2/\61\7\4\2\2\60.\3\2\2\2\60\61\3\2\2\2\61\62\3\2\2" +
+                    "\2\62\63\7\30\2\2\63\64\7\4\2\2\649\7\30\2\2\65\66\7\5\2\2\668\5\b\5\2" +
+                    "\67\65\3\2\2\28;\3\2\2\29\67\3\2\2\29:\3\2\2\2:F\3\2\2\2;9\3\2\2\2<=\7" +
+                    "\21\2\2=>\5\4\3\2>@\7\22\2\2?A\5\6\4\2@?\3\2\2\2@A\3\2\2\2AF\3\2\2\2B" +
+                    "C\5\22\n\2CD\5\4\3\3DF\3\2\2\2E \3\2\2\2E+\3\2\2\2E\60\3\2\2\2E<\3\2\2" +
+                    "\2EB\3\2\2\2FP\3\2\2\2GH\f\5\2\2HI\7\r\2\2IO\5\4\3\6JK\f\4\2\2KL\5\20" +
+                    "\t\2LM\5\4\3\5MO\3\2\2\2NG\3\2\2\2NJ\3\2\2\2OR\3\2\2\2PN\3\2\2\2PQ\3\2" +
+                    "\2\2Q\5\3\2\2\2RP\3\2\2\2ST\7\3\2\2TZ\7\b\2\2UV\7\3\2\2VZ\7\7\2\2WX\7" +
+                    "\6\2\2XZ\7\27\2\2YS\3\2\2\2YU\3\2\2\2YW\3\2\2\2Z\7\3\2\2\2[\\\7\21\2\2" +
+                    "\\]\7\30\2\2]^\7\23\2\2^_\7\30\2\2_`\7\4\2\2`a\t\2\2\2ab\7\22\2\2b\t\3" +
+                    "\2\2\2cd\b\6\1\2de\7\21\2\2ef\5\n\6\2fg\7\22\2\2gt\3\2\2\2hi\5\f\7\2i" +
+                    "j\5\16\b\2jk\5\f\7\2kt\3\2\2\2lm\5\f\7\2mn\5\16\b\2no\7\30\2\2ot\3\2\2" +
+                    "\2pq\5\22\n\2qr\5\n\6\3rt\3\2\2\2sc\3\2\2\2sh\3\2\2\2sl\3\2\2\2sp\3\2" +
+                    "\2\2t{\3\2\2\2uv\f\4\2\2vw\5\20\t\2wx\5\n\6\5xz\3\2\2\2yu\3\2\2\2z}\3" +
+                    "\2\2\2{y\3\2\2\2{|\3\2\2\2|\13\3\2\2\2}{\3\2\2\2~\177\7\30\2\2\177\u0080" +
+                    "\7\23\2\2\u0080\u0081\7\30\2\2\u0081\r\3\2\2\2\u0082\u0083\t\3\2\2\u0083" +
+                    "\17\3\2\2\2\u0084\u0085\t\4\2\2\u0085\21\3\2\2\2\u0086\u0087\7\26\2\2" +
+                    "\u0087\23\3\2\2\2\17\27\34%+\609@ENPYs{";
     public static final ATN _ATN =
             new ATNDeserializer().deserialize(_serializedATN.toCharArray());
     protected static final DFA[] _decisionToDFA;
@@ -217,14 +215,13 @@ public class Mg4jEqlParser extends Parser {
         QueryElemContext _prevctx = _localctx;
         int _startState = 2;
         enterRecursionRule(_localctx, 2, RULE_queryElem, _p);
-        int _la;
         try {
             int _alt;
             enterOuterAlt(_localctx, 1);
             {
-                setState(72);
+                setState(67);
                 _errHandler.sync(this);
-                switch (getInterpreter().adaptivePredict(_input, 8, _ctx)) {
+                switch (getInterpreter().adaptivePredict(_input, 7, _ctx)) {
                     case 1: {
                         _localctx = new SequenceContext(_localctx);
                         _ctx = _localctx;
@@ -321,27 +318,15 @@ public class Mg4jEqlParser extends Parser {
                         _prevctx = _localctx;
                         setState(58);
                         match(PAREN_LEFT);
+                        setState(59);
+                        queryElem(0);
+                        setState(60);
+                        match(PAREN_RIGHT);
                         setState(62);
                         _errHandler.sync(this);
-                        _la = _input.LA(1);
-                        while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << QUOTATION) | (1L << PAREN_LEFT) | (1L << NOT) | (1L << WORD))) != 0)) {
-                            {
-                                {
-                                    setState(59);
-                                    queryElem(0);
-                                }
-                            }
-                            setState(64);
-                            _errHandler.sync(this);
-                            _la = _input.LA(1);
-                        }
-                        setState(65);
-                        match(PAREN_RIGHT);
-                        setState(67);
-                        _errHandler.sync(this);
-                        switch (getInterpreter().adaptivePredict(_input, 7, _ctx)) {
+                        switch (getInterpreter().adaptivePredict(_input, 6, _ctx)) {
                             case 1: {
-                                setState(66);
+                                setState(61);
                                 limitation();
                             }
                             break;
@@ -352,55 +337,55 @@ public class Mg4jEqlParser extends Parser {
                         _localctx = new UnaryOperationContext(_localctx);
                         _ctx = _localctx;
                         _prevctx = _localctx;
-                        setState(69);
+                        setState(64);
                         unaryOp();
-                        setState(70);
+                        setState(65);
                         queryElem(1);
                     }
                     break;
                 }
                 _ctx.stop = _input.LT(-1);
-                setState(83);
+                setState(78);
                 _errHandler.sync(this);
-                _alt = getInterpreter().adaptivePredict(_input, 10, _ctx);
+                _alt = getInterpreter().adaptivePredict(_input, 9, _ctx);
                 while (_alt != 2 && _alt != org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER) {
                     if (_alt == 1) {
                         if (_parseListeners != null) triggerExitRuleEvent();
                         _prevctx = _localctx;
                         {
-                            setState(81);
+                            setState(76);
                             _errHandler.sync(this);
-                            switch (getInterpreter().adaptivePredict(_input, 9, _ctx)) {
+                            switch (getInterpreter().adaptivePredict(_input, 8, _ctx)) {
                                 case 1: {
                                     _localctx = new OrderOperationContext(new QueryElemContext(_parentctx, _parentState));
                                     pushNewRecursionContext(_localctx, _startState, RULE_queryElem);
-                                    setState(74);
+                                    setState(69);
                                     if (!(precpred(_ctx, 3)))
                                         throw new FailedPredicateException(this, "precpred(_ctx, 3)");
-                                    setState(75);
+                                    setState(70);
                                     match(LT);
-                                    setState(76);
+                                    setState(71);
                                     queryElem(4);
                                 }
                                 break;
                                 case 2: {
                                     _localctx = new BinaryOperationContext(new QueryElemContext(_parentctx, _parentState));
                                     pushNewRecursionContext(_localctx, _startState, RULE_queryElem);
-                                    setState(77);
+                                    setState(72);
                                     if (!(precpred(_ctx, 2)))
                                         throw new FailedPredicateException(this, "precpred(_ctx, 2)");
-                                    setState(78);
+                                    setState(73);
                                     binaryOp();
-                                    setState(79);
+                                    setState(74);
                                     queryElem(3);
                                 }
                                 break;
                             }
                         }
                     }
-                    setState(85);
+                    setState(80);
                     _errHandler.sync(this);
-                    _alt = getInterpreter().adaptivePredict(_input, 10, _ctx);
+                    _alt = getInterpreter().adaptivePredict(_input, 9, _ctx);
                 }
             }
         } catch (RecognitionException re) {
@@ -417,16 +402,16 @@ public class Mg4jEqlParser extends Parser {
         LimitationContext _localctx = new LimitationContext(_ctx, getState());
         enterRule(_localctx, 4, RULE_limitation);
         try {
-            setState(92);
+            setState(87);
             _errHandler.sync(this);
-            switch (getInterpreter().adaptivePredict(_input, 11, _ctx)) {
+            switch (getInterpreter().adaptivePredict(_input, 10, _ctx)) {
                 case 1:
                     _localctx = new ParContext(_localctx);
                     enterOuterAlt(_localctx, 1);
                 {
-                    setState(86);
+                    setState(81);
                     match(MINUS);
-                    setState(87);
+                    setState(82);
                     match(PAR);
                 }
                 break;
@@ -434,9 +419,9 @@ public class Mg4jEqlParser extends Parser {
                     _localctx = new SentContext(_localctx);
                     enterOuterAlt(_localctx, 2);
                 {
-                    setState(88);
+                    setState(83);
                     match(MINUS);
-                    setState(89);
+                    setState(84);
                     match(SENT);
                 }
                 break;
@@ -444,9 +429,9 @@ public class Mg4jEqlParser extends Parser {
                     _localctx = new ProximityContext(_localctx);
                     enterOuterAlt(_localctx, 3);
                 {
-                    setState(90);
+                    setState(85);
                     match(SIMILARITY);
-                    setState(91);
+                    setState(86);
                     match(NUMBER);
                 }
                 break;
@@ -468,17 +453,17 @@ public class Mg4jEqlParser extends Parser {
         try {
             enterOuterAlt(_localctx, 1);
             {
-                setState(94);
+                setState(89);
                 match(PAREN_LEFT);
-                setState(95);
+                setState(90);
                 match(WORD);
-                setState(96);
+                setState(91);
                 match(DOT);
-                setState(97);
+                setState(92);
                 match(WORD);
-                setState(98);
+                setState(93);
                 match(COLON);
-                setState(99);
+                setState(94);
                 _la = _input.LA(1);
                 if (!(_la == NUMBER || _la == WORD)) {
                     _errHandler.recoverInline(this);
@@ -487,7 +472,7 @@ public class Mg4jEqlParser extends Parser {
                     _errHandler.reportMatch(this);
                     consume();
                 }
-                setState(100);
+                setState(95);
                 match(PAREN_RIGHT);
             }
         } catch (RecognitionException re) {
@@ -515,48 +500,48 @@ public class Mg4jEqlParser extends Parser {
             int _alt;
             enterOuterAlt(_localctx, 1);
             {
-                setState(118);
+                setState(113);
                 _errHandler.sync(this);
-                switch (getInterpreter().adaptivePredict(_input, 12, _ctx)) {
+                switch (getInterpreter().adaptivePredict(_input, 11, _ctx)) {
                     case 1: {
-                        setState(103);
+                        setState(98);
                         match(PAREN_LEFT);
-                        setState(104);
+                        setState(99);
                         constraint(0);
-                        setState(105);
+                        setState(100);
                         match(PAREN_RIGHT);
                     }
                     break;
                     case 2: {
-                        setState(107);
+                        setState(102);
                         reference();
-                        setState(108);
+                        setState(103);
                         relOp();
-                        setState(109);
+                        setState(104);
                         reference();
                     }
                     break;
                     case 3: {
-                        setState(111);
+                        setState(106);
                         reference();
-                        setState(112);
+                        setState(107);
                         relOp();
-                        setState(113);
+                        setState(108);
                         match(WORD);
                     }
                     break;
                     case 4: {
-                        setState(115);
+                        setState(110);
                         unaryOp();
-                        setState(116);
+                        setState(111);
                         constraint(1);
                     }
                     break;
                 }
                 _ctx.stop = _input.LT(-1);
-                setState(126);
+                setState(121);
                 _errHandler.sync(this);
-                _alt = getInterpreter().adaptivePredict(_input, 13, _ctx);
+                _alt = getInterpreter().adaptivePredict(_input, 12, _ctx);
                 while (_alt != 2 && _alt != org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER) {
                     if (_alt == 1) {
                         if (_parseListeners != null) triggerExitRuleEvent();
@@ -565,18 +550,18 @@ public class Mg4jEqlParser extends Parser {
                             {
                                 _localctx = new ConstraintContext(_parentctx, _parentState);
                                 pushNewRecursionContext(_localctx, _startState, RULE_constraint);
-                                setState(120);
+                                setState(115);
                                 if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
-                                setState(121);
+                                setState(116);
                                 binaryOp();
-                                setState(122);
+                                setState(117);
                                 constraint(3);
                             }
                         }
                     }
-                    setState(128);
+                    setState(123);
                     _errHandler.sync(this);
-                    _alt = getInterpreter().adaptivePredict(_input, 13, _ctx);
+                    _alt = getInterpreter().adaptivePredict(_input, 12, _ctx);
                 }
             }
         } catch (RecognitionException re) {
@@ -595,11 +580,11 @@ public class Mg4jEqlParser extends Parser {
         try {
             enterOuterAlt(_localctx, 1);
             {
-                setState(129);
+                setState(124);
                 match(WORD);
-                setState(130);
+                setState(125);
                 match(DOT);
-                setState(131);
+                setState(126);
                 match(WORD);
             }
         } catch (RecognitionException re) {
@@ -619,7 +604,7 @@ public class Mg4jEqlParser extends Parser {
         try {
             enterOuterAlt(_localctx, 1);
             {
-                setState(133);
+                setState(128);
                 _la = _input.LA(1);
                 if (!((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << EQ) | (1L << NEQ) | (1L << LT) | (1L << LE) | (1L << GT) | (1L << GE))) != 0))) {
                     _errHandler.recoverInline(this);
@@ -646,7 +631,7 @@ public class Mg4jEqlParser extends Parser {
         try {
             enterOuterAlt(_localctx, 1);
             {
-                setState(135);
+                setState(130);
                 _la = _input.LA(1);
                 if (!(_la == OR || _la == AND)) {
                     _errHandler.recoverInline(this);
@@ -672,7 +657,7 @@ public class Mg4jEqlParser extends Parser {
         try {
             enterOuterAlt(_localctx, 1);
             {
-                setState(137);
+                setState(132);
                 match(NOT);
             }
         } catch (RecognitionException re) {
@@ -825,16 +810,12 @@ public class Mg4jEqlParser extends Parser {
             return getToken(Mg4jEqlParser.PAREN_LEFT, 0);
         }
 
+        public QueryElemContext queryElem() {
+            return getRuleContext(QueryElemContext.class, 0);
+        }
+
         public TerminalNode PAREN_RIGHT() {
             return getToken(Mg4jEqlParser.PAREN_RIGHT, 0);
-        }
-
-        public List<QueryElemContext> queryElem() {
-            return getRuleContexts(QueryElemContext.class);
-        }
-
-        public QueryElemContext queryElem(int i) {
-            return getRuleContext(QueryElemContext.class, i);
         }
 
         public LimitationContext limitation() {

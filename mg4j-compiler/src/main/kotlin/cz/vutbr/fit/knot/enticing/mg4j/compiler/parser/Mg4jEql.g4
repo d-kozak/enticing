@@ -7,7 +7,7 @@ queryElem
     : QUOTATION queryElem+ QUOTATION # sequence
     | (WORD COLON)? WORD # word
     | (WORD COLON)? WORD COLON WORD (EXPONENT attribute)* # nertag
-    | PAREN_LEFT queryElem* PAREN_RIGHT limitation? # paren
+    | PAREN_LEFT queryElem PAREN_RIGHT limitation? # paren
     | queryElem LT queryElem # orderOperation
     | queryElem binaryOp queryElem # binaryOperation
     | unaryOp queryElem # unaryOperation
