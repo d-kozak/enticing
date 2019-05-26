@@ -11,7 +11,7 @@ import {SearchQuery} from "../entities/SearchQuery";
 
 export const firstResult: SearchResult = {
     id: 0,
-    docId: 1,
+    docId: "c87d744d-62cc-49be-82e4-8ee3a4e91873",
     location: 0,
     size: 42,
     snippet: {
@@ -26,7 +26,7 @@ export const firstResult: SearchResult = {
 
 export const secondResult: SearchResult = {
     id: 1,
-    docId: 2,
+    docId: "9bd44ee8-563f-4a49-a5b0-ab2ffa1fe0e7",
     location: 0,
     size: 42,
     snippet: {
@@ -41,7 +41,7 @@ export const secondResult: SearchResult = {
 
 export const thirdResult: SearchResult = {
     id: 2,
-    docId: 3,
+    docId: "93dc171e-247b-47e1-806d-42f6839a07a4",
     location: 0,
     size: 42,
     snippet: {
