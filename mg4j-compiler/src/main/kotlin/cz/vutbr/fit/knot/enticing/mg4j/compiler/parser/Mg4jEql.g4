@@ -1,21 +1,27 @@
 grammar Mg4jEql;
 
-root: query+ (QUERY_CONSTRAINT_SEPARATOR constraint)? EOF;
+/** start rule of the grammar, represents the whole search query with constraints */
+root: query (QUERY_CONSTRAINT_SEPARATOR constraint)? EOF;
 
-query: identifier? queryElem align? limitation?;
+/** search query */
+query: queryPart+;
 
-queryElem
-    : QUOTATION query+ QUOTATION # sequence
-    | indexOperator? literal# lit
-    | PAREN_LEFT query+ PAREN_RIGHT # paren
-    | queryElem LT query # order
-    | queryElem binaryOperator query # binaryOperation
-    | unaryOperator query # unaryOperation
+/** one element in the query */
+queryPart: identifier? queryCore alignOperator? limitation?;
+
+/** by core it is meant that this element does not contain any 'decorations' (identifier,limitation)*/
+queryCore
+    : QUOTATION queryPart+ QUOTATION # sequence
+    | indexOperator? literal # lit
+    | PAREN_LEFT queryPart+ PAREN_RIGHT # paren
+    | queryCore LT queryPart # order
+    | queryCore binaryOperator queryPart # binaryOperation
+    | unaryOperator queryPart # unaryOperation
     ;
 
 literal: WORD | NUMBER;
 
-align : EXPONENT query;
+alignOperator : EXPONENT queryPart;
 
 identifier: WORD ARROW;
 
