@@ -14,7 +14,7 @@ class Mg4jParser {
                     it.removeErrorListeners()
                     it.addErrorListener(errorListener)
                 }.let {
-                    it.query()
+                    it.root()
                 }
         val root = MockNode("ast node implemented yet")
         return ParsedQuery(root, errorListener.errors)

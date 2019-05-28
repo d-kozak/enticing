@@ -18,6 +18,17 @@ public class Mg4jEqlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
+    public T visitRoot(Mg4jEqlParser.RootContext ctx) {
+        return visitChildren(ctx);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation returns the result of calling
+     * {@link #visitChildren} on {@code ctx}.</p>
+     */
+    @Override
     public T visitQuery(Mg4jEqlParser.QueryContext ctx) {
         return visitChildren(ctx);
     }
@@ -51,18 +62,7 @@ public class Mg4jEqlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitNertag(Mg4jEqlParser.NertagContext ctx) {
-        return visitChildren(ctx);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation returns the result of calling
-     * {@link #visitChildren} on {@code ctx}.</p>
-     */
-    @Override
-    public T visitOrderOperation(Mg4jEqlParser.OrderOperationContext ctx) {
+    public T visitLit(Mg4jEqlParser.LitContext ctx) {
         return visitChildren(ctx);
     }
 
@@ -95,7 +95,40 @@ public class Mg4jEqlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitWord(Mg4jEqlParser.WordContext ctx) {
+    public T visitOrder(Mg4jEqlParser.OrderContext ctx) {
+        return visitChildren(ctx);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation returns the result of calling
+     * {@link #visitChildren} on {@code ctx}.</p>
+     */
+    @Override
+    public T visitLiteral(Mg4jEqlParser.LiteralContext ctx) {
+        return visitChildren(ctx);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation returns the result of calling
+     * {@link #visitChildren} on {@code ctx}.</p>
+     */
+    @Override
+    public T visitAlign(Mg4jEqlParser.AlignContext ctx) {
+        return visitChildren(ctx);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation returns the result of calling
+     * {@link #visitChildren} on {@code ctx}.</p>
+     */
+    @Override
+    public T visitIdentifier(Mg4jEqlParser.IdentifierContext ctx) {
         return visitChildren(ctx);
     }
 
@@ -139,7 +172,7 @@ public class Mg4jEqlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitAttribute(Mg4jEqlParser.AttributeContext ctx) {
+    public T visitIndexOperator(Mg4jEqlParser.IndexOperatorContext ctx) {
         return visitChildren(ctx);
     }
 
@@ -183,7 +216,7 @@ public class Mg4jEqlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitBinaryOp(Mg4jEqlParser.BinaryOpContext ctx) {
+    public T visitBinaryOperator(Mg4jEqlParser.BinaryOperatorContext ctx) {
         return visitChildren(ctx);
     }
 
@@ -194,7 +227,7 @@ public class Mg4jEqlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitUnaryOp(Mg4jEqlParser.UnaryOpContext ctx) {
+    public T visitUnaryOperator(Mg4jEqlParser.UnaryOperatorContext ctx) {
         return visitChildren(ctx);
     }
 }

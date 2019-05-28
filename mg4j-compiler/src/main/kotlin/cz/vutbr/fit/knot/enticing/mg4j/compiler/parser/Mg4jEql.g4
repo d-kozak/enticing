@@ -1,17 +1,23 @@
 grammar Mg4jEql;
 
+root: query+ (QUERY_CONSTRAINT_SEPARATOR constraint)? EOF;
 
-query: queryElem* (SEPARATOR constraint)? EOF;
+query: identifier? queryElem align? limitation?;
 
 queryElem
-    : QUOTATION queryElem+ QUOTATION # sequence
-    | (WORD COLON)? WORD # word
-    | (WORD COLON)? WORD COLON WORD (EXPONENT attribute)* # nertag
-    | PAREN_LEFT queryElem+ PAREN_RIGHT limitation? # paren
-    | queryElem LT queryElem # orderOperation
-    | queryElem binaryOp queryElem # binaryOperation
-    | unaryOp queryElem # unaryOperation
+    : QUOTATION query+ QUOTATION # sequence
+    | indexOperator? literal# lit
+    | PAREN_LEFT query+ PAREN_RIGHT # paren
+    | queryElem LT query # order
+    | queryElem binaryOperator query # binaryOperation
+    | unaryOperator query # unaryOperation
     ;
+
+literal: WORD | NUMBER;
+
+align : EXPONENT query;
+
+identifier: WORD ARROW;
 
 limitation
     : MINUS PAR # par
@@ -19,16 +25,14 @@ limitation
     | SIMILARITY NUMBER # proximity
     ;
 
-attribute
-    : PAREN_LEFT WORD DOT WORD COLON (WORD|NUMBER) PAREN_RIGHT
-    ;
+indexOperator: (WORD DOT)* WORD COLON;
 
 constraint
     : PAREN_LEFT constraint PAREN_RIGHT
     | reference relOp reference
     | reference relOp WORD
-    | constraint binaryOp constraint
-    | unaryOp constraint
+    | constraint binaryOperator constraint
+    | unaryOperator constraint
     ;
 
 reference : WORD DOT WORD;
@@ -42,17 +46,18 @@ relOp
     | GE
     ;
 
-binaryOp
+binaryOperator
     : AND
     | OR
     ;
 
-unaryOp
+unaryOperator
     : NOT
     ;
 
 
-
+// tokens
+ARROW: '<-';
 MINUS:'-';
 COLON:':';
 EXPONENT: '^';
@@ -61,7 +66,7 @@ SENT: '_SENT_';
 PAR: '_PAR_';
 QUOTATION: '"';
 
-SEPARATOR:'&&';
+QUERY_CONSTRAINT_SEPARATOR:'&&';
 
 EQ: '=';
 NEQ: '!=';
@@ -72,10 +77,14 @@ GE :'>=';
 PAREN_LEFT : '(';
 PAREN_RIGHT : ')';
 DOT: '.';
-OR: '|' | 'or';
+OR: '|' | 'OR' | 'or';
 AND: '&' | 'and';
 NOT: '!' | 'not';
-NUMBER : [0-9]+;
-WORD : [a-zA-Z0-9_]+;
 
 WS : [ \t] -> skip;
+
+NUMBER : [0-9]+;
+WORD : ANY_VALID_CHAR+ WILDCARD?;
+
+fragment ANY_VALID_CHAR : [a-zA-Z0-9_];
+fragment WILDCARD:'*';

@@ -11,6 +11,14 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface Mg4jEqlVisitor<T> extends ParseTreeVisitor<T> {
     /**
+     * Visit a parse tree produced by {@link Mg4jEqlParser#root}.
+     *
+     * @param ctx the parse tree
+     * @return the visitor result
+     */
+    T visitRoot(Mg4jEqlParser.RootContext ctx);
+
+    /**
      * Visit a parse tree produced by {@link Mg4jEqlParser#query}.
      *
      * @param ctx the parse tree
@@ -37,22 +45,13 @@ public interface Mg4jEqlVisitor<T> extends ParseTreeVisitor<T> {
     T visitParen(Mg4jEqlParser.ParenContext ctx);
 
     /**
-     * Visit a parse tree produced by the {@code nertag}
+     * Visit a parse tree produced by the {@code lit}
      * labeled alternative in {@link Mg4jEqlParser#queryElem}.
      *
      * @param ctx the parse tree
      * @return the visitor result
      */
-    T visitNertag(Mg4jEqlParser.NertagContext ctx);
-
-    /**
-     * Visit a parse tree produced by the {@code orderOperation}
-     * labeled alternative in {@link Mg4jEqlParser#queryElem}.
-     *
-     * @param ctx the parse tree
-     * @return the visitor result
-     */
-    T visitOrderOperation(Mg4jEqlParser.OrderOperationContext ctx);
+    T visitLit(Mg4jEqlParser.LitContext ctx);
 
     /**
      * Visit a parse tree produced by the {@code binaryOperation}
@@ -73,13 +72,37 @@ public interface Mg4jEqlVisitor<T> extends ParseTreeVisitor<T> {
     T visitUnaryOperation(Mg4jEqlParser.UnaryOperationContext ctx);
 
     /**
-     * Visit a parse tree produced by the {@code word}
+     * Visit a parse tree produced by the {@code order}
      * labeled alternative in {@link Mg4jEqlParser#queryElem}.
      *
      * @param ctx the parse tree
      * @return the visitor result
      */
-    T visitWord(Mg4jEqlParser.WordContext ctx);
+    T visitOrder(Mg4jEqlParser.OrderContext ctx);
+
+    /**
+     * Visit a parse tree produced by {@link Mg4jEqlParser#literal}.
+     *
+     * @param ctx the parse tree
+     * @return the visitor result
+     */
+    T visitLiteral(Mg4jEqlParser.LiteralContext ctx);
+
+    /**
+     * Visit a parse tree produced by {@link Mg4jEqlParser#align}.
+     *
+     * @param ctx the parse tree
+     * @return the visitor result
+     */
+    T visitAlign(Mg4jEqlParser.AlignContext ctx);
+
+    /**
+     * Visit a parse tree produced by {@link Mg4jEqlParser#identifier}.
+     *
+     * @param ctx the parse tree
+     * @return the visitor result
+     */
+    T visitIdentifier(Mg4jEqlParser.IdentifierContext ctx);
 
     /**
      * Visit a parse tree produced by the {@code par}
@@ -109,12 +132,12 @@ public interface Mg4jEqlVisitor<T> extends ParseTreeVisitor<T> {
     T visitProximity(Mg4jEqlParser.ProximityContext ctx);
 
     /**
-     * Visit a parse tree produced by {@link Mg4jEqlParser#attribute}.
+     * Visit a parse tree produced by {@link Mg4jEqlParser#indexOperator}.
      *
      * @param ctx the parse tree
      * @return the visitor result
      */
-    T visitAttribute(Mg4jEqlParser.AttributeContext ctx);
+    T visitIndexOperator(Mg4jEqlParser.IndexOperatorContext ctx);
 
     /**
      * Visit a parse tree produced by {@link Mg4jEqlParser#constraint}.
@@ -141,18 +164,18 @@ public interface Mg4jEqlVisitor<T> extends ParseTreeVisitor<T> {
     T visitRelOp(Mg4jEqlParser.RelOpContext ctx);
 
     /**
-     * Visit a parse tree produced by {@link Mg4jEqlParser#binaryOp}.
+     * Visit a parse tree produced by {@link Mg4jEqlParser#binaryOperator}.
      *
      * @param ctx the parse tree
      * @return the visitor result
      */
-    T visitBinaryOp(Mg4jEqlParser.BinaryOpContext ctx);
+    T visitBinaryOperator(Mg4jEqlParser.BinaryOperatorContext ctx);
 
     /**
-     * Visit a parse tree produced by {@link Mg4jEqlParser#unaryOp}.
+     * Visit a parse tree produced by {@link Mg4jEqlParser#unaryOperator}.
      *
      * @param ctx the parse tree
      * @return the visitor result
      */
-    T visitUnaryOp(Mg4jEqlParser.UnaryOpContext ctx);
+    T visitUnaryOperator(Mg4jEqlParser.UnaryOperatorContext ctx);
 }
