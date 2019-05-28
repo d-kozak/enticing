@@ -1,15 +1,20 @@
 grammar Mg4jEql;
+
 /**
  * Parser rules
  */
-
 /** start rule of the grammar, represents the whole search query with constraints */
 root: query (QUERY_CONSTRAINT_SEPARATOR constraint)? EOF;
 
-/** search query */
+
+/**
+* Serch query rules
+*/
+
+/** search query without constraints */
 query: queryElem+;
 
-/** one element in the query */
+/** one element in the search query */
 queryElem: assignment? queryCore alignOperator? limitation?;
 
 /** by core it is meant that this element does not contain any 'decorations' (identifier,limitation) */
@@ -22,8 +27,7 @@ queryCore
     | unaryOperator queryElem # unaryOperation
     ;
 
-/** literals of the query language */
-literal: WORD | NUMBER;
+
 
 /** align operator to express queries over multiple indexes in the same document position */
 alignOperator : EXPONENT queryElem;
@@ -41,6 +45,13 @@ limitation
 /** for accessing a different index */
 indexOperator: (WORD DOT)* WORD COLON;
 
+/** literals of the query language */
+literal: WORD | NUMBER;
+
+/**
+* Constraints rules
+*/
+
 /** global contraints */
 constraint
     : PAREN_LEFT constraint PAREN_RIGHT
@@ -52,6 +63,10 @@ constraint
 
 /** reference to a part of the search query */
 reference : WORD DOT WORD;
+
+/**
+* Shared rules
+*/
 
 /** comparison operators */
 comparisonOperator
