@@ -124,18 +124,6 @@ public class Mg4jEqlBaseListener implements Mg4jEqlListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLiteral(Mg4jEqlParser.LiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLiteral(Mg4jEqlParser.LiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterAlignOperator(Mg4jEqlParser.AlignOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -204,6 +192,24 @@ public class Mg4jEqlBaseListener implements Mg4jEqlListener {
 	 */
 	@Override public void exitIndexOperator(Mg4jEqlParser.IndexOperatorContext ctx) { }
 	/**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void enterLiteral(Mg4jEqlParser.LiteralContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void exitLiteral(Mg4jEqlParser.LiteralContext ctx) {
+    }
+
+    /**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>

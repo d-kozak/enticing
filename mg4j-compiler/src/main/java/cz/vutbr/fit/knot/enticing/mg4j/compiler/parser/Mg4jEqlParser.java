@@ -1,13 +1,17 @@
 // Generated from /home/dkozak/projects/knot/enticing/mg4j-compiler/src/main/kotlin/cz/vutbr/fit/knot/enticing/mg4j/compiler/parser/Mg4jEql.g4 by ANTLR 4.7.2
 package cz.vutbr.fit.knot.enticing.mg4j.compiler.parser;
-import org.antlr.v4.runtime.atn.*;
-import org.antlr.v4.runtime.dfa.DFA;
+
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.misc.*;
-import org.antlr.v4.runtime.tree.*;
+import org.antlr.v4.runtime.atn.ATN;
+import org.antlr.v4.runtime.atn.ATNDeserializer;
+import org.antlr.v4.runtime.atn.ParserATNSimulator;
+import org.antlr.v4.runtime.atn.PredictionContextCache;
+import org.antlr.v4.runtime.dfa.DFA;
+import org.antlr.v4.runtime.tree.ParseTreeListener;
+import org.antlr.v4.runtime.tree.ParseTreeVisitor;
+import org.antlr.v4.runtime.tree.TerminalNode;
+
 import java.util.List;
-import java.util.Iterator;
-import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class Mg4jEqlParser extends Parser {
@@ -22,17 +26,53 @@ public class Mg4jEqlParser extends Parser {
 		PAREN_LEFT=16, PAREN_RIGHT=17, DOT=18, OR=19, AND=20, NOT=21, NUMBER=22, 
 		WORD=23, WS=24;
 	public static final int
-		RULE_root = 0, RULE_query = 1, RULE_queryElem = 2, RULE_queryCore = 3, 
-		RULE_literal = 4, RULE_alignOperator = 5, RULE_assignment = 6, RULE_limitation = 7, 
-		RULE_indexOperator = 8, RULE_constraint = 9, RULE_reference = 10, RULE_comparisonOperator = 11, 
+		RULE_root = 0, RULE_query = 1, RULE_queryElem = 2, RULE_queryCore = 3,
+            RULE_alignOperator = 4, RULE_assignment = 5, RULE_limitation = 6, RULE_indexOperator = 7,
+            RULE_literal = 8, RULE_constraint = 9, RULE_reference = 10, RULE_comparisonOperator = 11,
 		RULE_binaryOperator = 12, RULE_unaryOperator = 13;
-	private static String[] makeRuleNames() {
-		return new String[] {
-			"root", "query", "queryElem", "queryCore", "literal", "alignOperator", 
-			"assignment", "limitation", "indexOperator", "constraint", "reference", 
-			"comparisonOperator", "binaryOperator", "unaryOperator"
-		};
-	}
+    public static final String _serializedATN =
+            "\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\32\u009a\4\2\t\2" +
+                    "\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13" +
+                    "\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\3\2\3\2\3\2\5\2\"\n\2\3\2\3" +
+                    "\2\3\3\6\3\'\n\3\r\3\16\3(\3\4\5\4,\n\4\3\4\3\4\5\4\60\n\4\3\4\5\4\63" +
+                    "\n\4\3\5\3\5\3\5\6\58\n\5\r\5\16\59\3\5\3\5\3\5\5\5?\n\5\3\5\3\5\3\5\6" +
+                    "\5D\n\5\r\5\16\5E\3\5\3\5\3\5\3\5\3\5\5\5M\n\5\3\5\3\5\3\5\3\5\3\5\3\5" +
+                    "\3\5\7\5V\n\5\f\5\16\5Y\13\5\3\6\3\6\3\6\3\7\3\7\3\7\3\b\3\b\3\b\3\b\3" +
+                    "\b\3\b\5\bg\n\b\3\t\3\t\7\tk\n\t\f\t\16\tn\13\t\3\t\3\t\3\t\3\n\3\n\3" +
+                    "\13\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3" +
+                    "\13\3\13\5\13\u0085\n\13\3\13\3\13\3\13\3\13\7\13\u008b\n\13\f\13\16\13" +
+                    "\u008e\13\13\3\f\3\f\3\f\3\f\3\r\3\r\3\16\3\16\3\17\3\17\3\17\2\4\b\24" +
+                    "\20\2\4\6\b\n\f\16\20\22\24\26\30\32\34\2\5\3\2\30\31\3\2\f\21\3\2\25" +
+                    "\26\2\u009f\2\36\3\2\2\2\4&\3\2\2\2\6+\3\2\2\2\bL\3\2\2\2\nZ\3\2\2\2\f" +
+                    "]\3\2\2\2\16f\3\2\2\2\20l\3\2\2\2\22r\3\2\2\2\24\u0084\3\2\2\2\26\u008f" +
+                    "\3\2\2\2\30\u0093\3\2\2\2\32\u0095\3\2\2\2\34\u0097\3\2\2\2\36!\5\4\3" +
+                    "\2\37 \7\13\2\2 \"\5\24\13\2!\37\3\2\2\2!\"\3\2\2\2\"#\3\2\2\2#$\7\2\2" +
+                    "\3$\3\3\2\2\2%\'\5\6\4\2&%\3\2\2\2\'(\3\2\2\2(&\3\2\2\2()\3\2\2\2)\5\3" +
+                    "\2\2\2*,\5\f\7\2+*\3\2\2\2+,\3\2\2\2,-\3\2\2\2-/\5\b\5\2.\60\5\n\6\2/" +
+                    ".\3\2\2\2/\60\3\2\2\2\60\62\3\2\2\2\61\63\5\16\b\2\62\61\3\2\2\2\62\63" +
+                    "\3\2\2\2\63\7\3\2\2\2\64\65\b\5\1\2\65\67\7\n\2\2\668\5\6\4\2\67\66\3" +
+                    "\2\2\289\3\2\2\29\67\3\2\2\29:\3\2\2\2:;\3\2\2\2;<\7\n\2\2<M\3\2\2\2=" +
+                    "?\5\20\t\2>=\3\2\2\2>?\3\2\2\2?@\3\2\2\2@M\5\22\n\2AC\7\22\2\2BD\5\6\4" +
+                    "\2CB\3\2\2\2DE\3\2\2\2EC\3\2\2\2EF\3\2\2\2FG\3\2\2\2GH\7\23\2\2HM\3\2" +
+                    "\2\2IJ\5\34\17\2JK\5\6\4\2KM\3\2\2\2L\64\3\2\2\2L>\3\2\2\2LA\3\2\2\2L" +
+                    "I\3\2\2\2MW\3\2\2\2NO\f\5\2\2OP\7\16\2\2PV\5\6\4\2QR\f\4\2\2RS\5\32\16" +
+                    "\2ST\5\6\4\2TV\3\2\2\2UN\3\2\2\2UQ\3\2\2\2VY\3\2\2\2WU\3\2\2\2WX\3\2\2" +
+                    "\2X\t\3\2\2\2YW\3\2\2\2Z[\7\6\2\2[\\\5\6\4\2\\\13\3\2\2\2]^\7\31\2\2^" +
+                    "_\7\3\2\2_\r\3\2\2\2`a\7\4\2\2ag\7\t\2\2bc\7\4\2\2cg\7\b\2\2de\7\7\2\2" +
+                    "eg\7\30\2\2f`\3\2\2\2fb\3\2\2\2fd\3\2\2\2g\17\3\2\2\2hi\7\31\2\2ik\7\24" +
+                    "\2\2jh\3\2\2\2kn\3\2\2\2lj\3\2\2\2lm\3\2\2\2mo\3\2\2\2nl\3\2\2\2op\7\31" +
+                    "\2\2pq\7\5\2\2q\21\3\2\2\2rs\t\2\2\2s\23\3\2\2\2tu\b\13\1\2uv\7\22\2\2" +
+                    "vw\5\24\13\2wx\7\23\2\2x\u0085\3\2\2\2yz\5\26\f\2z{\5\30\r\2{|\5\26\f" +
+                    "\2|\u0085\3\2\2\2}~\5\26\f\2~\177\5\30\r\2\177\u0080\7\31\2\2\u0080\u0085" +
+                    "\3\2\2\2\u0081\u0082\5\34\17\2\u0082\u0083\5\24\13\3\u0083\u0085\3\2\2" +
+                    "\2\u0084t\3\2\2\2\u0084y\3\2\2\2\u0084}\3\2\2\2\u0084\u0081\3\2\2\2\u0085" +
+                    "\u008c\3\2\2\2\u0086\u0087\f\4\2\2\u0087\u0088\5\32\16\2\u0088\u0089\5" +
+                    "\24\13\5\u0089\u008b\3\2\2\2\u008a\u0086\3\2\2\2\u008b\u008e\3\2\2\2\u008c" +
+                    "\u008a\3\2\2\2\u008c\u008d\3\2\2\2\u008d\25\3\2\2\2\u008e\u008c\3\2\2" +
+                    "\2\u008f\u0090\7\31\2\2\u0090\u0091\7\24\2\2\u0091\u0092\7\31\2\2\u0092" +
+                    "\27\3\2\2\2\u0093\u0094\t\3\2\2\u0094\31\3\2\2\2\u0095\u0096\t\4\2\2\u0096" +
+                    "\33\3\2\2\2\u0097\u0098\7\27\2\2\u0098\35\3\2\2\2\21!(+/\629>ELUWfl\u0084" +
+                    "\u008c";
 	public static final String[] ruleNames = makeRuleNames();
 
 	private static String[] makeLiteralNames() {
@@ -628,58 +668,6 @@ public class Mg4jEqlParser extends Parser {
 		return _localctx;
 	}
 
-	public static class LiteralContext extends ParserRuleContext {
-		public TerminalNode WORD() { return getToken(Mg4jEqlParser.WORD, 0); }
-		public TerminalNode NUMBER() { return getToken(Mg4jEqlParser.NUMBER, 0); }
-		public LiteralContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_literal; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Mg4jEqlListener ) ((Mg4jEqlListener)listener).enterLiteral(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Mg4jEqlListener ) ((Mg4jEqlListener)listener).exitLiteral(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof Mg4jEqlVisitor ) return ((Mg4jEqlVisitor<? extends T>)visitor).visitLiteral(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final LiteralContext literal() throws RecognitionException {
-		LiteralContext _localctx = new LiteralContext(_ctx, getState());
-		enterRule(_localctx, 8, RULE_literal);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(88);
-			_la = _input.LA(1);
-			if ( !(_la==NUMBER || _la==WORD) ) {
-			_errHandler.recoverInline(this);
-			}
-			else {
-				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-				_errHandler.reportMatch(this);
-				consume();
-			}
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
 	public static class AlignOperatorContext extends ParserRuleContext {
 		public TerminalNode EXPONENT() { return getToken(Mg4jEqlParser.EXPONENT, 0); }
 		public QueryElemContext queryElem() {
@@ -704,27 +692,12 @@ public class Mg4jEqlParser extends Parser {
 		}
 	}
 
-	public final AlignOperatorContext alignOperator() throws RecognitionException {
-		AlignOperatorContext _localctx = new AlignOperatorContext(_ctx, getState());
-		enterRule(_localctx, 10, RULE_alignOperator);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(90);
-			match(EXPONENT);
-			setState(91);
-			queryElem();
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
+    private static String[] makeRuleNames() {
+        return new String[]{
+                "root", "query", "queryElem", "queryCore", "alignOperator", "assignment",
+                "limitation", "indexOperator", "literal", "constraint", "reference",
+                "comparisonOperator", "binaryOperator", "unaryOperator"
+        };
 	}
 
 	public static class AssignmentContext extends ParserRuleContext {
@@ -749,16 +722,16 @@ public class Mg4jEqlParser extends Parser {
 		}
 	}
 
-	public final AssignmentContext assignment() throws RecognitionException {
-		AssignmentContext _localctx = new AssignmentContext(_ctx, getState());
-		enterRule(_localctx, 12, RULE_assignment);
+    public final AlignOperatorContext alignOperator() throws RecognitionException {
+        AlignOperatorContext _localctx = new AlignOperatorContext(_ctx, getState());
+        enterRule(_localctx, 8, RULE_alignOperator);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(93);
-			match(WORD);
-			setState(94);
-			match(ARROW);
+                setState(88);
+                match(EXPONENT);
+                setState(89);
+                queryElem();
 			}
 		}
 		catch (RecognitionException re) {
@@ -838,43 +811,16 @@ public class Mg4jEqlParser extends Parser {
 		}
 	}
 
-	public final LimitationContext limitation() throws RecognitionException {
-		LimitationContext _localctx = new LimitationContext(_ctx, getState());
-		enterRule(_localctx, 14, RULE_limitation);
+    public final AssignmentContext assignment() throws RecognitionException {
+        AssignmentContext _localctx = new AssignmentContext(_ctx, getState());
+        enterRule(_localctx, 10, RULE_assignment);
 		try {
-			setState(102);
-			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,11,_ctx) ) {
-			case 1:
-				_localctx = new ParContext(_localctx);
-				enterOuterAlt(_localctx, 1);
-				{
-				setState(96);
-				match(MINUS);
-				setState(97);
-				match(PAR);
-				}
-				break;
-			case 2:
-				_localctx = new SentContext(_localctx);
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(98);
-				match(MINUS);
-				setState(99);
-				match(SENT);
-				}
-				break;
-			case 3:
-				_localctx = new ProximityContext(_localctx);
-				enterOuterAlt(_localctx, 3);
-				{
-				setState(100);
-				match(SIMILARITY);
-				setState(101);
-				match(NUMBER);
-				}
-				break;
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(91);
+                match(WORD);
+                setState(92);
+                match(ARROW);
 			}
 		}
 		catch (RecognitionException re) {
@@ -917,34 +863,82 @@ public class Mg4jEqlParser extends Parser {
 		}
 	}
 
+    public final LimitationContext limitation() throws RecognitionException {
+        LimitationContext _localctx = new LimitationContext(_ctx, getState());
+        enterRule(_localctx, 12, RULE_limitation);
+        try {
+            setState(100);
+            _errHandler.sync(this);
+            switch (getInterpreter().adaptivePredict(_input, 11, _ctx)) {
+                case 1:
+                    _localctx = new ParContext(_localctx);
+                    enterOuterAlt(_localctx, 1);
+                {
+                    setState(94);
+                    match(MINUS);
+                    setState(95);
+                    match(PAR);
+                }
+                break;
+                case 2:
+                    _localctx = new SentContext(_localctx);
+                    enterOuterAlt(_localctx, 2);
+                {
+                    setState(96);
+                    match(MINUS);
+                    setState(97);
+                    match(SENT);
+                }
+                break;
+                case 3:
+                    _localctx = new ProximityContext(_localctx);
+                    enterOuterAlt(_localctx, 3);
+                {
+                    setState(98);
+                    match(SIMILARITY);
+                    setState(99);
+                    match(NUMBER);
+                }
+                break;
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
 	public final IndexOperatorContext indexOperator() throws RecognitionException {
 		IndexOperatorContext _localctx = new IndexOperatorContext(_ctx, getState());
-		enterRule(_localctx, 16, RULE_indexOperator);
+        enterRule(_localctx, 14, RULE_indexOperator);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(108);
+                setState(106);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,12,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
-					setState(104);
+                        setState(102);
 					match(WORD);
-					setState(105);
+                        setState(103);
 					match(DOT);
 					}
-					} 
+                    }
 				}
-				setState(110);
+                setState(108);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,12,_ctx);
 			}
-			setState(111);
+                setState(109);
 			match(WORD);
-			setState(112);
+                setState(110);
 			match(COLON);
 			}
 		}
@@ -958,6 +952,33 @@ public class Mg4jEqlParser extends Parser {
 		}
 		return _localctx;
 	}
+
+    public final LiteralContext literal() throws RecognitionException {
+        LiteralContext _localctx = new LiteralContext(_ctx, getState());
+        enterRule(_localctx, 16, RULE_literal);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(112);
+                _la = _input.LA(1);
+                if (!(_la == NUMBER || _la == WORD)) {
+                    _errHandler.recoverInline(this);
+                } else {
+                    if (_input.LA(1) == Token.EOF) matchedEOF = true;
+                    _errHandler.reportMatch(this);
+                    consume();
+                }
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
 
 	public static class ConstraintContext extends ParserRuleContext {
 		public TerminalNode PAREN_LEFT() { return getToken(Mg4jEqlParser.PAREN_LEFT, 0); }
@@ -1324,49 +1345,40 @@ public class Mg4jEqlParser extends Parser {
 		return true;
 	}
 
-	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\32\u009a\4\2\t\2"+
-		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
-		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\3\2\3\2\3\2\5\2\"\n\2\3\2\3"+
-		"\2\3\3\6\3\'\n\3\r\3\16\3(\3\4\5\4,\n\4\3\4\3\4\5\4\60\n\4\3\4\5\4\63"+
-		"\n\4\3\5\3\5\3\5\6\58\n\5\r\5\16\59\3\5\3\5\3\5\5\5?\n\5\3\5\3\5\3\5\6"+
-		"\5D\n\5\r\5\16\5E\3\5\3\5\3\5\3\5\3\5\5\5M\n\5\3\5\3\5\3\5\3\5\3\5\3\5"+
-		"\3\5\7\5V\n\5\f\5\16\5Y\13\5\3\6\3\6\3\7\3\7\3\7\3\b\3\b\3\b\3\t\3\t\3"+
-		"\t\3\t\3\t\3\t\5\ti\n\t\3\n\3\n\7\nm\n\n\f\n\16\np\13\n\3\n\3\n\3\n\3"+
-		"\13\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3"+
-		"\13\3\13\5\13\u0085\n\13\3\13\3\13\3\13\3\13\7\13\u008b\n\13\f\13\16\13"+
-		"\u008e\13\13\3\f\3\f\3\f\3\f\3\r\3\r\3\16\3\16\3\17\3\17\3\17\2\4\b\24"+
-		"\20\2\4\6\b\n\f\16\20\22\24\26\30\32\34\2\5\3\2\30\31\3\2\f\21\3\2\25"+
-		"\26\2\u009f\2\36\3\2\2\2\4&\3\2\2\2\6+\3\2\2\2\bL\3\2\2\2\nZ\3\2\2\2\f"+
-		"\\\3\2\2\2\16_\3\2\2\2\20h\3\2\2\2\22n\3\2\2\2\24\u0084\3\2\2\2\26\u008f"+
-		"\3\2\2\2\30\u0093\3\2\2\2\32\u0095\3\2\2\2\34\u0097\3\2\2\2\36!\5\4\3"+
-		"\2\37 \7\13\2\2 \"\5\24\13\2!\37\3\2\2\2!\"\3\2\2\2\"#\3\2\2\2#$\7\2\2"+
-		"\3$\3\3\2\2\2%\'\5\6\4\2&%\3\2\2\2\'(\3\2\2\2(&\3\2\2\2()\3\2\2\2)\5\3"+
-		"\2\2\2*,\5\16\b\2+*\3\2\2\2+,\3\2\2\2,-\3\2\2\2-/\5\b\5\2.\60\5\f\7\2"+
-		"/.\3\2\2\2/\60\3\2\2\2\60\62\3\2\2\2\61\63\5\20\t\2\62\61\3\2\2\2\62\63"+
-		"\3\2\2\2\63\7\3\2\2\2\64\65\b\5\1\2\65\67\7\n\2\2\668\5\6\4\2\67\66\3"+
-		"\2\2\289\3\2\2\29\67\3\2\2\29:\3\2\2\2:;\3\2\2\2;<\7\n\2\2<M\3\2\2\2="+
-		"?\5\22\n\2>=\3\2\2\2>?\3\2\2\2?@\3\2\2\2@M\5\n\6\2AC\7\22\2\2BD\5\6\4"+
-		"\2CB\3\2\2\2DE\3\2\2\2EC\3\2\2\2EF\3\2\2\2FG\3\2\2\2GH\7\23\2\2HM\3\2"+
-		"\2\2IJ\5\34\17\2JK\5\6\4\2KM\3\2\2\2L\64\3\2\2\2L>\3\2\2\2LA\3\2\2\2L"+
-		"I\3\2\2\2MW\3\2\2\2NO\f\5\2\2OP\7\16\2\2PV\5\6\4\2QR\f\4\2\2RS\5\32\16"+
-		"\2ST\5\6\4\2TV\3\2\2\2UN\3\2\2\2UQ\3\2\2\2VY\3\2\2\2WU\3\2\2\2WX\3\2\2"+
-		"\2X\t\3\2\2\2YW\3\2\2\2Z[\t\2\2\2[\13\3\2\2\2\\]\7\6\2\2]^\5\6\4\2^\r"+
-		"\3\2\2\2_`\7\31\2\2`a\7\3\2\2a\17\3\2\2\2bc\7\4\2\2ci\7\t\2\2de\7\4\2"+
-		"\2ei\7\b\2\2fg\7\7\2\2gi\7\30\2\2hb\3\2\2\2hd\3\2\2\2hf\3\2\2\2i\21\3"+
-		"\2\2\2jk\7\31\2\2km\7\24\2\2lj\3\2\2\2mp\3\2\2\2nl\3\2\2\2no\3\2\2\2o"+
-		"q\3\2\2\2pn\3\2\2\2qr\7\31\2\2rs\7\5\2\2s\23\3\2\2\2tu\b\13\1\2uv\7\22"+
-		"\2\2vw\5\24\13\2wx\7\23\2\2x\u0085\3\2\2\2yz\5\26\f\2z{\5\30\r\2{|\5\26"+
-		"\f\2|\u0085\3\2\2\2}~\5\26\f\2~\177\5\30\r\2\177\u0080\7\31\2\2\u0080"+
-		"\u0085\3\2\2\2\u0081\u0082\5\34\17\2\u0082\u0083\5\24\13\3\u0083\u0085"+
-		"\3\2\2\2\u0084t\3\2\2\2\u0084y\3\2\2\2\u0084}\3\2\2\2\u0084\u0081\3\2"+
-		"\2\2\u0085\u008c\3\2\2\2\u0086\u0087\f\4\2\2\u0087\u0088\5\32\16\2\u0088"+
-		"\u0089\5\24\13\5\u0089\u008b\3\2\2\2\u008a\u0086\3\2\2\2\u008b\u008e\3"+
-		"\2\2\2\u008c\u008a\3\2\2\2\u008c\u008d\3\2\2\2\u008d\25\3\2\2\2\u008e"+
-		"\u008c\3\2\2\2\u008f\u0090\7\31\2\2\u0090\u0091\7\24\2\2\u0091\u0092\7"+
-		"\31\2\2\u0092\27\3\2\2\2\u0093\u0094\t\3\2\2\u0094\31\3\2\2\2\u0095\u0096"+
-		"\t\4\2\2\u0096\33\3\2\2\2\u0097\u0098\7\27\2\2\u0098\35\3\2\2\2\21!(+"+
-		"/\629>ELUWhn\u0084\u008c";
+    public static class LiteralContext extends ParserRuleContext {
+        public LiteralContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public TerminalNode WORD() {
+            return getToken(Mg4jEqlParser.WORD, 0);
+        }
+
+        public TerminalNode NUMBER() {
+            return getToken(Mg4jEqlParser.NUMBER, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_literal;
+        }
+
+        @Override
+        public void enterRule(ParseTreeListener listener) {
+            if (listener instanceof Mg4jEqlListener) ((Mg4jEqlListener) listener).enterLiteral(this);
+        }
+
+        @Override
+        public void exitRule(ParseTreeListener listener) {
+            if (listener instanceof Mg4jEqlListener) ((Mg4jEqlListener) listener).exitLiteral(this);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+            if (visitor instanceof Mg4jEqlVisitor) return ((Mg4jEqlVisitor<? extends T>) visitor).visitLiteral(this);
+            else return visitor.visitChildren(this);
+        }
+    }
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

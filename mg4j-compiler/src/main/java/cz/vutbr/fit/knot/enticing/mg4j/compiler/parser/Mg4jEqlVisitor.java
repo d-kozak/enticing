@@ -71,12 +71,6 @@ public interface Mg4jEqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitOrder(Mg4jEqlParser.OrderContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link Mg4jEqlParser#literal}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLiteral(Mg4jEqlParser.LiteralContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link Mg4jEqlParser#alignOperator}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -116,11 +110,18 @@ public interface Mg4jEqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIndexOperator(Mg4jEqlParser.IndexOperatorContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link Mg4jEqlParser#constraint}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitConstraint(Mg4jEqlParser.ConstraintContext ctx);
+     * Visit a parse tree produced by {@link Mg4jEqlParser#literal}.
+     * @param ctx the parse tree
+     * @return the visitor result
+     */
+    T visitLiteral(Mg4jEqlParser.LiteralContext ctx);
+
+    /**
+     * Visit a parse tree produced by {@link Mg4jEqlParser#constraint}.
+     * @param ctx the parse tree
+     * @return the visitor result
+     */
+    T visitConstraint(Mg4jEqlParser.ConstraintContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link Mg4jEqlParser#reference}.
 	 * @param ctx the parse tree

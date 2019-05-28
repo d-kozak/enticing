@@ -110,16 +110,6 @@ public interface Mg4jEqlListener extends ParseTreeListener {
 	 */
 	void exitOrder(Mg4jEqlParser.OrderContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link Mg4jEqlParser#literal}.
-	 * @param ctx the parse tree
-	 */
-	void enterLiteral(Mg4jEqlParser.LiteralContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link Mg4jEqlParser#literal}.
-	 * @param ctx the parse tree
-	 */
-	void exitLiteral(Mg4jEqlParser.LiteralContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link Mg4jEqlParser#alignOperator}.
 	 * @param ctx the parse tree
 	 */
@@ -186,6 +176,19 @@ public interface Mg4jEqlListener extends ParseTreeListener {
 	 */
 	void exitIndexOperator(Mg4jEqlParser.IndexOperatorContext ctx);
 	/**
+     * Enter a parse tree produced by {@link Mg4jEqlParser#literal}.
+     * @param ctx the parse tree
+     */
+    void enterLiteral(Mg4jEqlParser.LiteralContext ctx);
+
+    /**
+     * Exit a parse tree produced by {@link Mg4jEqlParser#literal}.
+     *
+     * @param ctx the parse tree
+     */
+    void exitLiteral(Mg4jEqlParser.LiteralContext ctx);
+
+    /**
 	 * Enter a parse tree produced by {@link Mg4jEqlParser#constraint}.
 	 * @param ctx the parse tree
 	 */
