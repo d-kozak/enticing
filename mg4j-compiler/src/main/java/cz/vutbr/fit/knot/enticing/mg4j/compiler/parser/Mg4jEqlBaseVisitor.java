@@ -31,7 +31,7 @@ public class Mg4jEqlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitQueryPart(Mg4jEqlParser.QueryPartContext ctx) { return visitChildren(ctx); }
+	@Override public T visitQueryElem(Mg4jEqlParser.QueryElemContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -94,7 +94,7 @@ public class Mg4jEqlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitIdentifier(Mg4jEqlParser.IdentifierContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAssignment(Mg4jEqlParser.AssignmentContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -143,7 +143,7 @@ public class Mg4jEqlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitRelOp(Mg4jEqlParser.RelOpContext ctx) { return visitChildren(ctx); }
+	@Override public T visitComparisonOperator(Mg4jEqlParser.ComparisonOperatorContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

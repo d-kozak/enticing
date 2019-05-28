@@ -40,13 +40,13 @@ public class Mg4jEqlBaseListener implements Mg4jEqlListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterQueryPart(Mg4jEqlParser.QueryPartContext ctx) { }
+	@Override public void enterQueryElem(Mg4jEqlParser.QueryElemContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitQueryPart(Mg4jEqlParser.QueryPartContext ctx) { }
+	@Override public void exitQueryElem(Mg4jEqlParser.QueryElemContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -148,13 +148,13 @@ public class Mg4jEqlBaseListener implements Mg4jEqlListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIdentifier(Mg4jEqlParser.IdentifierContext ctx) { }
+	@Override public void enterAssignment(Mg4jEqlParser.AssignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIdentifier(Mg4jEqlParser.IdentifierContext ctx) { }
+	@Override public void exitAssignment(Mg4jEqlParser.AssignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -232,13 +232,13 @@ public class Mg4jEqlBaseListener implements Mg4jEqlListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRelOp(Mg4jEqlParser.RelOpContext ctx) { }
+	@Override public void enterComparisonOperator(Mg4jEqlParser.ComparisonOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRelOp(Mg4jEqlParser.RelOpContext ctx) { }
+	@Override public void exitComparisonOperator(Mg4jEqlParser.ComparisonOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

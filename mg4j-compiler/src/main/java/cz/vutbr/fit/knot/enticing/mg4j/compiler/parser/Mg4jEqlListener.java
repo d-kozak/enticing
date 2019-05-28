@@ -28,15 +28,15 @@ public interface Mg4jEqlListener extends ParseTreeListener {
 	 */
 	void exitQuery(Mg4jEqlParser.QueryContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link Mg4jEqlParser#queryPart}.
+	 * Enter a parse tree produced by {@link Mg4jEqlParser#queryElem}.
 	 * @param ctx the parse tree
 	 */
-	void enterQueryPart(Mg4jEqlParser.QueryPartContext ctx);
+	void enterQueryElem(Mg4jEqlParser.QueryElemContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link Mg4jEqlParser#queryPart}.
+	 * Exit a parse tree produced by {@link Mg4jEqlParser#queryElem}.
 	 * @param ctx the parse tree
 	 */
-	void exitQueryPart(Mg4jEqlParser.QueryPartContext ctx);
+	void exitQueryElem(Mg4jEqlParser.QueryElemContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code sequence}
 	 * labeled alternative in {@link Mg4jEqlParser#queryCore}.
@@ -130,15 +130,15 @@ public interface Mg4jEqlListener extends ParseTreeListener {
 	 */
 	void exitAlignOperator(Mg4jEqlParser.AlignOperatorContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link Mg4jEqlParser#identifier}.
+	 * Enter a parse tree produced by {@link Mg4jEqlParser#assignment}.
 	 * @param ctx the parse tree
 	 */
-	void enterIdentifier(Mg4jEqlParser.IdentifierContext ctx);
+	void enterAssignment(Mg4jEqlParser.AssignmentContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link Mg4jEqlParser#identifier}.
+	 * Exit a parse tree produced by {@link Mg4jEqlParser#assignment}.
 	 * @param ctx the parse tree
 	 */
-	void exitIdentifier(Mg4jEqlParser.IdentifierContext ctx);
+	void exitAssignment(Mg4jEqlParser.AssignmentContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code par}
 	 * labeled alternative in {@link Mg4jEqlParser#limitation}.
@@ -206,15 +206,15 @@ public interface Mg4jEqlListener extends ParseTreeListener {
 	 */
 	void exitReference(Mg4jEqlParser.ReferenceContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link Mg4jEqlParser#relOp}.
+	 * Enter a parse tree produced by {@link Mg4jEqlParser#comparisonOperator}.
 	 * @param ctx the parse tree
 	 */
-	void enterRelOp(Mg4jEqlParser.RelOpContext ctx);
+	void enterComparisonOperator(Mg4jEqlParser.ComparisonOperatorContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link Mg4jEqlParser#relOp}.
+	 * Exit a parse tree produced by {@link Mg4jEqlParser#comparisonOperator}.
 	 * @param ctx the parse tree
 	 */
-	void exitRelOp(Mg4jEqlParser.RelOpContext ctx);
+	void exitComparisonOperator(Mg4jEqlParser.ComparisonOperatorContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link Mg4jEqlParser#binaryOperator}.
 	 * @param ctx the parse tree

@@ -1,49 +1,60 @@
 grammar Mg4jEql;
+/**
+ * Parser rules
+ */
 
 /** start rule of the grammar, represents the whole search query with constraints */
 root: query (QUERY_CONSTRAINT_SEPARATOR constraint)? EOF;
 
 /** search query */
-query: queryPart+;
+query: queryElem+;
 
 /** one element in the query */
-queryPart: identifier? queryCore alignOperator? limitation?;
+queryElem: assignment? queryCore alignOperator? limitation?;
 
-/** by core it is meant that this element does not contain any 'decorations' (identifier,limitation)*/
+/** by core it is meant that this element does not contain any 'decorations' (identifier,limitation) */
 queryCore
-    : QUOTATION queryPart+ QUOTATION # sequence
+    : QUOTATION queryElem+ QUOTATION # sequence
     | indexOperator? literal # lit
-    | PAREN_LEFT queryPart+ PAREN_RIGHT # paren
-    | queryCore LT queryPart # order
-    | queryCore binaryOperator queryPart # binaryOperation
-    | unaryOperator queryPart # unaryOperation
+    | PAREN_LEFT queryElem+ PAREN_RIGHT # paren
+    | queryCore LT queryElem # order
+    | queryCore binaryOperator queryElem # binaryOperation
+    | unaryOperator queryElem # unaryOperation
     ;
 
+/** literals of the query language */
 literal: WORD | NUMBER;
 
-alignOperator : EXPONENT queryPart;
+/** align operator to express queries over multiple indexes in the same document position */
+alignOperator : EXPONENT queryElem;
 
-identifier: WORD ARROW;
+/** assignment of part of the query to be used in global constraints */
+assignment: WORD ARROW;
 
+/** to express limitations with respect to position in the document */
 limitation
     : MINUS PAR # par
     | MINUS SENT # sent
     | SIMILARITY NUMBER # proximity
     ;
 
+/** for accessing a different index */
 indexOperator: (WORD DOT)* WORD COLON;
 
+/** global contraints */
 constraint
     : PAREN_LEFT constraint PAREN_RIGHT
-    | reference relOp reference
-    | reference relOp WORD
+    | reference comparisonOperator reference
+    | reference comparisonOperator WORD
     | constraint binaryOperator constraint
     | unaryOperator constraint
     ;
 
+/** reference to a part of the search query */
 reference : WORD DOT WORD;
 
-relOp
+/** comparison operators */
+comparisonOperator
     : EQ
     | NEQ
     | LT
@@ -52,17 +63,21 @@ relOp
     | GE
     ;
 
+/** binary operators */
 binaryOperator
     : AND
     | OR
     ;
 
+/** unary operators */
 unaryOperator
-    : NOT
-    ;
+   : NOT
+   ;
 
 
-// tokens
+/**
+ * Lexer rules
+ */
 ARROW: '<-';
 MINUS:'-';
 COLON:':';
@@ -87,10 +102,12 @@ OR: '|' | 'OR' | 'or';
 AND: '&' | 'and';
 NOT: '!' | 'not';
 
-WS : [ \t] -> skip;
 
 NUMBER : [0-9]+;
 WORD : ANY_VALID_CHAR+ WILDCARD?;
 
 fragment ANY_VALID_CHAR : [a-zA-Z0-9_];
 fragment WILDCARD:'*';
+
+/** ignore whitespace */
+WS : [ \t] -> skip;

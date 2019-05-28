@@ -23,11 +23,11 @@ public interface Mg4jEqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitQuery(Mg4jEqlParser.QueryContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link Mg4jEqlParser#queryPart}.
+	 * Visit a parse tree produced by {@link Mg4jEqlParser#queryElem}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitQueryPart(Mg4jEqlParser.QueryPartContext ctx);
+	T visitQueryElem(Mg4jEqlParser.QueryElemContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code sequence}
 	 * labeled alternative in {@link Mg4jEqlParser#queryCore}.
@@ -83,11 +83,11 @@ public interface Mg4jEqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAlignOperator(Mg4jEqlParser.AlignOperatorContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link Mg4jEqlParser#identifier}.
+	 * Visit a parse tree produced by {@link Mg4jEqlParser#assignment}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIdentifier(Mg4jEqlParser.IdentifierContext ctx);
+	T visitAssignment(Mg4jEqlParser.AssignmentContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code par}
 	 * labeled alternative in {@link Mg4jEqlParser#limitation}.
@@ -128,11 +128,11 @@ public interface Mg4jEqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitReference(Mg4jEqlParser.ReferenceContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link Mg4jEqlParser#relOp}.
+	 * Visit a parse tree produced by {@link Mg4jEqlParser#comparisonOperator}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitRelOp(Mg4jEqlParser.RelOpContext ctx);
+	T visitComparisonOperator(Mg4jEqlParser.ComparisonOperatorContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link Mg4jEqlParser#binaryOperator}.
 	 * @param ctx the parse tree
