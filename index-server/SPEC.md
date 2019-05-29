@@ -81,6 +81,7 @@ If an input folder is specified the server tries to index it after startup. If t
         entities: Map<string,Map<string,string>>,
         attributes: List<string> 
     }
+    ```
     ```javascript  
     * POST
        * save format to be used for subsequent search requests
