@@ -9,9 +9,8 @@ When started, it loads it's configuration, which is required as an input paramet
 * \[EXTENSION] url of the manager-service (for automatic registration)
 
 If an input folder is specified the server tries to index it after startup. If the indexation fails, the startup fails.
-?? If neither input folder not output folder or both of them are specified, startup fails.
-?? Another approach is to let it start anyway, but respond with 500 to any request until the indexing is successfully finished using '/index' endpoint.
-// I think the second might be better. If not for any other reason, the debugging during development will be faster, because there will be no need to restart the spring boot app every time
+?? If neither input folder nor output folder or both of them are specified, startup fails.
+?? Another approach is to let it start anyway, but respond with 500 to any request until the indexing is successfully finished using '/index' endpoint. I think the second might be better. If not for any other reason, the debugging during development will be faster, because there will be no need to restart the spring boot app every time
 
 
 
