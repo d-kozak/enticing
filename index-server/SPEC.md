@@ -22,7 +22,7 @@ If an input folder is specified the server tries to index it after startup. If t
 * /query
      * POST
         * perform search query, return list of snippets
-    ```
+    ```javascript
     requestPayload = {
        query: string,
        snippetCount: int,
@@ -103,8 +103,8 @@ If an input folder is specified the server tries to index it after startup. If t
     ```
     responsePayload = {
         title: string,
-        url: url // ?? redundant, since we already know it from the snippet, but might be useful
-        text: enhancedText // as in '/query',
+        url: url // ?? redundant, since we already know it from the snippet, but might be useful, maybe? ??
+        text: EnhancedText // as in '/query',
     }
     
     ```
