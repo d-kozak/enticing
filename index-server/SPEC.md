@@ -127,12 +127,13 @@ If an input folder is specified the server tries to index it after startup. If t
     }
     ```
  * /index
-    * build index
+    * index the specified directory and start using it after the process finishes 
     * POST
     ```javascript
     requestPayload = {
+        // the payload will essentially be the same as the part of the configuration file that corresponds to indexing
         inputDirectory: string,
-        outputDirectory: string
+        outputDirectory: string,
         indexSentences: boolean // index sentences instead of documents, default false
         gzipped: boolean // process gzipped files, default false
     }
