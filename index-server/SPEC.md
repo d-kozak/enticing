@@ -39,7 +39,7 @@ If an input folder is specified the server tries to index it after startup. If t
     // string for predefined option (e.g. "all")
     // Map | List for exact definition
     ```
-    ```
+    ```javascript
     responsePayload = {
         snippets: Array<Snippet>
     }
@@ -76,12 +76,12 @@ If an input folder is specified the server tries to index it after startup. If t
 * /format
     * GET
         * attributes that can be used in query
-    ```
+    ```javascript
     responsePayload = {
         entities: Map<string,Map<string,string>>,
         attributes: List<string> 
     }
-    ```  
+    ```javascript  
     * POST
        * save format to be used for subsequent search requests
        * requestPayload the same as formatDefinition from '/query'
@@ -93,14 +93,14 @@ If an input folder is specified the server tries to index it after startup. If t
 * /document
     * whole document
     * POST 
-    ```
+    ```javascript
     requestPayload = {
         documentId: UUID,
         collectionId: string,
         format // as in '/query'    
     }
     ```
-    ```
+    ```javascript
     responsePayload = {
         title: string,
         url: url // ?? redundant, since we already know it from the snippet, but might be useful, maybe? ??
@@ -111,7 +111,7 @@ If an input folder is specified the server tries to index it after startup. If t
 * /snippet
     * extend snippet
     * POST
-    ```
+    ```javascript
     requestPayload = {
         documentId: UUID,
         collectionId: string,
@@ -120,7 +120,7 @@ If an input folder is specified the server tries to index it after startup. If t
         format // as in '/query'
     }
     ```
-    ```
+    ```javascript
     responsePayload = {
         before: EnhancedText // text to insert before, datatype as in '/query',
         after: EnhancedText // text to insert after, datatype as in '/query'  
@@ -129,7 +129,7 @@ If an input folder is specified the server tries to index it after startup. If t
  * /index
     * build index
     * POST
-    ```
+    ```javascript
     requestPayload = {
         inputDirectory: string,
         outputDirectory: string
@@ -137,7 +137,7 @@ If an input folder is specified the server tries to index it after startup. If t
         gzipped: boolean // process gzipped files, default false
     }
     ```
-    ```
+    ```javascript
     responsePayload = {
         ??
         time: long // ms of execution
