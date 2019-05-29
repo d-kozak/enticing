@@ -1,5 +1,21 @@
-# Rest interface of the Index server
+# Specification of the Index server
 
+Index server manages .mg4j files and uses [mg4j](http://mg4j.di.unimi.it/) to index them and perform queries on them.
+
+# Lifecycle
+When started, it loads it's configuration, which is required as an input parameter. The configuration contains the following. 
+* format(attributes and annotations) which is used in it's input .mg4j files
+* input folder which should be indexed XOR already indexed folder which should be used for querying 
+* \[EXTENSION] url of the manager-service (for automatic registration)
+
+If an input folder is specified the server tries to index it after startup. If the indexation fails, the startup fails.
+?? If neither input folder not output folder or both of them are specified, startup fails.
+?? Another approach is to let it start anyway, but respond with 500 to any request until the indexing is successfully finished using '/index' endpoint.
+// I think the second might be better. If not for any other reason, the debugging during development will be faster, because there will be no need to restart the spring boot app every time
+
+
+
+# Rest interface
 * all paths prefixed (e.g /api/v1/* )
     * to support multiple APIs simultaneously (v1,v2,v3), if necessary
     * to add GUI at '/', if deemed useful in the future
@@ -14,6 +30,7 @@
        format
     }
     format = formatDefinition | formatId
+    formatId = long
     formatDefinition = {
        entities,
        attributes
@@ -42,12 +59,16 @@
         queryPart:string
     }
     EnhancedText = {
+        // I can see two options here
+        // first one, currently used in the UI
         ??
         text:string
         annotations:Map<int,Annotation>
         positions:Array<{from:int,to:int,annotationId:int}>
         ??
         OR
+        // second one, as described in the thesis, 
+        // more meaningful if we assume a lot of annotations and other meta info
         ??
         Array<Map<string,string>>
         ??
@@ -102,8 +123,8 @@
     ```
     ```
     responsePayload = {
-        prev: enhancedText // text to insert before, datatype as in '/query',
-        after: enhancedText // text to insert after, datatype as in '/query'  
+        before: EnhancedText // text to insert before, datatype as in '/query',
+        after: EnhancedText // text to insert after, datatype as in '/query'  
     }
     ```
  * /index
@@ -125,6 +146,6 @@
     ```
  
  * /actuator/health
-    * to check for availability
+    * to check availability
     * part of Spring Boot Actuator, see [documentation](https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-endpoints.html)
     
