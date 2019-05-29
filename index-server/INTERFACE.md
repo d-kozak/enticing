@@ -2,7 +2,7 @@
 
 * all paths prefixed (e.g /api/v1/* )
     * to support multiple APIs simultaneously (v1,v2,v3), if necessary
-    * to add GUI at '/' in the future, if deemed useful in the future
+    * to add GUI at '/', if deemed useful in the future
 
 * /query
      * POST
@@ -10,7 +10,7 @@
     ```
     requestPayload = {
        query: string,
-       snippets: int,
+       snippetCount: int,
        format
     }
     format = formatDefinition | formatId
@@ -28,7 +28,7 @@
         snippets: Array<Snippet>
     }
     Snippet = {
-        documentId: string,
+        documentId: UUID,
         collectionId: string,
         position: int // where in the document the snippet starts,
         url: url // url location of the original document,
@@ -38,7 +38,7 @@
     } 
     QueryMapping = {
         from: int,
-        to:int
+        to: int
         queryPart:string
     }
     EnhancedText = {
@@ -63,11 +63,11 @@
     }
     ```  
     * POST
-       * save format to be used for subsequent requests
+       * save format to be used for subsequent search requests
        * requestPayload the same as formatDefinition from '/query'
     ```
     responsePayload = {
-        id: formatId // id to be used in subsequent requests
+        id: formatId // id to identify the settings
     }
     ```
 * /document
@@ -77,9 +77,16 @@
     requestPayload = {
         documentId: UUID,
         collectionId: string,
-        text: enhancedText // as in '/query'
         format // as in '/query'    
     }
+    ```
+    ```
+    responsePayload = {
+        title: string,
+        url: url // ?? redundant, since we already know it from the snippet, but might be useful
+        text: enhancedText // as in '/query',
+    }
+    
     ```
 * /snippet
     * extend snippet
@@ -88,10 +95,15 @@
     requestPayload = {
         documentId: UUID,
         collectionId: string,
-        text: enhancedText // as in '/query'
         position: int, // start position of the snippet which we want to extend
         size: int // how many extra characters we want,
         format // as in '/query'
+    }
+    ```
+    ```
+    responsePayload = {
+        prev: enhancedText // text to insert before, datatype as in '/query',
+        after: enhancedText // text to insert after, datatype as in '/query'  
     }
     ```
  * /index
