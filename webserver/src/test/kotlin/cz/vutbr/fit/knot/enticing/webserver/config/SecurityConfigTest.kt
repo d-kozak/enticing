@@ -5,15 +5,15 @@ import cz.vutbr.fit.knot.enticing.dto.query.ContextExtensionQuery
 import cz.vutbr.fit.knot.enticing.dto.query.DocumentQuery
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 
-import cz.vutbr.fit.knot.enticing.mg4j.compiler.ast.MockNode
-import cz.vutbr.fit.knot.enticing.mg4j.compiler.dto.ParsedQuery
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.MockNode
+import cz.vutbr.fit.knot.enticing.eql.compiler.dto.ParsedQuery
 import cz.vutbr.fit.knot.enticing.webserver.dto.*
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
-import cz.vutbr.fit.knot.enticing.webserver.service.Mg4jCompilerService
+import cz.vutbr.fit.knot.enticing.webserver.service.EqlCompilerService
 import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
@@ -46,7 +46,7 @@ internal class SecurityConfigTest(
 ) {
 
     @MockBean
-    lateinit var compilerService: Mg4jCompilerService
+    lateinit var compilerService: EqlCompilerService
 
     @MockBean
     lateinit var userService: EnticingUserService

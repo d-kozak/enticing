@@ -13,7 +13,7 @@ import CodeMirror from 'react-codemirror';
 import {EditorConfiguration} from "codemirror";
 
 import './CodeMirror.css';
-import {MG4J_EQL} from "../../codemirror/mg4jmode";
+import {EQL} from "../../codemirror/eqlmode";
 
 import debounce from "debounce";
 import {API_BASE_PATH, useMockApi} from "../../globals";
@@ -88,7 +88,7 @@ const CMInputWrapper = (props: CMInputWrapperProps) => {
                 startSearching(query);
             }
         },
-        mode: MG4J_EQL,
+        mode: EQL,
         scrollbarStyle: "null"
     }
 

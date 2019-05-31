@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":mg4j-compiler"))
+    implementation(project(":eql-compiler"))
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "javax.validation:validation-api:2.0.1.Final"

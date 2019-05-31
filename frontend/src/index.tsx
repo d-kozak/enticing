@@ -8,7 +8,7 @@ import * as serviceWorker from './serviceWorker';
 // note: since the constant MG4J_EQL is used inside the SearchBar component, the
 // language module would be registered anyways, but I consider that as a side effect
 // and therefore I am keeping the import here to make it more explicit
-import './codemirror/mg4jmode';
+import './codemirror/eqlmode';
 
 
 const Root = () => <Provider store={store}>

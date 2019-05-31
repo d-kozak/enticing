@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.dto.query
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import cz.vutbr.fit.knot.enticing.mg4j.compiler.ast.QueryNode
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.QueryNode
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Positive
 
