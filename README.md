@@ -12,8 +12,8 @@ The whole repository is a gradle multi-project consisting of the following subpr
     * Web interface implemented in Typescript in React
 * webserver
     * Spring Boot application that serves the frontend and communicates with other backend components
-* mg4j-compiler
-    * All code connected with parsing, analyzing and translating mg4j-eql
+* eql-compiler
+    * All code connected with parsing, analyzing and translating EQL - Enticing Query Language
 * dto
     * Data transfer objects for communicating between components of the backend
     * Currently contains only DTOs between webserver and indexserver(to be done)

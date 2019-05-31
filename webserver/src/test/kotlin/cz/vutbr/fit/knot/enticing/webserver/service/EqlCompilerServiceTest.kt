@@ -15,7 +15,7 @@ class EqlCompilerServiceTest {
     private val parseMock = mockk<EqlCompiler>()
 
     @Test
-    fun `parseQuery calls mg4j parser`() {
+    fun `parseQuery calls eql parser`() {
         val service = EqlCompilerService(parseMock)
         every { parseMock.parse("foo") } returns ParsedQuery(MockNode())
 

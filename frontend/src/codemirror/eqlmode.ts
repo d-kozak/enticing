@@ -2,7 +2,7 @@ import CodeMirror, {Mode} from 'codemirror';
 import './tokenStyles.css';
 import {readOneToken, Token} from "./SimpleLanguageMode";
 
-export const EQL = 'mg4j-eql';
+export const EQL = 'eql';
 
 // example input :()&and|or!not-_PAR__SENT_not^.~"dafs"sadfsad &&
 const tokens: Array<Token> = [
@@ -32,12 +32,12 @@ const tokens: Array<Token> = [
     {match: /^".*?"/, token: 'sequence'}
 ]
 
-export const mg4jLanguageMode: Mode<any> = {
+export const eqlLanguageMode: Mode<any> = {
     token(stream: CodeMirror.StringStream): string | null {
         return readOneToken(stream, tokens);
     }
 };
 
-CodeMirror.defineMode(EQL, () => mg4jLanguageMode);
+CodeMirror.defineMode(EQL, () => eqlLanguageMode);
 
 

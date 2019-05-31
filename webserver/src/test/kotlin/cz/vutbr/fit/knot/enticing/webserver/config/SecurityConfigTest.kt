@@ -441,7 +441,7 @@ internal class SecurityConfigTest(
     }
 
     @Nested
-    inner class Mg4j {
+    inner class Eql {
         @Test
         fun `Parser endpoint is always accessible`() {
             val query = "nertag:person (killed|visited)"

@@ -1,3 +1,3 @@
-# Mg4J-Eql compiler
+# Enticing Query Language compiler
 
 Language spec [here](./SPEC.md)
