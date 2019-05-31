@@ -27,6 +27,13 @@ class AntlrParserTest {
     }
 
     @Test
+    fun `yet another query`() {
+        val input = """(pepa <- nertag:person^(birthplace:john)) or "john<-john ferda" &&  pepa.name != john.name"""
+        val (_, errors) = Mg4jParser().parse(input)
+        assertThat(errors).isEmpty()
+    }
+
+    @Test
     fun `Missing bracket`() {
         val input = "nertag:person (visited|killed"
 

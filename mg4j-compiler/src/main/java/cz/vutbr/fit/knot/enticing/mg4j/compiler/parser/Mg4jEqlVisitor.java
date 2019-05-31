@@ -23,53 +23,48 @@ public interface Mg4jEqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitQuery(Mg4jEqlParser.QueryContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link Mg4jEqlParser#queryElem}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitQueryElem(Mg4jEqlParser.QueryElemContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code sequence}
-	 * labeled alternative in {@link Mg4jEqlParser#queryCore}.
+     * labeled alternative in {@link Mg4jEqlParser#queryExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitSequence(Mg4jEqlParser.SequenceContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code paren}
-	 * labeled alternative in {@link Mg4jEqlParser#queryCore}.
+     * labeled alternative in {@link Mg4jEqlParser#queryExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitParen(Mg4jEqlParser.ParenContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code lit}
-	 * labeled alternative in {@link Mg4jEqlParser#queryCore}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLit(Mg4jEqlParser.LitContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code binaryOperation}
-	 * labeled alternative in {@link Mg4jEqlParser#queryCore}.
+     * labeled alternative in {@link Mg4jEqlParser#queryExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitBinaryOperation(Mg4jEqlParser.BinaryOperationContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code unaryOperation}
-	 * labeled alternative in {@link Mg4jEqlParser#queryCore}.
+     * labeled alternative in {@link Mg4jEqlParser#queryExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitUnaryOperation(Mg4jEqlParser.UnaryOperationContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code order}
-	 * labeled alternative in {@link Mg4jEqlParser#queryCore}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitOrder(Mg4jEqlParser.OrderContext ctx);
+     * Visit a parse tree produced by the {@code literal}
+     * labeled alternative in {@link Mg4jEqlParser#queryExpression}.
+     * @param ctx the parse tree
+     * @return the visitor result
+     */
+    T visitLiteral(Mg4jEqlParser.LiteralContext ctx);
+
+    /**
+     * Visit a parse tree produced by the {@code order}
+     * labeled alternative in {@link Mg4jEqlParser#queryExpression}.
+     * @param ctx the parse tree
+     * @return the visitor result
+     */
+    T visitOrder(Mg4jEqlParser.OrderContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link Mg4jEqlParser#alignOperator}.
 	 * @param ctx the parse tree
@@ -110,14 +105,15 @@ public interface Mg4jEqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIndexOperator(Mg4jEqlParser.IndexOperatorContext ctx);
 	/**
-     * Visit a parse tree produced by {@link Mg4jEqlParser#literal}.
+     * Visit a parse tree produced by {@link Mg4jEqlParser#queryLiteral}.
      * @param ctx the parse tree
      * @return the visitor result
      */
-    T visitLiteral(Mg4jEqlParser.LiteralContext ctx);
+    T visitQueryLiteral(Mg4jEqlParser.QueryLiteralContext ctx);
 
     /**
      * Visit a parse tree produced by {@link Mg4jEqlParser#constraint}.
+     *
      * @param ctx the parse tree
      * @return the visitor result
      */

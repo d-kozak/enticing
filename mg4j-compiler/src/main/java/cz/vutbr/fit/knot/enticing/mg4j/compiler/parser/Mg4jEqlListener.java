@@ -28,84 +28,77 @@ public interface Mg4jEqlListener extends ParseTreeListener {
 	 */
 	void exitQuery(Mg4jEqlParser.QueryContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link Mg4jEqlParser#queryElem}.
-	 * @param ctx the parse tree
-	 */
-	void enterQueryElem(Mg4jEqlParser.QueryElemContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link Mg4jEqlParser#queryElem}.
-	 * @param ctx the parse tree
-	 */
-	void exitQueryElem(Mg4jEqlParser.QueryElemContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code sequence}
-	 * labeled alternative in {@link Mg4jEqlParser#queryCore}.
+     * labeled alternative in {@link Mg4jEqlParser#queryExpression}.
 	 * @param ctx the parse tree
 	 */
 	void enterSequence(Mg4jEqlParser.SequenceContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code sequence}
-	 * labeled alternative in {@link Mg4jEqlParser#queryCore}.
+     * labeled alternative in {@link Mg4jEqlParser#queryExpression}.
 	 * @param ctx the parse tree
 	 */
 	void exitSequence(Mg4jEqlParser.SequenceContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code paren}
-	 * labeled alternative in {@link Mg4jEqlParser#queryCore}.
+     * labeled alternative in {@link Mg4jEqlParser#queryExpression}.
 	 * @param ctx the parse tree
 	 */
 	void enterParen(Mg4jEqlParser.ParenContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code paren}
-	 * labeled alternative in {@link Mg4jEqlParser#queryCore}.
+     * labeled alternative in {@link Mg4jEqlParser#queryExpression}.
 	 * @param ctx the parse tree
 	 */
 	void exitParen(Mg4jEqlParser.ParenContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code lit}
-	 * labeled alternative in {@link Mg4jEqlParser#queryCore}.
-	 * @param ctx the parse tree
-	 */
-	void enterLit(Mg4jEqlParser.LitContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code lit}
-	 * labeled alternative in {@link Mg4jEqlParser#queryCore}.
-	 * @param ctx the parse tree
-	 */
-	void exitLit(Mg4jEqlParser.LitContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code binaryOperation}
-	 * labeled alternative in {@link Mg4jEqlParser#queryCore}.
+     * labeled alternative in {@link Mg4jEqlParser#queryExpression}.
 	 * @param ctx the parse tree
 	 */
 	void enterBinaryOperation(Mg4jEqlParser.BinaryOperationContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code binaryOperation}
-	 * labeled alternative in {@link Mg4jEqlParser#queryCore}.
+     * labeled alternative in {@link Mg4jEqlParser#queryExpression}.
 	 * @param ctx the parse tree
 	 */
 	void exitBinaryOperation(Mg4jEqlParser.BinaryOperationContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code unaryOperation}
-	 * labeled alternative in {@link Mg4jEqlParser#queryCore}.
+     * labeled alternative in {@link Mg4jEqlParser#queryExpression}.
 	 * @param ctx the parse tree
 	 */
 	void enterUnaryOperation(Mg4jEqlParser.UnaryOperationContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code unaryOperation}
-	 * labeled alternative in {@link Mg4jEqlParser#queryCore}.
+     * labeled alternative in {@link Mg4jEqlParser#queryExpression}.
 	 * @param ctx the parse tree
 	 */
 	void exitUnaryOperation(Mg4jEqlParser.UnaryOperationContext ctx);
 	/**
+     * Enter a parse tree produced by the {@code literal}
+     * labeled alternative in {@link Mg4jEqlParser#queryExpression}.
+     * @param ctx the parse tree
+     */
+    void enterLiteral(Mg4jEqlParser.LiteralContext ctx);
+
+    /**
+     * Exit a parse tree produced by the {@code literal}
+     * labeled alternative in {@link Mg4jEqlParser#queryExpression}.
+     *
+     * @param ctx the parse tree
+     */
+    void exitLiteral(Mg4jEqlParser.LiteralContext ctx);
+
+    /**
 	 * Enter a parse tree produced by the {@code order}
-	 * labeled alternative in {@link Mg4jEqlParser#queryCore}.
+     * labeled alternative in {@link Mg4jEqlParser#queryExpression}.
 	 * @param ctx the parse tree
 	 */
 	void enterOrder(Mg4jEqlParser.OrderContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code order}
-	 * labeled alternative in {@link Mg4jEqlParser#queryCore}.
+     * labeled alternative in {@link Mg4jEqlParser#queryExpression}.
 	 * @param ctx the parse tree
 	 */
 	void exitOrder(Mg4jEqlParser.OrderContext ctx);
@@ -175,20 +168,21 @@ public interface Mg4jEqlListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitIndexOperator(Mg4jEqlParser.IndexOperatorContext ctx);
-	/**
-     * Enter a parse tree produced by {@link Mg4jEqlParser#literal}.
-     * @param ctx the parse tree
-     */
-    void enterLiteral(Mg4jEqlParser.LiteralContext ctx);
 
     /**
-     * Exit a parse tree produced by {@link Mg4jEqlParser#literal}.
+     * Enter a parse tree produced by {@link Mg4jEqlParser#queryLiteral}.
      *
      * @param ctx the parse tree
      */
-    void exitLiteral(Mg4jEqlParser.LiteralContext ctx);
+    void enterQueryLiteral(Mg4jEqlParser.QueryLiteralContext ctx);
 
     /**
+     * Exit a parse tree produced by {@link Mg4jEqlParser#queryLiteral}.
+     *
+     * @param ctx the parse tree
+     */
+    void exitQueryLiteral(Mg4jEqlParser.QueryLiteralContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link Mg4jEqlParser#constraint}.
 	 * @param ctx the parse tree
 	 */

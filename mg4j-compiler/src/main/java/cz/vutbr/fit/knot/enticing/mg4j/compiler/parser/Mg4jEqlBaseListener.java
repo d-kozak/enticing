@@ -40,18 +40,6 @@ public class Mg4jEqlBaseListener implements Mg4jEqlListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterQueryElem(Mg4jEqlParser.QueryElemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitQueryElem(Mg4jEqlParser.QueryElemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterSequence(Mg4jEqlParser.SequenceContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -71,18 +59,6 @@ public class Mg4jEqlBaseListener implements Mg4jEqlListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitParen(Mg4jEqlParser.ParenContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLit(Mg4jEqlParser.LitContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLit(Mg4jEqlParser.LitContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -112,7 +88,25 @@ public class Mg4jEqlBaseListener implements Mg4jEqlListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterOrder(Mg4jEqlParser.OrderContext ctx) { }
+    @Override
+    public void enterLiteral(Mg4jEqlParser.LiteralContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void exitLiteral(Mg4jEqlParser.LiteralContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void enterOrder(Mg4jEqlParser.OrderContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -190,26 +184,26 @@ public class Mg4jEqlBaseListener implements Mg4jEqlListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIndexOperator(Mg4jEqlParser.IndexOperatorContext ctx) { }
+	@Override public void exitIndexOperator(Mg4jEqlParser.IndexOperatorContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void enterQueryLiteral(Mg4jEqlParser.QueryLiteralContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void exitQueryLiteral(Mg4jEqlParser.QueryLiteralContext ctx) { }
 	/**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void enterLiteral(Mg4jEqlParser.LiteralContext ctx) {
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void exitLiteral(Mg4jEqlParser.LiteralContext ctx) {
-    }
-
-    /**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>

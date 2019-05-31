@@ -12,25 +12,21 @@ root: query (QUERY_CONSTRAINT_SEPARATOR constraint)? EOF;
 */
 
 /** search query without constraints */
-query: queryElem+;
+query: (assignment? queryExpression alignOperator? limitation? )+;
 
-/** one element in the search query */
-queryElem: assignment? queryCore alignOperator? limitation?;
-
-/** by core it is meant that this element does not contain any 'decorations' (identifier,limitation) */
-queryCore
-    : QUOTATION queryElem+ QUOTATION # sequence
-    | indexOperator? literal # lit
-    | PAREN_LEFT queryElem+ PAREN_RIGHT # paren
-    | queryCore LT queryElem # order
-    | queryCore binaryOperator queryElem # binaryOperation
-    | unaryOperator queryElem # unaryOperation
+queryExpression
+    : assignment? QUOTATION query QUOTATION alignOperator? limitation? # sequence
+    | assignment? indexOperator? queryLiteral # literal
+    | assignment? PAREN_LEFT query PAREN_RIGHT alignOperator? limitation? #paren
+    | queryExpression LT queryExpression # order
+    | assignment queryExpression alignOperator? limitation? LT assignment? queryExpression alignOperator? limitation? # order
+    | assignment queryExpression alignOperator? limitation? binaryOperator assignment? queryExpression alignOperator? limitation? # binaryOperation
+    | queryExpression alignOperator? limitation? binaryOperator assignment? queryExpression alignOperator? limitation? # binaryOperation
+    | unaryOperator queryExpression alignOperator? limitation? # unaryOperation
     ;
 
-
-
 /** align operator to express queries over multiple indexes in the same document position */
-alignOperator : EXPONENT queryElem;
+alignOperator : EXPONENT query;
 
 /** assignment of part of the query to be used in global constraints */
 assignment: WORD ARROW;
@@ -46,7 +42,7 @@ limitation
 indexOperator: (WORD DOT)* WORD COLON;
 
 /** literals of the query language */
-literal: WORD | NUMBER;
+queryLiteral: WORD | NUMBER;
 
 /**
 * Constraints rules

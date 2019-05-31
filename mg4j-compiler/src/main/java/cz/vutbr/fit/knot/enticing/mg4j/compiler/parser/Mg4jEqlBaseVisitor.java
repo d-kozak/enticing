@@ -31,13 +31,6 @@ public class Mg4jEqlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitQueryElem(Mg4jEqlParser.QueryElemContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	@Override public T visitSequence(Mg4jEqlParser.SequenceContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
@@ -52,21 +45,30 @@ public class Mg4jEqlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitLit(Mg4jEqlParser.LitContext ctx) { return visitChildren(ctx); }
+    @Override
+    public T visitBinaryOperation(Mg4jEqlParser.BinaryOperationContext ctx) {
+        return visitChildren(ctx);
+    }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitBinaryOperation(Mg4jEqlParser.BinaryOperationContext ctx) { return visitChildren(ctx); }
+    @Override
+    public T visitUnaryOperation(Mg4jEqlParser.UnaryOperationContext ctx) {
+        return visitChildren(ctx);
+    }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitUnaryOperation(Mg4jEqlParser.UnaryOperationContext ctx) { return visitChildren(ctx); }
+    @Override
+    public T visitLiteral(Mg4jEqlParser.LiteralContext ctx) {
+        return visitChildren(ctx);
+    }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -123,7 +125,7 @@ public class Mg4jEqlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitLiteral(Mg4jEqlParser.LiteralContext ctx) {
+    public T visitQueryLiteral(Mg4jEqlParser.QueryLiteralContext ctx) {
         return visitChildren(ctx);
     }
 
@@ -133,7 +135,10 @@ public class Mg4jEqlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
      * <p>The default implementation returns the result of calling
      * {@link #visitChildren} on {@code ctx}.</p>
      */
-    @Override public T visitConstraint(Mg4jEqlParser.ConstraintContext ctx) { return visitChildren(ctx); }
+    @Override
+    public T visitConstraint(Mg4jEqlParser.ConstraintContext ctx) {
+        return visitChildren(ctx);
+    }
 	/**
 	 * {@inheritDoc}
 	 *
