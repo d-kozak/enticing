@@ -4,15 +4,12 @@ Index server manages .mg4j files and uses [mg4j](http://mg4j.di.unimi.it/) to in
 
 # Lifecycle
 When started, it loads it's configuration, which is required as an input parameter. The configuration contains the following. 
-* format(attributes and annotations) which is used in it's input .mg4j files
-* input folder which should be indexed XOR already indexed folder which should be used for querying 
+* format(indexes and entities) which is used in it's input .mg4j files
+* \[folder with indexed data which should be used for querying] 
 * \[EXTENSION] url of the manager-service (for automatic registration)
 
-If an input folder is specified the server tries to index it after startup. If the indexation fails, the startup fails.
-?? If neither input folder nor output folder or both of them are specified, startup fails.
-?? Another approach is to let it start anyway, but respond with 500 to any request until the indexing is successfully finished using '/index' endpoint. I think the second might be better. If not for any other reason, the debugging during development will be faster, because there will be no need to restart the spring boot app every time
-
-
+If no index folder is provided, the server will respond with error messages to all query, document and snippet requests 
+until a new folder is set using the rest api. 
 
 # Rest interface
 * all paths prefixed (e.g /api/v1/* )
@@ -26,61 +23,49 @@ If an input folder is specified the server tries to index it after startup. If t
     requestPayload = {
        query: string,
        snippetCount: int,
-       from: int,
+       fromDocument: int,
        wantedElements,
-       format
+       responseFormat 
     }
+    responseFormat = {
+        format: "json" | "html"
+    }  
     wantedElements = {
        entities,
        fieldAttributes
     }
-    format = "json" | "html"
-    
-    entities = namedCollectionOfEntitties | Map<nertag,fieldAttributes>
-    fieldAttributes = namedCollectionOfFieldAttributes | List<string>
-    
+    entities = predefinedOption | Map<nertag,fieldAttributes>
     nertag = string
-    // predefined options
-    namedCollectionOfEntitties = "all"
-    namedCollectionOfFieldAttributes = "all"
+    fieldAttributes = predefinedOption | List<string>
+    // predefined options, possibility to add more 
+    predefinedOption = "all"
     ```
     ```javascript
     responsePayload = {
         snippets: Array<Snippet>,
-        lastDocument:int
+        lastProcessedDocument:int
     }
     Snippet = {
         documentId: UUID,
         collectionId: string,
-        position: int // where in the document the snippet starts,
-        url: url // url location of the original document,
-        canExtend: boolean // is it possible to further extend the snippet?
-        text,
+        position: int, // where in the document the snippet starts,
+        url: url, // url location of the original document,
+        canExtend: boolean, // is it possible to further extend the snippet?
+        text
     } 
-    text = html | complex
-    complex = {
+    text = html | json
+    json = {
         text : EnhancedText,
         mapping : Array<QueryMapping>
     }
     QueryMapping = {
-        from: int,
-        to: int
-        queryPart:string
+        textIndex: [int,int],
+        queryIndex: [int,int]
     }
-    EnhancedText = {
-        // I can see two options here
-        // first one, currently used in the UI
-        ??
+    EnhancedText = {  
         text:string
-        annotations:Map<int,Annotation>
-        positions:Array<{from:int,to:int,annotationId:int}>
-        ??
-        OR
-        // second one, as described in the thesis, 
-        // more meaningful if we assume a lot of annotations and other meta info
-        ??
-        Array<Map<string,string>>
-        ??
+        annotations:Map<annotationId,Annotation>,
+        positions:Array<{from:int,to:int,annotationId}>
     }
     ```
 * /format
@@ -99,14 +84,16 @@ If an input folder is specified the server tries to index it after startup. If t
     requestPayload = {
         documentId: UUID,
         collectionId: string,
+        query:string, // if we want to see how the query match the document
         format // as in '/query'    
     }
     ```
     ```javascript
     responsePayload = {
         title: string,
-        url: url // ?? redundant, since we already know it from the snippet, but might be useful, maybe? ??
-        text // as in '/query',
+        url: url, // ?? redundant, since we already know it from the snippet, but might be useful, maybe? ??
+        text, // as in '/query',
+        mapping: Array<QueryMapping>
     }
     
     ```
@@ -118,7 +105,7 @@ If an input folder is specified the server tries to index it after startup. If t
         documentId: UUID,
         collectionId: string,
         position: int, // start position of the snippet which we want to extend
-        size: int // how many extra characters we want,
+        size: int, // how many extra characters we want,
         format // as in '/query'
     }
     ```
@@ -128,22 +115,12 @@ If an input folder is specified the server tries to index it after startup. If t
         after: text // text to insert after, datatype as in '/query'  
     }
     ```
- * /index
-    * index the specified directory and start using it after the process finishes 
+ * /input-directory
+    * set new index directory to use for queries 
     * POST
     ```javascript
-    requestPayload = {
-        // the payload will essentially be the same as the part of the configuration file that corresponds to indexing
-        inputDirectory: string,
-        outputDirectory: string,
-        indexSentences: boolean // index sentences instead of documents, default false
-        gzipped: boolean // process gzipped files, default false
-    }
-    ```
-    ```javascript
-    responsePayload = {
-        ??
-        time: long // ms of execution
+    requestPayload = {   
+        directory: string
     }
     ```
  
