@@ -4,45 +4,56 @@ grammar Eql;
  * Parser rules
  */
 /** start rule of the grammar, represents the whole search query with constraints */
-root: query (QUERY_CONSTRAINT_SEPARATOR constraint)? EOF;
+root: query  (QUERY_CONSTRAINT_SEPARATOR constraint)? EOF;
 
 
 /**
 * Serch query rules
 */
+query: queryElem+ proximity? limitation? ;
 
-/** search query without constraints */
-query: (assignment? queryExpression alignOperator? limitation? )+;
-
-queryExpression
-    : assignment? QUOTATION query QUOTATION alignOperator? limitation? # sequence
-    | assignment? indexOperator? queryLiteral # literal
-    | assignment? PAREN_LEFT query PAREN_RIGHT alignOperator? limitation? #paren
-    | queryExpression LT queryExpression # order
-    | assignment queryExpression alignOperator? limitation? LT assignment? queryExpression alignOperator? limitation? # order
-    | assignment queryExpression alignOperator? limitation? binaryOperator assignment? queryExpression alignOperator? limitation? # binaryOperation
-    | queryExpression alignOperator? limitation? binaryOperator assignment? queryExpression alignOperator? limitation? # binaryOperation
-    | unaryOperator queryExpression alignOperator? limitation? # unaryOperation
+queryElem
+    : assignment? QUOTATION queryElem+ QUOTATION #sequence
+    | assignment? indexOperator? queryLiteral alignOperator? #indexWithSingleValue
+    | assignment? indexOperator PAREN_LEFT WORD (OR WORD)* PAREN_RIGHT alignOperator? #indexWithMultipleValues
+    | assignment? PAREN_LEFT queryElem+ PAREN_RIGHT proximity? #paren
+    | assignment queryElem LT queryElem proximity? # order
+    | queryElem LT queryElem proximity? # order
+    | queryElem binaryOperator queryElem # binaryOperation
+    | assignment? unaryOperator queryElem #unaryOperation
     ;
 
+proximity: SIMILARITY NUMBER ;
+
 /** align operator to express queries over multiple indexes in the same document position */
-alignOperator : EXPONENT query;
+alignOperator : (EXPONENT alignElem)+;
+
+alignElem
+    : WORD COLON queryLiteral # index
+    | PAREN_LEFT WORD COLON queryLiteral PAREN_RIGHT # index
+    | WORD DOT WORD COLON  queryLiteral # nertag
+    | PAREN_LEFT WORD DOT WORD COLON  queryLiteral PAREN_RIGHT # nertag
+    ;
 
 /** assignment of part of the query to be used in global constraints */
-assignment: WORD ARROW;
+assignment: (NUMBER | WORD) COLON EQ;
 
 /** to express limitations with respect to position in the document */
 limitation
     : MINUS PAR # par
     | MINUS SENT # sent
-    | SIMILARITY NUMBER # proximity
     ;
 
 /** for accessing a different index */
-indexOperator: (WORD DOT)* WORD COLON;
+indexOperator: WORD COLON;
 
 /** literals of the query language */
-queryLiteral: WORD | NUMBER;
+queryLiteral: WORD | NUMBER | interval;
+
+interval
+    : BRACKET_LEFT NUMBER RANGE NUMBER BRACKET_RIGHT #numberRange
+    | BRACKET_LEFT DATE? RANGE DATE? BRACKET_RIGHT #dateRange
+    ;
 
 /**
 * Constraints rules
@@ -58,7 +69,7 @@ constraint
     ;
 
 /** reference to a part of the search query */
-reference : WORD DOT WORD;
+reference : (WORD|NUMBER) DOT WORD;
 
 /**
 * Shared rules
@@ -108,13 +119,17 @@ GT : '>';
 GE :'>=';
 PAREN_LEFT : '(';
 PAREN_RIGHT : ')';
+BRACKET_LEFT: '[';
+BRACKET_RIGHT: ']';
+RANGE: '..';
 DOT: '.';
-OR: '|' | 'OR' | 'or';
-AND: '&' | 'and';
-NOT: '!' | 'not';
+OR: '|';
+AND: '&';
+NOT: '!';
 
 
 NUMBER : [0-9]+;
+DATE: [0-9]+'/'[0-9]+'/'[0-9]+;
 WORD : ANY_VALID_CHAR+ WILDCARD?;
 
 fragment ANY_VALID_CHAR : [a-zA-Z0-9_];

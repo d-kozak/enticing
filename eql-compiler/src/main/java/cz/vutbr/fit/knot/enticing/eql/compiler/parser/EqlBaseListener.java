@@ -19,101 +19,165 @@ public class EqlBaseListener implements EqlListener {
     @Override
     public void enterRoot(EqlParser.RootContext ctx) {
     }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
     @Override
     public void exitRoot(EqlParser.RootContext ctx) {
     }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
     @Override
     public void enterQuery(EqlParser.QueryContext ctx) {
     }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
     @Override
     public void exitQuery(EqlParser.QueryContext ctx) {
     }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void enterIndexWithMultipleValues(EqlParser.IndexWithMultipleValuesContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void exitIndexWithMultipleValues(EqlParser.IndexWithMultipleValuesContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
     @Override
     public void enterSequence(EqlParser.SequenceContext ctx) {
     }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
     @Override
     public void exitSequence(EqlParser.SequenceContext ctx) {
     }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
     @Override
     public void enterParen(EqlParser.ParenContext ctx) {
     }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
 	 */
-    @Override
-    public void exitParen(EqlParser.ParenContext ctx) {
+	@Override public void exitParen(EqlParser.ParenContext ctx) {
     }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-    @Override
-    public void enterBinaryOperation(EqlParser.BinaryOperationContext ctx) {
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+	@Override public void enterIndexWithSingleValue(EqlParser.IndexWithSingleValueContext ctx) {
     }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
 	 */
-    @Override
-    public void exitBinaryOperation(EqlParser.BinaryOperationContext ctx) {
+	@Override public void exitIndexWithSingleValue(EqlParser.IndexWithSingleValueContext ctx) {
     }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
 	 */
-    @Override
-    public void enterUnaryOperation(EqlParser.UnaryOperationContext ctx) {
+	@Override public void enterBinaryOperation(EqlParser.BinaryOperationContext ctx) {
     }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
 	 */
-    @Override
-    public void exitUnaryOperation(EqlParser.UnaryOperationContext ctx) {
+	@Override public void exitBinaryOperation(EqlParser.BinaryOperationContext ctx) {
     }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
 	 */
-    @Override
-    public void enterLiteral(EqlParser.LiteralContext ctx) {
+	@Override public void enterUnaryOperation(EqlParser.UnaryOperationContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUnaryOperation(EqlParser.UnaryOperationContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterOrder(EqlParser.OrderContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOrder(EqlParser.OrderContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterProximity(EqlParser.ProximityContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitProximity(EqlParser.ProximityContext ctx) {
     }
 
     /**
@@ -122,7 +186,7 @@ public class EqlBaseListener implements EqlListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void exitLiteral(EqlParser.LiteralContext ctx) {
+    public void enterAlignOperator(EqlParser.AlignOperatorContext ctx) {
     }
 
     /**
@@ -131,99 +195,115 @@ public class EqlBaseListener implements EqlListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void enterOrder(EqlParser.OrderContext ctx) {
+    public void exitAlignOperator(EqlParser.AlignOperatorContext ctx) {
     }
-	/**
-	 * {@inheritDoc}
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIndex(EqlParser.IndexContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void exitOrder(EqlParser.OrderContext ctx) { }
-	/**
-	 * {@inheritDoc}
+	 */
+	@Override public void exitIndex(EqlParser.IndexContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void enterAlignOperator(EqlParser.AlignOperatorContext ctx) { }
-	/**
-	 * {@inheritDoc}
+	 */
+	@Override public void enterNertag(EqlParser.NertagContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void exitAlignOperator(EqlParser.AlignOperatorContext ctx) { }
-	/**
-	 * {@inheritDoc}
+	 */
+	@Override public void exitNertag(EqlParser.NertagContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAssignment(EqlParser.AssignmentContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAssignment(EqlParser.AssignmentContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void enterAssignment(EqlParser.AssignmentContext ctx) { }
-	/**
-	 * {@inheritDoc}
+	 */
+	@Override
+    public void enterPar(EqlParser.ParContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void exitAssignment(EqlParser.AssignmentContext ctx) { }
-	/**
-	 * {@inheritDoc}
+	 */
+	@Override
+    public void exitPar(EqlParser.ParContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void enterPar(EqlParser.ParContext ctx) { }
-	/**
-	 * {@inheritDoc}
+	 */
+	@Override
+    public void enterSent(EqlParser.SentContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void exitPar(EqlParser.ParContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void enterSent(EqlParser.SentContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void exitSent(EqlParser.SentContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void enterProximity(EqlParser.ProximityContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void exitProximity(EqlParser.ProximityContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void enterIndexOperator(EqlParser.IndexOperatorContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void exitIndexOperator(EqlParser.IndexOperatorContext ctx) {
+	 */
+	@Override
+    public void exitSent(EqlParser.SentContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIndexOperator(EqlParser.IndexOperatorContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIndexOperator(EqlParser.IndexOperatorContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterQueryLiteral(EqlParser.QueryLiteralContext ctx) {
     }
 
     /**
@@ -232,7 +312,7 @@ public class EqlBaseListener implements EqlListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void enterQueryLiteral(EqlParser.QueryLiteralContext ctx) {
+    public void exitQueryLiteral(EqlParser.QueryLiteralContext ctx) {
     }
 
     /**
@@ -241,77 +321,121 @@ public class EqlBaseListener implements EqlListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void exitQueryLiteral(EqlParser.QueryLiteralContext ctx) { }
-	/**
+    public void enterNumberRange(EqlParser.NumberRangeContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+	 */
+    @Override
+    public void exitNumberRange(EqlParser.NumberRangeContext ctx) {
+    }
+
+    /**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void enterConstraint(EqlParser.ConstraintContext ctx) { }
-	/**
+    public void enterDateRange(EqlParser.DateRangeContext ctx) {
+    }
+
+    /**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void exitConstraint(EqlParser.ConstraintContext ctx) { }
-	/**
+    public void exitDateRange(EqlParser.DateRangeContext ctx) {
+    }
+
+    /**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+    @Override
+    public void enterConstraint(EqlParser.ConstraintContext ctx) {
+    }
+
+    /**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+    @Override
+    public void exitConstraint(EqlParser.ConstraintContext ctx) {
+    }
+
+    /**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void enterReference(EqlParser.ReferenceContext ctx) { }
-	/**
+    public void enterReference(EqlParser.ReferenceContext ctx) {
+    }
+
+    /**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void exitReference(EqlParser.ReferenceContext ctx) { }
-	/**
-	 * {@inheritDoc}
+    public void exitReference(EqlParser.ReferenceContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void enterComparisonOperator(EqlParser.ComparisonOperatorContext ctx) { }
-	/**
-	 * {@inheritDoc}
+	 */
+	@Override public void enterComparisonOperator(EqlParser.ComparisonOperatorContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void exitComparisonOperator(EqlParser.ComparisonOperatorContext ctx) { }
-	/**
-	 * {@inheritDoc}
+	 */
+	@Override public void exitComparisonOperator(EqlParser.ComparisonOperatorContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override
+    public void enterBinaryOperator(EqlParser.BinaryOperatorContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
      */
     @Override
-    public void enterBinaryOperator(EqlParser.BinaryOperatorContext ctx) { }
-	/**
-	 * {@inheritDoc}
+    public void exitBinaryOperator(EqlParser.BinaryOperatorContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void enterUnaryOperator(EqlParser.UnaryOperatorContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void exitBinaryOperator(EqlParser.BinaryOperatorContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void enterUnaryOperator(EqlParser.UnaryOperatorContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void exitUnaryOperator(EqlParser.UnaryOperatorContext ctx) { }
+	 */
+	@Override public void exitUnaryOperator(EqlParser.UnaryOperatorContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

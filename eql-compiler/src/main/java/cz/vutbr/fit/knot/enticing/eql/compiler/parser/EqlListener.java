@@ -1,6 +1,5 @@
 // Generated from /home/dkozak/projects/knot/enticing/eql-compiler/src/main/kotlin/cz/vutbr/fit/knot/enticing/eql/compiler/parser/Eql.g4 by ANTLR 4.7.2
 package cz.vutbr.fit.knot.enticing.eql.compiler.parser;
-
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -37,8 +36,24 @@ public interface EqlListener extends ParseTreeListener {
     void exitQuery(EqlParser.QueryContext ctx);
 
     /**
+     * Enter a parse tree produced by the {@code indexWithMultipleValues}
+     * labeled alternative in {@link EqlParser#queryElem}.
+     *
+     * @param ctx the parse tree
+     */
+    void enterIndexWithMultipleValues(EqlParser.IndexWithMultipleValuesContext ctx);
+
+    /**
+     * Exit a parse tree produced by the {@code indexWithMultipleValues}
+     * labeled alternative in {@link EqlParser#queryElem}.
+     *
+     * @param ctx the parse tree
+     */
+    void exitIndexWithMultipleValues(EqlParser.IndexWithMultipleValuesContext ctx);
+
+    /**
      * Enter a parse tree produced by the {@code sequence}
-     * labeled alternative in {@link EqlParser#queryExpression}.
+     * labeled alternative in {@link EqlParser#queryElem}.
      *
      * @param ctx the parse tree
      */
@@ -46,7 +61,7 @@ public interface EqlListener extends ParseTreeListener {
 
     /**
      * Exit a parse tree produced by the {@code sequence}
-     * labeled alternative in {@link EqlParser#queryExpression}.
+     * labeled alternative in {@link EqlParser#queryElem}.
      *
      * @param ctx the parse tree
      */
@@ -54,7 +69,7 @@ public interface EqlListener extends ParseTreeListener {
 
     /**
      * Enter a parse tree produced by the {@code paren}
-     * labeled alternative in {@link EqlParser#queryExpression}.
+     * labeled alternative in {@link EqlParser#queryElem}.
      *
      * @param ctx the parse tree
      */
@@ -62,15 +77,31 @@ public interface EqlListener extends ParseTreeListener {
 
     /**
      * Exit a parse tree produced by the {@code paren}
-     * labeled alternative in {@link EqlParser#queryExpression}.
+     * labeled alternative in {@link EqlParser#queryElem}.
      *
      * @param ctx the parse tree
      */
     void exitParen(EqlParser.ParenContext ctx);
 
     /**
+     * Enter a parse tree produced by the {@code indexWithSingleValue}
+     * labeled alternative in {@link EqlParser#queryElem}.
+     *
+     * @param ctx the parse tree
+     */
+    void enterIndexWithSingleValue(EqlParser.IndexWithSingleValueContext ctx);
+
+    /**
+     * Exit a parse tree produced by the {@code indexWithSingleValue}
+     * labeled alternative in {@link EqlParser#queryElem}.
+     *
+     * @param ctx the parse tree
+     */
+    void exitIndexWithSingleValue(EqlParser.IndexWithSingleValueContext ctx);
+
+    /**
      * Enter a parse tree produced by the {@code binaryOperation}
-     * labeled alternative in {@link EqlParser#queryExpression}.
+     * labeled alternative in {@link EqlParser#queryElem}.
      *
      * @param ctx the parse tree
      */
@@ -78,7 +109,7 @@ public interface EqlListener extends ParseTreeListener {
 
     /**
      * Exit a parse tree produced by the {@code binaryOperation}
-     * labeled alternative in {@link EqlParser#queryExpression}.
+     * labeled alternative in {@link EqlParser#queryElem}.
      *
      * @param ctx the parse tree
      */
@@ -86,7 +117,7 @@ public interface EqlListener extends ParseTreeListener {
 
     /**
      * Enter a parse tree produced by the {@code unaryOperation}
-     * labeled alternative in {@link EqlParser#queryExpression}.
+     * labeled alternative in {@link EqlParser#queryElem}.
      *
      * @param ctx the parse tree
      */
@@ -94,31 +125,15 @@ public interface EqlListener extends ParseTreeListener {
 
     /**
      * Exit a parse tree produced by the {@code unaryOperation}
-     * labeled alternative in {@link EqlParser#queryExpression}.
+     * labeled alternative in {@link EqlParser#queryElem}.
      *
      * @param ctx the parse tree
      */
     void exitUnaryOperation(EqlParser.UnaryOperationContext ctx);
 
     /**
-     * Enter a parse tree produced by the {@code literal}
-     * labeled alternative in {@link EqlParser#queryExpression}.
-     *
-     * @param ctx the parse tree
-     */
-    void enterLiteral(EqlParser.LiteralContext ctx);
-
-    /**
-     * Exit a parse tree produced by the {@code literal}
-     * labeled alternative in {@link EqlParser#queryExpression}.
-     *
-     * @param ctx the parse tree
-     */
-    void exitLiteral(EqlParser.LiteralContext ctx);
-
-    /**
      * Enter a parse tree produced by the {@code order}
-     * labeled alternative in {@link EqlParser#queryExpression}.
+     * labeled alternative in {@link EqlParser#queryElem}.
      *
      * @param ctx the parse tree
      */
@@ -126,11 +141,25 @@ public interface EqlListener extends ParseTreeListener {
 
     /**
      * Exit a parse tree produced by the {@code order}
-     * labeled alternative in {@link EqlParser#queryExpression}.
+     * labeled alternative in {@link EqlParser#queryElem}.
      *
      * @param ctx the parse tree
      */
     void exitOrder(EqlParser.OrderContext ctx);
+
+    /**
+     * Enter a parse tree produced by {@link EqlParser#proximity}.
+     *
+     * @param ctx the parse tree
+     */
+    void enterProximity(EqlParser.ProximityContext ctx);
+
+    /**
+     * Exit a parse tree produced by {@link EqlParser#proximity}.
+     *
+     * @param ctx the parse tree
+     */
+    void exitProximity(EqlParser.ProximityContext ctx);
 
     /**
      * Enter a parse tree produced by {@link EqlParser#alignOperator}.
@@ -145,6 +174,38 @@ public interface EqlListener extends ParseTreeListener {
      * @param ctx the parse tree
      */
     void exitAlignOperator(EqlParser.AlignOperatorContext ctx);
+
+    /**
+     * Enter a parse tree produced by the {@code index}
+     * labeled alternative in {@link EqlParser#alignElem}.
+     *
+     * @param ctx the parse tree
+     */
+    void enterIndex(EqlParser.IndexContext ctx);
+
+    /**
+     * Exit a parse tree produced by the {@code index}
+     * labeled alternative in {@link EqlParser#alignElem}.
+     *
+     * @param ctx the parse tree
+     */
+    void exitIndex(EqlParser.IndexContext ctx);
+
+    /**
+     * Enter a parse tree produced by the {@code nertag}
+     * labeled alternative in {@link EqlParser#alignElem}.
+     *
+     * @param ctx the parse tree
+     */
+    void enterNertag(EqlParser.NertagContext ctx);
+
+    /**
+     * Exit a parse tree produced by the {@code nertag}
+     * labeled alternative in {@link EqlParser#alignElem}.
+     *
+     * @param ctx the parse tree
+     */
+    void exitNertag(EqlParser.NertagContext ctx);
 
     /**
      * Enter a parse tree produced by {@link EqlParser#assignment}.
@@ -193,22 +254,6 @@ public interface EqlListener extends ParseTreeListener {
     void exitSent(EqlParser.SentContext ctx);
 
     /**
-     * Enter a parse tree produced by the {@code proximity}
-     * labeled alternative in {@link EqlParser#limitation}.
-     *
-     * @param ctx the parse tree
-     */
-    void enterProximity(EqlParser.ProximityContext ctx);
-
-    /**
-     * Exit a parse tree produced by the {@code proximity}
-     * labeled alternative in {@link EqlParser#limitation}.
-     *
-     * @param ctx the parse tree
-     */
-    void exitProximity(EqlParser.ProximityContext ctx);
-
-    /**
      * Enter a parse tree produced by {@link EqlParser#indexOperator}.
      *
      * @param ctx the parse tree
@@ -235,6 +280,38 @@ public interface EqlListener extends ParseTreeListener {
      * @param ctx the parse tree
      */
     void exitQueryLiteral(EqlParser.QueryLiteralContext ctx);
+
+    /**
+     * Enter a parse tree produced by the {@code numberRange}
+     * labeled alternative in {@link EqlParser#interval}.
+     *
+     * @param ctx the parse tree
+     */
+    void enterNumberRange(EqlParser.NumberRangeContext ctx);
+
+    /**
+     * Exit a parse tree produced by the {@code numberRange}
+     * labeled alternative in {@link EqlParser#interval}.
+     *
+     * @param ctx the parse tree
+     */
+    void exitNumberRange(EqlParser.NumberRangeContext ctx);
+
+    /**
+     * Enter a parse tree produced by the {@code dateRange}
+     * labeled alternative in {@link EqlParser#interval}.
+     *
+     * @param ctx the parse tree
+     */
+    void enterDateRange(EqlParser.DateRangeContext ctx);
+
+    /**
+     * Exit a parse tree produced by the {@code dateRange}
+     * labeled alternative in {@link EqlParser#interval}.
+     *
+     * @param ctx the parse tree
+     */
+    void exitDateRange(EqlParser.DateRangeContext ctx);
 
     /**
      * Enter a parse tree produced by {@link EqlParser#constraint}.
