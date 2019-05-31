@@ -26,22 +26,28 @@ If an input folder is specified the server tries to index it after startup. If t
     requestPayload = {
        query: string,
        snippetCount: int,
+       from: int,
+       wantedElements,
        format
     }
-    format = formatDefinition | formatId
-    formatId = long
-    formatDefinition = {
+    wantedElements = {
        entities,
-       attributes
+       fieldAttributes
     }
-    entities = string | Map<string,Map<string,string>>
-    attributes = string | List<string>
-    // string for predefined option (e.g. "all")
-    // Map | List for exact definition
+    format = "json" | "html"
+    
+    entities = namedCollectionOfEntitties | Map<nertag,fieldAttributes>
+    fieldAttributes = namedCollectionOfFieldAttributes | List<string>
+    
+    nertag = string
+    // predefined options
+    namedCollectionOfEntitties = "all"
+    namedCollectionOfFieldAttributes = "all"
     ```
     ```javascript
     responsePayload = {
-        snippets: Array<Snippet>
+        snippets: Array<Snippet>,
+        lastDocument:int
     }
     Snippet = {
         documentId: UUID,
@@ -49,9 +55,13 @@ If an input folder is specified the server tries to index it after startup. If t
         position: int // where in the document the snippet starts,
         url: url // url location of the original document,
         canExtend: boolean // is it possible to further extend the snippet?
+        text,
+    } 
+    text = html | complex
+    complex = {
         text : EnhancedText,
         mapping : Array<QueryMapping>
-    } 
+    }
     QueryMapping = {
         from: int,
         to: int
@@ -82,14 +92,6 @@ If an input folder is specified the server tries to index it after startup. If t
         attributes: List<string> 
     }
     ```  
-    * POST
-       * save format to be used for subsequent search requests
-       * requestPayload the same as formatDefinition from '/query'
-    ```javascript
-    responsePayload = {
-        id: formatId // id to identify the settings
-    }
-    ```
 * /document
     * whole document
     * POST 
@@ -104,7 +106,7 @@ If an input folder is specified the server tries to index it after startup. If t
     responsePayload = {
         title: string,
         url: url // ?? redundant, since we already know it from the snippet, but might be useful, maybe? ??
-        text: EnhancedText // as in '/query',
+        text // as in '/query',
     }
     
     ```
@@ -122,8 +124,8 @@ If an input folder is specified the server tries to index it after startup. If t
     ```
     ```javascript
     responsePayload = {
-        before: EnhancedText // text to insert before, datatype as in '/query',
-        after: EnhancedText // text to insert after, datatype as in '/query'  
+        before: text // text to insert before, datatype as in '/query',
+        after: text // text to insert after, datatype as in '/query'  
     }
     ```
  * /index
