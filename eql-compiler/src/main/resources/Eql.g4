@@ -63,7 +63,6 @@ interval
 constraint
     : PAREN_LEFT constraint PAREN_RIGHT
     | reference comparisonOperator reference
-    | reference comparisonOperator WORD
     | constraint binaryOperator constraint
     | unaryOperator constraint
     ;
@@ -79,10 +78,6 @@ reference : (WORD|NUMBER) DOT WORD;
 comparisonOperator
     : EQ
     | NEQ
-    | LT
-    | LE
-    | GT
-    | GE
     ;
 
 /** binary operators */
@@ -114,9 +109,6 @@ QUERY_CONSTRAINT_SEPARATOR:'&&';
 EQ: '=';
 NEQ: '!=';
 LT: '<';
-LE: '<=';
-GT : '>';
-GE :'>=';
 PAREN_LEFT : '(';
 PAREN_RIGHT : ')';
 BRACKET_LEFT: '[';

@@ -47,12 +47,12 @@ If you want to match one of multiple different values in a given index, you can 
 If the index you are querying contains integers or dates, you can use the range operator to specify interval, such as
 ```date:[1/1/1970..2/2/2000]``` or ```person.age:[20..30]```. 
 
-* **Align** ```index1:B ^ index2:B``` 
+* **Align** ```index1:A ^ index2:B``` 
 
 The align operator allows to express multiple requirements on one word. For example, we might want  to look
 for a noun, whose lemma is do. This query can be written as ```pos:noun^lemma:do```.
 
-The align operator is also useful when working with entities. Let's say that we want to query all people who were born in Brno.
+The align operator is also useful when working with entities. Let's say that we want to find documents talking about people who were born in Brno.
 This can be done using the following query: ```nertag:person^person.birthplace:Brno```. 
 
 ### Context constraints
@@ -62,6 +62,32 @@ you can add the following limitation to the end of the query.
 * **Sentence limit** - ``` - _SENT_ ``` The whole query has to be matched in one sentence.
 
 ### Global constraints
+Sometimes we might want to specify some relationship between multiple entities that can't be expressed using the previous operators.
+Let's say that we are searching for documents talking about two artists influencing each other. The query we might come up with is the following. 
+```
+nertag:artist < lemma:influence < nertag:artist
+``` 
+This query will work, but there is a catch. 
+This query might return more documents that we want, because we didn't specify that the two artist should be different people. 
+This where the global constraints come into play. The global constraint is a predicate which is separated from the query by ```&&```.
+The constrain can consists of one or more equalities or inequalities connected using logical operators **and**,**or**, **nor**. 
+
+But first of all we have to be able to identify a certain part of the query. 
+
+* **Identifier operator** ```x:=A```
+
+This operator allows us to assign an identifier to a certain part of the query.
+
+Once we have the identifier, we can use it to write the constraint.
+```
+1:=nertag:artist < lemma:influence < 2:=nertag:artist && 1.nerid != 2.nerid 
+```
+Now we get back only snippets in which the two artists are different people.
+
+If our query grows, we might prefer to use string identifiers instead of numbers.
+```
+influencer:=nertag:artist < lemma:influence < influencee:=nertag:artist && influencer.nerid != influencee.nerid 
+```
 
 ## Grammar
 Formal grammar written in [Antlr4](https://www.antlr.org/) format can be found at this [link](Eql.g4).
