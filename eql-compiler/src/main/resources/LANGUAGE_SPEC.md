@@ -29,17 +29,18 @@ we might want these words to appear close to each other. Without any modificatio
 Picasso visited Paris - _PAR_
 Picasso visited Paris - _SENT_
 ```
-These two queries require the words to appear in one paragraph and in one sentence, respectively. Let's go with the latter option for now.
+These two queries require the words to appear in one paragraph or in one sentence, respectively. Let's go with the latter option for now.
 Using just one verb might be a bit too specific. Let's add a second option, the verb explore. The **or** operator can be used for that.
 ```
 Picasso ( visited | explored )  Paris - _SENT_
 ```
 Now we are saying the we are looking for documents containing words Picasso, Paris and one of visited, explored. Note that the parenthesis are not necessary in the case. The query ```Picasso visited | explored  Paris - _SENT_```
-has the same meaning, but the first version might be more explicit. In we actually wanted the left and right part of the **or** to be both words, we can use parenthesis ```(Picasso visited) | (explored  Paris) - _SENT_```, 
+has the same meaning, but the first version might be more explicit. Without the parenthesis it might look like both words on each side are part of the **or**, which is not the case. If we actually wanted that, we can use parenthesis ```(Picasso visited) | (explored  Paris) - _SENT_```, 
 but the meaning is different of course.
 
 Let's keep focusing on the verbs a bit longer. There might be documents out there talking about Picasso visiting Paris, but the shape of the verb might be different. 
-Maybe the document can be written in present tense. To be able to match documents like that, we can use the **index** operator. This one is for querying metadata associated with given word.
+Maybe the document can be written in the present tense. To be able to match documents like that, we can use the **index** operator. So far our query used only the default index, which is token. 
+However, the metadata about words can be found on different indexes. 
 ```
 Picasso ( lemma:visit | lemma:explore )  Paris - _SENT_
 ```
