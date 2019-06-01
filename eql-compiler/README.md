@@ -1,3 +1,3 @@
 # Enticing Query Language compiler
 
-Language spec [here](./SPEC.md)
+Language spec [here](src/main/resources/LANGUAGE_SPEC.md)
