@@ -68,7 +68,7 @@ This new query shouldn't be surprising for you. Instead of an exact word Paris, 
 
 By applying a few operators, we got a query, which is more generic and therefore matches more documents.  
 
-There is still one more group of operators to talk about, *global constraints*. To illustrate what they are for, let's say that we are searching for two artists and a relationship between them.
+There is still one more group of operators to talk about, **global constraints**. To illustrate what they are for, let's say that we are searching for two artists and a relationship between them.
 The skeleton of the query is ```artist influenced artist```, but we are going to need a few operators to make the query more generic.
 ```
 nertag:(person|artist) < ( lemma:(influce|impact) | (lemma:paid < lemma:tribute) )  < nertag:(person|artist) - _PAR_
@@ -76,7 +76,7 @@ nertag:(person|artist) < ( lemma:(influce|impact) | (lemma:paid < lemma:tribute)
 We should already be familiar with the operators used in this query, but as an exercise, let's translate it to English. We are searching for a document where there is an entity followed by a verb followed by an entity. 
 Both entities should be of type person or artist.  The verb can be either by a single verb,
 whose lemma is either influence or impact, or 'paid tribute', again in any form thanks to using the _lemma_ index. On top of that, this whole query is limited to a single paragraph. Seems good. But there is a problem. 
-Currently, we didn't express that these two entities should be different people, and that is actually really important, isn't it. Now comes the time to use *global constraints*. 
+Currently, we didn't express that these two entities should be different people, and that is actually really important, isn't it? Now comes the time to use **global constraints**. 
 First we will identify parts of the query we are interested in using the **identifier operator**, than we will use them to express our global constraint.
 ```
 influencer:=nertag:(person|artist) < ( lemma:(influce|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) - _PAR_ && influencer.nerid != influencee.nerid
@@ -106,7 +106,7 @@ At least one of A, B have to be in the document.
  B should not be in the document.
 * **Parenthesis** - ```(A | B) & C``` 
 
-You can use parenthesis to build more complex logical expressions, such as this example, where we want at least one of A or B and C.  
+You can use parenthesis to build more complex logic expressions, such as this example, where we want at least one of A or B and C.  
 * **Proximity** - ```A B ~ 5```
  
 A and B should appear exactly 5 positions next to each other.
@@ -147,9 +147,9 @@ nertag:artist < lemma:influence < nertag:artist
 This query will work, but there is a catch. 
 This query might return more snippets than we want, because we didn't specify that the two artist should be different people. 
 This where the global constraints come into play. The global constraint is a predicate which is separated from the query by the symbol ```&&```.
-The constrain consists of one or more equalities or inequalities connected using logical operators **and**,**or**, **nor** and parenthesis, if necessary. 
+The constraint consists of one or more equalities or inequalities connected using logical operators **and**,**or**, **nor** and parenthesis, if necessary. 
 
-But before using global constraints we have to be able to identify a certain part of the query, right? 
+But before using global constraints we have to be able to identify parts of the query, right? 
 
 * **Identifier operator** ```x:=A```
 
