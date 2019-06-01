@@ -39,7 +39,7 @@ has the same meaning, but the first version might be more explicit. Without the 
 but the meaning is different of course.
 
 Let's keep focusing on the verbs a bit longer. There might be documents out there talking about Picasso visiting Paris, but the shape of the verb might be different. 
-Maybe the document can be written in the present tense. To be able to match documents like that, we can use the **index** operator. So far our query used only the default index, which is token. 
+Maybe the document can be written in the present tense. To be able to match documents like that, we can use the **index** operator. So far our query used only the default index, which is _token_. 
 However, the metadata about words can be found on different indexes. 
 ```
 Picasso ( lemma:visit | lemma:explore )  Paris - _SENT_
@@ -51,21 +51,37 @@ Picasso lemma:(visit|explore) Paris - _SENT_
 ```
 That's better, right?
 
-So far we used only basic indexes, logic operator and constraints. Let's utilize the semantic enhancement more now. EQL allows you the query for an entity instead of exact word. 
+So far we used only basic indexes, logic operator and constraints. Let's utilize the semantic enhancement more now. EQL allows you the query for an entity instead of an exact word. 
 Let's say that there is a sentence talking about Picasso and Paris, but it uses pronouns instead of the direct names. We want to match those as well and using the **align** operator we can.
 ```
 nertag:person^(person.name:Picasso) lemma:(visit|explore) Paris - _SENT_
 ``` 
-Well, this might look like a big step, so let's digest it a bit. We replaced ```Picasso``` with ```nertag:person^(person.name:Picasso)```. We are already familiar with the first part, ```nertag:person```.
+Well, this step might be hard to swallow at once, so let's digest it piece by piece. We replaced ```Picasso``` with ```nertag:person^(person.name:Picasso)```. We are already familiar with the first part, ```nertag:person```.
 This is an **index** operator. The only difference is that instead of _lemma_ we are querying _nertag_, which is an index containing the type of entity.  So why didn't we write just ```nertag:person lemma:(visit|explore) Paris - _SENT_```? 
-It is definitely simpler, but that would match *any* person visiting Paris and that is not what we want. We want that word to be a person, but only a person whose name is Picasso. More technically speaking, we want to 
+It is definitely simpler, but that would match **any** person visiting Paris and this is not what we want. We want that word to be a person, but only a person whose name is Picasso. More technically speaking, we want to 
 query two indexes, _nertag_ and _name_, where name is an attribute of entity person, but we want these two requirements on the same word, they should **align**. That's where the name comes from. Now that we understand our new query, 
-let's change Paris in the same way.
+let's change Paris the same way.
 ```
 nertag:person^(person.name:Picasso) lemma:(visit|explore)  nertag:place^(place.name:Paris) - _SENT_
 ```
 This new query shouldn't be surprising for you. Instead of an exact word Paris, we are using an entity, whose name is Paris, but the real word used in the sentence can be a pronoun for example. 
 
+By applying a few operators, we got a query, which is more generic and therefore matches more documents.  
+
+There is still one more group of operators to talk about, *global constraints*. To illustrate what they are for, let's say that we are searching for two artists and a relationship between them.
+The skeleton of the query is ```artist influenced artist```, but we are going to need a few operators to make the query more generic.
+```
+nertag:(person|artist) < ( lemma:(influce|impact) | (lemma:paid < lemma:tribute) )  < nertag:(person|artist) - _PAR_
+``` 
+We should already be familiar with the operators used in this query, but as an exercise, let's translate it to English. We are searching for a document where there is an entity followed by a verb followed by an entity. 
+Both entities should be of type person or artist.  The verb can be either by a single verb,
+whose lemma is either influence or impact, or 'paid tribute', again in any form thanks to using the _lemma_ index. On top of that, this whole query is limited to a single paragraph. Seems good. But there is a problem. 
+Currently, we didn't express that these two entities should be different people, and that is actually really important, isn't it. Now comes the time to use *global constraints*. 
+First we will identify parts of the query we are interested in using the **identifier operator**, than we will use them to express our global constraint.
+```
+influencer:=nertag:(person|artist) < ( lemma:(influce|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) - _PAR_ && influencer.nerid != influencee.nerid
+``` 
+Now we have ensured that the two artist should be different and our query should work as expected.
 
 ## EQL Operators
 The operators can be divided into four categories.
