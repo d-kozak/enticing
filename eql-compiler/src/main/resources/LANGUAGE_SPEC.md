@@ -70,15 +70,15 @@ nertag:artist < lemma:influence < nertag:artist
 This query will work, but there is a catch. 
 This query might return more documents that we want, because we didn't specify that the two artist should be different people. 
 This where the global constraints come into play. The global constraint is a predicate which is separated from the query by ```&&```.
-The constrain can consists of one or more equalities or inequalities connected using logical operators **and**,**or**, **nor**. 
+The constrain consists of one or more equalities or inequalities connected using logical operators **and**,**or**, **nor** and parenthesis, if necessary. 
 
-But first of all we have to be able to identify a certain part of the query. 
+But first of all we have to be able to identify a certain part of the query, right? 
 
 * **Identifier operator** ```x:=A```
 
 This operator allows us to assign an identifier to a certain part of the query.
 
-Once we have the identifier, we can use it to write the constraint.
+Once we have the identifier, we can use it to write the new query.
 ```
 1:=nertag:artist < lemma:influence < 2:=nertag:artist && 1.nerid != 2.nerid 
 ```
