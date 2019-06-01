@@ -1,4 +1,4 @@
-// Generated from /home/dkozak/projects/knot/enticing/eql-compiler/src/main/kotlin/cz/vutbr/fit/knot/enticing/eql/compiler/parser/Eql.g4 by ANTLR 4.7.2
+// Generated from /home/dkozak/projects/knot/enticing/eql-compiler/src/main/resources/Eql.g4 by ANTLR 4.7.2
 package cz.vutbr.fit.knot.enticing.eql.compiler.parser;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -133,7 +133,7 @@ public interface EqlVisitor<T> extends ParseTreeVisitor<T> {
 
     /**
      * Visit a parse tree produced by the {@code par}
-     * labeled alternative in {@link EqlParser#limitation}.
+     * labeled alternative in {@link EqlParser#contextConstraint}.
      *
      * @param ctx the parse tree
      * @return the visitor result
@@ -142,7 +142,7 @@ public interface EqlVisitor<T> extends ParseTreeVisitor<T> {
 
     /**
      * Visit a parse tree produced by the {@code sent}
-     * labeled alternative in {@link EqlParser#limitation}.
+     * labeled alternative in {@link EqlParser#contextConstraint}.
      *
      * @param ctx the parse tree
      * @return the visitor result

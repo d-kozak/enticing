@@ -77,7 +77,7 @@ We should already be familiar with the operators used in this query, but as an e
 Both entities should be of type person or artist.  The verb can be either by a single verb,
 whose lemma is either influence or impact, or 'paid tribute', again in any form thanks to using the _lemma_ index. On top of that, this whole query is limited to a single paragraph. Seems good. But there is a problem. 
 Currently, we didn't express that these two entities should be different people, and that is actually really important, isn't it? Now comes the time to use **global constraints**. 
-First we will identify parts of the query we are interested in using the **identifier operator**, than we will use them to express our global constraint.
+First we will identify parts of the query we are interested in using the **assignment operator**, than we will use them to express our global constraint.
 ```
 influencer:=nertag:(person|artist) < ( lemma:(influce|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) - _PAR_ && influencer.nerid != influencee.nerid
 ``` 
@@ -151,7 +151,7 @@ The constraint consists of one or more equalities or inequalities connected usin
 
 But before using global constraints we have to be able to identify parts of the query, right? 
 
-* **Identifier operator** ```x:=A```
+* **Assignment operator** ```x:=A```
 
 This operator allows us to assign an identifier to a certain part of the query.
 

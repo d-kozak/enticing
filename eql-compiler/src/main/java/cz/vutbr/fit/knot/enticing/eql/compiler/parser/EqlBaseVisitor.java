@@ -1,4 +1,4 @@
-// Generated from /home/dkozak/projects/knot/enticing/eql-compiler/src/main/kotlin/cz/vutbr/fit/knot/enticing/eql/compiler/parser/Eql.g4 by ANTLR 4.7.2
+// Generated from /home/dkozak/projects/knot/enticing/eql-compiler/src/main/resources/Eql.g4 by ANTLR 4.7.2
 package cz.vutbr.fit.knot.enticing.eql.compiler.parser;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
@@ -146,7 +146,8 @@ public class EqlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Eq
 	 * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitSent(EqlParser.SentContext ctx) { return visitChildren(ctx);
+    public T visitSent(EqlParser.SentContext ctx) {
+        return visitChildren(ctx);
     }
 
     /**

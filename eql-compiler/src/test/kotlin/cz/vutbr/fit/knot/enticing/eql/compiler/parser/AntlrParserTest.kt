@@ -68,14 +68,14 @@ class AntlrParserTest {
     inner class StressTest {
         @Test
         fun `Complex valid query`() {
-            val input = """(id:ahoj cau) ~ 5 foocko:=foo:bar^(bar.baz:10)^(bar.baz2:al) & (nertag:person (foo baz)) < aaaa ("baz baz bar") - _PAR_ && foocko.name < foo & id.name > bar"""
+            val input = """(id:ahoj cau) ~ 5 foocko:=foo:bar^(bar.baz:10)^(bar.baz2:al) & (nertag:person (foo baz)) < aaaa ("baz baz bar") - _PAR_ && foocko.name != foo.foo & id.name = bar.bar"""
             val (_, errors) = EqlCompiler().parse(input)
             assertThat(errors).isEmpty()
         }
 
         @Test
         fun `Another quite complex query`() {
-            val input = "nertag:person^(person.name:Jogn) (visited|entered)ahoj && ahoj.cau > cau.ahoj & foo.baz > baz.gaz | !foo.foo > foo.foo"
+            val input = "nertag:person^(person.name:Jogn) (visited|entered)ahoj && ahoj.cau = cau.ahoj & foo.baz != baz.gaz | !foo.foo != foo.foo"
             val (_, errors) = EqlCompiler().parse(input)
             assertThat(errors).isEmpty()
         }

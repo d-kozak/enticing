@@ -3,14 +3,14 @@ grammar Eql;
 /**
  * Parser rules
  */
-/** start rule of the grammar, represents the whole search query with constraints */
+/** start rule of the grammar, represents the whole search query with global constraints */
 root: query  (QUERY_CONSTRAINT_SEPARATOR constraint)? EOF;
 
 
 /**
 * Serch query rules
 */
-query: queryElem+ proximity? limitation? ;
+query: queryElem+ proximity? contextConstraint? ;
 
 queryElem
     : assignment? QUOTATION queryElem+ QUOTATION #sequence
@@ -36,10 +36,10 @@ alignElem
     ;
 
 /** assignment of part of the query to be used in global constraints */
-assignment: (NUMBER | WORD) COLON EQ;
+assignment: (NUMBER | WORD) ASSIGN;
 
 /** to express limitations with respect to position in the document */
-limitation
+contextConstraint
     : MINUS PAR # par
     | MINUS SENT # sent
     ;
@@ -95,7 +95,7 @@ unaryOperator
 /**
  * Lexer rules
  */
-ARROW: '<-';
+ASSIGN: ':=';
 MINUS:'-';
 COLON:':';
 EXPONENT: '^';
