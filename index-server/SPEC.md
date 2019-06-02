@@ -1,14 +1,18 @@
 # Specification of the Index server
 
-Index server manages .mg4j files and uses [mg4j](http://mg4j.di.unimi.it/) to index them and perform queries on them.
+Index server manages indexed .mg4j files and uses [mg4j](http://mg4j.di.unimi.it/) to perform queries on them.
 
 # Lifecycle
 When started, it loads it's configuration, which is required as an input parameter. The configuration contains the following. 
-* format(indexes and entities) which is used in it's input .mg4j files
-* \[folder with indexed data which should be used for querying] 
-* \[EXTENSION] url of the manager-service (for automatic registration)
+* format which is used in it's input .mg4j files
+    * names and descriptions of individual indexes
+    * names and descriptions of entities
+* information about indexed files
+    * name of the index (e.g. WIKI 2017b, something that uniquely identifies the indexed data)  
+    * the directory where the indexes are stored
+*  url of the manager-service (for automatic registration)
 
-If no index folder is provided, the server will respond with error messages to all query, document and snippet requests 
+If no information about index is provided, the server will respond with error messages to all query, document and snippet requests 
 until a new folder is set using the rest api. 
 
 # Rest interface
@@ -21,29 +25,32 @@ until a new folder is set using the rest api.
         * perform search query, return list of snippets
     ```javascript
     requestPayload = {
-       query: string,
-       snippetCount: int,
-       fromDocument: int,
-       wantedElements,
-       responseFormat 
+       query: string, // EQL query
+       snippetCount: int, // how many snippets to return
+       offset: int, // for pagination, offset at which to start searching
+       wantedIndexes, // which indexes to include in the rensponse
+     
+       ?? still not convinced about supporting different response types than json ??
+       ?? assuming two clients ,web frontend and tui, both of them will actually have different visualization ??
+       ?? so I would leave the json to html/text conversion to them ??
+       responseFormat // what format should the result have
     }
     responseFormat = {
         format: "json" | "html"
     }  
-    wantedElements = {
+    wantedIndexes = {
        entities,
        fieldAttributes
     }
     entities = predefinedOption | Map<nertag,fieldAttributes>
     nertag = string
-    fieldAttributes = predefinedOption | List<string>
-    // predefined options, possibility to add more 
-    predefinedOption = "all"
+    fieldAttributes = predefinedOption | List<string> 
+    predefinedOption = "all" // simple way to say all
     ```
     ```javascript
     responsePayload = {
         snippets: Array<Snippet>,
-        lastProcessedDocument:int
+        offset:int // for pagination
     }
     Snippet = {
         documentId: UUID,
@@ -63,7 +70,7 @@ until a new folder is set using the rest api.
         queryIndex: [int,int]
     }
     EnhancedText = {  
-        text:string
+        text:string,
         annotations:Map<annotationId,Annotation>,
         positions:Array<{from:int,to:int,annotationId}>
     }
@@ -73,9 +80,10 @@ until a new folder is set using the rest api.
         * attributes that can be used in query
     ```javascript
     responsePayload = {
-        entities: Map<string,Map<string,string>>,
-        attributes: List<string> 
+        entities: Map<nertag,Map<atttribute,description>>, // entities and their attributes
+        indexes: Map<index,description>  // all indexes that can be queried
     }
+    nertag = atttribute = description = index = string
     ```  
 * /document
     * whole document
@@ -84,16 +92,16 @@ until a new folder is set using the rest api.
     requestPayload = {
         documentId: UUID,
         collectionId: string,
-        query:string, // if we want to see how the query match the document
-        format // as in '/query'    
+        query:string?, // optional, if we want to see how the query match the document
+        wantedIndexes // as in '/query'  
     }
     ```
     ```javascript
     responsePayload = {
         title: string,
-        url: url, // ?? redundant, since we already know it from the snippet, but might be useful, maybe? ??
+        url: url, // url of the source
         text, // as in '/query',
-        mapping: Array<QueryMapping>
+        mapping: Array<QueryMapping>? // optional, only used if query was specified
     }
     
     ```
@@ -104,9 +112,10 @@ until a new folder is set using the rest api.
     requestPayload = {
         documentId: UUID,
         collectionId: string,
-        position: int, // start position of the snippet which we want to extend
-        size: int, // how many extra characters we want,
-        format // as in '/query'
+        snippetStart: int, // where current snippet starts
+        snippetSize: int // size of current spippets
+        size: int, // how many extra characters are wanted
+        wantedIndexes // as in '/query'
     }
     ```
     ```javascript
@@ -115,12 +124,13 @@ until a new folder is set using the rest api.
         after: text // text to insert after, datatype as in '/query'  
     }
     ```
- * /input-directory
+ * /index
     * set new index directory to use for queries 
     * POST
     ```javascript
     requestPayload = {   
-        directory: string
+        directory: string, // which directory the query
+        indexName: string // what index the data belong to
     }
     ```
  
