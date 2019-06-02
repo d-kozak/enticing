@@ -84,6 +84,22 @@ public interface EqlListener extends ParseTreeListener {
     void exitParen(EqlParser.ParenContext ctx);
 
     /**
+     * Enter a parse tree produced by the {@code logicUnaryOperation}
+     * labeled alternative in {@link EqlParser#queryElem}.
+     *
+     * @param ctx the parse tree
+     */
+    void enterLogicUnaryOperation(EqlParser.LogicUnaryOperationContext ctx);
+
+    /**
+     * Exit a parse tree produced by the {@code logicUnaryOperation}
+     * labeled alternative in {@link EqlParser#queryElem}.
+     *
+     * @param ctx the parse tree
+     */
+    void exitLogicUnaryOperation(EqlParser.LogicUnaryOperationContext ctx);
+
+    /**
      * Enter a parse tree produced by the {@code indexWithSingleValue}
      * labeled alternative in {@link EqlParser#queryElem}.
      *
@@ -100,36 +116,20 @@ public interface EqlListener extends ParseTreeListener {
     void exitIndexWithSingleValue(EqlParser.IndexWithSingleValueContext ctx);
 
     /**
-     * Enter a parse tree produced by the {@code binaryOperation}
+     * Enter a parse tree produced by the {@code logicBinaryOperation}
      * labeled alternative in {@link EqlParser#queryElem}.
      *
      * @param ctx the parse tree
      */
-    void enterBinaryOperation(EqlParser.BinaryOperationContext ctx);
+    void enterLogicBinaryOperation(EqlParser.LogicBinaryOperationContext ctx);
 
     /**
-     * Exit a parse tree produced by the {@code binaryOperation}
+     * Exit a parse tree produced by the {@code logicBinaryOperation}
      * labeled alternative in {@link EqlParser#queryElem}.
      *
      * @param ctx the parse tree
      */
-    void exitBinaryOperation(EqlParser.BinaryOperationContext ctx);
-
-    /**
-     * Enter a parse tree produced by the {@code unaryOperation}
-     * labeled alternative in {@link EqlParser#queryElem}.
-     *
-     * @param ctx the parse tree
-     */
-    void enterUnaryOperation(EqlParser.UnaryOperationContext ctx);
-
-    /**
-     * Exit a parse tree produced by the {@code unaryOperation}
-     * labeled alternative in {@link EqlParser#queryElem}.
-     *
-     * @param ctx the parse tree
-     */
-    void exitUnaryOperation(EqlParser.UnaryOperationContext ctx);
+    void exitLogicBinaryOperation(EqlParser.LogicBinaryOperationContext ctx);
 
     /**
      * Enter a parse tree produced by the {@code order}
@@ -192,20 +192,66 @@ public interface EqlListener extends ParseTreeListener {
     void exitIndex(EqlParser.IndexContext ctx);
 
     /**
-     * Enter a parse tree produced by the {@code nertag}
+     * Enter a parse tree produced by the {@code entityAttribute}
      * labeled alternative in {@link EqlParser#alignElem}.
      *
      * @param ctx the parse tree
      */
-    void enterNertag(EqlParser.NertagContext ctx);
+    void enterEntityAttribute(EqlParser.EntityAttributeContext ctx);
 
     /**
-     * Exit a parse tree produced by the {@code nertag}
+     * Exit a parse tree produced by the {@code entityAttribute}
      * labeled alternative in {@link EqlParser#alignElem}.
      *
      * @param ctx the parse tree
      */
-    void exitNertag(EqlParser.NertagContext ctx);
+    void exitEntityAttribute(EqlParser.EntityAttributeContext ctx);
+
+    /**
+     * Enter a parse tree produced by the {@code singleValue}
+     * labeled alternative in {@link EqlParser#singleValueOrMultiple}.
+     *
+     * @param ctx the parse tree
+     */
+    void enterSingleValue(EqlParser.SingleValueContext ctx);
+
+    /**
+     * Exit a parse tree produced by the {@code singleValue}
+     * labeled alternative in {@link EqlParser#singleValueOrMultiple}.
+     *
+     * @param ctx the parse tree
+     */
+    void exitSingleValue(EqlParser.SingleValueContext ctx);
+
+    /**
+     * Enter a parse tree produced by the {@code multipleValues}
+     * labeled alternative in {@link EqlParser#singleValueOrMultiple}.
+     *
+     * @param ctx the parse tree
+     */
+    void enterMultipleValues(EqlParser.MultipleValuesContext ctx);
+
+    /**
+     * Exit a parse tree produced by the {@code multipleValues}
+     * labeled alternative in {@link EqlParser#singleValueOrMultiple}.
+     *
+     * @param ctx the parse tree
+     */
+    void exitMultipleValues(EqlParser.MultipleValuesContext ctx);
+
+    /**
+     * Enter a parse tree produced by {@link EqlParser#literalOrInterval}.
+     *
+     * @param ctx the parse tree
+     */
+    void enterLiteralOrInterval(EqlParser.LiteralOrIntervalContext ctx);
+
+    /**
+     * Exit a parse tree produced by {@link EqlParser#literalOrInterval}.
+     *
+     * @param ctx the parse tree
+     */
+    void exitLiteralOrInterval(EqlParser.LiteralOrIntervalContext ctx);
 
     /**
      * Enter a parse tree produced by {@link EqlParser#assignment}.
@@ -222,36 +268,36 @@ public interface EqlListener extends ParseTreeListener {
     void exitAssignment(EqlParser.AssignmentContext ctx);
 
     /**
-     * Enter a parse tree produced by the {@code par}
+     * Enter a parse tree produced by the {@code paragraph}
      * labeled alternative in {@link EqlParser#contextConstraint}.
      *
      * @param ctx the parse tree
      */
-    void enterPar(EqlParser.ParContext ctx);
+    void enterParagraph(EqlParser.ParagraphContext ctx);
 
     /**
-     * Exit a parse tree produced by the {@code par}
+     * Exit a parse tree produced by the {@code paragraph}
      * labeled alternative in {@link EqlParser#contextConstraint}.
      *
      * @param ctx the parse tree
      */
-    void exitPar(EqlParser.ParContext ctx);
+    void exitParagraph(EqlParser.ParagraphContext ctx);
 
     /**
-     * Enter a parse tree produced by the {@code sent}
+     * Enter a parse tree produced by the {@code sentence}
      * labeled alternative in {@link EqlParser#contextConstraint}.
      *
      * @param ctx the parse tree
      */
-    void enterSent(EqlParser.SentContext ctx);
+    void enterSentence(EqlParser.SentenceContext ctx);
 
     /**
-     * Exit a parse tree produced by the {@code sent}
+     * Exit a parse tree produced by the {@code sentence}
      * labeled alternative in {@link EqlParser#contextConstraint}.
      *
      * @param ctx the parse tree
      */
-    void exitSent(EqlParser.SentContext ctx);
+    void exitSentence(EqlParser.SentenceContext ctx);
 
     /**
      * Enter a parse tree produced by {@link EqlParser#indexOperator}.
@@ -314,18 +360,68 @@ public interface EqlListener extends ParseTreeListener {
     void exitDateRange(EqlParser.DateRangeContext ctx);
 
     /**
-     * Enter a parse tree produced by {@link EqlParser#constraint}.
+     * Enter a parse tree produced by the {@code parens}
+     * labeled alternative in {@link EqlParser#globalConstraint}.
      *
      * @param ctx the parse tree
      */
-    void enterConstraint(EqlParser.ConstraintContext ctx);
+    void enterParens(EqlParser.ParensContext ctx);
 
     /**
-     * Exit a parse tree produced by {@link EqlParser#constraint}.
+     * Exit a parse tree produced by the {@code parens}
+     * labeled alternative in {@link EqlParser#globalConstraint}.
      *
      * @param ctx the parse tree
      */
-    void exitConstraint(EqlParser.ConstraintContext ctx);
+    void exitParens(EqlParser.ParensContext ctx);
+
+    /**
+     * Enter a parse tree produced by the {@code comparison}
+     * labeled alternative in {@link EqlParser#globalConstraint}.
+     *
+     * @param ctx the parse tree
+     */
+    void enterComparison(EqlParser.ComparisonContext ctx);
+
+    /**
+     * Exit a parse tree produced by the {@code comparison}
+     * labeled alternative in {@link EqlParser#globalConstraint}.
+     *
+     * @param ctx the parse tree
+     */
+    void exitComparison(EqlParser.ComparisonContext ctx);
+
+    /**
+     * Enter a parse tree produced by the {@code constraintLogicUnaryOperation}
+     * labeled alternative in {@link EqlParser#globalConstraint}.
+     *
+     * @param ctx the parse tree
+     */
+    void enterConstraintLogicUnaryOperation(EqlParser.ConstraintLogicUnaryOperationContext ctx);
+
+    /**
+     * Exit a parse tree produced by the {@code constraintLogicUnaryOperation}
+     * labeled alternative in {@link EqlParser#globalConstraint}.
+     *
+     * @param ctx the parse tree
+     */
+    void exitConstraintLogicUnaryOperation(EqlParser.ConstraintLogicUnaryOperationContext ctx);
+
+    /**
+     * Enter a parse tree produced by the {@code constraintLogicBinaryOperation}
+     * labeled alternative in {@link EqlParser#globalConstraint}.
+     *
+     * @param ctx the parse tree
+     */
+    void enterConstraintLogicBinaryOperation(EqlParser.ConstraintLogicBinaryOperationContext ctx);
+
+    /**
+     * Exit a parse tree produced by the {@code constraintLogicBinaryOperation}
+     * labeled alternative in {@link EqlParser#globalConstraint}.
+     *
+     * @param ctx the parse tree
+     */
+    void exitConstraintLogicBinaryOperation(EqlParser.ConstraintLogicBinaryOperationContext ctx);
 
     /**
      * Enter a parse tree produced by {@link EqlParser#reference}.
@@ -356,30 +452,30 @@ public interface EqlListener extends ParseTreeListener {
     void exitComparisonOperator(EqlParser.ComparisonOperatorContext ctx);
 
     /**
-     * Enter a parse tree produced by {@link EqlParser#binaryOperator}.
+     * Enter a parse tree produced by {@link EqlParser#logicBinaryOperator}.
      *
      * @param ctx the parse tree
      */
-    void enterBinaryOperator(EqlParser.BinaryOperatorContext ctx);
+    void enterLogicBinaryOperator(EqlParser.LogicBinaryOperatorContext ctx);
 
     /**
-     * Exit a parse tree produced by {@link EqlParser#binaryOperator}.
+     * Exit a parse tree produced by {@link EqlParser#logicBinaryOperator}.
      *
      * @param ctx the parse tree
      */
-    void exitBinaryOperator(EqlParser.BinaryOperatorContext ctx);
+    void exitLogicBinaryOperator(EqlParser.LogicBinaryOperatorContext ctx);
 
     /**
-     * Enter a parse tree produced by {@link EqlParser#unaryOperator}.
+     * Enter a parse tree produced by {@link EqlParser#logicUnaryOperator}.
      *
      * @param ctx the parse tree
      */
-    void enterUnaryOperator(EqlParser.UnaryOperatorContext ctx);
+    void enterLogicUnaryOperator(EqlParser.LogicUnaryOperatorContext ctx);
 
     /**
-     * Exit a parse tree produced by {@link EqlParser#unaryOperator}.
+     * Exit a parse tree produced by {@link EqlParser#logicUnaryOperator}.
      *
      * @param ctx the parse tree
      */
-    void exitUnaryOperator(EqlParser.UnaryOperatorContext ctx);
+    void exitLogicUnaryOperator(EqlParser.LogicUnaryOperatorContext ctx);
 }

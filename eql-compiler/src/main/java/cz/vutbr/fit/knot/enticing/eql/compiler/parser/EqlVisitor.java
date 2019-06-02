@@ -54,6 +54,15 @@ public interface EqlVisitor<T> extends ParseTreeVisitor<T> {
     T visitParen(EqlParser.ParenContext ctx);
 
     /**
+     * Visit a parse tree produced by the {@code logicUnaryOperation}
+     * labeled alternative in {@link EqlParser#queryElem}.
+     *
+     * @param ctx the parse tree
+     * @return the visitor result
+     */
+    T visitLogicUnaryOperation(EqlParser.LogicUnaryOperationContext ctx);
+
+    /**
      * Visit a parse tree produced by the {@code indexWithSingleValue}
      * labeled alternative in {@link EqlParser#queryElem}.
      *
@@ -63,22 +72,13 @@ public interface EqlVisitor<T> extends ParseTreeVisitor<T> {
     T visitIndexWithSingleValue(EqlParser.IndexWithSingleValueContext ctx);
 
     /**
-     * Visit a parse tree produced by the {@code binaryOperation}
+     * Visit a parse tree produced by the {@code logicBinaryOperation}
      * labeled alternative in {@link EqlParser#queryElem}.
      *
      * @param ctx the parse tree
      * @return the visitor result
      */
-    T visitBinaryOperation(EqlParser.BinaryOperationContext ctx);
-
-    /**
-     * Visit a parse tree produced by the {@code unaryOperation}
-     * labeled alternative in {@link EqlParser#queryElem}.
-     *
-     * @param ctx the parse tree
-     * @return the visitor result
-     */
-    T visitUnaryOperation(EqlParser.UnaryOperationContext ctx);
+    T visitLogicBinaryOperation(EqlParser.LogicBinaryOperationContext ctx);
 
     /**
      * Visit a parse tree produced by the {@code order}
@@ -115,13 +115,39 @@ public interface EqlVisitor<T> extends ParseTreeVisitor<T> {
     T visitIndex(EqlParser.IndexContext ctx);
 
     /**
-     * Visit a parse tree produced by the {@code nertag}
+     * Visit a parse tree produced by the {@code entityAttribute}
      * labeled alternative in {@link EqlParser#alignElem}.
      *
      * @param ctx the parse tree
      * @return the visitor result
      */
-    T visitNertag(EqlParser.NertagContext ctx);
+    T visitEntityAttribute(EqlParser.EntityAttributeContext ctx);
+
+    /**
+     * Visit a parse tree produced by the {@code singleValue}
+     * labeled alternative in {@link EqlParser#singleValueOrMultiple}.
+     *
+     * @param ctx the parse tree
+     * @return the visitor result
+     */
+    T visitSingleValue(EqlParser.SingleValueContext ctx);
+
+    /**
+     * Visit a parse tree produced by the {@code multipleValues}
+     * labeled alternative in {@link EqlParser#singleValueOrMultiple}.
+     *
+     * @param ctx the parse tree
+     * @return the visitor result
+     */
+    T visitMultipleValues(EqlParser.MultipleValuesContext ctx);
+
+    /**
+     * Visit a parse tree produced by {@link EqlParser#literalOrInterval}.
+     *
+     * @param ctx the parse tree
+     * @return the visitor result
+     */
+    T visitLiteralOrInterval(EqlParser.LiteralOrIntervalContext ctx);
 
     /**
      * Visit a parse tree produced by {@link EqlParser#assignment}.
@@ -132,22 +158,22 @@ public interface EqlVisitor<T> extends ParseTreeVisitor<T> {
     T visitAssignment(EqlParser.AssignmentContext ctx);
 
     /**
-     * Visit a parse tree produced by the {@code par}
+     * Visit a parse tree produced by the {@code paragraph}
      * labeled alternative in {@link EqlParser#contextConstraint}.
      *
      * @param ctx the parse tree
      * @return the visitor result
      */
-    T visitPar(EqlParser.ParContext ctx);
+    T visitParagraph(EqlParser.ParagraphContext ctx);
 
     /**
-     * Visit a parse tree produced by the {@code sent}
+     * Visit a parse tree produced by the {@code sentence}
      * labeled alternative in {@link EqlParser#contextConstraint}.
      *
      * @param ctx the parse tree
      * @return the visitor result
      */
-    T visitSent(EqlParser.SentContext ctx);
+    T visitSentence(EqlParser.SentenceContext ctx);
 
     /**
      * Visit a parse tree produced by {@link EqlParser#indexOperator}.
@@ -184,12 +210,40 @@ public interface EqlVisitor<T> extends ParseTreeVisitor<T> {
     T visitDateRange(EqlParser.DateRangeContext ctx);
 
     /**
-     * Visit a parse tree produced by {@link EqlParser#constraint}.
+     * Visit a parse tree produced by the {@code parens}
+     * labeled alternative in {@link EqlParser#globalConstraint}.
      *
      * @param ctx the parse tree
      * @return the visitor result
      */
-    T visitConstraint(EqlParser.ConstraintContext ctx);
+    T visitParens(EqlParser.ParensContext ctx);
+
+    /**
+     * Visit a parse tree produced by the {@code comparison}
+     * labeled alternative in {@link EqlParser#globalConstraint}.
+     *
+     * @param ctx the parse tree
+     * @return the visitor result
+     */
+    T visitComparison(EqlParser.ComparisonContext ctx);
+
+    /**
+     * Visit a parse tree produced by the {@code constraintLogicUnaryOperation}
+     * labeled alternative in {@link EqlParser#globalConstraint}.
+     *
+     * @param ctx the parse tree
+     * @return the visitor result
+     */
+    T visitConstraintLogicUnaryOperation(EqlParser.ConstraintLogicUnaryOperationContext ctx);
+
+    /**
+     * Visit a parse tree produced by the {@code constraintLogicBinaryOperation}
+     * labeled alternative in {@link EqlParser#globalConstraint}.
+     *
+     * @param ctx the parse tree
+     * @return the visitor result
+     */
+    T visitConstraintLogicBinaryOperation(EqlParser.ConstraintLogicBinaryOperationContext ctx);
 
     /**
      * Visit a parse tree produced by {@link EqlParser#reference}.
@@ -208,18 +262,18 @@ public interface EqlVisitor<T> extends ParseTreeVisitor<T> {
     T visitComparisonOperator(EqlParser.ComparisonOperatorContext ctx);
 
     /**
-     * Visit a parse tree produced by {@link EqlParser#binaryOperator}.
+     * Visit a parse tree produced by {@link EqlParser#logicBinaryOperator}.
      *
      * @param ctx the parse tree
      * @return the visitor result
      */
-    T visitBinaryOperator(EqlParser.BinaryOperatorContext ctx);
+    T visitLogicBinaryOperator(EqlParser.LogicBinaryOperatorContext ctx);
 
     /**
-     * Visit a parse tree produced by {@link EqlParser#unaryOperator}.
+     * Visit a parse tree produced by {@link EqlParser#logicUnaryOperator}.
      *
      * @param ctx the parse tree
      * @return the visitor result
      */
-    T visitUnaryOperator(EqlParser.UnaryOperatorContext ctx);
+    T visitLogicUnaryOperator(EqlParser.LogicUnaryOperatorContext ctx);
 }

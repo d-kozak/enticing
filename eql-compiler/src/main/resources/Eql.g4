@@ -3,72 +3,88 @@ grammar Eql;
 /**
  * Parser rules
  */
+
 /** start rule of the grammar, represents the whole search query with global constraints */
-root: query  (QUERY_CONSTRAINT_SEPARATOR constraint)? EOF;
+root: query  (GLOBAL_CONSTRAINT_SEPARATOR globalConstraint)? EOF;
 
 
 /**
 * Serch query rules
 */
+
+/** seach query */
 query: queryElem+ proximity? contextConstraint? ;
 
+/** single element in the query*/
 queryElem
-    : assignment? QUOTATION queryElem+ QUOTATION #sequence
-    | assignment? indexOperator? queryLiteral alignOperator? #indexWithSingleValue
-    | assignment? indexOperator PAREN_LEFT WORD (OR WORD)* PAREN_RIGHT alignOperator? #indexWithMultipleValues
-    | assignment? PAREN_LEFT queryElem+ PAREN_RIGHT proximity? #paren
+    : assignment? QUOTATION queryElem+ QUOTATION # sequence
+    | assignment? indexOperator? queryLiteral alignOperator? # indexWithSingleValue
+    | assignment? indexOperator singleValueOrMultiple alignOperator? # indexWithMultipleValues
+    | assignment? PAREN_LEFT queryElem+ PAREN_RIGHT proximity? # paren
     | assignment queryElem LT queryElem proximity? # order
     | queryElem LT queryElem proximity? # order
-    | queryElem binaryOperator queryElem # binaryOperation
-    | assignment? unaryOperator queryElem #unaryOperation
+    | queryElem logicBinaryOperator queryElem # logicBinaryOperation
+    | assignment? logicUnaryOperator queryElem # logicUnaryOperation
     ;
 
+/** specify required distance between two words */
 proximity: SIMILARITY NUMBER ;
 
 /** align operator to express queries over multiple indexes in the same document position */
 alignOperator : (EXPONENT alignElem)+;
 
+/** the other index to query */
 alignElem
-    : WORD COLON queryLiteral # index
-    | PAREN_LEFT WORD COLON queryLiteral PAREN_RIGHT # index
-    | WORD DOT WORD COLON  queryLiteral # nertag
-    | PAREN_LEFT WORD DOT WORD COLON  queryLiteral PAREN_RIGHT # nertag
+    : WORD COLON singleValueOrMultiple # index
+    | PAREN_LEFT WORD COLON singleValueOrMultiple PAREN_RIGHT # index
+    | WORD DOT WORD COLON  singleValueOrMultiple # entityAttribute
+    | PAREN_LEFT WORD DOT WORD COLON  singleValueOrMultiple PAREN_RIGHT # entityAttribute
     ;
 
-/** assignment of part of the query to be used in global constraints */
+/** single value or a list of alternatives */
+singleValueOrMultiple
+    : literalOrInterval # singleValue
+    | PAREN_LEFT literalOrInterval (OR literalOrInterval)* PAREN_RIGHT #multipleValues
+    ;
+
+/** either a literal or an interval */
+literalOrInterval: queryLiteral | interval;
+
+/** assignment to identify part of the query to be used in global constraints */
 assignment: (NUMBER | WORD) ASSIGN;
 
-/** to express limitations with respect to position in the document */
+/** to limit context */
 contextConstraint
-    : MINUS PAR # par
-    | MINUS SENT # sent
+    : PAR # paragraph
+    | SENT # sentence
     ;
 
-/** for accessing a different index */
+/** acess a different index */
 indexOperator: WORD COLON;
 
 /** literals of the query language */
-queryLiteral: WORD | NUMBER | interval;
+queryLiteral: WORD | NUMBER;
 
+/** interval, can be used on indexes with enumerable values */
 interval
     : BRACKET_LEFT NUMBER RANGE NUMBER BRACKET_RIGHT #numberRange
     | BRACKET_LEFT DATE? RANGE DATE? BRACKET_RIGHT #dateRange
     ;
 
 /**
-* Constraints rules
+* Global constraints rules
 */
 
 /** global contraints */
-constraint
-    : PAREN_LEFT constraint PAREN_RIGHT
-    | reference comparisonOperator reference
-    | constraint binaryOperator constraint
-    | unaryOperator constraint
+globalConstraint
+    : PAREN_LEFT globalConstraint PAREN_RIGHT # parens
+    | reference comparisonOperator reference # comparison
+    | globalConstraint logicBinaryOperator globalConstraint # constraintLogicBinaryOperation
+    | logicUnaryOperator globalConstraint # constraintLogicUnaryOperation
     ;
 
 /** reference to a part of the search query */
-reference : (WORD|NUMBER) DOT WORD;
+reference : ((WORD|NUMBER) DOT)? WORD;
 
 /**
 * Shared rules
@@ -81,13 +97,13 @@ comparisonOperator
     ;
 
 /** binary operators */
-binaryOperator
+logicBinaryOperator
     : AND
     | OR
     ;
 
 /** unary operators */
-unaryOperator
+logicUnaryOperator
    : NOT
    ;
 
@@ -95,16 +111,17 @@ unaryOperator
 /**
  * Lexer rules
  */
+
+
 ASSIGN: ':=';
-MINUS:'-';
 COLON:':';
 EXPONENT: '^';
 SIMILARITY:'~';
-SENT: '_SENT_';
-PAR: '_PAR_';
+SENT: '- _SENT_';
+PAR: '- _PAR_';
 QUOTATION: '"';
 
-QUERY_CONSTRAINT_SEPARATOR:'&&';
+GLOBAL_CONSTRAINT_SEPARATOR:'&&';
 
 EQ: '=';
 NEQ: '!=';

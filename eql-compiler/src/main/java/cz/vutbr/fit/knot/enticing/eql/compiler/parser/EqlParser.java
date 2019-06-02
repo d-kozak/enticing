@@ -16,16 +16,17 @@ import java.util.List;
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class EqlParser extends Parser {
     public static final int
-            ASSIGN = 1, MINUS = 2, COLON = 3, EXPONENT = 4, SIMILARITY = 5, SENT = 6, PAR = 7, QUOTATION = 8,
-            QUERY_CONSTRAINT_SEPARATOR = 9, EQ = 10, NEQ = 11, LT = 12, PAREN_LEFT = 13, PAREN_RIGHT = 14,
-            BRACKET_LEFT = 15, BRACKET_RIGHT = 16, RANGE = 17, DOT = 18, OR = 19, AND = 20, NOT = 21,
-            NUMBER = 22, DATE = 23, WORD = 24, WS = 25;
+            ASSIGN = 1, COLON = 2, EXPONENT = 3, SIMILARITY = 4, SENT = 5, PAR = 6, QUOTATION = 7,
+            GLOBAL_CONSTRAINT_SEPARATOR = 8, EQ = 9, NEQ = 10, LT = 11, PAREN_LEFT = 12, PAREN_RIGHT = 13,
+            BRACKET_LEFT = 14, BRACKET_RIGHT = 15, RANGE = 16, DOT = 17, OR = 18, AND = 19, NOT = 20,
+            NUMBER = 21, DATE = 22, WORD = 23, WS = 24;
     public static final int
             RULE_root = 0, RULE_query = 1, RULE_queryElem = 2, RULE_proximity = 3,
-            RULE_alignOperator = 4, RULE_alignElem = 5, RULE_assignment = 6, RULE_contextConstraint = 7,
-            RULE_indexOperator = 8, RULE_queryLiteral = 9, RULE_interval = 10, RULE_constraint = 11,
-            RULE_reference = 12, RULE_comparisonOperator = 13, RULE_binaryOperator = 14,
-            RULE_unaryOperator = 15;
+            RULE_alignOperator = 4, RULE_alignElem = 5, RULE_singleValueOrMultiple = 6,
+            RULE_literalOrInterval = 7, RULE_assignment = 8, RULE_contextConstraint = 9,
+            RULE_indexOperator = 10, RULE_queryLiteral = 11, RULE_interval = 12, RULE_globalConstraint = 13,
+            RULE_reference = 14, RULE_comparisonOperator = 15, RULE_logicBinaryOperator = 16,
+            RULE_logicUnaryOperator = 17;
     public static final String[] ruleNames = makeRuleNames();
     /**
      * @deprecated Use {@link #VOCABULARY} instead.
@@ -33,81 +34,85 @@ public class EqlParser extends Parser {
     @Deprecated
     public static final String[] tokenNames;
     public static final String _serializedATN =
-            "\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\33\u00ea\4\2\t\2" +
+            "\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\32\u00f4\4\2\t\2" +
                     "\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13" +
-                    "\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\3\2\3\2" +
-                    "\3\2\5\2&\n\2\3\2\3\2\3\3\6\3+\n\3\r\3\16\3,\3\3\5\3\60\n\3\3\3\5\3\63" +
-                    "\n\3\3\4\3\4\5\4\67\n\4\3\4\3\4\6\4;\n\4\r\4\16\4<\3\4\3\4\3\4\5\4B\n" +
-                    "\4\3\4\5\4E\n\4\3\4\3\4\5\4I\n\4\3\4\5\4L\n\4\3\4\3\4\3\4\3\4\3\4\7\4" +
-                    "S\n\4\f\4\16\4V\13\4\3\4\3\4\5\4Z\n\4\3\4\5\4]\n\4\3\4\3\4\6\4a\n\4\r" +
-                    "\4\16\4b\3\4\3\4\5\4g\n\4\3\4\3\4\3\4\3\4\3\4\5\4n\n\4\3\4\5\4q\n\4\3" +
-                    "\4\3\4\3\4\5\4v\n\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\5\4\u0080\n\4\7\4" +
-                    "\u0082\n\4\f\4\16\4\u0085\13\4\3\5\3\5\3\5\3\6\3\6\6\6\u008c\n\6\r\6\16" +
-                    "\6\u008d\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3" +
-                    "\7\3\7\3\7\3\7\3\7\3\7\3\7\5\7\u00a6\n\7\3\b\3\b\3\b\3\t\3\t\3\t\3\t\5" +
-                    "\t\u00af\n\t\3\n\3\n\3\n\3\13\3\13\3\13\5\13\u00b7\n\13\3\f\3\f\3\f\3" +
-                    "\f\3\f\3\f\3\f\5\f\u00c0\n\f\3\f\3\f\5\f\u00c4\n\f\3\f\5\f\u00c7\n\f\3" +
-                    "\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\5\r\u00d5\n\r\3\r\3\r\3" +
-                    "\r\3\r\7\r\u00db\n\r\f\r\16\r\u00de\13\r\3\16\3\16\3\16\3\16\3\17\3\17" +
-                    "\3\20\3\20\3\21\3\21\3\21\2\4\6\30\22\2\4\6\b\n\f\16\20\22\24\26\30\32" +
-                    "\34\36 \2\5\4\2\30\30\32\32\3\2\f\r\3\2\25\26\2\u00ff\2\"\3\2\2\2\4*\3" +
-                    "\2\2\2\6u\3\2\2\2\b\u0086\3\2\2\2\n\u008b\3\2\2\2\f\u00a5\3\2\2\2\16\u00a7" +
-                    "\3\2\2\2\20\u00ae\3\2\2\2\22\u00b0\3\2\2\2\24\u00b6\3\2\2\2\26\u00c6\3" +
-                    "\2\2\2\30\u00d4\3\2\2\2\32\u00df\3\2\2\2\34\u00e3\3\2\2\2\36\u00e5\3\2" +
-                    "\2\2 \u00e7\3\2\2\2\"%\5\4\3\2#$\7\13\2\2$&\5\30\r\2%#\3\2\2\2%&\3\2\2" +
-                    "\2&\'\3\2\2\2\'(\7\2\2\3(\3\3\2\2\2)+\5\6\4\2*)\3\2\2\2+,\3\2\2\2,*\3" +
-                    "\2\2\2,-\3\2\2\2-/\3\2\2\2.\60\5\b\5\2/.\3\2\2\2/\60\3\2\2\2\60\62\3\2" +
-                    "\2\2\61\63\5\20\t\2\62\61\3\2\2\2\62\63\3\2\2\2\63\5\3\2\2\2\64\66\b\4" +
-                    "\1\2\65\67\5\16\b\2\66\65\3\2\2\2\66\67\3\2\2\2\678\3\2\2\28:\7\n\2\2" +
-                    "9;\5\6\4\2:9\3\2\2\2;<\3\2\2\2<:\3\2\2\2<=\3\2\2\2=>\3\2\2\2>?\7\n\2\2" +
-                    "?v\3\2\2\2@B\5\16\b\2A@\3\2\2\2AB\3\2\2\2BD\3\2\2\2CE\5\22\n\2DC\3\2\2" +
-                    "\2DE\3\2\2\2EF\3\2\2\2FH\5\24\13\2GI\5\n\6\2HG\3\2\2\2HI\3\2\2\2Iv\3\2" +
-                    "\2\2JL\5\16\b\2KJ\3\2\2\2KL\3\2\2\2LM\3\2\2\2MN\5\22\n\2NO\7\17\2\2OT" +
-                    "\7\32\2\2PQ\7\25\2\2QS\7\32\2\2RP\3\2\2\2SV\3\2\2\2TR\3\2\2\2TU\3\2\2" +
-                    "\2UW\3\2\2\2VT\3\2\2\2WY\7\20\2\2XZ\5\n\6\2YX\3\2\2\2YZ\3\2\2\2Zv\3\2" +
-                    "\2\2[]\5\16\b\2\\[\3\2\2\2\\]\3\2\2\2]^\3\2\2\2^`\7\17\2\2_a\5\6\4\2`" +
-                    "_\3\2\2\2ab\3\2\2\2b`\3\2\2\2bc\3\2\2\2cd\3\2\2\2df\7\20\2\2eg\5\b\5\2" +
-                    "fe\3\2\2\2fg\3\2\2\2gv\3\2\2\2hi\5\16\b\2ij\5\6\4\2jk\7\16\2\2km\5\6\4" +
-                    "\2ln\5\b\5\2ml\3\2\2\2mn\3\2\2\2nv\3\2\2\2oq\5\16\b\2po\3\2\2\2pq\3\2" +
-                    "\2\2qr\3\2\2\2rs\5 \21\2st\5\6\4\3tv\3\2\2\2u\64\3\2\2\2uA\3\2\2\2uK\3" +
-                    "\2\2\2u\\\3\2\2\2uh\3\2\2\2up\3\2\2\2v\u0083\3\2\2\2wx\f\4\2\2xy\5\36" +
-                    "\20\2yz\5\6\4\5z\u0082\3\2\2\2{|\f\5\2\2|}\7\16\2\2}\177\5\6\4\2~\u0080" +
-                    "\5\b\5\2\177~\3\2\2\2\177\u0080\3\2\2\2\u0080\u0082\3\2\2\2\u0081w\3\2" +
-                    "\2\2\u0081{\3\2\2\2\u0082\u0085\3\2\2\2\u0083\u0081\3\2\2\2\u0083\u0084" +
-                    "\3\2\2\2\u0084\7\3\2\2\2\u0085\u0083\3\2\2\2\u0086\u0087\7\7\2\2\u0087" +
-                    "\u0088\7\30\2\2\u0088\t\3\2\2\2\u0089\u008a\7\6\2\2\u008a\u008c\5\f\7" +
-                    "\2\u008b\u0089\3\2\2\2\u008c\u008d\3\2\2\2\u008d\u008b\3\2\2\2\u008d\u008e" +
-                    "\3\2\2\2\u008e\13\3\2\2\2\u008f\u0090\7\32\2\2\u0090\u0091\7\5\2\2\u0091" +
-                    "\u00a6\5\24\13\2\u0092\u0093\7\17\2\2\u0093\u0094\7\32\2\2\u0094\u0095" +
-                    "\7\5\2\2\u0095\u0096\5\24\13\2\u0096\u0097\7\20\2\2\u0097\u00a6\3\2\2" +
-                    "\2\u0098\u0099\7\32\2\2\u0099\u009a\7\24\2\2\u009a\u009b\7\32\2\2\u009b" +
-                    "\u009c\7\5\2\2\u009c\u00a6\5\24\13\2\u009d\u009e\7\17\2\2\u009e\u009f" +
-                    "\7\32\2\2\u009f\u00a0\7\24\2\2\u00a0\u00a1\7\32\2\2\u00a1\u00a2\7\5\2" +
-                    "\2\u00a2\u00a3\5\24\13\2\u00a3\u00a4\7\20\2\2\u00a4\u00a6\3\2\2\2\u00a5" +
-                    "\u008f\3\2\2\2\u00a5\u0092\3\2\2\2\u00a5\u0098\3\2\2\2\u00a5\u009d\3\2" +
-                    "\2\2\u00a6\r\3\2\2\2\u00a7\u00a8\t\2\2\2\u00a8\u00a9\7\3\2\2\u00a9\17" +
-                    "\3\2\2\2\u00aa\u00ab\7\4\2\2\u00ab\u00af\7\t\2\2\u00ac\u00ad\7\4\2\2\u00ad" +
-                    "\u00af\7\b\2\2\u00ae\u00aa\3\2\2\2\u00ae\u00ac\3\2\2\2\u00af\21\3\2\2" +
-                    "\2\u00b0\u00b1\7\32\2\2\u00b1\u00b2\7\5\2\2\u00b2\23\3\2\2\2\u00b3\u00b7" +
-                    "\7\32\2\2\u00b4\u00b7\7\30\2\2\u00b5\u00b7\5\26\f\2\u00b6\u00b3\3\2\2" +
-                    "\2\u00b6\u00b4\3\2\2\2\u00b6\u00b5\3\2\2\2\u00b7\25\3\2\2\2\u00b8\u00b9" +
-                    "\7\21\2\2\u00b9\u00ba\7\30\2\2\u00ba\u00bb\7\23\2\2\u00bb\u00bc\7\30\2" +
-                    "\2\u00bc\u00c7\7\22\2\2\u00bd\u00bf\7\21\2\2\u00be\u00c0\7\31\2\2\u00bf" +
-                    "\u00be\3\2\2\2\u00bf\u00c0\3\2\2\2\u00c0\u00c1\3\2\2\2\u00c1\u00c3\7\23" +
-                    "\2\2\u00c2\u00c4\7\31\2\2\u00c3\u00c2\3\2\2\2\u00c3\u00c4\3\2\2\2\u00c4" +
-                    "\u00c5\3\2\2\2\u00c5\u00c7\7\22\2\2\u00c6\u00b8\3\2\2\2\u00c6\u00bd\3" +
-                    "\2\2\2\u00c7\27\3\2\2\2\u00c8\u00c9\b\r\1\2\u00c9\u00ca\7\17\2\2\u00ca" +
-                    "\u00cb\5\30\r\2\u00cb\u00cc\7\20\2\2\u00cc\u00d5\3\2\2\2\u00cd\u00ce\5" +
-                    "\32\16\2\u00ce\u00cf\5\34\17\2\u00cf\u00d0\5\32\16\2\u00d0\u00d5\3\2\2" +
-                    "\2\u00d1\u00d2\5 \21\2\u00d2\u00d3\5\30\r\3\u00d3\u00d5\3\2\2\2\u00d4" +
-                    "\u00c8\3\2\2\2\u00d4\u00cd\3\2\2\2\u00d4\u00d1\3\2\2\2\u00d5\u00dc\3\2" +
-                    "\2\2\u00d6\u00d7\f\4\2\2\u00d7\u00d8\5\36\20\2\u00d8\u00d9\5\30\r\5\u00d9" +
-                    "\u00db\3\2\2\2\u00da\u00d6\3\2\2\2\u00db\u00de\3\2\2\2\u00dc\u00da\3\2" +
-                    "\2\2\u00dc\u00dd\3\2\2\2\u00dd\31\3\2\2\2\u00de\u00dc\3\2\2\2\u00df\u00e0" +
-                    "\t\2\2\2\u00e0\u00e1\7\24\2\2\u00e1\u00e2\7\32\2\2\u00e2\33\3\2\2\2\u00e3" +
-                    "\u00e4\t\3\2\2\u00e4\35\3\2\2\2\u00e5\u00e6\t\4\2\2\u00e6\37\3\2\2\2\u00e7" +
-                    "\u00e8\7\27\2\2\u00e8!\3\2\2\2 %,/\62\66<ADHKTY\\bfmpu\177\u0081\u0083" +
-                    "\u008d\u00a5\u00ae\u00b6\u00bf\u00c3\u00c6\u00d4\u00dc";
+                    "\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22" +
+                    "\4\23\t\23\3\2\3\2\3\2\5\2*\n\2\3\2\3\2\3\3\6\3/\n\3\r\3\16\3\60\3\3\5" +
+                    "\3\64\n\3\3\3\5\3\67\n\3\3\4\3\4\5\4;\n\4\3\4\3\4\6\4?\n\4\r\4\16\4@\3" +
+                    "\4\3\4\3\4\5\4F\n\4\3\4\5\4I\n\4\3\4\3\4\5\4M\n\4\3\4\5\4P\n\4\3\4\3\4" +
+                    "\3\4\5\4U\n\4\3\4\5\4X\n\4\3\4\3\4\6\4\\\n\4\r\4\16\4]\3\4\3\4\5\4b\n" +
+                    "\4\3\4\3\4\3\4\3\4\3\4\5\4i\n\4\3\4\5\4l\n\4\3\4\3\4\3\4\5\4q\n\4\3\4" +
+                    "\3\4\3\4\3\4\3\4\3\4\3\4\3\4\5\4{\n\4\7\4}\n\4\f\4\16\4\u0080\13\4\3\5" +
+                    "\3\5\3\5\3\6\3\6\6\6\u0087\n\6\r\6\16\6\u0088\3\7\3\7\3\7\3\7\3\7\3\7" +
+                    "\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\5\7\u00a1" +
+                    "\n\7\3\b\3\b\3\b\3\b\3\b\7\b\u00a8\n\b\f\b\16\b\u00ab\13\b\3\b\3\b\5\b" +
+                    "\u00af\n\b\3\t\3\t\5\t\u00b3\n\t\3\n\3\n\3\n\3\13\3\13\5\13\u00ba\n\13" +
+                    "\3\f\3\f\3\f\3\r\3\r\3\16\3\16\3\16\3\16\3\16\3\16\3\16\5\16\u00c8\n\16" +
+                    "\3\16\3\16\5\16\u00cc\n\16\3\16\5\16\u00cf\n\16\3\17\3\17\3\17\3\17\3" +
+                    "\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\5\17\u00dd\n\17\3\17\3\17\3\17" +
+                    "\3\17\7\17\u00e3\n\17\f\17\16\17\u00e6\13\17\3\20\3\20\5\20\u00ea\n\20" +
+                    "\3\20\3\20\3\21\3\21\3\22\3\22\3\23\3\23\3\23\2\4\6\34\24\2\4\6\b\n\f" +
+                    "\16\20\22\24\26\30\32\34\36 \"$\2\5\4\2\27\27\31\31\3\2\13\f\3\2\24\25" +
+                    "\2\u0108\2&\3\2\2\2\4.\3\2\2\2\6p\3\2\2\2\b\u0081\3\2\2\2\n\u0086\3\2" +
+                    "\2\2\f\u00a0\3\2\2\2\16\u00ae\3\2\2\2\20\u00b2\3\2\2\2\22\u00b4\3\2\2" +
+                    "\2\24\u00b9\3\2\2\2\26\u00bb\3\2\2\2\30\u00be\3\2\2\2\32\u00ce\3\2\2\2" +
+                    "\34\u00dc\3\2\2\2\36\u00e9\3\2\2\2 \u00ed\3\2\2\2\"\u00ef\3\2\2\2$\u00f1" +
+                    "\3\2\2\2&)\5\4\3\2\'(\7\n\2\2(*\5\34\17\2)\'\3\2\2\2)*\3\2\2\2*+\3\2\2" +
+                    "\2+,\7\2\2\3,\3\3\2\2\2-/\5\6\4\2.-\3\2\2\2/\60\3\2\2\2\60.\3\2\2\2\60" +
+                    "\61\3\2\2\2\61\63\3\2\2\2\62\64\5\b\5\2\63\62\3\2\2\2\63\64\3\2\2\2\64" +
+                    "\66\3\2\2\2\65\67\5\24\13\2\66\65\3\2\2\2\66\67\3\2\2\2\67\5\3\2\2\28" +
+                    ":\b\4\1\29;\5\22\n\2:9\3\2\2\2:;\3\2\2\2;<\3\2\2\2<>\7\t\2\2=?\5\6\4\2" +
+                    ">=\3\2\2\2?@\3\2\2\2@>\3\2\2\2@A\3\2\2\2AB\3\2\2\2BC\7\t\2\2Cq\3\2\2\2" +
+                    "DF\5\22\n\2ED\3\2\2\2EF\3\2\2\2FH\3\2\2\2GI\5\26\f\2HG\3\2\2\2HI\3\2\2" +
+                    "\2IJ\3\2\2\2JL\5\30\r\2KM\5\n\6\2LK\3\2\2\2LM\3\2\2\2Mq\3\2\2\2NP\5\22" +
+                    "\n\2ON\3\2\2\2OP\3\2\2\2PQ\3\2\2\2QR\5\26\f\2RT\5\16\b\2SU\5\n\6\2TS\3" +
+                    "\2\2\2TU\3\2\2\2Uq\3\2\2\2VX\5\22\n\2WV\3\2\2\2WX\3\2\2\2XY\3\2\2\2Y[" +
+                    "\7\16\2\2Z\\\5\6\4\2[Z\3\2\2\2\\]\3\2\2\2][\3\2\2\2]^\3\2\2\2^_\3\2\2" +
+                    "\2_a\7\17\2\2`b\5\b\5\2a`\3\2\2\2ab\3\2\2\2bq\3\2\2\2cd\5\22\n\2de\5\6" +
+                    "\4\2ef\7\r\2\2fh\5\6\4\2gi\5\b\5\2hg\3\2\2\2hi\3\2\2\2iq\3\2\2\2jl\5\22" +
+                    "\n\2kj\3\2\2\2kl\3\2\2\2lm\3\2\2\2mn\5$\23\2no\5\6\4\3oq\3\2\2\2p8\3\2" +
+                    "\2\2pE\3\2\2\2pO\3\2\2\2pW\3\2\2\2pc\3\2\2\2pk\3\2\2\2q~\3\2\2\2rs\f\4" +
+                    "\2\2st\5\"\22\2tu\5\6\4\5u}\3\2\2\2vw\f\5\2\2wx\7\r\2\2xz\5\6\4\2y{\5" +
+                    "\b\5\2zy\3\2\2\2z{\3\2\2\2{}\3\2\2\2|r\3\2\2\2|v\3\2\2\2}\u0080\3\2\2" +
+                    "\2~|\3\2\2\2~\177\3\2\2\2\177\7\3\2\2\2\u0080~\3\2\2\2\u0081\u0082\7\6" +
+                    "\2\2\u0082\u0083\7\27\2\2\u0083\t\3\2\2\2\u0084\u0085\7\5\2\2\u0085\u0087" +
+                    "\5\f\7\2\u0086\u0084\3\2\2\2\u0087\u0088\3\2\2\2\u0088\u0086\3\2\2\2\u0088" +
+                    "\u0089\3\2\2\2\u0089\13\3\2\2\2\u008a\u008b\7\31\2\2\u008b\u008c\7\4\2" +
+                    "\2\u008c\u00a1\5\16\b\2\u008d\u008e\7\16\2\2\u008e\u008f\7\31\2\2\u008f" +
+                    "\u0090\7\4\2\2\u0090\u0091\5\16\b\2\u0091\u0092\7\17\2\2\u0092\u00a1\3" +
+                    "\2\2\2\u0093\u0094\7\31\2\2\u0094\u0095\7\23\2\2\u0095\u0096\7\31\2\2" +
+                    "\u0096\u0097\7\4\2\2\u0097\u00a1\5\16\b\2\u0098\u0099\7\16\2\2\u0099\u009a" +
+                    "\7\31\2\2\u009a\u009b\7\23\2\2\u009b\u009c\7\31\2\2\u009c\u009d\7\4\2" +
+                    "\2\u009d\u009e\5\16\b\2\u009e\u009f\7\17\2\2\u009f\u00a1\3\2\2\2\u00a0" +
+                    "\u008a\3\2\2\2\u00a0\u008d\3\2\2\2\u00a0\u0093\3\2\2\2\u00a0\u0098\3\2" +
+                    "\2\2\u00a1\r\3\2\2\2\u00a2\u00af\5\20\t\2\u00a3\u00a4\7\16\2\2\u00a4\u00a9" +
+                    "\5\20\t\2\u00a5\u00a6\7\24\2\2\u00a6\u00a8\5\20\t\2\u00a7\u00a5\3\2\2" +
+                    "\2\u00a8\u00ab\3\2\2\2\u00a9\u00a7\3\2\2\2\u00a9\u00aa\3\2\2\2\u00aa\u00ac" +
+                    "\3\2\2\2\u00ab\u00a9\3\2\2\2\u00ac\u00ad\7\17\2\2\u00ad\u00af\3\2\2\2" +
+                    "\u00ae\u00a2\3\2\2\2\u00ae\u00a3\3\2\2\2\u00af\17\3\2\2\2\u00b0\u00b3" +
+                    "\5\30\r\2\u00b1\u00b3\5\32\16\2\u00b2\u00b0\3\2\2\2\u00b2\u00b1\3\2\2" +
+                    "\2\u00b3\21\3\2\2\2\u00b4\u00b5\t\2\2\2\u00b5\u00b6\7\3\2\2\u00b6\23\3" +
+                    "\2\2\2\u00b7\u00ba\7\b\2\2\u00b8\u00ba\7\7\2\2\u00b9\u00b7\3\2\2\2\u00b9" +
+                    "\u00b8\3\2\2\2\u00ba\25\3\2\2\2\u00bb\u00bc\7\31\2\2\u00bc\u00bd\7\4\2" +
+                    "\2\u00bd\27\3\2\2\2\u00be\u00bf\t\2\2\2\u00bf\31\3\2\2\2\u00c0\u00c1\7" +
+                    "\20\2\2\u00c1\u00c2\7\27\2\2\u00c2\u00c3\7\22\2\2\u00c3\u00c4\7\27\2\2" +
+                    "\u00c4\u00cf\7\21\2\2\u00c5\u00c7\7\20\2\2\u00c6\u00c8\7\30\2\2\u00c7" +
+                    "\u00c6\3\2\2\2\u00c7\u00c8\3\2\2\2\u00c8\u00c9\3\2\2\2\u00c9\u00cb\7\22" +
+                    "\2\2\u00ca\u00cc\7\30\2\2\u00cb\u00ca\3\2\2\2\u00cb\u00cc\3\2\2\2\u00cc" +
+                    "\u00cd\3\2\2\2\u00cd\u00cf\7\21\2\2\u00ce\u00c0\3\2\2\2\u00ce\u00c5\3" +
+                    "\2\2\2\u00cf\33\3\2\2\2\u00d0\u00d1\b\17\1\2\u00d1\u00d2\7\16\2\2\u00d2" +
+                    "\u00d3\5\34\17\2\u00d3\u00d4\7\17\2\2\u00d4\u00dd\3\2\2\2\u00d5\u00d6" +
+                    "\5\36\20\2\u00d6\u00d7\5 \21\2\u00d7\u00d8\5\36\20\2\u00d8\u00dd\3\2\2" +
+                    "\2\u00d9\u00da\5$\23\2\u00da\u00db\5\34\17\3\u00db\u00dd\3\2\2\2\u00dc" +
+                    "\u00d0\3\2\2\2\u00dc\u00d5\3\2\2\2\u00dc\u00d9\3\2\2\2\u00dd\u00e4\3\2" +
+                    "\2\2\u00de\u00df\f\4\2\2\u00df\u00e0\5\"\22\2\u00e0\u00e1\5\34\17\5\u00e1" +
+                    "\u00e3\3\2\2\2\u00e2\u00de\3\2\2\2\u00e3\u00e6\3\2\2\2\u00e4\u00e2\3\2" +
+                    "\2\2\u00e4\u00e5\3\2\2\2\u00e5\35\3\2\2\2\u00e6\u00e4\3\2\2\2\u00e7\u00e8" +
+                    "\t\2\2\2\u00e8\u00ea\7\23\2\2\u00e9\u00e7\3\2\2\2\u00e9\u00ea\3\2\2\2" +
+                    "\u00ea\u00eb\3\2\2\2\u00eb\u00ec\7\31\2\2\u00ec\37\3\2\2\2\u00ed\u00ee" +
+                    "\t\3\2\2\u00ee!\3\2\2\2\u00ef\u00f0\t\4\2\2\u00f0#\3\2\2\2\u00f1\u00f2" +
+                    "\7\26\2\2\u00f2%\3\2\2\2\")\60\63\66:@EHLOTW]ahkpz|~\u0088\u00a0\u00a9" +
+                    "\u00ae\u00b2\u00b9\u00c7\u00cb\u00ce\u00dc\u00e4\u00e9";
     public static final ATN _ATN =
             new ATNDeserializer().deserialize(_serializedATN.toCharArray());
     protected static final DFA[] _decisionToDFA;
@@ -150,14 +155,15 @@ public class EqlParser extends Parser {
     private static String[] makeRuleNames() {
         return new String[]{
                 "root", "query", "queryElem", "proximity", "alignOperator", "alignElem",
-                "assignment", "contextConstraint", "indexOperator", "queryLiteral", "interval",
-                "constraint", "reference", "comparisonOperator", "binaryOperator", "unaryOperator"
+                "singleValueOrMultiple", "literalOrInterval", "assignment", "contextConstraint",
+                "indexOperator", "queryLiteral", "interval", "globalConstraint", "reference",
+                "comparisonOperator", "logicBinaryOperator", "logicUnaryOperator"
         };
     }
 
     private static String[] makeLiteralNames() {
         return new String[]{
-                null, "':='", "'-'", "':'", "'^'", "'~'", "'_SENT_'", "'_PAR_'", "'\"'",
+                null, "':='", "':'", "'^'", "'~'", "'- _SENT_'", "'- _PAR_'", "'\"'",
                 "'&&'", "'='", "'!='", "'<'", "'('", "')'", "'['", "']'", "'..'", "'.'",
                 "'|'", "'&'", "'!'"
         };
@@ -165,10 +171,10 @@ public class EqlParser extends Parser {
 
     private static String[] makeSymbolicNames() {
         return new String[]{
-                null, "ASSIGN", "MINUS", "COLON", "EXPONENT", "SIMILARITY", "SENT", "PAR",
-                "QUOTATION", "QUERY_CONSTRAINT_SEPARATOR", "EQ", "NEQ", "LT", "PAREN_LEFT",
-                "PAREN_RIGHT", "BRACKET_LEFT", "BRACKET_RIGHT", "RANGE", "DOT", "OR",
-                "AND", "NOT", "NUMBER", "DATE", "WORD", "WS"
+                null, "ASSIGN", "COLON", "EXPONENT", "SIMILARITY", "SENT", "PAR", "QUOTATION",
+                "GLOBAL_CONSTRAINT_SEPARATOR", "EQ", "NEQ", "LT", "PAREN_LEFT", "PAREN_RIGHT",
+                "BRACKET_LEFT", "BRACKET_RIGHT", "RANGE", "DOT", "OR", "AND", "NOT",
+                "NUMBER", "DATE", "WORD", "WS"
         };
     }
 
@@ -211,21 +217,21 @@ public class EqlParser extends Parser {
         try {
             enterOuterAlt(_localctx, 1);
             {
-                setState(32);
+                setState(36);
                 query();
-                setState(35);
+                setState(39);
                 _errHandler.sync(this);
                 _la = _input.LA(1);
-                if (_la == QUERY_CONSTRAINT_SEPARATOR) {
+                if (_la == GLOBAL_CONSTRAINT_SEPARATOR) {
                     {
-                        setState(33);
-                        match(QUERY_CONSTRAINT_SEPARATOR);
-                        setState(34);
-                        constraint(0);
+                        setState(37);
+                        match(GLOBAL_CONSTRAINT_SEPARATOR);
+                        setState(38);
+                        globalConstraint(0);
                     }
                 }
 
-                setState(37);
+                setState(41);
                 match(EOF);
             }
         } catch (RecognitionException re) {
@@ -245,36 +251,36 @@ public class EqlParser extends Parser {
         try {
             enterOuterAlt(_localctx, 1);
             {
-                setState(40);
+                setState(44);
                 _errHandler.sync(this);
                 _la = _input.LA(1);
                 do {
                     {
                         {
-                            setState(39);
+                            setState(43);
                             queryElem(0);
                         }
                     }
-                    setState(42);
+                    setState(46);
                     _errHandler.sync(this);
                     _la = _input.LA(1);
-                } while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << QUOTATION) | (1L << PAREN_LEFT) | (1L << BRACKET_LEFT) | (1L << NOT) | (1L << NUMBER) | (1L << WORD))) != 0));
-                setState(45);
+                } while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << QUOTATION) | (1L << PAREN_LEFT) | (1L << NOT) | (1L << NUMBER) | (1L << WORD))) != 0));
+                setState(49);
                 _errHandler.sync(this);
                 _la = _input.LA(1);
                 if (_la == SIMILARITY) {
                     {
-                        setState(44);
+                        setState(48);
                         proximity();
                     }
                 }
 
-                setState(48);
+                setState(52);
                 _errHandler.sync(this);
                 _la = _input.LA(1);
-                if (_la == MINUS) {
+                if (_la == SENT || _la == PAR) {
                     {
-                        setState(47);
+                        setState(51);
                         contextConstraint();
                     }
                 }
@@ -306,34 +312,34 @@ public class EqlParser extends Parser {
             int _alt;
             enterOuterAlt(_localctx, 1);
             {
-                setState(115);
+                setState(110);
                 _errHandler.sync(this);
-                switch (getInterpreter().adaptivePredict(_input, 17, _ctx)) {
+                switch (getInterpreter().adaptivePredict(_input, 16, _ctx)) {
                     case 1: {
                         _localctx = new SequenceContext(_localctx);
                         _ctx = _localctx;
                         _prevctx = _localctx;
 
-                        setState(52);
+                        setState(56);
                         _errHandler.sync(this);
                         _la = _input.LA(1);
                         if (_la == NUMBER || _la == WORD) {
                             {
-                                setState(51);
+                                setState(55);
                                 assignment();
                             }
                         }
 
-                        setState(54);
+                        setState(58);
                         match(QUOTATION);
-                        setState(56);
+                        setState(60);
                         _errHandler.sync(this);
                         _alt = 1;
                         do {
                             switch (_alt) {
                                 case 1: {
                                     {
-                                        setState(55);
+                                        setState(59);
                                         queryElem(0);
                                     }
                                 }
@@ -341,11 +347,11 @@ public class EqlParser extends Parser {
                                 default:
                                     throw new NoViableAltException(this);
                             }
-                            setState(58);
+                            setState(62);
                             _errHandler.sync(this);
                             _alt = getInterpreter().adaptivePredict(_input, 5, _ctx);
                         } while (_alt != 2 && _alt != org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER);
-                        setState(60);
+                        setState(64);
                         match(QUOTATION);
                     }
                     break;
@@ -353,31 +359,31 @@ public class EqlParser extends Parser {
                         _localctx = new IndexWithSingleValueContext(_localctx);
                         _ctx = _localctx;
                         _prevctx = _localctx;
-                        setState(63);
+                        setState(67);
                         _errHandler.sync(this);
                         switch (getInterpreter().adaptivePredict(_input, 6, _ctx)) {
                             case 1: {
-                                setState(62);
+                                setState(66);
                                 assignment();
                             }
                             break;
                         }
-                        setState(66);
+                        setState(70);
                         _errHandler.sync(this);
                         switch (getInterpreter().adaptivePredict(_input, 7, _ctx)) {
                             case 1: {
-                                setState(65);
+                                setState(69);
                                 indexOperator();
                             }
                             break;
                         }
-                        setState(68);
+                        setState(72);
                         queryLiteral();
-                        setState(70);
+                        setState(74);
                         _errHandler.sync(this);
                         switch (getInterpreter().adaptivePredict(_input, 8, _ctx)) {
                             case 1: {
-                                setState(69);
+                                setState(73);
                                 alignOperator();
                             }
                             break;
@@ -388,44 +394,24 @@ public class EqlParser extends Parser {
                         _localctx = new IndexWithMultipleValuesContext(_localctx);
                         _ctx = _localctx;
                         _prevctx = _localctx;
-                        setState(73);
+                        setState(77);
                         _errHandler.sync(this);
                         switch (getInterpreter().adaptivePredict(_input, 9, _ctx)) {
                             case 1: {
-                                setState(72);
+                                setState(76);
                                 assignment();
                             }
                             break;
                         }
-                        setState(75);
+                        setState(79);
                         indexOperator();
-                        setState(76);
-                        match(PAREN_LEFT);
-                        setState(77);
-                        match(WORD);
+                        setState(80);
+                        singleValueOrMultiple();
                         setState(82);
                         _errHandler.sync(this);
-                        _la = _input.LA(1);
-                        while (_la == OR) {
-                            {
-                                {
-                                    setState(78);
-                                    match(OR);
-                                    setState(79);
-                                    match(WORD);
-                                }
-                            }
-                            setState(84);
-                            _errHandler.sync(this);
-                            _la = _input.LA(1);
-                        }
-                        setState(85);
-                        match(PAREN_RIGHT);
-                        setState(87);
-                        _errHandler.sync(this);
-                        switch (getInterpreter().adaptivePredict(_input, 11, _ctx)) {
+                        switch (getInterpreter().adaptivePredict(_input, 10, _ctx)) {
                             case 1: {
-                                setState(86);
+                                setState(81);
                                 alignOperator();
                             }
                             break;
@@ -436,39 +422,39 @@ public class EqlParser extends Parser {
                         _localctx = new ParenContext(_localctx);
                         _ctx = _localctx;
                         _prevctx = _localctx;
-                        setState(90);
+                        setState(85);
                         _errHandler.sync(this);
                         _la = _input.LA(1);
                         if (_la == NUMBER || _la == WORD) {
                             {
-                                setState(89);
+                                setState(84);
                                 assignment();
                             }
                         }
 
-                        setState(92);
+                        setState(87);
                         match(PAREN_LEFT);
-                        setState(94);
+                        setState(89);
                         _errHandler.sync(this);
                         _la = _input.LA(1);
                         do {
                             {
                                 {
-                                    setState(93);
+                                    setState(88);
                                     queryElem(0);
                                 }
                             }
-                            setState(96);
+                            setState(91);
                             _errHandler.sync(this);
                             _la = _input.LA(1);
-                        } while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << QUOTATION) | (1L << PAREN_LEFT) | (1L << BRACKET_LEFT) | (1L << NOT) | (1L << NUMBER) | (1L << WORD))) != 0));
-                        setState(98);
+                        } while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << QUOTATION) | (1L << PAREN_LEFT) | (1L << NOT) | (1L << NUMBER) | (1L << WORD))) != 0));
+                        setState(93);
                         match(PAREN_RIGHT);
-                        setState(100);
+                        setState(95);
                         _errHandler.sync(this);
-                        switch (getInterpreter().adaptivePredict(_input, 14, _ctx)) {
+                        switch (getInterpreter().adaptivePredict(_input, 13, _ctx)) {
                             case 1: {
-                                setState(99);
+                                setState(94);
                                 proximity();
                             }
                             break;
@@ -479,19 +465,19 @@ public class EqlParser extends Parser {
                         _localctx = new OrderContext(_localctx);
                         _ctx = _localctx;
                         _prevctx = _localctx;
-                        setState(102);
+                        setState(97);
                         assignment();
-                        setState(103);
+                        setState(98);
                         queryElem(0);
-                        setState(104);
+                        setState(99);
                         match(LT);
-                        setState(105);
+                        setState(100);
                         queryElem(0);
-                        setState(107);
+                        setState(102);
                         _errHandler.sync(this);
-                        switch (getInterpreter().adaptivePredict(_input, 15, _ctx)) {
+                        switch (getInterpreter().adaptivePredict(_input, 14, _ctx)) {
                             case 1: {
-                                setState(106);
+                                setState(101);
                                 proximity();
                             }
                             break;
@@ -499,65 +485,65 @@ public class EqlParser extends Parser {
                     }
                     break;
                     case 6: {
-                        _localctx = new UnaryOperationContext(_localctx);
+                        _localctx = new LogicUnaryOperationContext(_localctx);
                         _ctx = _localctx;
                         _prevctx = _localctx;
-                        setState(110);
+                        setState(105);
                         _errHandler.sync(this);
                         _la = _input.LA(1);
                         if (_la == NUMBER || _la == WORD) {
                             {
-                                setState(109);
+                                setState(104);
                                 assignment();
                             }
                         }
 
-                        setState(112);
-                        unaryOperator();
-                        setState(113);
+                        setState(107);
+                        logicUnaryOperator();
+                        setState(108);
                         queryElem(1);
                     }
                     break;
                 }
                 _ctx.stop = _input.LT(-1);
-                setState(129);
+                setState(124);
                 _errHandler.sync(this);
-                _alt = getInterpreter().adaptivePredict(_input, 20, _ctx);
+                _alt = getInterpreter().adaptivePredict(_input, 19, _ctx);
                 while (_alt != 2 && _alt != org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER) {
                     if (_alt == 1) {
                         if (_parseListeners != null) triggerExitRuleEvent();
                         _prevctx = _localctx;
                         {
-                            setState(127);
+                            setState(122);
                             _errHandler.sync(this);
-                            switch (getInterpreter().adaptivePredict(_input, 19, _ctx)) {
+                            switch (getInterpreter().adaptivePredict(_input, 18, _ctx)) {
                                 case 1: {
-                                    _localctx = new BinaryOperationContext(new QueryElemContext(_parentctx, _parentState));
+                                    _localctx = new LogicBinaryOperationContext(new QueryElemContext(_parentctx, _parentState));
                                     pushNewRecursionContext(_localctx, _startState, RULE_queryElem);
-                                    setState(117);
+                                    setState(112);
                                     if (!(precpred(_ctx, 2)))
                                         throw new FailedPredicateException(this, "precpred(_ctx, 2)");
-                                    setState(118);
-                                    binaryOperator();
-                                    setState(119);
+                                    setState(113);
+                                    logicBinaryOperator();
+                                    setState(114);
                                     queryElem(3);
                                 }
                                 break;
                                 case 2: {
                                     _localctx = new OrderContext(new QueryElemContext(_parentctx, _parentState));
                                     pushNewRecursionContext(_localctx, _startState, RULE_queryElem);
-                                    setState(121);
+                                    setState(116);
                                     if (!(precpred(_ctx, 3)))
                                         throw new FailedPredicateException(this, "precpred(_ctx, 3)");
-                                    setState(122);
+                                    setState(117);
                                     match(LT);
-                                    setState(123);
+                                    setState(118);
                                     queryElem(0);
-                                    setState(125);
+                                    setState(120);
                                     _errHandler.sync(this);
-                                    switch (getInterpreter().adaptivePredict(_input, 18, _ctx)) {
+                                    switch (getInterpreter().adaptivePredict(_input, 17, _ctx)) {
                                         case 1: {
-                                            setState(124);
+                                            setState(119);
                                             proximity();
                                         }
                                         break;
@@ -567,9 +553,9 @@ public class EqlParser extends Parser {
                             }
                         }
                     }
-                    setState(131);
+                    setState(126);
                     _errHandler.sync(this);
-                    _alt = getInterpreter().adaptivePredict(_input, 20, _ctx);
+                    _alt = getInterpreter().adaptivePredict(_input, 19, _ctx);
                 }
             }
         } catch (RecognitionException re) {
@@ -588,9 +574,9 @@ public class EqlParser extends Parser {
         try {
             enterOuterAlt(_localctx, 1);
             {
-                setState(132);
+                setState(127);
                 match(SIMILARITY);
-                setState(133);
+                setState(128);
                 match(NUMBER);
             }
         } catch (RecognitionException re) {
@@ -610,16 +596,16 @@ public class EqlParser extends Parser {
             int _alt;
             enterOuterAlt(_localctx, 1);
             {
-                setState(137);
+                setState(132);
                 _errHandler.sync(this);
                 _alt = 1;
                 do {
                     switch (_alt) {
                         case 1: {
                             {
-                                setState(135);
+                                setState(130);
                                 match(EXPONENT);
-                                setState(136);
+                                setState(131);
                                 alignElem();
                             }
                         }
@@ -627,9 +613,9 @@ public class EqlParser extends Parser {
                         default:
                             throw new NoViableAltException(this);
                     }
-                    setState(139);
+                    setState(134);
                     _errHandler.sync(this);
-                    _alt = getInterpreter().adaptivePredict(_input, 21, _ctx);
+                    _alt = getInterpreter().adaptivePredict(_input, 20, _ctx);
                 } while (_alt != 2 && _alt != org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER);
             }
         } catch (RecognitionException re) {
@@ -646,70 +632,70 @@ public class EqlParser extends Parser {
         AlignElemContext _localctx = new AlignElemContext(_ctx, getState());
         enterRule(_localctx, 10, RULE_alignElem);
         try {
-            setState(163);
+            setState(158);
             _errHandler.sync(this);
-            switch (getInterpreter().adaptivePredict(_input, 22, _ctx)) {
+            switch (getInterpreter().adaptivePredict(_input, 21, _ctx)) {
                 case 1:
                     _localctx = new IndexContext(_localctx);
                     enterOuterAlt(_localctx, 1);
                 {
-                    setState(141);
+                    setState(136);
                     match(WORD);
-                    setState(142);
+                    setState(137);
                     match(COLON);
-                    setState(143);
-                    queryLiteral();
+                    setState(138);
+                    singleValueOrMultiple();
                 }
                 break;
                 case 2:
                     _localctx = new IndexContext(_localctx);
                     enterOuterAlt(_localctx, 2);
                 {
-                    setState(144);
+                    setState(139);
                     match(PAREN_LEFT);
-                    setState(145);
+                    setState(140);
                     match(WORD);
-                    setState(146);
+                    setState(141);
                     match(COLON);
-                    setState(147);
-                    queryLiteral();
-                    setState(148);
+                    setState(142);
+                    singleValueOrMultiple();
+                    setState(143);
                     match(PAREN_RIGHT);
                 }
                 break;
                 case 3:
-                    _localctx = new NertagContext(_localctx);
+                    _localctx = new EntityAttributeContext(_localctx);
                     enterOuterAlt(_localctx, 3);
                 {
-                    setState(150);
+                    setState(145);
                     match(WORD);
-                    setState(151);
+                    setState(146);
                     match(DOT);
-                    setState(152);
+                    setState(147);
                     match(WORD);
-                    setState(153);
+                    setState(148);
                     match(COLON);
-                    setState(154);
-                    queryLiteral();
+                    setState(149);
+                    singleValueOrMultiple();
                 }
                 break;
                 case 4:
-                    _localctx = new NertagContext(_localctx);
+                    _localctx = new EntityAttributeContext(_localctx);
                     enterOuterAlt(_localctx, 4);
                 {
-                    setState(155);
+                    setState(150);
                     match(PAREN_LEFT);
-                    setState(156);
+                    setState(151);
                     match(WORD);
-                    setState(157);
+                    setState(152);
                     match(DOT);
-                    setState(158);
+                    setState(153);
                     match(WORD);
-                    setState(159);
+                    setState(154);
                     match(COLON);
-                    setState(160);
-                    queryLiteral();
-                    setState(161);
+                    setState(155);
+                    singleValueOrMultiple();
+                    setState(156);
                     match(PAREN_RIGHT);
                 }
                 break;
@@ -724,62 +710,54 @@ public class EqlParser extends Parser {
         return _localctx;
     }
 
-    public final AssignmentContext assignment() throws RecognitionException {
-        AssignmentContext _localctx = new AssignmentContext(_ctx, getState());
-        enterRule(_localctx, 12, RULE_assignment);
+    public final SingleValueOrMultipleContext singleValueOrMultiple() throws RecognitionException {
+        SingleValueOrMultipleContext _localctx = new SingleValueOrMultipleContext(_ctx, getState());
+        enterRule(_localctx, 12, RULE_singleValueOrMultiple);
         int _la;
-        try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(165);
-                _la = _input.LA(1);
-                if (!(_la == NUMBER || _la == WORD)) {
-                    _errHandler.recoverInline(this);
-                } else {
-                    if (_input.LA(1) == Token.EOF) matchedEOF = true;
-                    _errHandler.reportMatch(this);
-                    consume();
-                }
-                setState(166);
-                match(ASSIGN);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public final ContextConstraintContext contextConstraint() throws RecognitionException {
-        ContextConstraintContext _localctx = new ContextConstraintContext(_ctx, getState());
-        enterRule(_localctx, 14, RULE_contextConstraint);
         try {
             setState(172);
             _errHandler.sync(this);
-            switch (getInterpreter().adaptivePredict(_input, 23, _ctx)) {
-                case 1:
-                    _localctx = new ParContext(_localctx);
+            switch (_input.LA(1)) {
+                case BRACKET_LEFT:
+                case NUMBER:
+                case WORD:
+                    _localctx = new SingleValueContext(_localctx);
                     enterOuterAlt(_localctx, 1);
                 {
-                    setState(168);
-                    match(MINUS);
-                    setState(169);
-                    match(PAR);
+                    setState(160);
+                    literalOrInterval();
                 }
                 break;
-                case 2:
-                    _localctx = new SentContext(_localctx);
+                case PAREN_LEFT:
+                    _localctx = new MultipleValuesContext(_localctx);
                     enterOuterAlt(_localctx, 2);
                 {
+                    setState(161);
+                    match(PAREN_LEFT);
+                    setState(162);
+                    literalOrInterval();
+                    setState(167);
+                    _errHandler.sync(this);
+                    _la = _input.LA(1);
+                    while (_la == OR) {
+                        {
+                            {
+                                setState(163);
+                                match(OR);
+                                setState(164);
+                                literalOrInterval();
+                            }
+                        }
+                        setState(169);
+                        _errHandler.sync(this);
+                        _la = _input.LA(1);
+                    }
                     setState(170);
-                    match(MINUS);
-                    setState(171);
-                    match(SENT);
+                    match(PAREN_RIGHT);
                 }
                 break;
+                default:
+                    throw new NoViableAltException(this);
             }
         } catch (RecognitionException re) {
             _localctx.exception = re;
@@ -791,52 +769,25 @@ public class EqlParser extends Parser {
         return _localctx;
     }
 
-    public final IndexOperatorContext indexOperator() throws RecognitionException {
-        IndexOperatorContext _localctx = new IndexOperatorContext(_ctx, getState());
-        enterRule(_localctx, 16, RULE_indexOperator);
+    public final LiteralOrIntervalContext literalOrInterval() throws RecognitionException {
+        LiteralOrIntervalContext _localctx = new LiteralOrIntervalContext(_ctx, getState());
+        enterRule(_localctx, 14, RULE_literalOrInterval);
         try {
-            enterOuterAlt(_localctx, 1);
-            {
-                setState(174);
-                match(WORD);
-                setState(175);
-                match(COLON);
-            }
-        } catch (RecognitionException re) {
-            _localctx.exception = re;
-            _errHandler.reportError(this, re);
-            _errHandler.recover(this, re);
-        } finally {
-            exitRule();
-        }
-        return _localctx;
-    }
-
-    public final QueryLiteralContext queryLiteral() throws RecognitionException {
-        QueryLiteralContext _localctx = new QueryLiteralContext(_ctx, getState());
-        enterRule(_localctx, 18, RULE_queryLiteral);
-        try {
-            setState(180);
+            setState(176);
             _errHandler.sync(this);
             switch (_input.LA(1)) {
+                case NUMBER:
                 case WORD:
                     enterOuterAlt(_localctx, 1);
                 {
-                    setState(177);
-                    match(WORD);
-                }
-                break;
-                case NUMBER:
-                    enterOuterAlt(_localctx, 2);
-                {
-                    setState(178);
-                    match(NUMBER);
+                    setState(174);
+                    queryLiteral();
                 }
                 break;
                 case BRACKET_LEFT:
-                    enterOuterAlt(_localctx, 3);
+                    enterOuterAlt(_localctx, 2);
                 {
-                    setState(179);
+                    setState(175);
                     interval();
                 }
                 break;
@@ -853,27 +804,140 @@ public class EqlParser extends Parser {
         return _localctx;
     }
 
-    public final IntervalContext interval() throws RecognitionException {
-        IntervalContext _localctx = new IntervalContext(_ctx, getState());
-        enterRule(_localctx, 20, RULE_interval);
+    public final AssignmentContext assignment() throws RecognitionException {
+        AssignmentContext _localctx = new AssignmentContext(_ctx, getState());
+        enterRule(_localctx, 16, RULE_assignment);
         int _la;
         try {
-            setState(196);
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(178);
+                _la = _input.LA(1);
+                if (!(_la == NUMBER || _la == WORD)) {
+                    _errHandler.recoverInline(this);
+                } else {
+                    if (_input.LA(1) == Token.EOF) matchedEOF = true;
+                    _errHandler.reportMatch(this);
+                    consume();
+                }
+                setState(179);
+                match(ASSIGN);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final ContextConstraintContext contextConstraint() throws RecognitionException {
+        ContextConstraintContext _localctx = new ContextConstraintContext(_ctx, getState());
+        enterRule(_localctx, 18, RULE_contextConstraint);
+        try {
+            setState(183);
             _errHandler.sync(this);
-            switch (getInterpreter().adaptivePredict(_input, 27, _ctx)) {
+            switch (_input.LA(1)) {
+                case PAR:
+                    _localctx = new ParagraphContext(_localctx);
+                    enterOuterAlt(_localctx, 1);
+                {
+                    setState(181);
+                    match(PAR);
+                }
+                break;
+                case SENT:
+                    _localctx = new SentenceContext(_localctx);
+                    enterOuterAlt(_localctx, 2);
+                {
+                    setState(182);
+                    match(SENT);
+                }
+                break;
+                default:
+                    throw new NoViableAltException(this);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final IndexOperatorContext indexOperator() throws RecognitionException {
+        IndexOperatorContext _localctx = new IndexOperatorContext(_ctx, getState());
+        enterRule(_localctx, 20, RULE_indexOperator);
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(185);
+                match(WORD);
+                setState(186);
+                match(COLON);
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final QueryLiteralContext queryLiteral() throws RecognitionException {
+        QueryLiteralContext _localctx = new QueryLiteralContext(_ctx, getState());
+        enterRule(_localctx, 22, RULE_queryLiteral);
+        int _la;
+        try {
+            enterOuterAlt(_localctx, 1);
+            {
+                setState(188);
+                _la = _input.LA(1);
+                if (!(_la == NUMBER || _la == WORD)) {
+                    _errHandler.recoverInline(this);
+                } else {
+                    if (_input.LA(1) == Token.EOF) matchedEOF = true;
+                    _errHandler.reportMatch(this);
+                    consume();
+                }
+            }
+        } catch (RecognitionException re) {
+            _localctx.exception = re;
+            _errHandler.reportError(this, re);
+            _errHandler.recover(this, re);
+        } finally {
+            exitRule();
+        }
+        return _localctx;
+    }
+
+    public final IntervalContext interval() throws RecognitionException {
+        IntervalContext _localctx = new IntervalContext(_ctx, getState());
+        enterRule(_localctx, 24, RULE_interval);
+        int _la;
+        try {
+            setState(204);
+            _errHandler.sync(this);
+            switch (getInterpreter().adaptivePredict(_input, 28, _ctx)) {
                 case 1:
                     _localctx = new NumberRangeContext(_localctx);
                     enterOuterAlt(_localctx, 1);
                 {
-                    setState(182);
+                    setState(190);
                     match(BRACKET_LEFT);
-                    setState(183);
+                    setState(191);
                     match(NUMBER);
-                    setState(184);
+                    setState(192);
                     match(RANGE);
-                    setState(185);
+                    setState(193);
                     match(NUMBER);
-                    setState(186);
+                    setState(194);
                     match(BRACKET_RIGHT);
                 }
                 break;
@@ -881,31 +945,31 @@ public class EqlParser extends Parser {
                     _localctx = new DateRangeContext(_localctx);
                     enterOuterAlt(_localctx, 2);
                 {
-                    setState(187);
-                    match(BRACKET_LEFT);
-                    setState(189);
-                    _errHandler.sync(this);
-                    _la = _input.LA(1);
-                    if (_la == DATE) {
-                        {
-                            setState(188);
-                            match(DATE);
-                        }
-                    }
-
-                    setState(191);
-                    match(RANGE);
-                    setState(193);
-                    _errHandler.sync(this);
-                    _la = _input.LA(1);
-                    if (_la == DATE) {
-                        {
-                            setState(192);
-                            match(DATE);
-                        }
-                    }
-
                     setState(195);
+                    match(BRACKET_LEFT);
+                    setState(197);
+                    _errHandler.sync(this);
+                    _la = _input.LA(1);
+                    if (_la == DATE) {
+                        {
+                            setState(196);
+                            match(DATE);
+                        }
+                    }
+
+                    setState(199);
+                    match(RANGE);
+                    setState(201);
+                    _errHandler.sync(this);
+                    _la = _input.LA(1);
+                    if (_la == DATE) {
+                        {
+                            setState(200);
+                            match(DATE);
+                        }
+                    }
+
+                    setState(203);
                     match(BRACKET_RIGHT);
                 }
                 break;
@@ -920,77 +984,87 @@ public class EqlParser extends Parser {
         return _localctx;
     }
 
-    public final ConstraintContext constraint() throws RecognitionException {
-        return constraint(0);
+    public final GlobalConstraintContext globalConstraint() throws RecognitionException {
+        return globalConstraint(0);
     }
 
-    private ConstraintContext constraint(int _p) throws RecognitionException {
+    private GlobalConstraintContext globalConstraint(int _p) throws RecognitionException {
         ParserRuleContext _parentctx = _ctx;
         int _parentState = getState();
-        ConstraintContext _localctx = new ConstraintContext(_ctx, _parentState);
-        ConstraintContext _prevctx = _localctx;
-        int _startState = 22;
-        enterRecursionRule(_localctx, 22, RULE_constraint, _p);
+        GlobalConstraintContext _localctx = new GlobalConstraintContext(_ctx, _parentState);
+        GlobalConstraintContext _prevctx = _localctx;
+        int _startState = 26;
+        enterRecursionRule(_localctx, 26, RULE_globalConstraint, _p);
         try {
             int _alt;
             enterOuterAlt(_localctx, 1);
             {
-                setState(210);
+                setState(218);
                 _errHandler.sync(this);
                 switch (_input.LA(1)) {
                     case PAREN_LEFT: {
-                        setState(199);
+                        _localctx = new ParensContext(_localctx);
+                        _ctx = _localctx;
+                        _prevctx = _localctx;
+
+                        setState(207);
                         match(PAREN_LEFT);
-                        setState(200);
-                        constraint(0);
-                        setState(201);
+                        setState(208);
+                        globalConstraint(0);
+                        setState(209);
                         match(PAREN_RIGHT);
                     }
                     break;
                     case NUMBER:
                     case WORD: {
-                        setState(203);
+                        _localctx = new ComparisonContext(_localctx);
+                        _ctx = _localctx;
+                        _prevctx = _localctx;
+                        setState(211);
                         reference();
-                        setState(204);
+                        setState(212);
                         comparisonOperator();
-                        setState(205);
+                        setState(213);
                         reference();
                     }
                     break;
                     case NOT: {
-                        setState(207);
-                        unaryOperator();
-                        setState(208);
-                        constraint(1);
+                        _localctx = new ConstraintLogicUnaryOperationContext(_localctx);
+                        _ctx = _localctx;
+                        _prevctx = _localctx;
+                        setState(215);
+                        logicUnaryOperator();
+                        setState(216);
+                        globalConstraint(1);
                     }
                     break;
                     default:
                         throw new NoViableAltException(this);
                 }
                 _ctx.stop = _input.LT(-1);
-                setState(218);
+                setState(226);
                 _errHandler.sync(this);
-                _alt = getInterpreter().adaptivePredict(_input, 29, _ctx);
+                _alt = getInterpreter().adaptivePredict(_input, 30, _ctx);
                 while (_alt != 2 && _alt != org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER) {
                     if (_alt == 1) {
                         if (_parseListeners != null) triggerExitRuleEvent();
                         _prevctx = _localctx;
                         {
                             {
-                                _localctx = new ConstraintContext(_parentctx, _parentState);
-                                pushNewRecursionContext(_localctx, _startState, RULE_constraint);
-                                setState(212);
+                                _localctx = new ConstraintLogicBinaryOperationContext(new GlobalConstraintContext(_parentctx, _parentState));
+                                pushNewRecursionContext(_localctx, _startState, RULE_globalConstraint);
+                                setState(220);
                                 if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
-                                setState(213);
-                                binaryOperator();
-                                setState(214);
-                                constraint(3);
+                                setState(221);
+                                logicBinaryOperator();
+                                setState(222);
+                                globalConstraint(3);
                             }
                         }
                     }
-                    setState(220);
+                    setState(228);
                     _errHandler.sync(this);
-                    _alt = getInterpreter().adaptivePredict(_input, 29, _ctx);
+                    _alt = getInterpreter().adaptivePredict(_input, 30, _ctx);
                 }
             }
         } catch (RecognitionException re) {
@@ -1005,23 +1079,30 @@ public class EqlParser extends Parser {
 
     public final ReferenceContext reference() throws RecognitionException {
         ReferenceContext _localctx = new ReferenceContext(_ctx, getState());
-        enterRule(_localctx, 24, RULE_reference);
+        enterRule(_localctx, 28, RULE_reference);
         int _la;
         try {
             enterOuterAlt(_localctx, 1);
             {
-                setState(221);
-                _la = _input.LA(1);
-                if (!(_la == NUMBER || _la == WORD)) {
-                    _errHandler.recoverInline(this);
-                } else {
-                    if (_input.LA(1) == Token.EOF) matchedEOF = true;
-                    _errHandler.reportMatch(this);
-                    consume();
+                setState(231);
+                _errHandler.sync(this);
+                switch (getInterpreter().adaptivePredict(_input, 31, _ctx)) {
+                    case 1: {
+                        setState(229);
+                        _la = _input.LA(1);
+                        if (!(_la == NUMBER || _la == WORD)) {
+                            _errHandler.recoverInline(this);
+                        } else {
+                            if (_input.LA(1) == Token.EOF) matchedEOF = true;
+                            _errHandler.reportMatch(this);
+                            consume();
+                        }
+                        setState(230);
+                        match(DOT);
+                    }
+                    break;
                 }
-                setState(222);
-                match(DOT);
-                setState(223);
+                setState(233);
                 match(WORD);
             }
         } catch (RecognitionException re) {
@@ -1036,12 +1117,12 @@ public class EqlParser extends Parser {
 
     public final ComparisonOperatorContext comparisonOperator() throws RecognitionException {
         ComparisonOperatorContext _localctx = new ComparisonOperatorContext(_ctx, getState());
-        enterRule(_localctx, 26, RULE_comparisonOperator);
+        enterRule(_localctx, 30, RULE_comparisonOperator);
         int _la;
         try {
             enterOuterAlt(_localctx, 1);
             {
-                setState(225);
+                setState(235);
                 _la = _input.LA(1);
                 if (!(_la == EQ || _la == NEQ)) {
                     _errHandler.recoverInline(this);
@@ -1061,14 +1142,14 @@ public class EqlParser extends Parser {
         return _localctx;
     }
 
-    public final BinaryOperatorContext binaryOperator() throws RecognitionException {
-        BinaryOperatorContext _localctx = new BinaryOperatorContext(_ctx, getState());
-        enterRule(_localctx, 28, RULE_binaryOperator);
+    public final LogicBinaryOperatorContext logicBinaryOperator() throws RecognitionException {
+        LogicBinaryOperatorContext _localctx = new LogicBinaryOperatorContext(_ctx, getState());
+        enterRule(_localctx, 32, RULE_logicBinaryOperator);
         int _la;
         try {
             enterOuterAlt(_localctx, 1);
             {
-                setState(227);
+                setState(237);
                 _la = _input.LA(1);
                 if (!(_la == OR || _la == AND)) {
                     _errHandler.recoverInline(this);
@@ -1088,13 +1169,13 @@ public class EqlParser extends Parser {
         return _localctx;
     }
 
-    public final UnaryOperatorContext unaryOperator() throws RecognitionException {
-        UnaryOperatorContext _localctx = new UnaryOperatorContext(_ctx, getState());
-        enterRule(_localctx, 30, RULE_unaryOperator);
+    public final LogicUnaryOperatorContext logicUnaryOperator() throws RecognitionException {
+        LogicUnaryOperatorContext _localctx = new LogicUnaryOperatorContext(_ctx, getState());
+        enterRule(_localctx, 34, RULE_logicUnaryOperator);
         try {
             enterOuterAlt(_localctx, 1);
             {
-                setState(229);
+                setState(239);
                 match(NOT);
             }
         } catch (RecognitionException re) {
@@ -1111,8 +1192,8 @@ public class EqlParser extends Parser {
         switch (ruleIndex) {
             case 2:
                 return queryElem_sempred((QueryElemContext) _localctx, predIndex);
-            case 11:
-                return constraint_sempred((ConstraintContext) _localctx, predIndex);
+            case 13:
+                return globalConstraint_sempred((GlobalConstraintContext) _localctx, predIndex);
         }
         return true;
     }
@@ -1127,7 +1208,7 @@ public class EqlParser extends Parser {
         return true;
     }
 
-    private boolean constraint_sempred(ConstraintContext _localctx, int predIndex) {
+    private boolean globalConstraint_sempred(GlobalConstraintContext _localctx, int predIndex) {
         switch (predIndex) {
             case 2:
                 return precpred(_ctx, 2);
@@ -1148,12 +1229,12 @@ public class EqlParser extends Parser {
             return getToken(EqlParser.EOF, 0);
         }
 
-        public TerminalNode QUERY_CONSTRAINT_SEPARATOR() {
-            return getToken(EqlParser.QUERY_CONSTRAINT_SEPARATOR, 0);
+        public TerminalNode GLOBAL_CONSTRAINT_SEPARATOR() {
+            return getToken(EqlParser.GLOBAL_CONSTRAINT_SEPARATOR, 0);
         }
 
-        public ConstraintContext constraint() {
-            return getRuleContext(ConstraintContext.class, 0);
+        public GlobalConstraintContext globalConstraint() {
+            return getRuleContext(GlobalConstraintContext.class, 0);
         }
 
         @Override
@@ -1248,32 +1329,12 @@ public class EqlParser extends Parser {
             return getRuleContext(IndexOperatorContext.class, 0);
         }
 
-        public TerminalNode PAREN_LEFT() {
-            return getToken(EqlParser.PAREN_LEFT, 0);
-        }
-
-        public List<TerminalNode> WORD() {
-            return getTokens(EqlParser.WORD);
-        }
-
-        public TerminalNode WORD(int i) {
-            return getToken(EqlParser.WORD, i);
-        }
-
-        public TerminalNode PAREN_RIGHT() {
-            return getToken(EqlParser.PAREN_RIGHT, 0);
+        public SingleValueOrMultipleContext singleValueOrMultiple() {
+            return getRuleContext(SingleValueOrMultipleContext.class, 0);
         }
 
         public AssignmentContext assignment() {
             return getRuleContext(AssignmentContext.class, 0);
-        }
-
-        public List<TerminalNode> OR() {
-            return getTokens(EqlParser.OR);
-        }
-
-        public TerminalNode OR(int i) {
-            return getToken(EqlParser.OR, i);
         }
 
         public AlignOperatorContext alignOperator() {
@@ -1386,6 +1447,41 @@ public class EqlParser extends Parser {
         }
     }
 
+    public static class LogicUnaryOperationContext extends QueryElemContext {
+        public LogicUnaryOperationContext(QueryElemContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public LogicUnaryOperatorContext logicUnaryOperator() {
+            return getRuleContext(LogicUnaryOperatorContext.class, 0);
+        }
+
+        public QueryElemContext queryElem() {
+            return getRuleContext(QueryElemContext.class, 0);
+        }
+
+        public AssignmentContext assignment() {
+            return getRuleContext(AssignmentContext.class, 0);
+        }
+
+        @Override
+        public void enterRule(ParseTreeListener listener) {
+            if (listener instanceof EqlListener) ((EqlListener) listener).enterLogicUnaryOperation(this);
+        }
+
+        @Override
+        public void exitRule(ParseTreeListener listener) {
+            if (listener instanceof EqlListener) ((EqlListener) listener).exitLogicUnaryOperation(this);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+            if (visitor instanceof EqlVisitor)
+                return ((EqlVisitor<? extends T>) visitor).visitLogicUnaryOperation(this);
+            else return visitor.visitChildren(this);
+        }
+    }
+
     public static class IndexWithSingleValueContext extends QueryElemContext {
         public IndexWithSingleValueContext(QueryElemContext ctx) {
             copyFrom(ctx);
@@ -1425,8 +1521,8 @@ public class EqlParser extends Parser {
         }
     }
 
-    public static class BinaryOperationContext extends QueryElemContext {
-        public BinaryOperationContext(QueryElemContext ctx) {
+    public static class LogicBinaryOperationContext extends QueryElemContext {
+        public LogicBinaryOperationContext(QueryElemContext ctx) {
             copyFrom(ctx);
         }
 
@@ -1438,57 +1534,24 @@ public class EqlParser extends Parser {
             return getRuleContext(QueryElemContext.class, i);
         }
 
-        public BinaryOperatorContext binaryOperator() {
-            return getRuleContext(BinaryOperatorContext.class, 0);
+        public LogicBinaryOperatorContext logicBinaryOperator() {
+            return getRuleContext(LogicBinaryOperatorContext.class, 0);
         }
 
         @Override
         public void enterRule(ParseTreeListener listener) {
-            if (listener instanceof EqlListener) ((EqlListener) listener).enterBinaryOperation(this);
+            if (listener instanceof EqlListener) ((EqlListener) listener).enterLogicBinaryOperation(this);
         }
 
         @Override
         public void exitRule(ParseTreeListener listener) {
-            if (listener instanceof EqlListener) ((EqlListener) listener).exitBinaryOperation(this);
+            if (listener instanceof EqlListener) ((EqlListener) listener).exitLogicBinaryOperation(this);
         }
 
         @Override
         public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-            if (visitor instanceof EqlVisitor) return ((EqlVisitor<? extends T>) visitor).visitBinaryOperation(this);
-            else return visitor.visitChildren(this);
-        }
-    }
-
-    public static class UnaryOperationContext extends QueryElemContext {
-        public UnaryOperationContext(QueryElemContext ctx) {
-            copyFrom(ctx);
-        }
-
-        public UnaryOperatorContext unaryOperator() {
-            return getRuleContext(UnaryOperatorContext.class, 0);
-        }
-
-        public QueryElemContext queryElem() {
-            return getRuleContext(QueryElemContext.class, 0);
-        }
-
-        public AssignmentContext assignment() {
-            return getRuleContext(AssignmentContext.class, 0);
-        }
-
-        @Override
-        public void enterRule(ParseTreeListener listener) {
-            if (listener instanceof EqlListener) ((EqlListener) listener).enterUnaryOperation(this);
-        }
-
-        @Override
-        public void exitRule(ParseTreeListener listener) {
-            if (listener instanceof EqlListener) ((EqlListener) listener).exitUnaryOperation(this);
-        }
-
-        @Override
-        public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-            if (visitor instanceof EqlVisitor) return ((EqlVisitor<? extends T>) visitor).visitUnaryOperation(this);
+            if (visitor instanceof EqlVisitor)
+                return ((EqlVisitor<? extends T>) visitor).visitLogicBinaryOperation(this);
             else return visitor.visitChildren(this);
         }
     }
@@ -1631,8 +1694,8 @@ public class EqlParser extends Parser {
         }
     }
 
-    public static class NertagContext extends AlignElemContext {
-        public NertagContext(AlignElemContext ctx) {
+    public static class EntityAttributeContext extends AlignElemContext {
+        public EntityAttributeContext(AlignElemContext ctx) {
             copyFrom(ctx);
         }
 
@@ -1652,8 +1715,8 @@ public class EqlParser extends Parser {
             return getToken(EqlParser.COLON, 0);
         }
 
-        public QueryLiteralContext queryLiteral() {
-            return getRuleContext(QueryLiteralContext.class, 0);
+        public SingleValueOrMultipleContext singleValueOrMultiple() {
+            return getRuleContext(SingleValueOrMultipleContext.class, 0);
         }
 
         public TerminalNode PAREN_LEFT() {
@@ -1666,17 +1729,17 @@ public class EqlParser extends Parser {
 
         @Override
         public void enterRule(ParseTreeListener listener) {
-            if (listener instanceof EqlListener) ((EqlListener) listener).enterNertag(this);
+            if (listener instanceof EqlListener) ((EqlListener) listener).enterEntityAttribute(this);
         }
 
         @Override
         public void exitRule(ParseTreeListener listener) {
-            if (listener instanceof EqlListener) ((EqlListener) listener).exitNertag(this);
+            if (listener instanceof EqlListener) ((EqlListener) listener).exitEntityAttribute(this);
         }
 
         @Override
         public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-            if (visitor instanceof EqlVisitor) return ((EqlVisitor<? extends T>) visitor).visitNertag(this);
+            if (visitor instanceof EqlVisitor) return ((EqlVisitor<? extends T>) visitor).visitEntityAttribute(this);
             else return visitor.visitChildren(this);
         }
     }
@@ -1694,8 +1757,8 @@ public class EqlParser extends Parser {
             return getToken(EqlParser.COLON, 0);
         }
 
-        public QueryLiteralContext queryLiteral() {
-            return getRuleContext(QueryLiteralContext.class, 0);
+        public SingleValueOrMultipleContext singleValueOrMultiple() {
+            return getRuleContext(SingleValueOrMultipleContext.class, 0);
         }
 
         public TerminalNode PAREN_LEFT() {
@@ -1719,6 +1782,131 @@ public class EqlParser extends Parser {
         @Override
         public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
             if (visitor instanceof EqlVisitor) return ((EqlVisitor<? extends T>) visitor).visitIndex(this);
+            else return visitor.visitChildren(this);
+        }
+    }
+
+    public static class SingleValueOrMultipleContext extends ParserRuleContext {
+        public SingleValueOrMultipleContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public SingleValueOrMultipleContext() {
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_singleValueOrMultiple;
+        }
+
+        public void copyFrom(SingleValueOrMultipleContext ctx) {
+            super.copyFrom(ctx);
+        }
+    }
+
+    public static class MultipleValuesContext extends SingleValueOrMultipleContext {
+        public MultipleValuesContext(SingleValueOrMultipleContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public TerminalNode PAREN_LEFT() {
+            return getToken(EqlParser.PAREN_LEFT, 0);
+        }
+
+        public List<LiteralOrIntervalContext> literalOrInterval() {
+            return getRuleContexts(LiteralOrIntervalContext.class);
+        }
+
+        public LiteralOrIntervalContext literalOrInterval(int i) {
+            return getRuleContext(LiteralOrIntervalContext.class, i);
+        }
+
+        public TerminalNode PAREN_RIGHT() {
+            return getToken(EqlParser.PAREN_RIGHT, 0);
+        }
+
+        public List<TerminalNode> OR() {
+            return getTokens(EqlParser.OR);
+        }
+
+        public TerminalNode OR(int i) {
+            return getToken(EqlParser.OR, i);
+        }
+
+        @Override
+        public void enterRule(ParseTreeListener listener) {
+            if (listener instanceof EqlListener) ((EqlListener) listener).enterMultipleValues(this);
+        }
+
+        @Override
+        public void exitRule(ParseTreeListener listener) {
+            if (listener instanceof EqlListener) ((EqlListener) listener).exitMultipleValues(this);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+            if (visitor instanceof EqlVisitor) return ((EqlVisitor<? extends T>) visitor).visitMultipleValues(this);
+            else return visitor.visitChildren(this);
+        }
+    }
+
+    public static class SingleValueContext extends SingleValueOrMultipleContext {
+        public SingleValueContext(SingleValueOrMultipleContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public LiteralOrIntervalContext literalOrInterval() {
+            return getRuleContext(LiteralOrIntervalContext.class, 0);
+        }
+
+        @Override
+        public void enterRule(ParseTreeListener listener) {
+            if (listener instanceof EqlListener) ((EqlListener) listener).enterSingleValue(this);
+        }
+
+        @Override
+        public void exitRule(ParseTreeListener listener) {
+            if (listener instanceof EqlListener) ((EqlListener) listener).exitSingleValue(this);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+            if (visitor instanceof EqlVisitor) return ((EqlVisitor<? extends T>) visitor).visitSingleValue(this);
+            else return visitor.visitChildren(this);
+        }
+    }
+
+    public static class LiteralOrIntervalContext extends ParserRuleContext {
+        public LiteralOrIntervalContext(ParserRuleContext parent, int invokingState) {
+            super(parent, invokingState);
+        }
+
+        public QueryLiteralContext queryLiteral() {
+            return getRuleContext(QueryLiteralContext.class, 0);
+        }
+
+        public IntervalContext interval() {
+            return getRuleContext(IntervalContext.class, 0);
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_literalOrInterval;
+        }
+
+        @Override
+        public void enterRule(ParseTreeListener listener) {
+            if (listener instanceof EqlListener) ((EqlListener) listener).enterLiteralOrInterval(this);
+        }
+
+        @Override
+        public void exitRule(ParseTreeListener listener) {
+            if (listener instanceof EqlListener) ((EqlListener) listener).exitLiteralOrInterval(this);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+            if (visitor instanceof EqlVisitor) return ((EqlVisitor<? extends T>) visitor).visitLiteralOrInterval(this);
             else return visitor.visitChildren(this);
         }
     }
@@ -1780,43 +1968,9 @@ public class EqlParser extends Parser {
         }
     }
 
-    public static class ParContext extends ContextConstraintContext {
-        public ParContext(ContextConstraintContext ctx) {
+    public static class SentenceContext extends ContextConstraintContext {
+        public SentenceContext(ContextConstraintContext ctx) {
             copyFrom(ctx);
-        }
-
-        public TerminalNode MINUS() {
-            return getToken(EqlParser.MINUS, 0);
-        }
-
-        public TerminalNode PAR() {
-            return getToken(EqlParser.PAR, 0);
-        }
-
-        @Override
-        public void enterRule(ParseTreeListener listener) {
-            if (listener instanceof EqlListener) ((EqlListener) listener).enterPar(this);
-        }
-
-        @Override
-        public void exitRule(ParseTreeListener listener) {
-            if (listener instanceof EqlListener) ((EqlListener) listener).exitPar(this);
-        }
-
-        @Override
-        public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-            if (visitor instanceof EqlVisitor) return ((EqlVisitor<? extends T>) visitor).visitPar(this);
-            else return visitor.visitChildren(this);
-        }
-    }
-
-    public static class SentContext extends ContextConstraintContext {
-        public SentContext(ContextConstraintContext ctx) {
-            copyFrom(ctx);
-        }
-
-        public TerminalNode MINUS() {
-            return getToken(EqlParser.MINUS, 0);
         }
 
         public TerminalNode SENT() {
@@ -1825,17 +1979,43 @@ public class EqlParser extends Parser {
 
         @Override
         public void enterRule(ParseTreeListener listener) {
-            if (listener instanceof EqlListener) ((EqlListener) listener).enterSent(this);
+            if (listener instanceof EqlListener) ((EqlListener) listener).enterSentence(this);
         }
 
         @Override
         public void exitRule(ParseTreeListener listener) {
-            if (listener instanceof EqlListener) ((EqlListener) listener).exitSent(this);
+            if (listener instanceof EqlListener) ((EqlListener) listener).exitSentence(this);
         }
 
         @Override
         public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-            if (visitor instanceof EqlVisitor) return ((EqlVisitor<? extends T>) visitor).visitSent(this);
+            if (visitor instanceof EqlVisitor) return ((EqlVisitor<? extends T>) visitor).visitSentence(this);
+            else return visitor.visitChildren(this);
+        }
+    }
+
+    public static class ParagraphContext extends ContextConstraintContext {
+        public ParagraphContext(ContextConstraintContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public TerminalNode PAR() {
+            return getToken(EqlParser.PAR, 0);
+        }
+
+        @Override
+        public void enterRule(ParseTreeListener listener) {
+            if (listener instanceof EqlListener) ((EqlListener) listener).enterParagraph(this);
+        }
+
+        @Override
+        public void exitRule(ParseTreeListener listener) {
+            if (listener instanceof EqlListener) ((EqlListener) listener).exitParagraph(this);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+            if (visitor instanceof EqlVisitor) return ((EqlVisitor<? extends T>) visitor).visitParagraph(this);
             else return visitor.visitChildren(this);
         }
     }
@@ -1886,10 +2066,6 @@ public class EqlParser extends Parser {
 
         public TerminalNode NUMBER() {
             return getToken(EqlParser.NUMBER, 0);
-        }
-
-        public IntervalContext interval() {
-            return getRuleContext(IntervalContext.class, 0);
         }
 
         @Override
@@ -2016,25 +2192,61 @@ public class EqlParser extends Parser {
         }
     }
 
-    public static class ConstraintContext extends ParserRuleContext {
-        public ConstraintContext(ParserRuleContext parent, int invokingState) {
+    public static class GlobalConstraintContext extends ParserRuleContext {
+        public GlobalConstraintContext(ParserRuleContext parent, int invokingState) {
             super(parent, invokingState);
+        }
+
+        public GlobalConstraintContext() {
+        }
+
+        @Override
+        public int getRuleIndex() {
+            return RULE_globalConstraint;
+        }
+
+        public void copyFrom(GlobalConstraintContext ctx) {
+            super.copyFrom(ctx);
+        }
+    }
+
+    public static class ParensContext extends GlobalConstraintContext {
+        public ParensContext(GlobalConstraintContext ctx) {
+            copyFrom(ctx);
         }
 
         public TerminalNode PAREN_LEFT() {
             return getToken(EqlParser.PAREN_LEFT, 0);
         }
 
-        public List<ConstraintContext> constraint() {
-            return getRuleContexts(ConstraintContext.class);
-        }
-
-        public ConstraintContext constraint(int i) {
-            return getRuleContext(ConstraintContext.class, i);
+        public GlobalConstraintContext globalConstraint() {
+            return getRuleContext(GlobalConstraintContext.class, 0);
         }
 
         public TerminalNode PAREN_RIGHT() {
             return getToken(EqlParser.PAREN_RIGHT, 0);
+        }
+
+        @Override
+        public void enterRule(ParseTreeListener listener) {
+            if (listener instanceof EqlListener) ((EqlListener) listener).enterParens(this);
+        }
+
+        @Override
+        public void exitRule(ParseTreeListener listener) {
+            if (listener instanceof EqlListener) ((EqlListener) listener).exitParens(this);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+            if (visitor instanceof EqlVisitor) return ((EqlVisitor<? extends T>) visitor).visitParens(this);
+            else return visitor.visitChildren(this);
+        }
+    }
+
+    public static class ComparisonContext extends GlobalConstraintContext {
+        public ComparisonContext(GlobalConstraintContext ctx) {
+            copyFrom(ctx);
         }
 
         public List<ReferenceContext> reference() {
@@ -2049,32 +2261,85 @@ public class EqlParser extends Parser {
             return getRuleContext(ComparisonOperatorContext.class, 0);
         }
 
-        public UnaryOperatorContext unaryOperator() {
-            return getRuleContext(UnaryOperatorContext.class, 0);
-        }
-
-        public BinaryOperatorContext binaryOperator() {
-            return getRuleContext(BinaryOperatorContext.class, 0);
-        }
-
-        @Override
-        public int getRuleIndex() {
-            return RULE_constraint;
-        }
-
         @Override
         public void enterRule(ParseTreeListener listener) {
-            if (listener instanceof EqlListener) ((EqlListener) listener).enterConstraint(this);
+            if (listener instanceof EqlListener) ((EqlListener) listener).enterComparison(this);
         }
 
         @Override
         public void exitRule(ParseTreeListener listener) {
-            if (listener instanceof EqlListener) ((EqlListener) listener).exitConstraint(this);
+            if (listener instanceof EqlListener) ((EqlListener) listener).exitComparison(this);
         }
 
         @Override
         public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-            if (visitor instanceof EqlVisitor) return ((EqlVisitor<? extends T>) visitor).visitConstraint(this);
+            if (visitor instanceof EqlVisitor) return ((EqlVisitor<? extends T>) visitor).visitComparison(this);
+            else return visitor.visitChildren(this);
+        }
+    }
+
+    public static class ConstraintLogicUnaryOperationContext extends GlobalConstraintContext {
+        public ConstraintLogicUnaryOperationContext(GlobalConstraintContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public LogicUnaryOperatorContext logicUnaryOperator() {
+            return getRuleContext(LogicUnaryOperatorContext.class, 0);
+        }
+
+        public GlobalConstraintContext globalConstraint() {
+            return getRuleContext(GlobalConstraintContext.class, 0);
+        }
+
+        @Override
+        public void enterRule(ParseTreeListener listener) {
+            if (listener instanceof EqlListener) ((EqlListener) listener).enterConstraintLogicUnaryOperation(this);
+        }
+
+        @Override
+        public void exitRule(ParseTreeListener listener) {
+            if (listener instanceof EqlListener) ((EqlListener) listener).exitConstraintLogicUnaryOperation(this);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+            if (visitor instanceof EqlVisitor)
+                return ((EqlVisitor<? extends T>) visitor).visitConstraintLogicUnaryOperation(this);
+            else return visitor.visitChildren(this);
+        }
+    }
+
+    public static class ConstraintLogicBinaryOperationContext extends GlobalConstraintContext {
+        public ConstraintLogicBinaryOperationContext(GlobalConstraintContext ctx) {
+            copyFrom(ctx);
+        }
+
+        public List<GlobalConstraintContext> globalConstraint() {
+            return getRuleContexts(GlobalConstraintContext.class);
+        }
+
+        public GlobalConstraintContext globalConstraint(int i) {
+            return getRuleContext(GlobalConstraintContext.class, i);
+        }
+
+        public LogicBinaryOperatorContext logicBinaryOperator() {
+            return getRuleContext(LogicBinaryOperatorContext.class, 0);
+        }
+
+        @Override
+        public void enterRule(ParseTreeListener listener) {
+            if (listener instanceof EqlListener) ((EqlListener) listener).enterConstraintLogicBinaryOperation(this);
+        }
+
+        @Override
+        public void exitRule(ParseTreeListener listener) {
+            if (listener instanceof EqlListener) ((EqlListener) listener).exitConstraintLogicBinaryOperation(this);
+        }
+
+        @Override
+        public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+            if (visitor instanceof EqlVisitor)
+                return ((EqlVisitor<? extends T>) visitor).visitConstraintLogicBinaryOperation(this);
             else return visitor.visitChildren(this);
         }
     }
@@ -2084,16 +2349,16 @@ public class EqlParser extends Parser {
             super(parent, invokingState);
         }
 
-        public TerminalNode DOT() {
-            return getToken(EqlParser.DOT, 0);
-        }
-
         public List<TerminalNode> WORD() {
             return getTokens(EqlParser.WORD);
         }
 
         public TerminalNode WORD(int i) {
             return getToken(EqlParser.WORD, i);
+        }
+
+        public TerminalNode DOT() {
+            return getToken(EqlParser.DOT, 0);
         }
 
         public TerminalNode NUMBER() {
@@ -2157,8 +2422,8 @@ public class EqlParser extends Parser {
         }
     }
 
-    public static class BinaryOperatorContext extends ParserRuleContext {
-        public BinaryOperatorContext(ParserRuleContext parent, int invokingState) {
+    public static class LogicBinaryOperatorContext extends ParserRuleContext {
+        public LogicBinaryOperatorContext(ParserRuleContext parent, int invokingState) {
             super(parent, invokingState);
         }
 
@@ -2172,28 +2437,29 @@ public class EqlParser extends Parser {
 
         @Override
         public int getRuleIndex() {
-            return RULE_binaryOperator;
+            return RULE_logicBinaryOperator;
         }
 
         @Override
         public void enterRule(ParseTreeListener listener) {
-            if (listener instanceof EqlListener) ((EqlListener) listener).enterBinaryOperator(this);
+            if (listener instanceof EqlListener) ((EqlListener) listener).enterLogicBinaryOperator(this);
         }
 
         @Override
         public void exitRule(ParseTreeListener listener) {
-            if (listener instanceof EqlListener) ((EqlListener) listener).exitBinaryOperator(this);
+            if (listener instanceof EqlListener) ((EqlListener) listener).exitLogicBinaryOperator(this);
         }
 
         @Override
         public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-            if (visitor instanceof EqlVisitor) return ((EqlVisitor<? extends T>) visitor).visitBinaryOperator(this);
+            if (visitor instanceof EqlVisitor)
+                return ((EqlVisitor<? extends T>) visitor).visitLogicBinaryOperator(this);
             else return visitor.visitChildren(this);
         }
     }
 
-    public static class UnaryOperatorContext extends ParserRuleContext {
-        public UnaryOperatorContext(ParserRuleContext parent, int invokingState) {
+    public static class LogicUnaryOperatorContext extends ParserRuleContext {
+        public LogicUnaryOperatorContext(ParserRuleContext parent, int invokingState) {
             super(parent, invokingState);
         }
 
@@ -2203,22 +2469,22 @@ public class EqlParser extends Parser {
 
         @Override
         public int getRuleIndex() {
-            return RULE_unaryOperator;
+            return RULE_logicUnaryOperator;
         }
 
         @Override
         public void enterRule(ParseTreeListener listener) {
-            if (listener instanceof EqlListener) ((EqlListener) listener).enterUnaryOperator(this);
+            if (listener instanceof EqlListener) ((EqlListener) listener).enterLogicUnaryOperator(this);
         }
 
         @Override
         public void exitRule(ParseTreeListener listener) {
-            if (listener instanceof EqlListener) ((EqlListener) listener).exitUnaryOperator(this);
+            if (listener instanceof EqlListener) ((EqlListener) listener).exitLogicUnaryOperator(this);
         }
 
         @Override
         public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-            if (visitor instanceof EqlVisitor) return ((EqlVisitor<? extends T>) visitor).visitUnaryOperator(this);
+            if (visitor instanceof EqlVisitor) return ((EqlVisitor<? extends T>) visitor).visitLogicUnaryOperator(this);
             else return visitor.visitChildren(this);
         }
     }

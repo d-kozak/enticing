@@ -1,12 +1,16 @@
 # Enticing Query Language (EQL) specification
-EQL is a language which you can use for querying semantically enhanced documents on the Enticing platform. 
-The queries can be as simple as only a few words, but they can be also very complex, containing logical operations, subqueries over multiple indexes or constraints further limiting the results.
+EQL is a language which you can use to query semantically enhanced documents on the Enticing platform. 
+The queries can be as simple as only a few words, but also very complex, containing logical operations, subqueries over multiple indexes or constraints further limiting the results.
 
 Each word in an indexed document contains meta information such as it's word class, lemma and many others. The documents may also contain entities, such as people or places. These entities have their own meta information. 
 For example a person will probably have a name and a birthdate at least. All this extra information can be used to write more advanced queries. 
 The amount of meta information depends on the index which you are querying. 
 
-## Query examples
+The rest of the document is structured as follows. First we provide a practical guide that shows how to use EQL. It starts with a simple query and gradually adds more operators 
+to it to satisfy the requirements. Then we provide a list of all operators that EQL supports with their description. Those with background in formal language theory might appreciate 
+the formal grammar of EQL which we can be found in the end.  
+
+## Practical guide
 
 Let's start with a simple query. We might want to search for documents talking about Picasso visiting Paris. I guess we all would probably write something like
 ```
@@ -34,13 +38,13 @@ Using just one verb might be a bit too specific. Let's add a second option, the 
 ```
 Picasso ( visited | explored )  Paris - _SENT_
 ```
-Now we are saying the we are looking for documents containing words Picasso, Paris and one of visited, explored. Note that the parenthesis are not necessary in the case. The query ```Picasso visited | explored  Paris - _SENT_```
+Now we are saying that we are looking for documents containing words Picasso, Paris and either visited or explored, or both. Note that the parenthesis are not necessary in the case. The query ```Picasso visited | explored  Paris - _SENT_```
 has the same meaning, but the first version might be more explicit. Without the parenthesis it might look like both words on each side are part of the **or**, which is not the case. If we actually wanted that, we can use parenthesis ```(Picasso visited) | (explored  Paris) - _SENT_```, 
 but the meaning is different of course.
 
 Let's keep focusing on the verbs a bit longer. There might be documents out there talking about Picasso visiting Paris, but the shape of the verb might be different. 
-Maybe the document can be written in the present tense. To be able to match documents like that, we can use the **index** operator. So far our query used only the default index, which is _token_. 
-However, the metadata about words can be found on different indexes. 
+Maybe the documents are written in the present tense. To be able to match documents like that, we can use the **index** operator. So far our query used only the default index, which is _token_. 
+This index contains words from the original document. The metadata about words can be found on the other indexes. 
 ```
 Picasso ( lemma:visit | lemma:explore )  Paris - _SENT_
 ```
@@ -57,9 +61,9 @@ Let's say that there is a sentence talking about Picasso and Paris, but it uses 
 nertag:person^(person.name:Picasso) lemma:(visit|explore) Paris - _SENT_
 ``` 
 Well, this step might be hard to swallow at once, so let's digest it piece by piece. We replaced ```Picasso``` with ```nertag:person^(person.name:Picasso)```. We are already familiar with the first part, ```nertag:person```.
-This is an **index** operator. The only difference is that instead of _lemma_ we are querying _nertag_, which is an index containing the type of entity.  So why didn't we write just ```nertag:person lemma:(visit|explore) Paris - _SENT_```? 
+This is an **index** operator. The only difference is that instead of _lemma_ we are querying _nertag_, which is an index containing the type of entity.  So why didn't we just write ```nertag:person lemma:(visit|explore) Paris - _SENT_```? 
 It is definitely simpler, but that would match **any** person visiting Paris and this is not what we want. We want that word to be a person, but only a person whose name is Picasso. More technically speaking, we want to 
-query two indexes, _nertag_ and _name_, where name is an attribute of entity person, but we want these two requirements on the same word, they should **align**. That's where the name comes from. Now that we understand our new query, 
+query two indexes, _nertag_ and _name_, where the name is an attribute of entity person, but these two requirements apply to the same word, they **align**. That's where the name comes from. Now that we understand our new query, 
 let's change Paris the same way.
 ```
 nertag:person^(person.name:Picasso) lemma:(visit|explore)  nertag:place^(place.name:Paris) - _SENT_
@@ -73,8 +77,8 @@ The skeleton of the query is ```artist influenced artist```, but we are going to
 ```
 nertag:(person|artist) < ( lemma:(influce|impact) | (lemma:paid < lemma:tribute) )  < nertag:(person|artist) - _PAR_
 ``` 
-We should already be familiar with the operators used in this query, but as an exercise, let's translate it to English. We are searching for a document where there is an entity followed by a verb followed by an entity. 
-Both entities should be of type person or artist.  The verb can be either by a single verb,
+We should already be familiar with the operators used in this query, but as an exercise, let's translate it to English. We are searching for a document where there is an entity followed by a word or words followed by an entity. 
+Both entities should be of type person or artist.  The word can be either by a single word,
 whose lemma is either influence or impact, or 'paid tribute', again in any form thanks to using the _lemma_ index. On top of that, this whole query is limited to a single paragraph. Seems good. But there is a problem. 
 Currently, we didn't express that these two entities should be different people, and that is actually really important, isn't it? Now comes the time to use **global constraints**. 
 First we will identify parts of the query we are interested in using the **assignment operator**, than we will use them to express our global constraint.
@@ -83,21 +87,28 @@ influencer:=nertag:(person|artist) < ( lemma:(influce|impact) | (lemma:paid < le
 ``` 
 Now we have ensured that the two artist should be different and our query should work as expected.
 
+Let us finish with one more query.
+```
+a:=nertag:(person|artist) < lemma:visit < b:=nertag:(person|artist) nertag:place^place.name:Barcelona nertag:event^event.date:[1/1/1960..12/12/2012] - _PAR_ && a.nerid != b.nerid
+```
+In this example we are looking for documents talking about one artist visiting another in Barcelona during an event that happened between 1/1/1960 and 12/12/2012. 
+The context is limited to a single paragraph and global constraints are used to ensure that the two artists are different. 
+
 ## EQL Operators
 The operators can be divided into four categories.
 ### Basic operators
 * **Implicit and** ```A B``` 
 
 If you specify no operator, **and** is chosen automatically. That is all mentioned words have to be in the document, not necessarily in this order.
-* **Sequence** ``` "A B C" ``` 
-
-A, B and C have to appear in sequence in this exact order.
 * **Order**  ```A < B```
 
 A should appear before B, but they do **not** have to be next to each other.
+* **Sequence** ``` "A B C" ``` 
+
+A, B and C have to appear in this order next to each other.
 * **And**   ```A & B``` 
 
-Both a and b have to be in the document.
+Both A and B have to be in the document, not necessarily in this order.
 * **Or**  ```A | B``` 
 
 At least one of A, B have to be in the document.
@@ -145,9 +156,9 @@ Let's say that we are searching for documents talking about two artists influenc
 nertag:artist < lemma:influence < nertag:artist
 ``` 
 This query will work, but there is a catch. 
-This query might return more snippets than we want, because we didn't specify that the two artist should be different people. 
+This query might return irrelevant snippets, because we didn't specify that the two artist should be different. 
 This where the global constraints come into play. The global constraint is a predicate which is separated from the query by the symbol ```&&```.
-The constraint consists of one or more equalities or inequalities connected using logical operators **and**,**or**, **nor** and parenthesis, if necessary. 
+The constraint consists of one or more equalities and inequalities connected using logical operators **and**,**or**, **not** and parenthesis, if necessary. 
 
 But before using global constraints we have to be able to identify parts of the query, right? 
 
@@ -159,7 +170,7 @@ Once we have the identifier, we can use it to write the new query.
 ```
 1:=nertag:artist < lemma:influence < 2:=nertag:artist && 1.nerid != 2.nerid 
 ```
-Now we get back only snippets in which the two artists are different people.
+Now we get back only snippets in which the two artists are different.
 
 If our query grows, we might prefer to use string identifiers instead of numbers.
 ```

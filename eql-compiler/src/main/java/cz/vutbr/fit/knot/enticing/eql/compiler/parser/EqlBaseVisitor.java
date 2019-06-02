@@ -43,27 +43,44 @@ public class EqlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Eq
     public T visitIndexWithMultipleValues(EqlParser.IndexWithMultipleValuesContext ctx) {
         return visitChildren(ctx);
     }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation returns the result of calling
+     * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitSequence(EqlParser.SequenceContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
+    public T visitSequence(EqlParser.SequenceContext ctx) {
+        return visitChildren(ctx);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation returns the result of calling
+     * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitParen(EqlParser.ParenContext ctx) { return visitChildren(ctx); }
+    public T visitParen(EqlParser.ParenContext ctx) {
+        return visitChildren(ctx);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation returns the result of calling
+     * {@link #visitChildren} on {@code ctx}.</p>
+     */
+    @Override
+    public T visitLogicUnaryOperation(EqlParser.LogicUnaryOperationContext ctx) {
+        return visitChildren(ctx);
+    }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
+     * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
     public T visitIndexWithSingleValue(EqlParser.IndexWithSingleValueContext ctx) { return visitChildren(ctx); }
@@ -71,23 +88,15 @@ public class EqlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Eq
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
+     * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitBinaryOperation(EqlParser.BinaryOperationContext ctx) { return visitChildren(ctx); }
+    public T visitLogicBinaryOperation(EqlParser.LogicBinaryOperationContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-     */
-    @Override
-    public T visitUnaryOperation(EqlParser.UnaryOperationContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
+     * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
     public T visitOrder(EqlParser.OrderContext ctx) { return visitChildren(ctx); }
@@ -95,7 +104,7 @@ public class EqlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Eq
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
+     * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
     public T visitProximity(EqlParser.ProximityContext ctx) { return visitChildren(ctx); }
@@ -103,7 +112,7 @@ public class EqlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Eq
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
+     * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
     public T visitAlignOperator(EqlParser.AlignOperatorContext ctx) { return visitChildren(ctx); }
@@ -111,7 +120,7 @@ public class EqlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Eq
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
+     * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
     public T visitIndex(EqlParser.IndexContext ctx) { return visitChildren(ctx); }
@@ -119,15 +128,39 @@ public class EqlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Eq
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
+     * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitNertag(EqlParser.NertagContext ctx) { return visitChildren(ctx); }
+    public T visitEntityAttribute(EqlParser.EntityAttributeContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
+     * {@link #visitChildren} on {@code ctx}.</p>
+     */
+    @Override
+    public T visitSingleValue(EqlParser.SingleValueContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+     * {@link #visitChildren} on {@code ctx}.</p>
+     */
+    @Override
+    public T visitMultipleValues(EqlParser.MultipleValuesContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+     * {@link #visitChildren} on {@code ctx}.</p>
+     */
+    @Override
+    public T visitLiteralOrInterval(EqlParser.LiteralOrIntervalContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+     * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
     public T visitAssignment(EqlParser.AssignmentContext ctx) { return visitChildren(ctx); }
@@ -135,18 +168,18 @@ public class EqlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Eq
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
+     * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitPar(EqlParser.ParContext ctx) { return visitChildren(ctx); }
+    public T visitParagraph(EqlParser.ParagraphContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
+     * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitSent(EqlParser.SentContext ctx) {
+    public T visitSentence(EqlParser.SentenceContext ctx) {
         return visitChildren(ctx);
     }
 
@@ -168,35 +201,73 @@ public class EqlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Eq
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitQueryLiteral(EqlParser.QueryLiteralContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
+    public T visitQueryLiteral(EqlParser.QueryLiteralContext ctx) { return visitChildren(ctx);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation returns the result of calling
+     * {@link #visitChildren} on {@code ctx}.</p>
+     */
+	@Override public T visitNumberRange(EqlParser.NumberRangeContext ctx) { return visitChildren(ctx);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation returns the result of calling
+     * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitDateRange(EqlParser.DateRangeContext ctx) { return visitChildren(ctx);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation returns the result of calling
+     * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitParens(EqlParser.ParensContext ctx) { return visitChildren(ctx);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation returns the result of calling
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitNumberRange(EqlParser.NumberRangeContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
+    public T visitComparison(EqlParser.ComparisonContext ctx) {
+        return visitChildren(ctx);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation returns the result of calling
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitDateRange(EqlParser.DateRangeContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
+    public T visitConstraintLogicUnaryOperation(EqlParser.ConstraintLogicUnaryOperationContext ctx) {
+        return visitChildren(ctx);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation returns the result of calling
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitConstraint(EqlParser.ConstraintContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
+    public T visitConstraintLogicBinaryOperation(EqlParser.ConstraintLogicBinaryOperationContext ctx) {
+        return visitChildren(ctx);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation returns the result of calling
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
@@ -222,7 +293,7 @@ public class EqlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Eq
      * {@link #visitChildren} on {@code ctx}.</p>
      */
     @Override
-    public T visitBinaryOperator(EqlParser.BinaryOperatorContext ctx) {
+    public T visitLogicBinaryOperator(EqlParser.LogicBinaryOperatorContext ctx) {
         return visitChildren(ctx);
     }
 
@@ -232,6 +303,5 @@ public class EqlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Eq
      * <p>The default implementation returns the result of calling
      * {@link #visitChildren} on {@code ctx}.</p>
      */
-    @Override
-    public T visitUnaryOperator(EqlParser.UnaryOperatorContext ctx) { return visitChildren(ctx); }
+    @Override public T visitLogicUnaryOperator(EqlParser.LogicUnaryOperatorContext ctx) { return visitChildren(ctx); }
 }
