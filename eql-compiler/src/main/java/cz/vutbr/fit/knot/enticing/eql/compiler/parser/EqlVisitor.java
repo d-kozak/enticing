@@ -27,15 +27,6 @@ public interface EqlVisitor<T> extends ParseTreeVisitor<T> {
     T visitQuery(EqlParser.QueryContext ctx);
 
     /**
-     * Visit a parse tree produced by the {@code indexWithMultipleValues}
-     * labeled alternative in {@link EqlParser#queryElem}.
-     *
-     * @param ctx the parse tree
-     * @return the visitor result
-     */
-    T visitIndexWithMultipleValues(EqlParser.IndexWithMultipleValuesContext ctx);
-
-    /**
      * Visit a parse tree produced by the {@code sequence}
      * labeled alternative in {@link EqlParser#queryElem}.
      *
@@ -63,13 +54,13 @@ public interface EqlVisitor<T> extends ParseTreeVisitor<T> {
     T visitLogicUnaryOperation(EqlParser.LogicUnaryOperationContext ctx);
 
     /**
-     * Visit a parse tree produced by the {@code indexWithSingleValue}
+     * Visit a parse tree produced by the {@code indexElem}
      * labeled alternative in {@link EqlParser#queryElem}.
      *
      * @param ctx the parse tree
      * @return the visitor result
      */
-    T visitIndexWithSingleValue(EqlParser.IndexWithSingleValueContext ctx);
+    T visitIndexElem(EqlParser.IndexElemContext ctx);
 
     /**
      * Visit a parse tree produced by the {@code logicBinaryOperation}
@@ -79,6 +70,15 @@ public interface EqlVisitor<T> extends ParseTreeVisitor<T> {
      * @return the visitor result
      */
     T visitLogicBinaryOperation(EqlParser.LogicBinaryOperationContext ctx);
+
+    /**
+     * Visit a parse tree produced by the {@code literal}
+     * labeled alternative in {@link EqlParser#queryElem}.
+     *
+     * @param ctx the parse tree
+     * @return the visitor result
+     */
+    T visitLiteral(EqlParser.LiteralContext ctx);
 
     /**
      * Visit a parse tree produced by the {@code order}

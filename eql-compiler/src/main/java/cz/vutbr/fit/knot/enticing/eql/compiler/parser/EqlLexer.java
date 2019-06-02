@@ -28,6 +28,11 @@ public class EqlLexer extends Lexer {
 		"DEFAULT_MODE"
 	};
     public static final String[] ruleNames = makeRuleNames();
+    /**
+     * @deprecated Use {@link #VOCABULARY} instead.
+     */
+    @Deprecated
+    public static final String[] tokenNames;
     public static final String _serializedATN =
             "\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\2\32\u0096\b\1\4\2" +
                     "\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4" +
@@ -72,28 +77,9 @@ public class EqlLexer extends Lexer {
                     "\3\2\2\2\u0094\u0095\b\33\2\2\u0095\66\3\2\2\2\t\2sx~\u0084\u0089\u008c" +
                     "\3\b\2\2";
     private static final String[] _LITERAL_NAMES = makeLiteralNames();
-
-    public EqlLexer(CharStream input) {
-        super(input);
-        _interp = new LexerATNSimulator(this, _ATN, _decisionToDFA, _sharedContextCache);
-    }
-
-	private static String[] makeRuleNames() {
-		return new String[] {
-                "ASSIGN", "COLON", "EXPONENT", "SIMILARITY", "SENT", "PAR", "QUOTATION",
-                "GLOBAL_CONSTRAINT_SEPARATOR", "EQ", "NEQ", "LT", "PAREN_LEFT", "PAREN_RIGHT",
-                "BRACKET_LEFT", "BRACKET_RIGHT", "RANGE", "DOT", "OR", "AND", "NOT",
-                "NUMBER", "DATE", "WORD", "ANY_VALID_CHAR", "WILDCARD", "WS"
-		};
-	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
-	/**
-	 * @deprecated Use {@link #VOCABULARY} instead.
-	 */
-	@Deprecated
-	public static final String[] tokenNames;
 	static {
 		tokenNames = new String[_SYMBOLIC_NAMES.length];
 		for (int i = 0; i < tokenNames.length; i++) {
@@ -105,20 +91,22 @@ public class EqlLexer extends Lexer {
 			if (tokenNames[i] == null) {
 				tokenNames[i] = "<INVALID>";
 			}
-		}
-	}
+        }
+    }
 
-	@Override
-	@Deprecated
-	public String[] getTokenNames() {
-		return tokenNames;
-	}
+    public EqlLexer(CharStream input) {
+        super(input);
+        _interp = new LexerATNSimulator(this, _ATN, _decisionToDFA, _sharedContextCache);
+    }
 
-	@Override
-
-	public Vocabulary getVocabulary() {
-		return VOCABULARY;
-	}
+    private static String[] makeRuleNames() {
+        return new String[]{
+                "ASSIGN", "COLON", "EXPONENT", "SIMILARITY", "SENT", "PAR", "QUOTATION",
+                "GLOBAL_CONSTRAINT_SEPARATOR", "EQ", "NEQ", "LT", "PAREN_LEFT", "PAREN_RIGHT",
+                "BRACKET_LEFT", "BRACKET_RIGHT", "RANGE", "DOT", "OR", "AND", "NOT",
+                "NUMBER", "DATE", "WORD", "ANY_VALID_CHAR", "WILDCARD", "WS"
+        };
+    }
 
     private static String[] makeLiteralNames() {
         return new String[]{
@@ -137,6 +125,22 @@ public class EqlLexer extends Lexer {
         };
     }
 
+    @Override
+    @Deprecated
+    public String[] getTokenNames() {
+        return tokenNames;
+    }
+
+    @Override
+
+    public Vocabulary getVocabulary() {
+        return VOCABULARY;
+    }
+
+    @Override
+    public String getGrammarFileName() {
+        return "Eql.g4"; }
+
 	@Override
 	public String[] getRuleNames() { return ruleNames; }
 
@@ -151,11 +155,6 @@ public class EqlLexer extends Lexer {
 
 	@Override
 	public ATN getATN() { return _ATN; }
-
-    @Override
-    public String getGrammarFileName() {
-        return "Eql.g4";
-    }
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

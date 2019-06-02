@@ -36,22 +36,6 @@ public interface EqlListener extends ParseTreeListener {
     void exitQuery(EqlParser.QueryContext ctx);
 
     /**
-     * Enter a parse tree produced by the {@code indexWithMultipleValues}
-     * labeled alternative in {@link EqlParser#queryElem}.
-     *
-     * @param ctx the parse tree
-     */
-    void enterIndexWithMultipleValues(EqlParser.IndexWithMultipleValuesContext ctx);
-
-    /**
-     * Exit a parse tree produced by the {@code indexWithMultipleValues}
-     * labeled alternative in {@link EqlParser#queryElem}.
-     *
-     * @param ctx the parse tree
-     */
-    void exitIndexWithMultipleValues(EqlParser.IndexWithMultipleValuesContext ctx);
-
-    /**
      * Enter a parse tree produced by the {@code sequence}
      * labeled alternative in {@link EqlParser#queryElem}.
      *
@@ -100,20 +84,20 @@ public interface EqlListener extends ParseTreeListener {
     void exitLogicUnaryOperation(EqlParser.LogicUnaryOperationContext ctx);
 
     /**
-     * Enter a parse tree produced by the {@code indexWithSingleValue}
+     * Enter a parse tree produced by the {@code indexElem}
      * labeled alternative in {@link EqlParser#queryElem}.
      *
      * @param ctx the parse tree
      */
-    void enterIndexWithSingleValue(EqlParser.IndexWithSingleValueContext ctx);
+    void enterIndexElem(EqlParser.IndexElemContext ctx);
 
     /**
-     * Exit a parse tree produced by the {@code indexWithSingleValue}
+     * Exit a parse tree produced by the {@code indexElem}
      * labeled alternative in {@link EqlParser#queryElem}.
      *
      * @param ctx the parse tree
      */
-    void exitIndexWithSingleValue(EqlParser.IndexWithSingleValueContext ctx);
+    void exitIndexElem(EqlParser.IndexElemContext ctx);
 
     /**
      * Enter a parse tree produced by the {@code logicBinaryOperation}
@@ -130,6 +114,22 @@ public interface EqlListener extends ParseTreeListener {
      * @param ctx the parse tree
      */
     void exitLogicBinaryOperation(EqlParser.LogicBinaryOperationContext ctx);
+
+    /**
+     * Enter a parse tree produced by the {@code literal}
+     * labeled alternative in {@link EqlParser#queryElem}.
+     *
+     * @param ctx the parse tree
+     */
+    void enterLiteral(EqlParser.LiteralContext ctx);
+
+    /**
+     * Exit a parse tree produced by the {@code literal}
+     * labeled alternative in {@link EqlParser#queryElem}.
+     *
+     * @param ctx the parse tree
+     */
+    void exitLiteral(EqlParser.LiteralContext ctx);
 
     /**
      * Enter a parse tree produced by the {@code order}

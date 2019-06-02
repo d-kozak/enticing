@@ -75,7 +75,7 @@ By applying a few operators, we got a query, which is more generic and therefore
 There is still one more group of operators to talk about, **global constraints**. To illustrate what they are for, let's say that we are searching for two artists and a relationship between them.
 The skeleton of the query is ```artist influenced artist```, but we are going to need a few operators to make the query more generic.
 ```
-nertag:(person|artist) < ( lemma:(influce|impact) | (lemma:paid < lemma:tribute) )  < nertag:(person|artist) - _PAR_
+nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < nertag:(person|artist) - _PAR_
 ``` 
 We should already be familiar with the operators used in this query, but as an exercise, let's translate it to English. We are searching for a document where there is an entity followed by a word or words followed by an entity. 
 Both entities should be of type person or artist.  The word can be either by a single word,
@@ -83,7 +83,7 @@ whose lemma is either influence or impact, or 'paid tribute', again in any form 
 Currently, we didn't express that these two entities should be different people, and that is actually really important, isn't it? Now comes the time to use **global constraints**. 
 First we will identify parts of the query we are interested in using the **assignment operator**, than we will use them to express our global constraint.
 ```
-influencer:=nertag:(person|artist) < ( lemma:(influce|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) - _PAR_ && influencer.nerid != influencee.nerid
+influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) - _PAR_ && influencer.nerid != influencee.nerid
 ``` 
 Now we have ensured that the two artist should be different and our query should work as expected.
 

@@ -18,8 +18,8 @@ query: queryElem+ proximity? contextConstraint? ;
 /** single element in the query*/
 queryElem
     : assignment? QUOTATION queryElem+ QUOTATION # sequence
-    | assignment? indexOperator? queryLiteral alignOperator? # indexWithSingleValue
-    | assignment? indexOperator singleValueOrMultiple alignOperator? # indexWithMultipleValues
+    | assignment? queryLiteral alignOperator? # literal
+    | assignment? indexOperator singleValueOrMultiple alignOperator? # indexElem
     | assignment? PAREN_LEFT queryElem+ PAREN_RIGHT proximity? # paren
     | assignment queryElem LT queryElem proximity? # order
     | queryElem LT queryElem proximity? # order
