@@ -19,7 +19,7 @@ into a spring boot app with rest interface that can be used to start the index p
 
 Slave index service manages already indexed .mg4j files and uses [mg4j](http://mg4j.di.unimi.it/) to perform queries on them.
 
-# Lifecycle
+### Lifecycle
 When started, it loads it's configuration, which is required as an input parameter. The configuration contains the following. 
 * format which is used in it's input .mg4j files
     * names and descriptions of individual indexes
@@ -32,7 +32,7 @@ When started, it loads it's configuration, which is required as an input paramet
 If no information about indexed files is provided, the server will respond with error messages to all query, document and snippet requests 
 until a new configuration is set using the rest api. 
 
-# Rest interface
+### Rest interface
 * all paths prefixed (e.g /api/v1/* )
     * to support multiple APIs simultaneously (v1,v2,v3), if necessary
     * to add GUI at '/', if deemed useful in the future
@@ -58,7 +58,7 @@ until a new configuration is set using the rest api.
     entities = predefinedOption | Map<nertag,fieldAttributes>
     nertag = string
     fieldAttributes = predefinedOption | List<string> 
-    predefinedOption = "all" // simple way to say all
+    predefinedOption = "all" // compact way to say 'give it all'
     ```
     ```javascript
     responsePayload = {
@@ -87,6 +87,7 @@ until a new configuration is set using the rest api.
         annotations:Map<annotationId,Annotation>, 
         positions:Array<{from:int,to:int,annotationId}>
     }
+    annotationId = int
     ```
 * /format
     * GET
@@ -136,7 +137,8 @@ until a new configuration is set using the rest api.
     ```javascript
     responsePayload = {
         before: text // text to insert before, datatype as in '/query',
-        after: text // text to insert after, datatype as in '/query'  
+        after: text, // text to insert after, datatype as in '/query'
+        canExtend: boolean  
     }
     ```
  * /index
@@ -164,7 +166,7 @@ until a new configuration is set using the rest api.
  as part of defining the search settings. Given the previously stated fact, I suggest changing that. 
  Instead of adding individual IPs of index servers, which is both time consuming and error prone, 
  I find it more meaningful to provide the admin user with a select component containing a list of currently available indexed corpuses, 
- which can be queried. 
+ which can be queried. However, he should still have to possibility to do everything manually if something goes wrong.
  
  I believe this approach also prevents situations like 'admin accidentally added the wrong index server in the wrong group'.
  
@@ -174,7 +176,7 @@ until a new configuration is set using the rest api.
  because the functionality of this master index service can be extended over time to handle other tasks like:
  
  * starting and shutting down slave index servers and whole indexed corpuses 
- * starting and monitoring the indexing process using the indexer component and with subsequently starting the index corpus
+ * starting and monitoring the indexing process using the indexer component with subsequently starting the index corpus
  * monitoring the infrastructure 
  * error detection and recovery
  * notifications when 'interesting' things happen
@@ -182,7 +184,7 @@ until a new configuration is set using the rest api.
  
  The minimal functionality that I suggest starting with is the following:
  * add new index into indexed corpus
-     * and create new indexed corpus if this is the first slave index server that belongs to it
+     * and create new indexed corpus if this is the first slave index service that belongs to it
  * return list of known index corpuses
      * each corpus consists of a list of urls of index server that belongs to it
  * periodically check the availability of known index servers 
@@ -203,5 +205,6 @@ until a new configuration is set using the rest api.
  And all of this would make the infrastructure significantly more complex.
  Therefore it might be better to keep this as a possible extension.
  
- Also it is worth mentioning that there already are libraries out there, like the ones in Spring Cloud or Spring Boot admin 
- that handle the monitoring quite well, so maybe adding one of these might be 'just good enough' solution for the monitoring to start with.   
+ Also it is worth mentioning that there already are libraries out there, like projects in Spring Cloud or Spring Boot Admin 
+ that handle the monitoring quite well, so maybe adding one of these might be 'just good enough' solution for the monitoring problem to start with.
+ And the registration and classification of index services based on the index they are querying can be added to the webserver.
