@@ -50,11 +50,11 @@ until a new configuration is set using the rest api.
        snippetCount: int, // how many snippets to return
        offset: int, // for pagination, offset at which to start searching
        wantedIndexes, // which indexes to include in the rensponse
-       responseFormat // what format should the result have
+       responseFormat, // what format should the result have
+       responseType,  // snippet(part of text) or match(specified by identifiers in the query)
     }
-    responseFormat = {
-        format: "json" | "html"
-    }  
+    responseFormat = "json" | "html"
+    responseType = "snippet" | "match"
     wantedIndexes = {
        entities,
        fieldAttributes
@@ -75,10 +75,16 @@ until a new configuration is set using the rest api.
         position: int, // where in the document the snippet starts,
         url: url, // url location of the original document,
         canExtend: boolean, // is it possible to further extend the snippet?
-        text
+        payload
     } 
-    text = html | json
-    json = {
+    payload = match | text
+    text = html | structured
+    match = Array<MatchInfo>
+    matchInfo = {
+       identifier:string, // identifier from the query
+       text // text that was matched
+    } 
+    structured = {
         text : EnhancedText,
         mapping : Array<QueryMapping>
     }
