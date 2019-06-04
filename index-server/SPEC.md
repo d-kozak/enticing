@@ -233,3 +233,9 @@ until a new configuration is set using the rest api.
  Also it is worth mentioning that there already are libraries out there, like projects in Spring Cloud or Spring Boot Admin 
  that handle the monitoring quite well, so maybe adding one of these might be 'just good enough' solution for the monitoring problem to start with.
  And the registration and classification of index services based on the index they are querying can be added to the webserver.
+ 
+ ## Note on security
+ Even if the Master-slave architecture is not going to be used, some kind of security has to be employed anyways.
+ For example the /config endpoint of slave index service should be accessible only to it's master component, 
+ regardless whether it is gonna be a specialized component or the webserver itself. 
+ Currently I can't think of anything better than public/private key cryptography. 
