@@ -78,13 +78,13 @@ until a new configuration is set using the rest api.
         payload
     } 
     payload = match | text
-    text = html | structured
+    text = html | json
     match = Array<MatchInfo>
     matchInfo = {
        identifier:string, // identifier from the query
        text // text that was matched
     } 
-    structured = {
+    json = {
         text : EnhancedText,
         mapping : Array<QueryMapping>
     }
