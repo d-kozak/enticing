@@ -25,8 +25,8 @@ When started, it loads it's configuration, which is required as an input paramet
     * names and descriptions of individual indexes
     * names and descriptions of entities and their attributes
 * information about indexed files
-    * name of the index (e.g. WIKI 2017b, something that uniquely identifies the indexed data) - should be unique for each corpus
-    * the directory where the indexes are stored
+    * name of the corpus (e.g. WIKI 2017b, something that uniquely identifies the corpus)
+    * the directory where the indexed data are stored
 *  url of the manager-service (for automatic registration) - \[extension\]
 
 If no information about indexed files is provided, the server will respond with error messages to all query, document and snippet requests 
@@ -94,6 +94,7 @@ until a new configuration is set using the rest api.
         * ask about indexes and entities that can be used in queries
     ```javascript
     responsePayload = {
+        corpusName: string // name of the corpus that the data belongs to
         entities: Map<nertag,Pair<description,Map<atttribute,description>>>, // entities and their attributes
         indexes: Map<indexName,description>  // all indexes that can be queried
     }
@@ -141,13 +142,13 @@ until a new configuration is set using the rest api.
         canExtend: boolean  
     }
     ```
- * /index
-    * set new index directory to use for queries 
+ * /config
+    * change index configuration 
     * POST
     ```javascript
     requestPayload = {   
         directory: string, // which directory the query
-        indexName: string // what index the data belong to
+        corpusName: string // what index the data belong to
     }
     ```
  
