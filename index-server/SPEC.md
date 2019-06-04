@@ -156,6 +156,20 @@ until a new configuration is set using the rest api.
     * to check availability
     * part of Spring Boot Actuator, see [documentation](https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-endpoints.html)
     
+    
+ ### Updates of annotations in indexed documents
+ Since the automated process of semantic annotation is not always correct, the system should be able to update annotations in the indexed documents.
+ A component for updated .mg4j files has already been implemented, but it is necessary to integrate it into the platform.
+ 
+ This process can be implemented as follows. Every index service will maintain a set of outdated documents. That is documents that have been updated 
+ and therefore their indexed version is incorrect. When returning a snippet or a document, the uuid of the document is checked and 
+ if it matches one of the outdated ones, it is filtered out. New endpoint will be added to the index server to inform it that a document has been updated. 
+ This set of document ids will also be persisted in a single file to survive restarting the service.    
+ 
+ For each corpus, there will be extra index service, whose job is to maintain documents with updated annotations. 
+ Once the size of documents handled by this index service grows too large, indexer can be run to reindex the corpus.
+ 
+ 
  ## Master index service - \[Extension\]
  The reason why I am suggesting to create a master index service is the following. As far as I understand it, 
  at any point in time one slave index service belongs to group of index services that altogether handles one indexed corpus, e.g. Wiki ABC or CommonCrawl XYZ.
