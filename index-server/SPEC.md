@@ -5,6 +5,7 @@ Currently I propose to create three components:
 
 * indexer  
 * \[slave\] index service
+* Commandline index client
 
 And on top of that, I present the possibility to add master index service, either immediately or in the future. 
   
