@@ -53,6 +53,7 @@ until a new configuration is set using the rest api.
        wantedIndexes, // which indexes to include in the rensponse
        responseFormat, // what format should the result have
        responseType,  // snippet(part of text) or match(specified by identifiers in the query)
+       defaultIndex: string
     }
     responseFormat = "json" | "html"
     responseType = "snippet" | "match"
@@ -78,15 +79,15 @@ until a new configuration is set using the rest api.
         canExtend: boolean, // is it possible to further extend the snippet?
         payload
     } 
-    payload = match | text
-    text = html | json
+    payload = match | annotatedText
+    annotatedText = html | json
     match = Array<MatchInfo>
     matchInfo = {
        identifier:string, // identifier from the query
        text // text that was matched
     } 
     json = {
-        text : EnhancedText,
+        enhancedText : EnhancedText,
         mapping : Array<QueryMapping>
     }
     QueryMapping = {
@@ -96,7 +97,7 @@ until a new configuration is set using the rest api.
     EnhancedText = {  
         text:string,
         annotations:Map<annotationId,Annotation>, 
-        positions:Array<{from:int,to:int,annotationId}>
+        positions:Array<{from:int,size:int,annotationId}>
     }
     annotationId = int
     ```
@@ -127,13 +128,13 @@ until a new configuration is set using the rest api.
     responsePayload = {
         title: string,
         url: url, // url of the source
-        text, // as in '/query',
+        annotatedText, // as in '/query',
         mapping: Array<QueryMapping>? // optional, only used if query was specified
     }
     
     ```
-* /snippet
-    * extend snippet
+* /context
+    * extend context
     * POST
     ```javascript
     requestPayload = {
@@ -148,12 +149,12 @@ until a new configuration is set using the rest api.
     ```
     ```javascript
     responsePayload = {
-        before: text // text to insert before, datatype as in '/query',
-        after: text, // text to insert after, datatype as in '/query'
+        before: annotatedText // text to insert before, datatype as in '/query',
+        after: annotatedText, // text to insert after, datatype as in '/query'
         canExtend: boolean  
     }
     ```
- * /config
+ * /config \[Extension\]
     * change index configuration 
     * POST
     ```javascript
