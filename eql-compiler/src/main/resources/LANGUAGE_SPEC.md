@@ -3,8 +3,8 @@ EQL is a language which you can use to query semantically enhanced documents on 
 The queries can be as simple as only a few words, but also very complex, containing logical operations, subqueries over multiple indexes or constraints further limiting the results.
 
 Each word in an indexed document contains meta information such as it's word class, lemma and many others. The documents may also contain entities, such as people or places. These entities have their own meta information. 
-For example a person will probably have a name and a birthdate at least. All this extra information can be used to write more advanced queries. 
-The amount of meta information depends on the index which you are querying. 
+For example a person will probably have a name and a birth date at least. All this extra information can be used to write more advanced queries. 
+The amount of meta information depends on the index which you are querying and you can check it in the settings.
 
 The rest of the document is structured as follows. First we provide a practical guide that shows how to use EQL. It starts with a simple query and gradually adds more operators 
 to it to satisfy the requirements. Then we provide a list of all operators that EQL supports with their description. Those with background in formal language theory might appreciate 
@@ -12,70 +12,65 @@ the formal grammar of EQL which we can be found in the end.
 
 ## Practical guide
 
-Let's start with a simple query. We might want to search for documents talking about Picasso visiting Paris. I guess we all would probably write something like
+Let's start with a simple query. We might want to search for documents talking about Bonaparte visiting Jaffa. I guess we all would probably write something like
 ```
-Picasso visited Paris
+Bonaparte visited Jaffa
 ```
 For sure, this query is a good starting point, but there is quite a lot of place for improvement. 
-First thing we might be tempted to do is to relax the ordering of the words, so that sentences like _Paris visited by Picasso_ are matched as well.
+First thing we might be tempted to do is to relax the ordering of the words, so that sentences like _Jaffa visited by Bonaparte_ are matched as well.
 Well I have good news for you, this is actually the default behavior. On the other hand, if we want to ensure the ordering, we can use the **order** operator.
+For some queries this might be very useful. Let's consider the following one.
 ```
-Picasso < visited < Paris
+Gauguin < influenced < Picasso
 ```
 This query will search for any document where these three words appear in the specified order. If we want to be even more strict, we can use the **sequence** operator.
 ```
-"Picasso visited Paris"
+"Gauguin influenced Picasso"
 ``` 
-Now the three words are required to appear next to each other. But this is probably not what we want 
-so let's go back to the original ```Picasso visited Paris``` and try to improve it differently. Even though the order might not be important, 
+Now the three words are required to appear next to each other. 
+
+Let's go back to the original ```Bonaparte visited Jaffa``` and try to improve it differently. Even though the order is not be important, 
 we might want these words to appear close to each other. Without any modification, the words can be anywhere inside the document. We can use the **Context constraints** to change that.
 ```
-Picasso visited Paris - _PAR_
-Picasso visited Paris - _SENT_
+Bonaparte visited Jaffa ~ _PAR_
+Bonaparte visited Jaffa ~ _SENT_
 ```
 These two queries require the words to appear in one paragraph or in one sentence, respectively. Let's go with the latter option for now.
 Using just one verb might be a bit too specific. Let's add a second option, the verb explore. The **or** operator can be used for that.
 ```
-Picasso ( visited | explored )  Paris - _SENT_
+Bonaparte ( visited | explored ) Jaffa ~ _SENT_
 ```
-Now we are saying that we are looking for documents containing words Picasso, Paris and either visited or explored, or both. Note that the parenthesis are not necessary in the case. The query ```Picasso visited | explored  Paris - _SENT_```
-has the same meaning, but the first version might be more explicit. Without the parenthesis it might look like both words on each side are part of the **or**, which is not the case. If we actually wanted that, we can use parenthesis ```(Picasso visited) | (explored  Paris) - _SENT_```, 
+Now we are saying that we are looking for documents containing words Bonaparte, Jaffa and either visited or explored, or both. Note that the parenthesis are not necessary in the case. The query ```Bonaparte visited | explored Jaffa ~ _SENT_```
+has the same meaning, but the first version might be more explicit. Without the parenthesis it might look like both words on each side are part of the **or**, which is not the case. If we actually wanted that, we can use parenthesis ```(Bonaparte visited) | (explored Jaffa) ~ _SENT_```, 
 but the meaning is different of course.
 
-Let's keep focusing on the verbs a bit longer. There might be documents out there talking about Picasso visiting Paris, but the shape of the verb might be different. 
+Let's keep focusing on the verbs a bit longer. There might be documents out there talking about Bonaparte visiting Jaffa, but the form of the word visit might be different. 
 Maybe the documents are written in the present tense. To be able to match documents like that, we can use the **index** operator. So far our query used only the default index, which is _token_. 
 This index contains words from the original document. The metadata about words can be found on the other indexes. 
 ```
-Picasso ( lemma:visit | lemma:explore )  Paris - _SENT_
+Bonaparte lemma:(visit|explore) Jaffa ~ _SENT_
 ```
-We relaxed the requirements a bit. Any verbs, whose lemmas are either visit or explore will be used. This allows us to match more documents, hopefully including the one we are searching for.
-Unfortunately, the query got uglier as well. We can fix this using a shorthand notation.
-```
-Picasso lemma:(visit|explore) Paris - _SENT_
-```
-That's better, right?
-
 So far we used only basic indexes, logic operator and constraints. Let's utilize the semantic enhancement more now. EQL allows you the query for an entity instead of an exact word. 
-Let's say that there is a sentence talking about Picasso and Paris, but it uses pronouns instead of the direct names. We want to match those as well and using the **align** operator we can.
+Let's say that there is a sentence talking about Bonaparte and Jaffa, but it uses pronouns instead of the direct names. We want to match those as well.
 ```
-nertag:person^(person.name:Picasso) lemma:(visit|explore) Paris - _SENT_
+person.name:Bonaparte lemma:(visit|explore) Jaffa ~ _SENT_
 ``` 
-Well, this step might be hard to swallow at once, so let's digest it piece by piece. We replaced ```Picasso``` with ```nertag:person^(person.name:Picasso)```. We are already familiar with the first part, ```nertag:person```.
-This is an **index** operator. The only difference is that instead of _lemma_ we are querying _nertag_, which is an index containing the type of entity.  So why didn't we just write ```nertag:person lemma:(visit|explore) Paris - _SENT_```? 
-It is definitely simpler, but that would match **any** person visiting Paris and this is not what we want. We want that word to be a person, but only a person whose name is Picasso. More technically speaking, we want to 
-query two indexes, _nertag_ and _name_, where the name is an attribute of entity person, but these two requirements apply to the same word, they **align**. That's where the name comes from. Now that we understand our new query, 
-let's change Paris the same way.
+We replaced ```Bonaparte``` with ```person.name:Bonaparte```. In this example _person_ and _name_ are just another indexes that we are querying, just like _lemma_ or _token_.
+Here we say that we are looking for an entity of type person whose name is Bonaparte. If we wanted to by more generic and look for any person, we could just use the **index** operator
+and ask a query like this ```nertag:person lemma:(visit|explore) Jaffa ~ _SENT_```
+  
+Now that we understand our new query, let's change Jaffa the same way.
 ```
-nertag:person^(person.name:Picasso) lemma:(visit|explore)  nertag:place^(place.name:Paris) - _SENT_
+person.name:Bonaparte lemma:(visit|explore)  place.name:Jaffa ~ _SENT_
 ```
-This new query shouldn't be surprising for you. Instead of an exact word Paris, we are using an entity, whose name is Paris, but the real word used in the sentence can be a pronoun for example. 
+This new query shouldn't be surprising for you. Instead of an exact word Jaffa, we are using an entity, whose name is Jaffa, but the real word used in the sentence can be a pronoun for example. 
 
 By applying a few operators, we got a query, which is more generic and therefore matches more documents.  
 
 There is still one more group of operators to talk about, **global constraints**. To illustrate what they are for, let's say that we are searching for two artists and a relationship between them.
 The skeleton of the query is ```artist influenced artist```, but we are going to need a few operators to make the query more generic.
 ```
-nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < nertag:(person|artist) - _PAR_
+nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < nertag:(person|artist) ~ _PAR_
 ``` 
 We should already be familiar with the operators used in this query, but as an exercise, let's translate it to English. We are searching for a document where there is an entity followed by a word or words followed by an entity. 
 Both entities should be of type person or artist.  The word can be either by a single word,
@@ -83,13 +78,13 @@ whose lemma is either influence or impact, or 'paid tribute', again in any form 
 Currently, we didn't express that these two entities should be different people, and that is actually really important, isn't it? Now comes the time to use **global constraints**. 
 First we will identify parts of the query we are interested in using the **assignment operator**, than we will use them to express our global constraint.
 ```
-influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) - _PAR_ && influencer.nerid != influencee.nerid
+influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) ~ _PAR_ && influencer.nerid != influencee.nerid
 ``` 
 Now we have ensured that the two artist should be different and our query should work as expected.
 
 Let us finish with one more query.
 ```
-a:=nertag:(person|artist) < lemma:visit < b:=nertag:(person|artist) nertag:place^place.name:Barcelona nertag:event^event.date:[1/1/1960..12/12/2012] - _PAR_ && a.nerid != b.nerid
+a:=nertag:(person|artist) < lemma:visit < b:=nertag:(person|artist) nertag:place^place.name:Barcelona nertag:event^event.date:[1/1/1960..12/12/2012] ~ _PAR_ && a.nerid != b.nerid
 ```
 In this example we are looking for documents talking about one artist visiting another in Barcelona during an event that happened between 1/1/1960 and 12/12/2012. 
 The context is limited to a single paragraph and global constraints are used to ensure that the two artists are different. 
@@ -129,8 +124,9 @@ To work with meta information, you have to specify index which you are querying.
 Look for document, where value A is present at given index.
 For example ```lemma:work``` will match any document in which any word, whose lemma is work, appears, e.g. works, working, worked, ...
 
-If you want to match one of multiple different values in a given index, you can use the shorthand notation ```index:(A|B|C)```, which is equivalent to 
-```index:A | index:B  | index:C```
+If you want to match one of multiple different values in a given index, you can use the notation ```index:(A|B|C)```.
+
+When working with entities, we can query for their attributes as well, ```person.name:Picasso```
 
 If the index you are querying contains integers or dates, you can use the range operator to specify interval, such as
 ```date:[1/1/1970..2/2/2000]``` or ```person.age:[20..30]```. 
@@ -140,14 +136,11 @@ If the index you are querying contains integers or dates, you can use the range 
 The align operator allows to express multiple requirements on one word. For example, we might want  to look
 for a noun, whose lemma is do. This query can be written as ```pos:noun ^ lemma:do```.
 
-The align operator is also useful when working with entities. Let's say that we want to find documents talking about people who were born in Brno.
-This can be done using the following query: ```nertag:person ^ person.birthplace:Brno```. 
-
 ### Context constraints
 The default context in which we are searching is the whole document. For more granular queries, 
 you can add the following limitation to the end of the query.
-* **Paragraph limit**  ``` - _PAR_``` The whole query has to be matched in one paragraph. 
-* **Sentence limit** ``` - _SENT_ ``` The whole query has to be matched in one sentence.
+* **Paragraph limit**  ``` ~ _PAR_``` The whole query has to be matched in one paragraph. 
+* **Sentence limit** ``` ~ _SENT_ ``` The whole query has to be matched in one sentence.
 
 ### Global constraints
 Sometimes we might want to specify some relationship between multiple entities that can't be expressed using the previous operators.
