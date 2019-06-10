@@ -14,7 +14,7 @@ the formal grammar of EQL which we can be found in the end.
 
 Let's start with a simple query. We might want to search for documents talking about Bonaparte visiting Jaffa. I guess we all would probably write something like
 ```
-Bonaparte visited Jaffa
+Bonaparte visits Jaffa
 ```
 For sure, this query is a good starting point, but there is quite a lot of place for improvement. 
 First thing we might be tempted to do is to relax the ordering of the words, so that sentences like _Jaffa visited by Bonaparte_ are matched as well.
@@ -29,23 +29,23 @@ This query will search for any document where these three words appear in the sp
 ``` 
 Now the three words are required to appear next to each other. 
 
-Let's go back to the original ```Bonaparte visited Jaffa``` and try to improve it differently. Even though the order is not be important, 
+Let's go back to the original ```Bonaparte visits Jaffa``` and try to improve it differently. Even though the order is not be important, 
 we might want these words to appear close to each other. Without any modification, the words can be anywhere inside the document. We can use the **Context constraints** to change that.
 ```
-Bonaparte visited Jaffa ~ _PAR_
-Bonaparte visited Jaffa ~ _SENT_
+Bonaparte visits Jaffa ~ _PAR_
+Bonaparte visits Jaffa ~ _SENT_
 ```
 These two queries require the words to appear in one paragraph or in one sentence, respectively. Let's go with the latter option for now.
 Using just one verb might be a bit too specific. Let's add a second option, the verb explore. The **or** operator can be used for that.
 ```
-Bonaparte ( visited | explored ) Jaffa ~ _SENT_
+Bonaparte ( visits | explores ) Jaffa ~ _SENT_
 ```
-Now we are saying that we are looking for documents containing words Bonaparte, Jaffa and either visited or explored, or both. Note that the parenthesis are not necessary in the case. The query ```Bonaparte visited | explored Jaffa ~ _SENT_```
-has the same meaning, but the first version might be more explicit. Without the parenthesis it might look like both words on each side are part of the **or**, which is not the case. If we actually wanted that, we can use parenthesis ```(Bonaparte visited) | (explored Jaffa) ~ _SENT_```, 
+Now we are saying that we are looking for documents containing words Bonaparte, Jaffa and either visited or explored, or both. Note that the parenthesis are not necessary in the case. The query ```Bonaparte visites | explores Jaffa ~ _SENT_```
+has the same meaning, but the first version might be more explicit. Without the parenthesis it might look like both words on each side are part of the **or**, which is not the case. If we actually wanted that, we can use parenthesis ```(Bonaparte visites) | (explores Jaffa) ~ _SENT_```, 
 but the meaning is different of course.
 
 Let's keep focusing on the verbs a bit longer. There might be documents out there talking about Bonaparte visiting Jaffa, but the form of the word visit might be different. 
-Maybe the documents are written in the present tense. To be able to match documents like that, we can use the **index** operator. So far our query used only the default index, which is _token_. 
+Maybe the documents are written in the past tense. To be able to match documents like that, we can use the **index** operator. So far our query used only the default index, which is _token_. 
 This index contains words from the original document. The metadata about words can be found on the other indexes. 
 ```
 Bonaparte lemma:(visit|explore) Jaffa ~ _SENT_
