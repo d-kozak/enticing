@@ -78,6 +78,7 @@ class DslTest {
                         description = "Original token from the document"
                     }
                     index("lemma") whichIs "The lemma of the word"
+                    "tag" whichIs "Tag of the word"
                 }
                 entities {
                     entity("person") {
@@ -95,7 +96,8 @@ class DslTest {
             corpusConfiguration = CorpusConfiguration("wiki2018",
                     indexes = mutableMapOf(
                             "token" to Index("token", "Original token from the document"),
-                            "lemma" to Index("lemma", "The lemma of the word", columnIndex = 1)
+                            "lemma" to Index("lemma", "The lemma of the word", columnIndex = 1),
+                            "tag" to Index("tag", "Tag of the word", columnIndex = 2)
                     ),
                     entities = mutableMapOf(
                             "person" to Entity("person", "Person entity", mutableMapOf("name" to Index("name", "The name of the person")))
