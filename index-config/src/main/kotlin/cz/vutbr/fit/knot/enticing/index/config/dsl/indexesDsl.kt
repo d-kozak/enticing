@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.config.dsl
 
-var indexes: IndexConfigDsl = mutableMapOf()
+
 
 data class Index(
         var name: String,
@@ -18,6 +18,15 @@ typealias IndexConfigDsl = MutableMap<String, Index>
 fun IndexConfigDsl.index(name: String, block: Index.() -> Unit = {}) = Index(name).apply(block)
         .also { it.columnIndex = this.size }
         .also { this[name] = it }
+
+private var indexes: IndexConfigDsl = mutableMapOf()
+
+fun IndexConfigDsl.params(limit: Int) {
+    for (i in 0..limit) {
+        val name = "param$i"
+        indexes[name] = Index(name, columnIndex = indexes.size)
+    }
+}
 
 infix
 fun String.whichIs(description: String): Index = Index(this, description)

@@ -13,11 +13,14 @@ class DslTest {
                 description = "Original token from the document"
             }
             index("lemma") whichIs "The lemma of the word"
+            params(1)
         }
         assertThat(indexes)
                 .isEqualTo(mutableMapOf(
                         "token" to Index("token", "Original token from the document"),
-                        "lemma" to Index("lemma", "The lemma of the word", columnIndex = 1)
+                        "lemma" to Index("lemma", "The lemma of the word", columnIndex = 1),
+                        "param0" to Index("param0", columnIndex = 2),
+                        "param1" to Index("param1", columnIndex = 3)
                 ))
     }
 
@@ -87,6 +90,10 @@ class DslTest {
                             attribute("name") whichIs "The name of the person"
                         }
                     }
+                    entity("artist") {
+                        attributes("name", "gender")
+                    }
+                    "date" with attributes("year", "month", "day")
                 }
             }
         }
@@ -100,7 +107,9 @@ class DslTest {
                             "tag" to Index("tag", "Tag of the word", columnIndex = 2)
                     ),
                     entities = mutableMapOf(
-                            "person" to Entity("person", "Person entity", mutableMapOf("name" to Index("name", "The name of the person")))
+                            "person" to Entity("person", "Person entity", mutableMapOf("name" to Index("name", "The name of the person"))),
+                            "artist" to Entity("artist", "", mutableMapOf("name" to Index("name"), "gender" to Index("gender", columnIndex = 1))),
+                            "date" to Entity("date", "", mutableMapOf("year" to Index("year"), "month" to Index("month", columnIndex = 1), "day" to Index("day", columnIndex = 2)))
                     )
             )
         }

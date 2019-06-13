@@ -14,8 +14,8 @@ class IndexerConfig {
         this.input = files.map { File(it) }
     }
 
-    fun inputDirectory(directoryPath: String) {
-        val directory = File(directoryPath)
+    fun inputDirectory(path: String) {
+        val directory = File(path)
         directory.isDirectory || throw IllegalArgumentException("$directory is not a directory")
         this.input = directory.listFiles { _, name -> name.endsWith(".mg4j") }.toList()
     }
@@ -46,8 +46,20 @@ class IndexerConfig {
         return result
     }
 
-    override fun toString(): String {
-        return "IndexerConfig(input=$input, output=$output, corpusConfiguration=$corpusConfiguration)"
+    override fun toString(): String = buildString {
+        append("Indexer config {\n")
+        append("\tinput: $input\n")
+        append("\toutput: $output\n")
+        append("\tcorpus: ${corpusConfiguration.corpusName}\n")
+        append("\tindexes:\n")
+        for (index in corpusConfiguration.indexes.values) {
+            append("\t\t${index.name}\n")
+        }
+        append("\tentities:\n")
+        for (entity in corpusConfiguration.entities.values) {
+            append("\t\t${entity.name}, attributes: ${entity.attributes.values.map { it.name }}\n")
+        }
+        append("}\n")
     }
 }
 
