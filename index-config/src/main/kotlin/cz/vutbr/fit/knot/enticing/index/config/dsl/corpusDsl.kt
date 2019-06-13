@@ -12,4 +12,4 @@ data class CorpusConfiguration(
             .also { this.entities = it }
 }
 
-fun corpus(name: String, block: CorpusConfiguration.() -> Unit = {}): CorpusConfiguration = CorpusConfiguration(name).apply(block)
+internal fun corpusDslInternal(name: String, block: CorpusConfiguration.() -> Unit = {}): CorpusConfiguration = CorpusConfiguration(name).apply(block)
