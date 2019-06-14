@@ -13,3 +13,10 @@ curl --header "Content-Type: application/json" \
   --data '{"query":"person"}' \
   http://localhost:12000
 ```
+
+Execute query locally, WIP just a proof of concept, not that useful currently
+```
+java -cp "../../../../mg4j-bin/*" it.unimi.di.big.mg4j.query.Query -h -i FileSystemItem CC-token CC-nertag
+```
+-cp "../../../../mg4j-bin/*" is for specifying all jars in the directory, not that '~' symbol does not work
+Since specifying all indexes and the collection in the terminal will be complicated, a small wrapper should be written to handle it
