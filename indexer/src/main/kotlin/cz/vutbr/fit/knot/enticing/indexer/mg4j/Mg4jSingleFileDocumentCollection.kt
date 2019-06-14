@@ -46,8 +46,8 @@ class Mg4jSingleFileDocumentCollection(
 
 
         val (title, uri) = parsePageLine(buffer, lineSize)
-        map[DocumentMetaData.TITLE] = title
-        map[DocumentMetaData.URI] = uri
+        map[DocumentMetadata.TITLE] = title
+        map[DocumentMetadata.URI] = uri
 
         stream.position(startPosition)
         return stream to map

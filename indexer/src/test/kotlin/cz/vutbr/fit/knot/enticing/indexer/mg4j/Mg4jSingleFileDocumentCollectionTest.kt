@@ -58,9 +58,9 @@ internal class Mg4jSingleFileDocumentCollectionTest {
                 Triple(15L, "None", "http://90daysdrydreamingofpimms.blogspot.com/2017/11/day-62-freedom-and-falling-apart-car.html")
         )) {
             val metadata = collection.metadata(index)
-            assertThat(metadata[DocumentMetaData.TITLE])
+            assertThat(metadata[DocumentMetadata.TITLE])
                     .isEqualTo(title)
-            assertThat(metadata[DocumentMetaData.URI])
+            assertThat(metadata[DocumentMetadata.URI])
                     .isEqualTo(uri)
         }
     }

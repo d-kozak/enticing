@@ -7,8 +7,11 @@ enum class DocumentMarks(val mark: String) {
     val bytes = mark.toByteArray()
 }
 
+val metaPrefix = "%%#".toByteArray()
+
 fun ByteArray.isDoc() = this.startsWith(DocumentMarks.DOC.bytes)
 fun ByteArray.isPage() = this.startsWith(DocumentMarks.PAGE.bytes)
+fun ByteArray.isMetaInfo(): Boolean = this.startsWith(metaPrefix)
 
 fun ByteArray.startsWith(prefix: ByteArray): Boolean {
     for (i in 0 until prefix.size) {
