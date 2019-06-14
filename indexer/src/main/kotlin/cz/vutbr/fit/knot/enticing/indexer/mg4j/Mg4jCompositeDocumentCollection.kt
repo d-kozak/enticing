@@ -9,6 +9,18 @@ import it.unimi.dsi.fastutil.objects.Reference2ObjectMap
 import java.io.File
 import java.io.InputStream
 
+internal fun initDocumentRanges(limits: List<Long>): Array<Long> {
+    val result = Array(limits.size) { 0L }
+    for (i in 0 until limits.size) {
+        val prev = if (i > 0) result[i - 1] else 0
+        result[i] = prev + limits[i]
+    }
+    for (i in 0 until limits.size) {
+        result[i] = result[i] - 1
+    }
+    return result
+}
+
 class Mg4jCompositeDocumentCollection(
         private val indexes: List<Index>,
         private val files: List<File>)
@@ -18,14 +30,7 @@ class Mg4jCompositeDocumentCollection(
 
     private val singleFileCollections = files.map { Mg4jSingleFileDocumentCollection(it, factory.copy()) }
 
-    private val documentRanges = Array(files.size) { 0L }
-
-    init {
-        for (i in 0 until singleFileCollections.size) {
-            val prev = if (i > 0) documentRanges[i - 1] else 0
-            documentRanges[i] = prev + singleFileCollections.size
-        }
-    }
+    private val documentRanges = initDocumentRanges(singleFileCollections.map { it.size() })
 
     override fun metadata(index: Long): Reference2ObjectMap<Enum<*>, Any> {
         val (collection, localIndex) = findCollection(index)
@@ -47,7 +52,7 @@ class Mg4jCompositeDocumentCollection(
         if (insertionPoint < 0) {
             insertionPoint = (insertionPoint + 1) * -1
         }
-        val localIndex = if (insertionPoint == 0) index else index - documentRanges[insertionPoint - 1]
+        val localIndex = if (insertionPoint == 0) index else index - documentRanges[insertionPoint - 1] - 1
         return singleFileCollections[insertionPoint] to localIndex
     }
 
