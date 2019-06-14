@@ -9,11 +9,14 @@ import it.unimi.dsi.fastutil.objects.Reference2ObjectMap
 import java.io.File
 import java.io.InputStream
 
-class Mg4jCompositeDocumentCollection(private val indexes: List<Index>, private val files: List<File>) : AbstractDocumentCollection() {
+class Mg4jCompositeDocumentCollection(
+        private val indexes: List<Index>,
+        private val files: List<File>)
+    : AbstractDocumentCollection() {
 
     private val factory = Mg4jDocumentFactory(indexes)
 
-    private val singleFileCollections = files.map { Mg4jSingleFileDocumentCollection(it) }
+    private val singleFileCollections = files.map { Mg4jSingleFileDocumentCollection(it, factory.copy()) }
 
     private val documentRanges = Array(files.size) { 0L }
 
@@ -59,4 +62,5 @@ class Mg4jCompositeDocumentCollection(private val indexes: List<Index>, private 
             collection.close()
         }
     }
+
 }
