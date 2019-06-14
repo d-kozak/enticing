@@ -1,7 +1,6 @@
 package cz.vutbr.fit.knot.enticing.indexer.mg4j
 
 import it.unimi.di.big.mg4j.document.AbstractDocument
-import it.unimi.dsi.fastutil.io.FastBufferedInputStream
 import it.unimi.dsi.fastutil.objects.Reference2ObjectMap
 import it.unimi.dsi.io.WordReader
 
@@ -18,6 +17,6 @@ class Mg4jDocument(
 
     override fun wordReader(field: Int): WordReader = wordReader
 
-    override fun content(field: Int): Any = FastBufferedInputStream(content[field].inputStream())
+    override fun content(field: Int): Any = content[field].inputStream().reader()
 
 }

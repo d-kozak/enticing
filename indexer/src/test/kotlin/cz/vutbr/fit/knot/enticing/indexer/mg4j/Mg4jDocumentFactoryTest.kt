@@ -4,12 +4,12 @@ import cz.vutbr.fit.knot.enticing.indexer.configuration.testConfiguration
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.io.File
-import java.io.InputStream
+import java.io.InputStreamReader
 
 private val indexes = testConfiguration.indexes
 
 fun assertStreamStartsWith(stream: Any, expected: String) {
-    val actual = (stream as InputStream).bufferedReader().use { it.readLine().substring(0, expected.length) }
+    val actual = (stream as InputStreamReader).readText().substring(0, expected.length)
     assertThat(actual)
             .isEqualTo(expected)
 }
