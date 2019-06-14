@@ -25,3 +25,25 @@ class Mg4jDocumentFactory(private val indexes: List<Index>) : AbstractDocumentFa
     }
 }
 
+internal fun parsePageLine(buffer: ByteArray, bufferSize: Int): Pair<String, String> {
+    val splitPoint = findSplitPoint(buffer, bufferSize)
+
+    val titleStart = DocumentMarks.PAGE.mark.length + 1
+    val titleLen = splitPoint - titleStart
+    val title = String(buffer, titleStart, titleLen)
+
+    val uriStart = splitPoint + 1
+    val uriLen = bufferSize - splitPoint - 1
+    val uri = String(buffer, uriStart, uriLen)
+    return title to uri
+}
+
+private const val tabByte = '\t'.toByte()
+internal fun findSplitPoint(buffer: ByteArray, bufferSize: Int): Int {
+    for (i in 0 until bufferSize) {
+        if (buffer[i] == tabByte) {
+            return i
+        }
+    }
+    throw IllegalArgumentException("Cannot find \\t that should separate title and uri")
+}
