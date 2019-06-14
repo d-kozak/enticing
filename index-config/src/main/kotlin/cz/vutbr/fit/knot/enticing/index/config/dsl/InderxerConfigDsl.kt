@@ -10,6 +10,9 @@ class IndexerConfig {
     lateinit var output: File
     lateinit var corpusConfiguration: CorpusConfiguration
 
+    val indexes
+        get() = corpusConfiguration.indexes.values.toList()
+
     fun inputFiles(vararg files: String) {
         this.input = files.map { File(it) }
     }

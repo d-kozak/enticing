@@ -25,9 +25,16 @@ class Mg4jSingleFileDocumentCollection(
     private val documentIndexes = findDocumentIndexes(inputFile)
 
 
-    override fun metadata(index: Long): Reference2ObjectMap<Enum<*>, Any> {
+    override fun metadata(index: Long): Reference2ObjectMap<Enum<*>, Any> = metadataAndStream(index).second
+
+    override fun stream(index: Long): InputStream = FastBufferedInputStream(FileInputStream(inputFile)).also {
+        it.position(documentIndexes.getLong(index))
+    }
+
+    private fun metadataAndStream(index: Long): Pair<FastBufferedInputStream, Reference2ObjectArrayMap<Enum<*>, Any>> {
         val map = Reference2ObjectArrayMap<Enum<*>, Any>()
         val stream = stream(index) as FastBufferedInputStream
+        val startPosition = stream.position()
 
 
         val buffer = ByteArray(1024)
@@ -41,15 +48,14 @@ class Mg4jSingleFileDocumentCollection(
         val (title, uri) = parsePageLine(buffer, lineSize)
         map[DocumentMetaData.TITLE] = title
         map[DocumentMetaData.URI] = uri
-        return map
+
+        stream.position(startPosition)
+        return stream to map
     }
 
-
-    override fun stream(index: Long): InputStream = FastBufferedInputStream(FileInputStream(inputFile)).also {
-        it.position(documentIndexes.getLong(index))
+    override fun document(index: Long): Document = metadataAndStream(index).let { (stream, metadata) ->
+        factory.getDocument(stream, metadata)
     }
-
-    override fun document(index: Long): Document = factory.getDocument(stream(index), metadata(index))
 
     override fun size(): Long = documentIndexes.size64()
 }

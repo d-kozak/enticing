@@ -1,11 +1,12 @@
 package cz.vutbr.fit.knot.enticing.indexer.mg4j
 
+import cz.vutbr.fit.knot.enticing.indexer.configuration.testConfiguration
 import it.unimi.dsi.fastutil.io.FastBufferedInputStream
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.io.File
 
-val dummyDocumentFactory = Mg4jDocumentFactory(emptyList())
+val testDocumentFactory = Mg4jDocumentFactory(testConfiguration.indexes)
 
 internal class Mg4jSingleFileDocumentCollectionTest {
 
@@ -20,7 +21,7 @@ internal class Mg4jSingleFileDocumentCollectionTest {
                 "src/test/resources/input/cc3.mg4j" to 158L
         )
         for ((path, count) in inputFiles) {
-            val collection = Mg4jSingleFileDocumentCollection(File(path), dummyDocumentFactory)
+            val collection = Mg4jSingleFileDocumentCollection(File(path), testDocumentFactory)
             assertThat(collection.size())
                     .isEqualTo(count)
         }
@@ -28,7 +29,7 @@ internal class Mg4jSingleFileDocumentCollectionTest {
 
     @Test
     fun `Check input stream`() {
-        val collection = Mg4jSingleFileDocumentCollection(File("src/test/resources/input/small.mg4j"), dummyDocumentFactory)
+        val collection = Mg4jSingleFileDocumentCollection(File("src/test/resources/input/small.mg4j"), testDocumentFactory)
 
         val buffer = ByteArray(1024)
 
@@ -42,15 +43,15 @@ internal class Mg4jSingleFileDocumentCollectionTest {
             val lineSize = stream.readLine(buffer)
             assertThat(lineSize)
                     .isGreaterThan(0)
-            val asString = String(buffer, 0, lineSize)
-            assertThat(asString)
+            val str = String(buffer, 0, lineSize)
+            assertThat(str)
                     .isEqualTo(content)
         }
     }
 
     @Test
     fun `Check metadata`() {
-        val collection = Mg4jSingleFileDocumentCollection(File("src/test/resources/input/small.mg4j"), dummyDocumentFactory)
+        val collection = Mg4jSingleFileDocumentCollection(File("src/test/resources/input/small.mg4j"), testDocumentFactory)
         for ((index, title, uri) in listOf(
                 Triple(2L, "Toy Soldiers Studio: II/20c Ptolemaic", "http://15mm25mm.blogspot.com/2014/07/ii20c-ptolemaic.html"),
                 Triple(3L, " - Writing Treatments That Sell: How to Create and Market Your Story Ideas to the Motion Picture and TV Industry, Second Edition", "http://1d-film.ru/books/2595289/"),
