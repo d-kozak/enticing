@@ -4,6 +4,8 @@ import java.io.File
 
 fun indexClient(block:IndexClientConfig.()->Unit):IndexClientConfig= IndexClientConfig().apply(block)
 
+// todo add validation (for all config classes)
+
 class IndexClientConfig {
 
     lateinit var mg4jFiles:List<File>
