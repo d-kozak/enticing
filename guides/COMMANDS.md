@@ -20,3 +20,9 @@ java -cp "../../../../mg4j-bin/*" it.unimi.di.big.mg4j.query.Query -h -i FileSys
 ```
 -cp "../../../../mg4j-bin/*" is for specifying all jars in the directory, not that '~' symbol does not work
 Since specifying all indexes and the collection in the terminal will be complicated, a small wrapper should be written to handle it
+
+
+CC input for indexing, about 300GiB of text
+```
+/mnt/data/commoncrawl/CC-2018-47/
+```
