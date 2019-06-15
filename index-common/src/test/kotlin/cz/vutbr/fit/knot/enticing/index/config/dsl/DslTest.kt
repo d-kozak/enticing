@@ -72,7 +72,7 @@ class DslTest {
 
     @Test
     fun `Indexer config simple test`() {
-        val config = indexerConfiguration {
+        val config = indexBuilder {
             inputFiles("1.mg4j", "2.mg4j", "3.mg4j")
             outputDirectory("tmp/output")
             corpus("wiki2018") {
@@ -97,7 +97,7 @@ class DslTest {
                 }
             }
         }
-        val expected = IndexerConfig().apply {
+        val expected = IndexBuilderConfig().apply {
             input = listOf(1, 2, 3).map { "$it.mg4j" }.map { File(it) }
             output = File("tmp/output")
             corpusConfiguration = CorpusConfiguration("wiki2018",

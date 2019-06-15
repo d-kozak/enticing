@@ -1,30 +1,30 @@
 package cz.vutbr.fit.knot.enticing.indexer
 
-import cz.vutbr.fit.knot.enticing.index.config.dsl.IndexerConfig
+import cz.vutbr.fit.knot.enticing.index.config.dsl.IndexBuilderConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.io.File
 
 
-val dummyLoadConfiguration: (path: String) -> IndexerConfig = { IndexerConfig() }
+val DUMMY_LOAD_CONFIGURATION: (path: String) -> IndexBuilderConfig = { IndexBuilderConfig() }
 
 class HandleArgumentsTest {
 
     @Test
     fun `At least one argument necessary the config location`() {
         assertThrows<IllegalArgumentException> {
-            handleArguments(loadConfig = dummyLoadConfiguration)
+            handleArguments(loadConfig = DUMMY_LOAD_CONFIGURATION)
         }
     }
 
     @Test
     fun `Loading of dsl requested based on the path in the first argument`() {
         var calledWith: String? = null
-        val load: (String) -> IndexerConfig = { path ->
+        val load: (String) -> IndexBuilderConfig = { path ->
             calledWith != null && throw IllegalStateException("Called with param is set, which suggest that load was called more than once")
             calledWith = path
-            dummyLoadConfiguration(path)
+            DUMMY_LOAD_CONFIGURATION(path)
         }
         handleArguments("foo/bar/baz/config.kts", loadConfig = load)
 
@@ -36,13 +36,13 @@ class HandleArgumentsTest {
     @Test
     fun `Two arguments not allowed, ambiguity`() {
         assertThrows<IllegalArgumentException> {
-            handleArguments("foo/config.kts", "input", loadConfig = dummyLoadConfiguration)
+            handleArguments("foo/config.kts", "input", loadConfig = DUMMY_LOAD_CONFIGURATION)
         }
     }
 
     @Test
     fun `Input and output in config updated based on arguments`() {
-        val config = handleArguments("foo/bar/baz/config.kts", "one.mg4j", "two.mg4j", "output/out", loadConfig = dummyLoadConfiguration)
+        val config = handleArguments("foo/bar/baz/config.kts", "one.mg4j", "two.mg4j", "output/out", loadConfig = DUMMY_LOAD_CONFIGURATION)
         assertThat(config.input)
                 .isEqualTo(listOf(File("one.mg4j"), File("two.mg4j")))
         assertThat(config.output)

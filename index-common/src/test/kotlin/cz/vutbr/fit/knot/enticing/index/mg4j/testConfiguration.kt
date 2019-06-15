@@ -2,7 +2,7 @@ package cz.vutbr.fit.knot.enticing.index.mg4j
 
 import cz.vutbr.fit.knot.enticing.index.config.dsl.*
 
-val testConfiguration = indexerConfiguration {
+val testConfiguration = indexBuilder {
     inputDirectory("src/test/resources/input")
     outputDirectory("src/test/resources/output")
 

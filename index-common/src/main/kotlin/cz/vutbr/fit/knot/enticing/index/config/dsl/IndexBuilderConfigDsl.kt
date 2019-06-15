@@ -2,9 +2,9 @@ package cz.vutbr.fit.knot.enticing.index.config.dsl
 
 import java.io.File
 
-fun indexerConfiguration(block: IndexerConfig.() -> Unit): IndexerConfig = IndexerConfig().apply(block)
+fun indexBuilder(block: IndexBuilderConfig.() -> Unit): IndexBuilderConfig = IndexBuilderConfig().apply(block)
 
-class IndexerConfig {
+class IndexBuilderConfig {
 
     lateinit var input: List<File>
     lateinit var output: File
@@ -33,7 +33,7 @@ class IndexerConfig {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is IndexerConfig) return false
+        if (other !is IndexBuilderConfig) return false
 
         if (input != other.input) return false
         if (output != other.output) return false

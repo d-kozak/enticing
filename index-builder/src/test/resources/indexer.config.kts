@@ -1,6 +1,6 @@
 import cz.vutbr.fit.knot.enticing.index.config.dsl.*
 
-indexerConfiguration {
+indexBuilder {
     inputDirectory("../index-common/src/test/resources/input")
     outputDirectory("../index-common/src/test/resources/output")
 

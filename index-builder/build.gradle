@@ -22,7 +22,6 @@ dependencies {
     compile("it.unimi.dsi:sux4j:4.0.0")
 
     implementation(project(":index-common"))
-    compile("de.swirtz:ktsRunner:0.0.7")
 
     testImplementation("io.mockk:mockk:1.9")
     testCompile("org.assertj:assertj-core:3.11.1")

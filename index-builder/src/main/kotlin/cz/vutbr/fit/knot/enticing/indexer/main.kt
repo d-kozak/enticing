@@ -1,13 +1,13 @@
 package cz.vutbr.fit.knot.enticing.indexer
 
-import cz.vutbr.fit.knot.enticing.index.config.dsl.IndexerConfig
+import cz.vutbr.fit.knot.enticing.index.config.dsl.IndexBuilderConfig
+import cz.vutbr.fit.knot.enticing.index.config.executeScript
 import cz.vutbr.fit.knot.enticing.index.mg4j.DirectoryIOFactory
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jCompositeDocumentCollection
-import cz.vutbr.fit.knot.enticing.indexer.configuration.loadConfiguration
 import it.unimi.di.big.mg4j.tool.IndexBuilder
 import java.io.File
 
-fun handleArguments(vararg args: String, loadConfig: (path: String) -> IndexerConfig = ::loadConfiguration): IndexerConfig {
+fun handleArguments(vararg args: String, loadConfig: (path: String) -> IndexBuilderConfig = ::executeScript): IndexBuilderConfig {
     args.isEmpty() && throw IllegalArgumentException("At least one argument necessary, the config file path")
     args.size == 2 && throw IllegalArgumentException("Two arguments are ambiguous, provide just the config file or at least three")
     val config = loadConfig(args[0])
@@ -18,7 +18,7 @@ fun handleArguments(vararg args: String, loadConfig: (path: String) -> IndexerCo
     return config
 }
 
-fun startIndexing(config: IndexerConfig) {
+fun startIndexing(config: IndexBuilderConfig) {
     val documentCollection = Mg4jCompositeDocumentCollection(config.indexes, config.input)
     IndexBuilder(config.corpusConfiguration.corpusName, documentCollection)
             .ioFactory(DirectoryIOFactory(config.output.toPath()))

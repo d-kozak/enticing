@@ -8,6 +8,9 @@ version = "0.0.1-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    maven {
+        setUrl("https://dl.bintray.com/s1m0nw1/KtsRunner")
+    }
 }
 
 dependencies {
@@ -17,6 +20,8 @@ dependencies {
     // TODO transitive dependencies of mg4j had to be added manually, try to find a better way
     compile("it.unimi.dsi:dsiutils:2.3.0")
     compile("it.unimi.dsi:sux4j:4.0.0")
+
+    compile("de.swirtz:ktsRunner:0.0.7")
 
     testImplementation("io.mockk:mockk:1.9")
     testCompile("org.assertj:assertj-core:3.11.1")
