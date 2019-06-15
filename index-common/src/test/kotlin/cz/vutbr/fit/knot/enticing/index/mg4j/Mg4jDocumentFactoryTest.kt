@@ -19,7 +19,7 @@ internal class Mg4jDocumentFactoryTest {
     @Test
     fun `load document test`() {
         val factory = Mg4jDocumentFactory(indexes)
-        val collection = Mg4jSingleFileDocumentCollection(File("src/test/resources/input/small.mg4j"), factory)
+        val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), factory)
 
         val document = collection.document(2)
         assertThat(document.title())

@@ -3,8 +3,8 @@ package cz.vutbr.fit.knot.enticing.index.mg4j
 import cz.vutbr.fit.knot.enticing.index.config.dsl.*
 
 val testConfiguration = indexBuilder {
-    inputDirectory("src/test/resources/input")
-    outputDirectory("src/test/resources/output")
+    inputDirectory("../data/mg4j")
+    outputDirectory("../data/indexed")
 
     corpus("CC") {
         indexes {

@@ -14,10 +14,10 @@ internal class Mg4jSingleFileDocumentCollectionTest {
     fun `Load collection and check size`() {
 
         val inputFiles = listOf(
-                "src/test/resources/input/small.mg4j" to 16L,
-                "src/test/resources/input/cc1.mg4j" to 146L,
-                "src/test/resources/input/cc2.mg4j" to 146L,
-                "src/test/resources/input/cc3.mg4j" to 158L
+                "../data/mg4j/small.mg4j" to 16L,
+                "../data/mg4j/cc1.mg4j" to 146L,
+                "../data/mg4j/cc2.mg4j" to 146L,
+                "../data/mg4j/cc3.mg4j" to 158L
         )
         for ((path, count) in inputFiles) {
             val collection = Mg4jSingleFileDocumentCollection(File(path), testDocumentFactory)
@@ -28,7 +28,7 @@ internal class Mg4jSingleFileDocumentCollectionTest {
 
     @Test
     fun `Check input stream`() {
-        val collection = Mg4jSingleFileDocumentCollection(File("src/test/resources/input/small.mg4j"), testDocumentFactory)
+        val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), testDocumentFactory)
 
         val buffer = ByteArray(1024)
 
@@ -50,7 +50,7 @@ internal class Mg4jSingleFileDocumentCollectionTest {
 
     @Test
     fun `Check metadata`() {
-        val collection = Mg4jSingleFileDocumentCollection(File("src/test/resources/input/small.mg4j"), testDocumentFactory)
+        val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), testDocumentFactory)
         for ((index, title, uri) in listOf(
                 Triple(2L, "Toy Soldiers Studio: II/20c Ptolemaic", "http://15mm25mm.blogspot.com/2014/07/ii20c-ptolemaic.html"),
                 Triple(3L, " - Writing Treatments That Sell: How to Create and Market Your Story Ideas to the Motion Picture and TV Industry, Second Edition", "http://1d-film.ru/books/2595289/"),

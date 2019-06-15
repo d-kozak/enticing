@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test
 import java.io.File
 
 val files = listOf(
-        "src/test/resources/input/cc1.mg4j",
-        "src/test/resources/input/cc2.mg4j",
-        "src/test/resources/input/cc3.mg4j"
+        "../data/mg4j/cc1.mg4j",
+        "../data/mg4j/cc2.mg4j",
+        "../data/mg4j/cc3.mg4j"
 ).map { File(it) }
 
 internal class Mg4jCompositeDocumentCollectionTest {
