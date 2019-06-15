@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.enticing.indexer
 
 import cz.vutbr.fit.knot.enticing.index.config.dsl.IndexerConfig
 import cz.vutbr.fit.knot.enticing.indexer.configuration.loadConfiguration
+import cz.vutbr.fit.knot.enticing.indexer.mg4j.DirectoryIOFactory
 import cz.vutbr.fit.knot.enticing.indexer.mg4j.Mg4jCompositeDocumentCollection
 import it.unimi.di.big.mg4j.tool.IndexBuilder
 import java.io.File
@@ -20,6 +21,7 @@ fun handleArguments(vararg args: String, loadConfig: (path: String) -> IndexerCo
 fun startIndexing(config: IndexerConfig) {
     val documentCollection = Mg4jCompositeDocumentCollection(config.indexes, config.input)
     IndexBuilder(config.corpusConfiguration.corpusName, documentCollection)
+            .ioFactory(DirectoryIOFactory(config.output.toPath()))
             .run()
 }
 
