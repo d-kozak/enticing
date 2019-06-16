@@ -26,3 +26,8 @@ CC input for indexing, about 300GiB of text
 ```
 /mnt/data/commoncrawl/CC-2018-47/
 ```
+
+Just an example of classpath going wrong, probably we will have to deal with that :X 
+```
+java -cp build/libs/index-builder-0.0.1-SNAPSHOT.jar:../index-common/build/libs/index-common-0.0.1-SNAPSHOT.jar:"/home/dkozak/mg4j-bin/*" cz.vutbr.fit.knot.enticing.indexer.MainKt src/test/resources/indexer.config.kts
+```
