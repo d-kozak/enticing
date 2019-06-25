@@ -15,6 +15,11 @@ fun handleArguments(vararg args: String, loadConfig: (path: String) -> IndexBuil
         config.input = (1..args.size - 2).map { File(args[it]) }
         config.output = File(args[args.size - 1])
     }
+
+    if (!config.output.exists()) {
+        config.output.mkdir() || throw IllegalArgumentException("Could not create output directory ${config.output}")
+    }
+    config.output.isDirectory || throw IllegalArgumentException("${config.output} is not a directory")
     return config
 }
 
