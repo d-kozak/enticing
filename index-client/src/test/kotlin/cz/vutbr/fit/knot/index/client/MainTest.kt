@@ -21,6 +21,6 @@ internal class MainTest {
         val config = handleArguments(arrayOf("src/test/resources/client.config.kts"))
         val (collection, engine) = initQueryEngine(config)
 
-        responseLoop(collection, engine, input::readQuery)
+        responseLoop(collection, config, engine, input::readQuery)
     }
 }
