@@ -13,6 +13,7 @@ import it.unimi.di.big.mg4j.query.parser.SimpleParser
 import it.unimi.di.big.mg4j.search.DocumentIteratorBuilderVisitor
 import it.unimi.di.big.mg4j.search.score.DocumentScoreInfo
 import it.unimi.dsi.fastutil.objects.*
+import java.io.InputStreamReader
 
 fun handleArguments(args: Array<String>): IndexClientConfig {
     args.size != 1 && throw IllegalArgumentException("Expecting exactly one argument, config file")
@@ -23,14 +24,17 @@ fun main(args: Array<String>) {
     val config = handleArguments(args)
 
     val (collection, engine) = initQueryEngine(config)
-    responseLoop(collection, engine)
+    responseLoop(collection, config, engine)
 }
 
-fun responseLoop(collection: Mg4jCompositeDocumentCollection, engine: QueryEngine, readQuery: () -> String? = ::readLine) {
-    var input = readQuery()
-
+fun responseLoop(collection: Mg4jCompositeDocumentCollection, config: IndexClientConfig, engine: QueryEngine, readQuery: () -> String? = ::readLine) {
     val resultList = ObjectArrayList<DocumentScoreInfo<Reference2ObjectMap<Index, Array<SelectedInterval>>>>()
 
+    val tokenIndex = config.corpusConfiguration.indexes["token"]!!.columnIndex
+
+    println("Engine started")
+    print("query>")
+    var input = readQuery()
     while (input != null && input != "quit") {
         resultList.clear()
         val processed = engine.process(input, 0, 100, resultList)
@@ -38,8 +42,38 @@ fun responseLoop(collection: Mg4jCompositeDocumentCollection, engine: QueryEngin
 
         for (result in resultList) {
             val document = collection.document(result.document)
+            val scores = result.info[engine.indexMap["token"]]!!
+
+            println("===========================")
             println(document.title())
+
+            for (score in scores) {
+                val reader = document.content(tokenIndex) as InputStreamReader
+                val regex = """\s+"""
+                val words = reader.readText().split(regex.toRegex())
+
+
+                val left = score.interval.left
+                val prefix = Math.max(left - 5, 0)
+                val right = score.interval.right
+
+                val suffix = Math.min(right + 5, words.size)
+
+                val wordList = mutableListOf<String>()
+                        .also {
+                            it.addAll(words.subList(prefix, left))
+                            it.add("<b>")
+                            it.addAll(words.subList(left, right + 1))
+                            it.add("</b>")
+                            it.addAll(words.subList(right + 1, suffix))
+                        }
+
+                val snippet = wordList.joinToString(separator = " ")
+                println("=> $snippet")
+            }
+            println("===========================")
         }
+        print("\nquery>")
         input = readQuery()
     }
 }
