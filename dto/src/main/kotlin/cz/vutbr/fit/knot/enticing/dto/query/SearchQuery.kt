@@ -1,30 +1,39 @@
 package cz.vutbr.fit.knot.enticing.dto.query
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo
-import cz.vutbr.fit.knot.enticing.eql.compiler.ast.QueryNode
+import javax.validation.Valid
+import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Positive
 
+// TODO add wantedIndexes
+
 data class SearchQuery(
+        @field:NotBlank
+        val query: String,
         @field:Positive
-        val snippetsCount: Int,
-        val query: QueryNode,
-        val format: ResponseFormat
+        val snippetCount: Int,
+        @field:Valid
+        val offset: Offset,
+        val responseType: ResponseType = ResponseType.SNIPPET,
+        val responseFormat: ResponseFormat = ResponseFormat.JSON,
+        @field:NotEmpty
+        val defaultIndex: String = "token"
 )
 
-data class ResponseFormat(
-        val nertags: NertagsFormat,
-        val attributes: AttributesFormat
+
+data class Offset(
+        @field:Positive
+        val document: Long,
+        @field:Positive
+        val snippet: Int
 )
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
-sealed class NertagsFormat {
-    data class SimpleDefinition(@field:NotEmpty val def: String) : NertagsFormat()
-    data class DetailedDefinition(val nertags: Map<String, List<String>>)
+enum class ResponseType {
+    SNIPPET,
+    MATCH
 }
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
-sealed class AttributesFormat {
-    data class SimpleDefinition(@field:NotEmpty val def: String) : AttributesFormat()
-    data class DetailedDefinition(val attributes: List<String>) : AttributesFormat()
+enum class ResponseFormat {
+    HTML,
+    JSON;
 }

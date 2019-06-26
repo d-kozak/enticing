@@ -71,10 +71,11 @@ until a new configuration is set using the rest api.
         snippets: Array<Snippet>,
         offset:int // for pagination, where to start next
     }
-    Snippet = {
-        documentId: UUID,
-        collectionId: string,
+    Snippet = {  
+        collection: string,
+        document: int,
         position: int, // where in the document the snippet starts,
+        size:int,
         url: url, // url location of the original document,
         canExtend: boolean, // is it possible to further extend the snippet?
         payload
