@@ -16,11 +16,11 @@ internal class MainTest {
         val input = MockInput(listOf(
                 "hello",
                 "dog",
-                "position:10"
+                "(position:10){{position->token}}"
         ))
         val config = handleArguments(arrayOf("src/test/resources/client.config.kts"))
         val (collection, engine) = initQueryEngine(config)
 
-        responseLoop(collection, engine, input::readQuery)
+        responseLoop(collection, config, engine, input::readQuery)
     }
 }

@@ -7,7 +7,11 @@ import org.junit.jupiter.api.assertThrows
 import java.io.File
 
 
-val DUMMY_LOAD_CONFIGURATION: (path: String) -> IndexBuilderConfig = { IndexBuilderConfig() }
+val DUMMY_LOAD_CONFIGURATION: (path: String) -> IndexBuilderConfig = {
+    IndexBuilderConfig().apply {
+        this.output = File("../data/indexed")
+    }
+}
 
 class HandleArgumentsTest {
 
@@ -42,10 +46,10 @@ class HandleArgumentsTest {
 
     @Test
     fun `Input and output in config updated based on arguments`() {
-        val config = handleArguments("foo/bar/baz/config.kts", "one.mg4j", "two.mg4j", "output/out", loadConfig = DUMMY_LOAD_CONFIGURATION)
+        val config = handleArguments("foo/bar/baz/config.kts", "one.mg4j", "two.mg4j", "../data/indexed", loadConfig = DUMMY_LOAD_CONFIGURATION)
         assertThat(config.input)
                 .isEqualTo(listOf(File("one.mg4j"), File("two.mg4j")))
         assertThat(config.output)
-                .isEqualTo(File("output/out"))
+                .isEqualTo(File("../data/indexed"))
     }
 }
