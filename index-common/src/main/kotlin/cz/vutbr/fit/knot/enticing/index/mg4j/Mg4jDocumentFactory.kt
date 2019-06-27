@@ -48,7 +48,7 @@ class Mg4jDocumentFactory(private val indexes: List<Index>) : AbstractDocumentFa
         }
 
         // todo avoid copying of the content from bytelist to bytearray
-        return Mg4jDocument(metadata, fields.map { it.toByteArray() })
+        return Mg4jDocument(indexes, metadata, fields.map { it.toByteArray() })
     }
 }
 

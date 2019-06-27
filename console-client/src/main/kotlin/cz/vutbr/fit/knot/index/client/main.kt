@@ -39,7 +39,7 @@ fun responseLoop(queryExecutor: QueryExecutor, inputSequence: Sequence<String>) 
                 Offset(0, 0),
                 TextMetadata.Predefined("none"),
                 ResponseType.SNIPPET,
-                ResponseFormat.JSON
+                ResponseFormat.HTML
         )
 
         val response = queryExecutor.query(query)

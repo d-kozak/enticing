@@ -1,12 +1,15 @@
 package cz.vutbr.fit.knot.enticing.index
 
 import cz.vutbr.fit.knot.enticing.dto.query.Offset
+import cz.vutbr.fit.knot.enticing.dto.query.ResponseFormat
 import cz.vutbr.fit.knot.enticing.dto.query.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.response.*
 import cz.vutbr.fit.knot.enticing.index.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.index.config.dsl.IndexClientConfig
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jCompositeDocumentCollection
+import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jDocument
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jDocumentFactory
+import it.unimi.di.big.mg4j.document.Document
 import it.unimi.di.big.mg4j.index.Index
 import it.unimi.di.big.mg4j.index.TermProcessor
 import it.unimi.di.big.mg4j.query.IntervalSelector
@@ -20,7 +23,6 @@ import it.unimi.dsi.fastutil.objects.*
 import it.unimi.dsi.util.Interval
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.io.InputStreamReader
 
 fun initQueryEngine(config: IndexClientConfig): QueryExecutor {
     val collection = Mg4jCompositeDocumentCollection(config.indexes, config.mg4jFiles)
@@ -49,13 +51,12 @@ fun initQueryEngine(config: IndexClientConfig): QueryExecutor {
     engine.intervalSelector = IntervalSelector(Integer.MAX_VALUE, Integer.MAX_VALUE)
     engine.multiplex = false
 
-    return QueryExecutor("name", collection, factory, engine, config.corpusConfiguration)
+    return QueryExecutor("name", collection, engine, config.corpusConfiguration)
 }
 
 class QueryExecutor(
         private val collectionName: String,
         private val collection: Mg4jCompositeDocumentCollection,
-        private val factory: Mg4jDocumentFactory,
         private val engine: QueryEngine,
         private val corpusConfiguration: CorpusConfiguration
 ) {
@@ -69,30 +70,27 @@ class QueryExecutor(
 
         val defaultIndex = engine.indexMap[query.defaultIndex]
                 ?: throw IllegalArgumentException("Index ${query.defaultIndex} not found")
-        val defaultIndexInt = factory.fieldIndex(query.defaultIndex)
-
         val processed = engine.process(query.query, documentOffset, query.snippetCount, resultList)
         log.info("Processed $processed documents")
 
         val matched = mutableListOf<Match>()
         for ((i, result) in resultList.withIndex()) {
-            val document = collection.document(result.document)
+            val document = collection.document(result.document) as Mg4jDocument
             val scores = getScoresForIndex(result, defaultIndex).let {
                 if (i == 0) it.subList(matchOffset, it.size) else it
             }
             for ((j, score) in scores.withIndex()) {
-                val reader = document.content(defaultIndexInt) as InputStreamReader
-                val regex = """\s+"""
-                val words = reader.readText().split(regex.toRegex())
-
+                val words = document.contentPerIndex[query.defaultIndex]
+                        ?: throw IllegalArgumentException("No content for index ${query.defaultIndex}")
 
                 val (left, right) = score.interval
                 val prefix = Math.max(left - 5, 0)
                 val suffix = Math.min(right + 5, words.size)
 
-                val prefixText = words.subList(prefix, left).joinToString(separator = " ")
-                val matchedText = words.subList(left, right).joinToString(separator = " ")
-                val suffixText = words.subList(right, suffix).joinToString(separator = " ")
+                val payload = when (query.responseFormat) {
+                    ResponseFormat.HTML -> processAsHtml(query, document, words, left, right, prefix, suffix)
+                    ResponseFormat.JSON -> processAsJson(query, document, words, left, right, prefix, suffix)
+                }
 
                 val match = Match(
                         collectionName,
@@ -101,15 +99,7 @@ class QueryExecutor(
                         right - left,
                         document.uri().toString(),
                         document.title().toString(),
-                        Payload.Snippet.Json(AnnotatedText(
-                                prefixText + matchedText + suffixText,
-                                emptyMap(),
-                                emptyList(),
-                                listOf(QueryMapping(
-                                        textIndex = MatchedRegion(prefixText.length, matchedText.length),
-                                        queryIndex = MatchedRegion(0, query.query.length)
-                                ))
-                        )),
+                        payload,
                         canExtend = prefix > 0 || suffix < words.size - 1
                 )
                 log.info("Found match $match")
@@ -123,6 +113,29 @@ class QueryExecutor(
     }
 }
 
+fun processAsJson(query: SearchQuery, document: Document, words: List<String>, left: Int, right: Int, prefix: Int, suffix: Int): Payload.Snippet.Json {
+    val prefixText = words.subList(prefix, left).joinToString(separator = " ")
+    val matchedText = words.subList(left, right).joinToString(separator = " ")
+    val suffixText = words.subList(right, suffix).joinToString(separator = " ")
+
+    return Payload.Snippet.Json(AnnotatedText(
+            prefixText + matchedText + suffixText,
+            emptyMap(),
+            emptyList(),
+            listOf(QueryMapping(
+                    textIndex = MatchedRegion(prefixText.length, matchedText.length),
+                    queryIndex = MatchedRegion(0, query.query.length)
+            ))
+    ))
+}
+
+fun processAsHtml(query: SearchQuery, document: Document, words: List<String>, left: Int, right: Int, prefix: Int, suffix: Int): Payload.Snippet.Html {
+    val prefixText = words.subList(prefix, left).joinToString(separator = " ")
+    val matchedText = words.subList(left, right).joinToString(separator = " ")
+    val suffixText = words.subList(right, suffix).joinToString(separator = " ")
+
+    return Payload.Snippet.Html("$prefixText<b>$matchedText</b>$suffixText")
+}
 
 fun getScoresForIndex(
         result: DocumentScoreInfo<Reference2ObjectMap<Index, Array<SelectedInterval>>>,
