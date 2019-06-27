@@ -78,7 +78,7 @@ data class Offset(
 
 enum class ResponseType {
     SNIPPET,
-    MATCH
+    IDENTIFIER_LIST
 }
 
 enum class ResponseFormat {

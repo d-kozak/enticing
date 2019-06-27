@@ -85,7 +85,7 @@ until a new configuration is set using the rest api.
     match = Array<MatchInfo>
     matchInfo = {
        identifier:string, // identifier from the query
-       text // text that was matched
+       text:annotatedText // text that was matched
     } 
     json = {
         enhancedText : EnhancedText,

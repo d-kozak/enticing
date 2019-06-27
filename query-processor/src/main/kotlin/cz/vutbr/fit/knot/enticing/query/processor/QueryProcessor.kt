@@ -26,9 +26,9 @@ fun process(searchQuery: SearchQuery, servers: List<ServerInfo>, contactServer: 
         serversToCall.clear()
         for ((server, result) in lastResults) {
             val resultsPerServer = serverResults[server] ?: mutableListOf()
-            if (result.isSuccess && result.value.snippets.isNotEmpty()) {
+            if (result.isSuccess && result.value.matched.isNotEmpty()) {
                 serversToCall.add(ServerInfo(server, result.value.offset))
-                collectedSnippetsCount += result.value.snippets.size
+                collectedSnippetsCount += result.value.matched.size
             }
             resultsPerServer.add(result)
             serverResults[server] = resultsPerServer
