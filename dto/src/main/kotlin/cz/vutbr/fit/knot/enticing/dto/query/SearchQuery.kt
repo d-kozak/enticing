@@ -2,7 +2,6 @@ package cz.vutbr.fit.knot.enticing.dto.query
 
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import com.fasterxml.jackson.annotation.JsonTypeName
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotEmpty
@@ -39,7 +38,7 @@ sealed class Metadata {
     data class ExactDefinition(
             val entities: Entities,
             val indexes: Indexes
-    )
+    ) : Metadata()
 }
 
 @JsonTypeInfo(
@@ -48,17 +47,12 @@ sealed class Metadata {
         property = "type"
 )
 @JsonSubTypes(
-        JsonSubTypes.Type(Entities.All::class, name = "all"),
-        JsonSubTypes.Type(Entities.ExactDefinition::class, name = "def")
+        JsonSubTypes.Type(Entities.Predefined::class, name = "predef"),
+        JsonSubTypes.Type(Entities.ExactDefinition::class, name = "exact")
 )
 sealed class Entities {
-    @JsonTypeName("all")
-    class All : Entities()
-
-    @JsonTypeName("def")
-    data class ExactDefinition(
-            val entities: Map<EntityId, Indexes>
-    ) : Entities()
+    data class Predefined(val value: String) : Entities()
+    data class ExactDefinition(val entities: Map<EntityId, Indexes>) : Entities()
 }
 
 @JsonTypeInfo(
@@ -67,14 +61,11 @@ sealed class Entities {
         property = "type"
 )
 @JsonSubTypes(
-        JsonSubTypes.Type(Indexes.All::class, name = "all"),
-        JsonSubTypes.Type(Indexes.ExactDefinition::class, name = "def")
+        JsonSubTypes.Type(Indexes.Predefined::class, name = "predef"),
+        JsonSubTypes.Type(Indexes.ExactDefinition::class, name = "exact")
 )
 sealed class Indexes {
-    @JsonTypeName("all")
-    class All : Indexes()
-
-    @JsonTypeName("def")
+    data class Predefined(val value: String) : Indexes()
     data class ExactDefinition(val names: List<String>) : Indexes()
 }
 
