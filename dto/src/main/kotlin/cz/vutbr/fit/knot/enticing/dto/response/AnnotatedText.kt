@@ -1,13 +1,18 @@
 package cz.vutbr.fit.knot.enticing.dto.response
 
+import javax.validation.Valid
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Positive
+import javax.validation.constraints.PositiveOrZero
 
 data class AnnotatedText(
         @field:NotEmpty
         val text: String,
+        @field:Valid
         val annotations: Map<Long, Annotation>,
+        @field:Valid
         val positions: List<AnnotationPosition>,
+        @field:Valid
         val queryMapping: List<QueryMapping>
 )
 
@@ -21,19 +26,22 @@ data class Annotation(
 )
 
 data class QueryMapping(
-        @field:Positive
-        val from: Long,
-        @field:Positive
-        val to: Long,
-        @field:NotEmpty
-        val query: String
+        @field:Valid
+        val textIndex: MatchedRegion,
+        @field:Valid
+        val queryIndex: MatchedRegion
 )
 
 data class AnnotationPosition(
         @field:Positive
         val annotationId: Long,
-        @field:Positive
-        val from: Long,
-        @field:Positive
-        val to: Long
+        @field:Valid
+        val match: MatchedRegion
+)
+
+data class MatchedRegion(
+        @field:PositiveOrZero
+        val from: Int,
+        @field:PositiveOrZero
+        val size: Int
 )
