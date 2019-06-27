@@ -14,21 +14,23 @@ data class SearchResult(
         @field:Valid
         val matched: List<Match>,
         @field:Valid
-        val offset: Offset
+        val offset: Offset?
 )
 
 data class Match(
         @field:NotEmpty
         val collection: String,
         @field:Positive
-        val document: Long,
+        val documentId: Long,
         @field:Positive
-        val location: Long,
+        val location: Int,
         @field:Positive
-        val size: Long,
+        val size: Int,
         @field:NotEmpty
         @field:Pattern(regexp = urlRegex)
         val url: String,
+        @field:NotBlank
+        val documentTitle: String,
         @field:Valid
         val payload: Payload,
         val canExtend: Boolean

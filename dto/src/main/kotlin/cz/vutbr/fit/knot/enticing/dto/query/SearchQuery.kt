@@ -14,7 +14,7 @@ data class SearchQuery(
         val snippetCount: Int,
         @field:Valid
         val offset: Offset,
-        val metadata: Metadata,
+        val metadata: TextMetadata,
         val responseType: ResponseType = ResponseType.SNIPPET,
         val responseFormat: ResponseFormat = ResponseFormat.JSON,
         @field:NotEmpty
@@ -30,15 +30,15 @@ typealias EntityId = String
         property = "type"
 )
 @JsonSubTypes(
-        JsonSubTypes.Type(Metadata.Predefined::class, name = "predef"),
-        JsonSubTypes.Type(Metadata.ExactDefinition::class, name = "exact")
+        JsonSubTypes.Type(TextMetadata.Predefined::class, name = "predef"),
+        JsonSubTypes.Type(TextMetadata.ExactDefinition::class, name = "exact")
 )
-sealed class Metadata {
-    data class Predefined(val value: String) : Metadata()
+sealed class TextMetadata {
+    data class Predefined(val value: String) : TextMetadata()
     data class ExactDefinition(
             val entities: Entities,
             val indexes: Indexes
-    ) : Metadata()
+    ) : TextMetadata()
 }
 
 @JsonTypeInfo(
@@ -71,7 +71,7 @@ sealed class Indexes {
 
 data class Offset(
         @field:Positive
-        val document: Long,
+        val document: Int,
         @field:Positive
         val snippet: Int
 )

@@ -4,7 +4,8 @@ import cz.vutbr.fit.knot.enticing.dto.response.*
 
 
 val firstResult = Match(
-        document = 0,
+        documentId = 0,
+        documentTitle = "Ed",
         collection = "col1",
         location = 0,
         size = 42,
@@ -21,7 +22,8 @@ val firstResult = Match(
 )
 
 val secondResult = Match(
-        document = 1,
+        documentId = 1,
+        documentTitle = "donald",
         location = 0,
         collection = "col1",
         size = 42,
@@ -38,7 +40,8 @@ val secondResult = Match(
 )
 
 val thirdResult = Match(
-        document = 2,
+        documentId = 2,
+        documentTitle = "milos",
         location = 0,
         collection = "col1",
         size = 42,

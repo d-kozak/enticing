@@ -13,7 +13,7 @@ class SerializationTest {
                 "foo bar baz",
                 42,
                 Offset(10, 10),
-                metadata = Metadata.Predefined("all"),
+                metadata = TextMetadata.Predefined("all"),
                 responseType = ResponseType.SNIPPET,
                 responseFormat = ResponseFormat.JSON,
                 defaultIndex = "lemma"
@@ -21,14 +21,14 @@ class SerializationTest {
 
         @Test
         fun `metadata all`() {
-            val input = templateQuery.copy(metadata = Metadata.Predefined("all"))
+            val input = templateQuery.copy(metadata = TextMetadata.Predefined("all"))
             val content = """"metadata":{"type":"predef","value":"all"}"""
             assertSerialization(input, content)
         }
 
         @Test
         fun `indexes all entities all`() {
-            val input = templateQuery.copy(metadata = Metadata.ExactDefinition(
+            val input = templateQuery.copy(metadata = TextMetadata.ExactDefinition(
                     entities = Entities.Predefined("none"),
                     indexes = Indexes.Predefined("all")
             ))
@@ -38,7 +38,7 @@ class SerializationTest {
 
         @Test
         fun `indexes exact entities for person place`() {
-            val input = templateQuery.copy(metadata = Metadata.ExactDefinition(
+            val input = templateQuery.copy(metadata = TextMetadata.ExactDefinition(
                     entities = Entities.ExactDefinition(mapOf(
                             "person" to Indexes.Predefined("all"),
                             "place" to Indexes.Predefined("none")
@@ -51,7 +51,7 @@ class SerializationTest {
 
         @Test
         fun `indexes exact entities exact`() {
-            val input = templateQuery.copy(metadata = Metadata.ExactDefinition(
+            val input = templateQuery.copy(metadata = TextMetadata.ExactDefinition(
                     entities = Entities.ExactDefinition(mapOf(
                             "person" to Indexes.ExactDefinition(listOf("one", "two", "three")),
                             "place" to Indexes.ExactDefinition(listOf("three", "four", "five"))
@@ -72,7 +72,8 @@ class SerializationTest {
             val input = SearchResult(
                     matched = listOf(Match(
                             collection = "collection1",
-                            document = 23,
+                            documentId = 23,
+                            documentTitle = "title1",
                             location = 10,
                             canExtend = false,
                             size = 20,
@@ -90,7 +91,8 @@ class SerializationTest {
             val input = SearchResult(
                     matched = listOf(Match(
                             collection = "collection1",
-                            document = 23,
+                            documentId = 23,
+                            documentTitle = "title1",
                             location = 10,
                             canExtend = false,
                             size = 20,
@@ -113,7 +115,8 @@ class SerializationTest {
             val input = SearchResult(
                     matched = listOf(Match(
                             collection = "collection1",
-                            document = 23,
+                            documentId = 23,
+                            documentTitle = "title3",
                             location = 10,
                             canExtend = false,
                             size = 20,

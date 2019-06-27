@@ -2,9 +2,7 @@ package cz.vutbr.fit.knot.enticing.indexer
 
 import cz.vutbr.fit.knot.enticing.index.config.dsl.IndexBuilderConfig
 import cz.vutbr.fit.knot.enticing.index.config.executeScript
-import cz.vutbr.fit.knot.enticing.index.mg4j.DirectoryIOFactory
-import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jCompositeDocumentCollection
-import it.unimi.di.big.mg4j.tool.IndexBuilder
+import cz.vutbr.fit.knot.enticing.index.startIndexing
 import java.io.File
 
 fun handleArguments(vararg args: String, loadConfig: (path: String) -> IndexBuilderConfig = ::executeScript): IndexBuilderConfig {
@@ -21,13 +19,6 @@ fun handleArguments(vararg args: String, loadConfig: (path: String) -> IndexBuil
     }
     config.output.isDirectory || throw IllegalArgumentException("${config.output} is not a directory")
     return config
-}
-
-fun startIndexing(config: IndexBuilderConfig) {
-    val documentCollection = Mg4jCompositeDocumentCollection(config.indexes, config.input)
-    IndexBuilder(config.corpusConfiguration.corpusName, documentCollection)
-            .ioFactory(DirectoryIOFactory(config.output.toPath()))
-            .run()
 }
 
 fun main(args: Array<String>) {

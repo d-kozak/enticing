@@ -28,6 +28,8 @@ dependencies {
     implementation("it.unimi.dsi:dsiutils:2.3.0")
     implementation("it.unimi.dsi:sux4j:4.0.0")
 
+    compile(project(":dto"))
+
     compile("de.swirtz:ktsRunner:0.0.7")
 
     testImplementation("io.mockk:mockk:1.9")
