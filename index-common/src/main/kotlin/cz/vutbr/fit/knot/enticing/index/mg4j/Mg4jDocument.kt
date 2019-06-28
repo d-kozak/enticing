@@ -5,16 +5,14 @@ import it.unimi.di.big.mg4j.document.AbstractDocument
 import it.unimi.dsi.fastutil.objects.Reference2ObjectMap
 import it.unimi.dsi.io.WordReader
 import it.unimi.dsi.lang.MutableString
-import java.io.InputStreamReader
+import java.io.StringReader
 
 internal val wordReader = WhitespaceWordReader()
-
-internal val whitespaceRegex = """\s+""".toRegex()
 
 class Mg4jDocument(
         private val indexes: List<Index>,
         private val metadata: Reference2ObjectMap<Enum<*>, Any>,
-        private val content: List<ByteArray>
+        private val content: List<String>
 ) : AbstractDocument() {
 
     override fun title(): CharSequence = metadata[DocumentMetadata.TITLE] as CharSequence
@@ -23,14 +21,14 @@ class Mg4jDocument(
 
     override fun wordReader(field: Int): WordReader = wordReader
 
-    override fun content(field: Int): Any = content[field].inputStream().reader()
+    override fun content(field: Int): Any = content[field].reader()
 
     fun readContentAt(left: Int, right: Int): Map<String, List<String>> = indexes.asSequence()
             .map { it.name to readIndex(it.columnIndex, left, right) }
             .toMap()
 
     private fun readIndex(index: Int, left: Int? = null, right: Int? = null): List<String> {
-        val inputReader = content(index) as InputStreamReader
+        val inputReader = content(index) as StringReader
         val wordReader = wordReader(index)
         val combined = wordReader.setReader(inputReader)
         val result = mutableListOf<String>()

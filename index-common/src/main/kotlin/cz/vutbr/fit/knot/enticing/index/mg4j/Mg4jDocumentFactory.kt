@@ -4,7 +4,6 @@ import cz.vutbr.fit.knot.enticing.index.config.dsl.Index
 import it.unimi.di.big.mg4j.document.AbstractDocumentFactory
 import it.unimi.di.big.mg4j.document.Document
 import it.unimi.di.big.mg4j.document.DocumentFactory
-import it.unimi.dsi.fastutil.bytes.ByteArrayList
 import it.unimi.dsi.fastutil.bytes.ByteArrays
 import it.unimi.dsi.fastutil.io.FastBufferedInputStream
 import it.unimi.dsi.fastutil.objects.Reference2ObjectMap
@@ -27,81 +26,79 @@ class Mg4jDocumentFactory(private val indexes: List<Index>) : AbstractDocumentFa
     override fun copy(): DocumentFactory = Mg4jDocumentFactory(indexes)
 
     override fun getDocument(rawContent: InputStream, metadata: Reference2ObjectMap<Enum<*>, Any>): Document {
-        val stream = rawContent as FastBufferedInputStream
+        val stream = (rawContent as FastBufferedInputStream).bufferedReader()
 
-        val buffer = ByteArray(1024)
-        val fields = indexes.map { ByteArrayList() }
+        val fields = indexes.map { StringBuilder() }
 
-        stream.readLine(buffer) // skip doc line
-        var lineSize = stream.readLine(buffer)
+        stream.readLine() // skip doc line
+        var line = stream.readLine()
         var lineIndex = 0
-        while (lineSize >= 0 && !buffer.isDoc()) {
-            if (!buffer.isMetaInfo()) {
-                processLine(buffer, fields, lineSize, lineIndex, indexes)
+        while (line != null && !line.isDoc()) {
+            if (!line.isMetaInfo()) {
+                processLine(line, fields, lineIndex)
             }
-            lineSize = stream.readLine(buffer)
+            line = stream.readLine()
             lineIndex++
         }
 
         // todo avoid copying of the content from bytelist to bytearray
-        return Mg4jDocument(indexes, metadata, fields.map { it.toByteArray() })
+        return Mg4jDocument(indexes, metadata, fields.map { it.toString() })
     }
 }
 
-data class EntityReplicationInfo(val buffer: ByteArray, var lineCount: Int, var startAt: Int?)
+data class EntityReplicationInfo(val elems: List<String>, var lineCount: Int)
 
-val NULL = "null".toByteArray()
+val NULL = "null"
+val whitespaceRegex = """\s""".toRegex()
 
-internal fun processLine(buffer: ByteArray, fields: List<ByteArrayList>, lineSize: Int, lineIndex: Int, indexes: List<Index>) {
-    var start = 0
-    var fieldIndex = 0
+var replicationInfo: EntityReplicationInfo? = null
 
-    var replicationInfo: EntityReplicationInfo? = null
+internal fun processLine(line: String, fields: List<StringBuilder>, lineIndex: Int) {
+    // todo @Speed rewrite using MutableStrings and whitespace readers?
+    val cells = line.split(whitespaceRegex)
+    val cellCount = 27
+    val nerlenIndex = 26
+    val firstEntityCell = 13
 
-    var columnIndex = 0
-    while (start >= 0) {
-        val lineBuffer = if (columnIndex > 12 && replicationInfo != null) {
-            if (--replicationInfo.lineCount > 0) {
-                if (replicationInfo.startAt != null) {
-                    start = replicationInfo.startAt!!
-                    replicationInfo.startAt = null
-                }
-                replicationInfo.buffer.also {
+
+
+    if (cells.size != cellCount) {
+        log.warn("$lineIndex: $line does not have correct format, skipping")
+        log.warn("It has size ${cells.size}, but it should be 27")
+        log.warn("was split into $cells")
+        return
+    }
+    for ((i, elem) in cells.withIndex()) {
+        val stringBuilder = fields[i]
+        if (stringBuilder.isNotBlank())
+            stringBuilder.append(' ')
+
+        if (i < firstEntityCell) {
+            if (elem.isBlank()) {
+                log.warn("$lineIndex:$i is blank")
+                stringBuilder.append(NULL)
+            } else {
+                stringBuilder.append(elem)
+            }
+        } else if (replicationInfo != null) {
+            if (i != cellCount - 1) {
+                stringBuilder.append(replicationInfo!!.elems[i - firstEntityCell])
+            } else {
+                stringBuilder.append('0')
+                replicationInfo!!.lineCount--
+                if (replicationInfo!!.lineCount == 0) {
                     replicationInfo = null
                 }
-            } else buffer
-        } else buffer
-
-        val nextTab = lineBuffer.next(tabByte, start, lineSize).let { if (it == -1) lineSize else it }
-        val fieldContent = fields[fieldIndex++]
-        if (fieldContent.isNotEmpty())
-            fieldContent.add(' '.toByte())
-        if (lineBuffer[start].toChar().isWhitespace()) {
-            log.warn("Empty value at line $lineIndex for column $columnIndex")
-            fieldContent.addElements(fieldContent.size, NULL)
+            }
+        } else if (i == nerlenIndex) {
+            val nerlen = elem.toIntOrNull() ?: 0
+            if (nerlen != 0) {
+                replicationInfo = EntityReplicationInfo(cells.subList(firstEntityCell, cellCount), nerlen)
+            }
+            stringBuilder.append(elem)
         } else {
-            fieldContent.addElements(fieldContent.size, lineBuffer, start, nextTab - start)
+            stringBuilder.append(elem)
         }
-        if (columnIndex == 26) {
-//            val nerlen = lineBuffer.inputStream()
-//                    .bufferedReader()
-//                    .readText()
-//                    .substring(start, nextTab - start)
-//                    .toIntOrNull() ?: 0
-//            if (nerlen != 0) {
-//                if(replicationInfo != null){
-//                    log.warn("replication info is already set, it will be replaced")
-//                }
-//                replicationInfo = EntityReplicationInfo(lineBuffer,nerlen,start)
-//            }
-        }
-        start = if (nextTab != lineSize) nextTab + 1 else -1
-        columnIndex++
-    }
-    if (columnIndex != indexes.size) {
-        val lineContent = buffer.inputStream().bufferedReader().readText().substring(0, lineSize)
-        System.err.println("LineContent: $lineContent")
-        throw IllegalArgumentException("Invalid number of columns processed at line $lineIndex, real $columnIndex, expected ${indexes.size}")
     }
 }
 

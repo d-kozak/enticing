@@ -1,15 +1,15 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
-import it.unimi.dsi.fastutil.bytes.ByteArrayList
+
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.io.File
-import java.io.InputStreamReader
+import java.io.StringReader
 
 private val indexes = testConfiguration.indexes
 
 fun assertStreamStartsWith(stream: Any, expected: String) {
-    val actual = (stream as InputStreamReader).readText().substring(0, expected.length)
+    val actual = (stream as StringReader).readText().substring(0, expected.length)
     assertThat(actual)
             .isEqualTo(expected)
 }
@@ -38,40 +38,29 @@ internal class Mg4jDocumentFactoryTest {
         val factory = Mg4jDocumentFactory(indexes)
         val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), factory)
 
-        val document = collection.document(0) as Mg4jDocument
+        for (docId in 0L..10L) {
+            val document = collection.document(docId) as Mg4jDocument
 
-        val content = document.wholeContent()
-        val nertag = content["nertag"]!!
-        val nerlength = content["nerlength"]!!.map { it.toInt() }
+            val content = document.wholeContent()
+            val nertag = content["nertag"]!!
+            val nerlength = content["nerlength"]!!.map { it.toInt() }
 
-        val result = nertag.zip(nerlength)
+            val result = nertag.zip(nerlength)
 
-
-        data class WantedEntity(
-                val type: String,
-                var positions: Int
-        )
-
-        var wantedEntity: WantedEntity? = null
-        for ((i, value) in result.withIndex()) {
-            val (type, count) = value
-            if (type != "0") {
-                assertThat(count)
-                        .isNotEqualTo(0)
-                assertThat(wantedEntity)
-                        .isNull()
-                wantedEntity = WantedEntity(type, count)
-            }
-
-            if (wantedEntity != null) {
-                wantedEntity.positions--
-                if (wantedEntity.positions >= 0) {
-                    if (type != wantedEntity.type) {
-                        System.err.println("... ${result.subList(Math.max(0, i - 5), Math.min(result.size, i + 5))} ...")
-                        throw AssertionError("Entity $wantedEntity should be spanned across this column at index $i")
+            var i = 0
+            while (i < result.size) {
+                val (type, count) = result[i]
+                if (count != 0) {
+                    for (j in i + 1 until count) {
+                        if (type != result[j].first) {
+                            val sublist = result.subList(Math.max(0, j - 5), Math.min(j + 5, result.size))
+                            System.err.println("... $sublist ...")
+                            throw AssertionError("Expected type $type at index $j")
+                        }
                     }
+                    i += count
                 } else {
-                    wantedEntity = null
+                    i++
                 }
             }
         }
@@ -100,21 +89,11 @@ internal class Mg4jDocumentFactoryTest {
 
     @Test
     fun `problematic line 448 test missing index token`() {
-        val input = """43		CC	0	1	NMOD	In	in	-42	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0""".toByteArray()
+        val input = """43		CC	0	1	NMOD	In	in	-42	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0"""
 
-        val output = indexes.map { ByteArrayList() }
-        try {
-            processLine(input, output, input.size, 0, indexes)
-        } catch (ex: IllegalArgumentException) {
-            val serializedOutput = output.map {
-                it.toByteArray().inputStream().bufferedReader().readText()
-            }
-            System.err.println(serializedOutput)
-            throw ex
-        }
-        val columns = output.map {
-            it.toByteArray().inputStream().bufferedReader().readText()
-        }
+        val output = indexes.map { StringBuilder() }
+        processLine(input, output, 0)
+        val columns = output.map { it.toString() }
         assertThat(columns)
                 .isEqualTo(listOf("43", "null", "CC", "0", "1", "NMOD", "In", "in", "-42", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"))
     }
@@ -130,7 +109,7 @@ internal class Mg4jDocumentFactoryTest {
             for (index in indexes) {
                 val highLevel = wholeContent[index.name]?.joinToString(separator = " ")
                         ?: throw IllegalStateException("Could not load content of index $index")
-                val lowLevel = (document.content(index.columnIndex) as InputStreamReader).readText()
+                val lowLevel = (document.content(index.columnIndex) as StringReader).readText()
                 assertThat(highLevel)
                         .isEqualTo(lowLevel)
             }
