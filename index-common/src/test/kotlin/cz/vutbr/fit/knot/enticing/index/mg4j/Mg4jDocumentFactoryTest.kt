@@ -33,6 +33,23 @@ internal class Mg4jDocumentFactoryTest {
     }
 
     @Test
+    fun `all indexes should have the same length`() {
+        val factory = Mg4jDocumentFactory(indexes)
+        val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), factory)
+
+        for (i in 0..10) {
+            val document = collection.document(1) as Mg4jDocument
+            val wholeContent = document.wholeContent()
+
+            val sizePerIndex = wholeContent.values.map { it.size }
+            val sizeSet = sizePerIndex.toSet()
+            if (sizeSet.size != 1) {
+                throw AssertionError("All indexes should have equal size, in this case the result is $sizePerIndex")
+            }
+        }
+    }
+
+    @Test
     fun `number of fields test`() {
         val factory = Mg4jDocumentFactory(indexes)
         assertThat(factory.numberOfFields())

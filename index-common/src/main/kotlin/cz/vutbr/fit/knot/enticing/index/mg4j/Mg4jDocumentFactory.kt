@@ -39,8 +39,7 @@ class Mg4jDocumentFactory(private val indexes: List<Index>) : AbstractDocumentFa
                     val nextTab = buffer.next(tabByte, start, lineSize).let { if (it == -1) lineSize else it }
                     val fieldContent = fields[fieldIndex++]
                     fieldContent.addElements(fieldContent.size, buffer, start, nextTab - start)
-                    if (nextTab != lineSize)
-                        fieldContent.add(' '.toByte())
+                    fieldContent.add(' '.toByte())
                     start = if (nextTab != lineSize) nextTab + 1 else -1
                 }
             }

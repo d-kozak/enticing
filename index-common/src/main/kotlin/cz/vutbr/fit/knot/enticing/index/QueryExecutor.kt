@@ -80,16 +80,18 @@ class QueryExecutor(
                 if (i == 0) it.subList(matchOffset, it.size) else it
             }
             for ((j, score) in scores.withIndex()) {
-                val words = document.contentPerIndex[query.defaultIndex]
-                        ?: throw IllegalArgumentException("No content for index ${query.defaultIndex}")
-
                 val (left, right) = score.interval
                 val prefix = Math.max(left - 5, 0)
-                val suffix = Math.min(right + 5, words.size)
+                val suffix = Math.min(right + 5, document.size)
+
+                val content = document.readContentAt(prefix, suffix)
+                val words = content[query.defaultIndex]
+                        ?: throw IllegalArgumentException("Could not read words for index ${query.defaultIndex}")
+
 
                 val payload = when (query.responseFormat) {
-                    ResponseFormat.HTML -> processAsHtml(query, document, words, left, right, prefix, suffix)
-                    ResponseFormat.JSON -> processAsJson(query, document, words, left, right, prefix, suffix)
+                    ResponseFormat.HTML -> processAsHtml(query, document, words, left - prefix, right - prefix)
+                    ResponseFormat.JSON -> processAsJson(query, document, words, left - prefix, right - prefix)
                 }
 
                 val match = Match(
@@ -113,10 +115,10 @@ class QueryExecutor(
     }
 }
 
-fun processAsJson(query: SearchQuery, document: Document, words: List<String>, left: Int, right: Int, prefix: Int, suffix: Int): Payload.Snippet.Json {
-    val prefixText = words.subList(prefix, left).joinToString(separator = " ")
+fun processAsJson(query: SearchQuery, document: Document, words: List<String>, left: Int, right: Int): Payload.Snippet.Json {
+    val prefixText = words.subList(0, left).joinToString(separator = " ")
     val matchedText = words.subList(left, right).joinToString(separator = " ")
-    val suffixText = words.subList(right, suffix).joinToString(separator = " ")
+    val suffixText = words.subList(right, words.size).joinToString(separator = " ")
 
     return Payload.Snippet.Json(AnnotatedText(
             prefixText + matchedText + suffixText,
@@ -129,10 +131,10 @@ fun processAsJson(query: SearchQuery, document: Document, words: List<String>, l
     ))
 }
 
-fun processAsHtml(query: SearchQuery, document: Document, words: List<String>, left: Int, right: Int, prefix: Int, suffix: Int): Payload.Snippet.Html {
-    val prefixText = words.subList(prefix, left).joinToString(separator = " ")
+fun processAsHtml(query: SearchQuery, document: Document, words: List<String>, left: Int, right: Int): Payload.Snippet.Html {
+    val prefixText = words.subList(0, left).joinToString(separator = " ")
     val matchedText = words.subList(left, right).joinToString(separator = " ")
-    val suffixText = words.subList(right, suffix).joinToString(separator = " ")
+    val suffixText = words.subList(right, words.size).joinToString(separator = " ")
 
     return Payload.Snippet.Html("$prefixText<b>$matchedText</b>$suffixText")
 }
