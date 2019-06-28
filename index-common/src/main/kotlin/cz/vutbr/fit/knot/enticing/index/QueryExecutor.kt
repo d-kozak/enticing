@@ -143,4 +143,4 @@ fun getScoresForIndex(
 ) = result.info[index]?.toList() ?: throw IllegalArgumentException("No results for index $index")
 
 operator fun Interval.component1() = left
-operator fun Interval.component2() = right
+operator fun Interval.component2() = right + 1
