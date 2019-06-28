@@ -80,10 +80,6 @@ fun ByteArray.growBy(length: Int): ByteArray = ByteArrays.grow(this, this.size +
 
 fun ByteArray.next(b: Byte, offset: Int = 0, size: Int = this.size): Int {
     for (i in offset until size) {
-        if (this[i] == ' '.toByte()) {
-            System.err.println("Ecountered a space, grrr!!!")
-        }
-
         if (this[i] == b)
             return i
     }
