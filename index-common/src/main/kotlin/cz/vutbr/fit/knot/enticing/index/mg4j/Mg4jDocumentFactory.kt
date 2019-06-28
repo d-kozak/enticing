@@ -8,7 +8,10 @@ import it.unimi.dsi.fastutil.bytes.ByteArrayList
 import it.unimi.dsi.fastutil.bytes.ByteArrays
 import it.unimi.dsi.fastutil.io.FastBufferedInputStream
 import it.unimi.dsi.fastutil.objects.Reference2ObjectMap
+import org.slf4j.LoggerFactory
 import java.io.InputStream
+
+private val log = LoggerFactory.getLogger(Mg4jDocumentFactory::class.java)
 
 class Mg4jDocumentFactory(private val indexes: List<Index>) : AbstractDocumentFactory() {
 
@@ -31,19 +34,13 @@ class Mg4jDocumentFactory(private val indexes: List<Index>) : AbstractDocumentFa
 
         stream.readLine(buffer) // skip doc line
         var lineSize = stream.readLine(buffer)
+        var lineIndex = 0
         while (lineSize >= 0 && !buffer.isDoc()) {
             if (!buffer.isMetaInfo()) {
-                var start = 0
-                var fieldIndex = 0
-                while (start >= 0) {
-                    val nextTab = buffer.next(tabByte, start, lineSize).let { if (it == -1) lineSize else it }
-                    val fieldContent = fields[fieldIndex++]
-                    fieldContent.addElements(fieldContent.size, buffer, start, nextTab - start)
-                    fieldContent.add(' '.toByte())
-                    start = if (nextTab != lineSize) nextTab + 1 else -1
-                }
+                processLine(buffer, fields, lineSize, lineIndex, indexes)
             }
             lineSize = stream.readLine(buffer)
+            lineIndex++
         }
 
         // todo avoid copying of the content from bytelist to bytearray
@@ -51,10 +48,42 @@ class Mg4jDocumentFactory(private val indexes: List<Index>) : AbstractDocumentFa
     }
 }
 
+
+val NULL = "null".toByteArray()
+
+internal fun processLine(buffer: ByteArray, fields: List<ByteArrayList>, lineSize: Int, lineIndex: Int, indexes: List<Index>) {
+    var start = 0
+    var fieldIndex = 0
+
+    var columnIndex = 0
+    while (start >= 0) {
+        val nextTab = buffer.next(tabByte, start, lineSize).let { if (it == -1) lineSize else it }
+        val fieldContent = fields[fieldIndex++]
+        if (buffer[start].toChar().isWhitespace()) {
+            log.warn("Empty value at line $lineIndex for column $columnIndex")
+            fieldContent.addElements(fieldContent.size, NULL)
+        } else {
+            fieldContent.addElements(fieldContent.size, buffer, start, nextTab - start)
+        }
+        fieldContent.add(' '.toByte())
+        start = if (nextTab != lineSize) nextTab + 1 else -1
+        columnIndex++
+    }
+    if (columnIndex != indexes.size) {
+        val lineContent = buffer.inputStream().bufferedReader().readText().substring(0, lineSize)
+        System.err.println("LineContent: $lineContent")
+        throw IllegalArgumentException("Invalid number of columns processed at line $lineIndex, real $columnIndex, expected ${indexes.size}")
+    }
+}
+
 fun ByteArray.growBy(length: Int): ByteArray = ByteArrays.grow(this, this.size + length)
 
 fun ByteArray.next(b: Byte, offset: Int = 0, size: Int = this.size): Int {
     for (i in offset until size) {
+        if (this[i] == ' '.toByte()) {
+            System.err.println("Ecountered a space, grrr!!!")
+        }
+
         if (this[i] == b)
             return i
     }

@@ -40,7 +40,7 @@ class Mg4jDocument(
 
         for (i in 0 until right) {
             if (!combined.next(word, nonWord)) {
-                throw IllegalArgumentException("Could not read enough words at index ${indexes[index].name}, left $left, right $right, result $result")
+                break
             }
             if (i >= left)
                 result.add(word.toString())
@@ -48,9 +48,6 @@ class Mg4jDocument(
 
         return result
     }
-
-    val size: Int
-        get() = content[0].size
 
     /**
      * reads the content of all indexes

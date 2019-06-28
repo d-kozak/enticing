@@ -83,7 +83,7 @@ class QueryExecutor(
             for ((j, score) in scores.withIndex()) {
                 val (left, right) = score.interval
                 val prefix = Math.max(left - 5, 0)
-                val suffix = Math.min(right + 5, document.size)
+                val suffix = right + 5
 
                 val content = document.readContentAt(prefix, suffix)
                 val words = content[query.defaultIndex]
