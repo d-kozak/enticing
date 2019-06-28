@@ -2,8 +2,11 @@ package cz.vutbr.fit.knot.enticing.index
 
 import cz.vutbr.fit.knot.enticing.dto.query.*
 import cz.vutbr.fit.knot.enticing.index.config.dsl.*
+import it.unimi.di.big.mg4j.query.parser.QueryParserException
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 
 val builderConfig = indexBuilder {
@@ -100,6 +103,7 @@ val clientConfig = indexClient {
 
             "artist" with attributes("url", "image", "name", "gender", "birthplace", "birthdate", "deathplace", "deathdate", "role", "nationality")
 
+
             "location" with attributes("url", "image", "name", "country")
 
             "artwork" with attributes("url", "image", "name", "form", "datebegun", "datecompleted", "movement", "genre", "author")
@@ -134,6 +138,15 @@ val clientConfig = indexClient {
 
 class QueryExecutionTest {
 
+    private val templateQuery = SearchQuery(
+            "",
+            20,
+            Offset(0, 0),
+            TextMetadata.Predefined("none"),
+            ResponseType.SNIPPET,
+            ResponseFormat.JSON
+    )
+
     companion object {
 
         @BeforeAll
@@ -146,27 +159,41 @@ class QueryExecutionTest {
 
     @Test
     fun `valid queries`() {
-        val template = SearchQuery(
-                "",
-                20,
-                Offset(0, 0),
-                TextMetadata.Predefined("none"),
-                ResponseType.SNIPPET,
-                ResponseFormat.JSON
-        )
-
         val queryEngine = initQueryEngine(clientConfig)
-
         for (input in listOf(
                 "hello",
                 "john",
                 "lemma:work{{lemma->token}}",
                 "nertag:person{{nertag->token}}"
         )) {
-            val query = template.copy(query = input)
+            val query = templateQuery.copy(query = input)
 
             val response = queryEngine.query(query)
+            assertThat(response.isSuccess)
         }
     }
 
+    @Test
+    fun `syntax error should be caught`() {
+        val queryEngine = initQueryEngine(clientConfig)
+        val query = templateQuery.copy(query = "lemma:work{{lemma->")
+
+        assertThrows<QueryParserException> {
+            val result = queryEngine.query(query)
+            assertThat(result.isFailure)
+            result.rethrowException()
+        }
+    }
+
+    @Test
+    fun `forgotten remapping should be caught`() {
+        val queryEngine = initQueryEngine(clientConfig)
+        val query = templateQuery.copy(query = "nertag:person")
+
+        assertThrows<IllegalArgumentException> {
+            val result = queryEngine.query(query)
+            assertThat(result.isFailure)
+            result.rethrowException()
+        }
+    }
 }

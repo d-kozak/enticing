@@ -43,11 +43,13 @@ fun responseLoop(queryExecutor: QueryExecutor, inputSequence: Sequence<String>) 
         )
 
         val response = queryExecutor.query(query)
-
         println("Response $response")
-        for (match in response.matched) {
-            println("doc ${match.documentTitle}")
-            println("text ${match.payload}")
+        if (response.isSuccess) {
+            val value = response.value
+            for (match in value.matched) {
+                println("doc ${match.documentTitle}")
+                println("text ${match.payload}")
+            }
         }
     }
 }

@@ -40,7 +40,7 @@ class Mg4jDocument(
 
         for (i in 0 until right) {
             if (!combined.next(word, nonWord)) {
-                throw IllegalStateException("Could not read enough words at index ${indexes[index].name}, left $left, right $right, result $result")
+                throw IllegalArgumentException("Could not read enough words at index ${indexes[index].name}, left $left, right $right, result $result")
             }
             if (i >= left)
                 result.add(word.toString())

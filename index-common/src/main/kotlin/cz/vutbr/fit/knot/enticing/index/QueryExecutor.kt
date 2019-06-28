@@ -4,6 +4,7 @@ import cz.vutbr.fit.knot.enticing.dto.query.Offset
 import cz.vutbr.fit.knot.enticing.dto.query.ResponseFormat
 import cz.vutbr.fit.knot.enticing.dto.query.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.response.*
+import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.index.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.index.config.dsl.IndexClientConfig
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jCompositeDocumentCollection
@@ -63,7 +64,7 @@ class QueryExecutor(
 
     private val log: Logger = LoggerFactory.getLogger(QueryExecutor::class.java)
 
-    fun query(query: SearchQuery): SearchResult {
+    fun query(query: SearchQuery): MResult<SearchResult> = MResult.runCatching {
         log.info("Executing query $query")
         val resultList = ObjectArrayList<DocumentScoreInfo<Reference2ObjectMap<Index, Array<SelectedInterval>>>>()
         val (documentOffset, matchOffset) = query.offset
@@ -107,11 +108,11 @@ class QueryExecutor(
                 log.info("Found match $match")
                 matched.add(match)
                 if (matched.size >= query.snippetCount) {
-                    return SearchResult(matched, Offset(result.document.toInt(), j + 1))
+                    return@runCatching SearchResult(matched, Offset(result.document.toInt(), j + 1))
                 }
             }
         }
-        return SearchResult(matched, null)
+        return@runCatching SearchResult(matched, null)
     }
 }
 
