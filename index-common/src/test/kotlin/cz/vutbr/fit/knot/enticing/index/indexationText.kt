@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.enticing.index
 
 import cz.vutbr.fit.knot.enticing.dto.query.*
 import cz.vutbr.fit.knot.enticing.index.config.dsl.*
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 
 
@@ -131,12 +132,28 @@ val clientConfig = indexClient {
     }
 }
 
-class StartIndexingTest {
+class QueryExecutionTest {
 
+    companion object {
+
+        @BeforeAll
+        @JvmStatic
+        internal fun beforeAll() {
+            startIndexing(builderConfig)
+        }
+
+    }
 
     @Test
-    fun `index & query`() {
-        startIndexing(builderConfig)
+    fun `valid queries`() {
+        val template = SearchQuery(
+                "",
+                20,
+                Offset(0, 0),
+                TextMetadata.Predefined("none"),
+                ResponseType.SNIPPET,
+                ResponseFormat.JSON
+        )
 
         val queryEngine = initQueryEngine(clientConfig)
 
@@ -146,17 +163,10 @@ class StartIndexingTest {
                 "lemma:work{{lemma->token}}",
                 "nertag:person{{nertag->token}}"
         )) {
-            val query = SearchQuery(
-                    input,
-                    20,
-                    Offset(0, 0),
-                    TextMetadata.Predefined("none"),
-                    ResponseType.SNIPPET,
-                    ResponseFormat.JSON
-            )
+            val query = template.copy(query = input)
 
             val response = queryEngine.query(query)
         }
-
     }
+
 }
