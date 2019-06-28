@@ -10,5 +10,5 @@ data class ServerInfo(
         @field:NotEmpty
         @field:Pattern(regexp = urlRegex)
         val address: String,
-        val offset: Offset? = null
+        val offset: Offset = Offset(0, 0)
 )
