@@ -48,6 +48,7 @@ class Mg4jDocumentFactory(private val indexes: List<Index>) : AbstractDocumentFa
     }
 }
 
+data class EntityReplicationInfo(val buffer: ByteArray, var lineCount: Int, var startAt: Int?)
 
 val NULL = "null".toByteArray()
 
@@ -55,17 +56,45 @@ internal fun processLine(buffer: ByteArray, fields: List<ByteArrayList>, lineSiz
     var start = 0
     var fieldIndex = 0
 
+    var replicationInfo: EntityReplicationInfo? = null
+
     var columnIndex = 0
     while (start >= 0) {
-        val nextTab = buffer.next(tabByte, start, lineSize).let { if (it == -1) lineSize else it }
+        val lineBuffer = if (columnIndex > 12 && replicationInfo != null) {
+            if (--replicationInfo.lineCount > 0) {
+                if (replicationInfo.startAt != null) {
+                    start = replicationInfo.startAt!!
+                    replicationInfo.startAt = null
+                }
+                replicationInfo.buffer.also {
+                    replicationInfo = null
+                }
+            } else buffer
+        } else buffer
+
+        val nextTab = lineBuffer.next(tabByte, start, lineSize).let { if (it == -1) lineSize else it }
         val fieldContent = fields[fieldIndex++]
-        if (buffer[start].toChar().isWhitespace()) {
+        if (fieldContent.isNotEmpty())
+            fieldContent.add(' '.toByte())
+        if (lineBuffer[start].toChar().isWhitespace()) {
             log.warn("Empty value at line $lineIndex for column $columnIndex")
             fieldContent.addElements(fieldContent.size, NULL)
         } else {
-            fieldContent.addElements(fieldContent.size, buffer, start, nextTab - start)
+            fieldContent.addElements(fieldContent.size, lineBuffer, start, nextTab - start)
         }
-        fieldContent.add(' '.toByte())
+        if (columnIndex == 26) {
+//            val nerlen = lineBuffer.inputStream()
+//                    .bufferedReader()
+//                    .readText()
+//                    .substring(start, nextTab - start)
+//                    .toIntOrNull() ?: 0
+//            if (nerlen != 0) {
+//                if(replicationInfo != null){
+//                    log.warn("replication info is already set, it will be replaced")
+//                }
+//                replicationInfo = EntityReplicationInfo(lineBuffer,nerlen,start)
+//            }
+        }
         start = if (nextTab != lineSize) nextTab + 1 else -1
         columnIndex++
     }

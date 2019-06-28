@@ -41,8 +41,40 @@ internal class Mg4jDocumentFactoryTest {
         val document = collection.document(0) as Mg4jDocument
 
         val content = document.wholeContent()
+        val nertag = content["nertag"]!!
+        val nerlength = content["nerlength"]!!.map { it.toInt() }
 
-        println(content["nertag"])
+        val result = nertag.zip(nerlength)
+
+
+        data class WantedEntity(
+                val type: String,
+                var positions: Int
+        )
+
+        var wantedEntity: WantedEntity? = null
+        for ((i, value) in result.withIndex()) {
+            val (type, count) = value
+            if (type != "0") {
+                assertThat(count)
+                        .isNotEqualTo(0)
+                assertThat(wantedEntity)
+                        .isNull()
+                wantedEntity = WantedEntity(type, count)
+            }
+
+            if (wantedEntity != null) {
+                wantedEntity.positions--
+                if (wantedEntity.positions >= 0) {
+                    if (type != wantedEntity.type) {
+                        System.err.println("... ${result.subList(Math.max(0, i - 5), Math.min(result.size, i + 5))} ...")
+                        throw AssertionError("Entity $wantedEntity should be spanned across this column at index $i")
+                    }
+                } else {
+                    wantedEntity = null
+                }
+            }
+        }
     }
 
     @Test
@@ -80,11 +112,11 @@ internal class Mg4jDocumentFactoryTest {
             System.err.println(serializedOutput)
             throw ex
         }
-        val serializedOutput = output.map {
+        val columns = output.map {
             it.toByteArray().inputStream().bufferedReader().readText()
-        }.toString()
-        assertThat(serializedOutput)
-                .isEqualTo("""[43 , null , CC , 0 , 1 , NMOD , In , in , -42 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ]""")
+        }
+        assertThat(columns)
+                .isEqualTo(listOf("43", "null", "CC", "0", "1", "NMOD", "In", "in", "-42", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"))
     }
 
     @Test

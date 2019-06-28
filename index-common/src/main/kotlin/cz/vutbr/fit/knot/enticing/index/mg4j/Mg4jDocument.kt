@@ -29,7 +29,7 @@ class Mg4jDocument(
             .map { it.name to readIndex(it.columnIndex, left, right) }
             .toMap()
 
-    private fun readIndex(index: Int, left: Int, right: Int): List<String> {
+    private fun readIndex(index: Int, left: Int? = null, right: Int? = null): List<String> {
         val inputReader = content(index) as InputStreamReader
         val wordReader = wordReader(index)
         val combined = wordReader.setReader(inputReader)
@@ -38,12 +38,15 @@ class Mg4jDocument(
         val word = MutableString()
         val nonWord = MutableString()
 
-        for (i in 0 until right) {
+        val range = if (right != null) 0 until right else 0..Int.MAX_VALUE
+        for (i in range) {
             if (!combined.next(word, nonWord)) {
                 break
             }
-            if (i >= left)
-                result.add(word.toString())
+            if (left != null) {
+                if (i >= left)
+                    result.add(word.toString())
+            } else result.add(word.toString())
         }
 
         return result
@@ -54,6 +57,6 @@ class Mg4jDocument(
      * this is EXPENSIVE, for debug purposes
      */
     fun wholeContent(): Map<String, List<String>> = indexes.map {
-        it.name to content[it.columnIndex].inputStream().bufferedReader().readText().split(whitespaceRegex)
+        it.name to readIndex(it.columnIndex)
     }.toMap()
 }
