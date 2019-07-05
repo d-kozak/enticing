@@ -16,7 +16,6 @@ repositories {
 }
 
 jar {
-    zip64 = true
     manifest {
         attributes 'Main-Class': 'cz.vutbr.fit.knot.enticing.index.client.MainKt'
     }
@@ -28,14 +27,11 @@ jar {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    compile("it.unimi.di:mg4j-big:5.4.3")
-
-    // TODO transitive dependencies of mg4j had to be added manually, try to find a better way
-    compile("it.unimi.dsi:dsiutils:2.3.0")
-    compile("it.unimi.dsi:sux4j:4.0.0")
-
+    implementation(project(":query-processor"))
     implementation(project(":index-common"))
+    implementation(project(":dto"))
+
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     testImplementation("io.mockk:mockk:1.9")
     testCompile("org.assertj:assertj-core:3.11.1")

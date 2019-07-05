@@ -11,6 +11,7 @@ repositories {
 }
 
 dependencies {
+    implementation(project(":dto"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.antlr:antlr4:4.7.2")
     testImplementation("io.mockk:mockk:1.9")

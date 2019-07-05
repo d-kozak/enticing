@@ -25,14 +25,10 @@ jar {
 
 
 dependencies {
-    compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("it.unimi.di:mg4j-big:5.4.3")
-
-    // TODO transitive dependencies of mg4j had to be added manually, try to find a better way
-    implementation("it.unimi.dsi:dsiutils:2.3.0")
-    implementation("it.unimi.dsi:sux4j:4.0.0")
-
     implementation(project(":index-common"))
+    implementation(project(":dto"))
+
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     testImplementation("io.mockk:mockk:1.9")
     testCompile("org.assertj:assertj-core:3.11.1")

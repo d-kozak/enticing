@@ -12,8 +12,6 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":eql-compiler"))
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "javax.validation:validation-api:2.0.1.Final"
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8")

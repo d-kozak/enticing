@@ -22,8 +22,8 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":index-common"))
     implementation(project(":dto"))
+    implementation(project(":index-common"))
 
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-security")
