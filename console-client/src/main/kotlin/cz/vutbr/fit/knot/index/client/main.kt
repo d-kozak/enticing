@@ -4,7 +4,7 @@ import cz.vutbr.fit.knot.enticing.dto.query.*
 import cz.vutbr.fit.knot.enticing.index.QueryExecutor
 import cz.vutbr.fit.knot.enticing.index.config.dsl.IndexClientConfig
 import cz.vutbr.fit.knot.enticing.index.config.executeScript
-import cz.vutbr.fit.knot.enticing.index.initQueryEngine
+import cz.vutbr.fit.knot.enticing.index.initQueryExecutor
 
 fun handleArguments(args: Array<String>): IndexClientConfig {
     args.size != 1 && throw IllegalArgumentException("Expecting exactly one argument, config file")
@@ -14,7 +14,7 @@ fun handleArguments(args: Array<String>): IndexClientConfig {
 fun main(args: Array<String>) {
     val config = handleArguments(args)
 
-    val queryExecutor = initQueryEngine(config)
+    val queryExecutor = initQueryExecutor(config)
 
     val inputSequence = sequence<String> {
         println("Engine started")

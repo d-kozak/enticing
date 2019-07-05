@@ -25,7 +25,7 @@ import it.unimi.dsi.util.Interval
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-fun initQueryEngine(config: IndexClientConfig): QueryExecutor {
+fun initQueryExecutor(config: IndexClientConfig): QueryExecutor {
     val collection = Mg4jCompositeDocumentCollection(config.indexes, config.mg4jFiles)
     val factory = Mg4jDocumentFactory(config.indexes)
 
@@ -55,7 +55,7 @@ fun initQueryEngine(config: IndexClientConfig): QueryExecutor {
     return QueryExecutor("name", collection, engine, config.corpusConfiguration)
 }
 
-class QueryExecutor(
+class QueryExecutor internal constructor(
         private val collectionName: String,
         private val collection: Mg4jCompositeDocumentCollection,
         private val engine: QueryEngine,
@@ -82,6 +82,7 @@ class QueryExecutor(
             }
             for ((j, score) in scores.withIndex()) {
                 val (left, right) = score.interval
+                // todo how big the prefix and suffix should be ( and if they are necessary at all) depends on the size of the matched region
                 val prefix = Math.max(left - 5, 0)
                 val suffix = right + 5
 

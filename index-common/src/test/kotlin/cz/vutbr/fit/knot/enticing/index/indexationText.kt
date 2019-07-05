@@ -159,7 +159,7 @@ class QueryExecutionTest {
 
     @Test
     fun `valid queries`() {
-        val queryEngine = initQueryEngine(clientConfig)
+        val queryEngine = initQueryExecutor(clientConfig)
         for (input in listOf(
                 "hello",
                 "john",
@@ -175,7 +175,7 @@ class QueryExecutionTest {
 
     @Test
     fun `syntax error should be caught`() {
-        val queryEngine = initQueryEngine(clientConfig)
+        val queryEngine = initQueryExecutor(clientConfig)
         val query = templateQuery.copy(query = "lemma:work{{lemma->")
 
         assertThrows<QueryParserException> {
@@ -187,7 +187,7 @@ class QueryExecutionTest {
 
     @Test
     fun `forgotten remapping should be caught`() {
-        val queryEngine = initQueryEngine(clientConfig)
+        val queryEngine = initQueryExecutor(clientConfig)
         val query = templateQuery.copy(query = "nertag:person")
 
         assertThrows<IllegalArgumentException> {
