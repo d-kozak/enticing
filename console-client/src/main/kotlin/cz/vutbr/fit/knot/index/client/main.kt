@@ -1,9 +1,9 @@
 package cz.vutbr.fit.knot.index.client
 
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexClientConfig
+import cz.vutbr.fit.knot.enticing.dto.config.executeScript
 import cz.vutbr.fit.knot.enticing.dto.query.*
 import cz.vutbr.fit.knot.enticing.index.QueryExecutor
-import cz.vutbr.fit.knot.enticing.index.config.dsl.IndexClientConfig
-import cz.vutbr.fit.knot.enticing.index.config.executeScript
 import cz.vutbr.fit.knot.enticing.index.initQueryExecutor
 
 fun handleArguments(args: Array<String>): IndexClientConfig {

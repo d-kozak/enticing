@@ -24,8 +24,6 @@ dependencies {
     implementation(project(":dto"))
     implementation(project(":eql-compiler"))
 
-    compile("de.swirtz:ktsRunner:0.0.7")
-
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     implementation("it.unimi.di:mg4j-big:5.4.3") {

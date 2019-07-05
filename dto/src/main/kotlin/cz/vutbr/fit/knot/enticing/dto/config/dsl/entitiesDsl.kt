@@ -1,4 +1,4 @@
-package cz.vutbr.fit.knot.enticing.index.config.dsl
+package cz.vutbr.fit.knot.enticing.dto.config.dsl
 
 typealias Attribute = Index
 typealias AttributesDsl = MutableMap<String, Attribute>

@@ -9,9 +9,14 @@ version = "0.0.1-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    maven {
+        setUrl("https://dl.bintray.com/s1m0nw1/KtsRunner")
+    }
 }
 
 dependencies {
+    compile("de.swirtz:ktsRunner:0.0.7")
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "javax.validation:validation-api:2.0.1.Final"
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8")

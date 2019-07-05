@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
-import cz.vutbr.fit.knot.enticing.index.config.dsl.Index
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.Index
 import it.unimi.di.big.mg4j.document.AbstractDocumentCollection
 import it.unimi.di.big.mg4j.document.Document
 import it.unimi.di.big.mg4j.document.DocumentCollection

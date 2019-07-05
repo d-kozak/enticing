@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
-import cz.vutbr.fit.knot.enticing.index.config.dsl.*
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.*
 
 val testConfiguration = indexBuilder {
     inputDirectory("../data/mg4j")

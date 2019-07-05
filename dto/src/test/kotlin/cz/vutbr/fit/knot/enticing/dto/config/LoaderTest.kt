@@ -1,4 +1,4 @@
-package cz.vutbr.fit.knot.enticing.index.config
+package cz.vutbr.fit.knot.enticing.dto.config
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

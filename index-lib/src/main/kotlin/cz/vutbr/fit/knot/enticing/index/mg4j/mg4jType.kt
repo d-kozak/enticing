@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
-import cz.vutbr.fit.knot.enticing.index.config.dsl.FieldType
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.FieldType
 import it.unimi.di.big.mg4j.document.DocumentFactory
 
 val FieldType.mg4jType: DocumentFactory.FieldType

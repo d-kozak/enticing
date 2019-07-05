@@ -1,4 +1,4 @@
-package cz.vutbr.fit.knot.enticing.index.config
+package cz.vutbr.fit.knot.enticing.dto.config
 
 import de.swirtz.ktsrunner.objectloader.KtsObjectLoader
 import java.io.File
