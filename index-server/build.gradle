@@ -7,12 +7,12 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version "1.3.21"
 }
 
-apply plugin:  "io.spring.dependency-management"
+apply plugin: "io.spring.dependency-management"
 
 
 group = "cz.vutbr.knot.enticing"
 version = "0.0.1-SNAPSHOT"
-sourceCompatibility= "1.8"
+sourceCompatibility = "1.8"
 
 repositories {
     mavenCentral()
@@ -22,9 +22,12 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":index-common"))
+    implementation(project(":index-common")) {
+        exclude group: "org.mortbay.jetty", module: "jetty"
+        exclude group: "javax.servlet", module: "servlet-api"
+    }
     implementation(project(":dto"))
-    
+
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web")
