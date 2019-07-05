@@ -22,10 +22,7 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":index-common")) {
-        exclude group: "org.mortbay.jetty", module: "jetty"
-        exclude group: "javax.servlet", module: "servlet-api"
-    }
+    implementation(project(":index-common"))
     implementation(project(":dto"))
 
     implementation("org.springframework.boot:spring-boot-starter-actuator")

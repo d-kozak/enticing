@@ -22,7 +22,11 @@ jar {
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("it.unimi.di:mg4j-big:5.4.3")
+    implementation("it.unimi.di:mg4j-big:5.4.3") {
+        // exclude some transitive mg4j dependencies that are messing up the classpath (java.servlet.* was there multiple times)
+        exclude group: "org.mortbay.jetty", module: "jetty"
+        exclude group: "javax.servlet", module: "servlet-api"
+    }
 
     // TODO transitive dependencies of mg4j had to be added manually, try to find a better way
     implementation("it.unimi.dsi:dsiutils:2.3.0")
