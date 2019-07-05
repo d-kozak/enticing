@@ -9,6 +9,13 @@ import cz.vutbr.fit.knot.enticing.query.processor.request.ServerInfo
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
+/**
+ * lambda to interface conversion
+ */
+internal fun dummyDispatcher(fn: (SearchQuery, ServerInfo) -> MResult<SearchResult>): RequestDispatcher = object : RequestDispatcher {
+    override fun invoke(searchQuery: SearchQuery, serverInfo: ServerInfo): MResult<SearchResult> = fn(searchQuery, serverInfo)
+}
+
 internal class QueryProcessorTest {
 
     data class FailOnPurposeException(val msg: String) : Exception()
@@ -41,7 +48,7 @@ internal class QueryProcessorTest {
     fun `everything fails test`() {
         val servers = listOf(ServerInfo("yahoo.com"), ServerInfo("google.com"), ServerInfo("foo.bar"))
 
-        val fail: ContactServer = { _, server -> MResult.failure(FailOnPurposeException(server.address)) }
+        val fail: RequestDispatcher = dummyDispatcher { _, server -> MResult.failure(FailOnPurposeException(server.address)) }
 
         val result = process(templateQuery, servers, fail)
         val expected: Map<String, List<MResult<SearchResult>>> = mapOf(
@@ -57,7 +64,7 @@ internal class QueryProcessorTest {
     fun `servers should be called with specific offsets`() {
         val servers = listOf(ServerInfo("yahoo.com", Offset(1, 2)), ServerInfo("google.com", Offset(3, 4)), ServerInfo("foo.bar", Offset(5, 6)))
 
-        val contactServer: ContactServer = { query, server ->
+        val requestDispatcher: RequestDispatcher = dummyDispatcher { query, server ->
             when (server.address) {
                 "yahoo.com" -> assertThat(server.offset)
                         .isEqualTo(Offset(1, 2))
@@ -70,7 +77,7 @@ internal class QueryProcessorTest {
             MResult.failure(FailOnPurposeException(server.address))
         }
 
-        val result = process(templateQuery, servers, contactServer)
+        val result = process(templateQuery, servers, requestDispatcher)
         val expected: Map<String, List<MResult<SearchResult>>> = mapOf(
                 "yahoo.com" to listOf(MResult.failure(FailOnPurposeException("yahoo.com"))),
                 "google.com" to listOf(MResult.failure(FailOnPurposeException("google.com"))),
@@ -84,7 +91,7 @@ internal class QueryProcessorTest {
     fun `first server is successful and is called twice`() {
         val servers = listOf(ServerInfo("yahoo.com"), ServerInfo("google.com", offset = Offset(10, 20)), ServerInfo("foo.bar"))
 
-        val fail: ContactServer = { _, server ->
+        val fail: RequestDispatcher = dummyDispatcher { _, server ->
             when {
                 server.address != "google.com" -> MResult.failure(FailOnPurposeException(server.address))
                 server.offset == Offset(10, 20) -> MResult.success(googleFirstResult)

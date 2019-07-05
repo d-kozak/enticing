@@ -8,9 +8,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 
-typealias ContactServer = (searchQuery: SearchQuery, serverInfo: ServerInfo) -> MResult<SearchResult>
-
-fun process(searchQuery: SearchQuery, servers: List<ServerInfo>, contactServer: ContactServer): Map<String, List<MResult<SearchResult>>> = runBlocking {
+fun process(searchQuery: SearchQuery, servers: List<ServerInfo>, requestDispatcher: RequestDispatcher): Map<String, List<MResult<SearchResult>>> = runBlocking {
     val serversToCall = servers.toMutableList()
     var collectedSnippetsCount = 0
     val serverResults = mutableMapOf<String, MutableList<MResult<SearchResult>>>()
@@ -21,7 +19,7 @@ fun process(searchQuery: SearchQuery, servers: List<ServerInfo>, contactServer: 
                 .mapIndexed { i, server -> splitSnippetCount(i, serversToCall.size, snippetsToCollect, searchQuery) to server }
                 .map { (query, server) ->
                     async {
-                        server.address to contactServer(query, server)
+                        server.address to requestDispatcher(query, server)
                     }
                 }.awaitAll()
 
