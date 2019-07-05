@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.enticing.index.server.config
 
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import cz.vutbr.fit.knot.enticing.index.server.service.QueryService
+import cz.vutbr.fit.knot.enticing.index.server.utils.dummyResult
 import cz.vutbr.fit.knot.enticing.index.server.utils.templateQuery
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
@@ -26,6 +27,9 @@ class SecurityConfigTest(
 
     @Test
     fun `query endpoint should be always available`() {
+        Mockito.`when`(queryService.processQuery(templateQuery))
+                .thenReturn(dummyResult)
+
         mockMvc.perform(post("$apiBasePath/query")
                 .content(templateQuery.toJson())
                 .contentType(MediaType.APPLICATION_JSON))

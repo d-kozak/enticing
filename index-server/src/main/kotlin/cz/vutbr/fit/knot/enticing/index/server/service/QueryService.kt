@@ -1,14 +1,14 @@
 package cz.vutbr.fit.knot.enticing.index.server.service
 
 import cz.vutbr.fit.knot.enticing.dto.query.SearchQuery
-import cz.vutbr.fit.knot.enticing.dto.response.SearchResult
+import cz.vutbr.fit.knot.enticing.index.QueryExecutor
 import org.springframework.stereotype.Service
 
 
 @Service
-class QueryService {
+class QueryService(
+        private val queryExecutor: QueryExecutor
+) {
 
-    fun processQuery(query: SearchQuery): SearchResult {
-        TODO("finish this")
-    }
+    fun processQuery(query: SearchQuery) = queryExecutor.query(query)
 }

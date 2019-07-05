@@ -13,6 +13,9 @@ class QueryController(
 ) {
 
     @PostMapping
-    fun query(@RequestBody query: SearchQuery): SearchResult = queryService.processQuery(query)
+    fun query(@RequestBody query: SearchQuery): SearchResult {
+        val result = queryService.processQuery(query)
+        return if (result.isSuccess) result.value else result.rethrowException()
+    }
 
 }
