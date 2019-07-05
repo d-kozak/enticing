@@ -25,7 +25,7 @@ jar {
 
 
 dependencies {
-    implementation(project(":index-common"))
+    implementation(project(":index-lib"))
     implementation(project(":dto"))
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")

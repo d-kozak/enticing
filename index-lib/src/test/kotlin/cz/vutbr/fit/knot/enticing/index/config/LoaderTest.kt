@@ -7,7 +7,7 @@ class LoaderTest {
 
     @Test
     fun `Load from file`() {
-        val fib42:Int = executeScript("src/test/resources/fib.kts")
+        val fib42: Int = executeScript("src/test/resources/fib.kts")
         assertThat(fib42)
                 .isEqualTo(267914296)
     }

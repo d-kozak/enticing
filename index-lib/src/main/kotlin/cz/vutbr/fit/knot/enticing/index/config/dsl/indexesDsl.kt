@@ -1,7 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.config.dsl
 
 
-
 data class Index(
         var name: String,
         var description: String = "",

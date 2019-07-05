@@ -2,15 +2,15 @@ package cz.vutbr.fit.knot.enticing.index.config.dsl
 
 import java.io.File
 
-fun indexClient(block:IndexClientConfig.()->Unit):IndexClientConfig= IndexClientConfig().apply(block)
+fun indexClient(block: IndexClientConfig.() -> Unit): IndexClientConfig = IndexClientConfig().apply(block)
 
 // todo add validation (for all config classes)
 
 class IndexClientConfig {
 
-    lateinit var mg4jFiles:List<File>
-    lateinit var indexDirectory:File
-    lateinit var corpusConfiguration:CorpusConfiguration
+    lateinit var mg4jFiles: List<File>
+    lateinit var indexDirectory: File
+    lateinit var corpusConfiguration: CorpusConfiguration
 
     val indexes
         get() = corpusConfiguration.indexes.values.toList()
