@@ -41,8 +41,9 @@ Responsibilities of each module are the following.
     * compile EQL to mg4j
     * query validation
 * dto
-    * define data transfer objects used between query processor and index servers
-* index-common
+    * domain objects used in all modules
+    * configuration dsls for all modules
+* index-lib
     * index data using mg4j
     * query indexed data
 * index-server
