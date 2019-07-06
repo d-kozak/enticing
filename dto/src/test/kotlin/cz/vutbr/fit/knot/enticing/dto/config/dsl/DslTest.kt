@@ -1,6 +1,10 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl
 
+import cz.vutbr.fit.knot.enticing.dto.config.SearchConfig
+import cz.vutbr.fit.knot.enticing.dto.query.ResponseFormat
+import cz.vutbr.fit.knot.enticing.dto.query.ResponseType
 import cz.vutbr.fit.knot.enticing.dto.query.ServerInfo
+import cz.vutbr.fit.knot.enticing.dto.query.TextMetadata
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -187,9 +191,13 @@ class DslTest {
                         }
                     }
                 }
+                searchConfig {
+                    snippetCount = 42
+                }
             }
 
             val expected = ConsoleClientConfig()
+            expected.searchConfig = SearchConfig(42)
             expected.clientType = ConsoleClientType.LocalIndex(indexClient {
                 mg4jDirectory("../data/mg4j")
                 indexDirectory("../data/indexed")
@@ -256,20 +264,28 @@ class DslTest {
             assertThat(config)
                     .isEqualTo(expected)
         }
-    }
 
-    @Test
-    fun `remote client`() {
-        val config = consoleClient {
-            remote {
-                servers("localhost:8001", "localhost:8001", "localhost:8003")
+
+        @Test
+        fun `remote client`() {
+            val config = consoleClient {
+                remote {
+                    servers("localhost:8001", "localhost:8001", "localhost:8003")
+                }
+                searchConfig {
+                    snippetCount = 42
+                    defaultIndex = "lemma"
+                    responseFormat = ResponseFormat.HTML
+                    responseType = ResponseType.IDENTIFIER_LIST
+                }
             }
-        }
 
-        val servers = listOf("localhost:8001", "localhost:8001", "localhost:8003").map { ServerInfo(it) }.toMutableList()
-        val expected = ConsoleClientConfig()
-        expected.clientType = ConsoleClientType.RemoteIndex(servers)
-        assertThat(config)
-                .isEqualTo(expected)
+            val servers = listOf("localhost:8001", "localhost:8001", "localhost:8003").map { ServerInfo(it) }.toMutableList()
+            val expected = ConsoleClientConfig()
+            expected.searchConfig = SearchConfig(42, TextMetadata.Predefined("all"), ResponseType.IDENTIFIER_LIST, ResponseFormat.HTML, "lemma")
+            expected.clientType = ConsoleClientType.RemoteIndex(servers)
+            assertThat(config)
+                    .isEqualTo(expected)
+        }
     }
 }
