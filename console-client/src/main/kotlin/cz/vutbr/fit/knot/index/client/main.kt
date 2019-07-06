@@ -4,16 +4,19 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.ConsoleClientConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.ConsoleClientType
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
 
-fun handleArguments(args: Array<String>): ConsoleClientConfig = executeScript(args[0])
+fun handleArguments(args: Array<String>): ConsoleClientConfig {
+    args.size == 1 || throw IllegalArgumentException("Exactly one argument expected, the config file")
+    return executeScript(args[0])
+}
 
 
 fun main(args: Array<String>) {
-    val config = handleArguments(args)
+    val (clientType, searchConfig) = handleArguments(args)
     val inputSequence = prepareUserInput()
 
-    when (val clientType = config.clientType) {
+    when (clientType) {
         is ConsoleClientType.LocalIndex -> {
-            startLocalClient(config, inputSequence)
+            startLocalClient(clientType, searchConfig, inputSequence)
         }
 
         is ConsoleClientType.RemoteIndex -> {

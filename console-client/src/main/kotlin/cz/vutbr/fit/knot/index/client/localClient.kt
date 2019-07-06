@@ -1,14 +1,13 @@
 package cz.vutbr.fit.knot.index.client
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.ConsoleClientConfig
+import cz.vutbr.fit.knot.enticing.dto.config.SearchConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.ConsoleClientType
 import cz.vutbr.fit.knot.enticing.dto.query.*
 import cz.vutbr.fit.knot.enticing.index.QueryExecutor
 import cz.vutbr.fit.knot.enticing.index.initQueryExecutor
 
-fun startLocalClient(config: ConsoleClientConfig, input: Sequence<String>) {
-    val localClient = config.clientType as ConsoleClientType.LocalIndex
-    val queryExecutor = initQueryExecutor(localClient.indexClientConfig)
+fun startLocalClient(config: ConsoleClientType.LocalIndex, searchConfig: SearchConfig, input: Sequence<String>) {
+    val queryExecutor = initQueryExecutor(config.indexClientConfig)
 
     for (line in input) {
         executeLocally(queryExecutor, line)

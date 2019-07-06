@@ -39,6 +39,10 @@ class ConsoleClientConfig {
     override fun toString(): String {
         return "ConsoleClientConfig(searchConfig=$searchConfig, clientType=$clientType)"
     }
+
+    operator fun component1() = clientType
+    operator fun component2() = searchConfig
+
 }
 
 
