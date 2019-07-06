@@ -13,6 +13,11 @@ data class MResult<T> internal constructor(val value: T) {
         throw value.throwable
     } else throw IllegalStateException("This result $this is not a failure, cannot throw")
 
+    val exception: Throwable
+        get() = if (value is Failure) {
+            value.throwable
+        } else throw IllegalStateException("This result $this is not a failure, cannot throw")
+
     companion object {
         fun <T> success(value: T): MResult<T> = MResult(value)
 

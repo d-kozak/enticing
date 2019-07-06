@@ -4,9 +4,9 @@ import cz.vutbr.fit.knot.enticing.dto.query.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.query.ServerInfo
 import cz.vutbr.fit.knot.enticing.dto.response.SearchResult
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpMethod
-import org.springframework.http.HttpStatus
+import cz.vutbr.fit.knot.enticing.dto.utils.toDto
+import cz.vutbr.fit.knot.enticing.dto.utils.toJson
+import org.springframework.http.*
 import org.springframework.web.client.RestTemplate
 
 
@@ -17,10 +17,13 @@ interface RequestDispatcher {
 class RestTemplateRequestDispatcher(private val restTemplate: RestTemplate = RestTemplate(), private val path: String = "/api/v1/query") : RequestDispatcher {
 
     override fun invoke(searchQuery: SearchQuery, serverInfo: ServerInfo): MResult<SearchResult> = MResult.runCatching {
-        val entity = HttpEntity(searchQuery)
-        val result = restTemplate.exchange<SearchResult>("http://" + serverInfo.address + path, HttpMethod.POST, entity)
+        val input = searchQuery.toJson()
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.APPLICATION_JSON
+        val entity = HttpEntity(input, headers)
+        val result = restTemplate.exchange<String>("http://" + serverInfo.address + path, HttpMethod.POST, entity)
         if (result.statusCode == HttpStatus.OK) {
-            result.body
+            result.body.toDto<SearchResult>()
         } else {
             // todo somehow rethrow the real exception?
             throw RuntimeException(result.body.toString())

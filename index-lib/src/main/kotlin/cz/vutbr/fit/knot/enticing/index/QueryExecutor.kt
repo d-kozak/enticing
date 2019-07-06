@@ -1,12 +1,12 @@
 package cz.vutbr.fit.knot.enticing.index
 
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexClientConfig
 import cz.vutbr.fit.knot.enticing.dto.query.Offset
 import cz.vutbr.fit.knot.enticing.dto.query.ResponseFormat
 import cz.vutbr.fit.knot.enticing.dto.query.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.response.*
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexClientConfig
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jCompositeDocumentCollection
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jDocument
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jDocumentFactory
@@ -24,6 +24,8 @@ import it.unimi.dsi.fastutil.objects.*
 import it.unimi.dsi.util.Interval
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
+const val MAX_SNIPPET_SIZE = 50
 
 fun initQueryExecutor(config: IndexClientConfig): QueryExecutor {
     val collection = Mg4jCompositeDocumentCollection(config.indexes, config.mg4jFiles)
@@ -120,7 +122,7 @@ class QueryExecutor internal constructor(
 fun processAsJson(query: SearchQuery, document: Document, words: List<String>, left: Int, right: Int): Payload.Snippet.Json {
     val prefixText = words.subList(0, left).joinToString(separator = " ")
     val matchedText = words.subList(left, right).joinToString(separator = " ")
-    val suffixText = words.subList(right, words.size).joinToString(separator = " ")
+    val suffixText = words.subList(right + 1, words.size).joinToString(separator = " ")
 
     return Payload.Snippet.Json(AnnotatedText(
             prefixText + matchedText + suffixText,
@@ -134,9 +136,11 @@ fun processAsJson(query: SearchQuery, document: Document, words: List<String>, l
 }
 
 fun processAsHtml(query: SearchQuery, document: Document, words: List<String>, left: Int, right: Int): Payload.Snippet.Html {
-    val prefixText = words.subList(0, left).joinToString(separator = " ")
-    val matchedText = words.subList(left, right).joinToString(separator = " ")
-    val suffixText = words.subList(right, words.size).joinToString(separator = " ")
+    if (words.isEmpty()) return Payload.Snippet.Html("NULL")
+
+    val prefixText = words.subList(0, Math.min(left, words.size)).joinToString(separator = " ")
+    val matchedText = words.subList(Math.min(left, words.size - 1), Math.min(right, words.size)).joinToString(separator = " ")
+    val suffixText = words.subList(Math.min(right, words.size - 1), words.size).joinToString(separator = " ")
 
     return Payload.Snippet.Html("$prefixText<b>$matchedText</b>$suffixText")
 }
@@ -145,6 +149,7 @@ fun getScoresForIndex(
         result: DocumentScoreInfo<Reference2ObjectMap<Index, Array<SelectedInterval>>>,
         index: Index
 ) = result.info[index]?.toList() ?: throw IllegalArgumentException("No results for index $index")
+
 
 operator fun Interval.component1() = left
 operator fun Interval.component2() = right + 1

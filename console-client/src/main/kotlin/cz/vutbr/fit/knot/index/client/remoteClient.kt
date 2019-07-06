@@ -10,9 +10,18 @@ fun startRemoteClient(config: ConsoleClientType.RemoteIndex, searchConfig: Searc
     for (line in input) {
         val servers = config.servers
         val query = searchConfig.toTemplateQuery().copy(query = line)
+        val resultMap = process(query, servers, RestTemplateRequestDispatcher())
 
-        val result = process(query, servers, RestTemplateRequestDispatcher())
+        for ((server, results) in resultMap) {
+            println("Results from $server")
 
-        println("result is $result")
+            for (result in results) {
+                if (result.isSuccess) {
+                    printResult(result.value)
+                } else {
+                    result.exception.printStackTrace()
+                }
+            }
+        }
     }
 }

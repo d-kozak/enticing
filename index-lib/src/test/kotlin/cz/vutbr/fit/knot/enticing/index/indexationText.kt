@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.index
 
-import cz.vutbr.fit.knot.enticing.dto.query.*
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.*
+import cz.vutbr.fit.knot.enticing.dto.query.*
 import it.unimi.di.big.mg4j.query.parser.QueryParserException
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeAll
@@ -164,7 +164,8 @@ class QueryExecutionTest {
                 "hello",
                 "john",
                 "lemma:work{{lemma->token}}",
-                "nertag:person{{nertag->token}}"
+                "nertag:person{{nertag->token}}",
+                "job work"
         )) {
             val query = templateQuery.copy(query = input)
 

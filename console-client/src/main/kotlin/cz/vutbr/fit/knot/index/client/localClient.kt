@@ -26,11 +26,9 @@ internal fun executeLocally(queryExecutor: QueryExecutor, input: String) {
     val response = queryExecutor.query(query)
     println("Response $response")
     if (response.isSuccess) {
-        val value = response.value
-        for (match in value.matched) {
-            println("doc ${match.documentTitle}")
-            println("text ${match.payload}")
-        }
+        printResult(response.value)
+    } else {
+        response.exception.printStackTrace()
     }
 }
 
