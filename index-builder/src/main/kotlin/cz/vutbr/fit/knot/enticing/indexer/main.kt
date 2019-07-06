@@ -3,21 +3,18 @@ package cz.vutbr.fit.knot.enticing.indexer
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexBuilderConfig
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
 import cz.vutbr.fit.knot.enticing.index.startIndexing
-import java.io.File
 
 fun handleArguments(vararg args: String, loadConfig: (path: String) -> IndexBuilderConfig = ::executeScript): IndexBuilderConfig {
-    args.isEmpty() && throw IllegalArgumentException("At least one argument necessary, the config file path")
-    args.size == 2 && throw IllegalArgumentException("Two arguments are ambiguous, provide just the config file or at least three")
+    args.size < 3 && throw IllegalArgumentException("At least three arguments necessary: config_file input_dir output_dir")
     val config = loadConfig(args[0])
-    if (args.size > 1) {
-        config.input = (1..args.size - 2).map { File(args[it]) }
-        config.output = File(args[args.size - 1])
+    if (args.size == 3) {
+        config.inputDirectory(args[1])
+        config.outputDirectory(args[2])
+    } else {
+        config.inputFiles(args.toList().subList(1, args.size - 1))
+        config.outputDirectory(args.last())
     }
 
-    if (!config.output.exists()) {
-        config.output.mkdir() || throw IllegalArgumentException("Could not create output directory ${config.output}")
-    }
-    config.output.isDirectory || throw IllegalArgumentException("${config.output} is not a directory")
     return config
 }
 

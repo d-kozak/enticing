@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.indexer
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexBuilderConfig
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.indexBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -8,17 +9,23 @@ import java.io.File
 
 
 val DUMMY_LOAD_CONFIGURATION: (path: String) -> IndexBuilderConfig = {
-    IndexBuilderConfig().apply {
-        this.output = File("../data/indexed")
+    indexBuilder {
+
     }
 }
 
 class HandleArgumentsTest {
 
     @Test
-    fun `At least one argument necessary the config location`() {
+    fun `At least three arguments necessary`() {
         assertThrows<IllegalArgumentException> {
             handleArguments(loadConfig = DUMMY_LOAD_CONFIGURATION)
+        }
+        assertThrows<IllegalArgumentException> {
+            handleArguments("foo/config.kts", loadConfig = DUMMY_LOAD_CONFIGURATION)
+        }
+        assertThrows<IllegalArgumentException> {
+            handleArguments("foo/config.kts", "../data/mg4j", loadConfig = DUMMY_LOAD_CONFIGURATION)
         }
     }
 
@@ -30,7 +37,7 @@ class HandleArgumentsTest {
             calledWith = path
             DUMMY_LOAD_CONFIGURATION(path)
         }
-        handleArguments("foo/bar/baz/config.kts", loadConfig = load)
+        handleArguments("foo/bar/baz/config.kts", "../data/mg4j", "../data/indexed", loadConfig = load)
 
         assertThat(calledWith)
                 .isNotNull()
@@ -38,17 +45,19 @@ class HandleArgumentsTest {
     }
 
     @Test
-    fun `Two arguments not allowed, ambiguity`() {
-        assertThrows<IllegalArgumentException> {
-            handleArguments("foo/config.kts", "input", loadConfig = DUMMY_LOAD_CONFIGURATION)
-        }
+    fun `Exactly specified input mgj4 files`() {
+        val config = handleArguments("foo/bar/baz/config.kts", "../data/mg4j/cc1.mg4j", "../data/mg4j/cc2.mg4j", "../data/indexed", loadConfig = DUMMY_LOAD_CONFIGURATION)
+        assertThat(config.input.toSet())
+                .isEqualTo(setOf(File("../data/mg4j/cc1.mg4j"), File("../data/mg4j/cc2.mg4j")))
+        assertThat(config.output)
+                .isEqualTo(File("../data/indexed"))
     }
 
     @Test
-    fun `Input and output in config updated based on arguments`() {
-        val config = handleArguments("foo/bar/baz/config.kts", "one.mg4j", "two.mg4j", "../data/indexed", loadConfig = DUMMY_LOAD_CONFIGURATION)
-        assertThat(config.input)
-                .isEqualTo(listOf(File("one.mg4j"), File("two.mg4j")))
+    fun `Input specified as directory`() {
+        val config = handleArguments("foo/bar/baz/config.kts", "../data/mg4j", "../data/indexed", loadConfig = DUMMY_LOAD_CONFIGURATION)
+        assertThat(config.input.toSet())
+                .isEqualTo(setOf(File("../data/mg4j/cc1.mg4j"), File("../data/mg4j/cc2.mg4j"), File("../data/mg4j/cc3.mg4j"), File("../data/mg4j/small.mg4j")))
         assertThat(config.output)
                 .isEqualTo(File("../data/indexed"))
     }

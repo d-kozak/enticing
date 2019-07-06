@@ -4,8 +4,6 @@ import java.io.File
 
 fun indexClient(block: IndexClientConfig.() -> Unit): IndexClientConfig = IndexClientConfig().apply(block)
 
-// todo add validation (for all config classes)
-
 class IndexClientConfig {
 
     lateinit var mg4jFiles: List<File>
@@ -16,17 +14,20 @@ class IndexClientConfig {
         get() = corpusConfiguration.indexes.values.toList()
 
     fun mg4jFiles(vararg files: String) {
-        this.mg4jFiles = files.map { File(it) }
+        mg4jFiles(files.toList())
+    }
+
+    fun mg4jFiles(files: List<String>) {
+        this.mg4jFiles = requireMg4jFiles(files)
     }
 
     fun mg4jDirectory(path: String) {
-        val directory = File(path)
-        directory.isDirectory || throw IllegalArgumentException("$directory is not a directory")
-        this.mg4jFiles = directory.listFiles { _, name -> name.endsWith(".mg4j") }.toList()
+        val inputDirectory = requireDirectory(path)
+        this.mg4jFiles = inputDirectory.listFiles { _, name -> name.endsWith(".mg4j") }.toList()
     }
 
     fun indexDirectory(path: String) {
-        this.indexDirectory = File(path)
+        this.indexDirectory = requireDirectory(path)
     }
 
     fun corpus(name: String, block: CorpusConfiguration.() -> Unit): CorpusConfiguration = corpusDslInternal(name, block).also {
@@ -67,3 +68,4 @@ class IndexClientConfig {
         append("}\n")
     }
 }
+

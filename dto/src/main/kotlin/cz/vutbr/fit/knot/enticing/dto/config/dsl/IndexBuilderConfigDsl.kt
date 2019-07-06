@@ -14,17 +14,20 @@ class IndexBuilderConfig {
         get() = corpusConfiguration.indexes.values.toList()
 
     fun inputFiles(vararg files: String) {
-        this.input = files.map { File(it) }
+        inputFiles(files.toList())
+    }
+
+    fun inputFiles(files: List<String>) {
+        this.input = requireMg4jFiles(files)
     }
 
     fun inputDirectory(path: String) {
-        val directory = File(path)
-        directory.isDirectory || throw IllegalArgumentException("$directory is not a directory")
+        val directory = requireDirectory(path)
         this.input = directory.listFiles { _, name -> name.endsWith(".mg4j") }.toList()
     }
 
     fun outputDirectory(path: String) {
-        this.output = File(path)
+        this.output = requireDirectory(path, createIfNecessary = true)
     }
 
     fun corpus(name: String, block: CorpusConfiguration.() -> Unit): CorpusConfiguration = corpusDslInternal(name, block).also {

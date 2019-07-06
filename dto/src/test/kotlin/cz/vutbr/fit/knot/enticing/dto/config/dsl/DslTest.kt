@@ -73,8 +73,8 @@ class DslTest {
     @Test
     fun `Indexer config simple test`() {
         val config = indexBuilder {
-            inputFiles("1.mg4j", "2.mg4j", "3.mg4j")
-            outputDirectory("tmp/output")
+            inputFiles("../data/mg4j/cc1.mg4j", "../data/mg4j/cc2.mg4j", "../data/mg4j/cc3.mg4j")
+            outputDirectory("../data/indexed")
             corpus("wiki2018") {
                 indexes {
                     index("token") {
@@ -98,8 +98,8 @@ class DslTest {
             }
         }
         val expected = IndexBuilderConfig().apply {
-            input = listOf(1, 2, 3).map { "$it.mg4j" }.map { File(it) }
-            output = File("tmp/output")
+            input = listOf(1, 2, 3).map { "../data/mg4j/cc$it.mg4j" }.map { File(it) }
+            output = File("../data/indexed")
             corpusConfiguration = CorpusConfiguration("wiki2018",
                     indexes = mutableMapOf(
                             "token" to Index("token", "Original token from the document"),
