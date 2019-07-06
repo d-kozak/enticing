@@ -1,9 +1,9 @@
 package cz.vutbr.fit.knot.enticing.query.processor
 
 import cz.vutbr.fit.knot.enticing.dto.query.SearchQuery
+import cz.vutbr.fit.knot.enticing.dto.query.ServerInfo
 import cz.vutbr.fit.knot.enticing.dto.response.SearchResult
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
-import cz.vutbr.fit.knot.enticing.query.processor.request.ServerInfo
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus

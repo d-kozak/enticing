@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver.entity
 
-import cz.vutbr.fit.knot.enticing.dto.utils.regex.urlRegex
+import cz.vutbr.fit.knot.enticing.dto.utils.regex.urlRegexStr
 import cz.vutbr.fit.knot.enticing.webserver.entity.ipaddress.IpAddressCollection
 import javax.persistence.*
 import javax.validation.constraints.NotEmpty
@@ -19,10 +19,10 @@ class SearchSettings(
         var default: Boolean = false,
         var private: Boolean = true,
         @field:NotEmpty
-        @field:Pattern(regexp = urlRegex)
+        @field:Pattern(regexp = urlRegexStr)
         var annotationDataServer: String = "",
         @field:NotEmpty
-        @field:Pattern(regexp = urlRegex)
+        @field:Pattern(regexp = urlRegexStr)
         var annotationServer: String = "",
         @field:ElementCollection(fetch = FetchType.EAGER)
         @field:NotEmpty

@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.query.processor
 
+import cz.vutbr.fit.knot.enticing.dto.query.ServerInfo
 import cz.vutbr.fit.knot.enticing.dto.response.SearchResult
-import cz.vutbr.fit.knot.enticing.query.processor.request.ServerInfo
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

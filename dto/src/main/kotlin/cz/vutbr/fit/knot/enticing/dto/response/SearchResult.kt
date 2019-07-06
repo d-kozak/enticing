@@ -3,7 +3,7 @@ package cz.vutbr.fit.knot.enticing.dto.response
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import cz.vutbr.fit.knot.enticing.dto.query.Offset
-import cz.vutbr.fit.knot.enticing.dto.utils.regex.urlRegex
+import cz.vutbr.fit.knot.enticing.dto.utils.regex.urlRegexStr
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotEmpty
@@ -27,7 +27,7 @@ data class Match(
         @field:Positive
         val size: Int,
         @field:NotEmpty
-        @field:Pattern(regexp = urlRegex)
+        @field:Pattern(regexp = urlRegexStr)
         val url: String,
         @field:NotBlank
         val documentTitle: String,

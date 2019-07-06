@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver.entity
 
-import cz.vutbr.fit.knot.enticing.dto.utils.regex.urlRegex
+import cz.vutbr.fit.knot.enticing.dto.utils.regex.urlRegexStr
 import cz.vutbr.fit.knot.enticing.webserver.entity.ipaddress.ipRegex
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -9,7 +9,7 @@ class RegexTest {
 
     @Test
     fun urlRegexText() {
-        val pattern = urlRegex.toPattern()
+        val pattern = urlRegexStr.toPattern()
         val matches = { input: String -> pattern.matcher(input).find() }
         assertThat(matches("google.com")).isTrue()
         assertThat(matches("www.google.com")).isTrue()
