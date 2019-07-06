@@ -14,11 +14,11 @@ interface RequestDispatcher {
     operator fun invoke(searchQuery: SearchQuery, serverInfo: ServerInfo): MResult<SearchResult>
 }
 
-class RestTemplateRequestDispatcher(private val restTemplate: RestTemplate, private val path: String = "/api/v1/query") : RequestDispatcher {
+class RestTemplateRequestDispatcher(private val restTemplate: RestTemplate = RestTemplate(), private val path: String = "/api/v1/query") : RequestDispatcher {
 
     override fun invoke(searchQuery: SearchQuery, serverInfo: ServerInfo): MResult<SearchResult> = MResult.runCatching {
         val entity = HttpEntity(searchQuery)
-        val result = restTemplate.exchange<SearchResult>(serverInfo.address + path, HttpMethod.POST, entity)
+        val result = restTemplate.exchange<SearchResult>("http://" + serverInfo.address + path, HttpMethod.POST, entity)
         if (result.statusCode == HttpStatus.OK) {
             result.body
         } else {

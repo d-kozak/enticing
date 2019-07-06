@@ -31,6 +31,8 @@ dependencies {
     implementation(project(":index-lib"))
     implementation(project(":dto"))
 
+    implementation 'org.springframework:spring-web:3.0.2.RELEASE'
+
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     testImplementation("io.mockk:mockk:1.9")

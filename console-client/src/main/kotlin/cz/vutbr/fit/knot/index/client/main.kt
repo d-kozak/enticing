@@ -12,6 +12,9 @@ fun handleArguments(args: Array<String>): ConsoleClientConfig {
 
 fun main(args: Array<String>) {
     val (clientType, searchConfig) = handleArguments(args)
+
+    // todo setup search config updates here
+
     val inputSequence = prepareUserInput()
 
     when (clientType) {
@@ -20,7 +23,7 @@ fun main(args: Array<String>) {
         }
 
         is ConsoleClientType.RemoteIndex -> {
-            TODO("finish")
+            startRemoteClient(clientType, searchConfig, inputSequence)
         }
     }
 }
