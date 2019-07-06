@@ -4,6 +4,7 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.ConsoleClientConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.ConsoleClientType
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
 import cz.vutbr.fit.knot.enticing.index.initQueryExecutor
+import cz.vutbr.fit.knot.enticing.index.startIndexing
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 
@@ -16,6 +17,11 @@ internal class LocalClientTest {
         @BeforeAll
         @JvmStatic
         internal fun initConfig() {
+            // @cleanup it it necessary to have the indexed data in place for the console client to work, but there is no gradle
+            // dependency that would require index-builder tests to execute before console-client, there should be a better way, but currently
+            // it is solved by executing the indexing from here
+            startIndexing(executeScript("../index-builder/src/test/resources/indexer.config.kts"))
+
             val wholeConfig = executeScript<ConsoleClientConfig>("src/test/resources/client.config.local.kts")
             localCofig = wholeConfig.clientType as ConsoleClientType.LocalIndex
         }

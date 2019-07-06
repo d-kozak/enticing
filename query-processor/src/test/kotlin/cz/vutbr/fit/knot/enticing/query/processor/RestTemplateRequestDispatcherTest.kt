@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.query.processor
 
 import cz.vutbr.fit.knot.enticing.dto.query.ServerInfo
-import cz.vutbr.fit.knot.enticing.dto.response.SearchResult
+import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -22,8 +22,8 @@ internal class RestTemplateRequestDispatcherTest {
         val mockTemplate = mockk<RestTemplate>()
         val serverInfo = ServerInfo("google.com")
         every {
-            mockTemplate.exchange<SearchResult>("http://" + serverInfo.address + "/api/v1/query", HttpMethod.POST, any())
-        } returns ResponseEntity(googleFirstResult, HttpStatus.OK)
+            mockTemplate.exchange<String>("http://" + serverInfo.address + "/api/v1/query", HttpMethod.POST, any())
+        } returns ResponseEntity(googleFirstResult.toJson(), HttpStatus.OK)
 
 
         val requestDispatcher = RestTemplateRequestDispatcher(mockTemplate)
@@ -34,7 +34,7 @@ internal class RestTemplateRequestDispatcherTest {
         assertThat(result.value)
                 .isEqualTo(googleFirstResult)
 
-        verify(exactly = 1) { mockTemplate.exchange<SearchResult>("http://" + serverInfo.address + "/api/v1/query", HttpMethod.POST, any()) }
+        verify(exactly = 1) { mockTemplate.exchange<String>("http://" + serverInfo.address + "/api/v1/query", HttpMethod.POST, any()) }
     }
 
     @Test
@@ -42,7 +42,7 @@ internal class RestTemplateRequestDispatcherTest {
         val mockTemplate = mockk<RestTemplate>()
         val serverInfo = ServerInfo("google.com")
         every {
-            mockTemplate.exchange<SearchResult>("http://" + serverInfo.address + "/api/v1/query", HttpMethod.POST, any())
+            mockTemplate.exchange<String>("http://" + serverInfo.address + "/api/v1/query", HttpMethod.POST, any())
         } throws FailOnPurposeException("fail!")
 
 
@@ -53,7 +53,7 @@ internal class RestTemplateRequestDispatcherTest {
                 .isTrue()
         assertThrows<FailOnPurposeException> { result.rethrowException() }
 
-        verify(exactly = 1) { mockTemplate.exchange<SearchResult>("http://" + serverInfo.address + "/api/v1/query", HttpMethod.POST, any()) }
+        verify(exactly = 1) { mockTemplate.exchange<String>("http://" + serverInfo.address + "/api/v1/query", HttpMethod.POST, any()) }
     }
 
 
