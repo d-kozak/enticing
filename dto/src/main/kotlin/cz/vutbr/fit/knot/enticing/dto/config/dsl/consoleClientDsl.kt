@@ -15,6 +15,25 @@ class ConsoleClientConfig {
 
     fun remote(block: ConsoleClientType.RemoteIndex.() -> Unit) = ConsoleClientType.RemoteIndex().apply(block)
             .also { this.clientType = it }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is ConsoleClientConfig) return false
+
+        if (clientType != other.clientType) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return clientType.hashCode()
+    }
+
+    override fun toString(): String {
+        return "ConsoleClientConfig(clientType=$clientType)"
+    }
+
+
 }
 
 sealed class ConsoleClientType {
