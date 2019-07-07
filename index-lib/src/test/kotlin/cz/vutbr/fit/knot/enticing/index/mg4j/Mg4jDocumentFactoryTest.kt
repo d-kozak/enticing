@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test
 import java.io.File
 import java.io.StringReader
 
+private val corpusConfig = testConfiguration.corpusConfiguration
 private val indexes = testConfiguration.indexes
 
 fun assertStreamStartsWith(stream: Any, expected: String) {
@@ -19,7 +20,7 @@ internal class Mg4jDocumentFactoryTest {
 
     @Test
     fun `load document test`() {
-        val factory = Mg4jDocumentFactory(indexes)
+        val factory = Mg4jDocumentFactory(corpusConfig)
         val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), factory)
 
         val document = collection.document(2)
@@ -35,15 +36,15 @@ internal class Mg4jDocumentFactoryTest {
 
     @Test
     fun `nerlength should be used to extend entities over multiple words`() {
-        val factory = Mg4jDocumentFactory(indexes)
+        val factory = Mg4jDocumentFactory(corpusConfig)
         val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), factory)
 
         for (docId in 0L..10L) {
             val document = collection.document(docId) as Mg4jDocument
 
-            val content = document.wholeContent()
-            val nertag = content["nertag"]!!
-            val nerlength = content["nerlength"]!!.map { it.toInt() }
+            val content = document.loadSnippetPartsFields()
+            val nertag = content["nertag"]
+            val nerlength = content["nerlength"].map { it.toInt() }
 
             val result = nertag.zip(nerlength)
 
@@ -68,12 +69,12 @@ internal class Mg4jDocumentFactoryTest {
 
     @Test
     fun `all indexes should have the same length`() {
-        val factory = Mg4jDocumentFactory(indexes)
+        val factory = Mg4jDocumentFactory(corpusConfig)
         val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), factory)
 
         for (i in 0L..10L) {
             val document = collection.document(i) as Mg4jDocument
-            val wholeContent = document.wholeContent()
+            val wholeContent = document.loadSnippetPartsFields().toMap()
 
             val sizePerIndex = wholeContent.values.map { it.size }
             val sizeSet = sizePerIndex.toSet()
@@ -99,16 +100,15 @@ internal class Mg4jDocumentFactoryTest {
     }
 
     @Test
-    fun `content of each index loaded by low level content shoudl be identic to loading it using higher level readContentAt`() {
-        val factory = Mg4jDocumentFactory(indexes)
+    fun `content of each index loaded by low level content should be identic to loading it using higher level readContentAt`() {
+        val factory = Mg4jDocumentFactory(corpusConfig)
         val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), factory)
 
         for (i in 0L..10L) {
             val document = collection.document(i) as Mg4jDocument
-            val wholeContent = document.wholeContent()
+            val wholeContent = document.loadSnippetPartsFields()
             for (index in indexes) {
-                val highLevel = wholeContent[index.name]?.joinToString(separator = " ")
-                        ?: throw IllegalStateException("Could not load content of index $index")
+                val highLevel = wholeContent[index.name].joinToString(separator = " ")
                 val lowLevel = (document.content(index.columnIndex) as StringReader).readText()
                 assertThat(highLevel)
                         .isEqualTo(lowLevel)
@@ -118,14 +118,14 @@ internal class Mg4jDocumentFactoryTest {
 
     @Test
     fun `number of fields test`() {
-        val factory = Mg4jDocumentFactory(indexes)
+        val factory = Mg4jDocumentFactory(corpusConfig)
         assertThat(factory.numberOfFields())
                 .isEqualTo(indexes.size)
     }
 
     @Test
     fun `field name test`() {
-        val factory = Mg4jDocumentFactory(indexes)
+        val factory = Mg4jDocumentFactory(corpusConfig)
         for (i in 0 until indexes.size) {
             assertThat(factory.fieldName(i))
                     .isEqualTo(indexes[i].name)
@@ -134,7 +134,7 @@ internal class Mg4jDocumentFactoryTest {
 
     @Test
     fun `field index test`() {
-        val factory = Mg4jDocumentFactory(indexes)
+        val factory = Mg4jDocumentFactory(corpusConfig)
         for (i in 0 until indexes.size) {
             assertThat(factory.fieldIndex(indexes[i].name))
                     .isEqualTo(i)
@@ -143,7 +143,7 @@ internal class Mg4jDocumentFactoryTest {
 
     @Test
     fun `field type test`() {
-        val factory = Mg4jDocumentFactory(indexes)
+        val factory = Mg4jDocumentFactory(corpusConfig)
         for (i in 0 until indexes.size) {
             assertThat(factory.fieldType(i))
                     .isEqualTo(indexes[i].type.mg4jType)

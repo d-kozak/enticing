@@ -5,7 +5,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.io.File
 
-val testDocumentFactory = Mg4jDocumentFactory(testConfiguration.indexes)
+val testDocumentFactory = Mg4jDocumentFactory(testConfiguration.corpusConfiguration)
 
 internal class Mg4jSingleFileDocumentCollectionTest {
 

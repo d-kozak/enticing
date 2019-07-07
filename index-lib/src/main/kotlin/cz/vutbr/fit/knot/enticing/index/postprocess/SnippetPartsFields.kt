@@ -1,0 +1,54 @@
+package cz.vutbr.fit.knot.enticing.index.postprocess
+
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
+
+data class SnippetPartsFields(
+        val elements: List<SnippetElement>,
+        val corpusConfiguration: CorpusConfiguration
+) : Iterable<SnippetElement> {
+    operator fun get(index: String): List<String> {
+        if (corpusConfiguration.isEntityAttribute(index))
+            throw IllegalArgumentException("Only direct indexed are allowed right now")
+
+        val result = mutableListOf<String>()
+
+        for (element in elements) {
+            when (element) {
+                is SnippetElement.Word -> {
+                    result.add(element[corpusConfiguration.indexOf(index)])
+                }
+
+                is SnippetElement.Entity -> {
+                    result.addAll(element[corpusConfiguration.indexOf(index)])
+                }
+            }
+        }
+
+        return result
+    }
+
+    fun toMap(): Map<String, List<String>> = corpusConfiguration.indexes
+            .values
+            .asSequence()
+            .map { it.name }
+            .map { it to this[it] }
+            .toMap()
+
+    override fun iterator(): Iterator<SnippetElement> = elements.iterator()
+}
+
+sealed class SnippetElement {
+    data class Word(override val index: Int, val indexes: List<String>) : SnippetElement() {
+        operator fun get(i: Int) = if (i < indexes.size) indexes[i] else {
+            System.err.println("$i is too big")
+            "NULL"
+        }
+    }
+
+    data class Entity(override val index: Int, val entityInfo: List<String>, val words: List<Word>) : SnippetElement() {
+        operator fun get(i: Int): List<String> = words.map { it[i] }
+
+    }
+
+    abstract val index: Int
+}

@@ -28,8 +28,8 @@ import org.slf4j.LoggerFactory
 const val MAX_SNIPPET_SIZE = 50
 
 fun initQueryExecutor(config: IndexClientConfig): QueryExecutor {
-    val collection = Mg4jCompositeDocumentCollection(config.indexes, config.mg4jFiles)
-    val factory = Mg4jDocumentFactory(config.indexes)
+    val collection = Mg4jCompositeDocumentCollection(config.corpusConfiguration, config.mg4jFiles)
+    val factory = Mg4jDocumentFactory(config.corpusConfiguration)
 
     val indexDir = config.indexDirectory
 
@@ -88,9 +88,8 @@ class QueryExecutor internal constructor(
                 val prefix = Math.max(left - 5, 0)
                 val suffix = right + 5
 
-                val content = document.readContentAt(prefix, suffix)
+                val content = document.loadSnippetPartsFields(prefix, suffix)
                 val words = content[query.defaultIndex]
-                        ?: throw IllegalArgumentException("Could not read words for index ${query.defaultIndex}")
 
 
                 val payload = when (query.responseFormat) {

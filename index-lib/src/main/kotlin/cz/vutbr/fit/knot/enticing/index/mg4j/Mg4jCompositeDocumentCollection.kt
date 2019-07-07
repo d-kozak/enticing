@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.Index
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import it.unimi.di.big.mg4j.document.AbstractDocumentCollection
 import it.unimi.di.big.mg4j.document.Document
 import it.unimi.di.big.mg4j.document.DocumentCollection
@@ -22,11 +22,11 @@ internal fun initDocumentRanges(limits: List<Long>): Array<Long> {
 }
 
 class Mg4jCompositeDocumentCollection(
-        private val indexes: List<Index>,
+        private val corpusConfiguration: CorpusConfiguration,
         private val files: List<File>)
     : AbstractDocumentCollection() {
 
-    private val factory = Mg4jDocumentFactory(indexes)
+    private val factory = Mg4jDocumentFactory(corpusConfiguration)
 
     private val singleFileCollections = files.map { Mg4jSingleFileDocumentCollection(it, factory.copy()) }
 
@@ -56,7 +56,7 @@ class Mg4jCompositeDocumentCollection(
         return singleFileCollections[insertionPoint] to localIndex
     }
 
-    override fun copy(): DocumentCollection = Mg4jCompositeDocumentCollection(indexes, files)
+    override fun copy(): DocumentCollection = Mg4jCompositeDocumentCollection(corpusConfiguration, files)
 
     override fun factory(): DocumentFactory = factory
 

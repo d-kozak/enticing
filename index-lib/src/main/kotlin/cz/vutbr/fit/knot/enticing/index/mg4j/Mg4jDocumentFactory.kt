@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.Index
 import it.unimi.di.big.mg4j.document.AbstractDocumentFactory
 import it.unimi.di.big.mg4j.document.Document
@@ -12,7 +13,11 @@ import java.io.InputStream
 
 private val log = LoggerFactory.getLogger(Mg4jDocumentFactory::class.java)
 
-class Mg4jDocumentFactory(private val indexes: List<Index>) : AbstractDocumentFactory() {
+class Mg4jDocumentFactory(private val corpusConfiguration: CorpusConfiguration) : AbstractDocumentFactory() {
+
+
+    private val indexes: List<Index>
+        get() = corpusConfiguration.indexes.values.toList()
 
     override fun numberOfFields(): Int = indexes.size
 
@@ -23,7 +28,7 @@ class Mg4jDocumentFactory(private val indexes: List<Index>) : AbstractDocumentFa
 
     override fun fieldType(field: Int): DocumentFactory.FieldType = indexes[field].type.mg4jType
 
-    override fun copy(): DocumentFactory = Mg4jDocumentFactory(indexes)
+    override fun copy(): DocumentFactory = Mg4jDocumentFactory(corpusConfiguration)
 
     override fun getDocument(rawContent: InputStream, metadata: Reference2ObjectMap<Enum<*>, Any>): Document {
         val stream = (rawContent as FastBufferedInputStream).bufferedReader()
@@ -42,7 +47,7 @@ class Mg4jDocumentFactory(private val indexes: List<Index>) : AbstractDocumentFa
         }
 
         // todo avoid copying of the content from bytelist to bytearray
-        return Mg4jDocument(indexes, metadata, fields.map { it.toString() })
+        return Mg4jDocument(corpusConfiguration, metadata, fields.map { it.toString() })
     }
 }
 
