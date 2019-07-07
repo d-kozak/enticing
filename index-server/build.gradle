@@ -13,12 +13,17 @@ apply plugin: "io.spring.dependency-management"
 group = "cz.vutbr.knot.enticing"
 version = "0.0.1-SNAPSHOT"
 sourceCompatibility = "1.8"
+libsDirName= "../../lib"
 
 repositories {
     mavenCentral()
     maven {
         setUrl("https://dl.bintray.com/s1m0nw1/KtsRunner")
     }
+}
+
+bootJar {
+    requiresUnpack '**/dto-*.jar'
 }
 
 dependencies {

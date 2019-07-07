@@ -4,11 +4,20 @@ plugins {
 
 group = "cz.vutbr.fit.knot.enticing"
 version = "0.0.1-SNAPSHOT"
+libsDirName= "../../lib"
 
 repositories {
     mavenCentral()
     maven {
         setUrl("https://dl.bintray.com/s1m0nw1/KtsRunner")
+    }
+}
+
+jar {
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
     }
 }
 

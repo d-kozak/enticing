@@ -7,6 +7,8 @@ plugins {
 
 group = "cz.vutbr.fit.knot.enticing"
 version = "0.0.1-SNAPSHOT"
+libsDirName= "../../lib"
+
 
 repositories {
     mavenCentral()
@@ -31,7 +33,7 @@ dependencies {
     implementation(project(":index-lib"))
     implementation(project(":dto"))
 
-    implementation 'org.springframework:spring-web:3.0.2.RELEASE'
+    compile('org.springframework:spring-web:3.0.2.RELEASE')
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 

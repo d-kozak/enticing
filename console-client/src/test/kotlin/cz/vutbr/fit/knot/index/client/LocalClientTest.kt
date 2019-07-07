@@ -8,8 +8,7 @@ import cz.vutbr.fit.knot.enticing.index.startIndexing
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 
-
-internal lateinit var localCofig: ConsoleClientType.LocalIndex
+internal lateinit var localConfig: ConsoleClientType.LocalIndex
 
 internal class LocalClientTest {
 
@@ -23,7 +22,7 @@ internal class LocalClientTest {
             startIndexing(executeScript("../index-builder/src/test/resources/indexer.config.kts"))
 
             val wholeConfig = executeScript<ConsoleClientConfig>("src/test/resources/client.config.local.kts")
-            localCofig = wholeConfig.clientType as ConsoleClientType.LocalIndex
+            localConfig = wholeConfig.clientType as ConsoleClientType.LocalIndex
         }
 
     }
@@ -31,7 +30,7 @@ internal class LocalClientTest {
     @Test
     fun `execute locally test`() {
         val input = sequenceOf("foo bar baz", "hello", "nertag:person{{nertag->token}}", "lemma:work{{lemma->token}}")
-        val executor = initQueryExecutor(localCofig.indexClientConfig)
+        val executor = initQueryExecutor(localConfig.indexClientConfig)
         for (line in input) {
             executeLocally(executor, line)
         }

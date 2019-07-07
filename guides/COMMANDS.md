@@ -31,3 +31,8 @@ Just an example of classpath going wrong, probably we will have to deal with tha
 ```
 java -cp build/libs/index-builder-0.0.1-SNAPSHOT.jar:../index-common/build/libs/index-common-0.0.1-SNAPSHOT.jar:"/home/dkozak/mg4j-bin/*" cz.vutbr.fit.knot.enticing.indexer.MainKt src/test/resources/indexer.config.kts
 ```
+
+Start console client (with local config). Assumes you are in the lib directory.
+```
+java -cp "*:mg4j-bin/*" cz.vutbr.fit.knot.index.client.MainKt ../console-client/src/test/resources/client.config.local.kts
+```

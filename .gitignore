@@ -1,4 +1,5 @@
 data/indexed/**
+lib/**
 
 HELP.md
 .gradle

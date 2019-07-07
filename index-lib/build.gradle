@@ -4,6 +4,8 @@ plugins {
 
 group = "cz.vutbr.fit.knot.enticing"
 version = "0.0.1-SNAPSHOT"
+libsDirName= "../../lib"
+
 
 repositories {
     mavenCentral()
