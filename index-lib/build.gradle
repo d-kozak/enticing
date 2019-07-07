@@ -34,7 +34,6 @@ dependencies {
         exclude group: "javax.servlet", module: "servlet-api"
     }
 
-    // TODO transitive dependencies of mg4j had to be added manually, try to find a better way
     implementation("it.unimi.dsi:dsiutils:2.3.0")
     implementation("it.unimi.dsi:sux4j:4.0.0")
 

@@ -22,6 +22,8 @@ class QueryConfig(
 
     @Bean
     fun queryExecutor(): QueryExecutor {
+        // todo each index server should support multiple collections, not just one
+
         log.info("Loading configuration from $configFile")
         val config = executeScript<IndexClientConfig>(configFile)
         log.info("Loaded config $config")
