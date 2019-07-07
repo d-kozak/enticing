@@ -3,7 +3,7 @@ package cz.vutbr.fit.knot.index.client
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.ConsoleClientConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.ConsoleClientType
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
-import cz.vutbr.fit.knot.enticing.index.initQueryExecutor
+import cz.vutbr.fit.knot.enticing.index.query.initQueryExecutor
 import cz.vutbr.fit.knot.enticing.index.startIndexing
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test

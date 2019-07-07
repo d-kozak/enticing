@@ -2,8 +2,8 @@ package cz.vutbr.fit.knot.enticing.index.server.config
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexClientConfig
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
-import cz.vutbr.fit.knot.enticing.index.QueryExecutor
-import cz.vutbr.fit.knot.enticing.index.initQueryExecutor
+import cz.vutbr.fit.knot.enticing.index.query.QueryExecutor
+import cz.vutbr.fit.knot.enticing.index.query.initQueryExecutor
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value

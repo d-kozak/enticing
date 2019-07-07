@@ -9,6 +9,8 @@ import java.io.StringReader
 
 internal val wordReader = WhitespaceWordReader()
 
+typealias DocumentContent = Map<String, List<String>>
+
 class Mg4jDocument(
         private val indexes: List<Index>,
         private val metadata: Reference2ObjectMap<Enum<*>, Any>,
@@ -23,7 +25,7 @@ class Mg4jDocument(
 
     override fun content(field: Int): Any = content[field].reader()
 
-    fun readContentAt(left: Int, right: Int): Map<String, List<String>> = indexes.asSequence()
+    fun readContentAt(left: Int, right: Int): DocumentContent = indexes.asSequence()
             .map { it.name to readIndex(it.columnIndex, left, right) }
             .toMap()
 
@@ -37,6 +39,7 @@ class Mg4jDocument(
         val nonWord = MutableString()
 
         val range = if (right != null) 0 until right else 0..Int.MAX_VALUE
+
         for (i in range) {
             if (!combined.next(word, nonWord)) {
                 break
@@ -46,7 +49,6 @@ class Mg4jDocument(
                     result.add(word.toString())
             } else result.add(word.toString())
         }
-
         return result
     }
 
