@@ -6,7 +6,12 @@ import cz.vutbr.fit.knot.enticing.dto.config.executeScript
 
 fun handleArguments(args: Array<String>): ConsoleClientConfig {
     args.size == 1 || throw IllegalArgumentException("Exactly one argument expected, the config file")
-    return executeScript(args[0])
+    val config = executeScript<ConsoleClientConfig>(args[0])
+    val errors = config.validate()
+    if (errors.isNotEmpty()) {
+        throw IllegalArgumentException("$errors")
+    }
+    return config
 }
 
 

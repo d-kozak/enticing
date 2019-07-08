@@ -43,13 +43,19 @@ class ConsoleClientConfig {
     operator fun component1() = clientType
     operator fun component2() = searchConfig
 
+    fun validate(): List<String> = if (!::clientType.isInitialized) {
+        listOf("No client type was specified")
+    } else
+        clientType.validate()
+
 }
 
 
-
-
 sealed class ConsoleClientType {
-    data class LocalIndex(val indexClientConfig: IndexClientConfig) : ConsoleClientType()
+
+    data class LocalIndex(val indexClientConfig: IndexClientConfig) : ConsoleClientType() {
+        override fun validate(): List<String> = indexClientConfig.validate()
+    }
 
     data class RemoteIndex(
             var servers: MutableList<ServerInfo> = mutableListOf()
@@ -66,5 +72,22 @@ sealed class ConsoleClientType {
             }
             this.servers = servers.asSequence().map { ServerInfo(it) }.toMutableList()
         }
+
+        override fun validate(): List<String> {
+            val errors = mutableListOf<String>()
+            if (servers.isEmpty())
+                errors.add("No servers specified")
+            for (server in servers) {
+                if (server.address.isBlank()) {
+                    errors.add("Server address ${server.address} should be neither empty not blank")
+                }
+                if (!server.address.matches(urlRegex)) {
+                    errors.add("${server.address} is not a valid address")
+                }
+            }
+            return errors
+        }
     }
+
+    abstract fun validate(): List<String>
 }

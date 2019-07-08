@@ -61,6 +61,11 @@ consoleClient {
                 "genre" with attributes("url", "image", "name")
 
             }
+            entityMapping {
+                entityIndex = "nertag"
+                attributeIndexes = 15 to 24
+                extraIndexes("nertype", "nerlength")
+            }
         }
     }
 }

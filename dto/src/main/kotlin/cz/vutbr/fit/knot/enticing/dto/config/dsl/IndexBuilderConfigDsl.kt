@@ -10,6 +10,13 @@ class IndexBuilderConfig {
     lateinit var output: File
     lateinit var corpusConfiguration: CorpusConfiguration
 
+    /**
+     * for errors that were discovered during creation, but their test cannot be postponed so easily
+     *
+     * e.g. mg4j directory
+     */
+    private val errors = mutableListOf<String>()
+
     val indexes
         get() = corpusConfiguration.indexes.values.toList()
 
@@ -18,20 +25,34 @@ class IndexBuilderConfig {
     }
 
     fun inputFiles(files: List<String>) {
-        this.input = requireMg4jFiles(files)
+        this.input = files.map { File(it) }
     }
 
     fun inputDirectory(path: String) {
-        val directory = requireDirectory(path)
-        this.input = directory.listFiles { _, name -> name.endsWith(".mg4j") }.toList()
+        val directory = File(path)
+        checkDirectory(directory, errors)
+        if (errors.isEmpty())
+            this.input = directory.listFiles { _, name -> name.endsWith(".mg4j") }?.toList() ?: emptyList()
+        else
+            this.input = emptyList()
     }
 
     fun outputDirectory(path: String) {
-        this.output = requireDirectory(path, createIfNecessary = true)
+        this.output = File(path)
     }
 
-    fun corpus(name: String, block: CorpusConfiguration.() -> Unit): CorpusConfiguration = corpusDslInternal(name, block).also {
+    fun corpus(name: String, block: CorpusConfiguration.() -> Unit): CorpusConfiguration = corpusConfig(name, block).also {
         this.corpusConfiguration = it
+    }
+
+
+    fun validate(): List<String> {
+        val errors = errors.toMutableList()
+
+        checkMg4jFiles(input, errors)
+        checkDirectory(this.output, errors, createIfNecessary = true)
+
+        return errors
     }
 
     override fun equals(other: Any?): Boolean {

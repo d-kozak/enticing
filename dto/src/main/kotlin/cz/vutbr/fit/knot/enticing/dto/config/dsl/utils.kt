@@ -2,30 +2,34 @@ package cz.vutbr.fit.knot.enticing.dto.config.dsl
 
 import java.io.File
 
-internal fun requireDirectory(path: String, createIfNecessary: Boolean = false): File {
-    val directory = File(path)
+internal fun checkDirectory(directory: File, errors: MutableList<String>, createIfNecessary: Boolean = false) {
     if (createIfNecessary) {
         if (!directory.exists()) {
-            directory.mkdir() || throw IllegalArgumentException("Could not create directory $path")
+            if (!directory.mkdir()) {
+                errors.add("Could not create directory $directory")
+            }
         } else {
-            directory.isDirectory || throw IllegalArgumentException("$path is not a directory")
+            if (!directory.isDirectory) {
+                errors.add("$directory is not a directory")
+            }
+
         }
     } else {
-        directory.isDirectory || throw IllegalArgumentException("$path is not a directory")
-        directory.exists() || throw IllegalArgumentException("$path does not exist")
+        if (!directory.isDirectory) {
+            errors.add("$directory is not a directory")
+        }
+        if (!directory.exists()) {
+            errors.add("$directory does not exist")
+        }
     }
-    return directory
 }
 
-internal fun requireMg4jFiles(files: List<String>): List<File> {
-    val inputFiles = files.map { File(it) }
-    val nonExistent = inputFiles.filter { !it.exists() }.toList()
-    if (nonExistent.isNotEmpty()) {
-        throw IllegalArgumentException("Files $nonExistent do not exist")
+internal fun checkMg4jFiles(files: List<File>, errors: MutableList<String>) {
+    if (files.isEmpty()) {
+        errors.add("No mg4j files specified")
     }
-    val withoutExtension = inputFiles.filter { !it.name.endsWith(".mg4j") }
-    if (withoutExtension.isNotEmpty()) {
-        throw IllegalArgumentException("Files $nonExistent do not have the proper .mg4j extension")
-    }
-    return inputFiles
+    errors.addAll(files.filter { !it.exists() }
+            .map { "File $it does not exist" })
+    files.filter { !it.name.endsWith(".mg4j") }
+            .map { "File $it does not have the proper .mg4j extension" }
 }

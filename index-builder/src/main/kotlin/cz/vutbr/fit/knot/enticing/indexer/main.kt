@@ -15,6 +15,11 @@ fun handleArguments(vararg args: String, loadConfig: (path: String) -> IndexBuil
         config.outputDirectory(args.last())
     }
 
+    val errors = config.validate()
+    if (errors.isNotEmpty()) {
+        throw IllegalArgumentException("$errors")
+    }
+
     return config
 }
 
