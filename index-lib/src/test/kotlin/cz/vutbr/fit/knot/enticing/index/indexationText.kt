@@ -186,16 +186,4 @@ class QueryExecutionTest {
             result.rethrowException()
         }
     }
-
-    @Test
-    fun `forgotten remapping should be caught`() {
-        val queryEngine = initQueryExecutor(clientConfig)
-        val query = templateQuery.copy(query = "nertag:person")
-
-        assertThrows<IllegalArgumentException> {
-            val result = queryEngine.query(query)
-            assertThat(result.isFailure)
-            result.rethrowException()
-        }
-    }
 }

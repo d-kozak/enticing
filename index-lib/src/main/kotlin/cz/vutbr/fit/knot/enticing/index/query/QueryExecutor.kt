@@ -98,9 +98,7 @@ class QueryExecutor internal constructor(
                 ?: throw IllegalArgumentException("Index ${query.defaultIndex} not found")
 
         val document = collection.document(result.document) as Mg4jDocument
-        val scores = getScoresForIndex(result, defaultIndex).let {
-            if (offset != null) it.subList(offset, it.size) else it
-        }
+        val scores = getScoresForIndex(result, defaultIndex)
 
         for (score in scores) {
             val (left, right) = score.interval
@@ -136,6 +134,14 @@ class QueryExecutor internal constructor(
 
         return matched to null
     }
+
+
+    private fun getScoresForIndex(
+            result: DocumentScoreInfo<Reference2ObjectMap<Index, Array<SelectedInterval>>>,
+            index: Index
+    ): List<SelectedInterval> = result.info[index]?.toList() ?: listOf<SelectedInterval>().also {
+        log.warn("No results for index $index")
+    }
 }
 
 
@@ -164,11 +170,6 @@ fun processAsHtml(query: SearchQuery, document: Document, words: List<String>, l
 
     return Payload.Snippet.Html("$prefixText<b>$matchedText</b>$suffixText")
 }
-
-fun getScoresForIndex(
-        result: DocumentScoreInfo<Reference2ObjectMap<Index, Array<SelectedInterval>>>,
-        index: Index
-) = result.info[index]?.toList() ?: throw IllegalArgumentException("No results for index $index")
 
 
 operator fun Interval.component1() = left

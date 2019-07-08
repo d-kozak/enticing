@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.dto.utils
 
+
 data class MResult<T> internal constructor(val value: T) {
 
     val isSuccess get() = value !is Failure
@@ -9,14 +10,12 @@ data class MResult<T> internal constructor(val value: T) {
 
     fun getOrNull() = if (value !is Failure) value else null
 
-    fun rethrowException(): Nothing = if (value is Failure) {
-        throw value.throwable
-    } else throw IllegalStateException("This result $this is not a failure, cannot throw")
+    fun rethrowException(): Nothing = throw exception
 
     val exception: Throwable
         get() = if (value is Failure) {
             value.throwable
-        } else throw IllegalStateException("This result $this is not a failure, cannot throw")
+        } else throw UnsupportedOperationException("This result $this is not a failure, cannot throw")
 
     companion object {
         fun <T> success(value: T): MResult<T> = MResult(value)

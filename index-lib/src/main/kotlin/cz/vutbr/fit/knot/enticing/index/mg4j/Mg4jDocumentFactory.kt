@@ -46,6 +46,7 @@ class Mg4jDocumentFactory(private val corpusConfiguration: CorpusConfiguration) 
             lineIndex++
         }
 
+        metadata[DocumentMetadata.SIZE] = lineIndex
         // todo avoid copying of the content from bytelist to bytearray
         return Mg4jDocument(corpusConfiguration, metadata, fields.map { it.toString() })
     }
