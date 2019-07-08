@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.index.client
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.ConsoleClientConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.ConsoleClientType
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexBuilderConfig
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
 import cz.vutbr.fit.knot.enticing.index.query.initQueryExecutor
 import cz.vutbr.fit.knot.enticing.index.startIndexing
@@ -19,7 +20,7 @@ internal class LocalClientTest {
             // @cleanup it it necessary to have the indexed data in place for the console client to work, but there is no gradle
             // dependency that would require index-builder tests to execute before console-client, there should be a better way, but currently
             // it is solved by executing the indexing from here
-            startIndexing(executeScript("../index-builder/src/test/resources/indexer.config.kts"))
+            startIndexing(executeScript<IndexBuilderConfig>("../index-builder/src/test/resources/indexer.config.kts").also { it.validate() })
 
             val wholeConfig = executeScript<ConsoleClientConfig>("src/test/resources/client.config.local.kts")
             localConfig = wholeConfig.clientType as ConsoleClientType.LocalIndex
