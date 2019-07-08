@@ -57,6 +57,8 @@ fun initQueryExecutor(config: IndexClientConfig): QueryExecutor {
     return QueryExecutor("name", collection, engine, config.corpusConfiguration)
 }
 
+internal typealias Mg4jSearchResult = DocumentScoreInfo<Reference2ObjectMap<Index, Array<SelectedInterval>>>
+
 class QueryExecutor internal constructor(
         private val collectionName: String,
         private val collection: Mg4jCompositeDocumentCollection,
@@ -68,55 +70,74 @@ class QueryExecutor internal constructor(
 
     fun query(query: SearchQuery): MResult<SearchResult> = MResult.runCatching {
         log.info("Executing query $query")
-        val resultList = ObjectArrayList<DocumentScoreInfo<Reference2ObjectMap<Index, Array<SelectedInterval>>>>()
+        val resultList = ObjectArrayList<Mg4jSearchResult>()
         val (documentOffset, matchOffset) = query.offset
 
-        val defaultIndex = engine.indexMap[query.defaultIndex]
-                ?: throw IllegalArgumentException("Index ${query.defaultIndex} not found")
         val processed = engine.process(query.query, documentOffset, query.snippetCount, resultList)
         log.info("Processed $processed documents")
 
         val matched = mutableListOf<Match>()
         for ((i, result) in resultList.withIndex()) {
-            val document = collection.document(result.document) as Mg4jDocument
-            val scores = getScoresForIndex(result, defaultIndex).let {
-                if (i == 0) it.subList(matchOffset, it.size) else it
-            }
-            for ((j, score) in scores.withIndex()) {
-                val (left, right) = score.interval
-                // todo how big the prefix and suffix should be ( and if they are necessary at all) depends on the size of the matched region
-                val prefix = Math.max(left - 5, 0)
-                val suffix = right + 5
-
-                val content = document.loadSnippetPartsFields(prefix, suffix)
-                val words = content[query.defaultIndex]
-
-
-                val payload = when (query.responseFormat) {
-                    ResponseFormat.HTML -> processAsHtml(query, document, words, left - prefix, right - prefix)
-                    ResponseFormat.JSON -> processAsJson(query, document, words, left - prefix, right - prefix)
+            val (matchList, nextSnippet) = processDocument(query, result, query.snippetCount - matched.size, if (i == 0) matchOffset else null)
+            matched.addAll(matchList)
+            if (matched.size >= query.snippetCount || nextSnippet != null) {
+                val offset = when {
+                    nextSnippet != null -> Offset(result.document.toInt(), nextSnippet)
+                    i != resultList.size - 1 -> Offset(resultList[i + 1].document.toInt(), 0)
+                    else -> null
                 }
-
-                val match = Match(
-                        collectionName,
-                        result.document,
-                        left,
-                        right - left,
-                        document.uri().toString(),
-                        document.title().toString(),
-                        payload,
-                        canExtend = prefix > 0 || suffix < words.size - 1
-                )
-                log.info("Found match $match")
-                matched.add(match)
-                if (matched.size >= query.snippetCount) {
-                    return@runCatching SearchResult(matched, Offset(result.document.toInt(), j + 1))
-                }
+                return@runCatching SearchResult(matched, offset)
             }
         }
         return@runCatching SearchResult(matched, null)
     }
+
+    internal fun processDocument(query: SearchQuery, result: Mg4jSearchResult, wantedSnippets: Int, offset: Int? = null): Pair<List<Match>, Int?> {
+        val matched = mutableListOf<Match>()
+        val defaultIndex = engine.indexMap[query.defaultIndex]
+                ?: throw IllegalArgumentException("Index ${query.defaultIndex} not found")
+
+        val document = collection.document(result.document) as Mg4jDocument
+        val scores = getScoresForIndex(result, defaultIndex).let {
+            if (offset != null) it.subList(offset, it.size) else it
+        }
+
+        for (score in scores) {
+            val (left, right) = score.interval
+            // todo how big the prefix and suffix should be ( and if they are necessary at all) depends on the size of the matched region
+            val prefix = Math.max(left - 5, 0)
+            val suffix = right + 5
+
+            val content = document.loadSnippetPartsFields(prefix, suffix)
+            val words = content[query.defaultIndex]
+
+
+            val payload = when (query.responseFormat) {
+                ResponseFormat.HTML -> processAsHtml(query, document, words, left - prefix, right - prefix)
+                ResponseFormat.JSON -> processAsJson(query, document, words, left - prefix, right - prefix)
+            }
+
+            val match = Match(
+                    collectionName,
+                    result.document,
+                    left,
+                    right - left,
+                    document.uri().toString(),
+                    document.title().toString(),
+                    payload,
+                    canExtend = prefix > 0 || suffix < words.size - 1
+            )
+            log.info("Found match $match")
+            matched.add(match)
+            if (matched.size >= wantedSnippets) {
+                return matched to matched.size + 1
+            }
+        }
+
+        return matched to null
+    }
 }
+
 
 fun processAsJson(query: SearchQuery, document: Document, words: List<String>, left: Int, right: Int): Payload.Snippet.Json {
     val prefixText = words.subList(0, left).joinToString(separator = " ")

@@ -56,6 +56,7 @@ private fun produceJson(content: SnippetPartsFields, query: SearchQuery, left: I
 }
 
 private fun produceHtml(content: SnippetPartsFields, query: SearchQuery, left: Int?, right: Int?): Payload.Snippet.Html {
+    // todo extend according to the html snippet format spec (when there is one :) )
     val result = buildString {
         for (elem in content) {
             if (left != null && elem.index == left) {
