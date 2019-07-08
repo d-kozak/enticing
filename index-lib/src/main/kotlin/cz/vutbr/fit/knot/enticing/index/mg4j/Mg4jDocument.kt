@@ -26,34 +26,42 @@ class Mg4jDocument(
 
     override fun uri(): CharSequence = metadata[DocumentMetadata.URI] as CharSequence
 
+    fun size() = metadata[DocumentMetadata.SIZE] as Int
+
     override fun wordReader(field: Int): WordReader = wordReader
 
     override fun content(field: Int): Any = content[field].reader()
 
-    fun loadSnippetPartsFields(left: Int? = null, right: Int? = null): SnippetPartsFields {
+    /**
+     * Loads SnippetPartsFields from part of the document
+     *
+     * @param left left limit, inclusive
+     * @param right right limit, inclusive
+     */
+    fun loadSnippetPartsFields(left: Int = 0, _right: Int = -1): SnippetPartsFields {
+        val right = if (_right == -1) size() else _right
         val indexContent = indexes.asSequence()
                 .map { it.name to readIndex(it.columnIndex, left, right) }
                 .toMap()
-
+        val loadedDataSize = indexContent["token"]!!.size
         fun collectIndexValuesAt(i: Int): List<String> = indexes.map { indexContent[it.name]!![i] }
 
-        // all indexes should be the same length
-        val len = indexContent["token"]!!.size
 
         val result = mutableListOf<SnippetElement>()
         var i = 0
-        while (i < len) {
+        val limit = Math.min(right - left, loadedDataSize)
+        while (i < limit) {
             val nertag = indexContent["nertag"]!![i]
             if (nertag != "0") {
                 val entityInfo = listOf<String>()
                 val nerlen = Math.max(indexContent["nerlength"]!![i].toIntOrNull() ?: 1, 1)
-                val words = (i until i + nerlen)
-                        .map { SnippetElement.Word(it, collectIndexValuesAt(it)) }
-                result.add(SnippetElement.Entity(i, entityInfo, words))
+                val words = (i until Math.min(i + nerlen, loadedDataSize))
+                        .map { SnippetElement.Word(left + it, collectIndexValuesAt(it)) }
+                result.add(SnippetElement.Entity(left + i, entityInfo, words))
                 i += nerlen
 
             } else {
-                result.add(SnippetElement.Word(i, collectIndexValuesAt(i)))
+                result.add(SnippetElement.Word(left + i, collectIndexValuesAt(i)))
                 i++
             }
         }
@@ -70,7 +78,7 @@ class Mg4jDocument(
         val word = MutableString()
         val nonWord = MutableString()
 
-        val range = if (right != null) 0 until right else 0..Int.MAX_VALUE
+        val range = if (right != null) 0..right else 0..Int.MAX_VALUE
 
         for (i in range) {
             if (!combined.next(word, nonWord)) {

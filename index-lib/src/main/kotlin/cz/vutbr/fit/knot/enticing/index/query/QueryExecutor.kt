@@ -3,14 +3,13 @@ package cz.vutbr.fit.knot.enticing.index.query
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexClientConfig
 import cz.vutbr.fit.knot.enticing.dto.query.Offset
-import cz.vutbr.fit.knot.enticing.dto.query.ResponseFormat
 import cz.vutbr.fit.knot.enticing.dto.query.SearchQuery
-import cz.vutbr.fit.knot.enticing.dto.response.*
+import cz.vutbr.fit.knot.enticing.dto.response.Match
+import cz.vutbr.fit.knot.enticing.dto.response.SearchResult
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jCompositeDocumentCollection
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jDocument
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jDocumentFactory
-import it.unimi.di.big.mg4j.document.Document
 import it.unimi.di.big.mg4j.index.Index
 import it.unimi.di.big.mg4j.index.TermProcessor
 import it.unimi.di.big.mg4j.query.IntervalSelector
@@ -25,7 +24,9 @@ import it.unimi.dsi.util.Interval
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-const val MAX_SNIPPET_SIZE = 50
+
+// todo put into the configuration?
+const val SNIPPET_SIZE = 50
 
 fun initQueryExecutor(config: IndexClientConfig): QueryExecutor {
     val collection = Mg4jCompositeDocumentCollection(config.corpusConfiguration, config.mg4jFiles)
@@ -78,7 +79,7 @@ class QueryExecutor internal constructor(
 
         val matched = mutableListOf<Match>()
         for ((i, result) in resultList.withIndex()) {
-            val (matchList, nextSnippet) = processDocument(query, result, query.snippetCount - matched.size, if (i == 0) matchOffset else null)
+            val (matchList, nextSnippet) = processDocument(query, result, query.snippetCount - matched.size, if (i == 0) matchOffset else 0)
             matched.addAll(matchList)
             if (matched.size >= query.snippetCount || nextSnippet != null) {
                 val offset = when {
@@ -92,7 +93,7 @@ class QueryExecutor internal constructor(
         return@runCatching SearchResult(matched, null)
     }
 
-    internal fun processDocument(query: SearchQuery, result: Mg4jSearchResult, wantedSnippets: Int, offset: Int? = null): Pair<List<Match>, Int?> {
+    internal fun processDocument(query: SearchQuery, result: Mg4jSearchResult, wantedSnippets: Int, offset: Int): Pair<List<Match>, Int?> {
         val matched = mutableListOf<Match>()
         val defaultIndex = engine.indexMap[query.defaultIndex]
                 ?: throw IllegalArgumentException("Index ${query.defaultIndex} not found")
@@ -100,20 +101,22 @@ class QueryExecutor internal constructor(
         val document = collection.document(result.document) as Mg4jDocument
         val scores = getScoresForIndex(result, defaultIndex)
 
-        for (score in scores) {
-            val (left, right) = score.interval
-            // todo how big the prefix and suffix should be ( and if they are necessary at all) depends on the size of the matched region
-            val prefix = Math.max(left - 5, 0)
-            val suffix = right + 5
+        var lastProcessedIndex = -1
 
-            val content = document.loadSnippetPartsFields(prefix, suffix)
-            val words = content[query.defaultIndex]
+        for ((i, score) in scores.withIndex()) {
+            val (left, right) = score.clampRight(score.left + SNIPPET_SIZE)
+            if (right <= lastProcessedIndex) continue
 
+            val relevantScores = scores
+                    .asSequence()
+                    .filterIndexed { j, _ -> j >= i }
+                    .filter { (it, _) -> it < left + SNIPPET_SIZE }
+                    .map { it.clampRight(left + SNIPPET_SIZE) }
+                    .toList()
 
-            val payload = when (query.responseFormat) {
-                ResponseFormat.HTML -> processAsHtml(query, document, words, left - prefix, right - prefix)
-                ResponseFormat.JSON -> processAsJson(query, document, words, left - prefix, right - prefix)
-            }
+            val content = document.loadSnippetPartsFields(left, left + SNIPPET_SIZE)
+
+            val payload = createPayload(query, content, relevantScores)
 
             val match = Match(
                     collectionName,
@@ -123,13 +126,15 @@ class QueryExecutor internal constructor(
                     document.uri().toString(),
                     document.title().toString(),
                     payload,
-                    canExtend = prefix > 0 || suffix < words.size - 1
+                    canExtend = left > 0 || left + SNIPPET_SIZE < document.size()
             )
-            log.info("Found match $match")
             matched.add(match)
+            log.info("Found match $match")
             if (matched.size >= wantedSnippets) {
                 return matched to matched.size + 1
             }
+
+            lastProcessedIndex = if (relevantScores.isNotEmpty()) relevantScores.last().right else right
         }
 
         return matched to null
@@ -139,38 +144,7 @@ class QueryExecutor internal constructor(
     private fun getScoresForIndex(
             result: DocumentScoreInfo<Reference2ObjectMap<Index, Array<SelectedInterval>>>,
             index: Index
-    ): List<SelectedInterval> = result.info[index]?.toList() ?: listOf<SelectedInterval>().also {
+    ): List<Interval> = result.info[index]?.asSequence()?.map { it.interval }?.toList() ?: listOf<Interval>().also {
         log.warn("No results for index $index")
     }
 }
-
-
-fun processAsJson(query: SearchQuery, document: Document, words: List<String>, left: Int, right: Int): Payload.Snippet.Json {
-    val prefixText = words.subList(0, left).joinToString(separator = " ")
-    val matchedText = words.subList(left, right).joinToString(separator = " ")
-    val suffixText = words.subList(right + 1, words.size).joinToString(separator = " ")
-
-    return Payload.Snippet.Json(AnnotatedText(
-            prefixText + matchedText + suffixText,
-            emptyMap(),
-            emptyList(),
-            listOf(QueryMapping(
-                    textIndex = MatchedRegion(prefixText.length, matchedText.length),
-                    queryIndex = MatchedRegion(0, query.query.length)
-            ))
-    ))
-}
-
-fun processAsHtml(query: SearchQuery, document: Document, words: List<String>, left: Int, right: Int): Payload.Snippet.Html {
-    if (words.isEmpty()) return Payload.Snippet.Html("NULL")
-
-    val prefixText = words.subList(0, Math.min(left, words.size)).joinToString(separator = " ")
-    val matchedText = words.subList(Math.min(left, words.size - 1), Math.min(right, words.size)).joinToString(separator = " ")
-    val suffixText = words.subList(Math.min(right, words.size - 1), words.size).joinToString(separator = " ")
-
-    return Payload.Snippet.Html("$prefixText<b>$matchedText</b>$suffixText")
-}
-
-
-operator fun Interval.component1() = left
-operator fun Interval.component2() = right + 1

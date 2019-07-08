@@ -8,6 +8,7 @@ import cz.vutbr.fit.knot.enticing.dto.response.Payload
 import cz.vutbr.fit.knot.enticing.dto.response.QueryMapping
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetPartsFields
+import it.unimi.dsi.util.Interval
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -47,13 +48,13 @@ internal class PayloadCreatorTest {
 
         @Test
         fun `simple format no metadata`() {
-            var payload = createPayload(htmlQuery, smallDocument, 0, 3)
+            var payload = createPayload(htmlQuery, smallDocument, listOf(Interval.valueOf(0, 2)))
             assertThat(payload)
                     .isEqualTo(Payload.Snippet.Html("<b>one two three</b>"))
-            payload = createPayload(htmlQuery, smallDocument, 1, 3)
+            payload = createPayload(htmlQuery, smallDocument, listOf(Interval.valueOf(1, 2)))
             assertThat(payload)
                     .isEqualTo(Payload.Snippet.Html("one <b>two three</b>"))
-            payload = createPayload(htmlQuery, smallDocument, 1, 2)
+            payload = createPayload(htmlQuery, smallDocument, listOf(Interval.valueOf(1, 1)))
             assertThat(payload)
                     .isEqualTo(Payload.Snippet.Html("one <b>two</b> three"))
         }
@@ -66,7 +67,7 @@ internal class PayloadCreatorTest {
 
         @Test
         fun `simple format no metadata`() {
-            var payload = createPayload(jsonQuery, smallDocument, 0, 3)
+            var payload = createPayload(jsonQuery, smallDocument, listOf(Interval.valueOf(0, 2)))
             assertThat(payload)
                     .isEqualTo(Payload.Snippet.Json(AnnotatedText(
                             "one two three",
@@ -74,7 +75,7 @@ internal class PayloadCreatorTest {
                             emptyList(),
                             listOf(QueryMapping(0 to 13, 0 to jsonQuery.query.length))
                     )))
-            payload = createPayload(jsonQuery, smallDocument, 1, 3)
+            payload = createPayload(jsonQuery, smallDocument, listOf(Interval.valueOf(1, 2)))
             assertThat(payload)
                     .isEqualTo(Payload.Snippet.Json(AnnotatedText(
                             "one two three",
@@ -82,7 +83,7 @@ internal class PayloadCreatorTest {
                             emptyList(),
                             listOf(QueryMapping(4 to 13, 0 to jsonQuery.query.length))
                     )))
-            payload = createPayload(jsonQuery, smallDocument, 1, 2)
+            payload = createPayload(jsonQuery, smallDocument, listOf(Interval.valueOf(1, 1)))
             assertThat(payload)
                     .isEqualTo(Payload.Snippet.Json(AnnotatedText(
                             "one two three",
@@ -96,7 +97,7 @@ internal class PayloadCreatorTest {
     @Test
     fun `left should be smaller or equal to right`() {
         assertThrows<IllegalArgumentException> {
-            createPayload(templateQuery, smallDocument, 2, 1)
+            createPayload(templateQuery, smallDocument, listOf(Interval.valueOf(2, 1)))
         }
     }
 
@@ -104,7 +105,7 @@ internal class PayloadCreatorTest {
     @Test
     fun `default index should be present in the document`() {
         assertThrows<IllegalArgumentException> {
-            createPayload(templateQuery.copy(defaultIndex = "foo"), smallDocument, 1, 2)
+            createPayload(templateQuery.copy(defaultIndex = "foo"), smallDocument, listOf(Interval.valueOf(1, 2)))
         }
     }
 

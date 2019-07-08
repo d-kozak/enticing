@@ -7,24 +7,27 @@ import cz.vutbr.fit.knot.enticing.dto.response.Payload
 import cz.vutbr.fit.knot.enticing.dto.response.QueryMapping
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetPartsFields
+import it.unimi.dsi.util.Interval
 
-internal fun createPayload(query: SearchQuery, content: SnippetPartsFields, left: Int? = null, right: Int? = null): Payload {
-    checkPreconditions(left, right, content, query)
+internal fun createPayload(query: SearchQuery, content: SnippetPartsFields, intervals: List<Interval>): Payload {
 
+    // todo check for ResponseType once EQL stuff is in place
     return when (query.responseFormat) {
-        ResponseFormat.HTML -> produceHtml(content, query, left, right)
-        ResponseFormat.JSON -> produceJson(content, query, left, right)
+        ResponseFormat.HTML -> produceHtml(content, query, intervals)
+        ResponseFormat.JSON -> produceJson(content, query, intervals)
     }
-
 }
 
-private fun produceJson(content: SnippetPartsFields, query: SearchQuery, left: Int?, right: Int?): Payload {
-    var startPosition = 0
-    var endPosition = 0
+private fun produceJson(content: SnippetPartsFields, query: SearchQuery, intervals: List<Interval>): Payload {
+    val (left, right) = split(intervals)
+
+    val queryIndex = 0 to query.query.length
+    val queryMapping = mutableListOf<QueryMapping>()
     val text = buildString {
+        var startPosition = 0
         var currentPosition = 0
         for (elem in content) {
-            if (left != null && elem.index == left) {
+            if (elem.index in left) {
                 startPosition = currentPosition
             }
 
@@ -41,8 +44,8 @@ private fun produceJson(content: SnippetPartsFields, query: SearchQuery, left: I
                 }
             }
 
-            if (right != null && elem.index == right - 1) {
-                endPosition = currentPosition
+            if (elem.index in right) {
+                queryMapping.add(QueryMapping(startPosition to currentPosition, queryIndex))
             }
 
             if (elem != content.elements.last()) {
@@ -51,15 +54,16 @@ private fun produceJson(content: SnippetPartsFields, query: SearchQuery, left: I
             }
         }
     }
-    val queryMapping = QueryMapping(textIndex = startPosition to endPosition, queryIndex = 0 to query.query.length)
-    return Payload.Snippet.Json(AnnotatedText(text, emptyMap(), emptyList(), listOf(queryMapping)))
+    return Payload.Snippet.Json(AnnotatedText(text, emptyMap(), emptyList(), queryMapping))
 }
 
-private fun produceHtml(content: SnippetPartsFields, query: SearchQuery, left: Int?, right: Int?): Payload.Snippet.Html {
+private fun produceHtml(content: SnippetPartsFields, query: SearchQuery, intervals: List<Interval>): Payload.Snippet.Html {
     // todo extend according to the html snippet format spec (when there is one :) )
+    val (left, right) = split(intervals)
+
     val result = buildString {
         for (elem in content) {
-            if (left != null && elem.index == left) {
+            if (elem.index in left) {
                 append("<b>")
             }
 
@@ -72,7 +76,7 @@ private fun produceHtml(content: SnippetPartsFields, query: SearchQuery, left: I
                 }
             }
 
-            if (right != null && elem.index == right - 1) {
+            if (elem.index in right) {
                 append("</b>")
             }
 
@@ -84,11 +88,12 @@ private fun produceHtml(content: SnippetPartsFields, query: SearchQuery, left: I
     return Payload.Snippet.Html(result)
 }
 
-private fun checkPreconditions(left: Int?, right: Int?, content: SnippetPartsFields, query: SearchQuery) {
-    if (left != null && right != null) {
-        require(left < right) { "$left should be < to $right" }
-    } else if (right == null || left == null) {
-        throw IllegalArgumentException("Both or none of left and right should be null")
+private fun split(intervals: List<Interval>): Pair<Set<Int>, Set<Int>> {
+    val left = mutableSetOf<Int>()
+    val right = mutableSetOf<Int>()
+    for ((l, r) in intervals) {
+        left.add(l)
+        right.add(r)
     }
-    require(content[query.defaultIndex] != null) { "Data for default index are not present" }
+    return Pair(left, right)
 }
