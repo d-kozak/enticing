@@ -15,7 +15,7 @@ data class Index(
 typealias IndexConfigDsl = MutableMap<String, Index>
 
 fun IndexConfigDsl.index(name: String, block: Index.() -> Unit = {}) = Index(name).apply(block)
-        .also { it.columnIndex = this.size }
+        .also { if (it.columnIndex == 0) it.columnIndex = this.size }
         .also { this[name] = it }
 
 private var indexes: IndexConfigDsl = mutableMapOf()

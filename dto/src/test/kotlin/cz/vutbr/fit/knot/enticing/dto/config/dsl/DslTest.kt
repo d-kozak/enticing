@@ -1,10 +1,7 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl
 
 import cz.vutbr.fit.knot.enticing.dto.config.SearchConfig
-import cz.vutbr.fit.knot.enticing.dto.query.ResponseFormat
-import cz.vutbr.fit.knot.enticing.dto.query.ResponseType
-import cz.vutbr.fit.knot.enticing.dto.query.ServerInfo
-import cz.vutbr.fit.knot.enticing.dto.query.TextMetadata
+import cz.vutbr.fit.knot.enticing.dto.query.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -145,12 +142,55 @@ class DslTest {
                     .isEqualTo(expected)
         }
 
+
         @Nested
-        inner class Validation {
+        inner class EntityFilteringTest {
 
             @Test
-            fun `valid config`() {
-                val config = corpusConfig("CC") {
+            fun `toplevel predefined none`() {
+                val requirement = TextMetadata.Predefined("none")
+                val defaultIndex = "token"
+
+                val filtered = fullValidCorpusConfig.filterBy(requirement, defaultIndex)
+
+                val expected = corpusConfig("CC") {
+                    indexes {
+                        index("token") {
+                            columnIndex = 1
+                            description = "Original word in the document"
+                        }
+                        entityMapping {
+                            entityIndex = "nertag"
+                            attributeIndexes = 15 to 24
+                            extraIndexes("nertype", "nerlength")
+                        }
+                    }
+                }
+                assertThat(filtered)
+                        .isEqualTo(expected)
+            }
+
+            @Test
+            fun `toplevel predefined all`() {
+                val requirement = TextMetadata.Predefined("all")
+                val defaultIndex = "token"
+
+                val filtered = fullValidCorpusConfig.filterBy(requirement, defaultIndex)
+                assertThat(filtered)
+                        .isEqualTo(fullValidCorpusConfig)
+            }
+
+            @Test
+            fun `exact all indexes no entities`() {
+                val requirement = TextMetadata.ExactDefinition(
+                        indexes = Indexes.Predefined("all"),
+                        entities = Entities.Predefined("none")
+                )
+                val defaultIndex = "token"
+
+                val filtered = fullValidCorpusConfig.filterBy(requirement, defaultIndex)
+
+                val expected = corpusConfig("CC") {
                     indexes {
                         "position" whichIs "Position of the word in the document"
                         "token" whichIs "Original word in the document"
@@ -170,40 +210,6 @@ class DslTest {
                         params(9)
                         "nertype" whichIs "nertype"
                         "nerlength" whichIs "nerlength"
-                    }
-
-                    entities {
-                        "person" with attributes("url", "image", "name", "gender", "birthplace", "birthdate", "deathplace", "deathdate", "profession", "nationality")
-
-                        "artist" with attributes("url", "image", "name", "gender", "birthplace", "birthdate", "deathplace", "deathdate", "role", "nationality")
-
-                        "location" with attributes("url", "image", "name", "country")
-
-                        "artwork" with attributes("url", "image", "name", "form", "datebegun", "datecompleted", "movement", "genre", "author")
-
-                        "event" with attributes("url", "image", "name", "startdate", "enddate", "location")
-
-                        "museum" with attributes("url", "image", "name", "type", "established", "director", "location")
-
-                        "family" with attributes("url", "image", "name", "role", "nationality", "members")
-
-                        "group" with attributes("url", "image", "name", "role", "nationality")
-
-                        "nationality" with attributes("url", "image", "name", "country")
-
-                        "date" with attributes("url", "image", "year", "month", "day")
-
-                        "interval" with attributes("url", "image", "fromyear", "frommonth", "fromday", "toyear", "tomonth", "today")
-
-                        "form" with attributes("url", "image", "name")
-
-                        "medium" with attributes("url", "image", "name")
-
-                        "mythology" with attributes("url", "image", "name")
-
-                        "movement" with attributes("url", "image", "name")
-
-                        "genre" with attributes("url", "image", "name")
 
                     }
                     entityMapping {
@@ -212,7 +218,144 @@ class DslTest {
                         extraIndexes("nertype", "nerlength")
                     }
                 }
-                val errors = config.validate()
+                assertThat(filtered)
+                        .isEqualTo(expected)
+            }
+
+            @Test
+            fun `exact no indexes no entities`() {
+                val requirement = TextMetadata.ExactDefinition(
+                        indexes = Indexes.Predefined("none"),
+                        entities = Entities.Predefined("none")
+                )
+                val defaultIndex = "token"
+
+                val filtered = fullValidCorpusConfig.filterBy(requirement, defaultIndex)
+
+                val expected = corpusConfig("CC") {
+                    indexes {
+                        index("token") {
+                            columnIndex = 1
+                            description = "Original word in the document"
+                        }
+                    }
+                    entityMapping {
+                        entityIndex = "nertag"
+                        attributeIndexes = 15 to 24
+                        extraIndexes("nertype", "nerlength")
+                    }
+                }
+                assertThat(filtered)
+                        .isEqualTo(expected)
+            }
+
+            @Test
+            fun `exact three indexes no entities`() {
+                val requirement = TextMetadata.ExactDefinition(
+                        indexes = Indexes.ExactDefinition(listOf("lemma", "nerlength")),
+                        entities = Entities.Predefined("none")
+                )
+                val defaultIndex = "token"
+
+                val filtered = fullValidCorpusConfig.filterBy(requirement, defaultIndex)
+
+                val expected = corpusConfig("CC") {
+                    indexes {
+                        index("token") {
+                            columnIndex = 1
+                            description = "Original word in the document"
+                        }
+                        index("lemma") {
+                            columnIndex = 3
+                            description = "Lemma of the word"
+                        }
+                        index("nerlength") {
+                            columnIndex = 26
+                            description = "nerlength"
+                        }
+                    }
+                    entityMapping {
+                        entityIndex = "nertag"
+                        attributeIndexes = 15 to 24
+                        extraIndexes("nertype", "nerlength")
+                    }
+                }
+                assertThat(filtered)
+                        .isEqualTo(expected)
+            }
+
+
+        }
+
+        private val fullValidCorpusConfig = corpusConfig("CC") {
+            indexes {
+                "position" whichIs "Position of the word in the document"
+                "token" whichIs "Original word in the document"
+                "tag" whichIs "tag"
+                "lemma" whichIs "Lemma of the word"
+                "parpos" whichIs "parpos"
+                "function" whichIs "function"
+                "parwrod" whichIs "parword"
+                "parlemma" whichIs "parlemma"
+                "paroffset" whichIs "paroffset"
+                "link" whichIs "link"
+                "length" whichIs "length"
+                "docuri" whichIs "docuri"
+                "lower" whichIs "lower"
+                "nerid" whichIs "nerid"
+                "nertag" whichIs "nertag"
+                params(9)
+                "nertype" whichIs "nertype"
+                "nerlength" whichIs "nerlength"
+            }
+
+            entities {
+                "person" with attributes("url", "image", "name", "gender", "birthplace", "birthdate", "deathplace", "deathdate", "profession", "nationality")
+
+                "artist" with attributes("url", "image", "name", "gender", "birthplace", "birthdate", "deathplace", "deathdate", "role", "nationality")
+
+                "location" with attributes("url", "image", "name", "country")
+
+                "artwork" with attributes("url", "image", "name", "form", "datebegun", "datecompleted", "movement", "genre", "author")
+
+                "event" with attributes("url", "image", "name", "startdate", "enddate", "location")
+
+                "museum" with attributes("url", "image", "name", "type", "established", "director", "location")
+
+                "family" with attributes("url", "image", "name", "role", "nationality", "members")
+
+                "group" with attributes("url", "image", "name", "role", "nationality")
+
+                "nationality" with attributes("url", "image", "name", "country")
+
+                "date" with attributes("url", "image", "year", "month", "day")
+
+                "interval" with attributes("url", "image", "fromyear", "frommonth", "fromday", "toyear", "tomonth", "today")
+
+                "form" with attributes("url", "image", "name")
+
+                "medium" with attributes("url", "image", "name")
+
+                "mythology" with attributes("url", "image", "name")
+
+                "movement" with attributes("url", "image", "name")
+
+                "genre" with attributes("url", "image", "name")
+
+            }
+            entityMapping {
+                entityIndex = "nertag"
+                attributeIndexes = 15 to 24
+                extraIndexes("nertype", "nerlength")
+            }
+        }
+
+        @Nested
+        inner class Validation {
+
+            @Test
+            fun `valid config`() {
+                val errors = fullValidCorpusConfig.validate()
                 assertThat(errors)
                         .isEmpty()
             }
