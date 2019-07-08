@@ -4,7 +4,6 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.index
 import cz.vutbr.fit.knot.enticing.dto.query.*
 import cz.vutbr.fit.knot.enticing.dto.response.AnnotatedText
-import cz.vutbr.fit.knot.enticing.dto.response.MatchedRegion
 import cz.vutbr.fit.knot.enticing.dto.response.Payload
 import cz.vutbr.fit.knot.enticing.dto.response.QueryMapping
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
@@ -73,7 +72,7 @@ internal class PayloadCreatorTest {
                             "one two three",
                             emptyMap(),
                             emptyList(),
-                            listOf(QueryMapping(MatchedRegion(0, 13), MatchedRegion(0, jsonQuery.query.length)))
+                            listOf(QueryMapping(0 to 13, 0 to jsonQuery.query.length))
                     )))
             payload = createPayload(jsonQuery, smallDocument, 1, 3)
             assertThat(payload)
@@ -81,7 +80,7 @@ internal class PayloadCreatorTest {
                             "one two three",
                             emptyMap(),
                             emptyList(),
-                            listOf(QueryMapping(MatchedRegion(4, 13), MatchedRegion(0, jsonQuery.query.length)))
+                            listOf(QueryMapping(4 to 13, 0 to jsonQuery.query.length))
                     )))
             payload = createPayload(jsonQuery, smallDocument, 1, 2)
             assertThat(payload)
@@ -89,7 +88,7 @@ internal class PayloadCreatorTest {
                             "one two three",
                             emptyMap(),
                             emptyList(),
-                            listOf(QueryMapping(MatchedRegion(4, 7), MatchedRegion(0, jsonQuery.query.length)))
+                            listOf(QueryMapping(4 to 7, 0 to jsonQuery.query.length))
                     )))
         }
     }

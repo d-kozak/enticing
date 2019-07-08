@@ -30,7 +30,9 @@ data class QueryMapping(
         val textIndex: MatchedRegion,
         @field:Valid
         val queryIndex: MatchedRegion
-)
+) {
+        constructor(textIndex: Pair<Int, Int>, queryIndex: Pair<Int, Int>) : this(MatchedRegion(textIndex.first, textIndex.second), MatchedRegion(queryIndex.first, queryIndex.second))
+}
 
 data class AnnotationPosition(
         @field:Positive
