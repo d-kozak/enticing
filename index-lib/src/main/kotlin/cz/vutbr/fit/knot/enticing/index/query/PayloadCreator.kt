@@ -3,13 +3,12 @@ package cz.vutbr.fit.knot.enticing.index.query
 import cz.vutbr.fit.knot.enticing.dto.query.ResponseFormat
 import cz.vutbr.fit.knot.enticing.dto.query.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.response.AnnotatedText
-import cz.vutbr.fit.knot.enticing.dto.response.MatchedRegion
 import cz.vutbr.fit.knot.enticing.dto.response.Payload
 import cz.vutbr.fit.knot.enticing.dto.response.QueryMapping
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetPartsFields
 
-fun createPayload(query: SearchQuery, content: SnippetPartsFields, left: Int? = null, right: Int? = null): Payload {
+internal fun createPayload(query: SearchQuery, content: SnippetPartsFields, left: Int? = null, right: Int? = null): Payload {
     checkPreconditions(left, right, content, query)
 
     return when (query.responseFormat) {
@@ -19,7 +18,7 @@ fun createPayload(query: SearchQuery, content: SnippetPartsFields, left: Int? = 
 
 }
 
-fun produceJson(content: SnippetPartsFields, query: SearchQuery, left: Int?, right: Int?): Payload {
+private fun produceJson(content: SnippetPartsFields, query: SearchQuery, left: Int?, right: Int?): Payload {
     var startPosition = 0
     var endPosition = 0
     val text = buildString {
@@ -52,25 +51,32 @@ fun produceJson(content: SnippetPartsFields, query: SearchQuery, left: Int?, rig
             }
         }
     }
-    val queryMapping = QueryMapping(textIndex = MatchedRegion(startPosition, endPosition), queryIndex = MatchedRegion(0, query.query.length))
+    val queryMapping = QueryMapping(textIndex = startPosition to endPosition, queryIndex = 0 to query.query.length)
     return Payload.Snippet.Json(AnnotatedText(text, emptyMap(), emptyList(), listOf(queryMapping)))
 }
 
 private fun produceHtml(content: SnippetPartsFields, query: SearchQuery, left: Int?, right: Int?): Payload.Snippet.Html {
-    val defaultIndex = content[query.defaultIndex]
     val result = buildString {
-        for ((i, word) in defaultIndex.withIndex()) {
-            if (left != null && i == left) {
+        for (elem in content) {
+            if (left != null && elem.index == left) {
                 append("<b>")
             }
 
-            append(word)
-            if (i != defaultIndex.size - 1 && ((right != null && i != right - 1)) || right == null) {
-                append(' ')
+            when (elem) {
+                is SnippetElement.Word -> {
+                    append(elem[content.corpusConfiguration.indexOf(query.defaultIndex)])
+                }
+                is SnippetElement.Entity -> {
+                    append(elem[content.corpusConfiguration.indexOf(query.defaultIndex)].joinToString(" "))
+                }
             }
 
-            if (right != null && i == right - 1) {
+            if (right != null && elem.index == right - 1) {
                 append("</b>")
+            }
+
+            if (elem != content.elements.last()) {
+                append(' ')
             }
         }
     }

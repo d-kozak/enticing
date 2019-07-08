@@ -55,7 +55,7 @@ internal class PayloadCreatorTest {
                     .isEqualTo(Payload.Snippet.Html("one <b>two three</b>"))
             payload = createPayload(htmlQuery, smallDocument, 1, 2)
             assertThat(payload)
-                    .isEqualTo(Payload.Snippet.Html("one <b>two</b>three"))
+                    .isEqualTo(Payload.Snippet.Html("one <b>two</b> three"))
         }
     }
 
