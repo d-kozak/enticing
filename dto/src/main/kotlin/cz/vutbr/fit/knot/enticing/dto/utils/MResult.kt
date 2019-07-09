@@ -22,7 +22,7 @@ data class MResult<T> internal constructor(val value: T) {
 
         fun <T> failure(throwable: Throwable): MResult<T> = MResult(createFailure(throwable)) as MResult<T>
 
-        fun <T> runCatching(block: () -> T): MResult<T> =
+        inline fun <T> runCatching(block: () -> T): MResult<T> =
                 try {
                     success(block())
                 } catch (ex: Exception) {

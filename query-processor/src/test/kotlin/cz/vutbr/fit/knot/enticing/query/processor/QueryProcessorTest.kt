@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
  * lambda to interface conversion
  */
 internal fun dummyDispatcher(fn: (SearchQuery, ServerInfo) -> MResult<SearchResult>): RequestDispatcher = object : RequestDispatcher {
-    override fun invoke(searchQuery: SearchQuery, serverInfo: ServerInfo): MResult<SearchResult> = fn(searchQuery, serverInfo)
+    override suspend fun invoke(searchQuery: SearchQuery, serverInfo: ServerInfo): MResult<SearchResult> = fn(searchQuery, serverInfo)
 }
 
 internal class QueryProcessorTest {
