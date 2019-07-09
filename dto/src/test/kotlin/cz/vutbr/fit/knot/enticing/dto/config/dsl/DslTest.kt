@@ -69,7 +69,7 @@ class DslTest {
                 entityMapping {
                     entityIndex = "nertag"
                     attributeIndexes = 15 to 24
-                    extraIndexes("nertype", "nerlength")
+                    extraAttributes("nertype", "nerlength")
                 }
             }
             assertThat(corpus)
@@ -84,7 +84,7 @@ class DslTest {
                             entityMapping = EntityMapping().apply {
                                 entityIndex = "nertag"
                                 attributeIndexes = 15 to 24
-                                extraEntityIndexes = setOf("nertype", "nerlength")
+                                extraAttributes = LinkedHashSet(listOf("nertype", "nerlength"))
                             }
                     ))
         }
@@ -119,7 +119,7 @@ class DslTest {
                     entityMapping {
                         entityIndex = "nertag"
                         attributeIndexes = 15 to 24
-                        extraIndexes("nertype", "nerlength")
+                        extraAttributes("nertype", "nerlength")
                     }
                 }
             }
@@ -140,7 +140,7 @@ class DslTest {
                         entityMapping = EntityMapping().apply {
                             entityIndex = "nertag"
                             attributeIndexes = 15 to 24
-                            extraEntityIndexes = setOf("nertype", "nerlength")
+                            extraAttributes = LinkedHashSet(listOf("nertype", "nerlength"))
                         }
                 )
             }
@@ -168,7 +168,7 @@ class DslTest {
                         entityMapping {
                             entityIndex = "nertag"
                             attributeIndexes = 15 to 24
-                            extraIndexes("nertype", "nerlength")
+                            extraAttributes("nertype", "nerlength")
                         }
                     }
                 }
@@ -221,7 +221,7 @@ class DslTest {
                     entityMapping {
                         entityIndex = "nertag"
                         attributeIndexes = 15 to 24
-                        extraIndexes("nertype", "nerlength")
+                        extraAttributes("nertype", "nerlength")
                     }
                 }
                 assertThat(filtered)
@@ -248,7 +248,7 @@ class DslTest {
                     entityMapping {
                         entityIndex = "nertag"
                         attributeIndexes = 15 to 24
-                        extraIndexes("nertype", "nerlength")
+                        extraAttributes("nertype", "nerlength")
                     }
                 }
                 assertThat(filtered)
@@ -283,7 +283,7 @@ class DslTest {
                     entityMapping {
                         entityIndex = "nertag"
                         attributeIndexes = 15 to 24
-                        extraIndexes("nertype", "nerlength")
+                        extraAttributes("nertype", "nerlength")
                     }
                 }
                 assertThat(filtered)
@@ -319,7 +319,7 @@ class DslTest {
                     entityMapping {
                         entityIndex = "nertag"
                         attributeIndexes = 15 to 24
-                        extraIndexes("nertype", "nerlength")
+                        extraAttributes("nertype", "nerlength")
                     }
                 }
                 assertThat(filtered)
@@ -356,7 +356,7 @@ class DslTest {
                     entityMapping {
                         entityIndex = "nertag"
                         attributeIndexes = 15 to 24
-                        extraIndexes("nertype", "nerlength")
+                        extraAttributes("nertype", "nerlength")
                     }
                 }
                 assertThat(filtered)
@@ -405,7 +405,7 @@ class DslTest {
                     entityMapping {
                         entityIndex = "nertag"
                         attributeIndexes = 15 to 24
-                        extraIndexes("nertype", "nerlength")
+                        extraAttributes("nertype", "nerlength")
                     }
                 }
                 assertThat(filtered)
@@ -458,7 +458,7 @@ class DslTest {
                     entityMapping {
                         entityIndex = "nertag"
                         attributeIndexes = 15 to 24
-                        extraIndexes("nertype", "nerlength")
+                        extraAttributes("nertype", "nerlength")
                     }
                 }
                 assertThat(filtered)
@@ -527,7 +527,7 @@ class DslTest {
             entityMapping {
                 entityIndex = "nertag"
                 attributeIndexes = 15 to 24
-                extraIndexes("nertype", "nerlength")
+                extraAttributes("nertype", "nerlength")
             }
         }
 
@@ -603,7 +603,7 @@ class DslTest {
                     entityMapping {
                         entityIndex = "nertag"
                         attributeIndexes = 15 to 24
-                        extraIndexes("nertype", "nerlength")
+                        extraAttributes("nertype", "nerlength")
                     }
                 }
                 val errors = config.validate()
@@ -672,7 +672,7 @@ class DslTest {
                     entityMapping {
                         entityIndex = "nertagg"
                         attributeIndexes = 15 to 24
-                        extraIndexes("nertype", "nerlength")
+                        extraAttributes("nertype", "nerlength")
                     }
                 }
                 val errors = config.validate()
@@ -741,7 +741,7 @@ class DslTest {
                     entityMapping {
                         entityIndex = "nertag"
                         attributeIndexes = -1 to 50
-                        extraIndexes("nertype", "nerlength")
+                        extraAttributes("nertype", "nerlength")
                     }
                 }
                 val errors = config.validate()
@@ -811,12 +811,12 @@ class DslTest {
                     entityMapping {
                         entityIndex = "nertag"
                         attributeIndexes = 15 to 24
-                        extraIndexes("nertype", "nerlengtg")
+                        extraAttributes("nertype", "nerlengtg")
                     }
                 }
                 val errors = config.validate()
                 assertThat(errors)
-                        .contains("extra index nerlengtg was not found within indexes")
+                        .contains("extra attribute nerlengtg was not found within indexes")
             }
 
             @Test
@@ -880,7 +880,7 @@ class DslTest {
                     entityMapping {
                         entityIndex = "nertag"
                         attributeIndexes = 15 to 24
-                        extraIndexes("nertype", "nerlength")
+                        extraAttributes("nertype", "nerlength")
                     }
                 }
                 val errors = config.validate()
@@ -960,7 +960,7 @@ class DslTest {
                         entityMapping {
                             entityIndex = "nertag"
                             attributeIndexes = 15 to 24
-                            extraIndexes("nertype", "nerlength")
+                            extraAttributes("nertype", "nerlength")
                         }
                     }
 
@@ -1036,7 +1036,7 @@ class DslTest {
                     entityMapping {
                         entityIndex = "nertag"
                         attributeIndexes = 15 to 24
-                        extraIndexes("nertype", "nerlength")
+                        extraAttributes("nertype", "nerlength")
                     }
                 }
 

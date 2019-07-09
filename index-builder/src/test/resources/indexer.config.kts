@@ -63,7 +63,7 @@ indexBuilder {
         entityMapping {
             entityIndex = "nertag"
             attributeIndexes = 15 to 24
-            extraIndexes("nertype", "nerlength")
+            extraAttributes("nertype", "nerlength")
         }
     }
 }

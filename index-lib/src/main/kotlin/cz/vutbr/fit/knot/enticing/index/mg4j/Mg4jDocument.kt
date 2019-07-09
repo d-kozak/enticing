@@ -56,7 +56,7 @@ class Mg4jDocument(
                     entity.attributes.values.map { indexContent[it.correspondingIndex]!![i] }
                             .toMutableList()
                             .also {
-                                it.addAll(filteredConfig.entityMapping.extraEntityIndexes.map { indexContent[it]!![i] })
+                                it.addAll(filteredConfig.entityMapping.extraAttributes.map { indexContent[it]!![i] })
                             }
 
                 } ?: listOf()

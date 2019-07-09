@@ -42,14 +42,16 @@ class EntityMapping {
     lateinit var attributeIndexes: Pair<Int, Int>
 
     /**
-     * Indexes that do not belong to attributeIndexes, but should still be accessible through entities
+     * Indexes that should be added as attributes to all entities.
      *
-     * currently those are nertype and nerlength
+     * This is done in the validation step after ensuring they exist.
+     * Currently this is just nertype index
+     * LinkedHashSet is used to preserve the ordering
      */
-    var extraEntityIndexes: Set<String> = emptySet()
+    var extraAttributes: LinkedHashSet<String> = LinkedHashSet()
 
-    fun extraIndexes(vararg names: String) {
-        this.extraEntityIndexes = names.toSet()
+    fun extraAttributes(vararg names: String) {
+        this.extraAttributes = LinkedHashSet(names.toList())
     }
 
     override fun equals(other: Any?): Boolean {
@@ -58,7 +60,7 @@ class EntityMapping {
 
         if (entityIndex != other.entityIndex) return false
         if (attributeIndexes != other.attributeIndexes) return false
-        if (extraEntityIndexes != other.extraEntityIndexes) return false
+        if (extraAttributes != other.extraAttributes) return false
 
         return true
     }
@@ -66,12 +68,12 @@ class EntityMapping {
     override fun hashCode(): Int {
         var result = entityIndex.hashCode()
         result = 31 * result + attributeIndexes.hashCode()
-        result = 31 * result + extraEntityIndexes.hashCode()
+        result = 31 * result + extraAttributes.hashCode()
         return result
     }
 
     override fun toString(): String {
-        return "EntityMapping(entityIndex='$entityIndex', attributeIndexes=$attributeIndexes, extraEntityIndexes=$extraEntityIndexes)"
+        return "EntityMapping(entityIndex='$entityIndex', attributeIndexes=$attributeIndexes, extraAttributes=$extraAttributes)"
     }
 
 }
@@ -86,6 +88,7 @@ fun CorpusConfiguration.validate() = mutableListOf<String>().also { this.validat
  * @param errors list to which the error messages should be appended
  */
 fun CorpusConfiguration.validate(errors: MutableList<String>) {
+    // todo @cleanUp refacotyr
 
     if (corpusName.isBlank()) {
         errors.add("Corpus name should neither be empty nor blank")
@@ -122,13 +125,6 @@ fun CorpusConfiguration.validate(errors: MutableList<String>) {
         errors.add("attribute index upper bound ${entityMapping.attributeIndexes.second} is not within $indexRange")
     }
 
-    errors.addAll(
-            entityMapping.extraEntityIndexes
-                    .filter { indexes[it] == null }
-                    .map { "extra index $it was not found within indexes" }
-    )
-
-
     val maxAttributeSize = entityMapping.attributeIndexes.second - entityMapping.attributeIndexes.first + 1
     errors.addAll(
             entities.values
@@ -138,6 +134,22 @@ fun CorpusConfiguration.validate(errors: MutableList<String>) {
                         "entity ${it.name} has too many attributes, ${attributes.subList(maxAttributeSize, attributes.size).map { it.name }} are above the specified size $maxAttributeSize(range ${entityMapping.attributeIndexes.first}..${entityMapping.attributeIndexes.second})"
                     }
     )
+
+    for (indexName in entityMapping.extraAttributes) {
+        val index = indexes[indexName]
+        if (index != null) {
+            for (entity in entities.values) {
+                if (entity.attributes[indexName] == null) {
+                    entity.attributes[indexName] = Attribute(index.name, entity.attributes.size, index.description, index.type, index.name)
+                } else {
+                    errors.add("Attribute with name $indexName already exists in entity ${entity.name}")
+                }
+            }
+        } else {
+            errors.add("extra attribute $indexName was not found within indexes")
+        }
+    }
+
 }
 
 private fun checkName(key: String, name: String, errors: MutableList<String>) {

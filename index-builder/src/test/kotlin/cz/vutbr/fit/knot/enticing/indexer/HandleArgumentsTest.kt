@@ -68,7 +68,7 @@ val DUMMY_LOAD_CONFIGURATION: (path: String) -> IndexBuilderConfig = {
             entityMapping {
                 entityIndex = "nertag"
                 attributeIndexes = 15 to 24
-                extraIndexes("nertype", "nerlength")
+                extraAttributes("nertype", "nerlength")
             }
         }
     }

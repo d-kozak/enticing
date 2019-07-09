@@ -19,9 +19,6 @@ data class SnippetPartsFields(
     }
 
     operator fun get(index: String): List<String> {
-        if (corpusConfiguration.isEntityAttribute(index))
-            throw IllegalArgumentException("Only direct indexed are allowed right now")
-
         val result = mutableListOf<String>()
 
         for (element in elements) {
