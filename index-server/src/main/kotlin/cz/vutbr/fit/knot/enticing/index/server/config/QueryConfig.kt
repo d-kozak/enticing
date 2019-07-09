@@ -31,6 +31,12 @@ class QueryConfig(
         log.info("Using index directory ${this.indexDirectory}")
         config.mg4jFiles(mg4jFiles)
         log.info("Using mg4j files ${this.mg4jFiles}")
+
+        val errors = config.validate()
+        if (errors.isNotEmpty()) {
+            throw IllegalArgumentException("$errors")
+        }
+
         return initQueryExecutor(config)
     }
 }

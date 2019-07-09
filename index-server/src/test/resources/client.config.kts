@@ -60,5 +60,10 @@ indexClient {
             "genre" with attributes("url", "image", "name")
 
         }
+        entityMapping {
+            entityIndex = "nertag"
+            attributeIndexes = 15 to 24
+            extraAttributes("nertype", "nerlength")
+        }
     }
 }
