@@ -1,11 +1,10 @@
 package cz.vutbr.fit.knot.enticing.index.query
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.corpusConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.index
 import cz.vutbr.fit.knot.enticing.dto.query.*
-import cz.vutbr.fit.knot.enticing.dto.response.AnnotatedText
-import cz.vutbr.fit.knot.enticing.dto.response.Payload
-import cz.vutbr.fit.knot.enticing.dto.response.QueryMapping
+import cz.vutbr.fit.knot.enticing.dto.response.*
+import cz.vutbr.fit.knot.enticing.dto.response.Annotation
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetPartsFields
 import it.unimi.dsi.util.Interval
@@ -26,18 +25,28 @@ internal class PayloadCreatorTest {
             ResponseFormat.JSON
     )
 
-    private val noMetadataConfig = CorpusConfiguration("empty")
-            .apply {
+    private val noMetadata = SnippetPartsFields(listOf(
+            SnippetElement.Word(0, listOf("one")),
+            SnippetElement.Word(1, listOf("two")),
+            SnippetElement.Word(2, listOf("three"))),
+            corpusConfig("empty") {
                 indexes {
                     index("token")
                 }
             }
+    )
 
-    private val smallDocument = SnippetPartsFields(listOf(
-            SnippetElement.Word(0, listOf("one")),
-            SnippetElement.Word(1, listOf("two")),
-            SnippetElement.Word(2, listOf("three"))),
-            noMetadataConfig
+    private val simpleStructure = SnippetPartsFields(listOf(
+            SnippetElement.Word(0, listOf("one", "1", "google.com")),
+            SnippetElement.Word(1, listOf("two", "2", "yahoo.com")),
+            SnippetElement.Word(2, listOf("three", "3", "localhost"))),
+            corpusConfig("simple") {
+                indexes {
+                    index("token")
+                    index("lemma")
+                    index("url")
+                }
+            }
     )
 
 
@@ -48,15 +57,22 @@ internal class PayloadCreatorTest {
 
         @Test
         fun `simple format no metadata`() {
-            var payload = createPayload(htmlQuery, smallDocument, listOf(Interval.valueOf(0, 2)))
+            var payload = createPayload(htmlQuery, noMetadata, listOf(Interval.valueOf(0, 2)))
             assertThat(payload)
                     .isEqualTo(Payload.Snippet.Html("<b>one two three</b>"))
-            payload = createPayload(htmlQuery, smallDocument, listOf(Interval.valueOf(1, 2)))
+            payload = createPayload(htmlQuery, noMetadata, listOf(Interval.valueOf(1, 2)))
             assertThat(payload)
                     .isEqualTo(Payload.Snippet.Html("one <b>two three</b>"))
-            payload = createPayload(htmlQuery, smallDocument, listOf(Interval.valueOf(1, 1)))
+            payload = createPayload(htmlQuery, noMetadata, listOf(Interval.valueOf(1, 1)))
             assertThat(payload)
                     .isEqualTo(Payload.Snippet.Html("one <b>two</b> three"))
+        }
+
+        @Test
+        fun `two other indexes`() {
+            val payload = createPayload(htmlQuery, simpleStructure, listOf(Interval.valueOf(1, 2)))
+            assertThat(payload)
+                    .isEqualTo(Payload.Snippet.Html("""<span eql-lemma="1" eql-url="google.com">one</span> <b><span eql-lemma="2" eql-url="yahoo.com">two</span> <span eql-lemma="3" eql-url="localhost">three</span></b>"""))
         }
     }
 
@@ -67,7 +83,7 @@ internal class PayloadCreatorTest {
 
         @Test
         fun `simple format no metadata`() {
-            var payload = createPayload(jsonQuery, smallDocument, listOf(Interval.valueOf(0, 2)))
+            var payload = createPayload(jsonQuery, noMetadata, listOf(Interval.valueOf(0, 2)))
             assertThat(payload)
                     .isEqualTo(Payload.Snippet.Json(AnnotatedText(
                             "one two three",
@@ -75,7 +91,7 @@ internal class PayloadCreatorTest {
                             emptyList(),
                             listOf(QueryMapping(0 to 13, 0 to jsonQuery.query.length))
                     )))
-            payload = createPayload(jsonQuery, smallDocument, listOf(Interval.valueOf(1, 2)))
+            payload = createPayload(jsonQuery, noMetadata, listOf(Interval.valueOf(1, 2)))
             assertThat(payload)
                     .isEqualTo(Payload.Snippet.Json(AnnotatedText(
                             "one two three",
@@ -83,7 +99,7 @@ internal class PayloadCreatorTest {
                             emptyList(),
                             listOf(QueryMapping(4 to 13, 0 to jsonQuery.query.length))
                     )))
-            payload = createPayload(jsonQuery, smallDocument, listOf(Interval.valueOf(1, 1)))
+            payload = createPayload(jsonQuery, noMetadata, listOf(Interval.valueOf(1, 1)))
             assertThat(payload)
                     .isEqualTo(Payload.Snippet.Json(AnnotatedText(
                             "one two three",
@@ -92,12 +108,28 @@ internal class PayloadCreatorTest {
                             listOf(QueryMapping(4 to 7, 0 to jsonQuery.query.length))
                     )))
         }
+
+        @Test
+        fun `two other indexes`() {
+            val payload = createPayload(jsonQuery, simpleStructure, listOf(Interval.valueOf(1, 2)))
+            assertThat(payload)
+                    .isEqualTo(Payload.Snippet.Json(AnnotatedText(
+                            "one two three",
+                            mapOf(
+                                    0 to Annotation(0, mapOf("lemma" to "1", "url" to "google.com")),
+                                    1 to Annotation(1, mapOf("lemma" to "2", "url" to "yahoo.com")),
+                                    2 to Annotation(2, mapOf("lemma" to "3", "url" to "localhost"))
+                            ),
+                            listOf(AnnotationPosition(0, 0 to 3), AnnotationPosition(1, 4 to 7), AnnotationPosition(2, 8 to 13)),
+                            listOf(QueryMapping(4 to 13, 0 to jsonQuery.query.length))
+                    )))
+        }
     }
 
     @Test
     fun `left should be smaller or equal to right`() {
         assertThrows<IllegalArgumentException> {
-            createPayload(templateQuery, smallDocument, listOf(Interval.valueOf(2, 1)))
+            createPayload(templateQuery, noMetadata, listOf(Interval.valueOf(2, 1)))
         }
     }
 
@@ -105,7 +137,7 @@ internal class PayloadCreatorTest {
     @Test
     fun `default index should be present in the document`() {
         assertThrows<IllegalArgumentException> {
-            createPayload(templateQuery.copy(defaultIndex = "foo"), smallDocument, listOf(Interval.valueOf(1, 2)))
+            createPayload(templateQuery.copy(defaultIndex = "foo"), noMetadata, listOf(Interval.valueOf(1, 2)))
         }
     }
 

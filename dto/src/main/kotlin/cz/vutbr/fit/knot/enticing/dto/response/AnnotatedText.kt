@@ -9,19 +9,17 @@ data class AnnotatedText(
         @field:NotEmpty
         val text: String,
         @field:Valid
-        val annotations: Map<Long, Annotation>,
+        val annotations: Map<Int, Annotation>,
         @field:Valid
         val positions: List<AnnotationPosition>,
         @field:Valid
         val queryMapping: List<QueryMapping>
 )
 
+
 data class Annotation(
         @field:Positive
-        val id: Long,
-        @field:NotEmpty
-        val type: String,
-        val image: String?,
+        val id: Int,
         val content: Map<String, String>
 )
 
@@ -36,10 +34,12 @@ data class QueryMapping(
 
 data class AnnotationPosition(
         @field:Positive
-        val annotationId: Long,
+        val annotationId: Int,
         @field:Valid
         val match: MatchedRegion
-)
+) {
+    constructor(annotationId: Int, match: Pair<Int, Int>) : this(annotationId, MatchedRegion(match.first, match.second))
+}
 
 data class MatchedRegion(
         @field:PositiveOrZero

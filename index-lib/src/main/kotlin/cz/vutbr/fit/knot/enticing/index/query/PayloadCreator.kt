@@ -2,9 +2,8 @@ package cz.vutbr.fit.knot.enticing.index.query
 
 import cz.vutbr.fit.knot.enticing.dto.query.ResponseFormat
 import cz.vutbr.fit.knot.enticing.dto.query.SearchQuery
-import cz.vutbr.fit.knot.enticing.dto.response.AnnotatedText
-import cz.vutbr.fit.knot.enticing.dto.response.Payload
-import cz.vutbr.fit.knot.enticing.dto.response.QueryMapping
+import cz.vutbr.fit.knot.enticing.dto.response.*
+import cz.vutbr.fit.knot.enticing.dto.response.Annotation
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetPartsFields
 import it.unimi.dsi.util.Interval
@@ -20,6 +19,18 @@ internal fun createPayload(query: SearchQuery, content: SnippetPartsFields, inte
 
 private fun produceJson(content: SnippetPartsFields, query: SearchQuery, intervals: List<Interval>): Payload {
     val (left, right) = split(intervals)
+    val config = content.corpusConfiguration
+
+    val annotations = mutableMapOf<Int, Annotation>()
+    val positions = mutableListOf<AnnotationPosition>()
+
+    val metaIndexes = config.indexes.keys.toMutableSet().also { it.remove(query.defaultIndex) }
+
+    fun addAnnotation(content: Map<String, String>, from: Int, to: Int) {
+        val newId = annotations.size
+        annotations[newId] = Annotation(newId, content)
+        positions.add(AnnotationPosition(newId, MatchedRegion(from, to)))
+    }
 
     val queryIndex = 0 to query.query.length
     val queryMapping = mutableListOf<QueryMapping>()
@@ -34,6 +45,11 @@ private fun produceJson(content: SnippetPartsFields, query: SearchQuery, interva
             when (elem) {
                 is SnippetElement.Word -> {
                     val word = elem[query.defaultIndex]
+
+                    val annotationContent = metaIndexes.map { it to elem[it] }.toMap()
+                    if (annotationContent.isNotEmpty())
+                        addAnnotation(annotationContent, currentPosition, currentPosition + word.length)
+
                     currentPosition += word.length
                     append(word)
                 }
@@ -54,12 +70,14 @@ private fun produceJson(content: SnippetPartsFields, query: SearchQuery, interva
             }
         }
     }
-    return Payload.Snippet.Json(AnnotatedText(text, emptyMap(), emptyList(), queryMapping))
+    return Payload.Snippet.Json(AnnotatedText(text, annotations, positions, queryMapping))
 }
 
 private fun produceHtml(content: SnippetPartsFields, query: SearchQuery, intervals: List<Interval>): Payload.Snippet.Html {
-    // todo extend according to the html snippet format spec (when there is one :) )
     val (left, right) = split(intervals)
+    val config = content.corpusConfiguration
+
+    val metaIndexes = config.indexes.keys.toMutableSet().also { it.remove(query.defaultIndex) }
 
     val result = buildString {
         for (elem in content) {
@@ -69,7 +87,25 @@ private fun produceHtml(content: SnippetPartsFields, query: SearchQuery, interva
 
             when (elem) {
                 is SnippetElement.Word -> {
-                    append(elem[query.defaultIndex])
+                    if (metaIndexes.isNotEmpty()) {
+                        append("<span")
+                        for (index in metaIndexes) {
+                            if (index != query.defaultIndex) {
+                                val value = elem[index]
+                                append(" eql-")
+                                append(index)
+                                append("=")
+                                append('"')
+                                append(value)
+                                append('"')
+                            }
+                        }
+                        append(">")
+                        append(elem[query.defaultIndex])
+                        append("</span>")
+                    } else {
+                        append(elem[query.defaultIndex])
+                    }
                 }
                 is SnippetElement.Entity -> {
                     append(elem[query.defaultIndex].joinToString(" "))
