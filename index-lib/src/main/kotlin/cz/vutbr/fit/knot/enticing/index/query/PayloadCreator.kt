@@ -33,12 +33,12 @@ private fun produceJson(content: SnippetPartsFields, query: SearchQuery, interva
 
             when (elem) {
                 is SnippetElement.Word -> {
-                    val word = elem[content.corpusConfiguration.indexOf(query.defaultIndex)]
+                    val word = elem[query.defaultIndex]
                     currentPosition += word.length
                     append(word)
                 }
                 is SnippetElement.Entity -> {
-                    val phrase = elem[content.corpusConfiguration.indexOf(query.defaultIndex)].joinToString(" ")
+                    val phrase = elem[query.defaultIndex].joinToString(" ")
                     currentPosition += phrase.length
                     append(phrase)
                 }
@@ -69,10 +69,10 @@ private fun produceHtml(content: SnippetPartsFields, query: SearchQuery, interva
 
             when (elem) {
                 is SnippetElement.Word -> {
-                    append(elem[content.corpusConfiguration.indexOf(query.defaultIndex)])
+                    append(elem[query.defaultIndex])
                 }
                 is SnippetElement.Entity -> {
-                    append(elem[content.corpusConfiguration.indexOf(query.defaultIndex)].joinToString(" "))
+                    append(elem[query.defaultIndex].joinToString(" "))
                 }
             }
 

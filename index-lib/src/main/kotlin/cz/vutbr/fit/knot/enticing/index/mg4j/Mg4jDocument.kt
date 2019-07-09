@@ -38,7 +38,7 @@ class Mg4jDocument(
      * @param left left limit, inclusive
      * @param right right limit, inclusive
      */
-    fun loadSnippetPartsFields(left: Int = 0, _right: Int = -1): SnippetPartsFields {
+    fun loadSnippetPartsFields(left: Int = 0, _right: Int = -1, config: CorpusConfiguration? = null): SnippetPartsFields {
         val right = if (_right == -1) size() else _right
         val indexContent = indexes.asSequence()
                 .map { it.name to readIndex(it.columnIndex, left, right) }
@@ -65,7 +65,7 @@ class Mg4jDocument(
                 i++
             }
         }
-        return SnippetPartsFields(result, corpusConfiguration)
+        return SnippetPartsFields(result, config ?: corpusConfiguration)
     }
 
 

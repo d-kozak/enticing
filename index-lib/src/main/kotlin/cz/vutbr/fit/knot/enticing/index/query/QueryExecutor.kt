@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.enticing.index.query
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexClientConfig
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.filterBy
 import cz.vutbr.fit.knot.enticing.dto.query.Offset
 import cz.vutbr.fit.knot.enticing.dto.query.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.response.Match
@@ -77,9 +78,11 @@ class QueryExecutor internal constructor(
         val processed = engine.process(query.query, documentOffset, query.snippetCount, resultList)
         log.info("Processed $processed documents")
 
+        val config = corpusConfiguration.filterBy(query.metadata, query.defaultIndex)
+
         val matched = mutableListOf<Match>()
         for ((i, result) in resultList.withIndex()) {
-            val (matchList, nextSnippet) = processDocument(query, result, query.snippetCount - matched.size, if (i == 0) matchOffset else 0)
+            val (matchList, nextSnippet) = processDocument(query, result, config, query.snippetCount - matched.size, if (i == 0) matchOffset else 0)
             matched.addAll(matchList)
             if (matched.size >= query.snippetCount || nextSnippet != null) {
                 val offset = when {
@@ -93,7 +96,7 @@ class QueryExecutor internal constructor(
         return@runCatching SearchResult(matched, null)
     }
 
-    internal fun processDocument(query: SearchQuery, result: Mg4jSearchResult, wantedSnippets: Int, offset: Int): Pair<List<Match>, Int?> {
+    internal fun processDocument(query: SearchQuery, result: Mg4jSearchResult, config: CorpusConfiguration, wantedSnippets: Int, offset: Int): Pair<List<Match>, Int?> {
         val matched = mutableListOf<Match>()
         val defaultIndex = engine.indexMap[query.defaultIndex]
                 ?: throw IllegalArgumentException("Index ${query.defaultIndex} not found")
@@ -114,7 +117,7 @@ class QueryExecutor internal constructor(
                     .map { it.clampRight(left + SNIPPET_SIZE) }
                     .toList()
 
-            val content = document.loadSnippetPartsFields(left, left + SNIPPET_SIZE)
+            val content = document.loadSnippetPartsFields(left, left + SNIPPET_SIZE, config)
 
             val payload = createPayload(query, content, relevantScores)
 
