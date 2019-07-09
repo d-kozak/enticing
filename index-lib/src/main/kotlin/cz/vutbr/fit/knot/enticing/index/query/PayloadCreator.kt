@@ -105,29 +105,29 @@ private fun produceHtml(content: SnippetPartsFields, query: SearchQuery, interva
 
 private fun appendEntity(config: CorpusConfiguration, metaIndexes: MutableSet<String>, query: SearchQuery, elem: SnippetElement.Entity, builder: StringBuilder, right: Set<Int>) {
     with(builder) {
-        append("<span eql-entity")
-
         val entity = config.entities[elem.entityClass]
-                ?: throw IllegalArgumentException("Could not find entity ${elem.entityClass}")
-        for (attribute in entity.attributes.values) {
-            val name = attribute.name
-            val value = elem.entityInfo[attribute.columnIndex]
-            append(" eql-")
-            append(name)
-            append("=")
-            append('"')
-            append(value)
-            append('"')
+        if (entity != null) {
+            append("<span eql-entity")
+            for (attribute in entity.attributes.values) {
+                val name = attribute.name
+                val value = elem.entityInfo[attribute.columnIndex]
+                append(" eql-")
+                append(name)
+                append("=")
+                append('"')
+                append(value)
+                append('"')
+            }
+            append(">")
         }
-
-        append(">")
         for (word in elem.words) {
             appendWord(metaIndexes, query, word, builder)
             if (word.index in right) {
                 append("</b>")
             }
         }
-        append("</span>")
+        if (entity != null)
+            append("</span>")
     }
 }
 
