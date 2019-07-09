@@ -30,7 +30,10 @@ infix fun String.with(attributes: Array<String>): Entity {
 fun attributes(vararg names: String): Array<String> = Array(names.size) { names[it] }
 
 fun AttributesDsl.attribute(name: String, block: Attribute.() -> Unit = {}) = Index(name).apply(block)
-        .also { it.columnIndex = this.size }
+        .also {
+            if (it.columnIndex == 0)
+                it.columnIndex = this.size
+        }
         .also { this[name] = it }
 
 typealias EntityConfigDsl = MutableMap<String, Entity>

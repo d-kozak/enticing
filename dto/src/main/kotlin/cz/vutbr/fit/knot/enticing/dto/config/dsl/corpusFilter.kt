@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl
 
 import cz.vutbr.fit.knot.enticing.dto.query.Entities
+import cz.vutbr.fit.knot.enticing.dto.query.EntityId
 import cz.vutbr.fit.knot.enticing.dto.query.Indexes
 import cz.vutbr.fit.knot.enticing.dto.query.TextMetadata
 
@@ -22,18 +23,38 @@ private fun CorpusConfiguration.filterExact(metadata: TextMetadata.ExactDefiniti
 )
 
 private fun CorpusConfiguration.filterEntities(entities: Entities): Map<String, Entity> = when (entities) {
-    is Entities.Predefined -> {
-        when (entities.value) {
-            "all" -> this.entities
-            "none" -> emptyMap()
-            else -> throw IllegalArgumentException("Unknown entity format ${entities.value}")
+    is Entities.Predefined -> when (entities.value) {
+        "all" -> this.entities
+        "none" -> emptyMap()
+        else -> throw IllegalArgumentException("Unknown entity format ${entities.value}")
+    }
+    is Entities.ExactDefinition -> entities.entities.entries.map { (name, indexes) ->
+        name to when (indexes) {
+            is Indexes.Predefined -> {
+                when (indexes.value) {
+                    "all" -> getEntityOrDie(name)
+                    "none" -> getEntityOrDie(name).copy(attributes = mutableMapOf())
+                    else -> throw IllegalArgumentException("Unknown entity attribute format ${indexes.value}")
+                }
+            }
+            is Indexes.ExactDefinition -> {
+                val entity = getEntityOrDie(name)
+                val attributes = indexes.names
+                        .map {
+                            it to (entity.attributes[it]
+                                    ?: throw IllegalArgumentException("Unknown attribute $it of entity $name"))
+                        }
+                        .toMap()
+                        .toMutableMap()
+                entity.copy(attributes = attributes)
+            }
         }
-    }
-    is Entities.ExactDefinition -> {
-        // todo finish this
-        this.entities
-    }
+    }.toMap()
 }
+
+
+private fun CorpusConfiguration.getEntityOrDie(name: EntityId) =
+        this.entities[name] ?: throw IllegalArgumentException("Unknown entity $name")
 
 
 private fun CorpusConfiguration.filterIndexes(indexes: Indexes, defaultIndex: String): Map<String, Index> = when (indexes) {

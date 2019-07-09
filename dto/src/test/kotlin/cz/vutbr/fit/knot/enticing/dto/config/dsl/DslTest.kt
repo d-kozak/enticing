@@ -284,6 +284,181 @@ class DslTest {
                         .isEqualTo(expected)
             }
 
+            @Test
+            fun `exact two indexes one entity with no attributes`() {
+                val requirement = TextMetadata.ExactDefinition(
+                        indexes = Indexes.ExactDefinition(listOf("nerlength")),
+                        entities = Entities.ExactDefinition(
+                                mapOf("museum" to Indexes.Predefined("none"))
+                        )
+                )
+                val defaultIndex = "token"
+
+                val filtered = fullValidCorpusConfig.filterBy(requirement, defaultIndex)
+
+                val expected = corpusConfig("CC") {
+                    indexes {
+                        index("token") {
+                            columnIndex = 1
+                            description = "Original word in the document"
+                        }
+                        index("nerlength") {
+                            columnIndex = 26
+                            description = "nerlength"
+                        }
+                    }
+                    entities {
+                        entity("museum")
+                    }
+                    entityMapping {
+                        entityIndex = "nertag"
+                        attributeIndexes = 15 to 24
+                        extraIndexes("nertype", "nerlength")
+                    }
+                }
+                assertThat(filtered)
+                        .isEqualTo(expected)
+            }
+
+
+            @Test
+            fun `exact two indexes one entity with all attributes`() {
+                val requirement = TextMetadata.ExactDefinition(
+                        indexes = Indexes.ExactDefinition(listOf("nerlength")),
+                        entities = Entities.ExactDefinition(
+                                mapOf("artist" to Indexes.Predefined("all"))
+                        )
+                )
+                val defaultIndex = "token"
+
+                val filtered = fullValidCorpusConfig.filterBy(requirement, defaultIndex)
+
+                val expected = corpusConfig("CC") {
+                    indexes {
+                        index("token") {
+                            columnIndex = 1
+                            description = "Original word in the document"
+                        }
+                        index("nerlength") {
+                            columnIndex = 26
+                            description = "nerlength"
+                        }
+                    }
+                    entities {
+                        "artist" with attributes("url", "image", "name", "gender", "birthplace", "birthdate", "deathplace", "deathdate", "role", "nationality")
+                    }
+                    entityMapping {
+                        entityIndex = "nertag"
+                        attributeIndexes = 15 to 24
+                        extraIndexes("nertype", "nerlength")
+                    }
+                }
+                assertThat(filtered)
+                        .isEqualTo(expected)
+            }
+
+            @Test
+            fun `exact two indexes one entity with specified attributes`() {
+                val requirement = TextMetadata.ExactDefinition(
+                        indexes = Indexes.ExactDefinition(listOf("nerlength")),
+                        entities = Entities.ExactDefinition(
+                                mapOf("event" to Indexes.ExactDefinition(listOf("url", "name", "startdate", "location")))
+                        )
+                )
+                val defaultIndex = "token"
+
+                val filtered = fullValidCorpusConfig.filterBy(requirement, defaultIndex)
+
+                val expected = corpusConfig("CC") {
+                    indexes {
+                        index("token") {
+                            columnIndex = 1
+                            description = "Original word in the document"
+                        }
+                        index("nerlength") {
+                            columnIndex = 26
+                            description = "nerlength"
+                        }
+                    }
+                    entities {
+                        entity("event") {
+                            attributes {
+                                attribute("url")
+                                attribute("name") {
+                                    columnIndex = 2
+                                }
+                                attribute("startdate") {
+                                    columnIndex = 3
+                                }
+                                attribute("location") {
+                                    columnIndex = 5
+                                }
+                            }
+                        }
+                    }
+                    entityMapping {
+                        entityIndex = "nertag"
+                        attributeIndexes = 15 to 24
+                        extraIndexes("nertype", "nerlength")
+                    }
+                }
+                assertThat(filtered)
+                        .isEqualTo(expected)
+            }
+
+            @Test
+            fun `exact two indexes one entity with specified attributes one entity with all one with none`() {
+                val requirement = TextMetadata.ExactDefinition(
+                        indexes = Indexes.ExactDefinition(listOf("nerlength")),
+                        entities = Entities.ExactDefinition(
+                                mapOf("event" to Indexes.ExactDefinition(listOf("url", "name", "startdate", "location")),
+                                        "person" to Indexes.Predefined("all"),
+                                        "form" to Indexes.Predefined("none")
+                                ))
+                )
+                val defaultIndex = "token"
+
+                val filtered = fullValidCorpusConfig.filterBy(requirement, defaultIndex)
+
+                val expected = corpusConfig("CC") {
+                    indexes {
+                        index("token") {
+                            columnIndex = 1
+                            description = "Original word in the document"
+                        }
+                        index("nerlength") {
+                            columnIndex = 26
+                            description = "nerlength"
+                        }
+                    }
+                    entities {
+                        entity("event") {
+                            attributes {
+                                attribute("url")
+                                attribute("name") {
+                                    columnIndex = 2
+                                }
+                                attribute("startdate") {
+                                    columnIndex = 3
+                                }
+                                attribute("location") {
+                                    columnIndex = 5
+                                }
+                            }
+                        }
+                        "person" with attributes("url", "image", "name", "gender", "birthplace", "birthdate", "deathplace", "deathdate", "profession", "nationality")
+                        entity("form")
+                    }
+                    entityMapping {
+                        entityIndex = "nertag"
+                        attributeIndexes = 15 to 24
+                        extraIndexes("nertype", "nerlength")
+                    }
+                }
+                assertThat(filtered)
+                        .isEqualTo(expected)
+            }
+
 
         }
 
