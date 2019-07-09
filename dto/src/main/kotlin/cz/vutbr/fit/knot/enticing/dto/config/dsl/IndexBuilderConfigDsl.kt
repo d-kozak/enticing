@@ -51,6 +51,7 @@ class IndexBuilderConfig {
 
         checkMg4jFiles(input, errors)
         checkDirectory(this.output, errors, createIfNecessary = true)
+        corpusConfiguration.validate(errors)
 
         return errors
     }

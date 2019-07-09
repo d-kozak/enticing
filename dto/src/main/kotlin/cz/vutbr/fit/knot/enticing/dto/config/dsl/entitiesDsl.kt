@@ -1,7 +1,15 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl
 
-typealias Attribute = Index
+
 typealias AttributesDsl = MutableMap<String, Attribute>
+
+data class Attribute(
+        var name: String = "",
+        var columnIndex: Int = 0,
+        var description: String = "",
+        var type: FieldType = FieldType.Text,
+        var correspondingIndex: String = ""
+)
 
 data class Entity(
         var name: String,
@@ -10,7 +18,7 @@ data class Entity(
 ) {
     fun attributes(vararg names: String, block: AttributesDsl.() -> Unit = {}): AttributesDsl {
         val predefined = names.asSequence()
-                .mapIndexed { i, name -> name to Index(name, columnIndex = attributes.size + i) }
+                .mapIndexed { i, name -> name to Attribute(name, columnIndex = attributes.size + i) }
                 .toMap()
                 .toMutableMap()
         return predefined.apply(block)
@@ -29,7 +37,7 @@ infix fun String.with(attributes: Array<String>): Entity {
 
 fun attributes(vararg names: String): Array<String> = Array(names.size) { names[it] }
 
-fun AttributesDsl.attribute(name: String, block: Attribute.() -> Unit = {}) = Index(name).apply(block)
+fun AttributesDsl.attribute(name: String, block: Attribute.() -> Unit = {}) = Attribute(name).apply(block)
         .also {
             if (it.columnIndex == 0)
                 it.columnIndex = this.size

@@ -38,7 +38,7 @@ class Mg4jDocument(
      * @param left left limit, inclusive
      * @param right right limit, inclusive
      */
-    fun loadSnippetPartsFields(left: Int = 0, _right: Int = -1, config: CorpusConfiguration? = null): SnippetPartsFields {
+    fun loadSnippetPartsFields(left: Int = 0, _right: Int = -1, filteredConfig: CorpusConfiguration): SnippetPartsFields {
         val right = if (_right == -1) size() else _right
         val indexContent = indexes.asSequence()
                 .map { it.name to readIndex(it.columnIndex, left, right) }
@@ -53,7 +53,9 @@ class Mg4jDocument(
         while (i < limit) {
             val nertag = indexContent["nertag"]!![i]
             if (nertag != "0") {
-                val entityInfo = listOf<String>()
+                val entityInfo: List<String> = filteredConfig.entities[nertag]?.let { entity ->
+                    entity.attributes.values.map { indexContent[it.correspondingIndex]!![i] }
+                } ?: listOf()
                 val nerlen = Math.max(indexContent["nerlength"]!![i].toIntOrNull() ?: 1, 1)
                 val words = (i until Math.min(i + nerlen, loadedDataSize))
                         .map { SnippetElement.Word(left + it, collectIndexValuesAt(it)) }
@@ -65,7 +67,7 @@ class Mg4jDocument(
                 i++
             }
         }
-        return SnippetPartsFields(result, config ?: corpusConfiguration)
+        return SnippetPartsFields(result, filteredConfig)
     }
 
 

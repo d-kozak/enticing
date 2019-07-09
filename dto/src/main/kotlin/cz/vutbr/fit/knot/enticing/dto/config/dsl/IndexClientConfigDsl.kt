@@ -85,6 +85,7 @@ class IndexClientConfig {
         val errors = errors.toMutableList()
         checkMg4jFiles(mg4jFiles, errors)
         checkDirectory(this.indexDirectory, errors)
+        corpusConfiguration.validate(errors)
         return errors
     }
 }

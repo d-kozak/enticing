@@ -76,18 +76,40 @@ class EntityMapping {
 
 }
 
+
+fun CorpusConfiguration.validate() = mutableListOf<String>().also { this.validate(it) }
+
 /**
  * Validates corpus configuration
  *
- * @return list of error messages
+ * During the process, the corresponding index for each attribute of each entity is found and saved
+ * @param errors list to which the error messages should be appended
  */
-fun CorpusConfiguration.validate(): List<String> {
-    val errors = mutableListOf<String>()
+fun CorpusConfiguration.validate(errors: MutableList<String>) {
 
     if (corpusName.isBlank()) {
         errors.add("Corpus name should neither be empty nor blank")
     }
 
+    for ((key, index) in indexes) {
+        checkName(key, index.name, errors)
+    }
+    val indexList = indexes.values.toList()
+    val from = entityMapping.attributeIndexes.first
+    if (from >= 0) {
+        for ((key, entity) in entities) {
+            checkName(key, entity.name, errors)
+
+            for (attribute in entity.attributes.values) {
+                val i = from + attribute.columnIndex
+                if (i < 0 || i >= indexList.size) {
+                    errors.add("Index ${attribute.columnIndex} for attribute ${attribute.name} in entity ${entity.name} is exceeding the number of indexes ${indexList.size}")
+                } else {
+                    attribute.correspondingIndex = indexList[i].name
+                }
+            }
+        }
+    }
     if (indexes[entityMapping.entityIndex] == null) {
         errors.add("entity index ${entityMapping.entityIndex} not found")
     }
@@ -116,8 +138,17 @@ fun CorpusConfiguration.validate(): List<String> {
                         "entity ${it.name} has too many attributes, ${attributes.subList(maxAttributeSize, attributes.size).map { it.name }} are above the specified size $maxAttributeSize(range ${entityMapping.attributeIndexes.first}..${entityMapping.attributeIndexes.second})"
                     }
     )
-
-    return errors
 }
 
+private fun checkName(key: String, name: String, errors: MutableList<String>) {
+    if (key.isBlank()) {
+        errors.add("Name should not be blank")
+    }
+    if (name.isBlank()) {
+        errors.add("Name should not be blank")
+    }
+    if (key != name) {
+        errors.add("Inconsistency in the name of entity, key was $key, name was $name")
+    }
+}
 

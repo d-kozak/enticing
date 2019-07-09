@@ -35,13 +35,15 @@ class DslTest {
                 entity("person") {
                     description = "Person entity"
                     attributes {
-                        attribute("name") whichIs "The name of the person"
+                        attribute("name") {
+                            description = "The name of the person"
+                        }
                     }
                 }
             }
             assertThat(entities)
                     .isEqualTo(mutableMapOf(
-                            "person" to Entity("person", "Person entity", mutableMapOf("name" to Index("name", "The name of the person")))
+                            "person" to Entity("person", "Person entity", mutableMapOf("name" to Attribute("name", description = "The name of the person")))
                     ))
         }
 
@@ -58,7 +60,9 @@ class DslTest {
                     entity("person") {
                         description = "Person entity"
                         attributes {
-                            attribute("name") whichIs "The name of the person"
+                            attribute("name") {
+                                description = "The name of the person"
+                            }
                         }
                     }
                 }
@@ -75,7 +79,7 @@ class DslTest {
                                     "lemma" to Index("lemma", "The lemma of the word", columnIndex = 1)
                             ),
                             entities = mutableMapOf(
-                                    "person" to Entity("person", "Person entity", mutableMapOf("name" to Index("name", "The name of the person")))
+                                    "person" to Entity("person", "Person entity", mutableMapOf("name" to Attribute("name", description = "The name of the person")))
                             ),
                             entityMapping = EntityMapping().apply {
                                 entityIndex = "nertag"
@@ -102,7 +106,9 @@ class DslTest {
                         entity("person") {
                             description = "Person entity"
                             attributes {
-                                attribute("name") whichIs "The name of the person"
+                                attribute("name") {
+                                    description = "The name of the person"
+                                }
                             }
                         }
                         entity("artist") {
@@ -127,9 +133,9 @@ class DslTest {
                                 "tag" to Index("tag", "Tag of the word", columnIndex = 2)
                         ),
                         entities = mutableMapOf(
-                                "person" to Entity("person", "Person entity", mutableMapOf("name" to Index("name", "The name of the person"))),
-                                "artist" to Entity("artist", "", mutableMapOf("name" to Index("name"), "gender" to Index("gender", columnIndex = 1))),
-                                "date" to Entity("date", "", mutableMapOf("year" to Index("year"), "month" to Index("month", columnIndex = 1), "day" to Index("day", columnIndex = 2)))
+                                "person" to Entity("person", "Person entity", mutableMapOf("name" to Attribute("name", description = "The name of the person"))),
+                                "artist" to Entity("artist", "", mutableMapOf("name" to Attribute("name"), "gender" to Attribute("gender", columnIndex = 1))),
+                                "date" to Entity("date", "", mutableMapOf("year" to Attribute("year"), "month" to Attribute("month", columnIndex = 1), "day" to Attribute("day", columnIndex = 2)))
                         ),
                         entityMapping = EntityMapping().apply {
                             entityIndex = "nertag"

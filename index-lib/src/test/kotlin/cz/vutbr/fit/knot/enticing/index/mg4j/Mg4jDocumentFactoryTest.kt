@@ -42,7 +42,7 @@ internal class Mg4jDocumentFactoryTest {
         for (docId in 0L..10L) {
             val document = collection.document(docId) as Mg4jDocument
 
-            val content = document.loadSnippetPartsFields()
+            val content = document.loadSnippetPartsFields(filteredConfig = corpusConfig)
             val nertag = content["nertag"]
             val nerlength = content["nerlength"].map { it.toInt() }
 
@@ -74,7 +74,7 @@ internal class Mg4jDocumentFactoryTest {
 
         for (i in 0L..10L) {
             val document = collection.document(i) as Mg4jDocument
-            val wholeContent = document.loadSnippetPartsFields().toMap()
+            val wholeContent = document.loadSnippetPartsFields(filteredConfig = corpusConfig).toMap()
 
             val sizePerIndex = wholeContent.values.map { it.size }
             val sizeSet = sizePerIndex.toSet()
@@ -106,7 +106,7 @@ internal class Mg4jDocumentFactoryTest {
 
         for (i in 0L..10L) {
             val document = collection.document(i) as Mg4jDocument
-            val wholeContent = document.loadSnippetPartsFields()
+            val wholeContent = document.loadSnippetPartsFields(filteredConfig = corpusConfig)
             for (index in indexes) {
                 val highLevel = wholeContent[index.name].joinToString(separator = " ")
                 val lowLevel = (document.content(index.columnIndex) as StringReader).readText()
