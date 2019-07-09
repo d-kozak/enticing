@@ -1,9 +1,5 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl
 
-import cz.vutbr.fit.knot.enticing.dto.query.Entities
-import cz.vutbr.fit.knot.enticing.dto.query.Indexes
-import cz.vutbr.fit.knot.enticing.dto.query.TextMetadata
-
 fun corpusConfig(name: String, block: CorpusConfiguration.() -> Unit = {}): CorpusConfiguration = CorpusConfiguration(name).apply(block)
 
 data class CorpusConfiguration(
@@ -27,57 +23,6 @@ data class CorpusConfiguration(
 
     fun indexOf(name: String) = indexes[name]?.columnIndex ?: throw IllegalArgumentException("Unknown index $name")
 
-    fun filterBy(metadata: TextMetadata, defaultIndex: String): CorpusConfiguration = when (metadata) {
-        is TextMetadata.Predefined -> {
-            when (metadata.value) {
-                "all" -> this
-                "none" -> this.copy(entities = emptyMap(), indexes = onlySpecifiedIndexes(defaultIndex))
-                else -> throw IllegalArgumentException("Unknown toplevel format ${metadata.value}")
-            }
-        }
-
-        is TextMetadata.ExactDefinition -> {
-            val indexes = when (metadata.indexes) {
-                is Indexes.Predefined -> {
-                    when (metadata.indexes.value) {
-                        "all" -> this.indexes
-                        "none" -> onlySpecifiedIndexes(defaultIndex)
-                        else -> throw IllegalArgumentException("Unknown index format ${metadata.indexes.value}")
-                    }
-                }
-                is Indexes.ExactDefinition ->
-                    if (defaultIndex in metadata.indexes.names)
-                        onlySpecifiedIndexes(metadata.indexes.names)
-                    else {
-                        val names = metadata.indexes.names.toMutableList()
-                        names.add(defaultIndex)
-                        onlySpecifiedIndexes(names)
-                    }
-
-            }
-
-            val entities = when (metadata.entities) {
-                is Entities.Predefined -> {
-                    when (metadata.entities.value) {
-                        "all" -> this.entities
-                        "none" -> emptyMap()
-                        else -> throw IllegalArgumentException("Unknown entity format ${metadata.entities.value}")
-                    }
-                }
-                is Entities.ExactDefinition -> {
-                    this.entities
-                }
-            }
-
-            this.copy(indexes = indexes, entities = entities)
-        }
-    }
-
-    private fun onlySpecifiedIndexes(indexes: List<String>): Map<String, Index> = indexes.map {
-        it to (this.indexes[it] ?: throw IllegalArgumentException("Could not find index $it"))
-    }.toMap()
-
-    private fun onlySpecifiedIndexes(vararg indexes: String) = onlySpecifiedIndexes(indexes.toList())
 }
 
 /**
