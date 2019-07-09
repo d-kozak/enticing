@@ -35,7 +35,7 @@ class EntityMapping {
     lateinit var entityIndex: String
 
     /**
-     * Indexes of mg4j indexes that are used for entity attributes
+     * Indexes of mg4j indexes that are used for entity attributes, both inclusive
      *
      * currently those are url to param9
      */
@@ -46,7 +46,7 @@ class EntityMapping {
      *
      * currently those are nertype and nerlength
      */
-    lateinit var extraEntityIndexes: Set<String>
+    var extraEntityIndexes: Set<String> = emptySet()
 
     fun extraIndexes(vararg names: String) {
         this.extraEntityIndexes = names.toSet()

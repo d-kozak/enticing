@@ -46,20 +46,24 @@ class Mg4jDocument(
         val loadedDataSize = indexContent["token"]!!.size
         fun collectIndexValuesAt(i: Int): List<String> = indexes.map { indexContent[it.name]!![i] }
 
-
         val result = mutableListOf<SnippetElement>()
         var i = 0
         val limit = Math.min(right - left, loadedDataSize)
         while (i < limit) {
-            val nertag = indexContent["nertag"]!![i]
-            if (nertag != "0") {
-                val entityInfo: List<String> = filteredConfig.entities[nertag]?.let { entity ->
+            val entityClass = indexContent[filteredConfig.entityMapping.entityIndex]!![i]
+            if (entityClass != "0") {
+                val entityInfo: List<String> = filteredConfig.entities[entityClass]?.let { entity ->
                     entity.attributes.values.map { indexContent[it.correspondingIndex]!![i] }
+                            .toMutableList()
+                            .also {
+                                it.addAll(filteredConfig.entityMapping.extraEntityIndexes.map { indexContent[it]!![i] })
+                            }
+
                 } ?: listOf()
                 val nerlen = Math.max(indexContent["nerlength"]!![i].toIntOrNull() ?: 1, 1)
                 val words = (i until Math.min(i + nerlen, loadedDataSize))
                         .map { SnippetElement.Word(left + it, collectIndexValuesAt(it)) }
-                result.add(SnippetElement.Entity(left + i, entityInfo, words))
+                result.add(SnippetElement.Entity(left + i, entityClass, entityInfo, words))
                 i += nerlen
 
             } else {

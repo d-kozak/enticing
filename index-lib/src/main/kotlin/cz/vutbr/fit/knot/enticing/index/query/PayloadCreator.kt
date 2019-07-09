@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.query
 
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.query.ResponseFormat
 import cz.vutbr.fit.knot.enticing.dto.query.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.response.*
@@ -86,30 +87,8 @@ private fun produceHtml(content: SnippetPartsFields, query: SearchQuery, interva
             }
 
             when (elem) {
-                is SnippetElement.Word -> {
-                    if (metaIndexes.isNotEmpty()) {
-                        append("<span")
-                        for (index in metaIndexes) {
-                            if (index != query.defaultIndex) {
-                                val value = elem[index]
-                                append(" eql-")
-                                append(index)
-                                append("=")
-                                append('"')
-                                append(value)
-                                append('"')
-                            }
-                        }
-                        append(">")
-                        append(elem[query.defaultIndex])
-                        append("</span>")
-                    } else {
-                        append(elem[query.defaultIndex])
-                    }
-                }
-                is SnippetElement.Entity -> {
-                    append(elem[query.defaultIndex].joinToString(" "))
-                }
+                is SnippetElement.Word -> appendWord(metaIndexes, query, elem, this)
+                is SnippetElement.Entity -> appendEntity(config, metaIndexes, query, elem, this, right)
             }
 
             if (elem.index in right) {
@@ -122,6 +101,58 @@ private fun produceHtml(content: SnippetPartsFields, query: SearchQuery, interva
         }
     }
     return Payload.Snippet.Html(result)
+}
+
+private fun appendEntity(config: CorpusConfiguration, metaIndexes: MutableSet<String>, query: SearchQuery, elem: SnippetElement.Entity, builder: StringBuilder, right: Set<Int>) {
+    with(builder) {
+        append("<span eql-entity")
+
+        val entity = config.entities[elem.entityClass]
+                ?: throw IllegalArgumentException("Could not find entity ${elem.entityClass}")
+        for (attribute in entity.attributes.values) {
+            val name = attribute.name
+            val value = elem.entityInfo[attribute.columnIndex]
+            append(" eql-")
+            append(name)
+            append("=")
+            append('"')
+            append(value)
+            append('"')
+        }
+
+        append(">")
+        for (word in elem.words) {
+            appendWord(metaIndexes, query, word, builder)
+            if (word.index in right) {
+                append("</b>")
+            }
+        }
+        append("</span>")
+    }
+}
+
+private fun appendWord(metaIndexes: MutableSet<String>, query: SearchQuery, elem: SnippetElement.Word, builder: StringBuilder) {
+    with(builder) {
+        if (metaIndexes.isNotEmpty()) {
+            append("<span eql-word")
+            for (index in metaIndexes) {
+                if (index != query.defaultIndex) {
+                    val value = elem[index]
+                    append(" eql-")
+                    append(index)
+                    append("=")
+                    append('"')
+                    append(value)
+                    append('"')
+                }
+            }
+            append(">")
+            append(elem[query.defaultIndex])
+            append("</span>")
+        } else {
+            append(elem[query.defaultIndex])
+        }
+    }
 }
 
 private fun split(intervals: List<Interval>): Pair<Set<Int>, Set<Int>> {

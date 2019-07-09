@@ -1,7 +1,9 @@
 package cz.vutbr.fit.knot.enticing.index.query
 
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.attributes
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.corpusConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.index
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.with
 import cz.vutbr.fit.knot.enticing.dto.query.*
 import cz.vutbr.fit.knot.enticing.dto.response.*
 import cz.vutbr.fit.knot.enticing.dto.response.Annotation
@@ -49,6 +51,32 @@ internal class PayloadCreatorTest {
             }
     )
 
+    private val withEntities = SnippetPartsFields(listOf(
+            SnippetElement.Word(0, listOf("one", "1", "google.com", "0", "0")),
+            SnippetElement.Word(1, listOf("two", "2", "yahoo.com", "0", "0")),
+            SnippetElement.Word(2, listOf("three", "3", "localhost", "0", "0")),
+            SnippetElement.Entity(3, "person", listOf("harry"),
+                    words = listOf(SnippetElement.Word(3, listOf("harry", "3", "localhost", "person", "harry")),
+                            SnippetElement.Word(4, listOf("potter", "3", "localhost", "0", "0")))
+            )),
+            corpusConfig("simple") {
+                indexes {
+                    index("token")
+                    index("lemma")
+                    index("url")
+                    index("nertag")
+                    index("param")
+                }
+                entities {
+                    "person" with attributes("name")
+                }
+                entityMapping {
+                    entityIndex = "nertag"
+                    attributeIndexes = 4 to 4
+                }
+            }
+    )
+
 
     @Nested
     inner class SnippetHtml {
@@ -72,7 +100,13 @@ internal class PayloadCreatorTest {
         fun `two other indexes`() {
             val payload = createPayload(htmlQuery, simpleStructure, listOf(Interval.valueOf(1, 2)))
             assertThat(payload)
-                    .isEqualTo(Payload.Snippet.Html("""<span eql-lemma="1" eql-url="google.com">one</span> <b><span eql-lemma="2" eql-url="yahoo.com">two</span> <span eql-lemma="3" eql-url="localhost">three</span></b>"""))
+                    .isEqualTo(Payload.Snippet.Html("""<span eql-word eql-lemma="1" eql-url="google.com">one</span> <b><span eql-word eql-lemma="2" eql-url="yahoo.com">two</span> <span eql-word eql-lemma="3" eql-url="localhost">three</span></b>"""))
+        }
+
+        @Test
+        fun `with one entity`() {
+            val payload = createPayload(htmlQuery, withEntities, listOf(Interval.valueOf(1, 2)))
+            println(payload)
         }
     }
 

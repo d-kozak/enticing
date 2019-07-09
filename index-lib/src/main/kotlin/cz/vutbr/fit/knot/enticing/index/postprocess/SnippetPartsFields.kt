@@ -10,6 +10,11 @@ data class SnippetPartsFields(
     init {
         for (element in elements) {
             element.parent = this
+            if (element is SnippetElement.Entity) {
+                for (word in element.words) {
+                    word.parent = this
+                }
+            }
         }
     }
 
@@ -57,7 +62,7 @@ sealed class SnippetElement {
         operator fun get(key: String) = this[parent.corpusConfiguration.indexOf(key)]
     }
 
-    data class Entity(override val index: Int, val entityInfo: List<String>, val words: List<Word>) : SnippetElement() {
+    data class Entity(override val index: Int, val entityClass: String, val entityInfo: List<String>, val words: List<Word>) : SnippetElement() {
         operator fun get(i: Int): List<String> = words.map { it[i] }
 
         operator fun get(key: String) = this[parent.corpusConfiguration.indexOf(key)]
