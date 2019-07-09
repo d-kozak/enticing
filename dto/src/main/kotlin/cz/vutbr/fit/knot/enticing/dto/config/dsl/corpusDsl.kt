@@ -21,6 +21,8 @@ data class CorpusConfiguration(
     val entityAttributes: Set<String>
         get() = entities.values.flatMap { it.attributes.keys }.toSet()
 
+    fun getMetaIndexes(defaultIndex: String): Set<String> = indexes.keys.toMutableSet().also { it.remove(defaultIndex) }
+
     fun indexOf(name: String) = indexes[name]?.columnIndex ?: throw IllegalArgumentException("Unknown index $name")
 
 }

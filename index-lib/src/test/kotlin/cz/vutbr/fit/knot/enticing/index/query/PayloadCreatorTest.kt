@@ -7,6 +7,7 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.with
 import cz.vutbr.fit.knot.enticing.dto.query.*
 import cz.vutbr.fit.knot.enticing.dto.response.*
 import cz.vutbr.fit.knot.enticing.dto.response.Annotation
+import cz.vutbr.fit.knot.enticing.index.payload.createPayload
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetPartsFields
 import it.unimi.dsi.util.Interval
@@ -106,7 +107,8 @@ internal class PayloadCreatorTest {
         @Test
         fun `with one entity`() {
             val payload = createPayload(htmlQuery, withEntities, listOf(Interval.valueOf(1, 2)))
-            println(payload)
+            assertThat(payload)
+                    .isEqualTo(Payload.Snippet.Html("""<span eql-word eql-lemma="1" eql-url="google.com" eql-nertag="0" eql-param="0">one</span> <b><span eql-word eql-lemma="2" eql-url="yahoo.com" eql-nertag="0" eql-param="0">two</span> <span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="0" eql-param="0">three</span></b> <span eql-entity eql-name="harry"><span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="person" eql-param="harry">harry</span><span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="0" eql-param="0">potter</span></span>"""))
         }
     }
 

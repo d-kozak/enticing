@@ -11,6 +11,7 @@ import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jCompositeDocumentCollection
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jDocument
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jDocumentFactory
+import cz.vutbr.fit.knot.enticing.index.payload.createPayload
 import it.unimi.di.big.mg4j.index.Index
 import it.unimi.di.big.mg4j.index.TermProcessor
 import it.unimi.di.big.mg4j.query.IntervalSelector
