@@ -91,7 +91,7 @@ export const processQueryMapping = (annotatedText: AnnotatedText): Array<Process
 
     const annotated = enriched.flatMap(position => [
         ...processAnnotations(annotatedText, [position.prevEnd, position.textIndex.from]),
-        new TextWithDecoration(processAnnotations(annotatedText, [position.textIndex.from, position.textIndex.to]), new Decoration('here comes the sun, ehm query...'))
+        new TextWithDecoration(processAnnotations(annotatedText, [position.textIndex.from, position.textIndex.to]), new Decoration('nertag:person'))
     ])
 
     const lastPosition = queryMapping[queryMapping.length - 1];
