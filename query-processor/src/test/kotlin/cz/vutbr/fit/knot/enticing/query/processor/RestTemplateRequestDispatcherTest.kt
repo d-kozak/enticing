@@ -5,6 +5,7 @@ import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -27,7 +28,7 @@ internal class RestTemplateRequestDispatcherTest {
 
 
         val requestDispatcher = RestTemplateRequestDispatcher(mockTemplate)
-        val result = requestDispatcher(templateQuery, serverInfo)
+        val result = runBlocking { requestDispatcher(templateQuery, serverInfo) }
         if (result.isFailure) {
             result.rethrowException()
         }
@@ -47,7 +48,7 @@ internal class RestTemplateRequestDispatcherTest {
 
 
         val requestDispatcher = RestTemplateRequestDispatcher(mockTemplate)
-        val result = requestDispatcher(templateQuery, serverInfo)
+        val result = runBlocking { requestDispatcher(templateQuery, serverInfo) }
 
         assertThat(result.isFailure)
                 .isTrue()
