@@ -1,19 +1,17 @@
-import {Snippet} from "../entities/Snippet";
 import {Dispatch} from "redux";
 import {hideProgressBarAction, showProgressBarAction} from "../actions/ProgressBarActions";
 import {AnnotatedText} from "../entities/Annotation";
 import {loremOneSentece} from "./loremIpsum";
 import {searchResultUpdatedAction} from "../actions/SearchResultActions";
+import {Match} from "../entities/Snippet";
 
 
-export const mockContextRequested = (searchResult: Snippet, dispatch: Dispatch) => {
+export const mockContextRequested = (searchResult: Match, dispatch: Dispatch) => {
     dispatch(showProgressBarAction())
     setTimeout(() => {
-        const updatedResult: Snippet = {
+        const updatedResult: Match = {
             ...searchResult,
-            id: searchResult.id,
-            url: searchResult.url,
-            snippet: extendText(searchResult.snippet),
+            payload: extendText(searchResult.payload),
             canExtend: Math.random() > 0.3
         };
         dispatch(searchResultUpdatedAction(updatedResult))

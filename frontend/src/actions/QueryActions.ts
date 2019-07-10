@@ -8,20 +8,22 @@ import {hideProgressBarAction, showProgressBarAction} from "./ProgressBarActions
 import {newSearchResultsAction} from "./SearchResultActions";
 import {openSnackBar} from "./SnackBarActions";
 
-
-export const objectToIntMap = (obj: any): Map<number, any> => {
-    const map = new Map<number, any>()
-    for (let key in obj)
-        map.set(Number(key), obj[key]);
-    return map
-}
-
 export const transformSearchResult = (item: any) => {
-    for (let id in item.snippet.annotations) {
-        const annotation = item.snippet.annotations[id]
+    console.log(item);
+    const content = item.payload.content;
+    for (let id in content.annotations) {
+        const annotation = content.annotations[id];
         annotation.content = new Map(Object.entries(annotation.content))
     }
-    item.snippet.annotations = objectToIntMap(item.snippet.annotations);
+    item.snippet = {};
+    item.snippet.annotations = new Map(Object.entries(content.annotations));
+    item.snippet.text = content.text;
+    item.snippet.positions = content.positions;
+    for (let id in content.positions) {
+        const position = content.positions[id];
+        position.from = position.match.from;
+        position.to = position.from + position.match.size;
+    }
 }
 
 export const startSearchingAction = (query: SearchQuery, selectedSettings: Number, history?: H.History): ThunkResult<void> => (dispatch) => {

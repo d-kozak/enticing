@@ -1,4 +1,10 @@
-import {AnnotatedText, AnnotationPosition, QueryMapping, validateAnnotatedText} from "../../entities/Annotation";
+import {
+    AnnotatedText,
+    AnnotationPosition,
+    MatchedRegion,
+    QueryMapping,
+    validateAnnotatedText
+} from "../../entities/Annotation";
 import {Decoration, ProcessedAnnotatedText, TextWithAnnotation, TextWithDecoration} from "./ProcessedAnnotatedText";
 
 
@@ -40,28 +46,30 @@ export const splitAnnotations = (annotatedText: AnnotatedText): AnnotatedText =>
 }
 
 export const splitAnnotation = (position: AnnotationPosition, queryMapping: Array<QueryMapping>): Array<AnnotationPosition> => {
-    const {from, to, annotationId} = position;
+    const {match, annotationId} = position;
+    const {from, to} = match
 
     for (let mapping of queryMapping) {
-        const annotationInsideMapping = mapping.from < from && mapping.to > to;
-        const mappingInsideAnnotation = from < mapping.from && to > mapping.to;
-        const leftOverlap = from < mapping.from && to < mapping.to;
-        const rightOverlap = mapping.from < from && to > mapping.to;
+        const index = mapping.textIndex;
+        const annotationInsideMapping = index.from < from && index.to > to;
+        const mappingInsideAnnotation = from < index.from && to > index.to;
+        const leftOverlap = from < index.from && to < index.to;
+        const rightOverlap = index.from < from && to > index.to;
         if (mappingInsideAnnotation) {
             return [
-                {from, to: mapping.from, annotationId},
-                {from: mapping.from, to: mapping.to, annotationId},
-                {from: mapping.to, to, annotationId}
+                {annotationId, match: MatchedRegion.fromInterval(from, index.from)},
+                {annotationId, match: MatchedRegion.fromInterval(index.from, index.to)},
+                {annotationId, match: MatchedRegion.fromInterval(index.to, to)}
             ];
         } else if (leftOverlap) {
             return [
-                {from, to: mapping.from, annotationId},
-                {from: mapping.from, to, annotationId}
+                {annotationId, match: MatchedRegion.fromInterval(from, index.from)},
+                {annotationId, match: MatchedRegion.fromInterval(index.from, to)}
             ]
         } else if (rightOverlap) {
             return [
-                {from, to: mapping.to, annotationId},
-                {from: mapping.to, to, annotationId}
+                {annotationId, match: MatchedRegion.fromInterval(from, index.to)},
+                {annotationId, match: MatchedRegion.fromInterval(index.to, to)}
             ]
         } else if (annotationInsideMapping) {
             return [position];
@@ -78,16 +86,16 @@ export const processQueryMapping = (annotatedText: AnnotatedText): Array<Process
 
     const enriched = queryMapping.map((position, index) => ({
         ...position,
-        prevEnd: index > 0 ? queryMapping[index - 1].to : 0
+        prevEnd: index > 0 ? queryMapping[index - 1].textIndex.to : 0
     }))
 
     const annotated = enriched.flatMap(position => [
-        ...processAnnotations(annotatedText, [position.prevEnd, position.from]),
-        new TextWithDecoration(processAnnotations(annotatedText, [position.from, position.to]), new Decoration(position.query))
+        ...processAnnotations(annotatedText, [position.prevEnd, position.textIndex.from]),
+        new TextWithDecoration(processAnnotations(annotatedText, [position.textIndex.from, position.textIndex.to]), new Decoration('here comes the sun, ehm query...'))
     ])
 
     const lastPosition = queryMapping[queryMapping.length - 1];
-    annotated.push(...processAnnotations(annotatedText, [lastPosition.to, text.length]))
+    annotated.push(...processAnnotations(annotatedText, [lastPosition.textIndex.to, text.length]))
     return annotated;
 };
 
@@ -100,7 +108,7 @@ export const processQueryMapping = (annotatedText: AnnotatedText): Array<Process
  */
 export const processAnnotations = (annotatedText: AnnotatedText, interval: [number, number]): Array<string | TextWithAnnotation> => {
     const {text, positions} = annotatedText;
-    const processedPositions = positions.filter(position => position.from >= interval[0] && position.to <= interval[1]);
+    const processedPositions = positions.filter(position => position.match.from >= interval[0] && position.match.to <= interval[1]);
     if (processedPositions.length == 0) {
         return [annotatedText.text.substring(interval[0], interval[1])]
     }
@@ -110,7 +118,7 @@ export const processAnnotations = (annotatedText: AnnotatedText, interval: [numb
      * */
     const enriched = processedPositions.map((position, index) => ({
         ...position,
-        prevEnd: index > 0 ? positions[index - 1].to : interval[0]
+        prevEnd: index > 0 ? positions[index - 1].match.to : interval[0]
     }));
 
     /**
@@ -118,8 +126,8 @@ export const processAnnotations = (annotatedText: AnnotatedText, interval: [numb
      *                                          b) the annotation itself
      */
     const annotated = enriched.flatMap(position => [
-        text.substring(position.prevEnd, position.from),
-        new TextWithAnnotation(text.substring(position.from, position.to), position.annotationId)
+        text.substring(position.prevEnd, position.match.from),
+        new TextWithAnnotation(text.substring(position.match.from, position.match.to), position.annotationId)
     ]);
 
     /**
@@ -127,8 +135,8 @@ export const processAnnotations = (annotatedText: AnnotatedText, interval: [numb
      */
     const lastPosition = positions[positions.length - 1];
 
-    if (lastPosition.to < interval[1])
-        annotated.push(text.substring(lastPosition.to, interval[1]))
+    if (lastPosition.match.to < interval[1])
+        annotated.push(text.substring(lastPosition.match.to, interval[1]))
 
     return annotated;
 };

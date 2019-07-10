@@ -3,7 +3,6 @@ import {WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React, {useState} from 'react';
-import {Snippet} from "../../entities/Snippet";
 import SearchResultItem from "./SnippetComponent";
 import Typography from "@material-ui/core/es/Typography";
 import Paper from "@material-ui/core/es/Paper";
@@ -13,6 +12,7 @@ import DocumentDialog from "./documentdialog/DocumentDialog";
 import {AppState} from "../../reducers/RootReducer";
 import {connect} from "react-redux";
 import {documentDialogRequestedAction} from "../../actions/dialog/DocumentDialogAction";
+import {Match} from "../../entities/Snippet";
 
 const styles = createStyles({
     root: {
@@ -34,7 +34,7 @@ export type SnippetListProps =
     & typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
     & {
-    snippet: Array<Snippet>;
+    snippet: Array<Match>;
 }
 
 const SnippetList = (props: SnippetListProps) => {
@@ -69,7 +69,7 @@ const SnippetList = (props: SnippetListProps) => {
 const mapStateToProps = (state: AppState) => ({});
 
 const mapDispatchToProps = {
-    openDocumentDialog: documentDialogRequestedAction as (searchResult: Snippet) => void
+    openDocumentDialog: documentDialogRequestedAction as (searchResult: Match) => void
 }
 
 export default withStyles(styles, {

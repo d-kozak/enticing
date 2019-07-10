@@ -1,20 +1,25 @@
 import {Dispatch} from "redux";
 import {hideProgressBarAction, showProgressBarAction} from "../actions/ProgressBarActions";
 import {documentLoadedAction} from "../actions/dialog/DocumentDialogAction";
-import {Snippet} from "../entities/Snippet";
+import {Match} from "../entities/Snippet";
 import {IndexedDocument} from "../entities/IndexedDocument";
 import {loremIpsumLong} from "./loremIpsum";
 import {EdSheeran} from "./mockAnnotations";
+import {MatchedRegion} from "../entities/Annotation";
 
 
-export const mockDocumentRequested = (searchResult: Snippet, dispatch: Dispatch) => {
+export const mockDocumentRequested = (searchResult: Match, dispatch: Dispatch) => {
     dispatch(showProgressBarAction())
     setTimeout(() => {
         const document: IndexedDocument = {
             body: {
                 text: loremIpsumLong,
-                annotations: new Map([[1, EdSheeran]]),
-                positions: [{annotationId: 1, from: 99, to: 109}],
+                annotations: {
+                    "ed": EdSheeran
+                },
+                positions: [{
+                    annotationId: "ed", match: new MatchedRegion(99, 10), subAnnotations: []
+                }],
                 queryMapping: []
             },
             title: searchResult.url,

@@ -1,11 +1,11 @@
 import {IndexedDocument} from "../../entities/IndexedDocument";
-import {Snippet} from "../../entities/Snippet";
 import {ThunkResult} from "../RootActions";
 import {mockDocumentRequested} from "../../mocks/mockDocumentApi";
 import {API_BASE_PATH, useMockApi} from "../../globals";
 import axios from "axios";
 import {hideProgressBarAction, showProgressBarAction} from "../ProgressBarActions";
 import {openSnackBar} from "../SnackBarActions";
+import {Match} from "../../entities/Snippet";
 
 export const DOCUMENT_DIALOG_DOCUMENT_LOADED = '[DOCUMENT DIALOG] DOCUMENT LOADED';
 export const DOCUMENT_DIALOG_CLOSED = '[DOCUMENT DIALOG] CLOSED';
@@ -31,13 +31,13 @@ export const documentDialogClosedAction = (): DialogClosedAction => ({
     type: DOCUMENT_DIALOG_CLOSED
 });
 
-export const documentDialogRequestedAction = (searchResult: Snippet): ThunkResult<void> => dispatch => {
+export const documentDialogRequestedAction = (searchResult: Match): ThunkResult<void> => dispatch => {
     if (useMockApi()) {
         mockDocumentRequested(searchResult, dispatch);
         return;
     }
     dispatch(showProgressBarAction())
-    axios.post(`${API_BASE_PATH}/query/document`, {docId: searchResult.docId}, {
+    axios.post(`${API_BASE_PATH}/query/document`, {docId: searchResult.documentId}, {
         withCredentials: true
     }).then(response => {
         dispatch(hideProgressBarAction());

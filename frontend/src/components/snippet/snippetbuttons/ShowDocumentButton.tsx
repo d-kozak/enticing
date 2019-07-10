@@ -1,12 +1,12 @@
-import {Snippet} from "../../../entities/Snippet";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import FullScreenIcon from "@material-ui/icons/Fullscreen";
 import React from "react";
+import {Match} from "../../../entities/Snippet";
 
 interface OpenDocumentButtonProps {
-    searchResult: Snippet,
-    openDocument: (searchResult: Snippet) => void
+    searchResult: Match,
+    openDocument: (searchResult: Match) => void
 }
 
 export const ShowDocumentButton = ({openDocument, searchResult}: OpenDocumentButtonProps) => <Tooltip

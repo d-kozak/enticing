@@ -1,4 +1,3 @@
-import {Snippet} from "../entities/Snippet";
 import {ThunkResult} from "./RootActions";
 import {mockContextRequested} from "../mocks/mockContextApi";
 import {API_BASE_PATH, useMockApi} from "../globals";
@@ -8,8 +7,9 @@ import {hideProgressBarAction, showProgressBarAction} from "./ProgressBarActions
 import {searchResultUpdatedAction} from "./SearchResultActions";
 import {transformSearchResult} from "./QueryActions";
 import {openSnackBar} from "./SnackBarActions";
+import {Match} from "../entities/Snippet";
 
-export const contextExtensionRequestAction = (searchResult: Snippet): ThunkResult<void> => dispatch => {
+export const contextExtensionRequestAction = (searchResult: Match): ThunkResult<void> => dispatch => {
     if (useMockApi()) {
         mockContextRequested(searchResult, dispatch);
         return;
@@ -20,7 +20,7 @@ export const contextExtensionRequestAction = (searchResult: Snippet): ThunkResul
     }).then((response) => {
         transformSearchResult(response.data);
         const updatedResult = {...searchResult, ...response.data}
-        updatedResult.snippet.text = searchResult.snippet.text + response.data.snippet.text;
+        updatedResult.snippet.text = searchResult.payload.text + response.data.snippet.text;
         dispatch(searchResultUpdatedAction(updatedResult))
         dispatch(hideProgressBarAction());
     }).catch(() => {

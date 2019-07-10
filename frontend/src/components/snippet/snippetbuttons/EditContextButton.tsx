@@ -2,11 +2,11 @@ import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import AddIcon from "@material-ui/icons/Add";
 import React from "react";
-import {Snippet} from "../../../entities/Snippet";
+import {Match} from "../../../entities/Snippet";
 
 interface EditContextButtonProps {
-    searchResult: Snippet;
-    requestContextExtension: (searchResult: Snippet) => void
+    searchResult: Match;
+    requestContextExtension: (searchResult: Match) => void
 }
 
 export const EditContextButton = ({searchResult, requestContextExtension}: EditContextButtonProps) => <Tooltip

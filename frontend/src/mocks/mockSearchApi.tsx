@@ -1,4 +1,3 @@
-import {Snippet} from "../entities/Snippet";
 import * as React from "react";
 import {DonaldTrump, EdSheeran, KarlovyVary} from "./mockAnnotations";
 import {Dispatch} from "redux";
@@ -7,48 +6,80 @@ import {hideProgressBarAction, showProgressBarAction} from "../actions/ProgressB
 import {newSearchResultsAction} from "../actions/SearchResultActions";
 import {openSnackBar} from "../actions/SnackBarActions";
 import {SearchQuery} from "../entities/SearchQuery";
+import {Match} from "../entities/Snippet";
+import {MatchedRegion} from "../entities/Annotation";
 
 
-export const firstResult: Snippet = {
-    id: 0,
-    docId: "c87d744d-62cc-49be-82e4-8ee3a4e91873",
+export const firstResult: Match = {
+    id: "first",
+    collection: "col1",
+    documentId: 1,
+    documentTitle: 'Ed on the road',
     location: 0,
     size: 42,
-    snippet: {
+    payload: {
         text: "Ed Sheeran visited Liberia and meets JD, a homeless Liberian 14-year-old boy. After Sheeran saw an older man hitting JD in public, he knew",
-        annotations: new Map([[1, EdSheeran]]),
-        positions: [{annotationId: 1, from: 0, to: 10}],
-        queryMapping: [{from: 0, to: 10, query: "nertag:person"}]
+        annotations: {
+            "ed": EdSheeran
+        },
+        positions: [{
+            annotationId: "ed", match: new MatchedRegion(0, 10), subAnnotations: []
+        }],
+        queryMapping: [
+            {
+                textIndex: new MatchedRegion(0, 10),
+                queryIndex: new MatchedRegion(0, 13)
+            }]
     },
     url: 'https://www.borgenmagazine.com/ed-sheeran-visited-liberia/',
     canExtend: true
 };
 
-export const secondResult: Snippet = {
-    id: 1,
-    docId: "9bd44ee8-563f-4a49-a5b0-ab2ffa1fe0e7",
+export const secondResult: Match = {
+    id: "second",
+    collection: "col2",
+    documentId: 2,
+    documentTitle: "just donald",
     location: 0,
     size: 42,
-    snippet: {
+    payload: {
         text: "President Donald Trump visited San Antonio for a closed-door fundraiser at The Argyle, the exclusive dinner club in Alamo Heights. Air Force ...",
-        annotations: new Map([[2, DonaldTrump]]),
-        positions: [{annotationId: 2, from: 10, to: 22}],
-        queryMapping: [{from: 0, to: 16, query: "nertag:person"}]
+        annotations: {
+            "donald": DonaldTrump
+        },
+        positions: [{
+            annotationId: "donald", match: new MatchedRegion(10, 12), subAnnotations: []
+        }],
+        queryMapping: [
+            {
+                textIndex: new MatchedRegion(0, 16),
+                queryIndex: new MatchedRegion(0, 13)
+            }]
     },
     url: 'https://www.mysanantonio.com/news/local/article/President-Trump-arrives-in-San-Antonio-for-13756986.php',
     canExtend: true
 };
 
-export const thirdResult: Snippet = {
-    id: 2,
-    docId: "93dc171e-247b-47e1-806d-42f6839a07a4",
+export const thirdResult: Match = {
+    id: "third",
+    collection: "col3",
+    documentId: 3,
+    documentTitle: "Milos",
     location: 0,
     size: 42,
-    snippet: {
+    payload: {
         text: "The president of the Czech republic Milos Zeman visited a porcelain factory Thun 1794 within his two-day visit to Karlovy Vary region. The president met with ...",
-        annotations: new Map([[3, KarlovyVary]]),
-        positions: [{annotationId: 3, from: 114, to: 127}],
-        queryMapping: [{from: 117, to: 140, query: "nertag:place"}]
+        annotations: {
+            "kv": KarlovyVary
+        },
+        positions: [{
+            annotationId: "kv", match: new MatchedRegion(114, 13), subAnnotations: []
+        }],
+        queryMapping: [
+            {
+                textIndex: new MatchedRegion(117, 23),
+                queryIndex: new MatchedRegion(0, 13)
+            }]
     },
     url: 'https://www.thun.cz/en/article/238-visit-of-mr--president-milos-zeman.html',
     canExtend: true
@@ -57,11 +88,11 @@ export const thirdResult: Snippet = {
 const results = [firstResult, secondResult, thirdResult];
 const randomResult = () => results[Math.floor(Math.random() * results.length) % results.length]
 
-const resultArray: Array<Snippet> = Array(50)
+const resultArray: Array<Match> = Array(50)
     .fill(null)
-    .map((_, index) => ({...randomResult(), id: index, canExtend: Math.random() > 0.3}))
+    .map((_, index) => ({...randomResult(), id: "id-" + index, canExtend: Math.random() > 0.3}))
 
-const mockExecuteQuery: ((query: string) => Promise<Array<Snippet>>) = (query) => {
+const mockExecuteQuery: ((query: string) => Promise<Array<Match>>) = (query) => {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             switch (query) {

@@ -19,9 +19,9 @@ export class TextWithDecoration {
 
 export class TextWithAnnotation {
     text: string;
-    annotationId: number;
+    annotationId: string;
 
-    constructor(text: string, annotationId: number) {
+    constructor(text: string, annotationId: string) {
         this.text = text;
         this.annotationId = annotationId;
     }

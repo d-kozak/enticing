@@ -30,12 +30,12 @@ export default withStyles(styles, {withTheme: true})(AnnotatedTextComponent);
 
 const colors = ["red", "green", "blue"];
 
-const visualizeText = (text: ProcessedAnnotatedText, annotations: Map<number, Annotation>): React.ReactNode => {
+const visualizeText = (text: ProcessedAnnotatedText, annotations: { [key: string]: Annotation }): React.ReactNode => {
     if (typeof text === "string") {
         return text;
     } else if (text instanceof TextWithAnnotation) {
-        const color = colors[text.annotationId % colors.length]
-        return <AnnotationTooltip annotation={annotations.get(text.annotationId)!} text={text.text} color={color}/>
+        const color = colors[Math.floor(Math.random() * colors.length)]
+        return <AnnotationTooltip annotation={annotations[text.annotationId]} text={text.text} color={color}/>
     } else {
         const content = <React.Fragment>
             {text.text.map((elem, index) => <React.Fragment key={index}>
