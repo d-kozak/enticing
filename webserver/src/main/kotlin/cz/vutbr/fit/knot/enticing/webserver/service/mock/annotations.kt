@@ -3,7 +3,7 @@ package cz.vutbr.fit.knot.enticing.webserver.service.mock
 import cz.vutbr.fit.knot.enticing.dto.response.Annotation
 
 val EdSheeran = Annotation(
-        id = 1,
+        id = "ed",
         content = mapOf(
                 "type" to "person",
                 "image" to "https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cg_face%2Cq_auto:good%2Cw_300/MTM5ODkxNzYyODU1NDIwOTM4/ed-sheeran-gettyimages-494227430_1600jpg.jpg",
@@ -17,7 +17,7 @@ val EdSheeran = Annotation(
 )
 
 val DonaldTrump = Annotation(
-        id = 2,
+        id = "donald",
         content = mapOf(
                 "type" to "person",
                 "image" to "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Donald_Trump_official_portrait.jpg/800px-Donald_Trump_official_portrait.jpg",
@@ -30,7 +30,7 @@ val DonaldTrump = Annotation(
 )
 
 val KarlovyVary = Annotation(
-        id = 2,
+        id = "kv",
         content = mapOf(
                 "type" to "place",
                 "image" to "https://upload.wikimedia.org/wikipedia/commons/d/d8/Karlovy_Vary_Czech.jpg",

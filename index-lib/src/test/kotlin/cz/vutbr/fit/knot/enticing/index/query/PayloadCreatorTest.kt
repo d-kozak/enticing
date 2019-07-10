@@ -152,11 +152,11 @@ internal class PayloadCreatorTest {
                     .isEqualTo(Payload.Snippet.Json(AnnotatedText(
                             "one two three",
                             mapOf(
-                                    0 to Annotation(0, mapOf("lemma" to "1", "url" to "google.com")),
-                                    1 to Annotation(1, mapOf("lemma" to "2", "url" to "yahoo.com")),
-                                    2 to Annotation(2, mapOf("lemma" to "3", "url" to "localhost"))
+                                    "w-0" to Annotation("w-0", mapOf("lemma" to "1", "url" to "google.com")),
+                                    "w-1" to Annotation("w-1", mapOf("lemma" to "2", "url" to "yahoo.com")),
+                                    "w-2" to Annotation("w-2", mapOf("lemma" to "3", "url" to "localhost"))
                             ),
-                            listOf(AnnotationPosition(0, 0 to 3), AnnotationPosition(1, 4 to 7), AnnotationPosition(2, 8 to 13)),
+                            listOf(AnnotationPosition("w-0", 0 to 3), AnnotationPosition("w-1", 4 to 7), AnnotationPosition("w-2", 8 to 13)),
                             listOf(QueryMapping(4 to 13, 0 to jsonQuery.query.length))
                     )))
         }

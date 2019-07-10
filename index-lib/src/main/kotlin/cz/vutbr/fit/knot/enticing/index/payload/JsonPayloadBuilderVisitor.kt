@@ -11,7 +11,7 @@ import it.unimi.dsi.util.Interval
 class JsonPayloadBuilderVisitor(config: CorpusConfiguration, query: SearchQuery, intervals: List<Interval>
 ) : AbstractPayloadBuilderVisitor<Payload>(config, query, intervals) {
 
-    private val annotations = mutableMapOf<Int, Annotation>()
+    private val annotations = mutableMapOf<String, Annotation>()
     private val positions = mutableListOf<AnnotationPosition>()
     private val queryMapping = mutableListOf<QueryMapping>()
 
@@ -29,7 +29,7 @@ class JsonPayloadBuilderVisitor(config: CorpusConfiguration, query: SearchQuery,
 
         val annotationContent = metaIndexes.map { it to elem[it] }.toMap()
         if (annotationContent.isNotEmpty())
-            addAnnotation(annotationContent, builder.length, builder.length + word.length)
+            addAnnotation("w-${annotations.size}", annotationContent, builder.length, builder.length + word.length)
         builder.append(word)
     }
 
@@ -46,10 +46,9 @@ class JsonPayloadBuilderVisitor(config: CorpusConfiguration, query: SearchQuery,
         builder.append(' ')
     }
 
-    private fun addAnnotation(content: Map<String, String>, from: Int, to: Int) {
-        val newId = annotations.size
-        annotations[newId] = Annotation(newId, content)
-        positions.add(AnnotationPosition(newId, MatchedRegion(from, to)))
+    private fun addAnnotation(id: String, content: Map<String, String>, from: Int, to: Int) {
+        annotations[id] = Annotation(id, content)
+        positions.add(AnnotationPosition(id, MatchedRegion(from, to)))
     }
 
     override fun getResult(): Payload = Payload.Snippet.Json(
