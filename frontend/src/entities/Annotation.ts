@@ -25,7 +25,7 @@ export function isAnnotation(obj: Object): obj is Annotation {
 
 export class MatchedRegion {
 
-    constructor(public from: number, public size: number) {
+    constructor(public from: number = 0, public size: number = 0) {
     }
 
     get to() {
