@@ -24,8 +24,8 @@ internal class PayloadCreatorTest {
             20,
             Offset(0, 0),
             TextMetadata.Predefined("none"),
-            ResponseType.SNIPPET,
-            ResponseFormat.JSON
+            ResponseType.FULL,
+            ResponseFormat.ANNOTATED_TEXT
     )
 
     private val noMetadata = SnippetPartsFields(listOf(
@@ -88,40 +88,40 @@ internal class PayloadCreatorTest {
         fun `simple format no metadata`() {
             var payload = createPayload(htmlQuery, noMetadata, listOf(Interval.valueOf(0, 2)))
             assertThat(payload)
-                    .isEqualTo(Payload.Snippet.Html("<b>one two three</b>"))
+                    .isEqualTo(Payload.FullResponse.Html("<b>one two three</b>"))
             payload = createPayload(htmlQuery, noMetadata, listOf(Interval.valueOf(1, 2)))
             assertThat(payload)
-                    .isEqualTo(Payload.Snippet.Html("one <b>two three</b>"))
+                    .isEqualTo(Payload.FullResponse.Html("one <b>two three</b>"))
             payload = createPayload(htmlQuery, noMetadata, listOf(Interval.valueOf(1, 1)))
             assertThat(payload)
-                    .isEqualTo(Payload.Snippet.Html("one <b>two</b> three"))
+                    .isEqualTo(Payload.FullResponse.Html("one <b>two</b> three"))
         }
 
         @Test
         fun `two other indexes`() {
             val payload = createPayload(htmlQuery, simpleStructure, listOf(Interval.valueOf(1, 2)))
             assertThat(payload)
-                    .isEqualTo(Payload.Snippet.Html("""<span eql-word eql-lemma="1" eql-url="google.com">one</span> <b><span eql-word eql-lemma="2" eql-url="yahoo.com">two</span> <span eql-word eql-lemma="3" eql-url="localhost">three</span></b>"""))
+                    .isEqualTo(Payload.FullResponse.Html("""<span eql-word eql-lemma="1" eql-url="google.com">one</span> <b><span eql-word eql-lemma="2" eql-url="yahoo.com">two</span> <span eql-word eql-lemma="3" eql-url="localhost">three</span></b>"""))
         }
 
         @Test
         fun `with one entity`() {
             val payload = createPayload(htmlQuery, withEntities, listOf(Interval.valueOf(1, 2)))
             assertThat(payload)
-                    .isEqualTo(Payload.Snippet.Html("""<span eql-word eql-lemma="1" eql-url="google.com" eql-nertag="0" eql-param="0">one</span> <b><span eql-word eql-lemma="2" eql-url="yahoo.com" eql-nertag="0" eql-param="0">two</span> <span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="0" eql-param="0">three</span></b> <span eql-entity eql-name="harry"><span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="person" eql-param="harry">harry</span><span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="0" eql-param="0">potter</span></span>"""))
+                    .isEqualTo(Payload.FullResponse.Html("""<span eql-word eql-lemma="1" eql-url="google.com" eql-nertag="0" eql-param="0">one</span> <b><span eql-word eql-lemma="2" eql-url="yahoo.com" eql-nertag="0" eql-param="0">two</span> <span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="0" eql-param="0">three</span></b> <span eql-entity eql-name="harry"><span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="person" eql-param="harry">harry</span><span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="0" eql-param="0">potter</span></span>"""))
         }
     }
 
     @Nested
-    inner class SnippetJson {
+    inner class SnippetAnnotated {
 
-        private val jsonQuery = templateQuery.copy(responseFormat = ResponseFormat.JSON)
+        private val jsonQuery = templateQuery.copy(responseFormat = ResponseFormat.ANNOTATED_TEXT)
 
         @Test
         fun `simple format no metadata`() {
             var payload = createPayload(jsonQuery, noMetadata, listOf(Interval.valueOf(0, 2)))
             assertThat(payload)
-                    .isEqualTo(Payload.Snippet.Json(AnnotatedText(
+                    .isEqualTo(Payload.FullResponse.Annotated(AnnotatedText(
                             "one two three",
                             emptyMap(),
                             emptyList(),
@@ -129,7 +129,7 @@ internal class PayloadCreatorTest {
                     )))
             payload = createPayload(jsonQuery, noMetadata, listOf(Interval.valueOf(1, 2)))
             assertThat(payload)
-                    .isEqualTo(Payload.Snippet.Json(AnnotatedText(
+                    .isEqualTo(Payload.FullResponse.Annotated(AnnotatedText(
                             "one two three",
                             emptyMap(),
                             emptyList(),
@@ -137,7 +137,7 @@ internal class PayloadCreatorTest {
                     )))
             payload = createPayload(jsonQuery, noMetadata, listOf(Interval.valueOf(1, 1)))
             assertThat(payload)
-                    .isEqualTo(Payload.Snippet.Json(AnnotatedText(
+                    .isEqualTo(Payload.FullResponse.Annotated(AnnotatedText(
                             "one two three",
                             emptyMap(),
                             emptyList(),
@@ -149,7 +149,7 @@ internal class PayloadCreatorTest {
         fun `two other indexes`() {
             val payload = createPayload(jsonQuery, simpleStructure, listOf(Interval.valueOf(1, 2)))
             assertThat(payload)
-                    .isEqualTo(Payload.Snippet.Json(AnnotatedText(
+                    .isEqualTo(Payload.FullResponse.Annotated(AnnotatedText(
                             "one two three",
                             mapOf(
                                     "w-0" to Annotation("w-0", mapOf("lemma" to "1", "url" to "google.com")),

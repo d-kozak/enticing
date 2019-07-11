@@ -12,7 +12,7 @@ internal fun createPayload(query: SearchQuery, content: SnippetPartsFields, inte
     // todo check for ResponseType once EQL stuff is in place
     val visitor = when (query.responseFormat) {
         ResponseFormat.HTML -> HtmlPayloadBuilderVisitor(content.corpusConfiguration, query, intervals)
-        ResponseFormat.JSON -> JsonPayloadBuilderVisitor(content.corpusConfiguration, query, intervals)
+        ResponseFormat.ANNOTATED_TEXT -> JsonPayloadBuilderVisitor(content.corpusConfiguration, query, intervals)
     }
 
     for (elem in content) {

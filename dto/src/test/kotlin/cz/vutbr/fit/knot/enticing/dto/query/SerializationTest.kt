@@ -14,8 +14,8 @@ class SerializationTest {
                 42,
                 Offset(10, 10),
                 metadata = TextMetadata.Predefined("all"),
-                responseType = ResponseType.SNIPPET,
-                responseFormat = ResponseFormat.JSON,
+                responseType = ResponseType.FULL,
+                responseFormat = ResponseFormat.ANNOTATED_TEXT,
                 defaultIndex = "lemma"
         )
 
@@ -70,7 +70,8 @@ class SerializationTest {
         @Test
         fun `snippet html`() {
             val input = SearchResult(
-                    matched = listOf(Match(
+                    matched = listOf(Snippet(
+                            host = "server1",
                             collection = "collection1",
                             documentId = 23,
                             documentTitle = "title1",
@@ -78,7 +79,7 @@ class SerializationTest {
                             canExtend = false,
                             size = 20,
                             url = "google.com",
-                            payload = Payload.Snippet.Html("hello html")
+                            payload = Payload.FullResponse.Html("hello html")
                     )),
                     offset = Offset(10, 20)
             )
@@ -89,7 +90,8 @@ class SerializationTest {
         @Test
         fun `snippet json`() {
             val input = SearchResult(
-                    matched = listOf(Match(
+                    matched = listOf(Snippet(
+                            host = "server2",
                             collection = "collection1",
                             documentId = 23,
                             documentTitle = "title1",
@@ -97,7 +99,7 @@ class SerializationTest {
                             canExtend = false,
                             size = 20,
                             url = "google.com",
-                            payload = Payload.Snippet.Json(AnnotatedText(
+                            payload = Payload.FullResponse.Annotated(AnnotatedText(
                                     "foo bar baz",
                                     emptyMap(),
                                     emptyList(),
@@ -106,14 +108,15 @@ class SerializationTest {
                     )),
                     offset = Offset(10, 20)
             )
-            val content = """"payload":{"type":"json","content":{"text":"foo bar baz","annotations":{},"positions":[],"queryMapping":[]}}"""
+            val content = """"payload":{"type":"annotated","content":{"text":"foo bar baz","annotations":{},"positions":[],"queryMapping":[]}}"""
             assertSerialization(input, content)
         }
 
         @Test
         fun `identifier list`() {
             val input = SearchResult(
-                    matched = listOf(Match(
+                    matched = listOf(Snippet(
+                            host = "server3",
                             collection = "collection1",
                             documentId = 23,
                             documentTitle = "title3",
@@ -121,9 +124,9 @@ class SerializationTest {
                             canExtend = false,
                             size = 20,
                             url = "google.com",
-                            payload = Payload.IdentifierList(
+                            payload = Payload.Identifiers(
                                     listOf(
-                                            IdentifierMatch("x", Payload.Snippet.Json(AnnotatedText(
+                                            Identifier("x", Payload.FullResponse.Annotated(AnnotatedText(
                                                     "foo bar baz",
                                                     emptyMap(),
                                                     emptyList(),
@@ -134,7 +137,7 @@ class SerializationTest {
                     )),
                     offset = Offset(10, 20)
             )
-            val content = """"payload":{"type":"identifiers","list":[{"identifier":"x","snippet":{"type":"json","content":{"text":"foo bar baz","annotations":{},"positions":[],"queryMapping":[]}}}]}"""
+            val content = """"payload":{"type":"identifiers","list":[{"identifier":"x","snippet":{"type":"annotated","content":{"text":"foo bar baz","annotations":{},"positions":[],"queryMapping":[]}}}]}"""
             assertSerialization(input, content)
         }
     }

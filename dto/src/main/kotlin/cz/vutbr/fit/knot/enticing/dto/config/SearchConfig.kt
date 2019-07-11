@@ -8,8 +8,8 @@ data class SearchConfig(
         @field:Positive
         var snippetCount: Int = 20,
         var metadata: TextMetadata = TextMetadata.Predefined("all"),
-        var responseType: ResponseType = ResponseType.SNIPPET,
-        var responseFormat: ResponseFormat = ResponseFormat.JSON,
+        var responseType: ResponseType = ResponseType.FULL,
+        var responseFormat: ResponseFormat = ResponseFormat.ANNOTATED_TEXT,
         @field:NotEmpty
         var defaultIndex: String = "token"
 ) {

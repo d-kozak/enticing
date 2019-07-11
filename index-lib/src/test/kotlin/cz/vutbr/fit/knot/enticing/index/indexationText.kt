@@ -93,8 +93,8 @@ class QueryExecutionTest {
             20,
             Offset(0, 0),
             TextMetadata.Predefined("none"),
-            ResponseType.SNIPPET,
-            ResponseFormat.JSON
+            ResponseType.FULL,
+            ResponseFormat.ANNOTATED_TEXT
     )
 
     companion object {

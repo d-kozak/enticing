@@ -45,71 +45,8 @@ until a new configuration is set using the rest api.
 * /query
      * POST
         * perform search query, return list of snippets
-    ```javascript
-    requestPayload:Snippet = {
-       query: string, // EQL query
-       snippetCount: int, // how many snippets to return
-       offset, // for pagination, offset at which to start searching
-       metadata, // which metadata to include
-       responseFormat, // what format should the result have
-       responseType,  // snippet(part of text) or match(specified by identifiers in the query)
-       defaultIndex: string
-    }
-    offset = {
-      document:int // at which document to start
-      snippet:int // at which of the snippets in the document to start
-    }
-    responseFormat = "annotated_text" | "html"
-    responseType = "full" | "identifiers"
-    metadata = predefinedOptions | {
-       entities,
-       indexes
-    }
-    entities = predefinedOption | Map<nertag,indexes>
-    nertag = string
-    indexes = predefinedOption | List<string> 
-    predefinedOption = "all" | "none"
-    ```
-    ```javascript
-    responsePayload:SearchResult = {
-        snippets: Array<Snippet>,
-        offset: Offset // for pagination, where to start next
-    }
-    Snippet = {  
-        host:url, /* this field is set later on in the QueryProcessor, there is no need to set this in the index-server */  
-        collection: string,
-        documentId: int,
-        position: int, // where in the document the snippet starts,
-        size:int,
-        url: url, // url location of the original document,
-        canExtend: boolean, // is it possible to further extend the snippet?
-        documentTitle: string,
-        payload
-    } 
-    payload = FullResponse | Identifiers
-    FullResponse = Html | AnnotatedText
-    Identifiers = Array<Identifier>
-    Identifier = {
-       name:string, // identifier from the query
-       text:FullResponse // what was matched
-    } 
-    AnnotatedText = {
-        text: string,
-        annotations:Map<AnnotationId,Annotation>,
-        positions: Array<AnnotationPosition>,
-        queryMapping : Array<QueryMapping>
-    }
-    annotationId = string
-    Annotation = {
-      id:AnnotationId,
-      content: Map<string,string>
-    }
-    QueryMapping = {
-        textIndex: MatchedRegion, // this part of text
-        queryIndex: MatchedRegion // was matched by this part of query
-    }
-    
-    ```
+        * accepts [SearchQuery](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/query/SearchQuery.kt)
+        * returns [SearchResult](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/response/SearchResult.kt)
 * /format
     * GET
         * ask about indexes and entities that can be used in queries

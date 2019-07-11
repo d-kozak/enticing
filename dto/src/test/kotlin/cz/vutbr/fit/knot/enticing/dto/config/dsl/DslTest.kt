@@ -1057,13 +1057,13 @@ class DslTest {
                     snippetCount = 42
                     defaultIndex = "lemma"
                     responseFormat = ResponseFormat.HTML
-                    responseType = ResponseType.IDENTIFIER_LIST
+                    responseType = ResponseType.IDENTIFIERS
                 }
             }
 
             val servers = listOf("localhost:8001", "localhost:8001", "localhost:8003").map { ServerInfo(it) }.toMutableList()
             val expected = ConsoleClientConfig()
-            expected.searchConfig = SearchConfig(42, TextMetadata.Predefined("all"), ResponseType.IDENTIFIER_LIST, ResponseFormat.HTML, "lemma")
+            expected.searchConfig = SearchConfig(42, TextMetadata.Predefined("all"), ResponseType.IDENTIFIERS, ResponseFormat.HTML, "lemma")
             expected.clientType = ConsoleClientType.RemoteIndex(servers)
             assertThat(config)
                     .isEqualTo(expected)

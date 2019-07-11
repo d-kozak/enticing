@@ -20,7 +20,7 @@ internal fun executeLocally(queryExecutor: QueryExecutor, input: String) {
             20,
             Offset(0, 0),
             TextMetadata.Predefined("none"),
-            ResponseType.SNIPPET,
+            ResponseType.FULL,
             ResponseFormat.HTML
     )
     val response = queryExecutor.query(query)

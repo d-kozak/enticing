@@ -51,7 +51,7 @@ class JsonPayloadBuilderVisitor(config: CorpusConfiguration, query: SearchQuery,
         positions.add(AnnotationPosition(id, MatchedRegion(from, to)))
     }
 
-    override fun getResult(): Payload = Payload.Snippet.Json(
+    override fun getResult(): Payload = Payload.FullResponse.Annotated(
             AnnotatedText(builder.toString(), annotations, positions, queryMapping))
 }
 

@@ -5,8 +5,8 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexClientConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.filterBy
 import cz.vutbr.fit.knot.enticing.dto.query.Offset
 import cz.vutbr.fit.knot.enticing.dto.query.SearchQuery
-import cz.vutbr.fit.knot.enticing.dto.response.Match
 import cz.vutbr.fit.knot.enticing.dto.response.SearchResult
+import cz.vutbr.fit.knot.enticing.dto.response.Snippet
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jCompositeDocumentCollection
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jDocument
@@ -81,7 +81,7 @@ class QueryExecutor internal constructor(
 
         val config = corpusConfiguration.filterBy(query.metadata, query.defaultIndex)
 
-        val matched = mutableListOf<Match>()
+        val matched = mutableListOf<Snippet>()
         for ((i, result) in resultList.withIndex()) {
             val (matchList, nextSnippet) = processDocument(query, result, config, query.snippetCount - matched.size, if (i == 0) matchOffset else 0)
             matched.addAll(matchList)
@@ -97,8 +97,8 @@ class QueryExecutor internal constructor(
         return@runCatching SearchResult(matched, null)
     }
 
-    internal fun processDocument(query: SearchQuery, result: Mg4jSearchResult, config: CorpusConfiguration, wantedSnippets: Int, offset: Int): Pair<List<Match>, Int?> {
-        val matched = mutableListOf<Match>()
+    internal fun processDocument(query: SearchQuery, result: Mg4jSearchResult, config: CorpusConfiguration, wantedSnippets: Int, offset: Int): Pair<List<Snippet>, Int?> {
+        val matched = mutableListOf<Snippet>()
         val defaultIndex = engine.indexMap[query.defaultIndex]
                 ?: throw IllegalArgumentException("Index ${query.defaultIndex} not found")
 
@@ -122,7 +122,8 @@ class QueryExecutor internal constructor(
 
             val payload = createPayload(query, content, relevantScores)
 
-            val match = Match(
+            val match = Snippet(
+                    null,
                     collectionName,
                     result.document,
                     left,
