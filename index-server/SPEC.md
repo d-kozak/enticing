@@ -46,61 +46,69 @@ until a new configuration is set using the rest api.
      * POST
         * perform search query, return list of snippets
     ```javascript
-    requestPayload = {
+    requestPayload:Snippet = {
        query: string, // EQL query
        snippetCount: int, // how many snippets to return
-       offset: int, // for pagination, offset at which to start searching
-       wantedIndexes, // which indexes to include in the rensponse
+       offset, // for pagination, offset at which to start searching
+       metadata, // which metadata to include
        responseFormat, // what format should the result have
        responseType,  // snippet(part of text) or match(specified by identifiers in the query)
        defaultIndex: string
     }
-    responseFormat = "json" | "html"
-    responseType = "snippet" | "match"
-    wantedIndexes = {
-       entities,
-       fieldAttributes
+    offset = {
+      document:int // at which document to start
+      snippet:int // at which of the snippets in the document to start
     }
-    entities = predefinedOption | Map<nertag,fieldAttributes>
+    responseFormat = "annotated_text" | "html"
+    responseType = "full" | "identifiers"
+    metadata = predefinedOptions | {
+       entities,
+       indexes
+    }
+    entities = predefinedOption | Map<nertag,indexes>
     nertag = string
-    fieldAttributes = predefinedOption | List<string> 
-    predefinedOption = "all" // compact way to say 'give it all'
+    indexes = predefinedOption | List<string> 
+    predefinedOption = "all" | "none"
     ```
     ```javascript
-    responsePayload = {
+    responsePayload:SearchResult = {
         snippets: Array<Snippet>,
-        offset:int // for pagination, where to start next
+        offset: Offset // for pagination, where to start next
     }
     Snippet = {  
+        host:url, /* this field is set later on in the QueryProcessor, there is no need to set this in the index-server */  
         collection: string,
-        document: int,
+        documentId: int,
         position: int, // where in the document the snippet starts,
         size:int,
         url: url, // url location of the original document,
         canExtend: boolean, // is it possible to further extend the snippet?
+        documentTitle: string,
         payload
     } 
-    payload = match | annotatedText
-    annotatedText = html | json
-    match = Array<MatchInfo>
-    matchInfo = {
-       identifier:string, // identifier from the query
-       text:annotatedText // text that was matched
+    payload = FullResponse | Identifiers
+    FullResponse = Html | AnnotatedText
+    Identifiers = Array<Identifier>
+    Identifier = {
+       name:string, // identifier from the query
+       text:FullResponse // what was matched
     } 
-    json = {
-        enhancedText : EnhancedText,
-        mapping : Array<QueryMapping>
+    AnnotatedText = {
+        text: string,
+        annotations:Map<AnnotationId,Annotation>,
+        positions: Array<AnnotationPosition>,
+        queryMapping : Array<QueryMapping>
+    }
+    annotationId = string
+    Annotation = {
+      id:AnnotationId,
+      content: Map<string,string>
     }
     QueryMapping = {
-        textIndex: [int,int], // this part of text
-        queryIndex: [int,int] // was matched by which part of query
+        textIndex: MatchedRegion, // this part of text
+        queryIndex: MatchedRegion // was matched by this part of query
     }
-    EnhancedText = {  
-        text:string,
-        annotations:Map<annotationId,Annotation>, 
-        positions:Array<{from:int,size:int,annotationId}>
-    }
-    annotationId = int
+    
     ```
 * /format
     * GET
