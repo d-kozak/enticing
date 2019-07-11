@@ -18,15 +18,17 @@ data class AnnotatedText(
          */
         @field:Valid
         val annotations: Map<String, Annotation>,
-        @field:Valid
+
         /**
          * Positions of all annotations
          */
-        val positions: List<AnnotationPosition>,
         @field:Valid
+        val positions: List<AnnotationPosition>,
+
         /**
          * Information how the query was matched by the text
          */
+        @field:Valid
         val queryMapping: List<QueryMapping>
 )
 
