@@ -17,7 +17,6 @@ internal val templateQuery = SearchQuery(
 
 internal val dummyResult = MResult.success(SearchResult(
         listOf(Snippet(
-                "host",
                 "col",
                 10,
                 10,

@@ -19,7 +19,6 @@ internal val templateQuery = SearchQuery(
 
 internal val googleFirstResult = SearchResult(
         listOf(Snippet(
-                "server1",
                 "col",
                 10,
                 10,

@@ -71,7 +71,6 @@ class SerializationTest {
         fun `snippet html`() {
             val input = SearchResult(
                     matched = listOf(Snippet(
-                            host = "server1",
                             collection = "collection1",
                             documentId = 23,
                             documentTitle = "title1",
@@ -91,7 +90,6 @@ class SerializationTest {
         fun `snippet json`() {
             val input = SearchResult(
                     matched = listOf(Snippet(
-                            host = "server2",
                             collection = "collection1",
                             documentId = 23,
                             documentTitle = "title1",
@@ -116,7 +114,6 @@ class SerializationTest {
         fun `identifier list`() {
             val input = SearchResult(
                     matched = listOf(Snippet(
-                            host = "server3",
                             collection = "collection1",
                             documentId = 23,
                             documentTitle = "title3",

@@ -5,7 +5,7 @@ import java.util.*
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Pattern
 
-data class IndexedDocument(
+data class FullDocument(
         val id: UUID,
         @field:NotEmpty
         val title: String,

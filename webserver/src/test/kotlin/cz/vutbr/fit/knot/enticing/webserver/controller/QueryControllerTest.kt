@@ -3,6 +3,7 @@ package cz.vutbr.fit.knot.enticing.webserver.controller
 
 import cz.vutbr.fit.knot.enticing.dto.query.ContextExtensionQuery
 import cz.vutbr.fit.knot.enticing.dto.query.DocumentQuery
+import cz.vutbr.fit.knot.enticing.dto.query.TextMetadata
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
@@ -84,7 +85,7 @@ internal class QueryControllerTest(
 
     @Test
     fun document() {
-        val query = DocumentQuery(UUID.randomUUID())
+        val query = DocumentQuery("google.com", "col1", 1, TextMetadata.Predefined("none"), "token", "foo")
 
         Mockito.`when`(queryService.document(query)).thenReturn(dummyDocument)
 

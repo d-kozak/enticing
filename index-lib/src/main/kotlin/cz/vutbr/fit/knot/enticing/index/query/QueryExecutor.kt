@@ -123,7 +123,6 @@ class QueryExecutor internal constructor(
             val payload = createPayload(query, content, relevantScores)
 
             val match = Snippet(
-                    null,
                     collectionName,
                     result.document,
                     left,

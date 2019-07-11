@@ -3,6 +3,7 @@ package cz.vutbr.fit.knot.enticing.webserver.config
 import com.fasterxml.jackson.databind.ObjectMapper
 import cz.vutbr.fit.knot.enticing.dto.query.ContextExtensionQuery
 import cz.vutbr.fit.knot.enticing.dto.query.DocumentQuery
+import cz.vutbr.fit.knot.enticing.dto.query.TextMetadata
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.MockNode
@@ -432,7 +433,7 @@ internal class SecurityConfigTest(
 
         @Test
         fun `Document is always accessible`() {
-            val query = DocumentQuery(UUID.randomUUID())
+            val query = DocumentQuery("google.com", "col1", 1, TextMetadata.Predefined("none"), "token", "foo")
             mockMvc.perform(post("$apiBasePath/query/document")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(query.toJson()))

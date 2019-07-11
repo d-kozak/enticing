@@ -3,6 +3,8 @@ package cz.vutbr.fit.knot.enticing.dto.response
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import cz.vutbr.fit.knot.enticing.dto.query.Offset
+import cz.vutbr.fit.knot.enticing.dto.utils.Extended
+import cz.vutbr.fit.knot.enticing.dto.utils.ExtraInfo
 import cz.vutbr.fit.knot.enticing.dto.utils.regex.urlRegexStr
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
@@ -33,27 +35,22 @@ data class SearchResult(
  */
 data class Snippet(
         /**
-         * What host the snippet came from
-         *
-         * This field is set later on in the QueryProcessor, there is no need to set this in the IndexServer
-         */
-        val host: String?,
-        @field:NotEmpty
-
-        /**
          * What collection the snippet came from
          */
+        @field:NotEmpty
         val collection: String,
-        @field:Positive
+
 
         /**
          * What document the snippet came from
          */
-        val documentId: Long,
         @field:Positive
+        val documentId: Long,
+
         /**
          * At which index in the document the snippet starts
          */
+        @field:Positive
         val location: Int,
 
         /**
@@ -86,6 +83,21 @@ data class Snippet(
          */
         val canExtend: Boolean
 )
+
+
+/**
+ * Extra information added to Snippet class during postprocessing
+ */
+data class SnippetExtra(
+        /**
+         * Url of the server this snippet came from
+         */
+        @field:NotBlank
+        @field:Pattern(regexp = urlRegexStr)
+        val host: String
+) : ExtraInfo
+
+typealias ExtendedSnippet = Extended<Snippet, SnippetExtra>
 
 /**
  * The actual data in the snippet

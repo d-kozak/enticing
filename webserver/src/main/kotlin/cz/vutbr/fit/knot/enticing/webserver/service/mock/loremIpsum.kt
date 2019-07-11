@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.service.mock
 
 import cz.vutbr.fit.knot.enticing.dto.response.AnnotatedText
-import cz.vutbr.fit.knot.enticing.dto.response.IndexedDocument
+import cz.vutbr.fit.knot.enticing.dto.response.FullDocument
 import java.util.*
 
 
@@ -20,7 +20,7 @@ Curabitur bibendum justo non orci. Donec ipsum massa, ullamcorper in, auctor et,
 """.trimIndent()
 
 
-val dummyDocument = IndexedDocument(
+val dummyDocument = FullDocument(
         UUID.randomUUID(),
         "Document One",
         "https://www.google.com",
