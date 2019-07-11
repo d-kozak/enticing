@@ -50,14 +50,7 @@ until a new configuration is set using the rest api.
 * /format
     * GET
         * ask about indexes and entities that can be used in queries
-    ```javascript
-    responsePayload = {
-        corpusName: string // name of the corpus that the data belongs to
-        entities: Map<nertag,Pair<description,Map<atttribute,description>>>, // entities and their attributes
-        indexes: Map<indexName,description>  // all indexes that can be queried
-    }
-    nertag = atttribute = description = indexName = string
-    ```  
+        * returns [CorpusFormat](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/response/CorpusFormat.kt) 
 * /document
     * whole document
     * POST 
