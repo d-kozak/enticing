@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.server.controller
 
+import cz.vutbr.fit.knot.enticing.dto.CorpusFormat
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import cz.vutbr.fit.knot.enticing.index.server.service.QueryService
 import cz.vutbr.fit.knot.enticing.index.server.utils.*
@@ -12,9 +13,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-
 
 @WebMvcTest(secure = false)
 internal class QueryControllerTest(
@@ -27,6 +29,20 @@ internal class QueryControllerTest(
 
 
     @Test
+    fun `get format`() {
+        val format = CorpusFormat("corp1", mapOf("lemma" to "lemma"), emptyMap())
+
+        Mockito.`when`(queryService.loadCorpusFormat())
+                .thenReturn(format)
+
+        mockMvc.perform(get("$apiBasePath/format"))
+                .andExpect(status().isOk)
+                .andExpect(content().json(format.toJson()))
+
+        Mockito.verify(queryService).loadCorpusFormat()
+    }
+
+    @Test
     fun `valid document query`() {
         Mockito.`when`(queryService.getDocument(templateDocumentQuery))
                 .thenReturn(documentDummyResult)
@@ -34,6 +50,7 @@ internal class QueryControllerTest(
         mockMvc.perform(post("$apiBasePath/document")
                 .contentJson(templateDocumentQuery))
                 .andExpect(status().isOk)
+                .andExpect(content().json(documentDummyResult.toJson()))
 
         Mockito.verify(queryService).getDocument(templateDocumentQuery)
     }
@@ -46,6 +63,7 @@ internal class QueryControllerTest(
         mockMvc.perform(post("$apiBasePath/query")
                 .contentJson(templateSearchQuery))
                 .andExpect(status().isOk)
+                .andExpect(content().json(searchDummyResult.toJson()))
 
         Mockito.verify(queryService).processQuery(templateSearchQuery)
 
@@ -62,9 +80,13 @@ internal class QueryControllerTest(
 
     @Test
     fun `valid context extension query`() {
+        Mockito.`when`(queryService.extendContext(templateContextExtensionQuery))
+                .thenReturn(contextExtensionDummyResult)
+
         mockMvc.perform(post("$apiBasePath/context")
                 .contentJson(templateContextExtensionQuery))
                 .andExpect(status().isOk)
+                .andExpect(content().json(contextExtensionDummyResult.toJson()))
 
         Mockito.verify(queryService).extendContext(templateContextExtensionQuery)
     }

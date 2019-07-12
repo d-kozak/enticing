@@ -4,7 +4,7 @@ import java.io.File
 
 fun indexClient(block: IndexClientConfig.() -> Unit): IndexClientConfig = IndexClientConfig().apply(block)
 
-class IndexClientConfig {
+open class IndexClientConfig {
 
 
     lateinit var mg4jFiles: List<File>

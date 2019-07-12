@@ -2,9 +2,7 @@ package cz.vutbr.fit.knot.enticing.index.server.config
 
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import cz.vutbr.fit.knot.enticing.index.server.service.QueryService
-import cz.vutbr.fit.knot.enticing.index.server.utils.searchDummyResult
-import cz.vutbr.fit.knot.enticing.index.server.utils.templateContextExtensionQuery
-import cz.vutbr.fit.knot.enticing.index.server.utils.templateSearchQuery
+import cz.vutbr.fit.knot.enticing.index.server.utils.*
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
@@ -45,6 +43,18 @@ class SecurityConfigTest(
                 .andExpect(status().isOk)
 
         Mockito.verify(queryService).extendContext(templateContextExtensionQuery)
+    }
+
+    @Test
+    fun `document endpoint is always accessible`() {
+        Mockito.`when`(queryService.getDocument(templateDocumentQuery))
+                .thenReturn(documentDummyResult)
+
+        mockMvc.perform(post("$apiBasePath/document")
+                .contentJson(templateDocumentQuery))
+                .andExpect(status().isOk)
+
+        Mockito.verify(queryService).getDocument(templateDocumentQuery)
     }
 
     @AfterEach

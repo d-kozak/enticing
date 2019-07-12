@@ -3,10 +3,7 @@ package cz.vutbr.fit.knot.enticing.index.server.controller
 import cz.vutbr.fit.knot.enticing.dto.IndexServer
 import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.index.server.service.QueryService
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
 @RestController
@@ -23,5 +20,8 @@ class QueryController(
 
     @PostMapping("/document")
     fun document(@RequestBody @Valid query: IndexServer.DocumentQuery): IndexServer.FullDocument = queryService.getDocument(query)
+
+    @GetMapping("/format")
+    fun format() = queryService.loadCorpusFormat()
 
 }
