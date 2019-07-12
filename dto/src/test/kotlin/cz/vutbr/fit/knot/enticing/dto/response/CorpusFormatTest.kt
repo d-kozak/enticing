@@ -3,6 +3,7 @@ package cz.vutbr.fit.knot.enticing.dto.response
 import cz.vutbr.fit.knot.enticing.dto.CorpusFormat
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.*
 import cz.vutbr.fit.knot.enticing.dto.toCorpusFormat
+import cz.vutbr.fit.knot.enticing.dto.withAttributes
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -48,12 +49,11 @@ class CorpusFormatTest {
                         "param0" to ""
                 ),
                 entities = mapOf(
-                        "person" to Pair("Person entity", mapOf(
+                        "person" to ("Person entity" withAttributes mapOf(
                                 "name" to "The name of the person",
                                 "url" to "url"
                         ))
                 ))
-
         assertThat(input.toCorpusFormat())
                 .isEqualTo(expected)
     }
