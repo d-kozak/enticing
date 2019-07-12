@@ -8,7 +8,7 @@ import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
 import it.unimi.dsi.util.Interval
 
 
-class JsonPayloadBuilderVisitor(config: CorpusConfiguration, query: SearchQuery, intervals: List<Interval>
+class JsonPayloadBuilderVisitor(config: CorpusConfiguration, query: Mg4jQuery, intervals: List<Interval>
 ) : AbstractPayloadBuilderVisitor<Payload>(config, query, intervals) {
 
     private val annotations = mutableMapOf<String, Annotation>()
@@ -16,7 +16,7 @@ class JsonPayloadBuilderVisitor(config: CorpusConfiguration, query: SearchQuery,
     private val queryMapping = mutableListOf<QueryMapping>()
 
     @Incomplete("this is just a dummy value until we know the real queryMatch (waiting for EQL)")
-    private val queryMatch = 0 to query.query.length
+    private val queryMatch = 0 to 1
 
     private var startPosition = 0
 

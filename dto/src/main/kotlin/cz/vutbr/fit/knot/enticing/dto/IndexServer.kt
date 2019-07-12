@@ -48,11 +48,11 @@ object IndexServer {
              * What should be the defaultIndex
              */
             @field:NotBlank
-            val defaultIndex: String = Defaults.defaultIndex,
+            override val defaultIndex: String = Defaults.defaultIndex,
             /**
              * What should be the format of the response
              */
-            val responseFormat: ResponseFormat = Defaults.responseFormat,
+            override val responseFormat: ResponseFormat = Defaults.responseFormat,
 
             /**
              * Query, optional
@@ -62,7 +62,7 @@ object IndexServer {
              */
             @Incomplete("can be used only when postprocessing is ready")
             val query: String? = null
-    )
+    ) : Mg4jQuery
 
     /**
      * Extension for a snippet
@@ -109,12 +109,12 @@ object IndexServer {
              * What should be the defaultIndex
              */
             @field:NotBlank
-            val defaultIndex: String = Defaults.defaultIndex,
+            override val defaultIndex: String = Defaults.defaultIndex,
 
             /**
              * What should be the format of the response
              */
-            val responseFormat: ResponseFormat = Defaults.responseFormat,
+            override val responseFormat: ResponseFormat = Defaults.responseFormat,
 
             /**
              * Query, optional
@@ -124,7 +124,7 @@ object IndexServer {
              */
             @Incomplete("can be used only when postprocessing is ready")
             val query: String? = null
-    )
+    ) : Mg4jQuery
 
     /**
      * Full document content returned from an IndexServer

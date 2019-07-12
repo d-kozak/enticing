@@ -165,11 +165,18 @@ class QueryExecutor internal constructor(
     }
 
     @Incomplete("not implemented yet, returns dummy data")
-    fun getDocument(query: IndexServer.DocumentQuery): MResult<IndexServer.FullDocument> {
-        return MResult.success(IndexServer.FullDocument(
-                "how to use google",
-                "google.com/howto",
-                Payload.FullResponse.Html("how to use google for dummies")
-        ))
+    fun getDocument(query: IndexServer.DocumentQuery): MResult<IndexServer.FullDocument> = MResult.runCatching {
+        val document = collection.document(query.documentId.toLong()) as Mg4jDocument
+
+        val filteredConfig = corpusConfiguration.filterBy(query.metadata, query.defaultIndex)
+
+        val content = document.loadSnippetPartsFields(filteredConfig = filteredConfig)
+
+        val payload = createPayload(query, content, emptyList()) as Payload.FullResponse
+        IndexServer.FullDocument(
+                document.title().toString(),
+                document.uri().toString(),
+                payload
+        )
     }
 }

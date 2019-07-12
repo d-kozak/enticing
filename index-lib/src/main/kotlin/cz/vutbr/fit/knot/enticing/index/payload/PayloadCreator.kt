@@ -1,14 +1,14 @@
 package cz.vutbr.fit.knot.enticing.index.payload
 
-import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
-import cz.vutbr.fit.knot.enticing.dto.ResponseFormat
-import cz.vutbr.fit.knot.enticing.dto.SearchQuery
+import cz.vutbr.fit.knot.enticing.dto.Mg4jQuery
 import cz.vutbr.fit.knot.enticing.dto.Payload
+import cz.vutbr.fit.knot.enticing.dto.ResponseFormat
+import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetPartsFields
 import it.unimi.dsi.util.Interval
 
-internal fun createPayload(query: SearchQuery, content: SnippetPartsFields, intervals: List<Interval>): Payload {
+internal fun createPayload(query: Mg4jQuery, content: SnippetPartsFields, intervals: List<Interval>): Payload {
 
     @Incomplete("check for ResponseType once EQL stuff is in place")
     val visitor = when (query.responseFormat) {

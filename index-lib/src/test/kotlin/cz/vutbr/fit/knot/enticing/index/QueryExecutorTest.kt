@@ -86,13 +86,13 @@ val clientConfig = indexClient {
     corpusConfiguration = corpusConfig
 }
 
-class QueryExecutionTest {
+class QueryExecutorTest {
 
     private val templateQuery = SearchQuery(
             "",
             20,
             Offset(0, 0),
-            TextMetadata.Predefined("none"),
+            TextMetadata.Predefined("all"),
             ResponseType.FULL,
             ResponseFormat.ANNOTATED_TEXT
     )
@@ -102,7 +102,10 @@ class QueryExecutionTest {
         @BeforeAll
         @JvmStatic
         internal fun beforeAll() {
-            startIndexing(builderConfig)
+            // it is necessary to validate the configuration, because some initialization happens at that phase
+            builderConfig.validate()
+            clientConfig.validate()
+            //startIndexing(builderConfig)
         }
 
     }
@@ -123,6 +126,7 @@ class QueryExecutionTest {
             if (result.isFailure) {
                 result.rethrowException()
             }
+            println(result)
         }
     }
 
@@ -136,5 +140,40 @@ class QueryExecutionTest {
             assertThat(result.isFailure)
             result.rethrowException()
         }
+    }
+
+    @Test
+    fun `document retrieval test`() {
+        val executor = initQueryExecutor(clientConfig)
+        for (i in 0..10) {
+            val query = IndexServer.DocumentQuery("col1", i)
+
+            val document = executor.getDocument(query).unwrap()
+
+            if (document.payload is Payload.FullResponse.Annotated) {
+                val annotated = document.payload as Payload.FullResponse.Annotated
+                assertThat(validateAnnotatedText(annotated.content))
+                        .isEmpty()
+            }
+        }
+    }
+
+    fun validateAnnotatedText(text: AnnotatedText): List<String> {
+        val errors = mutableListOf<String>()
+        for (position in text.positions) {
+            val (id, _, subAnnotations) = position
+            if (id !in text.annotations) {
+                errors.add("$id not found in annotations")
+            }
+            for ((subId, _, subsub) in subAnnotations) {
+                if (subId !in text.annotations) {
+                    errors.add("$subId not found in annotations")
+                }
+                if (subsub.isNotEmpty()) {
+                    errors.add("only two level nesting allowed, this one is deeper $")
+                }
+            }
+        }
+        return errors
     }
 }

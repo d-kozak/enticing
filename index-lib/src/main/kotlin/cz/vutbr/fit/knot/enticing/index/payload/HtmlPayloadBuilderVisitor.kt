@@ -1,13 +1,13 @@
 package cz.vutbr.fit.knot.enticing.index.payload
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
-import cz.vutbr.fit.knot.enticing.dto.SearchQuery
+import cz.vutbr.fit.knot.enticing.dto.Mg4jQuery
 import cz.vutbr.fit.knot.enticing.dto.Payload
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
 import it.unimi.dsi.util.Interval
 
 class HtmlPayloadBuilderVisitor(
-        config: CorpusConfiguration, query: SearchQuery, intervals: List<Interval>
+        config: CorpusConfiguration, query: Mg4jQuery, intervals: List<Interval>
 ) : AbstractPayloadBuilderVisitor<Payload>(config, query, intervals) {
 
     override fun visitMatchStart() {

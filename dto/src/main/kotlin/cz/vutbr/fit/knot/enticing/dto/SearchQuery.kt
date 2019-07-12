@@ -42,7 +42,7 @@ data class SearchQuery(
         /**
          * What should be the format of the response
          */
-        val responseFormat: ResponseFormat = Defaults.responseFormat,
+        override val responseFormat: ResponseFormat = Defaults.responseFormat,
 
         /**
          * What is the default index
@@ -51,8 +51,8 @@ data class SearchQuery(
          * the others are considered the metadata of the default index
          */
         @field:NotBlank
-        val defaultIndex: String = Defaults.defaultIndex
-)
+        override val defaultIndex: String = Defaults.defaultIndex
+) : Mg4jQuery
 
 
 /**

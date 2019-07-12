@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.index.payload
 
+import cz.vutbr.fit.knot.enticing.dto.Mg4jQuery
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
-import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
 import cz.vutbr.fit.knot.enticing.index.query.component1
 import cz.vutbr.fit.knot.enticing.index.query.component2
@@ -24,7 +24,7 @@ interface PayloadBuilderVisitor<T> {
 
 abstract class AbstractPayloadBuilderVisitor<T>(
         protected val config: CorpusConfiguration,
-        protected val query: SearchQuery,
+        protected val query: Mg4jQuery,
         protected val intervals: List<Interval>)
     : PayloadBuilderVisitor<T> {
     protected val builder: StringBuilder = StringBuilder()
