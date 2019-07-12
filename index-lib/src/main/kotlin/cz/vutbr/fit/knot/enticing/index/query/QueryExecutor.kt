@@ -25,6 +25,7 @@ import it.unimi.di.big.mg4j.search.DocumentIteratorBuilderVisitor
 import it.unimi.di.big.mg4j.search.score.DocumentScoreInfo
 import it.unimi.dsi.fastutil.objects.*
 import it.unimi.dsi.util.Interval
+import it.unimi.dsi.util.Intervals
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -156,15 +157,17 @@ class QueryExecutor internal constructor(
     }
 
     @Incomplete("not implemented yet, returns dummy data")
-    fun extendSnippet(query: IndexServer.ContextExtensionQuery): MResult<IndexServer.SnippetExtension> {
-        return MResult.success(IndexServer.SnippetExtension(
+    fun extendSnippet(query: IndexServer.ContextExtensionQuery): MResult<IndexServer.SnippetExtension> = MResult.runCatching {
+        val document = collection.document(query.docId.toLong()) as Mg4jDocument
+
+
+        IndexServer.SnippetExtension(
                 Payload.FullResponse.Html("null"),
                 Payload.FullResponse.Html("null"),
                 false
-        ))
+        )
     }
 
-    @Incomplete("not implemented yet, returns dummy data")
     fun getDocument(query: IndexServer.DocumentQuery): MResult<IndexServer.FullDocument> = MResult.runCatching {
         val document = collection.document(query.documentId.toLong()) as Mg4jDocument
 
@@ -179,4 +182,15 @@ class QueryExecutor internal constructor(
                 payload
         )
     }
+}
+
+/**
+ * Compute the size of prefix and suffix for snippet extension
+ */
+internal fun computeExtentionIntervals(left: Int, right: Int, extension: Int, documentSize: Int): Pair<Interval, Interval> {
+    val prefixSize = Math.min(extension / 2, if (left > 0) left - 1 else 0)
+    val suffixSize = Math.min(extension - prefixSize, documentSize - right - 1)
+    val leftInterval = if (prefixSize > 0) Interval.valueOf(left - prefixSize, left - 1) else Intervals.EMPTY_INTERVAL
+    val rightInterval = if (suffixSize > 0) Interval.valueOf(right + 1, right + suffixSize) else Intervals.EMPTY_INTERVAL
+    return leftInterval to rightInterval
 }
