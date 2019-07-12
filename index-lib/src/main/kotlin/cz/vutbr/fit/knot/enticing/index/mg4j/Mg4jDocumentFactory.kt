@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.Speed
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.Index
 import it.unimi.di.big.mg4j.document.AbstractDocumentFactory
@@ -47,7 +48,7 @@ class Mg4jDocumentFactory(private val corpusConfiguration: CorpusConfiguration) 
         }
 
         metadata[DocumentMetadata.SIZE] = lineIndex
-        // todo avoid copying of the content from bytelist to bytearray
+        @Speed("avoid copying of the content from bytelist to bytearray")
         return Mg4jDocument(corpusConfiguration, metadata, fields.map { it.toString() })
     }
 }
@@ -59,8 +60,8 @@ val whitespaceRegex = """\s""".toRegex()
 
 var replicationInfo: EntityReplicationInfo? = null
 
+@Speed("rewrite using MutableStrings and whitespace readers?")
 internal fun processLine(line: String, fields: List<StringBuilder>, lineIndex: Int) {
-    // todo @Speed rewrite using MutableStrings and whitespace readers?
     val cells = line.split(whitespaceRegex)
     val cellCount = 27
     val nerlenIndex = 26

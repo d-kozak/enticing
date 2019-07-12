@@ -1,5 +1,7 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
+
 fun corpusConfig(name: String, block: CorpusConfiguration.() -> Unit = {}): CorpusConfiguration = CorpusConfiguration(name).apply(block)
 
 data class CorpusConfiguration(
@@ -89,9 +91,8 @@ fun CorpusConfiguration.validate() = mutableListOf<String>().also { this.validat
  * During the process, the corresponding index for each attribute of each entity is found and saved
  * @param errors list to which the error messages should be appended
  */
+@Cleanup("Validation could be moved into separate class, handled for example using the visitor pattern")
 fun CorpusConfiguration.validate(errors: MutableList<String>) {
-    // todo @cleanUp refacotyr
-
     if (corpusName.isBlank()) {
         errors.add("Corpus name should neither be empty nor blank")
     }

@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.index.client
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.ConsoleClientConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.ConsoleClientType
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
@@ -18,7 +19,7 @@ fun handleArguments(args: Array<String>): ConsoleClientConfig {
 fun main(args: Array<String>) {
     val (clientType, searchConfig) = handleArguments(args)
 
-    // todo setup search config updates here
+    @Incomplete("todo setup search config updates here")
 
     val inputSequence = prepareUserInput()
 

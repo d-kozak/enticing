@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.enticing.dto.query
 
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
+import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.utils.Defaults
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
@@ -148,8 +149,9 @@ enum class ResponseType {
     FULL,
     /**
      * Only return the values of identifiers used in the query
-     * todo can only be done when EQL is in place
+     *
      */
+    @Incomplete("can only be used when EQL is in place")
     IDENTIFIERS
 }
 

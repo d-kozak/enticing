@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.enticing.query.processor
 
 
 import com.github.kittinunf.fuel.httpPost
+import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.query.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.query.ServerInfo
 import cz.vutbr.fit.knot.enticing.dto.response.SearchResult
@@ -48,7 +49,7 @@ class RestTemplateRequestDispatcher(private val restTemplate: RestTemplate = Res
         if (result.statusCode == HttpStatus.OK) {
             result.body!!.toDto<SearchResult>()
         } else {
-            // todo somehow rethrow the real exception?
+            @Incomplete("somehow rethrow the real exception?")
             throw RuntimeException(result.body.toString())
         }
     }

@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.query
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexClientConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.filterBy
@@ -26,8 +27,7 @@ import it.unimi.dsi.util.Interval
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-
-// todo put into the configuration?
+@Cleanup("put into configuration?")
 const val SNIPPET_SIZE = 50
 
 fun initQueryExecutor(config: IndexClientConfig): QueryExecutor {

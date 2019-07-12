@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.payload
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.query.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.response.*
@@ -15,7 +16,7 @@ class JsonPayloadBuilderVisitor(config: CorpusConfiguration, query: SearchQuery,
     private val positions = mutableListOf<AnnotationPosition>()
     private val queryMapping = mutableListOf<QueryMapping>()
 
-    // todo @temporary this is just a dummy value until we know the real queryMatch (again, waiting for EQL)
+    @Incomplete("this is just a dummy value until we know the real queryMatch (waiting for EQL)")
     private val queryMatch = 0 to query.query.length
 
     private var startPosition = 0

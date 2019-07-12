@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.server.config
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexClientConfig
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
 import cz.vutbr.fit.knot.enticing.index.query.QueryExecutor
@@ -21,9 +22,8 @@ class QueryConfig(
     private val log: Logger = LoggerFactory.getLogger(QueryConfig::class.java)
 
     @Bean
+    @Incomplete("each index server should support multiple collections, not just one")
     fun queryExecutor(): QueryExecutor {
-        // todo each index server should support multiple collections, not just one
-
         log.info("Loading configuration from $configFile")
         val config = executeScript<IndexClientConfig>(configFile)
         log.info("Loaded config $config")
