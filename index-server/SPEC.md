@@ -54,8 +54,8 @@ until a new configuration is set using the rest api.
 * /document
     * POST 
         * get whole document
-        * accepts[DocumentQuery](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/IndexServer.kt)
-        * returns[FullDocument](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/IndexServer.kt)
+        * accepts [DocumentQuery](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/IndexServer.kt)
+        * returns [FullDocument](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/IndexServer.kt)
     
 * /context
     * POST
