@@ -2,10 +2,7 @@ package cz.vutbr.fit.knot.enticing.index.server.controller
 
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import cz.vutbr.fit.knot.enticing.index.server.service.QueryService
-import cz.vutbr.fit.knot.enticing.index.server.utils.contextExtensionDummyResult
-import cz.vutbr.fit.knot.enticing.index.server.utils.searchDummyResult
-import cz.vutbr.fit.knot.enticing.index.server.utils.templateContextExtensionQuery
-import cz.vutbr.fit.knot.enticing.index.server.utils.templateSearchQuery
+import cz.vutbr.fit.knot.enticing.index.server.utils.*
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
@@ -30,13 +27,24 @@ internal class QueryControllerTest(
 
 
     @Test
+    fun `valid document query`() {
+        Mockito.`when`(queryService.getDocument(templateDocumentQuery))
+                .thenReturn(documentDummyResult)
+
+        mockMvc.perform(post("$apiBasePath/document")
+                .contentJson(templateDocumentQuery))
+                .andExpect(status().isOk)
+
+        Mockito.verify(queryService).getDocument(templateDocumentQuery)
+    }
+
+    @Test
     fun `valid search query`() {
         Mockito.`when`(queryService.processQuery(templateSearchQuery))
                 .thenReturn(searchDummyResult)
 
         mockMvc.perform(post("$apiBasePath/query")
-                .content(templateSearchQuery.toJson())
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentJson(templateSearchQuery))
                 .andExpect(status().isOk)
 
         Mockito.verify(queryService).processQuery(templateSearchQuery)
@@ -46,8 +54,7 @@ internal class QueryControllerTest(
     @Test
     fun `search query missing query`() {
         mockMvc.perform(post("$apiBasePath/query")
-                .content(templateSearchQuery.copy(query = "  ").toJson())
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentJson(templateSearchQuery.copy(query = "  ")))
                 .andExpect(status().`is`(400))
 
         Mockito.verifyZeroInteractions(queryService)
@@ -56,8 +63,7 @@ internal class QueryControllerTest(
     @Test
     fun `valid context extension query`() {
         mockMvc.perform(post("$apiBasePath/context")
-                .content(templateContextExtensionQuery.toJson())
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentJson(templateContextExtensionQuery))
                 .andExpect(status().isOk)
 
         Mockito.verify(queryService).extendContext(templateContextExtensionQuery)
@@ -66,8 +72,7 @@ internal class QueryControllerTest(
     @Test
     fun `context extension collection is empty`() {
         mockMvc.perform(post("$apiBasePath/context")
-                .content(templateContextExtensionQuery.copy(collection = "").toJson())
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentJson(templateContextExtensionQuery.copy(collection = "")))
                 .andExpect(status().`is`(400))
 
         Mockito.verifyZeroInteractions(queryService)

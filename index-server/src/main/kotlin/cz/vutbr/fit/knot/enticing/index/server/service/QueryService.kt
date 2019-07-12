@@ -14,4 +14,6 @@ class QueryService(
     fun processQuery(query: SearchQuery) = queryExecutor.query(query).unwrap()
 
     fun extendContext(query: IndexServer.ContextExtensionQuery) = queryExecutor.extendSnippet(query).unwrap()
+
+    fun getDocument(query: IndexServer.DocumentQuery) = queryExecutor.getDocument(query).unwrap()
 }

@@ -21,4 +21,7 @@ class QueryController(
     @PostMapping("/context")
     fun context(@RequestBody @Valid query: IndexServer.ContextExtensionQuery): IndexServer.SnippetExtension = queryService.extendContext(query)
 
+    @PostMapping("/document")
+    fun document(@RequestBody @Valid query: IndexServer.DocumentQuery): IndexServer.FullDocument = queryService.getDocument(query)
+
 }

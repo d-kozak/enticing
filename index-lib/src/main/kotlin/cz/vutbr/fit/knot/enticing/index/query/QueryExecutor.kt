@@ -155,12 +155,21 @@ class QueryExecutor internal constructor(
         log.warn("No results for index $index")
     }
 
-    @Incomplete("not implemented yet")
+    @Incomplete("not implemented yet, returns dummy data")
     fun extendSnippet(query: IndexServer.ContextExtensionQuery): MResult<IndexServer.SnippetExtension> {
         return MResult.success(IndexServer.SnippetExtension(
                 Payload.FullResponse.Html("null"),
                 Payload.FullResponse.Html("null"),
                 false
+        ))
+    }
+
+    @Incomplete("not implemented yet, returns dummy data")
+    fun getDocument(query: IndexServer.DocumentQuery): MResult<IndexServer.FullDocument> {
+        return MResult.success(IndexServer.FullDocument(
+                "how to use google",
+                "google.com/howto",
+                Payload.FullResponse.Html("how to use google for dummies")
         ))
     }
 }

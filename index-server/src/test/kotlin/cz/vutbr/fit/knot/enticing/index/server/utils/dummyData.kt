@@ -25,6 +25,18 @@ internal val searchDummyResult = IndexServer.SearchResult(
         Offset(42, 84)
 )
 
+internal val templateDocumentQuery = IndexServer.DocumentQuery(
+        collection = "col1",
+        documentId = 1
+)
+
+internal val documentDummyResult = IndexServer.FullDocument(
+        "how to use google",
+        "google.com/howto",
+        Payload.FullResponse.Html("how to use google for dummies")
+)
+
+
 internal val templateContextExtensionQuery = IndexServer.ContextExtensionQuery(
         collection = "col1",
         docId = 1,
