@@ -1,10 +1,9 @@
 package cz.vutbr.fit.knot.enticing.index.payload
 
+import cz.vutbr.fit.knot.enticing.dto.*
+import cz.vutbr.fit.knot.enticing.dto.Annotation
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
-import cz.vutbr.fit.knot.enticing.dto.query.SearchQuery
-import cz.vutbr.fit.knot.enticing.dto.response.*
-import cz.vutbr.fit.knot.enticing.dto.response.Annotation
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
 import it.unimi.dsi.util.Interval
 

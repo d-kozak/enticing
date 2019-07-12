@@ -1,8 +1,8 @@
-package cz.vutbr.fit.knot.enticing.dto.utils
+package cz.vutbr.fit.knot.enticing.dto
 
-import cz.vutbr.fit.knot.enticing.dto.query.ResponseFormat
-import cz.vutbr.fit.knot.enticing.dto.query.ResponseType
-import cz.vutbr.fit.knot.enticing.dto.query.TextMetadata
+import cz.vutbr.fit.knot.enticing.dto.ResponseFormat
+import cz.vutbr.fit.knot.enticing.dto.ResponseType
+import cz.vutbr.fit.knot.enticing.dto.TextMetadata
 
 /**
  * Default values for dto attributes.

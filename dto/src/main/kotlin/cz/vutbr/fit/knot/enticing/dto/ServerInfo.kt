@@ -1,5 +1,6 @@
-package cz.vutbr.fit.knot.enticing.dto.query
+package cz.vutbr.fit.knot.enticing.dto
 
+import cz.vutbr.fit.knot.enticing.dto.Offset
 import cz.vutbr.fit.knot.enticing.dto.utils.regex.urlRegexStr
 import javax.validation.Valid
 import javax.validation.constraints.NotEmpty

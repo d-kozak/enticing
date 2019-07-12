@@ -1,13 +1,13 @@
 package cz.vutbr.fit.knot.enticing.index.query
 
+import cz.vutbr.fit.knot.enticing.dto.IndexServer
 import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexClientConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.filterBy
-import cz.vutbr.fit.knot.enticing.dto.query.Offset
-import cz.vutbr.fit.knot.enticing.dto.query.SearchQuery
-import cz.vutbr.fit.knot.enticing.dto.response.SearchResult
-import cz.vutbr.fit.knot.enticing.dto.response.Snippet
+import cz.vutbr.fit.knot.enticing.dto.Offset
+import cz.vutbr.fit.knot.enticing.dto.SearchQuery
+import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jCompositeDocumentCollection
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jDocument
@@ -71,7 +71,7 @@ class QueryExecutor internal constructor(
 
     private val log: Logger = LoggerFactory.getLogger(QueryExecutor::class.java)
 
-    fun query(query: SearchQuery): MResult<SearchResult> = MResult.runCatching {
+    fun query(query: SearchQuery): MResult<IndexServer.SearchResult> = MResult.runCatching {
         log.info("Executing query $query")
         val resultList = ObjectArrayList<Mg4jSearchResult>()
         val (documentOffset, matchOffset) = query.offset
@@ -81,7 +81,7 @@ class QueryExecutor internal constructor(
 
         val config = corpusConfiguration.filterBy(query.metadata, query.defaultIndex)
 
-        val matched = mutableListOf<Snippet>()
+        val matched = mutableListOf<IndexServer.Snippet>()
         for ((i, result) in resultList.withIndex()) {
             val (matchList, nextSnippet) = processDocument(query, result, config, query.snippetCount - matched.size, if (i == 0) matchOffset else 0)
             matched.addAll(matchList)
@@ -91,14 +91,16 @@ class QueryExecutor internal constructor(
                     i != resultList.size - 1 -> Offset(resultList[i + 1].document.toInt(), 0)
                     else -> null
                 }
-                return@runCatching SearchResult(matched, offset)
+                return@runCatching IndexServer.SearchResult(matched, offset)
             }
         }
-        return@runCatching SearchResult(matched, null)
+        return@runCatching IndexServer.SearchResult(matched, null)
     }
 
-    internal fun processDocument(query: SearchQuery, result: Mg4jSearchResult, config: CorpusConfiguration, wantedSnippets: Int, offset: Int): Pair<List<Snippet>, Int?> {
-        val matched = mutableListOf<Snippet>()
+    @Incomplete("Better snippet creation algorithm needed")
+    @Incomplete("Offset is not being used")
+    internal fun processDocument(query: SearchQuery, result: Mg4jSearchResult, config: CorpusConfiguration, wantedSnippets: Int, offset: Int): Pair<List<IndexServer.Snippet>, Int?> {
+        val matched = mutableListOf<IndexServer.Snippet>()
         val defaultIndex = engine.indexMap[query.defaultIndex]
                 ?: throw IllegalArgumentException("Index ${query.defaultIndex} not found")
 
@@ -122,7 +124,7 @@ class QueryExecutor internal constructor(
 
             val payload = createPayload(query, content, relevantScores)
 
-            val match = Snippet(
+            val match = IndexServer.Snippet(
                     collectionName,
                     result.document,
                     left,

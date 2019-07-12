@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.dto.query
 
-import cz.vutbr.fit.knot.enticing.dto.response.*
+import cz.vutbr.fit.knot.enticing.dto.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -69,8 +69,8 @@ class SerializationTest {
 
         @Test
         fun `snippet html`() {
-            val input = SearchResult(
-                    matched = listOf(Snippet(
+            val input = IndexServer.SearchResult(
+                    matched = listOf(IndexServer.Snippet(
                             collection = "collection1",
                             documentId = 23,
                             documentTitle = "title1",
@@ -88,8 +88,8 @@ class SerializationTest {
 
         @Test
         fun `snippet json`() {
-            val input = SearchResult(
-                    matched = listOf(Snippet(
+            val input = IndexServer.SearchResult(
+                    matched = listOf(IndexServer.Snippet(
                             collection = "collection1",
                             documentId = 23,
                             documentTitle = "title1",
@@ -112,8 +112,8 @@ class SerializationTest {
 
         @Test
         fun `identifier list`() {
-            val input = SearchResult(
-                    matched = listOf(Snippet(
+            val input = IndexServer.SearchResult(
+                    matched = listOf(IndexServer.Snippet(
                             collection = "collection1",
                             documentId = 23,
                             documentTitle = "title3",

@@ -1,15 +1,16 @@
-package cz.vutbr.fit.knot.enticing.dto.query
+package cz.vutbr.fit.knot.enticing.dto
 
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
-import cz.vutbr.fit.knot.enticing.dto.utils.Defaults
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Positive
 
 /**
  * Query to be processed by an IndexServer
+ *
+ * Used both on the webserver and IndexServer interface
  */
 data class SearchQuery(
         /**

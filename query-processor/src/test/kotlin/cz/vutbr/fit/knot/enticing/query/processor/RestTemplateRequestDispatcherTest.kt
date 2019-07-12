@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.query.processor
 
-import cz.vutbr.fit.knot.enticing.dto.query.ServerInfo
+import cz.vutbr.fit.knot.enticing.dto.ServerInfo
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import io.mockk.every
 import io.mockk.mockk

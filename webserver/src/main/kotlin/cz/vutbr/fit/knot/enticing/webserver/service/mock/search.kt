@@ -1,11 +1,10 @@
 package cz.vutbr.fit.knot.enticing.webserver.service.mock
 
-import cz.vutbr.fit.knot.enticing.dto.response.*
-import cz.vutbr.fit.knot.enticing.dto.utils.ExtraInfo
-import cz.vutbr.fit.knot.enticing.dto.utils.with
+import cz.vutbr.fit.knot.enticing.dto.*
 
 
-val firstResult = Snippet(
+val firstResult = Webserver.Snippet(
+        host = "server1",
         documentId = 0,
         documentTitle = "Ed",
         collection = "col1",
@@ -21,9 +20,10 @@ val firstResult = Snippet(
         ),
         url = "https://www.borgenmagazine.com/ed-sheeran-visited-liberia/",
         canExtend = true
-) with ExtraInfo("server1")
+)
 
-val secondResult = Snippet(
+val secondResult = Webserver.Snippet(
+        host = "server2",
         documentId = 1,
         documentTitle = "donald",
         location = 0,
@@ -39,9 +39,10 @@ val secondResult = Snippet(
         ),
         url = "https://www.mysanantonio.com/news/local/article/President-Trump-arrives-in-San-Antonio-for-13756986.php",
         canExtend = true
-) with ExtraInfo("server2")
+)
 
-val thirdResult = Snippet(
+val thirdResult = Webserver.Snippet(
+        host = "server3",
         documentId = 2,
         documentTitle = "milos",
         location = 0,
@@ -57,7 +58,7 @@ val thirdResult = Snippet(
         ),
         url = "https://www.thun.cz/en/article/238-visit-of-mr--president-milos-zeman.html",
         canExtend = true
-) with ExtraInfo("server3")
+)
 
 val results = listOf(firstResult, secondResult, thirdResult)
 fun randomResult() = results[Math.floor(Math.random() * results.size).toInt()]

@@ -1,10 +1,8 @@
 package cz.vutbr.fit.knot.enticing.webserver.service.mock
 
-import cz.vutbr.fit.knot.enticing.dto.response.AnnotatedText
-import cz.vutbr.fit.knot.enticing.dto.response.DocumentExtra
-import cz.vutbr.fit.knot.enticing.dto.response.FullDocument
-import cz.vutbr.fit.knot.enticing.dto.response.Payload
-import cz.vutbr.fit.knot.enticing.dto.utils.with
+import cz.vutbr.fit.knot.enticing.dto.AnnotatedText
+import cz.vutbr.fit.knot.enticing.dto.Payload
+import cz.vutbr.fit.knot.enticing.dto.Webserver
 
 
 val loremOneSentence = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit."
@@ -22,7 +20,10 @@ Curabitur bibendum justo non orci. Donec ipsum massa, ullamcorper in, auctor et,
 """.trimIndent()
 
 
-val dummyDocument = FullDocument(
+val dummyDocument = Webserver.FullDocument(
+        "google.com",
+        "col1",
+        1,
         "Document One",
         "https://www.google.com",
         Payload.FullResponse.Annotated(AnnotatedText(
@@ -31,4 +32,4 @@ val dummyDocument = FullDocument(
                 emptyList(),
                 emptyList()
         ))
-) with DocumentExtra("google.com", "col1", 1)
+)

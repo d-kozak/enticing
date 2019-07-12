@@ -1,9 +1,9 @@
 package cz.vutbr.fit.knot.enticing.query.processor
 
-import cz.vutbr.fit.knot.enticing.dto.query.Offset
-import cz.vutbr.fit.knot.enticing.dto.query.SearchQuery
-import cz.vutbr.fit.knot.enticing.dto.query.ServerInfo
-import cz.vutbr.fit.knot.enticing.dto.response.SearchResult
+import cz.vutbr.fit.knot.enticing.dto.IndexServer
+import cz.vutbr.fit.knot.enticing.dto.Offset
+import cz.vutbr.fit.knot.enticing.dto.SearchQuery
+import cz.vutbr.fit.knot.enticing.dto.ServerInfo
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test
 /**
  * lambda to interface conversion
  */
-internal fun dummyDispatcher(fn: (SearchQuery, ServerInfo) -> MResult<SearchResult>): RequestDispatcher = object : RequestDispatcher {
-    override suspend fun invoke(searchQuery: SearchQuery, serverInfo: ServerInfo): MResult<SearchResult> = fn(searchQuery, serverInfo)
+internal fun dummyDispatcher(fn: (SearchQuery, ServerInfo) -> MResult<IndexServer.SearchResult>): RequestDispatcher = object : RequestDispatcher {
+    override suspend fun invoke(searchQuery: SearchQuery, serverInfo: ServerInfo): MResult<IndexServer.SearchResult> = fn(searchQuery, serverInfo)
 }
 
 internal class QueryProcessorTest {
@@ -25,7 +25,7 @@ internal class QueryProcessorTest {
         val fail: RequestDispatcher = dummyDispatcher { _, server -> MResult.failure(FailOnPurposeException(server.address)) }
 
         val result = process(templateQuery, servers, fail)
-        val expected: Map<String, List<MResult<SearchResult>>> = mapOf(
+        val expected: Map<String, List<MResult<IndexServer.SearchResult>>> = mapOf(
                 "yahoo.com" to listOf(MResult.failure(FailOnPurposeException("yahoo.com"))),
                 "google.com" to listOf(MResult.failure(FailOnPurposeException("google.com"))),
                 "foo.bar" to listOf(MResult.failure(FailOnPurposeException("foo.bar")))
@@ -52,7 +52,7 @@ internal class QueryProcessorTest {
         }
 
         val result = process(templateQuery, servers, requestDispatcher)
-        val expected: Map<String, List<MResult<SearchResult>>> = mapOf(
+        val expected: Map<String, List<MResult<IndexServer.SearchResult>>> = mapOf(
                 "yahoo.com" to listOf(MResult.failure(FailOnPurposeException("yahoo.com"))),
                 "google.com" to listOf(MResult.failure(FailOnPurposeException("google.com"))),
                 "foo.bar" to listOf(MResult.failure(FailOnPurposeException("foo.bar")))
@@ -75,7 +75,7 @@ internal class QueryProcessorTest {
         }
 
         val result = process(templateQuery, servers, fail)
-        val expected: Map<String, List<MResult<SearchResult>>> = mapOf(
+        val expected: Map<String, List<MResult<IndexServer.SearchResult>>> = mapOf(
                 "yahoo.com" to listOf(MResult.failure(FailOnPurposeException("yahoo.com"))),
                 "google.com" to listOf(MResult.success(googleFirstResult), MResult.failure(FailOnPurposeException("google.com"))),
                 "foo.bar" to listOf(MResult.failure(FailOnPurposeException("foo.bar")))

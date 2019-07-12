@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.index.payload
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
-import cz.vutbr.fit.knot.enticing.dto.query.SearchQuery
+import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
 import cz.vutbr.fit.knot.enticing.index.query.component1
 import cz.vutbr.fit.knot.enticing.index.query.component2

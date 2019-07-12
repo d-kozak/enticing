@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl
 
 import cz.vutbr.fit.knot.enticing.dto.config.SearchConfig
-import cz.vutbr.fit.knot.enticing.dto.query.ServerInfo
+import cz.vutbr.fit.knot.enticing.dto.ServerInfo
 import cz.vutbr.fit.knot.enticing.dto.utils.regex.urlRegex
 
 fun consoleClient(block: ConsoleClientConfig.() -> Unit): ConsoleClientConfig = ConsoleClientConfig().apply(block)

@@ -1,9 +1,9 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl
 
-import cz.vutbr.fit.knot.enticing.dto.query.Entities
-import cz.vutbr.fit.knot.enticing.dto.query.EntityId
-import cz.vutbr.fit.knot.enticing.dto.query.Indexes
-import cz.vutbr.fit.knot.enticing.dto.query.TextMetadata
+import cz.vutbr.fit.knot.enticing.dto.Entities
+import cz.vutbr.fit.knot.enticing.dto.EntityId
+import cz.vutbr.fit.knot.enticing.dto.Indexes
+import cz.vutbr.fit.knot.enticing.dto.TextMetadata
 
 fun CorpusConfiguration.filterBy(metadata: TextMetadata, defaultIndex: String): CorpusConfiguration = when (metadata) {
     is TextMetadata.Predefined -> filterPredefined(metadata, defaultIndex)

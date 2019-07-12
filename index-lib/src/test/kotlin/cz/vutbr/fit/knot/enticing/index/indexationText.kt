@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.index
 
+import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.*
-import cz.vutbr.fit.knot.enticing.dto.query.*
 import cz.vutbr.fit.knot.enticing.index.query.initQueryExecutor
 import it.unimi.di.big.mg4j.query.parser.QueryParserException
 import org.assertj.core.api.Assertions.assertThat

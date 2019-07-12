@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.index.server.controller
 
-import cz.vutbr.fit.knot.enticing.dto.query.SearchQuery
-import cz.vutbr.fit.knot.enticing.dto.response.SearchResult
+import cz.vutbr.fit.knot.enticing.dto.IndexServer
+import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.index.server.service.QueryService
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -13,7 +13,7 @@ class QueryController(
 ) {
 
     @PostMapping
-    fun query(@RequestBody query: SearchQuery): SearchResult {
+    fun query(@RequestBody query: SearchQuery): IndexServer.SearchResult {
         val result = queryService.processQuery(query)
         return if (result.isSuccess) result.value else result.rethrowException()
     }

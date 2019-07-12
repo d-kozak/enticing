@@ -1,6 +1,8 @@
 package cz.vutbr.fit.knot.enticing.dto.response
 
+import cz.vutbr.fit.knot.enticing.dto.CorpusFormat
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.*
+import cz.vutbr.fit.knot.enticing.dto.toCorpusFormat
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

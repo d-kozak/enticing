@@ -1,5 +1,5 @@
+import cz.vutbr.fit.knot.enticing.dto.ResponseFormat
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.consoleClient
-import cz.vutbr.fit.knot.enticing.dto.query.ResponseFormat
 
 consoleClient {
     remote {

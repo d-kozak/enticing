@@ -1,4 +1,4 @@
-package cz.vutbr.fit.knot.enticing.dto.response
+package cz.vutbr.fit.knot.enticing.dto
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import javax.validation.constraints.NotBlank

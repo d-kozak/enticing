@@ -9,6 +9,7 @@ package cz.vutbr.fit.knot.enticing.dto.annotation
 @Target(AnnotationTarget.CLASS, AnnotationTarget.PROPERTY, AnnotationTarget.FIELD, AnnotationTarget.LOCAL_VARIABLE, AnnotationTarget.CONSTRUCTOR, AnnotationTarget.FUNCTION, AnnotationTarget.EXPRESSION, AnnotationTarget.FILE)
 @Retention(AnnotationRetention.SOURCE)
 @MustBeDocumented
+@Repeatable
 annotation class Speed(val message: String)
 
 /**
@@ -17,6 +18,7 @@ annotation class Speed(val message: String)
 @Target(AnnotationTarget.CLASS, AnnotationTarget.PROPERTY, AnnotationTarget.FIELD, AnnotationTarget.LOCAL_VARIABLE, AnnotationTarget.CONSTRUCTOR, AnnotationTarget.FUNCTION, AnnotationTarget.EXPRESSION, AnnotationTarget.FILE)
 @Retention(AnnotationRetention.SOURCE)
 @MustBeDocumented
+@Repeatable
 annotation class Incomplete(val message: String)
 
 /**
@@ -25,6 +27,7 @@ annotation class Incomplete(val message: String)
 @Target(AnnotationTarget.CLASS, AnnotationTarget.PROPERTY, AnnotationTarget.FIELD, AnnotationTarget.LOCAL_VARIABLE, AnnotationTarget.CONSTRUCTOR, AnnotationTarget.FUNCTION, AnnotationTarget.EXPRESSION, AnnotationTarget.FILE)
 @Retention(AnnotationRetention.SOURCE)
 @MustBeDocumented
+@Repeatable
 annotation class Cleanup(val message: String)
 
 /**
@@ -33,4 +36,17 @@ annotation class Cleanup(val message: String)
 @Target(AnnotationTarget.CLASS, AnnotationTarget.PROPERTY, AnnotationTarget.FIELD, AnnotationTarget.LOCAL_VARIABLE, AnnotationTarget.CONSTRUCTOR, AnnotationTarget.FUNCTION, AnnotationTarget.EXPRESSION, AnnotationTarget.FILE)
 @Retention(AnnotationRetention.SOURCE)
 @MustBeDocumented
+@Repeatable
 annotation class WhatIf(val message: String)
+
+/**
+ * Warning about something that could possibly go wrong
+ */
+@Target(AnnotationTarget.CLASS, AnnotationTarget.PROPERTY, AnnotationTarget.FIELD, AnnotationTarget.LOCAL_VARIABLE, AnnotationTarget.CONSTRUCTOR, AnnotationTarget.FUNCTION, AnnotationTarget.EXPRESSION, AnnotationTarget.FILE)
+@Retention(AnnotationRetention.SOURCE)
+@MustBeDocumented
+@Repeatable
+annotation class Warning(val message: String)
+
+
+

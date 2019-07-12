@@ -2,10 +2,10 @@ package cz.vutbr.fit.knot.enticing.query.processor
 
 
 import com.github.kittinunf.fuel.httpPost
+import cz.vutbr.fit.knot.enticing.dto.IndexServer
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
-import cz.vutbr.fit.knot.enticing.dto.query.SearchQuery
-import cz.vutbr.fit.knot.enticing.dto.query.ServerInfo
-import cz.vutbr.fit.knot.enticing.dto.response.SearchResult
+import cz.vutbr.fit.knot.enticing.dto.SearchQuery
+import cz.vutbr.fit.knot.enticing.dto.ServerInfo
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 
 import cz.vutbr.fit.knot.enticing.dto.utils.toDto
@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate
 
 
 interface RequestDispatcher {
-    suspend operator fun invoke(searchQuery: SearchQuery, serverInfo: ServerInfo): MResult<SearchResult>
+    suspend operator fun invoke(searchQuery: SearchQuery, serverInfo: ServerInfo): MResult<IndexServer.SearchResult>
 }
 
 
@@ -30,24 +30,24 @@ interface RequestDispatcher {
  */
 class FuelRequestDispatcher(private val path: String = "/api/v1/query") : RequestDispatcher {
 
-    override suspend fun invoke(searchQuery: SearchQuery, serverInfo: ServerInfo): MResult<SearchResult> = MResult.runCatching {
+    override suspend fun invoke(searchQuery: SearchQuery, serverInfo: ServerInfo): MResult<IndexServer.SearchResult> = MResult.runCatching {
         val url = "http://" + serverInfo.address + path
         url.httpPost()
                 .jsonBody(searchQuery)
-                .awaitDto<SearchResult>()
+                .awaitDto<IndexServer.SearchResult>()
     }
 }
 
 class RestTemplateRequestDispatcher(private val restTemplate: RestTemplate = RestTemplate(), private val path: String = "/api/v1/query") : RequestDispatcher {
 
-    override suspend fun invoke(searchQuery: SearchQuery, serverInfo: ServerInfo): MResult<SearchResult> = MResult.runCatching {
+    override suspend fun invoke(searchQuery: SearchQuery, serverInfo: ServerInfo): MResult<IndexServer.SearchResult> = MResult.runCatching {
         val input = searchQuery.toJson()
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
         val entity = HttpEntity(input, headers)
         val result = restTemplate.exchange<String>("http://" + serverInfo.address + path, HttpMethod.POST, entity)
         if (result.statusCode == HttpStatus.OK) {
-            result.body!!.toDto<SearchResult>()
+            result.body!!.toDto<IndexServer.SearchResult>()
         } else {
             @Incomplete("somehow rethrow the real exception?")
             throw RuntimeException(result.body.toString())

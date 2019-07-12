@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.dto.config
 
-import cz.vutbr.fit.knot.enticing.dto.query.*
+import cz.vutbr.fit.knot.enticing.dto.*
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Positive
 

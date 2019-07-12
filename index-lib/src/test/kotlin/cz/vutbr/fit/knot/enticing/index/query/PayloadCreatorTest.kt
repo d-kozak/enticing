@@ -1,12 +1,11 @@
 package cz.vutbr.fit.knot.enticing.index.query
 
+import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.attributes
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.corpusConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.index
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.with
-import cz.vutbr.fit.knot.enticing.dto.query.*
-import cz.vutbr.fit.knot.enticing.dto.response.*
-import cz.vutbr.fit.knot.enticing.dto.response.Annotation
+import cz.vutbr.fit.knot.enticing.dto.Annotation
 import cz.vutbr.fit.knot.enticing.index.payload.createPayload
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetPartsFields
