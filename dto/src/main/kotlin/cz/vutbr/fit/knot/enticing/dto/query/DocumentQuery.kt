@@ -1,22 +1,17 @@
 package cz.vutbr.fit.knot.enticing.dto.query
 
-import cz.vutbr.fit.knot.enticing.dto.utils.regex.urlRegexStr
+import cz.vutbr.fit.knot.enticing.dto.utils.Defaults
+import cz.vutbr.fit.knot.enticing.dto.utils.Extended
+import cz.vutbr.fit.knot.enticing.dto.utils.ExtraInfo
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotEmpty
-import javax.validation.constraints.Pattern
 import javax.validation.constraints.Positive
 
 /**
  * Query to get the full content of a document
  */
 data class DocumentQuery(
-        /**
-         * Url of the server owning the document
-         */
-        @field:NotBlank
-        @field:Pattern(regexp = urlRegexStr)
-        val host: String,
         /**
          * Collection on the server
          */
@@ -31,13 +26,18 @@ data class DocumentQuery(
          * Which metadata to include
          */
         @field:Valid
-        val metadata: TextMetadata,
+        val metadata: TextMetadata = Defaults.metadata,
 
         /**
          * What should be the defaultIndex
          */
         @field:NotBlank
-        val defaultIndex: String,
+        val defaultIndex: String = Defaults.defaultIndex,
+
+        /**
+         * What should be the format of the response
+         */
+        val responseFormat: ResponseFormat = Defaults.responseFormat,
 
         /**
          * Query, optional
@@ -45,5 +45,8 @@ data class DocumentQuery(
          * if provided, QueryMapping informing about the mapping between the query and the document will
          * be included in the response
          */
-        val query: String?
+        val query: String? = null
 )
+
+
+typealias ExtendedDocumentQuery = Extended<DocumentQuery, ExtraInfo>

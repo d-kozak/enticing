@@ -1,9 +1,9 @@
 package cz.vutbr.fit.knot.enticing.webserver.controller
 
 import cz.vutbr.fit.knot.enticing.dto.query.ContextExtensionQuery
-import cz.vutbr.fit.knot.enticing.dto.query.DocumentQuery
+import cz.vutbr.fit.knot.enticing.dto.query.ExtendedDocumentQuery
+import cz.vutbr.fit.knot.enticing.dto.response.ExtendedDocument
 import cz.vutbr.fit.knot.enticing.dto.response.ExtendedSnippet
-import cz.vutbr.fit.knot.enticing.dto.response.FullDocument
 import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
 import org.springframework.web.bind.annotation.*
 import java.net.URLDecoder
@@ -19,5 +19,5 @@ class QueryController(private val queryService: QueryService) {
     fun context(@RequestBody query: ContextExtensionQuery): ExtendedSnippet = queryService.context(query)
 
     @PostMapping("/document")
-    fun document(@RequestBody query: DocumentQuery): FullDocument = queryService.document(query)
+    fun document(@RequestBody query: ExtendedDocumentQuery): ExtendedDocument = queryService.document(query)
 }

@@ -2,9 +2,9 @@ package cz.vutbr.fit.knot.enticing.dto.query
 
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
+import cz.vutbr.fit.knot.enticing.dto.utils.Defaults
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Positive
 
 /**
@@ -25,20 +25,21 @@ data class SearchQuery(
          * Offset at which to start, for pagination
          */
         @field:Valid
-        val offset: Offset,
+        val offset: Offset = Offset(0, 0),
         /**
          * Which other indexes and entities should be included
          */
         @field:Valid
-        val metadata: TextMetadata,
+        val metadata: TextMetadata = Defaults.metadata,
         /**
          * What should be the response type
          */
-        val responseType: ResponseType = ResponseType.FULL,
+        val responseType: ResponseType = Defaults.responseType,
+
         /**
          * What should be the format of the response
          */
-        val responseFormat: ResponseFormat = ResponseFormat.ANNOTATED_TEXT,
+        val responseFormat: ResponseFormat = Defaults.responseFormat,
 
         /**
          * What is the default index
@@ -46,8 +47,8 @@ data class SearchQuery(
          * Default index is the one returned as text,
          * the others are considered the metadata of the default index
          */
-        @field:NotEmpty
-        val defaultIndex: String = "token"
+        @field:NotBlank
+        val defaultIndex: String = Defaults.defaultIndex
 )
 
 

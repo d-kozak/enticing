@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.service.mock
 
 import cz.vutbr.fit.knot.enticing.dto.response.*
+import cz.vutbr.fit.knot.enticing.dto.utils.ExtraInfo
 import cz.vutbr.fit.knot.enticing.dto.utils.with
 
 
@@ -20,7 +21,7 @@ val firstResult = Snippet(
         ),
         url = "https://www.borgenmagazine.com/ed-sheeran-visited-liberia/",
         canExtend = true
-) with SnippetExtra("server1")
+) with ExtraInfo("server1")
 
 val secondResult = Snippet(
         documentId = 1,
@@ -38,7 +39,7 @@ val secondResult = Snippet(
         ),
         url = "https://www.mysanantonio.com/news/local/article/President-Trump-arrives-in-San-Antonio-for-13756986.php",
         canExtend = true
-) with SnippetExtra("server2")
+) with ExtraInfo("server2")
 
 val thirdResult = Snippet(
         documentId = 2,
@@ -56,7 +57,7 @@ val thirdResult = Snippet(
         ),
         url = "https://www.thun.cz/en/article/238-visit-of-mr--president-milos-zeman.html",
         canExtend = true
-) with SnippetExtra("server3")
+) with ExtraInfo("server3")
 
 val results = listOf(firstResult, secondResult, thirdResult)
 fun randomResult() = results[Math.floor(Math.random() * results.size).toInt()]

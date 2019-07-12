@@ -84,20 +84,7 @@ data class Snippet(
         val canExtend: Boolean
 )
 
-
-/**
- * Extra information added to Snippet class during postprocessing
- */
-data class SnippetExtra(
-        /**
-         * Url of the server this snippet came from
-         */
-        @field:NotBlank
-        @field:Pattern(regexp = urlRegexStr)
-        val host: String
-) : ExtraInfo
-
-typealias ExtendedSnippet = Extended<Snippet, SnippetExtra>
+typealias ExtendedSnippet = Extended<Snippet, ExtraInfo>
 
 /**
  * The actual data in the snippet

@@ -1,8 +1,10 @@
 package cz.vutbr.fit.knot.enticing.webserver.service.mock
 
 import cz.vutbr.fit.knot.enticing.dto.response.AnnotatedText
+import cz.vutbr.fit.knot.enticing.dto.response.DocumentExtra
 import cz.vutbr.fit.knot.enticing.dto.response.FullDocument
-import java.util.*
+import cz.vutbr.fit.knot.enticing.dto.response.Payload
+import cz.vutbr.fit.knot.enticing.dto.utils.with
 
 
 val loremOneSentence = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit."
@@ -21,13 +23,12 @@ Curabitur bibendum justo non orci. Donec ipsum massa, ullamcorper in, auctor et,
 
 
 val dummyDocument = FullDocument(
-        UUID.randomUUID(),
         "Document One",
         "https://www.google.com",
-        AnnotatedText(
+        Payload.FullResponse.Annotated(AnnotatedText(
                 documentText,
                 emptyMap(),
                 emptyList(),
                 emptyList()
-        )
-)
+        ))
+) with DocumentExtra("google.com", "col1", 1)
