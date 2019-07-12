@@ -124,7 +124,7 @@ internal class PayloadCreatorTest {
                             "one two three",
                             emptyMap(),
                             emptyList(),
-                            listOf(QueryMapping(0 to 13, 0 to jsonQuery.query.length))
+                            listOf(QueryMapping(0 to 13, 0 to 1))
                     )))
             payload = createPayload(jsonQuery, noMetadata, listOf(Interval.valueOf(1, 2)))
             assertThat(payload)
@@ -132,7 +132,7 @@ internal class PayloadCreatorTest {
                             "one two three",
                             emptyMap(),
                             emptyList(),
-                            listOf(QueryMapping(4 to 13, 0 to jsonQuery.query.length))
+                            listOf(QueryMapping(4 to 13, 0 to 1))
                     )))
             payload = createPayload(jsonQuery, noMetadata, listOf(Interval.valueOf(1, 1)))
             assertThat(payload)
@@ -140,7 +140,7 @@ internal class PayloadCreatorTest {
                             "one two three",
                             emptyMap(),
                             emptyList(),
-                            listOf(QueryMapping(4 to 7, 0 to jsonQuery.query.length))
+                            listOf(QueryMapping(4 to 7, 0 to 1))
                     )))
         }
 
@@ -156,7 +156,7 @@ internal class PayloadCreatorTest {
                                     "w-2" to Annotation("w-2", mapOf("lemma" to "3", "url" to "localhost"))
                             ),
                             listOf(AnnotationPosition("w-0", 0 to 3), AnnotationPosition("w-1", 4 to 7), AnnotationPosition("w-2", 8 to 13)),
-                            listOf(QueryMapping(4 to 13, 0 to jsonQuery.query.length))
+                            listOf(QueryMapping(4 to 13, 0 to 1))
                     )))
         }
     }
