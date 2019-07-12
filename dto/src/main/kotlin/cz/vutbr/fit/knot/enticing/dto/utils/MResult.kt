@@ -12,6 +12,8 @@ data class MResult<T> internal constructor(val value: T) {
 
     fun rethrowException(): Nothing = throw exception
 
+    fun unwrap(): T = if (isFailure) rethrowException() else this.value
+
     val exception: Throwable
         get() = if (value is Failure) {
             value.throwable

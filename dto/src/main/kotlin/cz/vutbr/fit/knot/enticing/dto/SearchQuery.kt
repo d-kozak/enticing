@@ -6,6 +6,7 @@ import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Positive
+import javax.validation.constraints.PositiveOrZero
 
 /**
  * Query to be processed by an IndexServer
@@ -131,12 +132,12 @@ data class Offset(
         /**
          * At which document to start next
          */
-        @field:Positive
+        @field:PositiveOrZero
         val document: Int,
         /**
          * At which snippet in that document to start
          */
-        @field:Positive
+        @field:PositiveOrZero
         val snippet: Int
 )
 

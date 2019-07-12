@@ -1,10 +1,8 @@
 package cz.vutbr.fit.knot.enticing.index.server.utils
 
 import cz.vutbr.fit.knot.enticing.dto.*
-import cz.vutbr.fit.knot.enticing.dto.Payload
-import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 
-internal val templateQuery = SearchQuery(
+internal val templateSearchQuery = SearchQuery(
         "foo bar baz",
         20,
         Offset(0, 0),
@@ -13,7 +11,7 @@ internal val templateQuery = SearchQuery(
         ResponseFormat.ANNOTATED_TEXT
 )
 
-internal val dummyResult = MResult.success(IndexServer.SearchResult(
+internal val searchDummyResult = IndexServer.SearchResult(
         listOf(IndexServer.Snippet(
                 "col",
                 10,
@@ -24,5 +22,18 @@ internal val dummyResult = MResult.success(IndexServer.SearchResult(
                 Payload.FullResponse.Html("texty text"),
                 false
         )),
-        Offset(42, 84))
+        Offset(42, 84)
 )
+
+internal val templateContextExtensionQuery = IndexServer.ContextExtensionQuery(
+        collection = "col1",
+        docId = 1,
+        location = 10,
+        size = 14,
+        extension = 20
+)
+
+internal val contextExtensionDummyResult = IndexServer.SnippetExtension(
+        Payload.FullResponse.Html("null"),
+        Payload.FullResponse.Html("null"),
+        false)

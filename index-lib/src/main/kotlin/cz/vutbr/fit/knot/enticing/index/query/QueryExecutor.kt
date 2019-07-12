@@ -1,13 +1,14 @@
 package cz.vutbr.fit.knot.enticing.index.query
 
 import cz.vutbr.fit.knot.enticing.dto.IndexServer
+import cz.vutbr.fit.knot.enticing.dto.Offset
+import cz.vutbr.fit.knot.enticing.dto.Payload
+import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
+import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexClientConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.filterBy
-import cz.vutbr.fit.knot.enticing.dto.Offset
-import cz.vutbr.fit.knot.enticing.dto.SearchQuery
-import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jCompositeDocumentCollection
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jDocument
@@ -152,5 +153,14 @@ class QueryExecutor internal constructor(
             index: Index
     ): List<Interval> = result.info[index]?.asSequence()?.map { it.interval }?.toList() ?: listOf<Interval>().also {
         log.warn("No results for index $index")
+    }
+
+    @Incomplete("not implemented yet")
+    fun extendSnippet(query: IndexServer.ContextExtensionQuery): MResult<IndexServer.SnippetExtension> {
+        return MResult.success(IndexServer.SnippetExtension(
+                Payload.FullResponse.Html("null"),
+                Payload.FullResponse.Html("null"),
+                false
+        ))
     }
 }

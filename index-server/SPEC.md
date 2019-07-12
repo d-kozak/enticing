@@ -60,14 +60,9 @@ until a new configuration is set using the rest api.
 * /context
     * POST
         * extend context
-        * accepts[ContextExtensionQuery](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/IndexServer.kt)
-        ```javascript
-        responsePayload = {
-            before: annotatedText // text to insert before, datatype as in '/query',
-            after: annotatedText, // text to insert after, datatype as in '/query'
-            canExtend: boolean  
-        }
-        ```
+        * accepts [ContextExtensionQuery](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/IndexServer.kt)
+        * returns [SnippetExtension](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/IndexServer.kt)
+        
  * /config \[Extension\]
     * change index configuration 
     * POST

@@ -2,8 +2,9 @@ package cz.vutbr.fit.knot.enticing.index.server.config
 
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import cz.vutbr.fit.knot.enticing.index.server.service.QueryService
-import cz.vutbr.fit.knot.enticing.index.server.utils.dummyResult
-import cz.vutbr.fit.knot.enticing.index.server.utils.templateQuery
+import cz.vutbr.fit.knot.enticing.index.server.utils.searchDummyResult
+import cz.vutbr.fit.knot.enticing.index.server.utils.templateContextExtensionQuery
+import cz.vutbr.fit.knot.enticing.index.server.utils.templateSearchQuery
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
@@ -27,13 +28,23 @@ class SecurityConfigTest(
 
     @Test
     fun `query endpoint should be always available`() {
-        Mockito.`when`(queryService.processQuery(templateQuery))
-                .thenReturn(dummyResult)
+        Mockito.`when`(queryService.processQuery(templateSearchQuery))
+                .thenReturn(searchDummyResult)
 
         mockMvc.perform(post("$apiBasePath/query")
-                .content(templateQuery.toJson())
+                .content(templateSearchQuery.toJson())
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().`is`(200))
+                .andExpect(status().isOk)
+    }
+
+    @Test
+    fun `context extension endpoint should be always available`() {
+        mockMvc.perform(post("$apiBasePath/context")
+                .content(templateContextExtensionQuery.toJson())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk)
+
+        Mockito.verify(queryService).extendContext(templateContextExtensionQuery)
     }
 
     @AfterEach

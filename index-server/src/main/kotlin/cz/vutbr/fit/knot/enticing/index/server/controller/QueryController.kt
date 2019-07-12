@@ -5,17 +5,20 @@ import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.index.server.service.QueryService
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import javax.validation.Valid
 
-@RestController("\${api.base.path}/query")
+@RestController
+@RequestMapping("\${api.base.path}")
 class QueryController(
         private val queryService: QueryService
 ) {
 
-    @PostMapping
-    fun query(@RequestBody query: SearchQuery): IndexServer.SearchResult {
-        val result = queryService.processQuery(query)
-        return if (result.isSuccess) result.value else result.rethrowException()
-    }
+    @PostMapping("/query")
+    fun query(@RequestBody @Valid query: SearchQuery): IndexServer.SearchResult = queryService.processQuery(query)
+
+    @PostMapping("/context")
+    fun context(@RequestBody @Valid query: IndexServer.ContextExtensionQuery): IndexServer.SnippetExtension = queryService.extendContext(query)
 
 }
