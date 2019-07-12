@@ -45,54 +45,29 @@ until a new configuration is set using the rest api.
 * /query
      * POST
         * perform search query, return list of snippets
-        * accepts [SearchQuery](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/query/SearchQuery.kt)
-        * returns [SearchResult](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/response/SearchResult.kt)
+        * accepts [SearchQuery](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/SearchQuery.kt)
+        * returns [SearchResult](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/IndexServer.kt)
 * /format
     * GET
         * ask about indexes and entities that can be used in queries
-        * returns [CorpusFormat](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/response/CorpusFormat.kt) 
+        * returns [CorpusFormat](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/CorpusFormat.kt) 
 * /document
-    * whole document
     * POST 
-    ```javascript
-    requestPayload = {
-        documentId: UUID,
-        collectionId: string,
-        query:string?, // optional, if we want to see how the query match the document
-        wantedIndexes, // as in '/query'
-        responseFormat // as in '/query'  
-    }
-    ```
-    ```javascript
-    responsePayload = {
-        title: string,
-        url: url, // url of the source
-        annotatedText, // as in '/query',
-        mapping: Array<QueryMapping>? // optional, only used if query was specified
-    }
+        * get whole document
+        * accepts[DocumentQuery](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/IndexServer.kt)
+        * returns[FullDocument](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/IndexServer.kt)
     
-    ```
 * /context
-    * extend context
     * POST
-    ```javascript
-    requestPayload = {
-        documentId: UUID,
-        collectionId: string,
-        snippetStart: int, // where current snippet starts
-        snippetSize: int // size of current spippets
-        size: int, // how many extra characters are wanted
-        wantedIndexes, // as in '/query'
-        responseFormat // as in '/query'
-    }
-    ```
-    ```javascript
-    responsePayload = {
-        before: annotatedText // text to insert before, datatype as in '/query',
-        after: annotatedText, // text to insert after, datatype as in '/query'
-        canExtend: boolean  
-    }
-    ```
+        * extend context
+        * accepts[ContextExtensionQuery](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/IndexServer.kt)
+        ```javascript
+        responsePayload = {
+            before: annotatedText // text to insert before, datatype as in '/query',
+            after: annotatedText, // text to insert after, datatype as in '/query'
+            canExtend: boolean  
+        }
+        ```
  * /config \[Extension\]
     * change index configuration 
     * POST

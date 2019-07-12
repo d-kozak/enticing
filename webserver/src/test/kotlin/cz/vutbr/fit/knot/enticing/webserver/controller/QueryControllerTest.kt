@@ -1,7 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver.controller
 
 
-import cz.vutbr.fit.knot.enticing.dto.query.ContextExtensionQuery
 import cz.vutbr.fit.knot.enticing.dto.TextMetadata
 import cz.vutbr.fit.knot.enticing.dto.Webserver
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
@@ -26,7 +25,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import java.net.URLEncoder
-import java.util.*
 
 @WebMvcTest
 @ExtendWith(SpringExtension::class)
@@ -68,7 +66,7 @@ internal class QueryControllerTest(
 
     @Test
     fun context() {
-        val query = ContextExtensionQuery("foo.baz", "col1", UUID.randomUUID(), 201, 42)
+        val query = Webserver.ContextExtensionQuery("foo.baz", "col1", 2, 201, 42, 10)
 
         Mockito.`when`(queryService.context(query)).thenReturn(firstResult)
 

@@ -1,7 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import cz.vutbr.fit.knot.enticing.dto.query.ContextExtensionQuery
 
 import cz.vutbr.fit.knot.enticing.dto.TextMetadata
 import cz.vutbr.fit.knot.enticing.dto.Webserver
@@ -425,7 +424,7 @@ internal class SecurityConfigTest(
 
         @Test
         fun `Context is always accessible`() {
-            val query = ContextExtensionQuery("foo.baz", "col1", UUID.randomUUID(), 201, 42)
+            val query = Webserver.ContextExtensionQuery("foo.baz", "col1", 2, 201, 42, 10)
             mockMvc.perform(post("$apiBasePath/query/context")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(query.toJson()))

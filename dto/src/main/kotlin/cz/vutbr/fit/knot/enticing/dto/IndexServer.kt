@@ -1,13 +1,68 @@
 package cz.vutbr.fit.knot.enticing.dto
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.utils.regex.urlRegexStr
 import javax.validation.Valid
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotEmpty
-import javax.validation.constraints.Pattern
-import javax.validation.constraints.Positive
+import javax.validation.constraints.*
 
 object IndexServer {
+
+    /**
+     * Query to extend the context of the snippet
+     */
+    data class ContextExtensionQuery(
+            /**
+             * Collection into which the snippet belongs
+             */
+            @field:NotBlank
+            val collection: String,
+            /**
+             * Document into which the snippet belongs
+             */
+            @field:PositiveOrZero
+            val docId: Int,
+
+            /**
+             * Where the original snippet starts
+             */
+            @field:PositiveOrZero
+            val location: Int,
+
+            /**
+             * How big the original snippet is
+             */
+            @field:Positive
+            val size: Int,
+
+            /**
+             * The number of words by which the snippet should be extended
+             */
+            @field:Positive
+            val extension: Int,
+            /**
+             * Which metadata to include
+             */
+            @field:Valid
+            val metadata: TextMetadata = Defaults.metadata,
+            /**
+             * What should be the defaultIndex
+             */
+            @field:NotBlank
+            val defaultIndex: String = Defaults.defaultIndex,
+            /**
+             * What should be the format of the response
+             */
+            val responseFormat: ResponseFormat = Defaults.responseFormat,
+
+            /**
+             * Query, optional
+             *
+             * if provided, QueryMapping informing about the mapping between the query and the document will
+             * be included in the response
+             */
+            @Incomplete("can be used only when postprocessing is ready")
+            val query: String? = null
+    )
 
     /**
      * Query to get the full content of a document
@@ -16,12 +71,12 @@ object IndexServer {
             /**
              * Collection on the server
              */
-            @field:NotEmpty
+            @field:NotBlank
             val collection: String,
             /**
              * Id of the document in the collection
              */
-            @field:Positive
+            @field:PositiveOrZero
             val documentId: Int,
             /**
              * Which metadata to include
@@ -46,6 +101,7 @@ object IndexServer {
              * if provided, QueryMapping informing about the mapping between the query and the document will
              * be included in the response
              */
+            @Incomplete("can be used only when postprocessing is ready")
             val query: String? = null
     )
 
@@ -97,7 +153,7 @@ object IndexServer {
             /**
              * What document the snippet came from
              */
-            @field:Positive
+            @field:PositiveOrZero
             val documentId: Long,
 
             /**
