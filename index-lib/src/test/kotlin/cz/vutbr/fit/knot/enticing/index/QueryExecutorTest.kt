@@ -2,7 +2,7 @@ package cz.vutbr.fit.knot.enticing.index
 
 import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.*
-import cz.vutbr.fit.knot.enticing.index.query.computeExtentionIntervals
+import cz.vutbr.fit.knot.enticing.index.query.computeExtensionIntervals
 import cz.vutbr.fit.knot.enticing.index.query.initQueryExecutor
 import it.unimi.di.big.mg4j.query.parser.QueryParserException
 import it.unimi.dsi.util.Interval
@@ -187,7 +187,7 @@ class QueryExecutorTest {
 
         @Test
         fun `both prefix and suffix available distributed evenly`() {
-            val (prefix, suffix) = computeExtentionIntervals(10, 14, 10, 20)
+            val (prefix, suffix) = computeExtensionIntervals(10, 14, 10, 20)
             assertThat(prefix)
                     .isEqualTo(Interval.valueOf(5, 9))
             assertThat(suffix)
@@ -196,7 +196,7 @@ class QueryExecutorTest {
 
         @Test
         fun `no prefix available`() {
-            val (prefix, suffix) = computeExtentionIntervals(0, 5, 10, 20)
+            val (prefix, suffix) = computeExtensionIntervals(0, 5, 10, 20)
             assertThat(prefix)
                     .isEqualTo(Intervals.EMPTY_INTERVAL)
             assertThat(suffix)
@@ -205,10 +205,90 @@ class QueryExecutorTest {
 
         @Test
         fun `no suffix available`() {
-            val (prefix, suffix) = computeExtentionIntervals(10, 15, 10, 16)
-            // todo finish
+            val (prefix, suffix) = computeExtensionIntervals(10, 15, 10, 16)
+            assertThat(prefix)
+                    .isEqualTo(Interval.valueOf(0, 9))
+            assertThat(suffix)
+                    .isEqualTo(Intervals.EMPTY_INTERVAL)
         }
 
+        @Test
+        fun `all extra goes to prefix suffix is limited`() {
+            val (prefix, suffix) = computeExtensionIntervals(10, 15, 10, 17)
+            assertThat(prefix)
+                    .isEqualTo(Interval.valueOf(1, 9))
+            assertThat(suffix)
+                    .isEqualTo(Interval.valueOf(16))
+        }
+
+        @Test
+        fun `all extra goes to suffix prefix is limited`() {
+            val (prefix, suffix) = computeExtensionIntervals(3, 5, 7, 17)
+            assertThat(prefix)
+                    .isEqualTo(Interval.valueOf(0, 2))
+            assertThat(suffix)
+                    .isEqualTo(Interval.valueOf(6, 9))
+        }
+
+        @Test
+        fun `a bit of extra goes to prefix suffix is limited`() {
+            val (prefix, suffix) = computeExtensionIntervals(5, 10, 7, 12)
+            assertThat(prefix)
+                    .isEqualTo(Interval.valueOf(0, 4))
+            assertThat(suffix)
+                    .isEqualTo(Interval.valueOf(11))
+        }
+
+        @Test
+        fun `a bit of extra goes to suffix prefix is limited`() {
+            val (prefix, suffix) = computeExtensionIntervals(3, 5, 7, 8)
+            assertThat(prefix)
+                    .isEqualTo(Interval.valueOf(0, 2))
+            assertThat(suffix)
+                    .isEqualTo(Interval.valueOf(6, 7))
+        }
+
+        @Test
+        fun `left negative`() {
+            assertThrows<IllegalArgumentException> {
+                computeExtensionIntervals(-3, 5, 7, 8)
+            }
+        }
+
+        @Test
+        fun `right negative`() {
+            assertThrows<IllegalArgumentException> {
+                computeExtensionIntervals(3, -5, 7, 8)
+            }
+        }
+
+        @Test
+        fun `right smaller than left`() {
+            assertThrows<IllegalArgumentException> {
+                computeExtensionIntervals(3, 2, 7, 8)
+            }
+        }
+
+        @Test
+        fun `extension too small`() {
+            assertThrows<IllegalArgumentException> {
+                computeExtensionIntervals(3, 5, 0, 8)
+            }
+        }
+
+        @Test
+        fun `document size negative`() {
+            assertThrows<IllegalArgumentException> {
+                computeExtensionIntervals(3, 5, 3, -1)
+            }
+        }
+
+        @Test
+        fun `document size zero`() {
+            assertThrows<IllegalArgumentException> {
+                computeExtensionIntervals(3, 5, 3, 0)
+            }
+        }
 
     }
 }

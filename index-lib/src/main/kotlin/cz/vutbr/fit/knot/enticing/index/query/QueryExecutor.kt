@@ -187,9 +187,45 @@ class QueryExecutor internal constructor(
 /**
  * Compute the size of prefix and suffix for snippet extension
  */
-internal fun computeExtentionIntervals(left: Int, right: Int, extension: Int, documentSize: Int): Pair<Interval, Interval> {
-    val prefixSize = Math.min(extension / 2, if (left > 0) left - 1 else 0)
-    val suffixSize = Math.min(extension - prefixSize, documentSize - right - 1)
+internal fun computeExtensionIntervals(left: Int, right: Int, extension: Int, documentSize: Int): Pair<Interval, Interval> {
+    val documentRange = 0 until documentSize
+    require(documentSize > 0) { "Document size should be bigger than zero, was $documentSize" }
+    require(left in documentRange) { "Left boundary should be within $documentRange was $left" }
+    require(right in documentRange) { "Right boundary should be be within $documentRange, was $right" }
+    require(extension != 0 && extension in documentRange) { "Extension should be within $documentRange, was $extension" }
+    require(left <= right) { "Left should be <= to right, was $left, $right" }
+
+    val maxPrefixSize = left
+    val maxSuffixSize = documentSize - right - 1
+    var prefixSize = Math.min(extension / 2, maxPrefixSize)
+    var suffixSize = Math.min(extension / 2, maxSuffixSize)
+
+    loop@ while (prefixSize + suffixSize < extension) {
+        val remaining = extension - prefixSize - suffixSize
+        when {
+            prefixSize == maxPrefixSize -> {
+                suffixSize = Math.min(suffixSize + remaining, maxSuffixSize)
+                break@loop
+            }
+            suffixSize == maxSuffixSize -> {
+                prefixSize = Math.min(prefixSize + remaining, maxPrefixSize)
+                break@loop
+            }
+            else -> {
+                prefixSize = Math.min(suffixSize + remaining / 2, maxPrefixSize)
+                suffixSize = Math.min(suffixSize + remaining / 2, maxSuffixSize)
+
+                if (extension % 2 == 1) {
+                    if (prefixSize < maxPrefixSize)
+                        prefixSize++
+                    else if (suffixSize < maxSuffixSize)
+                        suffixSize++
+                    break@loop
+                }
+            }
+        }
+    }
+
     val leftInterval = if (prefixSize > 0) Interval.valueOf(left - prefixSize, left - 1) else Intervals.EMPTY_INTERVAL
     val rightInterval = if (suffixSize > 0) Interval.valueOf(right + 1, right + suffixSize) else Intervals.EMPTY_INTERVAL
     return leftInterval to rightInterval
