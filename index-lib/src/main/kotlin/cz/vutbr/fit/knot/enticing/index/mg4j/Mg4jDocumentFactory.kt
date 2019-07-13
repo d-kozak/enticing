@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.annotation.Speed
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.Index
@@ -40,6 +41,7 @@ class Mg4jDocumentFactory(private val corpusConfiguration: CorpusConfiguration) 
         var line = stream.readLine()
         var lineIndex = 0
         while (line != null && !line.isDoc()) {
+            @Incomplete("some meta info like PAR and SENT should be counted")
             if (!line.isMetaInfo()) {
                 processLine(line, fields, lineIndex)
             }
@@ -47,6 +49,7 @@ class Mg4jDocumentFactory(private val corpusConfiguration: CorpusConfiguration) 
             lineIndex++
         }
 
+        @Incomplete("PAR and SENT not counted yet, therefore this size is not correct")
         metadata[DocumentMetadata.SIZE] = lineIndex
         @Speed("avoid copying of the content from bytelist to bytearray")
         return Mg4jDocument(corpusConfiguration, metadata, fields.map { it.toString() })
