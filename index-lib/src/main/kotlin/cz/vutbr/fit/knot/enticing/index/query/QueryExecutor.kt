@@ -204,16 +204,16 @@ internal fun computeExtensionIntervals(left: Int, right: Int, extension: Int, do
 private fun checkPreconditions(documentSize: Int, left: Int, right: Int, extension: Int) {
     val documentRange = 0 until documentSize
     require(documentSize > 0) { "Document size should be bigger than zero, was $documentSize" }
-    require(left in documentRange) { "Left boundary should be within $documentRange was $left" }
+    require(left in documentRange) { "Left boundary should be within $documentRange, was $left" }
     require(right in documentRange) { "Right boundary should be be within $documentRange, was $right" }
-    require(extension != 0 && extension in documentRange) { "Extension should be within $documentRange, was $extension" }
+    require(extension != 0 && extension in documentRange) { "Extension should be within 1..${documentSize - 1}, was $extension" }
     require(left <= right) { "Left should be <= to right, was $left, $right" }
 }
 
 private fun checkPostconditions(leftInterval: Interval, maxPrefixSize: Int, rightInterval: Interval, maxSuffixSize: Int, extension: Int) {
     require(leftInterval.size in 0..maxPrefixSize) { "prefix size should be within 0..${maxPrefixSize - 1}, was ${leftInterval.size}" }
     require(rightInterval.size in 0..maxSuffixSize) { "suffix size should be within 0..${maxSuffixSize - 1}, was ${rightInterval.size}" }
-    require(leftInterval.size + rightInterval.size <= extension) { "prefix + suffix <= extension,was $leftInterval.size,$rightInterval.size,$extension" }
+    require(leftInterval.size + rightInterval.size <= extension) { "prefix + suffix <= extension,was ${leftInterval.size},${rightInterval.size},$extension" }
 }
 
 @Cleanup("This is ugly and should be refactored somehow, hopefully there is an easier way to express this operation")
