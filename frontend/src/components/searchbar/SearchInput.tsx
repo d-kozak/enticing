@@ -31,7 +31,7 @@ const SearchInput = (props: SearchInputProps) => {
 
     const startSearching = () => {
         if (query.length > 0) {
-            parentStartSearching(query, selectedSettings, history);
+            parentStartSearching(query, Number(selectedSettings), history);
         }
     };
 

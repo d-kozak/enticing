@@ -2,7 +2,7 @@
  * Servers are actually a set in the backend but here it is kept as array for convenience (methods like map() are not not Sets in js unfortunately)
  */
 export interface SearchSettings extends SearchSettingsContent {
-    id: number,
+    id: string,
     default: boolean,
     private: boolean,
     /**

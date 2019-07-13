@@ -5,11 +5,12 @@ import {API_BASE_PATH, useMockApi} from "../globals";
 import axios from "axios";
 import {hideProgressBarAction, showProgressBarAction} from "./ProgressBarActions";
 import {searchResultUpdatedAction} from "./SearchResultActions";
-import {transformSearchResult} from "./QueryActions";
 import {openSnackBar} from "./SnackBarActions";
-import {Match} from "../entities/Snippet";
+import {Snippet} from "../entities/Snippet";
+import {transformAnnotatedText} from "./QueryActions";
+import {isSnippetExtension} from "../entities/SnippetExtension";
 
-export const contextExtensionRequestAction = (searchResult: Match): ThunkResult<void> => dispatch => {
+export const contextExtensionRequestAction = (searchResult: Snippet): ThunkResult<void> => dispatch => {
     if (useMockApi()) {
         mockContextRequested(searchResult, dispatch);
         return;
@@ -18,9 +19,16 @@ export const contextExtensionRequestAction = (searchResult: Match): ThunkResult<
     axios.post(`${API_BASE_PATH}/query/context`, searchResult, {
         withCredentials: true
     }).then((response) => {
-        transformSearchResult(response.data);
-        const updatedResult = {...searchResult, ...response.data}
-        updatedResult.snippet.text = searchResult.payload.text + response.data.snippet.text;
+        if (!isSnippetExtension(response.data)) {
+            throw `Invalid document ${JSON.stringify(response.data, null, 2)}`;
+        }
+        transformAnnotatedText(response.data.prefix.content);
+        transformAnnotatedText(response.data.suffix.content);
+        const updatedResult = searchResult;
+        // todo perform merge
+        console.error('merge for snippet extension not implemented yet');
+        // const updatedResult = {...searchResult, ...response.data}
+        // updatedResult.snippet.text = searchResult.payload.text + response.data.snippet.text;
         dispatch(searchResultUpdatedAction(updatedResult))
         dispatch(hideProgressBarAction());
     }).catch(() => {

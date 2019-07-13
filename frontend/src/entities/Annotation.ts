@@ -10,7 +10,7 @@ export interface Annotation {
     content: { [key: string]: string };
 }
 
-const annotationSchema = yup.object({
+export const annotationSchema = yup.object({
     id: yup.string()
         .required()
         .min(1),
@@ -87,7 +87,7 @@ export interface QueryMapping {
     queryIndex: MatchedRegion;
 }
 
-const queryMappingSchema = yup.object(
+export const queryMappingSchema = yup.object(
     {
         textIndex: matchRegionSchema,
         queryIndex: matchRegionSchema

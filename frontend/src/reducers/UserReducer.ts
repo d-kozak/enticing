@@ -9,7 +9,7 @@ import {User} from "../entities/User";
 
 const initialState = {
     user: null as User | null,
-    selectedSettings: null as number | null
+    selectedSettings: null as string | null
 }
 
 export type UserState = Readonly<typeof initialState>
@@ -40,7 +40,7 @@ const userReducer: UserReducer = (state = initialState, action) => {
         case USER_SEARCH_SETTINGS_SELECTED_SUCCESS:
             return {
                 ...state,
-                selectedSettings: typeof action.settings == 'number' ? action.settings : action.settings.id
+                selectedSettings: typeof action.settings === 'string' ? action.settings : action.settings.id
             };
     }
     return state

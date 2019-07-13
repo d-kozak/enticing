@@ -69,12 +69,12 @@ const SearchSettingsPage = (props: SearchSettingsPageProps) => {
     const {classes, isLoggedIn, searchSettings, loadFile, selectSearchSettings, selectedSearchSettingsIndex, addSearchSettings, isAdmin} = props;
     return <Paper className={classes.rootElement}>
         <Typography variant="h2" className={classes.settingsTitle}>Search Settings</Typography>
-        {searchSettings
+        {Object.values(searchSettings)
             .filter(settings => !settings.isTransient)
             .map((settings, index) => <ExpansionPanel key={`${index}-${settings.id}-${settings.name}`}>
                     <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
                         <Typography variant="h5">{settings.name}</Typography>
-                        {index === selectedSearchSettingsIndex && <Chip
+                        {settings.id === selectedSearchSettingsIndex && <Chip
                             icon={<DoneIcon/>}
                             label="Selected"
                             className={classes.chip}
@@ -93,11 +93,11 @@ const SearchSettingsPage = (props: SearchSettingsPageProps) => {
                         <Grid container justify="flex-end" alignItems="center">
                             <Grid item>
                                 <Button
-                                    disabled={index === selectedSearchSettingsIndex}
+                                    disabled={settings.id === selectedSearchSettingsIndex}
                                     onClick={() => selectSearchSettings(settings, selectedSearchSettingsIndex, isLoggedIn)}
                                     variant="contained" color="primary"
                                     type="submit"><DoneIcon
-                                    className={classes.iconSmall}/>{index !== selectedSearchSettingsIndex ? 'Select' : 'Already selected'}
+                                    className={classes.iconSmall}/>{settings.id !== selectedSearchSettingsIndex ? 'Select' : 'Already selected'}
                                 </Button>
                             </Grid>
                         </Grid>
@@ -135,7 +135,7 @@ const mapStateToProps = (state: AppState) => ({
 const mapDispatchToProps = {
     addSearchSettings: addEmptySearchSettingsRequestAction as () => void,
     loadFile: loadSettingsFromFileAction as (file: File) => void,
-    selectSearchSettings: searchSettingsSelectedRequestAction as (settings: SearchSettings, previousSelectedIndex: number, isLoggedIn: boolean) => void
+    selectSearchSettings: searchSettingsSelectedRequestAction as (settings: SearchSettings, previousSelectedIndex: string, isLoggedIn: boolean) => void
 };
 
 export default withStyles(styles, {

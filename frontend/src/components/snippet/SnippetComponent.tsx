@@ -11,7 +11,7 @@ import {ShowDocumentButton} from "./snippetbuttons/ShowDocumentButton";
 import {EditContextButton} from "./snippetbuttons/EditContextButton";
 import {EditAnnotationsButton} from "./snippetbuttons/EditAnnotationsButton";
 import AnnotatedTextComponent from "../annotations/AnnotatedTextComponent";
-import {Match} from "../../entities/Snippet";
+import {Snippet} from "../../entities/Snippet";
 
 
 const styles = createStyles({
@@ -23,8 +23,8 @@ const styles = createStyles({
 
 export type  SnippetComponentProps = WithStyles<typeof styles> & typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps> & {
-    snippet: Match,
-    openDocument: (searchResult: Match) => void
+    snippet: Snippet,
+    openDocument: (searchResult: Snippet) => void
 }
 
 const SnippetComponent = (props: SnippetComponentProps) => {
@@ -35,7 +35,7 @@ const SnippetComponent = (props: SnippetComponentProps) => {
         <EditAnnotationsButton/>
         <ShowDocumentButton searchResult={snippet} openDocument={openDocument}/>
         <GotoSourceButton searchResult={snippet}/>
-        <AnnotatedTextComponent text={snippet.payload}/>
+        <AnnotatedTextComponent text={snippet.payload.content}/>
     </div>
 };
 
@@ -43,7 +43,7 @@ const SnippetComponent = (props: SnippetComponentProps) => {
 const mapStateToProps = (state: AppState) => ({});
 
 const mapDispatchToProps = {
-    requestContextExtension: contextExtensionRequestAction as (searchResult: Match) => void
+    requestContextExtension: contextExtensionRequestAction as (searchResult: Snippet) => void
 }
 
 

@@ -7,23 +7,28 @@ import axios from "axios";
 import {hideProgressBarAction, showProgressBarAction} from "./ProgressBarActions";
 import {newSearchResultsAction} from "./SearchResultActions";
 import {openSnackBar} from "./SnackBarActions";
+import {isSearchResult} from "../entities/SearchResult";
+import {AnnotatedText, MatchedRegion} from "../entities/Annotation";
 
-export const transformSearchResult = (item: any) => {
-    console.log(item);
-    const content = item.payload.content;
-    for (let id in content.annotations) {
-        const annotation = content.annotations[id];
-        annotation.content = new Map(Object.entries(annotation.content))
+
+/**
+ * Preprocess annotated text
+ *
+ * Currently it transforms all matched regions to the MatchRegion object
+ * @param text to process
+ */
+export const transformAnnotatedText = (text: AnnotatedText) => {
+    for (let position of text.positions) {
+        const {from, size} = position.match
+        position.match = new MatchedRegion(from, size);
+        if (position.subAnnotations) {
+            for (let annotation of position.subAnnotations) {
+                const {from, size} = annotation.match;
+                annotation.match = new MatchedRegion(from, size);
+            }
+        }
     }
-    item.snippet = {};
-    item.snippet.annotations = new Map(Object.entries(content.annotations));
-    item.snippet.text = content.text;
-    item.snippet.positions = content.positions;
-    for (let id in content.positions) {
-        const position = content.positions[id];
-        position.from = position.match.from;
-        position.to = position.from + position.match.size;
-    }
+
 }
 
 export const startSearchingAction = (query: SearchQuery, selectedSettings: Number, history?: H.History): ThunkResult<void> => (dispatch) => {
@@ -40,11 +45,17 @@ export const startSearchingAction = (query: SearchQuery, selectedSettings: Numbe
         },
         withCredentials: true
     }).then(response => {
-        response.data.forEach((item: any, index: Number) => {
-            transformSearchResult(item)
-            item.id = index;
-        })
-        dispatch(newSearchResultsAction(response.data));
+        if (!isSearchResult(response.data)) {
+            throw `Invalid search result ${JSON.stringify(response.data, null, 2)}`;
+        }
+        for (let snippet of response.data.snippets) {
+            snippet.id = `${snippet.host}:${snippet.collection}:${snippet.documentId}`
+            transformAnnotatedText(snippet.payload.content)
+        }
+        for (let error in response.data.errors) {
+            dispatch(openSnackBar(`Error from ${error}: ${response.data.errors[error]}`))
+        }
+        dispatch(newSearchResultsAction(response.data.snippets));
         dispatch(hideProgressBarAction());
         if (history) {
             history.push(`/search?query=${encodedQuery}`);

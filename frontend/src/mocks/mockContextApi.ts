@@ -1,15 +1,14 @@
 import {Dispatch} from "redux";
 import {hideProgressBarAction, showProgressBarAction} from "../actions/ProgressBarActions";
-import {AnnotatedText} from "../entities/Annotation";
 import {loremOneSentece} from "./loremIpsum";
 import {searchResultUpdatedAction} from "../actions/SearchResultActions";
-import {Match} from "../entities/Snippet";
+import {Payload, Snippet} from "../entities/Snippet";
 
 
-export const mockContextRequested = (searchResult: Match, dispatch: Dispatch) => {
+export const mockContextRequested = (searchResult: Snippet, dispatch: Dispatch) => {
     dispatch(showProgressBarAction())
     setTimeout(() => {
-        const updatedResult: Match = {
+        const updatedResult: Snippet = {
             ...searchResult,
             payload: extendText(searchResult.payload),
             canExtend: Math.random() > 0.3
@@ -19,7 +18,9 @@ export const mockContextRequested = (searchResult: Match, dispatch: Dispatch) =>
     }, 2000);
 };
 
-const extendText = (annotatedText: AnnotatedText): AnnotatedText => ({
-    ...annotatedText,
-    text: annotatedText.text + loremOneSentece
+const extendText = (annotatedText: Payload): Payload => ({
+    content: {
+        ...annotatedText.content,
+        text: annotatedText.content.text + loremOneSentece
+    }
 });

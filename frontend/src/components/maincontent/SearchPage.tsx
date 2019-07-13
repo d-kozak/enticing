@@ -38,7 +38,7 @@ const SearchPage = (props: SearchPageProps) => {
 
     useEffect(() => {
         if (snippets === null) {
-            startSearching(query, selectedSettings);
+            startSearching(query, Number(selectedSettings));
         }
     }, [snippets])
 

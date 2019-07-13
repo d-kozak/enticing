@@ -18,19 +18,22 @@ export const selectedSearchSettingsIndexSelector = createSelector(searchSettings
     if (selectedSettings == null) {
         for (let i in searchSettings) {
             if (searchSettings[i].default) {
-                return Number(i)
+                return i;
             }
         }
-        return 0
-    }
-    for (let i in searchSettings) {
-        if (searchSettings[i].id == selectedSettings) {
-            return Number(i)
+    } else {
+        for (let i in searchSettings) {
+            if (searchSettings[i].id == selectedSettings) {
+                return i;
+            }
         }
     }
-    return 0
+    console.warn("Unknown settings");
+    console.warn(JSON.stringify(searchSettings, null, 2))
+    console.warn(JSON.stringify(selectedSettings, null, 2))
+    return "-1";
 });
 
 
 export const newSearchSettingsSelector = createSelector(searchSettingsSelector,
-    (searchSettings) => searchSettings.find(item => item.isTransient == true))
+    (searchSettings) => Object.values(searchSettings).find(item => item.isTransient == true))

@@ -18,6 +18,7 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import EditIcon from '@material-ui/icons/Edit';
 import InfoIcon from '@material-ui/icons/Info';
 import Divider from "@material-ui/core/Divider";
+import {openSnackBar} from "../../actions/SnackBarActions";
 
 
 const styles = (theme: Theme) => createStyles({
@@ -37,9 +38,14 @@ type SearchSettingsSelectorProps =
     & {}
 
 const SearchSettingsSelector = (props: SearchSettingsSelectorProps) => {
-    const {classes, isAdmin, isLoggedIn, searchSettings, selectSearchSettings, selectedSearchSettingsIndex} = props;
+    const {classes, isAdmin, isLoggedIn, searchSettings, selectSearchSettings, selectedSearchSettingsIndex, openSnackBar} = props;
 
     const [anchorElem, setAnchorElem] = useState<HTMLElement | null>(null)
+
+    const selectedSearchSettings = searchSettings[selectedSearchSettingsIndex];
+    if (!selectSearchSettings) {
+        openSnackBar('No search settings is selected!');
+    }
 
     return <div>
         <List component="nav">
@@ -50,12 +56,12 @@ const SearchSettingsSelector = (props: SearchSettingsSelectorProps) => {
                 aria-label="Search Settings"
                 onClick={(event) => setAnchorElem(event.currentTarget)}
             >
-                {searchSettings[selectedSearchSettingsIndex].private &&
+                {selectedSearchSettings && selectedSearchSettings.private &&
                 <VisibilityOffIcon className={classes.iconSmall}/>}
                 <Typography variant="button" color="inherit">Using: </Typography>
                 <ListItemText className={classes.listItem}>
-                    {selectedSearchSettingsIndex < searchSettings.length && <Typography variant="button"
-                                                                                        color="inherit">{searchSettings[selectedSearchSettingsIndex].name}</Typography>}
+                    {selectedSearchSettings && <Typography variant="button"
+                                                           color="inherit">{selectedSearchSettings.name}</Typography>}
                 </ListItemText>
             </ListItem>
         </List>
@@ -68,10 +74,10 @@ const SearchSettingsSelector = (props: SearchSettingsSelectorProps) => {
             <MenuItem disabled={true}>
                 Select configuration
             </MenuItem>
-            {searchSettings.map((settings, index) => (
+            {Object.values(searchSettings).map((settings) => (
                 <MenuItem
-                    key={index}
-                    selected={index === selectedSearchSettingsIndex}
+                    key={settings.id}
+                    selected={settings.id === selectedSearchSettingsIndex}
                     onClick={() => {
                         selectSearchSettings(settings, selectedSearchSettingsIndex, isLoggedIn)
                         setAnchorElem(null);
@@ -99,10 +105,11 @@ const mapStateToProps = (state: AppState) => ({
     isAdmin: isAdminSelector(state),
     isLoggedIn: isLoggedInSelector(state),
     searchSettings: state.searchSettings.settings,
-    selectedSearchSettingsIndex: selectedSearchSettingsIndexSelector(state)
+    selectedSearchSettingsIndex: selectedSearchSettingsIndexSelector(state),
+    openSnackBar: openSnackBar
 });
 const mapDispatchToProps = {
-    selectSearchSettings: searchSettingsSelectedRequestAction as (settings: SearchSettings, previousSelectedIndex: number, isLoggedIn: boolean) => void
+    selectSearchSettings: searchSettingsSelectedRequestAction as (settings: SearchSettings, previousSelectedIndex: string, isLoggedIn: boolean) => void
 };
 
 export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(SearchSettingsSelector));

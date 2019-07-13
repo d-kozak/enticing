@@ -2,10 +2,10 @@ import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import LinkIcon from "@material-ui/icons/Link";
 import React from "react";
-import {Match} from "../../../entities/Snippet";
+import {Snippet} from "../../../entities/Snippet";
 
 interface GotoSourceButtonProps {
-    searchResult: Match
+    searchResult: Snippet
 }
 
 export const GotoSourceButton = ({searchResult}: GotoSourceButtonProps) => <Tooltip title='Go to the source'>

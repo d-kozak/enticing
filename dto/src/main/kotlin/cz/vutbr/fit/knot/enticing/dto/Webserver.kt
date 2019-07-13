@@ -44,7 +44,7 @@ object Webserver {
              * Document into which the snippet belongs
              */
             @field:PositiveOrZero
-            val docId: Int,
+            val documentId: Int,
 
             /**
              * Where the original snippet starts
@@ -87,7 +87,7 @@ object Webserver {
             @Incomplete("can be used only when postprocessing is ready")
             val query: String? = null
     ) {
-        fun toIndexFormat() = IndexServer.ContextExtensionQuery(collection, docId, location, size, extension, metadata, defaultIndex, responseFormat)
+        fun toIndexFormat() = IndexServer.ContextExtensionQuery(collection, documentId, location, size, extension, metadata, defaultIndex, responseFormat)
     }
 
 

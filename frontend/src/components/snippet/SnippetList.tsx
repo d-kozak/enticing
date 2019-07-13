@@ -12,7 +12,7 @@ import DocumentDialog from "./documentdialog/DocumentDialog";
 import {AppState} from "../../reducers/RootReducer";
 import {connect} from "react-redux";
 import {documentDialogRequestedAction} from "../../actions/dialog/DocumentDialogAction";
-import {Match} from "../../entities/Snippet";
+import {Snippet} from "../../entities/Snippet";
 
 const styles = createStyles({
     root: {
@@ -34,7 +34,7 @@ export type SnippetListProps =
     & typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
     & {
-    snippet: Array<Match>;
+    snippet: Array<Snippet>;
 }
 
 const SnippetList = (props: SnippetListProps) => {
@@ -69,7 +69,7 @@ const SnippetList = (props: SnippetListProps) => {
 const mapStateToProps = (state: AppState) => ({});
 
 const mapDispatchToProps = {
-    openDocumentDialog: documentDialogRequestedAction as (searchResult: Match) => void
+    openDocumentDialog: documentDialogRequestedAction as (searchResult: Snippet) => void
 }
 
 export default withStyles(styles, {

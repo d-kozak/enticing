@@ -3,10 +3,10 @@ import {
     DOCUMENT_DIALOG_DOCUMENT_LOADED,
     DocumentDialogAction
 } from "../../actions/dialog/DocumentDialogAction";
-import {IndexedDocument} from "../../entities/IndexedDocument";
+import {FullDocument} from "../../entities/FullDocument";
 
 const initialState = {
-    document: null as IndexedDocument | null
+    document: null as FullDocument | null
 }
 
 export type DocumentDialogState = Readonly<typeof initialState>

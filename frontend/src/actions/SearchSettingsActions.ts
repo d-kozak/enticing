@@ -127,7 +127,7 @@ export const updateSearchSettingsRequestAction = (settings: SearchSettings, onDo
 
 export const addEmptySearchSettingsRequestAction = (): ThunkResult<void> => (dispatch) => {
     const newSettings: SearchSettings = {
-        id: 0,
+        id: "0",
         name: '',
         private: true,
         default: false,

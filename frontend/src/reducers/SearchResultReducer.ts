@@ -1,8 +1,8 @@
 import {SEARCH_RESULT_UPDATED, SEARCH_RESULTS_NEW, SearchResultAction} from "../actions/SearchResultActions";
-import {Match} from "../entities/Snippet";
+import {Snippet} from "../entities/Snippet";
 
 const initialState = {
-    snippets: null as Array<Match> | null
+    snippets: null as Array<Snippet> | null
 }
 
 export type SearchResultsState = Readonly<typeof initialState>

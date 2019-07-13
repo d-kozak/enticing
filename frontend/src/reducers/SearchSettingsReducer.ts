@@ -8,9 +8,10 @@ import {
     SearchSettingsAction
 } from "../actions/SearchSettingsActions";
 import {SearchSettings} from "../entities/SearchSettings";
+import {mapValues} from 'lodash';
 
 const initialState = {
-    settings: [] as Array<SearchSettings>
+    settings: {} as { [key: string]: SearchSettings }
 };
 
 type SearchSettingsState = Readonly<typeof initialState>;
@@ -21,14 +22,20 @@ const searchSettingsReducer: SearchSettingsReducer = (state = initialState, acti
     switch (action.type) {
         case SEARCH_SETTINGS_LOADED:
             return {
-                settings: action.settings
+                settings: action.settings.reduce((obj, item) => {
+                    obj[item.id] = item;
+                    return obj;
+                }, {} as { [key: string]: SearchSettings })
             };
         case SEARCH_SETTINGS_ADDED:
-            if (action.settings.isTransient && state.settings.find(setting => setting.isTransient == true)) {
+            if (action.settings.isTransient && Object.values(state.settings).find(setting => setting.isTransient == true)) {
                 throw new Error("Cannot create second transient settings.")
             }
             return {
-                settings: [...state.settings, action.settings]
+                settings: {
+                    ...state.settings,
+                    "transient": action.settings
+                }
             };
         case SEARCH_SETTINGS_UPDATED:
             if (action.settings.isTransient) {
@@ -37,23 +44,36 @@ const searchSettingsReducer: SearchSettingsReducer = (state = initialState, acti
                     isTransient: false
                 }
                 return {
-                    settings: state.settings.map((item => item.isTransient ? newSettings : item))
+                    settings: mapValues(state.settings, item => item.id === action.settings.id ? newSettings : item)
                 }
             }
             return {
-                settings: state.settings.map((item => item.id === action.settings.id ? action.settings : item))
+                settings: mapValues(state.settings, item => item.id === action.settings.id ? action.settings : item)
             };
-        case SEARCH_SETTINGS_REMOVED:
+
+        case SEARCH_SETTINGS_REMOVED: {
             return {
-                settings: state.settings.filter(item => item.id != action.settings.id)
+                settings: Object.values(state.settings)
+                    .filter(item => item.id == action.settings.id)
+                    .reduce((obj, item) => {
+                        obj[item.id] = item;
+                        return obj;
+                    }, {} as { [key: string]: SearchSettings })
             };
-        case SEARCH_SETTINGS_NEW_DEFAULT:
+        }
+        case SEARCH_SETTINGS_NEW_DEFAULT: {
             return {
-                settings: state.settings.map(item => ({...item, default: item.id === action.settings.id}))
+                settings: mapValues(state.settings, item => ({...item, default: item.id === action.settings.id}))
             }
+        }
         case SEARCH_SETTINGS_ADDING_CANCELLED:
             return {
-                settings: state.settings.filter(item => !item.isTransient)
+                settings: Object.values(state.settings)
+                    .filter(item => !item.isTransient)
+                    .reduce((obj, item) => {
+                        obj[item.id] = item;
+                        return obj;
+                    }, {} as { [key: string]: SearchSettings })
             }
     }
     return state;

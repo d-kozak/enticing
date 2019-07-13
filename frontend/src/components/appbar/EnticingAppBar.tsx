@@ -50,8 +50,9 @@ const EnticingAppBar = (props: EnticingAppBarProps) => {
                         </Typography>
                     </Link>
                 </div>
-                {searchSettings.length > 0 && <SearchSettingsSelector/>}
-                {searchSettings.length == 0 && <Link innerRef={clearDecorationsRef} to="/search-settings">
+                {Object.values(searchSettings).length > 0 && <SearchSettingsSelector/>}
+                {Object.values(searchSettings).length == 0 &&
+                <Link innerRef={clearDecorationsRef} to="/search-settings">
                     <IconButton color="inherit">
                         <WarningIcon/>
                         <Typography style={{margin: '5px'}} color="inherit" variant="body1">No search settings

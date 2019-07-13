@@ -1,18 +1,19 @@
-import {IndexedDocument} from "../../entities/IndexedDocument";
+import {FullDocument, isDocument} from "../../entities/FullDocument";
 import {ThunkResult} from "../RootActions";
 import {mockDocumentRequested} from "../../mocks/mockDocumentApi";
 import {API_BASE_PATH, useMockApi} from "../../globals";
 import axios from "axios";
 import {hideProgressBarAction, showProgressBarAction} from "../ProgressBarActions";
 import {openSnackBar} from "../SnackBarActions";
-import {Match} from "../../entities/Snippet";
+import {Snippet} from "../../entities/Snippet";
+import {transformAnnotatedText} from "../QueryActions";
 
 export const DOCUMENT_DIALOG_DOCUMENT_LOADED = '[DOCUMENT DIALOG] DOCUMENT LOADED';
 export const DOCUMENT_DIALOG_CLOSED = '[DOCUMENT DIALOG] CLOSED';
 
 interface DocumentDialogLoadedAction {
     type: typeof DOCUMENT_DIALOG_DOCUMENT_LOADED
-    document: IndexedDocument
+    document: FullDocument
 }
 
 interface DialogClosedAction {
@@ -22,7 +23,7 @@ interface DialogClosedAction {
 
 export type DocumentDialogAction = DocumentDialogLoadedAction | DialogClosedAction
 
-export const documentLoadedAction = (document: IndexedDocument): DocumentDialogLoadedAction => ({
+export const documentLoadedAction = (document: FullDocument): DocumentDialogLoadedAction => ({
     type: DOCUMENT_DIALOG_DOCUMENT_LOADED,
     document
 });
@@ -31,7 +32,7 @@ export const documentDialogClosedAction = (): DialogClosedAction => ({
     type: DOCUMENT_DIALOG_CLOSED
 });
 
-export const documentDialogRequestedAction = (searchResult: Match): ThunkResult<void> => dispatch => {
+export const documentDialogRequestedAction = (searchResult: Snippet): ThunkResult<void> => dispatch => {
     if (useMockApi()) {
         mockDocumentRequested(searchResult, dispatch);
         return;
@@ -40,6 +41,10 @@ export const documentDialogRequestedAction = (searchResult: Match): ThunkResult<
     axios.post(`${API_BASE_PATH}/query/document`, {docId: searchResult.documentId}, {
         withCredentials: true
     }).then(response => {
+        if (!isDocument(response.data)) {
+            throw `Invalid document ${JSON.stringify(response.data, null, 2)}`;
+        }
+        transformAnnotatedText(response.data.payload.content);
         dispatch(hideProgressBarAction());
         dispatch(documentLoadedAction(response.data));
     }).catch(() => {

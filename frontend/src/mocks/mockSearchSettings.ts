@@ -12,7 +12,7 @@ import {openSnackBar} from "../actions/SnackBarActions";
 
 const searchSettings: Array<SearchSettings> = [
     {
-        id: 0,
+        id: "0",
         default: false,
         name: 'Test index',
         annotationDataServer: "server1.com:42/test",
@@ -21,7 +21,7 @@ const searchSettings: Array<SearchSettings> = [
         private: true,
     },
     {
-        id: 1,
+        id: "1",
         default: true,
         name: 'Wikipedia 2018',
         annotationDataServer: "server1.com:42/foo",
@@ -30,7 +30,7 @@ const searchSettings: Array<SearchSettings> = [
         private: false,
     },
     {
-        id: 2,
+        id: "2",
         default: false,
         name: 'CC-2017',
         annotationDataServer: "10.10.10.10:42",
@@ -79,7 +79,7 @@ let counter = 3;
 export const mockSaveNewSearchSettings = (dispatch: Dispatch, searchSettings: SearchSettings, onDone: () => void) => {
     setTimeout(() => {
         dispatch(openSnackBar(`New settings ${searchSettings.name} added`));
-        searchSettings.id = counter++
+        searchSettings.id = `${counter++}`;
         dispatch(searchSettingsUpdatedAction(searchSettings));
         onDone();
     }, 2000);
@@ -90,7 +90,7 @@ export const mockUploadSettings = (settings: SearchSettingsContent, dispatch: Di
     setTimeout(() => {
         const newSettings: SearchSettings = {
             ...settings,
-            id: counter++,
+            id: `${counter++}`,
             private: true,
             default: false
         }

@@ -5,6 +5,6 @@ export interface User {
     login: string,
     active: boolean,
     roles: Array<String>,
-    selectedSettings: number | null,
+    selectedSettings: string | null,
     userSettings: UserSettings
 }
