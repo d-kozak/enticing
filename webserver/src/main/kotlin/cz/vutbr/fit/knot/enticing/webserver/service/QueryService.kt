@@ -6,6 +6,7 @@ import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.service.mock.dummyDocument
 import cz.vutbr.fit.knot.enticing.webserver.service.mock.loremOneSentence
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
 
@@ -13,7 +14,8 @@ import org.springframework.stereotype.Service
 class QueryService(
         private val dispatcher: QueryDispatcher,
         private val searchSettingsRepository: SearchSettingsRepository,
-        private val userService: EnticingUserService
+        private val userService: EnticingUserService,
+        private @Value("\${index.server.api.base.path}") val apiBasePath: String
 ) {
 
     fun query(query: String, selectedSettings: Long): Webserver.SearchResult {

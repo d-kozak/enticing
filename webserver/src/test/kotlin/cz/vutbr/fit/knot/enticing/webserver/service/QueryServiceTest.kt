@@ -49,7 +49,7 @@ internal class QueryServiceTest {
             val foo = mapOf("server1" to listOf(MResult.success(IndexServer.SearchResult(listOf(firstResult.toIndexServerFormat())))))
             every { dispatcher.dispatchQuery(dummyQuery, dummyServers.map { ServerInfo(it) }) } returns foo
 
-            val queryService = QueryService(dispatcher, searchSettingsRepository, userService)
+            val queryService = QueryService(dispatcher, searchSettingsRepository, userService, "foo/bar/baz")
 
             val result = queryService.query("nertag:person", 42)
             assertThat(result)
@@ -74,7 +74,7 @@ internal class QueryServiceTest {
             val foo = mapOf("server1" to listOf(MResult.success(IndexServer.SearchResult(listOf(firstResult.toIndexServerFormat())))))
             every { dispatcher.dispatchQuery(dummyQuery, dummyServers.map { ServerInfo(it) }) } returns foo
 
-            val queryService = QueryService(dispatcher, searchSettingsRepository, userService)
+            val queryService = QueryService(dispatcher, searchSettingsRepository, userService, "foo/bar/baz")
 
             val result = queryService.query("nertag:person", 42)
             assertThat(result)
@@ -94,7 +94,7 @@ internal class QueryServiceTest {
             val mockSearchSettings = SearchSettings(42, private = true, servers = dummyServers)
             every { searchSettingsRepository.findById(42) } returns Optional.of(mockSearchSettings)
 
-            val queryService = QueryService(dispatcher, searchSettingsRepository, userService)
+            val queryService = QueryService(dispatcher, searchSettingsRepository, userService, "foo/bar/baz")
 
             assertThrows<IllegalArgumentException> {
                 queryService.query("foo", 42)
@@ -109,7 +109,7 @@ internal class QueryServiceTest {
             val mockSearchSettings = SearchSettings(42, private = true, servers = dummyServers)
             every { searchSettingsRepository.findById(42) } returns Optional.of(mockSearchSettings)
 
-            val queryService = QueryService(dispatcher, searchSettingsRepository, userService)
+            val queryService = QueryService(dispatcher, searchSettingsRepository, userService, "foo/bar/baz")
 
             assertThrows<IllegalArgumentException> {
                 queryService.query("foo", 42)
@@ -121,7 +121,7 @@ internal class QueryServiceTest {
             every { userService.currentUser } returns null
             every { searchSettingsRepository.findById(42) } returns Optional.empty()
 
-            val queryService = QueryService(dispatcher, searchSettingsRepository, userService)
+            val queryService = QueryService(dispatcher, searchSettingsRepository, userService, "foo/bar/baz")
 
             assertThrows<IllegalArgumentException> { queryService.query("nertag:person", 42) }
         }
