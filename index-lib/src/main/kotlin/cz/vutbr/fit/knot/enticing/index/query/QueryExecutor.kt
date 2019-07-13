@@ -6,6 +6,7 @@ import cz.vutbr.fit.knot.enticing.dto.Payload
 import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
+import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexClientConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.filterBy
@@ -64,6 +65,8 @@ fun initQueryExecutor(config: IndexClientConfig): QueryExecutor {
 
 internal typealias Mg4jSearchResult = DocumentScoreInfo<Reference2ObjectMap<Index, Array<SelectedInterval>>>
 
+@Cleanup("Refactor into multiple classes/functions in different files")
+@WhatIf("? decouple from mg4j for easier and faster testing ?")
 class QueryExecutor internal constructor(
         private val collectionName: String,
         private val collection: Mg4jCompositeDocumentCollection,
@@ -156,15 +159,19 @@ class QueryExecutor internal constructor(
         log.warn("No results for index $index")
     }
 
-    @Incomplete("not implemented yet, returns dummy data")
     fun extendSnippet(query: IndexServer.ContextExtensionQuery): MResult<IndexServer.SnippetExtension> = MResult.runCatching {
         val document = collection.document(query.docId.toLong()) as Mg4jDocument
+        val (prefix, suffix) = computeExtensionIntervals(left = query.location, right = query.location + query.size, extension = query.extension, documentSize = document.size())
 
+        val filteredConfig = corpusConfiguration.filterBy(query.metadata, query.defaultIndex)
+
+        val prefixPayload = createPayload(query, document.loadSnippetPartsFields(prefix, filteredConfig), emptyList()) as Payload.FullResponse
+        val suffixPayload = createPayload(query, document.loadSnippetPartsFields(suffix, filteredConfig), emptyList()) as Payload.FullResponse
 
         IndexServer.SnippetExtension(
-                Payload.FullResponse.Html("null"),
-                Payload.FullResponse.Html("null"),
-                false
+                prefixPayload,
+                suffixPayload,
+                canExtend = document.size() > prefix.size + query.size + suffix.size
         )
     }
 

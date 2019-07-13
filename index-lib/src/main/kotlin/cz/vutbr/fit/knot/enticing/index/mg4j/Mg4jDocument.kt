@@ -1,5 +1,7 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
+import cz.vutbr.fit.knot.enticing.dto.annotation.Speed
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.Index
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
@@ -8,6 +10,7 @@ import it.unimi.di.big.mg4j.document.AbstractDocument
 import it.unimi.dsi.fastutil.objects.Reference2ObjectMap
 import it.unimi.dsi.io.WordReader
 import it.unimi.dsi.lang.MutableString
+import it.unimi.dsi.util.Interval
 import java.io.StringReader
 
 internal val wordReader = WhitespaceWordReader()
@@ -32,12 +35,21 @@ class Mg4jDocument(
 
     override fun content(field: Int): Any = content[field].reader()
 
+
+    /**
+     * Loads SnippetPartsFields from part of the document
+     *
+     * @param interval interval which should be loaded
+     */
+    fun loadSnippetPartsFields(interval: Interval, filteredConfig: CorpusConfiguration): SnippetPartsFields = loadSnippetPartsFields(interval.left, interval.right, filteredConfig)
     /**
      * Loads SnippetPartsFields from part of the document
      *
      * @param left left limit, inclusive
      * @param right right limit, inclusive
      */
+    @Cleanup("Ugly code, should be refactored")
+    @Speed("This is probably slower than necessary")
     fun loadSnippetPartsFields(left: Int = 0, _right: Int = -1, filteredConfig: CorpusConfiguration): SnippetPartsFields {
         val right = if (_right == -1) size() else _right
         val indexContent = indexes.asSequence()

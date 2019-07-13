@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.index
 
 import cz.vutbr.fit.knot.enticing.dto.*
+import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.*
 import cz.vutbr.fit.knot.enticing.index.query.computeExtensionIntervals
 import cz.vutbr.fit.knot.enticing.index.query.initQueryExecutor
@@ -90,6 +91,7 @@ val clientConfig = indexClient {
     corpusConfiguration = corpusConfig
 }
 
+@Incomplete("write a more complete test suite")
 class QueryExecutorTest {
 
     private val templateQuery = SearchQuery(
@@ -159,6 +161,21 @@ class QueryExecutorTest {
                 assertThat(validateAnnotatedText(annotated.content))
                         .isEmpty()
             }
+        }
+    }
+
+    @Test
+    fun `context extension test`() {
+        val executor = initQueryExecutor(clientConfig)
+
+        val (prefix, suffix, _) = executor.extendSnippet(
+                IndexServer.ContextExtensionQuery("col1", 2, 5, 5, 10
+                )).unwrap()
+
+        for (text in listOf(prefix, suffix)) {
+            val annotated = text as Payload.FullResponse.Annotated
+            validateAnnotatedText(annotated.content)
+            println(annotated)
         }
     }
 
