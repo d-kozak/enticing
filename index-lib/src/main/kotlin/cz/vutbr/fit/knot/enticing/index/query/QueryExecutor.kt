@@ -185,18 +185,39 @@ class QueryExecutor internal constructor(
 }
 
 /**
- * Compute the size of prefix and suffix for snippet extension
+ * Compute the intervals for prefix and suffix for snippet extension
  */
 internal fun computeExtensionIntervals(left: Int, right: Int, extension: Int, documentSize: Int): Pair<Interval, Interval> {
+    checkPreconditions(documentSize, left, right, extension)
+    val maxPrefixSize = left
+    val maxSuffixSize = documentSize - right - 1
+    val (prefixSize, suffixSize) = computePrefixAndSuffixSize(extension, maxPrefixSize, maxSuffixSize)
+
+
+    // zero check necessary, because there is no factory supporting empty interval, grrr
+    val leftInterval = if (prefixSize > 0) Interval.valueOf(left - prefixSize, left - 1) else Intervals.EMPTY_INTERVAL
+    val rightInterval = if (suffixSize > 0) Interval.valueOf(right + 1, right + suffixSize) else Intervals.EMPTY_INTERVAL
+    checkPostconditions(leftInterval, maxPrefixSize, rightInterval, maxSuffixSize, extension)
+    return leftInterval to rightInterval
+}
+
+private fun checkPreconditions(documentSize: Int, left: Int, right: Int, extension: Int) {
     val documentRange = 0 until documentSize
     require(documentSize > 0) { "Document size should be bigger than zero, was $documentSize" }
     require(left in documentRange) { "Left boundary should be within $documentRange was $left" }
     require(right in documentRange) { "Right boundary should be be within $documentRange, was $right" }
     require(extension != 0 && extension in documentRange) { "Extension should be within $documentRange, was $extension" }
     require(left <= right) { "Left should be <= to right, was $left, $right" }
+}
 
-    val maxPrefixSize = left
-    val maxSuffixSize = documentSize - right - 1
+private fun checkPostconditions(leftInterval: Interval, maxPrefixSize: Int, rightInterval: Interval, maxSuffixSize: Int, extension: Int) {
+    require(leftInterval.size in 0..maxPrefixSize) { "prefix size should be within 0..${maxPrefixSize - 1}, was ${leftInterval.size}" }
+    require(rightInterval.size in 0..maxSuffixSize) { "suffix size should be within 0..${maxSuffixSize - 1}, was ${rightInterval.size}" }
+    require(leftInterval.size + rightInterval.size <= extension) { "prefix + suffix <= extension,was $leftInterval.size,$rightInterval.size,$extension" }
+}
+
+@Cleanup("This is ugly and should be refactored somehow, hopefully there is an easier way to express this operation")
+private fun computePrefixAndSuffixSize(extension: Int, maxPrefixSize: Int, maxSuffixSize: Int): Pair<Int, Int> {
     var prefixSize = Math.min(extension / 2, maxPrefixSize)
     var suffixSize = Math.min(extension / 2, maxSuffixSize)
 
@@ -229,15 +250,5 @@ internal fun computeExtensionIntervals(left: Int, right: Int, extension: Int, do
     require(prefixSize in 0..maxPrefixSize) { "prefix size should be within 0..${maxPrefixSize - 1}, was $prefixSize" }
     require(suffixSize in 0..maxSuffixSize) { "suffix size should be within 0..${maxSuffixSize - 1}, was $suffixSize" }
     require(prefixSize + suffixSize <= extension) { "prefix + suffix <= extension,was $prefixSize,$suffixSize,$extension" }
-
-
-    // zero check necessary, because there is no factory supporting empty interval, grrr
-    val leftInterval = if (prefixSize > 0) Interval.valueOf(left - prefixSize, left - 1) else Intervals.EMPTY_INTERVAL
-    val rightInterval = if (suffixSize > 0) Interval.valueOf(right + 1, right + suffixSize) else Intervals.EMPTY_INTERVAL
-
-    require(leftInterval.size in 0..maxPrefixSize) { "prefix size should be within 0..${maxPrefixSize - 1}, was ${leftInterval.size}" }
-    require(rightInterval.size in 0..maxSuffixSize) { "suffix size should be within 0..${maxSuffixSize - 1}, was ${rightInterval.size}" }
-    require(leftInterval.size + rightInterval.size <= extension) { "prefix + suffix <= extension,was $leftInterval.size,$rightInterval.size,$extension" }
-
-    return leftInterval to rightInterval
+    return prefixSize to suffixSize
 }
