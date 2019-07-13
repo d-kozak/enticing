@@ -226,7 +226,18 @@ internal fun computeExtensionIntervals(left: Int, right: Int, extension: Int, do
         }
     }
 
+    require(prefixSize in 0..maxPrefixSize) { "prefix size should be within 0..${maxPrefixSize - 1}, was $prefixSize" }
+    require(suffixSize in 0..maxSuffixSize) { "suffix size should be within 0..${maxSuffixSize - 1}, was $suffixSize" }
+    require(prefixSize + suffixSize <= extension) { "prefix + suffix <= extension,was $prefixSize,$suffixSize,$extension" }
+
+
+    // zero check necessary, because there is no factory supporting empty interval, grrr
     val leftInterval = if (prefixSize > 0) Interval.valueOf(left - prefixSize, left - 1) else Intervals.EMPTY_INTERVAL
     val rightInterval = if (suffixSize > 0) Interval.valueOf(right + 1, right + suffixSize) else Intervals.EMPTY_INTERVAL
+
+    require(leftInterval.size in 0..maxPrefixSize) { "prefix size should be within 0..${maxPrefixSize - 1}, was ${leftInterval.size}" }
+    require(rightInterval.size in 0..maxSuffixSize) { "suffix size should be within 0..${maxSuffixSize - 1}, was ${rightInterval.size}" }
+    require(leftInterval.size + rightInterval.size <= extension) { "prefix + suffix <= extension,was $leftInterval.size,$rightInterval.size,$extension" }
+
     return leftInterval to rightInterval
 }
