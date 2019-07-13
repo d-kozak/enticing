@@ -15,7 +15,7 @@ internal fun dummyDispatcher(fn: (SearchQuery, ServerInfo) -> MResult<IndexServe
     override suspend fun invoke(searchQuery: SearchQuery, serverInfo: ServerInfo): MResult<IndexServer.SearchResult> = fn(searchQuery, serverInfo)
 }
 
-internal class QueryProcessorTest {
+internal class QueryDispatcherTest {
 
 
     @Test
@@ -24,7 +24,8 @@ internal class QueryProcessorTest {
 
         val fail: RequestDispatcher = dummyDispatcher { _, server -> MResult.failure(FailOnPurposeException(server.address)) }
 
-        val result = process(templateQuery, servers, fail)
+        val dispatcher = QueryDispatcher(fail)
+        val result = dispatcher.dispatchQuery(templateQuery, servers)
         val expected: Map<String, List<MResult<IndexServer.SearchResult>>> = mapOf(
                 "yahoo.com" to listOf(MResult.failure(FailOnPurposeException("yahoo.com"))),
                 "google.com" to listOf(MResult.failure(FailOnPurposeException("google.com"))),
@@ -51,7 +52,8 @@ internal class QueryProcessorTest {
             MResult.failure(FailOnPurposeException(server.address))
         }
 
-        val result = process(templateQuery, servers, requestDispatcher)
+        val dispatcher = QueryDispatcher(requestDispatcher)
+        val result = dispatcher.dispatchQuery(templateQuery, servers)
         val expected: Map<String, List<MResult<IndexServer.SearchResult>>> = mapOf(
                 "yahoo.com" to listOf(MResult.failure(FailOnPurposeException("yahoo.com"))),
                 "google.com" to listOf(MResult.failure(FailOnPurposeException("google.com"))),
@@ -74,7 +76,8 @@ internal class QueryProcessorTest {
             }
         }
 
-        val result = process(templateQuery, servers, fail)
+        val dispatcher = QueryDispatcher(fail)
+        val result = dispatcher.dispatchQuery(templateQuery, servers)
         val expected: Map<String, List<MResult<IndexServer.SearchResult>>> = mapOf(
                 "yahoo.com" to listOf(MResult.failure(FailOnPurposeException("yahoo.com"))),
                 "google.com" to listOf(MResult.success(googleFirstResult), MResult.failure(FailOnPurposeException("google.com"))),

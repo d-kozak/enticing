@@ -157,7 +157,7 @@ object IndexServer {
              * null means that there are no more snippets available
              */
             @field:Valid
-            val offset: Offset?
+            val offset: Offset? = null
     )
 
     /**

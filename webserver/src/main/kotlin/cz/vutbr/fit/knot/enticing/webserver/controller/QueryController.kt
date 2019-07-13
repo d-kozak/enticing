@@ -10,7 +10,7 @@ import java.net.URLDecoder
 class QueryController(private val queryService: QueryService) {
 
     @GetMapping
-    fun query(@RequestParam query: String, @RequestParam settings: Long): List<Webserver.Snippet> = queryService.query(URLDecoder.decode(query, "UTF-8"), settings)
+    fun query(@RequestParam query: String, @RequestParam settings: Long): Webserver.SearchResult = queryService.query(URLDecoder.decode(query, "UTF-8"), settings)
 
     @PostMapping("/context")
     fun context(@RequestBody query: Webserver.ContextExtensionQuery): Webserver.Snippet = queryService.context(query)

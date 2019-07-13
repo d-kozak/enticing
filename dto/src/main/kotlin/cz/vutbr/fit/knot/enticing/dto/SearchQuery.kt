@@ -23,7 +23,7 @@ data class SearchQuery(
          * Number of snippets to be returned
          */
         @field:Positive
-        val snippetCount: Int,
+        val snippetCount: Int = Defaults.snippetCount,
         /**
          * Offset at which to start, for pagination
          */

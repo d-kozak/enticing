@@ -54,7 +54,7 @@ internal class QueryControllerTest(
         val query = URLEncoder.encode("ahoj cau", "UTF-8")
         val selectedSettings = 1
 
-        val dummyResult = listOf(firstResult)
+        val dummyResult = Webserver.SearchResult(listOf(firstResult))
         Mockito.`when`(queryService.query("ahoj cau", 1)).thenReturn(dummyResult)
 
         mockMvc.perform(MockMvcRequestBuilders.get("$apiBasePath/query?query=$query&settings=$selectedSettings"))

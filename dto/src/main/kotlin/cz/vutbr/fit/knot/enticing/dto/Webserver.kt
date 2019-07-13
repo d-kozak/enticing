@@ -5,7 +5,25 @@ import cz.vutbr.fit.knot.enticing.dto.utils.regex.urlRegexStr
 import javax.validation.Valid
 import javax.validation.constraints.*
 
+typealias ServerId = String
+typealias ErrorMessage = String
+
 object Webserver {
+
+    /**
+     * Result for SearchQuery
+     */
+    data class SearchResult(
+            /**
+             * Merged results from all servers
+             */
+            val snippets: List<Snippet>,
+            /**
+             * Any error messages that came from servers
+             */
+            val errors: Map<ServerId, ErrorMessage> = emptyMap()
+    )
+
     /**
      * Query to extend the context of the snippet
      */
@@ -215,5 +233,7 @@ object Webserver {
              * Is it possible to further extend the snippet?
              */
             val canExtend: Boolean
-    )
+    ) {
+        fun toIndexServerFormat() = IndexServer.Snippet(collection, documentId, location, size, url, documentTitle, payload, canExtend)
+    }
 }
