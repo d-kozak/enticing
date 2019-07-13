@@ -30,7 +30,7 @@ jar {
 }
 
 dependencies {
-    implementation(project(":query-processor"))
+    implementation(project(":query-dispatcher"))
     implementation(project(":index-lib"))
     implementation(project(":dto"))
 

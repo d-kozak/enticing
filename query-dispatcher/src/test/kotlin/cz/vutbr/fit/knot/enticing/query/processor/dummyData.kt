@@ -1,7 +1,6 @@
 package cz.vutbr.fit.knot.enticing.query.processor
 
 import cz.vutbr.fit.knot.enticing.dto.*
-import cz.vutbr.fit.knot.enticing.dto.Payload
 
 
 internal data class FailOnPurposeException(val msg: String) : Exception()

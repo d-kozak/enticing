@@ -3,16 +3,14 @@ package cz.vutbr.fit.knot.enticing.query.processor
 
 import com.github.kittinunf.fuel.httpPost
 import cz.vutbr.fit.knot.enticing.dto.IndexServer
-import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.ServerInfo
+import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
-
 import cz.vutbr.fit.knot.enticing.dto.utils.toDto
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import cz.vutbr.fit.knot.enticing.query.processor.fuel.awaitDto
 import cz.vutbr.fit.knot.enticing.query.processor.fuel.jsonBody
-
 import org.springframework.http.*
 import org.springframework.web.client.RestTemplate
 
