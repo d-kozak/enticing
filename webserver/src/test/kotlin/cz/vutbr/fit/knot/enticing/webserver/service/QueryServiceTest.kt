@@ -10,9 +10,7 @@ import cz.vutbr.fit.knot.enticing.webserver.dto.User
 import cz.vutbr.fit.knot.enticing.webserver.dto.UserSettings
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
-import cz.vutbr.fit.knot.enticing.webserver.service.mock.firstResult
-import cz.vutbr.fit.knot.enticing.webserver.service.mock.secondResult
-import cz.vutbr.fit.knot.enticing.webserver.service.mock.thirdResult
+import cz.vutbr.fit.knot.enticing.webserver.service.mock.*
 import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.mockk
@@ -33,6 +31,7 @@ internal class QueryServiceTest {
         private val dispatcher: QueryDispatcher = mockk()
         private val searchSettingsRepository: SearchSettingsRepository = mockk()
         private val userService: EnticingUserService = mockk()
+        private val indexServerConnector: IndexServerConnector = mockk()
 
         @Test
         fun `valid request`() {
@@ -49,7 +48,7 @@ internal class QueryServiceTest {
             val foo = mapOf("server1" to listOf(MResult.success(IndexServer.SearchResult(listOf(firstResult.toIndexServerFormat())))))
             every { dispatcher.dispatchQuery(dummyQuery, dummyServers.map { ServerInfo(it) }) } returns foo
 
-            val queryService = QueryService(dispatcher, searchSettingsRepository, userService, "foo/bar/baz")
+            val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector)
 
             val result = queryService.query("nertag:person", 42)
             assertThat(result)
@@ -74,7 +73,7 @@ internal class QueryServiceTest {
             val foo = mapOf("server1" to listOf(MResult.success(IndexServer.SearchResult(listOf(firstResult.toIndexServerFormat())))))
             every { dispatcher.dispatchQuery(dummyQuery, dummyServers.map { ServerInfo(it) }) } returns foo
 
-            val queryService = QueryService(dispatcher, searchSettingsRepository, userService, "foo/bar/baz")
+            val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector)
 
             val result = queryService.query("nertag:person", 42)
             assertThat(result)
@@ -94,7 +93,7 @@ internal class QueryServiceTest {
             val mockSearchSettings = SearchSettings(42, private = true, servers = dummyServers)
             every { searchSettingsRepository.findById(42) } returns Optional.of(mockSearchSettings)
 
-            val queryService = QueryService(dispatcher, searchSettingsRepository, userService, "foo/bar/baz")
+            val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector)
 
             assertThrows<IllegalArgumentException> {
                 queryService.query("foo", 42)
@@ -109,7 +108,7 @@ internal class QueryServiceTest {
             val mockSearchSettings = SearchSettings(42, private = true, servers = dummyServers)
             every { searchSettingsRepository.findById(42) } returns Optional.of(mockSearchSettings)
 
-            val queryService = QueryService(dispatcher, searchSettingsRepository, userService, "foo/bar/baz")
+            val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector)
 
             assertThrows<IllegalArgumentException> {
                 queryService.query("foo", 42)
@@ -121,17 +120,91 @@ internal class QueryServiceTest {
             every { userService.currentUser } returns null
             every { searchSettingsRepository.findById(42) } returns Optional.empty()
 
-            val queryService = QueryService(dispatcher, searchSettingsRepository, userService, "foo/bar/baz")
+            val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector)
 
             assertThrows<IllegalArgumentException> { queryService.query("nertag:person", 42) }
         }
 
         @AfterEach
         fun clearMock() {
-            clearMocks(dispatcher, searchSettingsRepository, userService)
+            clearMocks(dispatcher, searchSettingsRepository, userService, indexServerConnector)
         }
     }
 
+
+    @Nested
+    inner class DocumentRetrieval {
+
+        private val dispatcher: QueryDispatcher = mockk()
+        private val searchSettingsRepository: SearchSettingsRepository = mockk()
+        private val userService: EnticingUserService = mockk()
+        private val indexServerConnector: IndexServerConnector = mockk()
+
+        @Test
+        fun `valid request`() {
+            val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector)
+            val query = Webserver.DocumentQuery("google", "col1", 21, query = "nertag:person")
+            val expected = dummyDocument.copy(host = "google", collection = "col1", documentId = 21, query = "nertag:person")
+
+            every { indexServerConnector.getDocument(query) } returns expected.toIndexFormat()
+            val actual = queryService.document(query)
+            assertThat(actual)
+                    .isEqualTo(expected)
+
+        }
+
+        @Test
+        fun `exception propagated`() {
+            val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector)
+            val query = Webserver.DocumentQuery("google", "col1", 21)
+
+            every { indexServerConnector.getDocument(any()) } throws IllegalArgumentException("booom!")
+            assertThrows<IllegalArgumentException> {
+                queryService.document(query)
+            }
+        }
+
+        @AfterEach
+        fun clearMock() {
+            clearMocks(dispatcher, searchSettingsRepository, userService, indexServerConnector)
+        }
+    }
+
+    @Nested
+    inner class ContextExtension {
+
+        private val dispatcher: QueryDispatcher = mockk()
+        private val searchSettingsRepository: SearchSettingsRepository = mockk()
+        private val userService: EnticingUserService = mockk()
+        private val indexServerConnector: IndexServerConnector = mockk()
+
+        @Test
+        fun `valid request`() {
+            val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector)
+            val query = Webserver.ContextExtensionQuery("google", "col1", 21, 30, 20, 40, query = "foo")
+            every { indexServerConnector.contextExtension(query) } returns snippetExtension
+            val actual = queryService.context(query)
+            assertThat(actual)
+                    .isEqualTo(snippetExtension)
+
+        }
+
+        @Test
+        fun `exception propagated`() {
+            val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector)
+            val query = Webserver.ContextExtensionQuery("google", "col1", 21, 30, 20, 40, query = "foo")
+
+            every { indexServerConnector.contextExtension(any()) } throws IllegalArgumentException("booom!")
+            assertThrows<IllegalArgumentException> {
+                queryService.context(query)
+            }
+        }
+
+        @AfterEach
+        fun clearMock() {
+            clearMocks(dispatcher, searchSettingsRepository, userService, indexServerConnector)
+        }
+    }
 
     @Nested
     inner class Flatten {

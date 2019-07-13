@@ -4,9 +4,6 @@ import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
-import cz.vutbr.fit.knot.enticing.webserver.service.mock.dummyDocument
-import cz.vutbr.fit.knot.enticing.webserver.service.mock.loremOneSentence
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
 
@@ -15,7 +12,7 @@ class QueryService(
         private val dispatcher: QueryDispatcher,
         private val searchSettingsRepository: SearchSettingsRepository,
         private val userService: EnticingUserService,
-        private @Value("\${index.server.api.base.path}") val apiBasePath: String
+        private val indexServerConnector: IndexServerConnector
 ) {
 
     fun query(query: String, selectedSettings: Long): Webserver.SearchResult {
@@ -34,9 +31,12 @@ class QueryService(
     }
 
 
-    fun context(query: Webserver.ContextExtensionQuery): Webserver.Snippet = Webserver.Snippet(query.host, query.collection, 42, query.location.toInt(), query.size.toInt() + 10, "http://www.google.com", "title", Payload.FullResponse.Annotated(AnnotatedText(loremOneSentence, emptyMap(), emptyList(), emptyList())), Math.random() > 0.4)
+    fun context(query: Webserver.ContextExtensionQuery): SnippetExtension = indexServerConnector.contextExtension(query)
 
-    fun document(query: Webserver.DocumentQuery): Webserver.FullDocument = dummyDocument
+    fun document(query: Webserver.DocumentQuery): Webserver.FullDocument {
+        val indexDocument = indexServerConnector.getDocument(query)
+        return indexDocument.toWebserverFormat(query.host, query.collection, query.documentId, query.query)
+    }
 }
 
 fun flatten(result: Map<String, List<MResult<IndexServer.SearchResult>>>): Webserver.SearchResult {

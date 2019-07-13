@@ -11,6 +11,7 @@ import cz.vutbr.fit.knot.enticing.webserver.service.EqlCompilerService
 import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
 import cz.vutbr.fit.knot.enticing.webserver.service.mock.dummyDocument
 import cz.vutbr.fit.knot.enticing.webserver.service.mock.firstResult
+import cz.vutbr.fit.knot.enticing.webserver.service.mock.snippetExtension
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
@@ -68,13 +69,13 @@ internal class QueryControllerTest(
     fun context() {
         val query = Webserver.ContextExtensionQuery("foo.baz", "col1", 2, 201, 42, 10)
 
-        Mockito.`when`(queryService.context(query)).thenReturn(firstResult)
+        Mockito.`when`(queryService.context(query)).thenReturn(snippetExtension)
 
         mockMvc.perform(MockMvcRequestBuilders.post("$apiBasePath/query/context")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(query.toJson()))
                 .andExpect(MockMvcResultMatchers.status().isOk)
-                .andExpect(content().string(firstResult.toJson()))
+                .andExpect(content().string(snippetExtension.toJson()))
 
 
         Mockito.verify(queryService).context(query)

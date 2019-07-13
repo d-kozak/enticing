@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver.controller
 
+import cz.vutbr.fit.knot.enticing.dto.SnippetExtension
 import cz.vutbr.fit.knot.enticing.dto.Webserver
 import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
 import org.springframework.web.bind.annotation.*
@@ -13,7 +14,7 @@ class QueryController(private val queryService: QueryService) {
     fun query(@RequestParam query: String, @RequestParam settings: Long): Webserver.SearchResult = queryService.query(URLDecoder.decode(query, "UTF-8"), settings)
 
     @PostMapping("/context")
-    fun context(@RequestBody query: Webserver.ContextExtensionQuery): Webserver.Snippet = queryService.context(query)
+    fun context(@RequestBody query: Webserver.ContextExtensionQuery): SnippetExtension = queryService.context(query)
 
     @PostMapping("/document")
     fun document(@RequestBody query: Webserver.DocumentQuery): Webserver.FullDocument = queryService.document(query)

@@ -45,7 +45,7 @@ internal val templateContextExtensionQuery = IndexServer.ContextExtensionQuery(
         extension = 20
 )
 
-internal val contextExtensionDummyResult = IndexServer.SnippetExtension(
+internal val contextExtensionDummyResult = SnippetExtension(
         Payload.FullResponse.Html("null"),
         Payload.FullResponse.Html("null"),
         false)

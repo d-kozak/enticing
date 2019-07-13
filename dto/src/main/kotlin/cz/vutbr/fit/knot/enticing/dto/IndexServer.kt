@@ -64,26 +64,6 @@ object IndexServer {
             val query: String? = null
     ) : Mg4jQuery
 
-    /**
-     * Extension for a snippet
-     */
-    data class SnippetExtension(
-            /**
-             * Text to include before
-             */
-            @field:Valid
-            val prefix: Payload.FullResponse,
-
-            /**
-             * Text to include after
-             */
-            @field:Valid
-            val suffix: Payload.FullResponse,
-            /**
-             * Is it possible to extend further?
-             */
-            val canExtend: Boolean
-    )
 
     /**
      * Query to get the full content of a document
@@ -139,7 +119,9 @@ object IndexServer {
             val payload: Payload.FullResponse,
             @field:Valid
             val queryMapping: List<QueryMapping> = emptyList()
-    )
+    ) {
+        fun toWebserverFormat(host: String, collection: String, documentId: Int, query: String? = null) = Webserver.FullDocument(host, collection, documentId, title, url, payload, query, queryMapping)
+    }
 
 
     /**

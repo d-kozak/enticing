@@ -86,7 +86,9 @@ object Webserver {
              */
             @Incomplete("can be used only when postprocessing is ready")
             val query: String? = null
-    )
+    ) {
+        fun toIndexFormat() = IndexServer.ContextExtensionQuery(collection, docId, location, size, extension, metadata, defaultIndex, responseFormat)
+    }
 
 
     /**
@@ -133,7 +135,9 @@ object Webserver {
              * be included in the response
              */
             val query: String? = null
-    )
+    ) {
+        fun toIndexFormat() = IndexServer.DocumentQuery(collection, documentId, metadata, defaultIndex, responseFormat)
+    }
 
 
     /**
@@ -172,7 +176,9 @@ object Webserver {
             val query: String? = null,
             @field:Valid
             val queryMapping: List<QueryMapping> = emptyList()
-    )
+    ) {
+        fun toIndexFormat() = IndexServer.FullDocument(title, url, payload, queryMapping)
+    }
 
     /**
      * Part of document that was matched by the query

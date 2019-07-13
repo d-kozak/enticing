@@ -1,9 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.query
 
-import cz.vutbr.fit.knot.enticing.dto.IndexServer
-import cz.vutbr.fit.knot.enticing.dto.Offset
-import cz.vutbr.fit.knot.enticing.dto.Payload
-import cz.vutbr.fit.knot.enticing.dto.SearchQuery
+import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
@@ -159,7 +156,7 @@ class QueryExecutor internal constructor(
         log.warn("No results for index $index")
     }
 
-    fun extendSnippet(query: IndexServer.ContextExtensionQuery): MResult<IndexServer.SnippetExtension> = MResult.runCatching {
+    fun extendSnippet(query: IndexServer.ContextExtensionQuery): MResult<SnippetExtension> = MResult.runCatching {
         val document = collection.document(query.docId.toLong()) as Mg4jDocument
         val (prefix, suffix) = computeExtensionIntervals(left = query.location, right = query.location + query.size, extension = query.extension, documentSize = document.size())
 
@@ -168,7 +165,7 @@ class QueryExecutor internal constructor(
         val prefixPayload = createPayload(query, document.loadSnippetPartsFields(prefix, filteredConfig), emptyList()) as Payload.FullResponse
         val suffixPayload = createPayload(query, document.loadSnippetPartsFields(suffix, filteredConfig), emptyList()) as Payload.FullResponse
 
-        IndexServer.SnippetExtension(
+        SnippetExtension(
                 prefixPayload,
                 suffixPayload,
                 canExtend = document.size() > prefix.size + query.size + suffix.size

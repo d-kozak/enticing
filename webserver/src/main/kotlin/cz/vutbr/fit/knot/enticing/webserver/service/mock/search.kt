@@ -2,7 +2,6 @@ package cz.vutbr.fit.knot.enticing.webserver.service.mock
 
 import cz.vutbr.fit.knot.enticing.dto.*
 
-
 val firstResult = Webserver.Snippet(
         host = "server1",
         documentId = 0,
@@ -58,6 +57,12 @@ val thirdResult = Webserver.Snippet(
         ),
         url = "https://www.thun.cz/en/article/238-visit-of-mr--president-milos-zeman.html",
         canExtend = true
+)
+
+val snippetExtension = SnippetExtension(
+        firstResult.payload as Payload.FullResponse,
+        secondResult.payload as Payload.FullResponse,
+        false
 )
 
 val results = listOf(firstResult, secondResult, thirdResult)
