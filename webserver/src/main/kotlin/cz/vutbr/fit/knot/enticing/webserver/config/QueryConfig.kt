@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate
 class QueryConfig {
 
     @Bean
-    fun queryDispatcher(@Value("\${index.server.api.base.path}") apiBasePath: String): QueryDispatcher = QueryDispatcher(FuelRequestDispatcher(apiBasePath))
+    fun queryDispatcher(@Value("\${index.server.api.base.path}") apiBasePath: String): QueryDispatcher = QueryDispatcher(FuelRequestDispatcher("$apiBasePath/query"))
 
     @Bean
     fun indexServerConnector(@Value("\${index.server.api.base.path}") apiBasePath: String) = IndexServerConnector(RestTemplate(), apiBasePath)

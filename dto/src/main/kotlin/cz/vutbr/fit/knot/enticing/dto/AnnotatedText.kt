@@ -1,5 +1,7 @@
 package cz.vutbr.fit.knot.enticing.dto
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotEmpty
@@ -67,7 +69,7 @@ data class AnnotationPosition(
         @field:Valid
         val subAnnotations: List<AnnotationPosition> = emptyList()
 ) {
-    constructor(annotationId: String, match: Pair<Int, Int>) : this(annotationId, MatchedRegion(match.first, match.second))
+    constructor(annotationId: String, match: Pair<Int, Int>) : this(annotationId, MatchedRegion(match.first, match.second - match.first))
 }
 
 /**
@@ -92,6 +94,8 @@ data class QueryMapping(
 /**
  * Described interval on the AnnotatedText
  */
+@Cleanup("It is very easy to pass in front & to instead of front & size, there should be a clear distinction")
+@JsonIgnoreProperties("to")
 data class MatchedRegion(
         /**
          * Where the interval starts

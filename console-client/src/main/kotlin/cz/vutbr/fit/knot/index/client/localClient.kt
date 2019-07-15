@@ -19,9 +19,9 @@ internal fun executeLocally(queryExecutor: QueryExecutor, input: String) {
             input,
             20,
             Offset(0, 0),
-            TextMetadata.Predefined("none"),
+            TextMetadata.Predefined("all"),
             ResponseType.FULL,
-            ResponseFormat.HTML
+            ResponseFormat.ANNOTATED_TEXT
     )
     val response = queryExecutor.query(query)
     println("Response $response")

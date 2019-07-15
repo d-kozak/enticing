@@ -118,7 +118,7 @@ export interface AnnotatedText {
 }
 
 
-const annotatedTextSchema = yup.object({
+export const annotatedTextSchema = yup.object({
     text: yup.string()
         .required()
         .min(1),
@@ -146,7 +146,7 @@ export const validateAnnotatedText = (annotatedText: AnnotatedText): void => {
         const position = positions[index];
         if (index < positions.length - 1) {
             const next = positions[index + 1];
-            assert(position.match.from + position.match.size <= next.match.from, () => `each position must end before the next one starts, in ${position},${next}`);
+            assert(position.match.from + position.match.size <= next.match.from, () => `each position must end before the next one starts, in ${JSON.stringify(position)},${JSON.stringify(next)}`);
         }
         assert(annotations[position.annotationId] !== undefined,
             () => `annotation with id ${position.annotationId} not found in ${JSON.stringify(annotations, null, 2)}`

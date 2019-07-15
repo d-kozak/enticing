@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.service
 
 import cz.vutbr.fit.knot.enticing.dto.*
+import cz.vutbr.fit.knot.enticing.dto.annotation.Temporary
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
@@ -52,6 +53,9 @@ fun flatten(result: Map<String, List<MResult<IndexServer.SearchResult>>>): Webse
             } else {
                 val exception = serverResult.exception
                 errors[serverId] = "${exception::class.simpleName}:${exception.message}"
+
+                @Temporary("should be delegated to error logging service...when there is one...")
+                exception.printStackTrace()
             }
         }
     }

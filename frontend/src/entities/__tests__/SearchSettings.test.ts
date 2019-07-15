@@ -1,4 +1,8 @@
 import {isSearchSettingsContent} from "../SearchSettings";
+import {searchResults} from "./realInput.test";
+import {isSearchResult} from "../SearchResult";
+import {isSnippet} from "../Snippet";
+import {isAnnotatedText} from "../Annotation";
 
 describe("SearchSettings content typ guard", () => {
     it("should pass", () => {
@@ -24,5 +28,21 @@ describe("SearchSettings content typ guard", () => {
         }
         expect(isSearchSettingsContent(input))
             .toBe(false)
+    });
+
+    it("real backend data", () => {
+        const input = searchResults;
+
+        expect(isSearchResult(input))
+            .toBe(true);
+
+        for (let snippet of input.snippets) {
+            expect(isSnippet(snippet))
+                .toBe(true);
+
+            expect(isAnnotatedText(snippet.payload.content))
+                .toBe(true);
+        }
+
     });
 })

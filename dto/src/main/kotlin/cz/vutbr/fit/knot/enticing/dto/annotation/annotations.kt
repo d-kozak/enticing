@@ -48,5 +48,14 @@ annotation class WhatIf(val message: String)
 @Repeatable
 annotation class Warning(val message: String)
 
+/**
+ * Denotes a region of code that is there only temporarily until a specific feature is ready
+ */
+@Target(AnnotationTarget.CLASS, AnnotationTarget.PROPERTY, AnnotationTarget.FIELD, AnnotationTarget.LOCAL_VARIABLE, AnnotationTarget.CONSTRUCTOR, AnnotationTarget.FUNCTION, AnnotationTarget.EXPRESSION, AnnotationTarget.FILE)
+@Retention(AnnotationRetention.SOURCE)
+@MustBeDocumented
+@Repeatable
+annotation class Temporary(val message: String)
+
 
 
