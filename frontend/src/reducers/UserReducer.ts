@@ -38,10 +38,15 @@ const userReducer: UserReducer = (state = initialState, action) => {
             }
         }
         case USER_SEARCH_SETTINGS_SELECTED_SUCCESS:
-            return {
+            const selectedSettingsId = typeof action.settings === 'string' ? action.settings : action.settings.id;
+            const newState = {
                 ...state,
-                selectedSettings: typeof action.settings === 'string' ? action.settings : action.settings.id
+                selectedSettings: selectedSettingsId
             };
+            if (newState.user !== null) {
+                newState.user.selectedSettings = selectedSettingsId;
+            }
+            return newState;
     }
     return state
 }

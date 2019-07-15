@@ -6,8 +6,11 @@ export const parseValidationErrors = (error: any): any => {
             for (let {field, defaultMessage} of errors) {
                 result[field] = defaultMessage
             }
+        } else {
+            console.warn('error when parsing error messages ' + error.response.data)
         }
     } catch (e) {
+        console.warn('error when parsing error messages ' + error.response.data)
     }
     return result;
 }
