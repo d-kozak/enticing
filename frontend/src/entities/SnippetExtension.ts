@@ -6,7 +6,7 @@ import * as yup from "yup";
 export interface SnippetExtension {
     prefix: Payload
     suffix: Payload
-    canExtend: Boolean
+    canExtend: boolean
 }
 
 export const snippetExtensionSchema = yup.object({
