@@ -29,6 +29,10 @@ export const transformAnnotatedText = (text: AnnotatedText) => {
         }
     }
 
+    for (let mapping of text.queryMapping) {
+        mapping.queryIndex = new MatchedRegion(mapping.queryIndex.from, mapping.queryIndex.size);
+        mapping.textIndex = new MatchedRegion(mapping.textIndex.from, mapping.textIndex.size);
+    }
 }
 
 export const startSearchingAction = (query: SearchQuery, selectedSettings: Number, history?: H.History): ThunkResult<void> => (dispatch) => {

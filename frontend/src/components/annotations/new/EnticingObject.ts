@@ -9,4 +9,8 @@ export abstract class EnticingObject {
     toJson() {
         return JSON.stringify(this, null, 2);
     }
+
+    dumpJson() {
+        console.log(this.toJson());
+    }
 }
