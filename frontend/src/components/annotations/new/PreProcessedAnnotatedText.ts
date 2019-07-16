@@ -116,11 +116,13 @@ function addIndexes(words: Array<Word>, text: AnnotatedText) {
 }
 
 
+// todo cleanup even though this method accepts an array of query mappings, it only uses the first item of that array
 const splitAnnotation = (position: AnnotationPosition, queryMapping: Array<QueryMapping>): Array<AnnotationPosition> => {
     const {annotationId, wordIndex} = position;
     const {from, to} = wordIndex!
     for (let mapping of queryMapping) {
-        const index = mapping.wordIndex!;
+        const index = mapping.wordIndex;
+        if (!index) continue;
         const annotationInsideMapping = index.from < from && index.to > to;
         const mappingInsideAnnotation = from < index.from && to > index.to;
         const leftOverlap = from < index.from && to < index.to;
@@ -206,7 +208,7 @@ export function preprocessAnnotatedText(annotatedText: AnnotatedText): PreProces
             const prefix = processEntitiesAt(annotatedText.annotations, words, newPositions, new Interval(0, mapping.wordIndex.from - 1));
             prefix.forEach(item => parts.push(item))
         }
-        const match = new QueryMatch([mapping.queryIndex.from, mapping.queryIndex.to], processEntitiesAt(annotatedText.annotations, words, newPositions, new Interval(mapping.wordIndex.from, mapping.wordIndex.to)))
+        const match = new QueryMatch([mapping.textIndex.from, mapping.textIndex.to], processEntitiesAt(annotatedText.annotations, words, newPositions, new Interval(mapping.wordIndex.from, mapping.wordIndex.to)))
         parts.push(match);
 
         if (index < annotatedText.queryMapping.length - 1) {
