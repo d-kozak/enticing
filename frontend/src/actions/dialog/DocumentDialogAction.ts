@@ -7,6 +7,7 @@ import {hideProgressBarAction, showProgressBarAction} from "../ProgressBarAction
 import {openSnackBar} from "../SnackBarActions";
 import {Snippet} from "../../entities/Snippet";
 import {transformAnnotatedText} from "../QueryActions";
+import {DocumentQuery} from "../../entities/DocumentQuery";
 
 export const DOCUMENT_DIALOG_DOCUMENT_LOADED = '[DOCUMENT DIALOG] DOCUMENT LOADED';
 export const DOCUMENT_DIALOG_CLOSED = '[DOCUMENT DIALOG] CLOSED';
@@ -38,7 +39,13 @@ export const documentDialogRequestedAction = (searchResult: Snippet): ThunkResul
         return;
     }
     dispatch(showProgressBarAction())
-    axios.post(`${API_BASE_PATH}/query/document`, {docId: searchResult.documentId}, {
+    const documentQuery: DocumentQuery = {
+        host: searchResult.host,
+        collection: searchResult.collection,
+        documentId: searchResult.documentId,
+        defaultIndex: "token",
+    }
+    axios.post(`${API_BASE_PATH}/query/document`, documentQuery, {
         withCredentials: true
     }).then(response => {
         if (!isDocument(response.data)) {

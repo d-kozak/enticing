@@ -21,7 +21,7 @@ const documentSchema = yup.object({
     title: yup.string().required(),
     url: yup.string().url().required(),
     payload: payloadSchema,
-    query: yup.string(),
+    query: yup.string().nullable(),
     queryMapping: yup.array(queryMappingSchema)
 })
 
