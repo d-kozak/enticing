@@ -1,5 +1,12 @@
 import {EnticingObject} from "./EnticingObject";
-import {AnnotatedText, AnnotationPosition, QueryMapping, validateAnnotatedText} from "../../../entities/Annotation";
+import {
+    AnnotatedText,
+    Annotation,
+    AnnotationPosition,
+    MatchedRegion,
+    QueryMapping,
+    validateAnnotatedText
+} from "../../../entities/Annotation";
 
 
 export type TextUnit = Word | Entity | QueryMatch;
@@ -24,7 +31,8 @@ export class PreProcessedAnnotatedText extends EnticingObject {
 }
 
 export class Word extends EnticingObject {
-    constructor(public content: ContentMap) {
+
+    constructor(public content: ContentMap, public from: number, public to: number) {
         super();
     }
 }
@@ -41,124 +49,179 @@ export class QueryMatch extends EnticingObject {
     }
 }
 
-function getWordsAt(annotatedText: AnnotatedText, interval: Interval): Array<Word> {
-    if (interval.isEmpty()) return [];
-    const relevantMappings = annotatedText.positions.filter(mapping => mapping.match.from >= interval.from && mapping.match.to <= interval.to)
-        .flatMap(mapping => mapping.subAnnotations !== undefined && mapping.subAnnotations.length > 0 ? mapping.subAnnotations : [mapping]);
 
-    return relevantMappings.map(mapping => {
-        const metadata = annotatedText.annotations[mapping.annotationId];
-        const content = {
-            ...metadata.content,
-            token: annotatedText.text.substring(mapping.match.from, mapping.match.to + 1)
-        };
-        return new Word(content);
-    });
+function getWords(text: AnnotatedText): Array<Word> {
+    return text.positions.filter(position => position.subAnnotations === undefined || position.subAnnotations.length == 0)
+        .flatMap((position, index, array) => {
+            const words = [] as Array<Word>
+            if (index == 0 && position.match.from > 0) {
+                const token = text.text.substring(0, position.match.from - 1);
+                words.push(new Word({token}, 0, position.match.from - 1));
+            }
+
+            const {from, to} = position.match;
+            const metadata = text.annotations[position.annotationId];
+            const content = {
+                ...metadata.content,
+                token: text.text.substring(position.match.from, position.match.to)
+            };
+            const word = new Word(content, from, to);
+            words.push(word);
+
+            if (index < array.length - 1) {
+                const next = array[index + 1];
+                if (position.match.to + 1 < next.match.from) {
+                    const token = text.text.substring(position.match.to + 1, next.match.from - 1);
+                    words.push(new Word({token}, position.match.to + 1, next.match.from - 1))
+                }
+            }
+
+            if (index == array.length - 1 && position.match.to < text.text.length - 1) {
+                const token = text.text.substring(position.match.to + 1);
+                words.push(new Word({token}, position.match.to + 1, text.text.length - 1));
+            }
+
+            return words;
+        });
 }
 
-function processEntitiesAndWords(annotatedText: AnnotatedText, interval: Interval): Array<Entity | Word> {
-    if (interval.isEmpty()) return [];
-    const relevantMappings = annotatedText.positions.filter(mapping => mapping.match.from >= interval.from && mapping.match.to <= interval.to);
-
-    const content = [] as Array<Entity | Word>
-    visitArray(relevantMappings, {
-        beforeFirst(item: AnnotationPosition): void {
-            if (item.match.from > 0) {
-                const words = getWordsAt(annotatedText, new Interval(0, item.match.from - 1));
-                for (let word of words) {
-                    content.push(word);
-                }
-            }
+function addIndexes(words: Array<Word>, text: AnnotatedText) {
+    function findCorrespondingIndexes(region: MatchedRegion) {
+        const {from, to} = region;
+        const fromIndex = words.findIndex(word => word.from <= from && word.to >= from);
+        if (fromIndex === -1) {
+            console.error('could not find corresponding fromIndex for word mapping ' + JSON.stringify(region, null, 2) + ' in ' + JSON.stringify(words, null, 2));
+            return undefined;
         }
-        , visitItem(item: AnnotationPosition, next: AnnotationPosition | null): void {
-            const words = getWordsAt(annotatedText, new Interval(item.match.from, item.match.to))
-            const isEntity = item.subAnnotations != null && item.subAnnotations.length > 0;
-            if (isEntity) {
-                const entity = annotatedText.annotations[item.annotationId];
-                content.push(new Entity(entity.content, words))
-            } else {
-                for (let word of words) {
-                    content.push(word);
-                }
-            }
-            if (next != null) {
-                const words = getWordsAt(annotatedText, new Interval(item.match.to + 1, next.match.from - 1))
-                for (let word of words) {
-                    content.push(word);
-                }
-            }
+        const toIndex = words.findIndex(word => word.from <= to && word.to >= to);
+        if (toIndex === -1) {
+            console.error('could not find corresponding toIndex for word mapping ' + JSON.stringify(region, null, 2) + ' in ' + JSON.stringify(words, null, 2));
+            return undefined;
         }
-        , afterLast(item: AnnotationPosition): void {
-            if (item.match.to < annotatedText.text.length - 1) {
-                const words = getWordsAt(annotatedText, new Interval(item.match.to + 1, annotatedText.text.length - 1));
-                for (let word of words) {
-                    content.push(word);
-                }
-            }
-        }
-    })
-
-
-    return content;
-}
-
-
-interface ArrayVisitor<T> {
-    beforeFirst(item: T): void
-
-    visitItem(item: T, next: T | null): void
-
-    afterLast(item: T): void
-}
-
-function visitArray<T>(input: Array<T>, visitor: ArrayVisitor<T>) {
-    for (let attr in input) {
-        const i = Number(attr);
-        const item = input[i];
-        if (i == 0) {
-            visitor.beforeFirst(item);
-        }
-        visitor.visitItem(item, i != input.length - 1 ? input[i + 1] : null);
-        if (i == input.length - 1) {
-            visitor.afterLast(item);
-        }
-
+        return MatchedRegion.fromInterval(fromIndex, toIndex);
     }
+
+
+    for (let mapping of text.queryMapping) {
+        mapping.wordIndex = findCorrespondingIndexes(mapping.textIndex);
+    }
+    for (let position of text.positions) {
+        position.wordIndex = findCorrespondingIndexes(position.match);
+        if (position.subAnnotations) {
+            for (let subposition of position.subAnnotations) {
+                subposition.wordIndex = findCorrespondingIndexes(subposition.match);
+            }
+        }
+    }
+}
+
+
+const splitAnnotation = (position: AnnotationPosition, queryMapping: Array<QueryMapping>): Array<AnnotationPosition> => {
+    const {annotationId, wordIndex} = position;
+    const {from, to} = wordIndex!
+    for (let mapping of queryMapping) {
+        const index = mapping.wordIndex!;
+        const annotationInsideMapping = index.from < from && index.to > to;
+        const mappingInsideAnnotation = from < index.from && to > index.to;
+        const leftOverlap = from < index.from && to < index.to;
+        const rightOverlap = index.from < from && to > index.to;
+        if (mappingInsideAnnotation) {
+            return [
+                {annotationId, match: MatchedRegion.fromInterval(from, index.from)},
+                {annotationId, match: MatchedRegion.fromInterval(index.from, index.to)},
+                {annotationId, match: MatchedRegion.fromInterval(index.to, to)}
+            ];
+        } else if (leftOverlap) {
+            return [
+                {annotationId, match: MatchedRegion.fromInterval(from, index.from)},
+                {annotationId, match: MatchedRegion.fromInterval(index.from, to)}
+            ]
+        } else if (rightOverlap) {
+            return [
+                {annotationId, match: MatchedRegion.fromInterval(from, index.to)},
+                {annotationId, match: MatchedRegion.fromInterval(index.to, to)}
+            ]
+        } else if (annotationInsideMapping) {
+            return [position];
+        }
+    }
+
+    return [position];
+}
+
+
+function processEntitiesAt(annotations: { [key: string]: Annotation }, words: Array<Word>, newPositions: AnnotationPosition[], interval: Interval): Array<Entity | Word> {
+    const annotationPositions = newPositions.filter(position => position.subAnnotations !== undefined && position.subAnnotations.length > 0);
+    if (annotationPositions.length == 0) {
+        return words.slice(interval.from, interval.to + 1)
+    }
+    return annotationPositions
+        .flatMap((position, index, array) => {
+            if (!position.wordIndex) return [];
+            const parts = [] as Array<Entity | Word>;
+            if (index == 0 && position.wordIndex.from > 0) {
+                words.slice(0, position.wordIndex.from)
+                    .forEach(item => parts.push(item));
+            }
+
+            const metadata = annotations[position.annotationId];
+            const entity = new Entity(metadata.content, words.slice(position.wordIndex.from, position.wordIndex.to + 1))
+            parts.push(entity);
+            if (index < array.length - 1) {
+                const next = array[index + 1];
+                if (next.wordIndex && position.wordIndex.to + 1 < next.wordIndex.from) {
+                    words.slice(position.wordIndex.to + 1, next.wordIndex.from)
+                        .forEach(item => parts.push(item))
+                }
+            }
+
+
+            if (index == array.length - 1 && position.wordIndex.to < words.length - 1) {
+                words.slice(position.wordIndex.to)
+                    .forEach(item => parts.push(item));
+            }
+
+            return parts;
+        });
 }
 
 export function preprocessAnnotatedText(annotatedText: AnnotatedText): PreProcessedAnnotatedText {
     validateAnnotatedText(annotatedText);
-    const content = [] as Array<TextUnit>;
 
-    visitArray(annotatedText.queryMapping, {
-        beforeFirst(item: QueryMapping): void {
-            if (item.textIndex.from > 0) {
-                const result = processEntitiesAndWords(annotatedText, new Interval(0, item.textIndex.from - 1));
-                for (let item of result) {
-                    content.push(item);
-                }
-            }
-        },
-        visitItem(item: QueryMapping, next: QueryMapping | null): void {
-            const result = processEntitiesAndWords(annotatedText, new Interval(item.textIndex.from, item.textIndex.to));
-            content.push(new QueryMatch([item.queryIndex.from, item.queryIndex.to], result));
+    const words = getWords(annotatedText);
+    addIndexes(words, annotatedText);
 
-            if (next != null) {
-                const result = processEntitiesAndWords(annotatedText, new Interval(item.textIndex.to + 1, next.textIndex.from - 1));
-                for (let item of result) {
-                    content.push(item);
-                }
-            }
-        },
-        afterLast(item: QueryMapping): void {
-            if (item.textIndex.to < annotatedText.text.length - 1) {
-                const result = processEntitiesAndWords(annotatedText, new Interval(item.textIndex.to + 1, annotatedText.text.length - 1));
-                for (let item of result) {
-                    content.push(item);
-                }
+    console.log(JSON.stringify(words, null, 2));
+    console.log(JSON.stringify(annotatedText, null, 2));
+
+    const newPositions = annotatedText.positions.flatMap(position => splitAnnotation(position, annotatedText.queryMapping));
+
+
+    const result = annotatedText.queryMapping.flatMap((mapping, index) => {
+        if (!mapping.wordIndex) return [] as Array<TextUnit>;
+        const parts = [] as Array<TextUnit>
+        if (index === 0 && mapping.wordIndex.from > 0) {
+            const prefix = processEntitiesAt(annotatedText.annotations, words, newPositions, new Interval(0, mapping.wordIndex.from - 1));
+            prefix.forEach(item => parts.push(item))
+        }
+        const match = new QueryMatch([mapping.queryIndex.from, mapping.queryIndex.to], processEntitiesAt(annotatedText.annotations, words, newPositions, new Interval(mapping.wordIndex.from, mapping.wordIndex.to)))
+        parts.push(match);
+
+        if (index < annotatedText.queryMapping.length - 1) {
+            const next = annotatedText.queryMapping[index + 1];
+            if (next.wordIndex && mapping.wordIndex.to + 1 < next.wordIndex!.from) {
+                const middle = processEntitiesAt(annotatedText.annotations, words, newPositions, new Interval(mapping.wordIndex.to + 1, next.wordIndex.from));
+                middle.forEach(item => parts.push(item));
             }
         }
+
+        if (index == annotatedText.queryMapping.length - 1 && mapping.wordIndex.to < words.length - 1) {
+            const suffix = processEntitiesAt(annotatedText.annotations, words, newPositions, new Interval(mapping.wordIndex.to + 1, words.length - 1));
+            suffix.forEach(item => parts.push(item));
+        }
+        return parts;
     });
 
-    return new PreProcessedAnnotatedText(content);
+
+    return new PreProcessedAnnotatedText(result);
 }

@@ -55,9 +55,11 @@ export function isMatchedRegion(obj: Object): obj is MatchedRegion {
  * rejects more then one level nesting, which is probably what we end up with.
  */
 export interface AnnotationPosition {
+    wordIndex?: MatchedRegion;
     annotationId: string;
     match: MatchedRegion;
     subAnnotations?: Array<{
+        wordIndex?: MatchedRegion;
         annotationId: string;
         match: MatchedRegion;
     }>
@@ -83,6 +85,7 @@ export function isAnnotationPosition(obj: Object): obj is AnnotationPosition {
 
 
 export interface QueryMapping {
+    wordIndex?: MatchedRegion;
     textIndex: MatchedRegion;
     queryIndex: MatchedRegion;
 }
