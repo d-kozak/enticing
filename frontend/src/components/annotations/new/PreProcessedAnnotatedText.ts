@@ -191,9 +191,6 @@ export function preprocessAnnotatedText(annotatedText: AnnotatedText): PreProces
     const words = getWords(annotatedText);
     addIndexes(words, annotatedText);
 
-    console.log(JSON.stringify(words, null, 2));
-    console.log(JSON.stringify(annotatedText, null, 2));
-
     const newPositions = annotatedText.positions.flatMap(position => splitAnnotation(position, annotatedText.queryMapping));
 
 

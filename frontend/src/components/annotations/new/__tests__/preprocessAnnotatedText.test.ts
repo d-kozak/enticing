@@ -9,7 +9,6 @@ it("ed sheeran", () => {
 
     expect(preprocessed.content.length)
         .toBe(2)
-    console.log(preprocessed.toJson());
 });
 
 it("donald", () => {
@@ -19,16 +18,12 @@ it("donald", () => {
 
     expect(preprocessed.content.length)
         .toBe(2);
-
-    console.log(preprocessed.toJson());
 });
 
 it("milos", () => {
     const input = thirdResult;
 
     const preprocessed = preprocessAnnotatedText(input.payload.content);
-
-    console.log(preprocessed.toJson());
 
     expect(preprocessed.content.length)
         .toBe(2)
@@ -44,8 +39,5 @@ it("real world snippet", () => {
         .toBe(4);
 
     expect(preprocessed.content[0] instanceof QueryMatch)
-        .toBe(true)
-
-
-    console.log(preprocessed.toJson())
+        .toBe(true);
 });

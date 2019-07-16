@@ -4,7 +4,7 @@ import {isSearchResult} from "../SearchResult";
 import {isSnippet} from "../Snippet";
 import {isAnnotatedText} from "../Annotation";
 
-describe("SearchSettings content typ guard", () => {
+describe("SearchSettings content type guard", () => {
     it("should pass", () => {
         const input = {
             "name": "Wikipedia 2018",

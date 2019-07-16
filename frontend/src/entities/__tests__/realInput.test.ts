@@ -1,5 +1,9 @@
 import {SearchResult} from "../SearchResult";
 
+it("dummy", () => {
+    // only here not to make the test suite fail
+});
+
 //ts-ignore
 export const searchResults: SearchResult = {
     "snippets": [

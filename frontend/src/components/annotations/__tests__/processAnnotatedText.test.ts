@@ -5,7 +5,7 @@ import {Decoration, TextWithAnnotation, TextWithDecoration} from "../ProcessedAn
 describe("process annotated text", () => {
     it("ed sheeran full process", () => {
         const edSheeran = firstResult;
-        const [, processed] = processAnnotatedText(edSheeran.payload);
+        const [, processed] = processAnnotatedText(edSheeran.payload.content);
         expect(processed.length).toBe(2)
         const [first, second] = processed;
 
@@ -21,7 +21,7 @@ describe("process annotated text", () => {
 
     it("donald trump full process", () => {
         const donaldTrump = secondResult;
-        const [, processed] = processAnnotatedText(donaldTrump.payload);
+        const [, processed] = processAnnotatedText(donaldTrump.payload.content);
         expect(processed.length).toBe(3)
         const [decoration, annotation, text] = processed;
 
@@ -41,7 +41,7 @@ describe("process annotated text", () => {
 
     it("split annotations ed", () => {
         const edSheeran = firstResult;
-        const split = splitAnnotations(edSheeran.payload);
+        const split = splitAnnotations(edSheeran.payload.content);
         expect(split.positions.length)
             .toBe(1)
         const position = split.positions[0]
@@ -51,7 +51,7 @@ describe("process annotated text", () => {
 
     it("split annotations donald", () => {
         const donald = secondResult;
-        const split = splitAnnotations(donald.payload);
+        const split = splitAnnotations(donald.payload.content);
         expect(split.positions.length)
             .toBe(2)
         const [position1, position2] = split.positions
@@ -64,7 +64,7 @@ describe("process annotated text", () => {
 
     it("split annotations vary", () => {
         const vary = thirdResult;
-        const split = splitAnnotations(vary.payload);
+        const split = splitAnnotations(vary.payload.content);
         expect(split.positions.length)
             .toBe(2)
         const [position1, position2] = split.positions

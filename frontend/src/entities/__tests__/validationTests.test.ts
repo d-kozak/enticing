@@ -4,10 +4,8 @@ import {
     isAnnotationPosition,
     isMatchedRegion,
     isQueryMapping,
-    MatchedRegion,
-    validateAnnotatedText
+    MatchedRegion
 } from "../Annotation";
-import {searchResults} from "./realInput.test";
 
 describe('validation tests', () => {
     it('matched region validation', () => {
@@ -25,7 +23,8 @@ describe('validation tests', () => {
         expect(isMatchedRegion(sizeIsNegative)).toBe(false);
         const valid: MatchedRegion = {
             from: 0,
-            size: 5
+            size: 5,
+            to: 5
         };
         expect(isMatchedRegion(valid)).toBe(true);
     });
@@ -154,12 +153,4 @@ describe('validation tests', () => {
             expect(isAnnotatedText(text)).toBe(false)
         }
     })
-
-    it('real backend data', () => {
-        const input = searchResults;
-        for (let snippet of input.snippets) {
-            validateAnnotatedText(snippet.payload.content)
-        }
-
-    });
 })
