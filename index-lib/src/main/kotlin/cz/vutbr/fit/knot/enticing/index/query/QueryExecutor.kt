@@ -112,7 +112,7 @@ class QueryExecutor internal constructor(
         var lastProcessedIndex = -1
 
         for ((i, score) in scores.withIndex()) {
-            val (left, right) = score.clampRight(score.left + SNIPPET_SIZE)
+            val (left, right) = if (score.right - score.left + 1 > 50) score.clampRight(score.left + SNIPPET_SIZE) else Interval.valueOf(score.left, score.left + 50)
             if (right <= lastProcessedIndex) continue
 
             val relevantScores = scores
@@ -122,7 +122,7 @@ class QueryExecutor internal constructor(
                     .map { it.clampRight(left + SNIPPET_SIZE) }
                     .toList()
 
-            val content = document.loadSnippetPartsFields(left, left + SNIPPET_SIZE, config)
+            val content = document.loadSnippetPartsFields(left, right, config)
 
             val payload = createPayload(query, content, relevantScores)
 
