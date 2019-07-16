@@ -214,7 +214,7 @@ export const realSnippet: Snippet = {
                 "subAnnotations": []
             }, {"annotationId": "w-49", "match": {"from": 293, "size": 9, to: 302}, "subAnnotations": []}],
             "queryMapping": [{
-                "textIndex": {"from": 0, "size": 6, to: 60},
+                "textIndex": {"from": 0, "size": 60, to: 60},
                 "queryIndex": {"from": 0, "size": 1, to: 3}
             }]
         }

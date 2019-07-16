@@ -8,6 +8,7 @@ import {openSnackBar} from "../actions/SnackBarActions";
 import {SearchQuery} from "../entities/SearchQuery";
 import {Snippet} from "../entities/Snippet";
 import {MatchedRegion} from "../entities/Annotation";
+import {realSnippet} from "./realSnippet";
 
 
 export const firstResult: Snippet = {
@@ -106,7 +107,7 @@ const mockExecuteQuery: ((query: string) => Promise<Array<Snippet>>) = (query) =
         setTimeout(() => {
             switch (query) {
                 case 'nertag:person (visited|entered)':
-                    resolve(resultArray);
+                    resolve([realSnippet]);
                     break;
                 case 'fail':
                     reject("booom!");
