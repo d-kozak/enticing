@@ -95,7 +95,7 @@ export const thirdResult: Snippet = {
     canExtend: true
 };
 
-const results = [firstResult, secondResult, thirdResult];
+const results = [firstResult, secondResult, thirdResult, realSnippet];
 const randomResult = () => results[Math.floor(Math.random() * results.length) % results.length]
 
 const resultArray: Array<Snippet> = Array(50)
@@ -107,7 +107,7 @@ const mockExecuteQuery: ((query: string) => Promise<Array<Snippet>>) = (query) =
         setTimeout(() => {
             switch (query) {
                 case 'nertag:person (visited|entered)':
-                    resolve([realSnippet]);
+                    resolve(resultArray);
                     break;
                 case 'fail':
                     reject("booom!");

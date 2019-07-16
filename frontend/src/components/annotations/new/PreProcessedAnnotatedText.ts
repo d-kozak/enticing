@@ -38,7 +38,7 @@ export class Word extends EnticingObject {
 }
 
 export class Entity extends EnticingObject {
-    constructor(public attributes: ContentMap, words: Array<Word>) {
+    constructor(public attributes: ContentMap, public words: Array<Word>) {
         super();
     }
 }
@@ -194,6 +194,11 @@ export function preprocessAnnotatedText(annotatedText: AnnotatedText): PreProces
     const newPositions = annotatedText.positions.flatMap(position => splitAnnotation(position, annotatedText.queryMapping));
 
 
+    if (annotatedText.queryMapping.length === 0) {
+        const text = processEntitiesAt(annotatedText.annotations, words, newPositions, new Interval(0, words.length - 1));
+        return new PreProcessedAnnotatedText(text);
+    }
+
     const result = annotatedText.queryMapping.flatMap((mapping, index) => {
         if (!mapping.wordIndex) return [] as Array<TextUnit>;
         const parts = [] as Array<TextUnit>
@@ -222,3 +227,5 @@ export function preprocessAnnotatedText(annotatedText: AnnotatedText): PreProces
 
     return new PreProcessedAnnotatedText(result);
 }
+
+

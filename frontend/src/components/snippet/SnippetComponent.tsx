@@ -10,8 +10,8 @@ import {GotoSourceButton} from "./snippetbuttons/GotoSourceButton";
 import {ShowDocumentButton} from "./snippetbuttons/ShowDocumentButton";
 import {EditContextButton} from "./snippetbuttons/EditContextButton";
 import {EditAnnotationsButton} from "./snippetbuttons/EditAnnotationsButton";
-import AnnotatedTextComponent from "../annotations/AnnotatedTextComponent";
 import {Snippet} from "../../entities/Snippet";
+import NewAnnotatedTextComponent from "../annotations/new/NewAnnotatedTextComponent";
 
 
 const styles = createStyles({
@@ -35,7 +35,7 @@ const SnippetComponent = (props: SnippetComponentProps) => {
         <EditAnnotationsButton/>
         <ShowDocumentButton searchResult={snippet} openDocument={openDocument}/>
         <GotoSourceButton searchResult={snippet}/>
-        <AnnotatedTextComponent text={snippet.payload.content}/>
+        <NewAnnotatedTextComponent text={snippet.payload.content}/>
     </div>
 };
 
