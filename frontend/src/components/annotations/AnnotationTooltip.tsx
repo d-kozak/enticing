@@ -67,12 +67,9 @@ const AnnotationTooltip = (props: AnnotationTooltipProps) => {
                          setOpen(false);
                      }}>
                          <AnnotationContent annotation={annotation}/>
-                         <span>
-                            {children && children}
-                         </span>
                      </div>}
             >
-                <span style={style}>{text}</span>
+                <span style={style}>{children ? <span> !ENTITY-START! {children} !ENTITY-END!</span> : text}</span>
             </Tooltip>
         </ClickAwayListener>
     </React.Fragment>

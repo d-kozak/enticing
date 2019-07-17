@@ -15,6 +15,15 @@ export const EdSheeran: Annotation = {
     }
 
 }
+
+export const sheer: Annotation = {
+    id: "sheer",
+    content: {
+        lemma: 'sheer',
+        dummy: 'indeed'
+    }
+}
+
 export const DonaldTrump: Annotation = {
     id: "donald",
     content: {

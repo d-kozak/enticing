@@ -49,9 +49,29 @@ export class QueryMatch extends EnticingObject {
     }
 }
 
+function getWordAnnotationPositions(text: AnnotatedText): Array<AnnotationPosition> {
+    const result = [] as Array<AnnotationPosition>
+
+    for (let position of text.positions) {
+        if (position.subAnnotations === undefined || position.subAnnotations.length == 0) {
+            result.push(position)
+        } else {
+            for (let subposition of position.subAnnotations) {
+                result.push(subposition)
+            }
+        }
+    }
+
+    return result
+}
+
 
 function getWords(text: AnnotatedText): Array<Word> {
-    return text.positions.filter(position => position.subAnnotations === undefined || position.subAnnotations.length == 0)
+    const positions = getWordAnnotationPositions(text);
+    if (positions.length == 0) {
+        console.warn("AnnotationPositions should never be empty, no meta information can be shown like this")
+    }
+    return positions.filter(position => position.subAnnotations === undefined || position.subAnnotations.length == 0)
         .flatMap((position, index, array) => {
             const words = [] as Array<Word>
             if (index == 0 && position.match.from > 0) {

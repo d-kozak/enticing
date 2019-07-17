@@ -35,7 +35,7 @@ const colors = ["red", "green", "blue"];
 
 export const renderElement = (text: TextUnit, annotations: { [key: string]: Annotation }): React.ReactNode => {
     if (text instanceof Word) {
-        const color = colors[Math.floor(Math.random() * colors.length)];
+        const color = "gray" //colors[Math.floor(Math.random() * colors.length)];
         const annotation: Annotation = {
             id: "NULL", // not really necessary right now
             content: {
@@ -49,7 +49,9 @@ export const renderElement = (text: TextUnit, annotations: { [key: string]: Anno
         else return <span>{token}</span>
     } else if (text instanceof Entity) {
         const color = colors[Math.floor(Math.random() * colors.length)];
-        const children = text.words.map(word => renderElement(word, annotations));
+        const children = text.words.map((word, index) => <React.Fragment key={index}>
+            {renderElement(word, annotations)}
+        </React.Fragment>);
         return <AnnotationTooltip annotation={{id: "NULL", content: text.attributes}} text="" color={color}
                                   children={children}/>
     } else if (text instanceof QueryMatch) {

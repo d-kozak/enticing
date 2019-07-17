@@ -1,5 +1,5 @@
 import * as React from "react";
-import {DonaldTrump, EdSheeran, KarlovyVary} from "./mockAnnotations";
+import {DonaldTrump, EdSheeran, KarlovyVary, sheer} from "./mockAnnotations";
 import {Dispatch} from "redux";
 import * as H from "history";
 import {hideProgressBarAction, showProgressBarAction} from "../actions/ProgressBarActions";
@@ -26,10 +26,15 @@ export const firstResult: Snippet = {
         content: {
             text: "Ed Sheeran visited Liberia and meets JD, a homeless Liberian 14-year-old boy. After Sheeran saw an older man hitting JD in public, he knew",
             annotations: {
-                "ed": EdSheeran
+                "ed": EdSheeran,
+                "sheer": sheer
             },
             positions: [{
-                annotationId: "ed", match: new MatchedRegion(0, 10), subAnnotations: []
+                annotationId: "ed", match: new MatchedRegion(0, 10), subAnnotations: [{
+                    annotationId: "sheer",
+                    wordIndex: new MatchedRegion(1, 1),
+                    match: new MatchedRegion(3, 7)
+                }]
             }],
             queryMapping: [
                 {
@@ -119,7 +124,7 @@ const mockExecuteQuery: ((query: string) => Promise<Array<Snippet>>) = (query) =
         setTimeout(() => {
             switch (query) {
                 case 'nertag:person (visited|entered)':
-                    resolve(snippetsWithEntities);
+                    resolve(resultArray);
                     break;
                 case 'fail':
                     reject("booom!");
