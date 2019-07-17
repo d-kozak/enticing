@@ -6,10 +6,13 @@ import cz.vutbr.fit.knot.enticing.dto.annotation.Temporary
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
 import it.unimi.dsi.util.Interval
+import org.slf4j.LoggerFactory
 
 
 class JsonPayloadBuilderVisitor(config: CorpusConfiguration, query: Mg4jQuery, intervals: List<Interval>
 ) : AbstractPayloadBuilderVisitor<Payload>(config, query, intervals) {
+
+    private val log = LoggerFactory.getLogger(JsonPayloadBuilderVisitor::class.java)
 
     private val annotations = mutableMapOf<String, Annotation>()
     private val positions = mutableListOf<AnnotationPosition>()
@@ -34,8 +37,50 @@ class JsonPayloadBuilderVisitor(config: CorpusConfiguration, query: Mg4jQuery, i
     }
 
     override fun visitEntity(entity: SnippetElement.Entity) {
-        val phrase = entity[query.defaultIndex].joinToString(" ")
-        builder.append(phrase)
+        val currentPosition = builder.length
+
+        val subAnnotations = mutableListOf<AnnotationPosition>()
+
+        for ((i, word) in entity.words.withIndex()) {
+            val token = word[query.defaultIndex]
+
+            val annotationContent = metaIndexes.map { it to word[it] }.toMap()
+            if (annotationContent.isNotEmpty()) {
+                val key = "w-${annotations.size}"
+                annotations[key] = Annotation(key, annotationContent)
+                subAnnotations.add(AnnotationPosition(key, MatchedRegion(builder.length, token.length)))
+            }
+            builder.append(token)
+            // necessary to manually visit the end of match if it happens within entity :X
+            if (isMatchEnd(word.index)) {
+                visitMatchEnd()
+            }
+            if (i != entity.words.size - 1) {
+                builder.append(' ')
+            }
+        }
+
+        val entityDescription = config.entities[entity.entityClass]
+        if (entityDescription == null) {
+            log.error("could not find entity with class ${entity.entityClass} in ${config.entities}")
+            return
+        }
+
+        if (entityDescription.attributes.size != entity.entityInfo.size) {
+            log.error("Inconsistent entity attributes and entityInfo, ${entityDescription.attributes}, ${entity.entityInfo}")
+        }
+
+        val annotationContent = entityDescription.attributes.values.asSequence()
+                .mapIndexed { i, attribute -> attribute.name to entity.entityInfo[i] }
+                .toMap()
+                .toMutableMap()
+        // add nertag if necessary
+        if (annotationContent[config.entityMapping.entityIndex] == null) {
+            annotationContent[config.entityMapping.entityIndex] = entity.entityClass
+        }
+
+
+        addAnnotation("e-${annotations.size}", annotationContent, currentPosition, builder.length - currentPosition, subAnnotations)
     }
 
     override fun visitMatchEnd() {
@@ -46,9 +91,9 @@ class JsonPayloadBuilderVisitor(config: CorpusConfiguration, query: Mg4jQuery, i
         builder.append(' ')
     }
 
-    private fun addAnnotation(id: String, content: Map<String, String>, from: Int, size: Int) {
+    private fun addAnnotation(id: String, content: Map<String, String>, from: Int, size: Int, subAnnotations: List<AnnotationPosition> = emptyList()) {
         annotations[id] = Annotation(id, content)
-        positions.add(AnnotationPosition(id, MatchedRegion(from, size)))
+        positions.add(AnnotationPosition(id, MatchedRegion(from, size), subAnnotations))
     }
 
     override fun getResult(): Payload {

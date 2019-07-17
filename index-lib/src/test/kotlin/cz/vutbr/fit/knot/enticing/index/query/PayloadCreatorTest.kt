@@ -1,11 +1,11 @@
 package cz.vutbr.fit.knot.enticing.index.query
 
 import cz.vutbr.fit.knot.enticing.dto.*
+import cz.vutbr.fit.knot.enticing.dto.Annotation
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.attributes
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.corpusConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.index
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.with
-import cz.vutbr.fit.knot.enticing.dto.Annotation
 import cz.vutbr.fit.knot.enticing.index.payload.createPayload
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetPartsFields
@@ -156,6 +156,26 @@ internal class PayloadCreatorTest {
                                     "w-2" to Annotation("w-2", mapOf("lemma" to "3", "url" to "localhost"))
                             ),
                             listOf(AnnotationPosition("w-0", 0 to 3), AnnotationPosition("w-1", 4 to 7), AnnotationPosition("w-2", 8 to 13)),
+                            listOf(QueryMapping(4 to 13, 0 to 1))
+                    )))
+        }
+
+        @Test
+        fun `with one entity`() {
+            val payload = createPayload(jsonQuery, withEntities, listOf(Interval.valueOf(1, 2)))
+            assertThat(payload)
+                    .isEqualTo(Payload.FullResponse.Annotated(AnnotatedText(
+                            "one two three harry potter",
+                            mapOf(
+                                    "w-0" to Annotation("w-0", mapOf("lemma" to "1", "url" to "google.com", "nertag" to "0", "param" to "0")),
+                                    "w-1" to Annotation("w-1", mapOf("lemma" to "2", "url" to "yahoo.com", "nertag" to "0", "param" to "0")),
+                                    "w-2" to Annotation("w-2", mapOf("lemma" to "3", "url" to "localhost", "nertag" to "0", "param" to "0")),
+                                    "w-3" to Annotation("w-3", mapOf("lemma" to "3", "url" to "localhost", "nertag" to "person", "param" to "harry")),
+                                    "w-4" to Annotation("w-4", mapOf("lemma" to "3", "url" to "localhost", "nertag" to "0", "param" to "0")),
+                                    "e-5" to Annotation("e-5", mapOf("nertag" to "person", "name" to "harry"))
+                            ),
+                            listOf(AnnotationPosition("w-0", 0 to 3), AnnotationPosition("w-1", 4 to 7), AnnotationPosition("w-2", 8 to 13),
+                                    AnnotationPosition("e-5", 14 to 26, listOf(AnnotationPosition("w-3", 14 to 19), AnnotationPosition("w-4", 20 to 26)))),
                             listOf(QueryMapping(4 to 13, 0 to 1))
                     )))
         }

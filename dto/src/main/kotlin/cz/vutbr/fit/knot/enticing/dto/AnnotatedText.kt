@@ -70,6 +70,8 @@ data class AnnotationPosition(
         val subAnnotations: List<AnnotationPosition> = emptyList()
 ) {
     constructor(annotationId: String, match: Pair<Int, Int>) : this(annotationId, MatchedRegion(match.first, match.second - match.first))
+
+    constructor(annotationId: String, match: Pair<Int, Int>, subAnnotations: List<AnnotationPosition>) : this(annotationId, MatchedRegion(match.first, match.second - match.first), subAnnotations)
 }
 
 /**
@@ -88,7 +90,7 @@ data class QueryMapping(
         @field:Valid
         val queryIndex: MatchedRegion
 ) {
-        constructor(textIndex: Pair<Int, Int>, queryIndex: Pair<Int, Int>) : this(MatchedRegion(textIndex.first, textIndex.second - textIndex.first), MatchedRegion(queryIndex.first, queryIndex.second))
+    constructor(textIndex: Pair<Int, Int>, queryIndex: Pair<Int, Int>) : this(MatchedRegion(textIndex.first, textIndex.second - textIndex.first), MatchedRegion(queryIndex.first, queryIndex.second))
 }
 
 /**
