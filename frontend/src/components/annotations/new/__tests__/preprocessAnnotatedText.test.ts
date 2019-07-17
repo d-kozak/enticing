@@ -12,7 +12,7 @@ it("ed sheeran", () => {
     const preprocessed = preprocessAnnotatedText(input.payload.content);
 
     expect(preprocessed.content.length)
-        .toBe(2)
+        .toBe(4)
 });
 
 it("donald", () => {
