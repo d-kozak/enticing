@@ -1,5 +1,3 @@
-it("dummy", () => {
-})
 
 
 export const searchResultWithEntities = {

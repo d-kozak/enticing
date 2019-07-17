@@ -3,7 +3,7 @@ import {isSnippet} from "../../../../entities/Snippet";
 import {isAnnotatedText} from "../../../../entities/Annotation";
 import {transformAnnotatedText} from "../../../../actions/QueryActions";
 import {preprocessAnnotatedText} from "../PreProcessedAnnotatedText";
-import {searchResultWithEntities} from "./searchResultWithEntities";
+import {searchResultWithEntities} from "../../../../mocks/searchResultWithEntities";
 
 it("process real answer", () => {
     for (let input of [searchResultWithEntities]) {

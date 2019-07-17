@@ -6,9 +6,12 @@ import {hideProgressBarAction, showProgressBarAction} from "../actions/ProgressB
 import {newSearchResultsAction} from "../actions/SearchResultActions";
 import {openSnackBar} from "../actions/SnackBarActions";
 import {SearchQuery} from "../entities/SearchQuery";
-import {Snippet} from "../entities/Snippet";
+import {isSnippet, Snippet} from "../entities/Snippet";
 import {MatchedRegion} from "../entities/Annotation";
 import {realSnippet} from "./realSnippet";
+import {searchResultWithEntities} from "./searchResultWithEntities";
+import {cloneDeep} from "lodash";
+import {transformAnnotatedText} from "../actions/QueryActions";
 
 
 export const firstResult: Snippet = {
@@ -102,12 +105,21 @@ const resultArray: Array<Snippet> = Array(50)
     .fill(null)
     .map((_, index) => ({...randomResult(), id: "id-" + index, canExtend: Math.random() > 0.3}))
 
+
 const mockExecuteQuery: ((query: string) => Promise<Array<Snippet>>) = (query) => {
+    // @ts-ignore
+    const snippetsWithEntities: Array<Snippet> = cloneDeep(searchResultWithEntities).snippets;
+
+    for (let snippet of snippetsWithEntities) {
+        if (!isSnippet(snippet)) continue
+        transformAnnotatedText(snippet.payload.content)
+    }
+
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             switch (query) {
                 case 'nertag:person (visited|entered)':
-                    resolve(resultArray);
+                    resolve(snippetsWithEntities);
                     break;
                 case 'fail':
                     reject("booom!");
