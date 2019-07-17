@@ -2,10 +2,7 @@ package cz.vutbr.fit.knot.enticing.index.query
 
 import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.Annotation
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.attributes
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.corpusConfig
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.index
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.with
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.*
 import cz.vutbr.fit.knot.enticing.index.payload.createPayload
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetPartsFields
@@ -74,7 +71,7 @@ internal class PayloadCreatorTest {
                     entityIndex = "nertag"
                     attributeIndexes = 4 to 4
                 }
-            }
+            }.also { it.validate() }
     )
 
 

@@ -21,7 +21,7 @@ class JsonPayloadBuilderVisitor(config: CorpusConfiguration, query: Mg4jQuery, i
     @Temporary("this is just a dummy value until we know the real queryMatch (waiting for EQL)")
     private val queryMatch = 0 to 1
 
-    private var startPosition = 0
+    private var startPosition = -1
 
     override fun visitMatchStart() {
         startPosition = builder.length
@@ -68,6 +68,7 @@ class JsonPayloadBuilderVisitor(config: CorpusConfiguration, query: Mg4jQuery, i
 
         if (entityDescription.attributes.size != entity.entityInfo.size) {
             log.error("Inconsistent entity attributes and entityInfo, ${entityDescription.attributes}, ${entity.entityInfo}")
+            return
         }
 
         val annotationContent = entityDescription.attributes.values.asSequence()
@@ -84,7 +85,12 @@ class JsonPayloadBuilderVisitor(config: CorpusConfiguration, query: Mg4jQuery, i
     }
 
     override fun visitMatchEnd() {
-        queryMapping.add(QueryMapping(startPosition to builder.length, queryMatch))
+        if (startPosition != -1) {
+            queryMapping.add(QueryMapping(startPosition to builder.length, queryMatch))
+            startPosition = -1
+        } else {
+            log.error("visitMatchEnd executed, but there was no start position")
+        }
     }
 
     override fun visitSeparator() {

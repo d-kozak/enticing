@@ -25,7 +25,7 @@ data class CorpusConfiguration(
 
     fun getMetaIndexes(defaultIndex: String): Set<String> = indexes.keys.toMutableSet().also { it.remove(defaultIndex) }
 
-    fun indexOf(name: String) = indexes[name]?.columnIndex ?: throw IllegalArgumentException("Unknown index $name")
+    fun indexOf(name: String) = indexes[name]?.columnIndex ?: throw IllegalArgumentException("Unknown index '$name'")
 
 }
 

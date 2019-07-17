@@ -66,12 +66,8 @@ class Mg4jDocument(
             if (entityClass != "0") {
                 val entityInfo: List<String> = filteredConfig.entities[entityClass]?.let { entity ->
                     entity.attributes.values.map { indexContent[it.correspondingIndex]!![i] }
-                            .toMutableList()
-                            .also {
-                                it.addAll(filteredConfig.entityMapping.extraAttributes.map { indexContent[it]!![i] })
-                            }
-
                 } ?: listOf()
+
                 val nerlen = Math.max(indexContent["nerlength"]!![i].toIntOrNull() ?: 1, 1)
                 val words = (i until Math.min(i + nerlen, loadedDataSize))
                         .map { SnippetElement.Word(left + it, collectIndexValuesAt(it)) }

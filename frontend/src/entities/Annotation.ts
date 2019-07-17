@@ -161,7 +161,7 @@ export const validateAnnotatedText = (annotatedText: AnnotatedText): void => {
         const mapping = queryMapping[index];
         if (index < queryMapping.length - 1) {
             const next = queryMapping[index + 1];
-            assert(mapping.textIndex.from + mapping.textIndex.size <= next.textIndex.from, () => `each mapping must end before the next starts, in ${mapping},${next}`);
+            assert(mapping.textIndex.from + mapping.textIndex.size <= next.textIndex.from, () => `each mapping must end before the next starts, in ${JSON.stringify(mapping)},${JSON.stringify(next)}`);
         }
     }
 };

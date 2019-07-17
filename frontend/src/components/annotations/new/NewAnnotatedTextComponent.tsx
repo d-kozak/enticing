@@ -16,12 +16,17 @@ type AnnotatedTextComponentProps = WithStyles<typeof styles> & {
 
 const NewAnnotatedTextComponent = (props: AnnotatedTextComponentProps) => {
     const {text} = props;
-    const processed = preprocessAnnotatedText(text);
-    return <React.Fragment>
-        {processed.content.map((elem, index) => <React.Fragment key={index}>
-            {renderElement(elem, text.annotations)}
-        </React.Fragment>)}
-    </React.Fragment>
+    try {
+        const processed = preprocessAnnotatedText(text);
+        return <React.Fragment>
+            {processed.content.map((elem, index) => <React.Fragment key={index}>
+                {renderElement(elem, text.annotations)}
+            </React.Fragment>)}
+        </React.Fragment>
+    } catch (e) {
+        console.error(e.message);
+    }
+    return <span>Error when processing result</span>
 };
 export default withStyles(styles, {withTheme: true})(NewAnnotatedTextComponent);
 
