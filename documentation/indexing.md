@@ -3,25 +3,25 @@
 This document covers the design of the components of the Enticing platform that contribute to it's indexing and searching functionality. 
 Currently I propose to create three components: 
 
-* indexer  
-* \[slave\] index service
-* Commandline index client
+* IndexBuilder
+* \[slave\] IndexServer
+* Console client
 
 And on top of that, I present the possibility to add master index service, either immediately or in the future. 
   
-## Indexer 
-The responsibility of an indexer is to create indexes out of .mg4j files. Part of this process is to evenly divide the 
+## IndexBuilder
+The responsibility of the IndexBuilder is to create indexes out of .mg4j files. Part of this process is to evenly divide the 
 indexed data into N parts, so that multiple index servers can each handle one part. 
 This component can start as a simple command line tool, but there is an option to eventually extend it 
 into a spring boot app with rest interface that can be used to start the index process or to ask for the current status 
 (since indexing is a time consuming process). Therefore even the initial version should be implemented with this extension in mind.
 
-## Commandline index client
+## Console client
 To allow for automated querying, for example for performance testing, a simple command line client can be implemented. 
 This client will either talk to only one index server or the whole indexed corpus. 
 The results will be printed into standard output or into a file.  
 
-## Slave index service
+## Index server
 Slave index service manages already indexed .mg4j files and uses [mg4j](http://mg4j.di.unimi.it/) to perform queries on them.
 
 ### Lifecycle
