@@ -24,7 +24,7 @@ it("process real answer", () => {
             }
             transformAnnotatedText(snippet.payload.content)
             const preprocessed = preprocessAnnotatedText(snippet.payload.content)
-            preprocessed.dumpJson();
+
 
         }
     }

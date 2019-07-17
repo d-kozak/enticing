@@ -12,7 +12,7 @@ export interface SnippetExtension {
 export const snippetExtensionSchema = yup.object({
     prefix: payloadSchema,
     suffix: payloadSchema,
-    canExtent: yup.boolean().required()
+    canExtend: yup.boolean().required()
 })
 
 

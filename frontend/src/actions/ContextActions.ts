@@ -13,7 +13,7 @@ import {ContextExtensionQuery} from "../entities/ContextExtensionQuery";
 import {MatchedRegion} from "../entities/Annotation";
 
 // todo incomplete only adds text now
-function mergeSnippet(snippet: Snippet, extension: SnippetExtension): Snippet {
+export function mergeSnippet(snippet: Snippet, extension: SnippetExtension): Snippet {
     const {prefix, suffix, canExtend} = extension;
     const prefixSize = prefix.content.text.length;
 
