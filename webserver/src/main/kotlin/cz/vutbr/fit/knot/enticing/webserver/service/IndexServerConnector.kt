@@ -18,7 +18,8 @@ class IndexServerConnector(private val template: RestTemplate = RestTemplate(), 
 
     fun contextExtension(query: Webserver.ContextExtensionQuery): SnippetExtension = resultOrThrow(query.host, query.toIndexFormat(), "context")
 
-    fun getFormat(server: String) = template.getForEntity("http://$server$apiBathPath/format", CorpusFormat::class.java)
+    fun getFormat(server: String) = template.getForEntity("http://$server$apiBathPath/format", CorpusFormat::class.java).body
+            ?: throw IllegalStateException("Could no get format from server $server")
 
     private inline fun <reified T> resultOrThrow(host: String, content: Any, endpoint: String): T {
         val input = content.toJson()

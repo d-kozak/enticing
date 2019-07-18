@@ -5,6 +5,9 @@ import cz.vutbr.fit.knot.enticing.dto.annotation.Temporary
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.runBlocking
 import org.springframework.stereotype.Service
 
 
@@ -37,6 +40,22 @@ class QueryService(
     fun document(query: Webserver.DocumentQuery): Webserver.FullDocument {
         val indexDocument = indexServerConnector.getDocument(query)
         return indexDocument.toWebserverFormat(query.host, query.collection, query.documentId, query.query)
+    }
+
+
+    fun format(selectedSettings: Long): CorpusFormat {
+        val searchSettings = searchSettingsRepository.findById(selectedSettings).orElseThrow { IllegalArgumentException("Unknown searchSettings id $selectedSettings") }
+        require(searchSettings.servers.isNotEmpty()) { "Search settings $searchSettings has no associated servers, therefore it has no CorpusFormat" }
+
+        return runBlocking {
+            val formats = searchSettings.servers.map { server ->
+                async {
+                    indexServerConnector.getFormat(server)
+                }
+            }.awaitAll()
+
+            mergeCorpusFormats(formats)
+        }
     }
 }
 

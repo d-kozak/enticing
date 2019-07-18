@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver.controller
 
+import cz.vutbr.fit.knot.enticing.dto.CorpusFormat
 import cz.vutbr.fit.knot.enticing.dto.SnippetExtension
 import cz.vutbr.fit.knot.enticing.dto.Webserver
 import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
@@ -18,4 +19,7 @@ class QueryController(private val queryService: QueryService) {
 
     @PostMapping("/document")
     fun document(@RequestBody query: Webserver.DocumentQuery): Webserver.FullDocument = queryService.document(query)
+
+    @GetMapping("/format/{settingsId}")
+    fun format(@PathVariable settingsId: Long): CorpusFormat = queryService.format(settingsId)
 }

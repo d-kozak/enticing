@@ -54,11 +54,12 @@ fun CorpusConfiguration.toCorpusFormat() =
                 entities.mapValues { (_, entity) -> entity.description withAttributes entity.attributes.mapValues { (_, attribute) -> attribute.description } }
         )
 
+fun mergeCorpusFormats(vararg formats: CorpusFormat): CorpusFormat = mergeCorpusFormats(formats.toList())
 
-fun mergeCorpusFormats(vararg formats: CorpusFormat): CorpusFormat {
+fun mergeCorpusFormats(formats: List<CorpusFormat>): CorpusFormat {
     require(formats.isNotEmpty()) { "At least one corpus format is necessary" }
     val start = formats[0]
-    val rest = formats.toList().subList(1, formats.size)
+    val rest = formats.subList(1, formats.size)
 
     val newIndexes = mutableMapOf<String, Description>()
     for ((index, description) in start.indexes) {
