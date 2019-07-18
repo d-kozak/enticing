@@ -1,14 +1,14 @@
-import {AnnotatedText, annotatedTextSchema} from "./Annotation";
 import {validateOrNull} from "./validationUtils";
 
 import * as yup from "yup";
+import {NewAnnotatedText, newAnnotatedTextSchema} from "../components/annotations/new/NewAnnotatedText";
 
 export interface Payload {
-    content: AnnotatedText
+    content: NewAnnotatedText
 }
 
 export const payloadSchema = yup.object({
-    content: annotatedTextSchema
+    content: newAnnotatedTextSchema
 });
 
 export function isPayload(obj: Object): obj is Payload {

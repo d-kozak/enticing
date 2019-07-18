@@ -6,8 +6,8 @@ import axios from "axios";
 import {hideProgressBarAction, showProgressBarAction} from "../ProgressBarActions";
 import {openSnackBar} from "../SnackBarActions";
 import {Snippet} from "../../entities/Snippet";
-import {transformAnnotatedText} from "../QueryActions";
 import {DocumentQuery} from "../../entities/DocumentQuery";
+import {parseNewAnnotatedText} from "../../components/annotations/new/NewAnnotatedText";
 
 export const DOCUMENT_DIALOG_DOCUMENT_LOADED = '[DOCUMENT DIALOG] DOCUMENT LOADED';
 export const DOCUMENT_DIALOG_CLOSED = '[DOCUMENT DIALOG] CLOSED';
@@ -51,7 +51,10 @@ export const documentDialogRequestedAction = (searchResult: Snippet): ThunkResul
         if (!isDocument(response.data)) {
             throw `Invalid document ${JSON.stringify(response.data, null, 2)}`;
         }
-        transformAnnotatedText(response.data.payload.content);
+        const parsed = parseNewAnnotatedText(response.data.payload.content);
+        if (parsed == null)
+            throw "could not parse"
+        response.data.payload.content = parsed
         dispatch(hideProgressBarAction());
         dispatch(documentLoadedAction(response.data));
     }).catch(() => {

@@ -7,49 +7,28 @@ import {hideProgressBarAction, showProgressBarAction} from "./ProgressBarActions
 import {searchResultUpdatedAction} from "./SearchResultActions";
 import {openSnackBar} from "./SnackBarActions";
 import {Snippet} from "../entities/Snippet";
-import {transformAnnotatedText} from "./QueryActions";
 import {isSnippetExtension, SnippetExtension} from "../entities/SnippetExtension";
 import {ContextExtensionQuery} from "../entities/ContextExtensionQuery";
-import {MatchedRegion} from "../entities/Annotation";
+import {NewAnnotatedText, parseNewAnnotatedText} from "../components/annotations/new/NewAnnotatedText";
 
-// todo incomplete only adds text now
-export function mergeSnippet(snippet: Snippet, extension: SnippetExtension): Snippet {
-    const {prefix, suffix, canExtend} = extension;
-    const prefixSize = prefix.content.text.length;
 
-    const newPositions = snippet.payload.content.positions.map(position => {
-        return {
-            ...position,
-            match: new MatchedRegion(prefixSize + position.match.from, position.match.size),
-            subAnnotations: position.subAnnotations != undefined ? position.subAnnotations.map(subPosition => {
-                return {
-                    ...subPosition,
-                    match: new MatchedRegion(prefixSize + subPosition.match.from, subPosition.match.size)
-                }
-            }) : undefined
-        }
-    })
-
-    const newQueryMapping = snippet.payload.content.queryMapping.map(mapping => {
-        return {
-            ...mapping,
-            textIndex: new MatchedRegion(prefixSize + mapping.textIndex.from, mapping.textIndex.size)
-        }
-    });
+function mergeSnippet(searchResult: Snippet, data: SnippetExtension): Snippet {
+    const prefix = data.prefix.content
+    const suffix = data.suffix.content
+    const newText = new NewAnnotatedText([
+        ...prefix.content,
+        ...searchResult.payload.content.content,
+        ...suffix.content
+    ])
 
     return {
-        ...snippet,
-        location: snippet.location - prefixSize,
-        size: prefixSize + snippet.size + suffix.content.text.length,
-        canExtend,
+        ...searchResult,
         payload: {
-            content: {
-                text: prefix.content.text + snippet.payload.content.text + suffix.content.text,
-                positions: newPositions,
-                queryMapping: newQueryMapping,
-                annotations: snippet.payload.content.annotations
-            }
-        }
+            content: newText
+        },
+        location: searchResult.location - prefix.size(),
+        size: prefix.size() + searchResult.size + suffix.size(),
+        canExtend: data.canExtend
     };
 }
 
@@ -74,8 +53,14 @@ export const contextExtensionRequestAction = (searchResult: Snippet): ThunkResul
         if (!isSnippetExtension(response.data)) {
             throw `Invalid document ${JSON.stringify(response.data, null, 2)}`;
         }
-        transformAnnotatedText(response.data.prefix.content);
-        transformAnnotatedText(response.data.suffix.content);
+
+        const parsedPrefix = parseNewAnnotatedText(response.data.prefix.content)
+        const parsedSuffix = parseNewAnnotatedText(response.data.suffix.content)
+        if (parsedPrefix === null || parsedSuffix === null) {
+            throw "could not parse"
+        }
+        response.data.prefix.content = parsedPrefix
+        response.data.suffix.content = parsedSuffix
 
 
         const merged: Snippet = mergeSnippet(searchResult, response.data);
