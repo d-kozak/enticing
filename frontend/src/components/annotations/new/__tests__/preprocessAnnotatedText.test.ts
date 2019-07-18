@@ -27,7 +27,8 @@ it("donald", () => {
 it("milos", () => {
     const input = thirdResult;
 
-    const preprocessed = preprocessAnnotatedText(input.payload.content);
+    const preprocessed = preprocessAnnotatedText(input.payload.content)
+    ;
 
     expect(preprocessed.content.length)
         .toBe(2)

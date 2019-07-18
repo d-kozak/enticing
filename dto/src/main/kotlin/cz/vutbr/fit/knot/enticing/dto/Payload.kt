@@ -34,7 +34,8 @@ sealed class Payload {
     )
     @JsonSubTypes(
             JsonSubTypes.Type(FullResponse.Html::class, name = "html"),
-            JsonSubTypes.Type(FullResponse.Annotated::class, name = "annotated")
+            JsonSubTypes.Type(FullResponse.Annotated::class, name = "annotated"),
+            JsonSubTypes.Type(FullResponse.NewAnnotated::class, name = "new")
     )
     sealed class FullResponse : Payload() {
         /**
@@ -46,6 +47,11 @@ sealed class Payload {
          * Text with annotations
          */
         data class Annotated(@field:Valid val content: AnnotatedText) : FullResponse()
+
+        /**
+         * New annotated format
+         */
+        data class NewAnnotated(@field:Valid val content: NewAnnotatedText) : FullResponse()
     }
 }
 

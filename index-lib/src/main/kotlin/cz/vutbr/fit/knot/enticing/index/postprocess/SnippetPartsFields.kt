@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.index.postprocess
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
+import java.util.*
 
 data class SnippetPartsFields(
         val elements: List<SnippetElement>,
@@ -34,6 +35,12 @@ data class SnippetPartsFields(
         }
 
         return result
+    }
+
+    operator fun get(i: Int): SnippetElement {
+        val indexes = elements.map { it.index }
+        val j = Collections.binarySearch(indexes, i)
+        return if (j >= 0) elements[j] else elements[-j - 1]
     }
 
     fun toMap(): Map<String, List<String>> = corpusConfiguration.indexes

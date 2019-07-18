@@ -176,6 +176,88 @@ internal class PayloadCreatorTest {
                             listOf(QueryMapping(4 to 13, 0 to 1))
                     )))
         }
+
+    }
+
+    @Nested
+    inner class NewFormat {
+
+        private val newFormatQuery = templateQuery.copy(responseFormat = ResponseFormat.NEW_ANNOTATED_TEXT)
+
+        @Test
+        fun `simple format no metadata`() {
+            var payload = createPayload(newFormatQuery, noMetadata, listOf(Interval.valueOf(0, 2)))
+            assertThat(payload)
+                    .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
+                            TextUnit.QueryMatch(Interval(0, 1),
+                                    listOf(TextUnit.Word("one"),
+                                            TextUnit.Word("two"),
+                                            TextUnit.Word("three")))
+                    )))
+
+            payload = createPayload(newFormatQuery, noMetadata, listOf(Interval.valueOf(1, 2)))
+            assertThat(payload)
+                    .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
+                            TextUnit.Word("one"),
+                            TextUnit.QueryMatch(Interval(0, 1),
+                                    listOf(
+                                            TextUnit.Word("two"),
+                                            TextUnit.Word("three")))
+                    )))
+            payload = createPayload(newFormatQuery, noMetadata, listOf(Interval.valueOf(1, 1)))
+            assertThat(payload)
+                    .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
+                            TextUnit.Word("one"),
+                            TextUnit.QueryMatch(Interval(0, 1),
+                                    listOf(TextUnit.Word("two"))),
+                            TextUnit.Word("three")
+                    )))
+        }
+
+        @Test
+        fun `two other indexes`() {
+            val payload = createPayload(newFormatQuery, simpleStructure, listOf(Interval.valueOf(1, 2)))
+            assertThat(payload)
+                    .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
+                            TextUnit.Word("one", "1", "google.com"),
+                            TextUnit.QueryMatch(Interval(0, 1),
+                                    listOf(
+                                            TextUnit.Word("two", "2", "yahoo.com"),
+                                            TextUnit.Word("three", "3", "localhost")))
+                    )))
+        }
+
+        @Test
+        fun `with one entity no intervals`() {
+            val payload = createPayload(newFormatQuery, withEntities, emptyList())
+            assertThat(payload)
+                    .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
+                            TextUnit.Word("one", "1", "google.com", "0", "0"),
+                            TextUnit.Word("two", "2", "yahoo.com", "0", "0"),
+                            TextUnit.Word("three", "3", "localhost", "0", "0"),
+                            TextUnit.Entity(attributes = listOf("harry"), entityClass = "person",
+                                    words = listOf(TextUnit.Word("harry", "3", "localhost", "person", "harry"),
+                                            TextUnit.Word("potter", "3", "localhost", "0", "0"))))))
+        }
+
+        @Test
+        fun `with one entity that is broken by interval`() {
+            val payload = createPayload(newFormatQuery, withEntities, listOf(Interval.valueOf(2, 3)))
+            assertThat(payload)
+                    .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
+                            TextUnit.Word("one", "1", "google.com", "0", "0"),
+                            TextUnit.Word("two", "2", "yahoo.com", "0", "0"),
+                            TextUnit.QueryMatch(cz.vutbr.fit.knot.enticing.dto.Interval(0, 1), listOf(
+                                    TextUnit.Word("three", "3", "localhost", "0", "0"),
+                                    TextUnit.Entity(attributes = listOf("harry"), entityClass = "person",
+                                            words = listOf(TextUnit.Word("harry", "3", "localhost", "person", "harry"))
+                                    ))),
+                            TextUnit.Entity(attributes = listOf("harry"), entityClass = "person",
+                                    words = listOf(TextUnit.Word("potter", "3", "localhost", "0", "0")))
+                    )))
+        }
+
+
     }
 
     @Test

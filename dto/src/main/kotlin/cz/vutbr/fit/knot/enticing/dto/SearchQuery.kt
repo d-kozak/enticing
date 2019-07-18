@@ -169,5 +169,10 @@ enum class ResponseFormat {
     /**
      * Response should be AnnotatedText
      */
-    ANNOTATED_TEXT;
+    ANNOTATED_TEXT,
+
+    /**
+     * New format of annotated text, eventually meant to replace it
+     */
+    NEW_ANNOTATED_TEXT;
 }

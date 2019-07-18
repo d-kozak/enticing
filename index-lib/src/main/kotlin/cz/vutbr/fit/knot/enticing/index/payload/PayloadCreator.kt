@@ -14,6 +14,7 @@ internal fun createPayload(query: Mg4jQuery, content: SnippetPartsFields, interv
     val visitor = when (query.responseFormat) {
         ResponseFormat.HTML -> HtmlPayloadBuilderVisitor(content.corpusConfiguration, query, intervals)
         ResponseFormat.ANNOTATED_TEXT -> JsonPayloadBuilderVisitor(content.corpusConfiguration, query, intervals)
+        else -> return Payload.FullResponse.NewAnnotated(createNewAnnotatedText(content, intervals))
     }
 
     for (elem in content) {
