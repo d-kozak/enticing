@@ -14,6 +14,7 @@ import {openSnackBar} from "./SnackBarActions";
 import axios from "axios";
 import {hideProgressBarAction, showProgressBarAction} from "./ProgressBarActions";
 import {parseValidationErrors} from "./errors";
+import {CorpusFormatLoadedAction} from "./CorpusFormatActions";
 
 export const SEARCH_SETTINGS_LOADED = "[SEARCH SETTINGS] LOADED";
 export const SEARCH_SETTINGS_ADDED = "[SEARCH SETTINGS] ADDED";
@@ -57,7 +58,9 @@ export type SearchSettingsAction =
     | SearchSettingsUpdatedAction
     | SearchSettingsRemovedAction
     | SearchSettingsNewDefaultAction
-    | SearchSettingsAddingCancelledAction;
+    | SearchSettingsAddingCancelledAction
+    | CorpusFormatLoadedAction // TODO add separate reducer or merge totally
+    ;
 
 export const searchSettingsLoadedAction = (settings: Array<SearchSettings>): SearchSettingsLoadedAction => ({
     type: SEARCH_SETTINGS_LOADED,

@@ -9,6 +9,7 @@ import {
 } from "../actions/SearchSettingsActions";
 import {SearchSettings} from "../entities/SearchSettings";
 import {mapValues} from 'lodash';
+import {CORPUS_FORMAT_LOADED} from "../actions/CorpusFormatActions";
 
 const initialState = {
     settings: {} as { [key: string]: SearchSettings }
@@ -75,6 +76,22 @@ const searchSettingsReducer: SearchSettingsReducer = (state = initialState, acti
                         return obj;
                     }, {} as { [key: string]: SearchSettings })
             }
+        case CORPUS_FORMAT_LOADED: {
+            const toUpdate = state.settings[action.id]
+            if (toUpdate) {
+                const updated = {
+                    ...toUpdate,
+                    corpusFormat: action.format
+                }
+                const key = action.id
+                return {
+                    ...state,
+                    key: updated
+                }
+            } else {
+                console.error(`Settings with id ${action.id} not found, therefore this is no-op`)
+            }
+        }
     }
     return state;
 };

@@ -10,6 +10,7 @@ export type IndexInfo = String2StringObjectMap
 export type AttributesInfo = String2StringObjectMap
 
 export interface CorpusFormat {
+    corpusName: string,
     indexes: IndexInfo,
     entities: { [clazz: string]: AttributesInfo }
 }
@@ -19,6 +20,7 @@ const string2stringObjectMapSchema = yup.lazy(obj => yup.object(
 ))
 
 export const corpusFormatSchema = yup.object({
+    corpusName: yup.string(),
     indexes: string2stringObjectMapSchema,
     entities: yup.lazy(obj => yup.object(
         mapValues(obj, () => string2stringObjectMapSchema)

@@ -1,6 +1,8 @@
 /**
  * Servers are actually a set in the backend but here it is kept as array for convenience (methods like map() are not not Sets in js unfortunately)
  */
+import {CorpusFormat} from "./CorpusFormat";
+
 export interface SearchSettings extends SearchSettingsContent {
     id: string,
     default: boolean,
@@ -8,7 +10,8 @@ export interface SearchSettings extends SearchSettingsContent {
     /**
      * true only for new search settings before they are saved in the backend
      */
-    isTransient?: boolean
+    isTransient?: boolean,
+    corpusFormat?: CorpusFormat
 }
 
 export type IpAddress = string;

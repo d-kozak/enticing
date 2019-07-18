@@ -45,6 +45,10 @@ class QueryService(
 
     fun format(selectedSettings: Long): CorpusFormat {
         val searchSettings = searchSettingsRepository.findById(selectedSettings).orElseThrow { IllegalArgumentException("Unknown searchSettings id $selectedSettings") }
+        if (searchSettings.private && (currentUser == null || !currentUser.isAdmin)) {
+            throw IllegalArgumentException("Settings is private, current user (or anonymous user) cannot use it")
+        }
+
         require(searchSettings.servers.isNotEmpty()) { "Search settings $searchSettings has no associated servers, therefore it has no CorpusFormat" }
 
         return runBlocking {

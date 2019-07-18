@@ -21,6 +21,8 @@ import {
     changePasswordDialogShowProgressAction
 } from "./dialog/ChangePasswordDialogActions";
 import {parseValidationErrors} from "./errors";
+import {isCorpusFormat} from "../entities/CorpusFormat";
+import {corpusFormatLoadedAction} from "./CorpusFormatActions";
 
 export const USER_LOGOUT = "[USER] LOGOUT";
 export const USER_LOGIN_SUCCESS = "[USER] LOGIN SUCCESS";
@@ -97,11 +99,20 @@ export const searchSettingsSelectedRequestAction = (settings: SearchSettings, pr
     dispatch(userSearchSettingsSelectedSuccessAction(settings));
     if (isLoggedIn) {
         axios.get(`${API_BASE_PATH}/search-settings/select/${settings.id}`, {withCredentials: true})
-            .catch(() => {
-                dispatch(openSnackBar(`Failed to select settings ${settings.name}`));
-                // rollback to previously selected
-                dispatch(userSearchSettingsSelectedSuccessAction(previousSelectedSettings));
+            .then(() => {
+                return axios.get(`${API_BASE_PATH}/query/format/${settings.id}`, {withCredentials: true})
             })
+            .then(response => {
+                if (isCorpusFormat(response.data)) {
+                    dispatch(corpusFormatLoadedAction(Number(settings.id), response.data))
+                } else {
+                    throw "cannot parse";
+                }
+            }).catch(() => {
+            dispatch(openSnackBar(`Failed to select settings ${settings.name}`));
+            // rollback to previously selected
+            dispatch(userSearchSettingsSelectedSuccessAction(previousSelectedSettings));
+        })
     }
 };
 

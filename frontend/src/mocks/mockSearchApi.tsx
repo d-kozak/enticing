@@ -11,7 +11,6 @@ import {MatchedRegion} from "../entities/Annotation";
 import {realSnippet} from "./realSnippet";
 import {searchResultWithEntities} from "./searchResultWithEntities";
 import {cloneDeep} from "lodash";
-import {transformAnnotatedText} from "../actions/QueryActions";
 
 
 export const firstResult: Snippet = {
