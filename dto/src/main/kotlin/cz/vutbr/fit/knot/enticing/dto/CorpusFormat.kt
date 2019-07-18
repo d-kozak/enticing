@@ -27,7 +27,10 @@ data class CorpusFormat(
          * Entities with their attributes
          */
         val entities: Map<EntityName, EntityFormat>
-)
+) {
+    internal constructor(name: String, indexes: List<String>, entities: Map<String, List<String>>)
+            : this(name, indexes.map { it to "" }.toMap(), entities.mapValues { EntityFormat("", it.value.map { it to "" }.toMap()) })
+}
 
 /**
  * Format of one attribute
@@ -50,3 +53,30 @@ fun CorpusConfiguration.toCorpusFormat() =
                 indexes.mapValues { (_, index) -> index.description },
                 entities.mapValues { (_, entity) -> entity.description withAttributes entity.attributes.mapValues { (_, attribute) -> attribute.description } }
         )
+
+
+fun mergeCorpusFormats(vararg formats: CorpusFormat): CorpusFormat {
+    require(formats.isNotEmpty()) { "At least one corpus format is necessary" }
+    val start = formats[0]
+    val rest = formats.toList().subList(1, formats.size)
+
+    val newIndexes = mutableMapOf<String, Description>()
+    for ((index, description) in start.indexes) {
+        if (rest.all { it.indexes.containsKey(index) })
+            newIndexes[index] = description
+    }
+    val newEntities = mutableMapOf<String, EntityFormat>()
+    for ((entityName, entityFormat) in start.entities) {
+        if (rest.all { it.entities.containsKey(entityName) }) {
+            val attributes = mutableMapOf<String, String>()
+            for ((attribute, description) in entityFormat.attributes) {
+                if (rest.all { it.entities[entityName]!!.attributes.containsKey(attribute) }) {
+                    attributes[attribute] = description
+                }
+            }
+            newEntities[entityName] = EntityFormat(entityFormat.description, attributes)
+        }
+    }
+    val newName = formats.map { it.corpusName }.distinct().joinToString("-")
+    return CorpusFormat(newName, newIndexes, newEntities)
+}
