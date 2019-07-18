@@ -122,7 +122,7 @@ class QueryExecutor internal constructor(
                     .map { it.clampRight(left + SNIPPET_SIZE) }
                     .toList()
 
-            val content = document.loadSnippetPartsFields(left, right, config)
+            val content = document.loadSnippetPartsFields(left, right + 1, config)
 
             val payload = createPayload(query, content, relevantScores)
 

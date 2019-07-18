@@ -16,7 +16,7 @@ fun createNewAnnotatedText(data: SnippetPartsFields, intervals: List<Interval>):
             val elements = mutableListOf<TextUnit>()
             if (interval == intervals.first()) {
                 elements.addAll(
-                        getElementsAt(0 to interval.left - 1, items)
+                        getElementsAt(items.elements.first().index to interval.left - 1, items)
                 )
             }
 
@@ -31,7 +31,7 @@ fun createNewAnnotatedText(data: SnippetPartsFields, intervals: List<Interval>):
 
             if (interval == intervals.last()) {
                 elements.addAll(
-                        getElementsAt(interval.right + 1 to items.last().index, items)
+                        getElementsAt(interval.right + 1 to items.elements.last().index, items)
                 )
             }
             elements
