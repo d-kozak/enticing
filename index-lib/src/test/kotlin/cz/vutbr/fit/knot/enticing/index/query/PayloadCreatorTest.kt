@@ -247,7 +247,7 @@ internal class PayloadCreatorTest {
                     .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
                             TextUnit.Word("one", "1", "google.com", "0", "0"),
                             TextUnit.Word("two", "2", "yahoo.com", "0", "0"),
-                            TextUnit.QueryMatch(cz.vutbr.fit.knot.enticing.dto.Interval(0, 1), listOf(
+                            TextUnit.QueryMatch(Interval(0, 1), listOf(
                                     TextUnit.Word("three", "3", "localhost", "0", "0"),
                                     TextUnit.Entity(attributes = listOf("harry"), entityClass = "person",
                                             words = listOf(TextUnit.Word("harry", "3", "localhost", "person", "harry"))
@@ -255,6 +255,26 @@ internal class PayloadCreatorTest {
                             TextUnit.Entity(attributes = listOf("harry"), entityClass = "person",
                                     words = listOf(TextUnit.Word("potter", "3", "localhost", "0", "0")))
                     )))
+        }
+
+
+        @Test
+        fun `with one entity that is broken by two intervals`() {
+            val payload = createPayload(newFormatQuery, withEntities, listOf(Interval.valueOf(2, 3), Interval.valueOf(4, 4)))
+            assertThat(payload)
+                    .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
+                            TextUnit.Word("one", "1", "google.com", "0", "0"),
+                            TextUnit.Word("two", "2", "yahoo.com", "0", "0"),
+                            TextUnit.QueryMatch(Interval(0, 1), listOf(
+                                    TextUnit.Word("three", "3", "localhost", "0", "0"),
+                                    TextUnit.Entity(attributes = listOf("harry"), entityClass = "person",
+                                            words = listOf(TextUnit.Word("harry", "3", "localhost", "person", "harry"))
+                                    ))),
+                            TextUnit.QueryMatch(Interval(0, 1), listOf(
+                                    TextUnit.Entity(attributes = listOf("harry"), entityClass = "person",
+                                            words = listOf(TextUnit.Word("potter", "3", "localhost", "0", "0"))
+                                    ))
+                            ))))
         }
 
 

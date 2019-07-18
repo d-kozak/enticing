@@ -4,6 +4,7 @@ import cz.vutbr.fit.knot.enticing.dto.NewAnnotatedText
 import cz.vutbr.fit.knot.enticing.dto.TextUnit
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetPartsFields
+import cz.vutbr.fit.knot.enticing.index.query.clamp
 import it.unimi.dsi.util.Interval
 
 fun createNewAnnotatedText(data: SnippetPartsFields, intervals: List<Interval>): NewAnnotatedText {
@@ -62,26 +63,25 @@ fun splitEntity(entity: SnippetElement.Entity, intervals: List<Interval>): List<
     val minIndex = entity.index
     val maxIndex = entity.words.last().index
     val entityRange = minIndex..maxIndex
-    val relevantIntervals = intervals.asSequence()
-            .flatMap { sequenceOf(it.left to true, it.right to false) }
-            .filter { it.first in entityRange }
-            .toList()
+    val relevantIntervals = intervals.filter { it.left in entityRange || it.right in entityRange }
+            .map { it.clamp(minIndex, maxIndex) }
     if (relevantIntervals.isEmpty())
         return listOf(entity)
 
+    val splitIntervals = relevantIntervals.mapIndexed { i, interval ->
+        val prev = if (i > 0) relevantIntervals[i - 1] else Interval.valueOf(minIndex - 1)
+        val next = if (i < relevantIntervals.size - 1) relevantIntervals[i + 1] else Interval.valueOf(maxIndex + 1)
 
-    return relevantIntervals
-            .mapIndexed { i, (current, isStart) ->
-                val prev = if (i > 0) relevantIntervals[i - 1] else minIndex to true
-                val next = if (i < relevantIntervals.size - 1) relevantIntervals[i + 1] else maxIndex to false
-                val left = entity.copy(
-                        index = if (prev.second) prev.first else prev.first + 1,
-                        words = entity.words.subList(prev.first - entity.index + if (prev.second) 0 else 1, current - entity.index + if (isStart) 0 else 1)
-                )
-                val right = entity.copy(
-                        index = if (isStart) current else current + 1,
-                        words = entity.words.subList(current - entity.index + if (isStart) 0 else 1, next.first - entity.index + if (next.second) 0 else 1)
-                )
-                listOf(left, right)
-            }.flatten()
+        val includeLeft = prev.right + 1 <= interval.left - 1
+        val includeRight = interval.right + 1 <= next.left - 1
+
+        when {
+            includeLeft && includeRight -> listOf(Interval.valueOf(prev.right + 1, interval.left - 1), Interval.valueOf(interval.left, interval.right), Interval.valueOf(interval.right + 1, next.left - 1))
+            includeLeft -> listOf(Interval.valueOf(prev.right + 1, interval.left - 1), Interval.valueOf(interval.left, interval.right))
+            includeRight -> listOf(Interval.valueOf(interval.left, interval.right), Interval.valueOf(interval.right + 1, next.left - 1))
+            else -> listOf(Interval.valueOf(interval.left, interval.right))
+        }
+    }.flatten()
+
+    return splitIntervals.map { entity.copy(index = it.left, words = entity.words.subList(it.left - entity.index, it.right - entity.index + 1)) }
 }
