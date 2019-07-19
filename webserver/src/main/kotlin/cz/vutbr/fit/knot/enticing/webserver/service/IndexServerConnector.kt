@@ -8,18 +8,29 @@ import cz.vutbr.fit.knot.enticing.dto.Webserver
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import cz.vutbr.fit.knot.enticing.query.processor.exchange
+import org.slf4j.LoggerFactory
 import org.springframework.http.*
 import org.springframework.web.client.RestTemplate
 
 class IndexServerConnector(private val template: RestTemplate = RestTemplate(), private val apiBathPath: String) {
 
+    private val log = LoggerFactory.getLogger(IndexServerConnector::class.java)
 
     fun getDocument(query: Webserver.DocumentQuery): IndexServer.FullDocument = resultOrThrow(query.host, query.toIndexFormat(), "document")
 
     fun contextExtension(query: Webserver.ContextExtensionQuery): SnippetExtension = resultOrThrow(query.host, query.toIndexFormat(), "context")
 
-    fun getFormat(server: String) = template.getForEntity("http://$server$apiBathPath/format", CorpusFormat::class.java).body
-            ?: throw IllegalStateException("Could no get format from server $server")
+    fun getFormat(server: String): CorpusFormat {
+        val url = "http://$server$apiBathPath/format"
+        try {
+            val response = template.getForEntity(url, CorpusFormat::class.java)
+            return response.body
+                    ?: throw IllegalStateException("Could no get format from server $server")
+        } catch (ex: Exception) {
+            log.warn("Could not get corpus format from $url")
+            throw ex
+        }
+    }
 
     private inline fun <reified T> resultOrThrow(host: String, content: Any, endpoint: String): T {
         val input = content.toJson()

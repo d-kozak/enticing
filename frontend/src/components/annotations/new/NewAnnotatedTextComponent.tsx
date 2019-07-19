@@ -59,13 +59,13 @@ export const renderElement = (text: TextUnit, corpusFormat: CorpusFormat): React
             {renderElement(word, corpusFormat)}
         </React.Fragment>);
 
-        const attributes = corpusFormat.entities[text.entityClass]
-        if (!attributes) {
+        const entityInfo = corpusFormat.entities[text.entityClass]
+        if (!entityInfo) {
             console.error("No attributes found for entity " + text.entityClass)
             return <span>{children}</span>
         }
         const content = {} as { [key: string]: string };
-        const attributeNames = Object.keys(attributes);
+        const attributeNames = Object.keys(entityInfo.attributes);
         for (let i in text.attributes) {
             content[attributeNames[i]] = text.attributes[i];
         }

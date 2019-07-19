@@ -9,6 +9,7 @@ import {Snippet} from "../entities/Snippet";
 import {Interval, NewAnnotatedText, QueryMatch, Word} from "../components/annotations/new/NewAnnotatedText";
 import {CorpusFormat} from "../entities/CorpusFormat";
 import {DonaldTrump, EdSheeran, KarlovyVary} from "./mockAnnotations";
+import {getProcessedSnippets} from "./realResponse";
 
 
 export const mockCorpusFormat: CorpusFormat = {
@@ -19,20 +20,26 @@ export const mockCorpusFormat: CorpusFormat = {
     },
     entities: {
         person: {
-            name: 'name',
-            url: 'url',
-            gender: 'gender',
-            birthplace: 'birthplace',
-            birthdate: 'birthdate',
-            image: 'image',
-            nertag: 'person'
+            description: "",
+            attributes: {
+                name: 'name',
+                url: 'url',
+                gender: 'gender',
+                birthplace: 'birthplace',
+                birthdate: 'birthdate',
+                image: 'image',
+                nertag: 'person'
+            }
         },
         location: {
-            name: 'name',
-            url: 'url',
-            country: 'country',
-            image: 'image',
-            nertag: 'nertag'
+            description: "",
+            attributes: {
+                name: 'name',
+                url: 'url',
+                country: 'country',
+                image: 'image',
+                nertag: 'nertag'
+            }
         }
     }
 }
@@ -95,7 +102,7 @@ const mockExecuteQuery: ((query: string) => Promise<Array<Snippet>>) = (query) =
         setTimeout(() => {
             switch (query) {
                 case 'nertag:person (visited|entered)':
-                    resolve(resultArray);
+                    resolve(getProcessedSnippets());
                     break;
                 case 'fail':
                     reject("booom!");

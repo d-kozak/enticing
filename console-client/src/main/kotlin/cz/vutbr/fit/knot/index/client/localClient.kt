@@ -17,7 +17,7 @@ fun startLocalClient(config: ConsoleClientType.LocalIndex, searchConfig: SearchC
 internal fun executeLocally(queryExecutor: QueryExecutor, input: String) {
     val query = SearchQuery(
             input,
-            20,
+            33,
             Offset(0, 0),
             TextMetadata.Predefined("all"),
             ResponseType.FULL,

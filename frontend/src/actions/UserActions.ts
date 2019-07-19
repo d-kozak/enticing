@@ -108,7 +108,8 @@ export const searchSettingsSelectedRequestAction = (settings: SearchSettings, pr
                 } else {
                     throw "cannot parse";
                 }
-            }).catch(() => {
+            }).catch((error) => {
+            console.error(error);
             dispatch(openSnackBar(`Failed to select settings ${settings.name}`));
             // rollback to previously selected
             dispatch(userSearchSettingsSelectedSuccessAction(previousSelectedSettings));

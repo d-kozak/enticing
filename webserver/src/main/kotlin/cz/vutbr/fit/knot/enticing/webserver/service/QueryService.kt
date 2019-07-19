@@ -22,7 +22,7 @@ class QueryService(
     fun query(query: String, selectedSettings: Long): Webserver.SearchResult {
         val currentUser = userService.currentUser
         val searchQuery = SearchQuery(query, currentUser?.userSettings?.resultsPerPage
-                ?: Defaults.snippetCount)
+                ?: Defaults.snippetCount, responseFormat = ResponseFormat.NEW_ANNOTATED_TEXT)
 
         val searchSettings = searchSettingsRepository.findById(selectedSettings).orElseThrow { IllegalArgumentException("Unknown searchSettings id $selectedSettings") }
 
@@ -44,6 +44,7 @@ class QueryService(
 
 
     fun format(selectedSettings: Long): CorpusFormat {
+        val currentUser = userService.currentUser
         val searchSettings = searchSettingsRepository.findById(selectedSettings).orElseThrow { IllegalArgumentException("Unknown searchSettings id $selectedSettings") }
         if (searchSettings.private && (currentUser == null || !currentUser.isAdmin)) {
             throw IllegalArgumentException("Settings is private, current user (or anonymous user) cannot use it")

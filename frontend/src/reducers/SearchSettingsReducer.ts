@@ -83,10 +83,11 @@ const searchSettingsReducer: SearchSettingsReducer = (state = initialState, acti
                     ...toUpdate,
                     corpusFormat: action.format
                 }
-                const key = action.id
                 return {
-                    ...state,
-                    key: updated
+                    settings: {
+                        ...state.settings,
+                        [action.id]: updated
+                    }
                 }
             } else {
                 console.error(`Settings with id ${action.id} not found, therefore this is no-op`)

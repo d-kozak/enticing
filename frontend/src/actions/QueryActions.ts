@@ -38,13 +38,15 @@ export const startSearchingAction = (query: SearchQuery, searchSettings: SearchS
         }
         for (let snippet of response.data.snippets) {
             snippet.id = `${snippet.host}:${snippet.collection}:${snippet.documentId}`
+            const parsed = parseNewAnnotatedText(snippet.payload.content);
+            if (parsed !== null) {
+                snippet.payload.content = parsed
+            } else {
+                console.error("could not parse snippet " + JSON.stringify(snippet))
+            }
         }
-        const snippets = response.data.snippets.map(
-            item => parseNewAnnotatedText(item)
-        ).filter(item => item != null)
 
-        // @ts-ignore
-        dispatch(newSearchResultsAction(snippets, searchSettings.corpusFormat));
+        dispatch(newSearchResultsAction(response.data.snippets, searchSettings.corpusFormat!));
         dispatch(hideProgressBarAction());
         if (history) {
             history.push(`/search?query=${encodedQuery}`);

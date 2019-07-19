@@ -60,7 +60,7 @@ export class Word extends EnticingObject implements TextUnit {
 }
 
 export const wordSchema = yup.object({
-    indexes: yup.array(yup.string().required())
+    indexes: yup.array(yup.string().required()).required()
 })
 
 export function isWord(obj: Object): obj is Word {
@@ -78,9 +78,9 @@ export class Entity extends EnticingObject implements TextUnit {
 }
 
 export const entitySchema = yup.object({
-    attributes: yup.array(yup.string().required()),
-    entityClass: yup.string(),
-    words: yup.array(wordSchema)
+    attributes: yup.array(yup.string().required()).required(),
+    entityClass: yup.string().required(),
+    words: yup.array(wordSchema).required()
 });
 
 export function isEntity(obj: Object): obj is Entity {
@@ -88,7 +88,7 @@ export function isEntity(obj: Object): obj is Entity {
 }
 
 export class QueryMatch extends EnticingObject implements TextUnit {
-    constructor(public queryIndex: Interval, public content: Array<Entity | Word>) {
+    constructor(public queryMatch: Interval, public content: Array<Entity | Word>) {
         super();
     }
 
@@ -99,7 +99,7 @@ export class QueryMatch extends EnticingObject implements TextUnit {
 
 export const queryMatchSchema = yup.object({
     queryIndex: intervalSchema,
-    content: yup.array()
+    content: yup.array().required()
 })
 
 export function isQueryMatch(obj: Object): obj is QueryMatch {
@@ -112,7 +112,6 @@ export function parseNewAnnotatedText(input: object): NewAnnotatedText | null {
         console.error("could not parse " + JSON.stringify(input))
         return null
     }
-
     for (let elem of input.content) {
         const parsed = parseElement(elem)
         if (parsed != null)
@@ -128,7 +127,7 @@ function parseElement(elem: TextUnit): TextUnit | null {
         const words = elem.words.map(word => new Word(word.indexes))
         return new Entity(elem.attributes, elem.entityClass, words)
     } else if (isQueryMatch(elem)) {
-        const interval = new Interval(elem.queryIndex.from, elem.queryIndex.to);
+        const interval = new Interval(elem.queryMatch.from, elem.queryMatch.to);
 
         // @ts-ignore incorrect stuff is filtered out, but typescript cannot see it :X
         const content: Array<Word | Entity> = elem.content.map(elem => parseElement(elem))

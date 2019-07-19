@@ -8,6 +8,9 @@ import cz.vutbr.fit.knot.enticing.index.query.clamp
 import it.unimi.dsi.util.Interval
 
 fun createNewAnnotatedText(data: SnippetPartsFields, intervals: List<Interval>): NewAnnotatedText {
+    if (data.elements.isEmpty()) {
+        return NewAnnotatedText()
+    }
     val items = splitEntities(intervals, data)
     check(items.elements.isNotEmpty()) { "Items should never be empty" }
 
@@ -20,7 +23,7 @@ fun createNewAnnotatedText(data: SnippetPartsFields, intervals: List<Interval>):
                 )
             }
 
-            val match = TextUnit.QueryMatch(cz.vutbr.fit.knot.enticing.dto.Interval(0, 1), getElementsAt(interval.left to interval.right, items) as List<TextUnit.ElementaryTextUnit>)
+            val match = TextUnit.QueryMatch(cz.vutbr.fit.knot.enticing.dto.Interval(0, 1), getElementsAt(interval.left to interval.right, items))
             elements.add(match)
             if (i < intervals.size - 1) {
                 val nextStart = intervals[i + 1].left - 1

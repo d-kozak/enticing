@@ -6,6 +6,7 @@ import {
     isQueryMapping,
     MatchedRegion
 } from "../Annotation";
+import {isCorpusFormat} from "../CorpusFormat";
 
 describe('validation tests', () => {
     it('matched region validation', () => {
@@ -152,5 +153,214 @@ describe('validation tests', () => {
         for (let text of invalid) {
             expect(isAnnotatedText(text)).toBe(false)
         }
+    })
+
+    it('corpus format validation', () => {
+        const input = {
+            "corpusName": "CC",
+            "indexes": {
+                "position": "Position of the word in the document",
+                "token": "Original word in the document",
+                "tag": "tag",
+                "lemma": "Lemma of the word",
+                "parpos": "parpos",
+                "function": "function",
+                "parwrod": "parword",
+                "parlemma": "parlemma",
+                "paroffset": "paroffset",
+                "link": "link",
+                "length": "length",
+                "docuri": "docuri",
+                "lower": "lower",
+                "nerid": "nerid",
+                "nertag": "nertag",
+                "param0": "",
+                "param1": "",
+                "param2": "",
+                "param3": "",
+                "param4": "",
+                "param5": "",
+                "param6": "",
+                "param7": "",
+                "param8": "",
+                "param9": "",
+                "nertype": "nertype",
+                "nerlength": "nerlength"
+            },
+            "entities": {
+                "person": {
+                    "description": "",
+                    "attributes": {
+                        "url": "",
+                        "image": "",
+                        "name": "",
+                        "gender": "",
+                        "birthplace": "",
+                        "birthdate": "",
+                        "deathplace": "",
+                        "deathdate": "",
+                        "profession": "",
+                        "nationality": "",
+                        "nertype": "nertype",
+                        "nerlength": "nerlength"
+                    }
+                },
+                "artist": {
+                    "description": "",
+                    "attributes": {
+                        "url": "",
+                        "image": "",
+                        "name": "",
+                        "gender": "",
+                        "birthplace": "",
+                        "birthdate": "",
+                        "deathplace": "",
+                        "deathdate": "",
+                        "role": "",
+                        "nationality": "",
+                        "nertype": "nertype",
+                        "nerlength": "nerlength"
+                    }
+                },
+                "location": {
+                    "description": "",
+                    "attributes": {
+                        "url": "",
+                        "image": "",
+                        "name": "",
+                        "country": "",
+                        "nertype": "nertype",
+                        "nerlength": "nerlength"
+                    }
+                },
+                "artwork": {
+                    "description": "",
+                    "attributes": {
+                        "url": "",
+                        "image": "",
+                        "name": "",
+                        "form": "",
+                        "datebegun": "",
+                        "datecompleted": "",
+                        "movement": "",
+                        "genre": "",
+                        "author": "",
+                        "nertype": "nertype",
+                        "nerlength": "nerlength"
+                    }
+                },
+                "event": {
+                    "description": "",
+                    "attributes": {
+                        "url": "",
+                        "image": "",
+                        "name": "",
+                        "startdate": "",
+                        "enddate": "",
+                        "location": "",
+                        "nertype": "nertype",
+                        "nerlength": "nerlength"
+                    }
+                },
+                "museum": {
+                    "description": "",
+                    "attributes": {
+                        "url": "",
+                        "image": "",
+                        "name": "",
+                        "type": "",
+                        "established": "",
+                        "director": "",
+                        "location": "",
+                        "nertype": "nertype",
+                        "nerlength": "nerlength"
+                    }
+                },
+                "family": {
+                    "description": "",
+                    "attributes": {
+                        "url": "",
+                        "image": "",
+                        "name": "",
+                        "role": "",
+                        "nationality": "",
+                        "members": "",
+                        "nertype": "nertype",
+                        "nerlength": "nerlength"
+                    }
+                },
+                "group": {
+                    "description": "",
+                    "attributes": {
+                        "url": "",
+                        "image": "",
+                        "name": "",
+                        "role": "",
+                        "nationality": "",
+                        "nertype": "nertype",
+                        "nerlength": "nerlength"
+                    }
+                },
+                "nationality": {
+                    "description": "",
+                    "attributes": {
+                        "url": "",
+                        "image": "",
+                        "name": "",
+                        "country": "",
+                        "nertype": "nertype",
+                        "nerlength": "nerlength"
+                    }
+                },
+                "date": {
+                    "description": "",
+                    "attributes": {
+                        "url": "",
+                        "image": "",
+                        "year": "",
+                        "month": "",
+                        "day": "",
+                        "nertype": "nertype",
+                        "nerlength": "nerlength"
+                    }
+                },
+                "interval": {
+                    "description": "",
+                    "attributes": {
+                        "url": "",
+                        "image": "",
+                        "fromyear": "",
+                        "frommonth": "",
+                        "fromday": "",
+                        "toyear": "",
+                        "tomonth": "",
+                        "today": "",
+                        "nertype": "nertype",
+                        "nerlength": "nerlength"
+                    }
+                },
+                "form": {
+                    "description": "",
+                    "attributes": {"url": "", "image": "", "name": "", "nertype": "nertype", "nerlength": "nerlength"}
+                },
+                "medium": {
+                    "description": "",
+                    "attributes": {"url": "", "image": "", "name": "", "nertype": "nertype", "nerlength": "nerlength"}
+                },
+                "mythology": {
+                    "description": "",
+                    "attributes": {"url": "", "image": "", "name": "", "nertype": "nertype", "nerlength": "nerlength"}
+                },
+                "movement": {
+                    "description": "",
+                    "attributes": {"url": "", "image": "", "name": "", "nertype": "nertype", "nerlength": "nerlength"}
+                },
+                "genre": {
+                    "description": "",
+                    "attributes": {"url": "", "image": "", "name": "", "nertype": "nertype", "nerlength": "nerlength"}
+                }
+            }
+        }
+        expect(isCorpusFormat(input)).toBe(true);
     })
 })
