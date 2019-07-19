@@ -30,7 +30,10 @@ import org.slf4j.LoggerFactory
 @Cleanup("put into configuration?")
 const val SNIPPET_SIZE = 50
 
+private val log = LoggerFactory.getLogger(QueryExecutor::class.java)
+
 fun initQueryExecutor(config: IndexClientConfig): QueryExecutor {
+    log.info("initializing with config $config")
     val collection = Mg4jCompositeDocumentCollection(config.corpusConfiguration, config.mg4jFiles)
     val factory = Mg4jDocumentFactory(config.corpusConfiguration)
 
@@ -124,7 +127,11 @@ class QueryExecutor internal constructor(
 
             val content = document.loadSnippetPartsFields(left, right + 1, config)
 
-            val payload = createPayload(query, content, relevantScores)
+            val payload = if (content.elements.isNotEmpty()) createPayload(query, content, relevantScores.map { it.clampRight(left + content.elements.size - 1) })
+            else {
+                log.warn("loaded empty document, why? ${document.title()}")
+                createPayload(query, content, emptyList())
+            }
 
             val match = IndexServer.Snippet(
                     collectionName,

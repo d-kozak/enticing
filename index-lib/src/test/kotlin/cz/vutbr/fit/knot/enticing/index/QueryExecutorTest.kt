@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.enticing.index
 
 import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
+import cz.vutbr.fit.knot.enticing.dto.annotation.Warning
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.*
 import cz.vutbr.fit.knot.enticing.dto.utils.toDto
 import cz.vutbr.fit.knot.enticing.index.query.computeExtensionIntervals
@@ -134,6 +135,38 @@ class QueryExecutorTest {
                 result.rethrowException()
             }
             println(result)
+        }
+    }
+
+    @Test
+    fun `valid queries with new data format requested`() {
+        val queryEngine = initQueryExecutor(clientConfig)
+        for (input in listOf(
+                "hello",
+                "john",
+                "lemma:work{{lemma->token}}",
+                "nertag:person{{nertag->token}}",
+                "job work"
+        )) {
+            val query = templateQuery.copy(query = input, responseFormat = ResponseFormat.NEW_ANNOTATED_TEXT)
+
+            val result = queryEngine.query(query)
+            if (result.isFailure) {
+                result.rethrowException()
+            }
+            println(result)
+        }
+    }
+
+    @Warning("it seems that different documents are being returned in test environment, why?")
+    @Test
+    fun problematicQuery() {
+        val query = SearchQuery(query = "job work", snippetCount = 33, offset = Offset(document = 0, snippet = 0), metadata = TextMetadata.Predefined(value = "all"), responseType = ResponseType.FULL, responseFormat = ResponseFormat.NEW_ANNOTATED_TEXT, defaultIndex = "token")
+        val queryEngine = initQueryExecutor(clientConfig)
+        val result = queryEngine.query(query)
+        println(result)
+        if (result.isFailure) {
+            result.rethrowException()
         }
     }
 
