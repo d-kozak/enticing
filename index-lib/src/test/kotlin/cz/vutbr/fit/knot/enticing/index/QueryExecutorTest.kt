@@ -170,7 +170,7 @@ class QueryExecutorTest {
         val executor = initQueryExecutor(clientConfig)
 
         val (prefix, suffix, _) = executor.extendSnippet(
-                IndexServer.ContextExtensionQuery("col1", 2, 5, 5, 10
+                IndexServer.ContextExtensionQuery("col1", 2, 5, 5, 10, responseFormat = ResponseFormat.ANNOTATED_TEXT
                 )).unwrap()
 
         for (text in listOf(prefix, suffix)) {
