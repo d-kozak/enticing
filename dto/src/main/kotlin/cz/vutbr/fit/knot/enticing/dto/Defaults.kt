@@ -8,7 +8,7 @@ package cz.vutbr.fit.knot.enticing.dto
 object Defaults {
     val snippetCount = 20
     val defaultIndex = "token"
-    val responseFormat = ResponseFormat.ANNOTATED_TEXT
+    val responseFormat = ResponseFormat.NEW_ANNOTATED_TEXT
     val responseType: ResponseType = ResponseType.FULL
     val metadata = TextMetadata.Predefined("all")
 }

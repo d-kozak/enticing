@@ -22,7 +22,7 @@ class QueryService(
     fun query(query: String, selectedSettings: Long): Webserver.SearchResult {
         val currentUser = userService.currentUser
         val searchQuery = SearchQuery(query, currentUser?.userSettings?.resultsPerPage
-                ?: Defaults.snippetCount, responseFormat = ResponseFormat.NEW_ANNOTATED_TEXT)
+                ?: Defaults.snippetCount)
 
         val searchSettings = searchSettingsRepository.findById(selectedSettings).orElseThrow { IllegalArgumentException("Unknown searchSettings id $selectedSettings") }
 
