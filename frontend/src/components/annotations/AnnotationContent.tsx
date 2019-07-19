@@ -21,12 +21,19 @@ export interface AnnotationContentProps extends WithStyles<typeof styles> {
     annotation: Annotation;
 }
 
+const parseUrl = (maybeMutlipleUrls: string): string => {
+    if (maybeMutlipleUrls.indexOf("|") != -1) {
+        return maybeMutlipleUrls.split("|")[0];
+    }
+    return maybeMutlipleUrls
+}
+
 const AnnotationContent = (props: AnnotationContentProps) => {
     const {annotation, classes} = props;
     const content = annotation.content;
     return <div>
         <Typography variant="h4">{content["type"]}</Typography>
-        {content["image"] && <img className={classes.image} src={content["image"]}/>}
+        {content["image"] && <img className={classes.image} src={parseUrl(content["image"])}/>}
         {Object.keys(content).map(
             (name, index) => <div key={index}>
                 <Typography variant="body1"><span
