@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.enticing.index.payload
 
 import cz.vutbr.fit.knot.enticing.dto.NewAnnotatedText
 import cz.vutbr.fit.knot.enticing.dto.TextUnit
+import cz.vutbr.fit.knot.enticing.dto.annotation.Warning
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetPartsFields
 import cz.vutbr.fit.knot.enticing.index.query.clamp
@@ -39,7 +40,10 @@ fun createNewAnnotatedText(data: SnippetPartsFields, intervals: List<Interval>):
             }
             elements
         }.flatten()
-    } else getElementsAt(0 to items.last().index, items)
+    } else {
+        @Warning("When the beginning of the interval was incorrectly set to 0, it was returning the first element from the SnippetPartsFields (containing only subset of the document) instead of failing, should be fixed")
+        getElementsAt(items.first().index to items.last().index, items)
+    }
     return NewAnnotatedText(textUnits)
 }
 
