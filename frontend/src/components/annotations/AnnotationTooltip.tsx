@@ -22,7 +22,7 @@ export interface AnnotationTooltipProps extends WithStyles<typeof styles> {
     children?: React.ReactNode
     annotation: Annotation,
     text: string,
-    color: string
+    color?: string
 }
 
 const AnnotationTooltip = (props: AnnotationTooltipProps) => {
@@ -43,9 +43,7 @@ const AnnotationTooltip = (props: AnnotationTooltipProps) => {
         }
     };
 
-    const style = {
-        color
-    }
+    const style = color ? {color} : {}
 
     const tooltip = classes.tooltip;
 

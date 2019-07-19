@@ -9,7 +9,6 @@ import {Snippet} from "../entities/Snippet";
 import {Interval, NewAnnotatedText, QueryMatch, Word} from "../components/annotations/new/NewAnnotatedText";
 import {CorpusFormat} from "../entities/CorpusFormat";
 import {DonaldTrump, EdSheeran, KarlovyVary} from "./mockAnnotations";
-import {getProcessedSnippets} from "./realResponse";
 
 
 export const mockCorpusFormat: CorpusFormat = {
@@ -102,7 +101,7 @@ const mockExecuteQuery: ((query: string) => Promise<Array<Snippet>>) = (query) =
         setTimeout(() => {
             switch (query) {
                 case 'nertag:person (visited|entered)':
-                    resolve(getProcessedSnippets());
+                    resolve(resultArray);
                     break;
                 case 'fail':
                     reject("booom!");

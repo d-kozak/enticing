@@ -36,7 +36,7 @@ const colors = ["red", "green", "blue"];
 
 export const renderElement = (text: TextUnit, corpusFormat: CorpusFormat): React.ReactNode => {
     if (text instanceof Word) {
-        const color = colors[Math.floor(Math.random() * colors.length)];
+        //const color = "black" // todo choose color colors[Math.floor(Math.random() * colors.length)];
 
         const content = {} as { [clazz: string]: string }
         const indexNames = Object.keys(corpusFormat.indexes)
@@ -51,7 +51,7 @@ export const renderElement = (text: TextUnit, corpusFormat: CorpusFormat): React
         const token = text.indexes[tokenIndex] + " ";
         delete annotation.content.token;
         if (Object.keys(annotation.content).length > 0)
-            return <AnnotationTooltip annotation={annotation} text={token} color={color}/>
+            return <AnnotationTooltip annotation={annotation} text={token}/>
         else return <span>{token}</span>
     } else if (text instanceof Entity) {
         const color = colors[Math.floor(Math.random() * colors.length)];

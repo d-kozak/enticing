@@ -32,3 +32,4 @@ Currently, way too many annotations open at once when mouse hovers over text. Tw
 ## Annotation colors
 Currently every annotated element is colored. This looks nice for scenarios with a few annotations. However, it gets ugly once 
 there are annotations for every word, which will actually be quite common. What about coloring only entities and keeping the words in default color?
+![alt text](../img/omalovanka.jpg)
