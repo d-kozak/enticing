@@ -8,12 +8,14 @@ import {SearchQuery} from "../entities/SearchQuery";
 import {Snippet} from "../entities/Snippet";
 import {NewAnnotatedText, Word} from "../components/annotations/new/NewAnnotatedText";
 import {CorpusFormat} from "../entities/CorpusFormat";
+import {DonaldTrump, EdSheeran, KarlovyVary} from "./mockAnnotations";
 
 
 export const mockCorpusFormat: CorpusFormat = {
     corpusName: "mockCorpus",
     indexes: {
-        token: "token"
+        token: "token",
+        lemma: "lemma"
     },
     entities: {
         person: {
@@ -25,7 +27,7 @@ export const mockCorpusFormat: CorpusFormat = {
             image: 'image',
             nertag: 'person'
         },
-        place: {
+        location: {
             name: 'name',
             url: 'url',
             country: 'country',
@@ -44,7 +46,7 @@ export const firstResult: Snippet = {
     location: 0,
     size: 42,
     payload: {
-        content: new NewAnnotatedText([new Word(["Ed"]), new Word(["Sheeran"]), new Word(["visited"]), new Word(["Liberia"]), new Word(["and"]), new Word(["meets"]), new Word(["JD,"]), new Word(["a"]), new Word(["homeless"]), new Word(["Liberian"]), new Word(["14-year-old"]), new Word(["boy."]), new Word(["After"]), new Word(["Sheeran"]), new Word(["saw"]), new Word(["an"]), new Word(["older"]), new Word(["man"]), new Word(["hitting"]), new Word(["JD"]), new Word(["in"]), new Word(["public,"]), new Word(["he"]), new Word(["knew"])])
+        content: new NewAnnotatedText([EdSheeran, new Word(["visited", "visit"]), new Word(["Liberia"]), new Word(["and"]), new Word(["meets"]), new Word(["JD,"]), new Word(["a"]), new Word(["homeless"]), new Word(["Liberian"]), new Word(["14-year-old"]), new Word(["boy."]), new Word(["After"]), new Word(["Sheeran"]), new Word(["saw"]), new Word(["an"]), new Word(["older"]), new Word(["man"]), new Word(["hitting"]), new Word(["JD"]), new Word(["in"]), new Word(["public,"]), new Word(["he"]), new Word(["knew"])])
     },
     url: 'https://www.borgenmagazine.com/ed-sheeran-visited-liberia/',
     canExtend: true
@@ -59,7 +61,7 @@ export const secondResult: Snippet = {
     location: 0,
     size: 42,
     payload: {
-        content: new NewAnnotatedText([new Word(["President"]), new Word(["Donald"]), new Word(["Trump"]), new Word(["visited"]), new Word(["San"]), new Word(["Antonio"]), new Word(["for"]), new Word(["a"]), new Word(["closed-door"]), new Word(["fundraiser"]), new Word(["at"]), new Word(["The"]), new Word(["Argyle,"]), new Word(["the"]), new Word(["exclusive"]), new Word(["dinner"]), new Word(["club"]), new Word(["in"]), new Word(["Alamo"]), new Word(["Heights."]), new Word(["Air"]), new Word(["Force"]), new Word(["..."])])
+        content: new NewAnnotatedText([new Word(["President"]), DonaldTrump, new Word(["visited"]), new Word(["San"]), new Word(["Antonio"]), new Word(["for"]), new Word(["a"]), new Word(["closed-door"]), new Word(["fundraiser"]), new Word(["at"]), new Word(["The"]), new Word(["Argyle,"]), new Word(["the"]), new Word(["exclusive"]), new Word(["dinner"]), new Word(["club"]), new Word(["in"]), new Word(["Alamo"]), new Word(["Heights."]), new Word(["Air"]), new Word(["Force"]), new Word(["..."])])
     },
     url: 'https://www.mysanantonio.com/news/local/article/President-Trump-arrives-in-San-Antonio-for-13756986.php',
     canExtend: true
@@ -74,7 +76,7 @@ export const thirdResult: Snippet = {
     location: 0,
     size: 42,
     payload: {
-        content: new NewAnnotatedText([new Word(["The"]), new Word(["president"]), new Word(["of"]), new Word(["the"]), new Word(["Czech"]), new Word(["republic"]), new Word(["Milos"]), new Word(["Zeman"]), new Word(["visited"]), new Word(["a"]), new Word(["porcelain"]), new Word(["factory"]), new Word(["Thun"]), new Word(["1794"]), new Word(["within"]), new Word(["his"]), new Word(["two-day"]), new Word(["visit"]), new Word(["to"]), new Word(["Karlovy"]), new Word(["Vary"]), new Word(["region."]), new Word(["The"]), new Word(["president"]), new Word(["met"]), new Word(["with"]), new Word(["..."])])
+        content: new NewAnnotatedText([new Word(["The"]), new Word(["president"]), new Word(["of"]), new Word(["the"]), new Word(["Czech"]), new Word(["republic"]), new Word(["Milos"]), new Word(["Zeman"]), new Word(["visited"]), new Word(["a"]), new Word(["porcelain"]), new Word(["factory"]), new Word(["Thun"]), new Word(["1794"]), new Word(["within"]), new Word(["his"]), new Word(["two-day"]), new Word(["visit"]), new Word(["to"]), KarlovyVary, new Word(["region."]), new Word(["The"]), new Word(["president"]), new Word(["met"]), new Word(["with"]), new Word(["..."])])
     },
     url: 'https://www.thun.cz/en/article/238-visit-of-mr--president-milos-zeman.html',
     canExtend: true

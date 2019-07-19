@@ -58,9 +58,19 @@ export const renderElement = (text: TextUnit, corpusFormat: CorpusFormat): React
         const children = text.words.map((word, index) => <React.Fragment key={index}>
             {renderElement(word, corpusFormat)}
         </React.Fragment>);
-        return <span> E {children} E </span>
-        // return <AnnotationTooltip annotation={{id: "NULL", content: text.attributes}} text="" color={color}
-        //                           children={children}/>
+
+        const attributes = corpusFormat.entities[text.entityClass]
+        if (!attributes) {
+            console.error("No attributes found for entity " + text.entityClass)
+            return <span>{children}</span>
+        }
+        const content = {} as { [key: string]: string };
+        const attributeNames = Object.keys(attributes);
+        for (let i in text.attributes) {
+            content[attributeNames[i]] = text.attributes[i];
+        }
+        return <AnnotationTooltip annotation={{id: "NULL", content}} text="" color={color}
+                                  children={children}/>
     } else if (text instanceof QueryMatch) {
         const content = <React.Fragment>
             {text.content.map((elem, index) => <React.Fragment key={index}>
