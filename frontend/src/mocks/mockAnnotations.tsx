@@ -43,7 +43,7 @@ export const KarlovyVary: Annotation = {
     content: {
         name: 'Karlovy Vary',
         url: 'https://cs.wikipedia.org/wiki/Karlovy_Vary',
-        Country: 'Czechia',
+        country: 'Czechia',
         image: 'https://upload.wikimedia.org/wikipedia/commons/d/d8/Karlovy_Vary_Czech.jpg',
         nertag: 'place'
     }

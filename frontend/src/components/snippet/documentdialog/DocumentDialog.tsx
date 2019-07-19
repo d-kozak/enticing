@@ -49,7 +49,7 @@ const DialogContent = withStyles(theme => ({
 
 
 const DocumentDialog = (props: DocumentDialogProps) => {
-    const {document, dialogClosed, classes} = props;
+    const {document, corpusFormat: corpusFormat, dialogClosed, classes} = props;
 
     return <Dialog
         open={document != null}
@@ -62,15 +62,17 @@ const DocumentDialog = (props: DocumentDialogProps) => {
                     <CloseIcon/>
                 </IconButton>
             </MuiDialogTitle>
-            {document !== null && <DialogContent>
-                <DocumentDialogContent document={document}/>
+            {document !== null && corpusFormat !== null &&
+            <DialogContent>
+                <DocumentDialogContent document={document} corpusFormat={corpusFormat}/>
             </DialogContent>}
         </div>
     </Dialog>
 };
 
 const mapStateToProps = (state: AppState) => ({
-    document: state.dialog.documentDialog.document
+    document: state.dialog.documentDialog.document,
+    corpusFormat: state.dialog.documentDialog.corpusFormat
 });
 
 const mapDispatchToProps = {

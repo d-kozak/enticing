@@ -7,8 +7,6 @@ export interface TextUnit {
     size(): number
 }
 
-export type ContentMap = { [key: string]: string };
-
 export class Interval extends EnticingObject {
     constructor(public from: number, public to: number) {
         super();
@@ -70,7 +68,7 @@ export function isWord(obj: Object): obj is Word {
 }
 
 export class Entity extends EnticingObject implements TextUnit {
-    constructor(public attributes: ContentMap, public entityClass: string, public words: Array<Word>) {
+    constructor(public attributes: Array<string>, public entityClass: string, public words: Array<Word>) {
         super();
     }
 

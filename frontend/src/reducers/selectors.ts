@@ -14,25 +14,26 @@ const searchSettingsSelector = (state: AppState) => state.searchSettings.setting
 
 const selectedSettingsSelector = (state: AppState) => state.userState.selectedSettings
 
-export const selectedSearchSettingsIndexSelector = createSelector(searchSettingsSelector, selectedSettingsSelector, (searchSettings, selectedSettings) => {
+export const selectedSearchSettingsSelector = createSelector(searchSettingsSelector, selectedSettingsSelector, (searchSettings, selectedSettings) => {
     if (selectedSettings == null) {
         for (let i in searchSettings) {
             if (searchSettings[i].default) {
-                return i;
+                return searchSettings[i];
             }
         }
     } else {
         for (let i in searchSettings) {
             if (searchSettings[i].id == selectedSettings) {
-                return i;
+                return searchSettings[i];
             }
         }
     }
     console.warn("Unknown settings");
     console.warn(JSON.stringify(searchSettings, null, 2))
     console.warn(JSON.stringify(selectedSettings, null, 2))
-    return "-1";
+    return null
 });
+
 
 
 export const newSearchSettingsSelector = createSelector(searchSettingsSelector,

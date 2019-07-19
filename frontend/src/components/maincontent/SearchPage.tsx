@@ -13,7 +13,9 @@ import {SearchQuery} from "../../entities/SearchQuery";
 import SearchInput from "../searchbar/SearchInput";
 
 import * as H from 'history';
-import {selectedSearchSettingsIndexSelector} from "../../reducers/selectors";
+import {selectedSearchSettingsSelector} from "../../reducers/selectors";
+import {SearchSettings} from "../../entities/SearchSettings";
+import {openSnackBar} from "../../actions/SnackBarActions";
 
 const styles = createStyles({
     searchInput: {
@@ -32,31 +34,38 @@ export type SearchPageProps =
 }
 
 const SearchPage = (props: SearchPageProps) => {
-    const {snippets, startSearching, classes, selectedSettings, history, location} = props;
+    const {snippets, startSearching, classes, selectedSettings, history, location, openSnackbar, corpusFormat} = props;
     const params = new URLSearchParams(location.search);
     const query = params.get('query') || '';
 
     useEffect(() => {
         if (snippets === null) {
-            startSearching(query, Number(selectedSettings));
+            if (selectedSettings !== null) {
+                startSearching(query, selectedSettings);
+            } else {
+                openSnackBar("no search settings selected, could not execute search");
+            }
         }
     }, [snippets])
 
 
     return <div>
         <SearchInput className={classes.searchInput} history={history} initialQuery={query}/>
-        {snippets !== null && snippets.length > 0 ? <SearchResultList snippet={snippets}/> :
+        {snippets !== null && snippets.length > 0 ?
+            <SearchResultList snippet={snippets} corpusFormat={corpusFormat!}/> :
             <NoResultsFound/>}
     </div>
 };
 
 const mapStateToProps = (state: AppState) => ({
     snippets: state.searchResult.snippets,
-    selectedSettings: selectedSearchSettingsIndexSelector(state)
+    corpusFormat: state.searchResult.corpusFormat,
+    selectedSettings: selectedSearchSettingsSelector(state)
 });
 
 const mapDispatchToProps = {
-    startSearching: startSearchingAction as (query: SearchQuery, selectedSettings: Number, history?: H.History) => void
+    startSearching: startSearchingAction as (query: SearchQuery, searchSettings: SearchSettings, history?: H.History) => void,
+    openSnackbar: openSnackBar
 };
 
 export default withStyles(styles, {

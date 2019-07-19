@@ -13,7 +13,7 @@ import Typography from "@material-ui/core/Typography";
 import {SearchSettings} from "../../entities/SearchSettings";
 import {searchSettingsSelectedRequestAction} from "../../actions/UserActions";
 import LinkTo from "../utils/linkTo";
-import {isAdminSelector, isLoggedInSelector, selectedSearchSettingsIndexSelector} from "../../reducers/selectors";
+import {isAdminSelector, isLoggedInSelector, selectedSearchSettingsSelector} from "../../reducers/selectors";
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import EditIcon from '@material-ui/icons/Edit';
 import InfoIcon from '@material-ui/icons/Info';
@@ -38,12 +38,13 @@ type SearchSettingsSelectorProps =
     & {}
 
 const SearchSettingsSelector = (props: SearchSettingsSelectorProps) => {
-    const {classes, isAdmin, isLoggedIn, searchSettings, selectSearchSettings, selectedSearchSettingsIndex, openSnackBar} = props;
+    const {classes, isAdmin, isLoggedIn, searchSettings, selectSearchSettings, selectedSearchSettings, openSnackBar} = props;
 
     const [anchorElem, setAnchorElem] = useState<HTMLElement | null>(null)
 
-    const selectedSearchSettings = searchSettings[selectedSearchSettingsIndex];
-    if (!selectSearchSettings) {
+
+    const selectedSearchSettingsIndex = selectedSearchSettings !== null ? selectedSearchSettings.id : "-1"
+    if (!selectedSearchSettings) {
         openSnackBar('No search settings is selected!');
     }
 
@@ -105,7 +106,7 @@ const mapStateToProps = (state: AppState) => ({
     isAdmin: isAdminSelector(state),
     isLoggedIn: isLoggedInSelector(state),
     searchSettings: state.searchSettings.settings,
-    selectedSearchSettingsIndex: selectedSearchSettingsIndexSelector(state),
+    selectedSearchSettings: selectedSearchSettingsSelector(state),
     openSnackBar: openSnackBar
 });
 const mapDispatchToProps = {

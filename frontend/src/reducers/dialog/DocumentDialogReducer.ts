@@ -4,9 +4,11 @@ import {
     DocumentDialogAction
 } from "../../actions/dialog/DocumentDialogAction";
 import {FullDocument} from "../../entities/FullDocument";
+import {CorpusFormat} from "../../entities/CorpusFormat";
 
 const initialState = {
-    document: null as FullDocument | null
+    document: null as FullDocument | null,
+    corpusFormat: null as CorpusFormat | null
 }
 
 export type DocumentDialogState = Readonly<typeof initialState>
@@ -17,12 +19,14 @@ const documentDialogReducer: DocumentDialogReducer = (state = initialState, acti
     switch (action.type) {
         case DOCUMENT_DIALOG_DOCUMENT_LOADED:
             return {
-                document: action.document
+                document: action.document,
+                corpusFormat: action.corpusFormat
             };
 
         case DOCUMENT_DIALOG_CLOSED:
             return {
-                document: null
+                document: null,
+                corpusFormat: null
             }
     }
     return state;

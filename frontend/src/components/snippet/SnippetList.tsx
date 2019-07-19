@@ -13,6 +13,7 @@ import {AppState} from "../../reducers/RootReducer";
 import {connect} from "react-redux";
 import {documentDialogRequestedAction} from "../../actions/dialog/DocumentDialogAction";
 import {Snippet} from "../../entities/Snippet";
+import {CorpusFormat} from "../../entities/CorpusFormat";
 
 const styles = createStyles({
     root: {
@@ -34,11 +35,12 @@ export type SnippetListProps =
     & typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
     & {
-    snippet: Array<Snippet>;
+    snippet: Array<Snippet>,
+    corpusFormat: CorpusFormat
 }
 
 const SnippetList = (props: SnippetListProps) => {
-    const {snippet, openDocumentDialog, classes} = props;
+    const {snippet, corpusFormat, openDocumentDialog, classes} = props;
 
     const [currentPage, setCurrentPage] = useState(0);
 
@@ -55,7 +57,7 @@ const SnippetList = (props: SnippetListProps) => {
                 (searchResult, index) => <React.Fragment key={index}>
                     {index > 0 && <Divider/>}
                     <SearchResultItem openDocument={openDocumentDialog}
-                                      snippet={searchResult}/>
+                                      snippet={searchResult} corpusFormat={corpusFormat}/>
                 </React.Fragment>)
         }
         <Typography
@@ -69,7 +71,7 @@ const SnippetList = (props: SnippetListProps) => {
 const mapStateToProps = (state: AppState) => ({});
 
 const mapDispatchToProps = {
-    openDocumentDialog: documentDialogRequestedAction as (searchResult: Snippet) => void
+    openDocumentDialog: documentDialogRequestedAction as (searchResult: Snippet, corpusFormat: CorpusFormat) => void
 }
 
 export default withStyles(styles, {

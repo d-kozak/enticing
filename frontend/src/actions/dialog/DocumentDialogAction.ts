@@ -8,13 +8,15 @@ import {openSnackBar} from "../SnackBarActions";
 import {Snippet} from "../../entities/Snippet";
 import {DocumentQuery} from "../../entities/DocumentQuery";
 import {parseNewAnnotatedText} from "../../components/annotations/new/NewAnnotatedText";
+import {CorpusFormat} from "../../entities/CorpusFormat";
 
 export const DOCUMENT_DIALOG_DOCUMENT_LOADED = '[DOCUMENT DIALOG] DOCUMENT LOADED';
 export const DOCUMENT_DIALOG_CLOSED = '[DOCUMENT DIALOG] CLOSED';
 
 interface DocumentDialogLoadedAction {
     type: typeof DOCUMENT_DIALOG_DOCUMENT_LOADED
-    document: FullDocument
+    document: FullDocument,
+    corpusFormat: CorpusFormat
 }
 
 interface DialogClosedAction {
@@ -24,16 +26,17 @@ interface DialogClosedAction {
 
 export type DocumentDialogAction = DocumentDialogLoadedAction | DialogClosedAction
 
-export const documentLoadedAction = (document: FullDocument): DocumentDialogLoadedAction => ({
+export const documentLoadedAction = (document: FullDocument, corpusFormat: CorpusFormat): DocumentDialogLoadedAction => ({
     type: DOCUMENT_DIALOG_DOCUMENT_LOADED,
-    document
+    document,
+    corpusFormat
 });
 
 export const documentDialogClosedAction = (): DialogClosedAction => ({
     type: DOCUMENT_DIALOG_CLOSED
 });
 
-export const documentDialogRequestedAction = (searchResult: Snippet): ThunkResult<void> => dispatch => {
+export const documentDialogRequestedAction = (searchResult: Snippet, corpusFormat: CorpusFormat): ThunkResult<void> => dispatch => {
     if (useMockApi()) {
         mockDocumentRequested(searchResult, dispatch);
         return;
@@ -56,7 +59,7 @@ export const documentDialogRequestedAction = (searchResult: Snippet): ThunkResul
             throw "could not parse"
         response.data.payload.content = parsed
         dispatch(hideProgressBarAction());
-        dispatch(documentLoadedAction(response.data));
+        dispatch(documentLoadedAction(response.data, corpusFormat));
     }).catch(() => {
         dispatch(openSnackBar('Could not load document'))
         dispatch(hideProgressBarAction());

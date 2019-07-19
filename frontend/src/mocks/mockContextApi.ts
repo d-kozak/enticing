@@ -3,6 +3,7 @@ import {hideProgressBarAction, showProgressBarAction} from "../actions/ProgressB
 import {loremOneSentece} from "./loremIpsum";
 import {searchResultUpdatedAction} from "../actions/SearchResultActions";
 import {Payload, Snippet} from "../entities/Snippet";
+import {NewAnnotatedText} from "../components/annotations/new/NewAnnotatedText";
 
 
 export const mockContextRequested = (searchResult: Snippet, dispatch: Dispatch) => {
@@ -19,8 +20,5 @@ export const mockContextRequested = (searchResult: Snippet, dispatch: Dispatch) 
 };
 
 const extendText = (annotatedText: Payload): Payload => ({
-    content: {
-        ...annotatedText.content,
-        text: annotatedText.content.text + loremOneSentece
-    }
+    content: new NewAnnotatedText([...annotatedText.content.content, ...loremOneSentece.content])
 });

@@ -4,8 +4,7 @@ import {documentLoadedAction} from "../actions/dialog/DocumentDialogAction";
 import {Snippet} from "../entities/Snippet";
 import {FullDocument} from "../entities/FullDocument";
 import {loremIpsumLong} from "./loremIpsum";
-import {EdSheeran} from "./mockAnnotations";
-import {MatchedRegion} from "../entities/Annotation";
+import {mockCorpusFormat} from "./mockSearchApi";
 
 
 export const mockDocumentRequested = (searchResult: Snippet, dispatch: Dispatch) => {
@@ -15,22 +14,13 @@ export const mockDocumentRequested = (searchResult: Snippet, dispatch: Dispatch)
             host: "google.com",
             collection: "col1", documentId: 42,
             payload: {
-                content: {
-                    text: loremIpsumLong,
-                    annotations: {
-                        "ed": EdSheeran
-                    },
-                    positions: [{
-                        annotationId: "ed", match: new MatchedRegion(99, 10), subAnnotations: []
-                    }],
-                    queryMapping: []
-                }
+                content: loremIpsumLong,
             },
             title: searchResult.url,
             url: searchResult.url,
             queryMapping: [],
         };
         dispatch(hideProgressBarAction());
-        dispatch(documentLoadedAction(document));
+        dispatch(documentLoadedAction(document, mockCorpusFormat));
     }, 2000);
 };

@@ -22,6 +22,8 @@ import {
 import {SearchSettings} from "../entities/SearchSettings";
 import {loadSearchSettingsAction} from "../actions/SearchSettingsActions";
 import {UserSettings as UserSettingsModel} from "../entities/UserSettings";
+import {corpusFormatLoadedAction} from "../actions/CorpusFormatActions";
+import {mockCorpusFormat} from "./mockSearchApi";
 
 
 interface MockUser extends User {
@@ -199,6 +201,7 @@ export const mockUserSettingsSelectedRequest = (settings: SearchSettings, dispat
     dispatch(showProgressBarAction());
     setTimeout(() => {
         dispatch(userSearchSettingsSelectedSuccessAction(settings));
+        dispatch(corpusFormatLoadedAction(Number(settings.id), mockCorpusFormat));
         dispatch(openSnackBar(`Selected configuration ${settings.name}`));
         dispatch(hideProgressBarAction());
     }, 2000);

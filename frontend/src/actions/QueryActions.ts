@@ -9,19 +9,24 @@ import {newSearchResultsAction} from "./SearchResultActions";
 import {openSnackBar} from "./SnackBarActions";
 import {isSearchResult} from "../entities/SearchResult";
 import {parseNewAnnotatedText} from "../components/annotations/new/NewAnnotatedText";
+import {SearchSettings} from "../entities/SearchSettings";
 
 
-export const startSearchingAction = (query: SearchQuery, selectedSettings: Number, history?: H.History): ThunkResult<void> => (dispatch) => {
+export const startSearchingAction = (query: SearchQuery, searchSettings: SearchSettings, history?: H.History): ThunkResult<void> => (dispatch) => {
     const encodedQuery = encodeURI(query)
     if (useMockApi()) {
         mockSearch(query, dispatch, history)
         return;
     }
+    if (!searchSettings.corpusFormat) {
+        console.log('No corpus format is loaded, cannot perform search');
+        return
+    }
     dispatch(showProgressBarAction())
     axios.get(`${API_BASE_PATH}/query`, {
         params: {
             query: encodedQuery,
-            settings: selectedSettings
+            settings: searchSettings.id
         },
         withCredentials: true
     }).then(response => {
@@ -39,7 +44,7 @@ export const startSearchingAction = (query: SearchQuery, selectedSettings: Numbe
         ).filter(item => item != null)
 
         // @ts-ignore
-        dispatch(newSearchResultsAction(snippets));
+        dispatch(newSearchResultsAction(snippets, searchSettings.corpusFormat));
         dispatch(hideProgressBarAction());
         if (history) {
             history.push(`/search?query=${encodedQuery}`);
