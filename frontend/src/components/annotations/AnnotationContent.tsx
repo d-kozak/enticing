@@ -21,11 +21,11 @@ export interface AnnotationContentProps extends WithStyles<typeof styles> {
     annotation: Annotation;
 }
 
-const parseUrl = (maybeMutlipleUrls: string): string => {
+const parseUrl = (maybeMutlipleUrls: string): Array<string> => {
     if (maybeMutlipleUrls.indexOf("|") != -1) {
-        return maybeMutlipleUrls.split("|")[0];
+        return maybeMutlipleUrls.split("|");
     }
-    return maybeMutlipleUrls
+    return [maybeMutlipleUrls]
 }
 
 const AnnotationContent = (props: AnnotationContentProps) => {
@@ -33,14 +33,16 @@ const AnnotationContent = (props: AnnotationContentProps) => {
     const content = annotation.content;
     return <div>
         <Typography variant="h4">{content["type"]}</Typography>
-        {content["image"] && <img className={classes.image} src={parseUrl(content["image"])}/>}
-        {Object.keys(content).map(
-            (name, index) => <div key={index}>
-                <Typography variant="body1"><span
-                    className={classes.attributeName}>{name}:</span> {name == 'url' ?
-                    <a href={content[name]}>{content[name]}</a> : content[name]}</Typography>
-            </div>
-        )}
+        {content["image"] && parseUrl(content["image"]).map(url => <img className={classes.image} src={url}/>)}
+        {Object.keys(content)
+            .filter(name => name !== "image")
+            .map(
+                (name, index) => <div key={index}>
+                    <Typography variant="body1"><span
+                        className={classes.attributeName}>{name}:</span> {name == 'url' ?
+                        <a href={content[name]}>{content[name]}</a> : content[name]}</Typography>
+                </div>
+            )}
     </div>
 };
 
