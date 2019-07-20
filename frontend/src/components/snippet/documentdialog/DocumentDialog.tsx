@@ -54,6 +54,8 @@ const DocumentDialog = (props: DocumentDialogProps) => {
     return <Dialog
         open={document != null}
         onClose={dialogClosed}
+        fullWidth={true}
+        maxWidth="md"
     >
         <div className={classes.root}>
             <MuiDialogTitle disableTypography className={classes.title}>
