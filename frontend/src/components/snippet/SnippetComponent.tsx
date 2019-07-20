@@ -13,6 +13,7 @@ import {EditAnnotationsButton} from "./snippetbuttons/EditAnnotationsButton";
 import {Snippet} from "../../entities/Snippet";
 import NewAnnotatedTextComponent from "../annotations/new/NewAnnotatedTextComponent";
 import {CorpusFormat} from "../../entities/CorpusFormat";
+import Grid from "@material-ui/core/es/Grid";
 
 
 const styles = createStyles({
@@ -32,13 +33,17 @@ export type  SnippetComponentProps = WithStyles<typeof styles> & typeof mapDispa
 const SnippetComponent = (props: SnippetComponentProps) => {
     const {snippet, corpusFormat, requestContextExtension, openDocument, classes} = props;
 
-    return <div className={classes.root}>
-        <EditContextButton searchResult={snippet} requestContextExtension={requestContextExtension}/>
-        <EditAnnotationsButton/>
-        <ShowDocumentButton searchResult={snippet} openDocument={openDocument} corpusFormat={corpusFormat}/>
-        <GotoSourceButton searchResult={snippet}/>
-        <NewAnnotatedTextComponent text={snippet.payload.content} corpusFormat={corpusFormat}/>
-    </div>
+    return <Grid container justify="center" direction="column" className={classes.root}>
+        <Grid item>
+            <EditContextButton searchResult={snippet} requestContextExtension={requestContextExtension}/>
+            <EditAnnotationsButton/>
+            <ShowDocumentButton searchResult={snippet} openDocument={openDocument} corpusFormat={corpusFormat}/>
+            <GotoSourceButton searchResult={snippet}/>
+        </Grid>
+        <Grid item>
+            <NewAnnotatedTextComponent text={snippet.payload.content} corpusFormat={corpusFormat}/>
+        </Grid>
+    </Grid>
 };
 
 

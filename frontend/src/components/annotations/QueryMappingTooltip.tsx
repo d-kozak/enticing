@@ -9,8 +9,8 @@ import Typography from "@material-ui/core/es/Typography";
 const styles = (theme: Theme) => createStyles({
     mapping: {
         fontWeight: "bold",
-        padding: '0px 3px',
-        margin: '0px 10px'
+        padding: '0px',
+        margin: '0px'
     },
     tooltip: {
         backgroundColor: theme.palette.common.white,

@@ -9,7 +9,11 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import {CorpusFormat} from "../../../entities/CorpusFormat";
 
 
-const styles = (theme: Theme) => createStyles({});
+const styles = (theme: Theme) => createStyles({
+    root: {
+        margin: '0px 15px 5px 15px'
+    }
+});
 
 type AnnotatedTextComponentProps = WithStyles<typeof styles> & {
     text: NewAnnotatedText,
@@ -17,13 +21,13 @@ type AnnotatedTextComponentProps = WithStyles<typeof styles> & {
 }
 
 const NewAnnotatedTextComponent = (props: AnnotatedTextComponentProps) => {
-    const {text, corpusFormat} = props;
+    const {text, corpusFormat, classes} = props;
     try {
-        return <React.Fragment>
+        return <div className={classes.root}>
             {text.content.map((elem, index) => <React.Fragment key={index}>
                 {renderElement(elem, corpusFormat)}
             </React.Fragment>)}
-        </React.Fragment>
+        </div>
     } catch (e) {
         console.error(e.message);
     }
