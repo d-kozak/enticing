@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.controller
 
 
+import cz.vutbr.fit.knot.enticing.dto.CorpusFormat
 import cz.vutbr.fit.knot.enticing.dto.TextMetadata
 import cz.vutbr.fit.knot.enticing.dto.Webserver
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
@@ -97,5 +98,21 @@ internal class QueryControllerTest(
 
         Mockito.verify(queryService).document(query)
         Mockito.clearInvocations(queryService)
+    }
+
+    @Test
+    fun format() {
+        val url = "$apiBasePath/query/format/42"
+        val corpusFormat = CorpusFormat("dummy", emptyMap(), emptyMap())
+        Mockito.`when`(queryService.format(42))
+                .thenReturn(corpusFormat)
+
+        mockMvc.perform(MockMvcRequestBuilders.get(url))
+                .andExpect(MockMvcResultMatchers.status().isOk)
+                .andExpect(content().json(corpusFormat.toJson()))
+
+        Mockito.verify(queryService).format(42)
+        Mockito.clearInvocations(searchSettingsRepository)
+
     }
 }

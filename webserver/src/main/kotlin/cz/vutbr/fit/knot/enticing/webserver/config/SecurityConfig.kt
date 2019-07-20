@@ -46,7 +46,7 @@ class SecurityConfig(
                         "$apiBasePath/login",
                         "$apiBasePath/search-settings",
                         "$apiBasePath/query",
-                        "$apiBasePath/query/*",
+                        "$apiBasePath/query/**",
                         "$apiBasePath/compiler")
                 .permitAll()
                 .anyRequest()

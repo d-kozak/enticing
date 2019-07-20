@@ -114,6 +114,21 @@ export const searchSettingsSelectedRequestAction = (settings: SearchSettings, pr
             // rollback to previously selected
             dispatch(userSearchSettingsSelectedSuccessAction(previousSelectedSettings));
         })
+    } else {
+        // if not logged in, just load corpus format
+        axios.get(`${API_BASE_PATH}/query/format/${settings.id}`, {withCredentials: true})
+            .then(response => {
+                if (isCorpusFormat(response.data)) {
+                    dispatch(corpusFormatLoadedAction(Number(settings.id), response.data))
+                } else {
+                    throw "cannot parse";
+                }
+                dispatch(userSearchSettingsSelectedSuccessAction(settings));
+            })
+            .catch((error) => {
+                console.error(error);
+                dispatch(openSnackBar(`Failed to load corpus format for settings ${settings.name}`));
+            })
     }
 };
 

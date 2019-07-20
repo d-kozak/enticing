@@ -1,11 +1,9 @@
 package cz.vutbr.fit.knot.enticing.webserver.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
-
 import cz.vutbr.fit.knot.enticing.dto.TextMetadata
 import cz.vutbr.fit.knot.enticing.dto.Webserver
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
-
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.MockNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.dto.ParsedQuery
 import cz.vutbr.fit.knot.enticing.webserver.dto.*
@@ -391,6 +389,16 @@ internal class SecurityConfigTest(
 
                 mockMvc.perform(put("$apiBasePath/search-settings/default/1"))
                         .andExpect(status().`is`(200))
+
+                Mockito.clearInvocations(searchSettingsRepository)
+            }
+
+            @Test
+            fun `corpus format is always accessible`() {
+                val url = "$apiBasePath/query/format/42"
+
+                mockMvc.perform(get(url))
+                        .andExpect(status().isOk)
 
                 Mockito.clearInvocations(searchSettingsRepository)
             }
