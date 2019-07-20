@@ -8,7 +8,7 @@ import {hideProgressBarAction, showProgressBarAction} from "./ProgressBarActions
 import {newSearchResultsAction} from "./SearchResultActions";
 import {openSnackBar} from "./SnackBarActions";
 import {isSearchResult} from "../entities/SearchResult";
-import {parseNewAnnotatedText} from "../components/annotations/new/NewAnnotatedText";
+import {parseNewAnnotatedText} from "../components/annotations/NewAnnotatedText";
 import {SearchSettings} from "../entities/SearchSettings";
 
 

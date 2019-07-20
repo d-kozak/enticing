@@ -3,10 +3,11 @@ import {WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 import React, {useState} from 'react';
 import Tooltip from "@material-ui/core/es/Tooltip";
-import {Annotation} from "../../entities/Annotation";
 import AnnotationContent from "./AnnotationContent";
 import {Theme} from "@material-ui/core/es";
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import {CorpusFormat} from "../../entities/CorpusFormat";
+import {Entity, Word} from "./NewAnnotatedText";
 
 
 const styles = (theme: Theme) => createStyles({
@@ -18,15 +19,15 @@ const styles = (theme: Theme) => createStyles({
 });
 
 
-export interface AnnotationTooltipProps extends WithStyles<typeof styles> {
-    children?: React.ReactNode
-    annotation: Annotation,
-    text: string,
+export interface AnnotatedWordProps extends WithStyles<typeof styles> {
+    corpusFormat: CorpusFormat,
+    word: Word,
+    enclosingEntity?: Entity,
     color?: string
 }
 
-const AnnotationTooltip = (props: AnnotationTooltipProps) => {
-    const {annotation, text, color, classes, children} = props;
+const AnnotatedWord = (props: AnnotatedWordProps) => {
+    const {classes, color, word, enclosingEntity: entity, corpusFormat} = props;
 
     // custom open-close handling was implemented so that it works on mobile phones as well,
     // hover does not work there by itself, clicks are necessary
@@ -43,14 +44,12 @@ const AnnotationTooltip = (props: AnnotationTooltipProps) => {
         }
     };
 
-    const style = color ? {color} : {}
-
-    const tooltip = classes.tooltip;
-
+    const tokenIndex = Object.keys(corpusFormat.indexes).indexOf("token")
+    const text = tokenIndex != -1 ? word.indexes[tokenIndex] + " " : " !NULL! "
 
     return <React.Fragment>
         <ClickAwayListener onClickAway={() => setOpen(false)}>
-            <Tooltip classes={{tooltip}}
+            <Tooltip classes={{tooltip: classes.tooltip}}
                      open={isOpen}
                      interactive
                      disableHoverListener
@@ -64,10 +63,10 @@ const AnnotationTooltip = (props: AnnotationTooltipProps) => {
                          shouldClose = true;
                          setOpen(false);
                      }}>
-                         <AnnotationContent annotation={annotation}/>
+                         <AnnotationContent corpusFormat={corpusFormat} word={word} enclosingEntity={entity}/>
                      </div>}
             >
-                <span style={style}>{children ? <span> {children} </span> : text}</span>
+                <span style={color ? {color} : {}}>{text}</span>
             </Tooltip>
         </ClickAwayListener>
     </React.Fragment>
@@ -75,4 +74,4 @@ const AnnotationTooltip = (props: AnnotationTooltipProps) => {
 
 export default withStyles(styles, {
     withTheme: true
-})(AnnotationTooltip)
+})(AnnotatedWord)

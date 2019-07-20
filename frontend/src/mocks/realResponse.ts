@@ -1,5 +1,5 @@
 import {Snippet} from "../entities/Snippet";
-import {parseNewAnnotatedText} from "../components/annotations/new/NewAnnotatedText";
+import {parseNewAnnotatedText} from "../components/annotations/NewAnnotatedText";
 import {isSearchResult} from "../entities/SearchResult";
 
 

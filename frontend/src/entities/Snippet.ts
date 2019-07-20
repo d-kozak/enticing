@@ -1,7 +1,7 @@
 import {validateOrNull} from "./validationUtils";
 
 import * as yup from "yup";
-import {NewAnnotatedText, newAnnotatedTextSchema} from "../components/annotations/new/NewAnnotatedText";
+import {NewAnnotatedText, newAnnotatedTextSchema} from "../components/annotations/NewAnnotatedText";
 
 export interface Payload {
     content: NewAnnotatedText

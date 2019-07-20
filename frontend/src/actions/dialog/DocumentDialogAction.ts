@@ -7,7 +7,7 @@ import {hideProgressBarAction, showProgressBarAction} from "../ProgressBarAction
 import {openSnackBar} from "../SnackBarActions";
 import {Snippet} from "../../entities/Snippet";
 import {DocumentQuery} from "../../entities/DocumentQuery";
-import {parseNewAnnotatedText} from "../../components/annotations/new/NewAnnotatedText";
+import {parseNewAnnotatedText} from "../../components/annotations/NewAnnotatedText";
 import {CorpusFormat} from "../../entities/CorpusFormat";
 
 export const DOCUMENT_DIALOG_DOCUMENT_LOADED = '[DOCUMENT DIALOG] DOCUMENT LOADED';

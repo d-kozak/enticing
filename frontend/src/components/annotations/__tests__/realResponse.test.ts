@@ -1,6 +1,6 @@
-import {isSearchResult} from "../../../../entities/SearchResult";
+import {isSearchResult} from "../../../entities/SearchResult";
 import {parseNewAnnotatedText} from "../NewAnnotatedText";
-import {realResponse} from "../../../../mocks/realResponse";
+import {realResponse} from "../../../mocks/realResponse";
 
 
 it("process real response", () => {

@@ -3,7 +3,7 @@ import {hideProgressBarAction, showProgressBarAction} from "../actions/ProgressB
 import {loremOneSentece} from "./loremIpsum";
 import {searchResultUpdatedAction} from "../actions/SearchResultActions";
 import {Payload, Snippet} from "../entities/Snippet";
-import {NewAnnotatedText} from "../components/annotations/new/NewAnnotatedText";
+import {NewAnnotatedText} from "../components/annotations/NewAnnotatedText";
 
 
 export const mockContextRequested = (searchResult: Snippet, dispatch: Dispatch) => {

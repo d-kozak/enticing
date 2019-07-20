@@ -9,7 +9,7 @@ import {openSnackBar} from "./SnackBarActions";
 import {Snippet} from "../entities/Snippet";
 import {isSnippetExtension, SnippetExtension} from "../entities/SnippetExtension";
 import {ContextExtensionQuery} from "../entities/ContextExtensionQuery";
-import {NewAnnotatedText, parseNewAnnotatedText} from "../components/annotations/new/NewAnnotatedText";
+import {NewAnnotatedText, parseNewAnnotatedText} from "../components/annotations/NewAnnotatedText";
 
 
 function mergeSnippet(searchResult: Snippet, data: SnippetExtension): Snippet {

@@ -6,7 +6,7 @@ import {newSearchResultsAction} from "../actions/SearchResultActions";
 import {openSnackBar} from "../actions/SnackBarActions";
 import {SearchQuery} from "../entities/SearchQuery";
 import {Snippet} from "../entities/Snippet";
-import {Interval, NewAnnotatedText, QueryMatch, Word} from "../components/annotations/new/NewAnnotatedText";
+import {Interval, NewAnnotatedText, QueryMatch, Word} from "../components/annotations/NewAnnotatedText";
 import {CorpusFormat} from "../entities/CorpusFormat";
 import {DonaldTrump, EdSheeran, KarlovyVary} from "./mockAnnotations";
 
@@ -26,8 +26,7 @@ export const mockCorpusFormat: CorpusFormat = {
                 gender: 'gender',
                 birthplace: 'birthplace',
                 birthdate: 'birthdate',
-                image: 'image',
-                nertag: 'person'
+                image: 'image'
             }
         },
         location: {
@@ -36,8 +35,7 @@ export const mockCorpusFormat: CorpusFormat = {
                 name: 'name',
                 url: 'url',
                 country: 'country',
-                image: 'image',
-                nertag: 'nertag'
+                image: 'image'
             }
         }
     }

@@ -1,6 +1,6 @@
 import {EnticingObject} from "./EnticingObject";
 import * as  yup from "yup";
-import {validateOrNull} from "../../../entities/validationUtils";
+import {validateOrNull} from "../../entities/validationUtils";
 
 
 export interface TextUnit {

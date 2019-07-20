@@ -11,7 +11,7 @@ import {ShowDocumentButton} from "./snippetbuttons/ShowDocumentButton";
 import {EditContextButton} from "./snippetbuttons/EditContextButton";
 import {EditAnnotationsButton} from "./snippetbuttons/EditAnnotationsButton";
 import {Snippet} from "../../entities/Snippet";
-import NewAnnotatedTextComponent from "../annotations/new/NewAnnotatedTextComponent";
+import NewAnnotatedTextComponent from "../annotations/NewAnnotatedTextComponent";
 import {CorpusFormat} from "../../entities/CorpusFormat";
 import Grid from "@material-ui/core/es/Grid";
 
