@@ -110,7 +110,7 @@ export const mockLogin = (login: string, password: string, dispatch: Dispatch, o
                 dispatch(openSnackBar('Logged in'));
 
                 // @ts-ignore
-                dispatch(loadSearchSettingsAction(user.isAdmin));
+                dispatch(loadSearchSettingsAction(user));
 
                 dispatch(loginSuccessAction(user));
             } else {
@@ -125,7 +125,7 @@ export const mockLogin = (login: string, password: string, dispatch: Dispatch, o
 export const mockLogout = (dispatch: Dispatch) => {
     dispatch(openSnackBar('Logged out'));
     // @ts-ignore
-    dispatch(loadSearchSettingsAction(false));
+    dispatch(loadSearchSettingsAction(null));
     dispatch(logoutSuccessAction());
 }
 

@@ -76,7 +76,7 @@ export const logoutRequestAction = (): ThunkResult<void> => dispatch => {
         .then(() => {
             dispatch(openSnackBar('Logged out'));
             // @ts-ignore
-            dispatch(loadSearchSettingsAction(false));
+            dispatch(loadSearchSettingsAction(null));
             dispatch(logoutSuccessAction());
             dispatch(hideProgressBarAction());
         })
@@ -187,7 +187,7 @@ export const signUpAction = (login: string, password: string, onError: (error: a
 export const attemptLoginAction = (): ThunkResult<void> => (dispatch) => {
     if (useMockApi()) {
         // login should fail, just load search actions
-        dispatch(loadSearchSettingsAction(false));
+        dispatch(loadSearchSettingsAction(null));
         return;
     }
     axios.get<User>(`${API_BASE_PATH}/user`, {withCredentials: true})
@@ -199,7 +199,7 @@ export const attemptLoginAction = (): ThunkResult<void> => (dispatch) => {
         })
         .catch(() => {
             // load search settings even when not logged in
-            dispatch(loadSearchSettingsAction(false));
+            dispatch(loadSearchSettingsAction(null));
         });
 }
 

@@ -33,7 +33,8 @@ const AnnotationContent = (props: AnnotationContentProps) => {
     const content = annotation.content;
     return <div>
         <Typography variant="h4">{content["type"]}</Typography>
-        {content["image"] && parseUrl(content["image"]).map(url => <img className={classes.image} src={url}/>)}
+        {content["image"] && parseUrl(content["image"]).map((url, index) => <img key={index} className={classes.image}
+                                                                                 src={url}/>)}
         {Object.keys(content)
             .filter(name => name !== "image")
             .map(

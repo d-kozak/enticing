@@ -9,6 +9,8 @@ import {
     searchSettingsUpdatedAction
 } from "../actions/SearchSettingsActions";
 import {openSnackBar} from "../actions/SnackBarActions";
+import {corpusFormatLoadedAction} from "../actions/CorpusFormatActions";
+import {mockCorpusFormat} from "./mockSearchApi";
 
 const searchSettings: Array<SearchSettings> = [
     {
@@ -45,6 +47,9 @@ export const mockLoadSearchSettings = (dispatch: Dispatch, isAdmin: boolean) => 
     setTimeout(() => {
         const settingsToLoad = isAdmin ? searchSettings : searchSettings.slice(1);
         dispatch(searchSettingsLoadedAction(settingsToLoad));
+        for (let settings of settingsToLoad) {
+            dispatch(corpusFormatLoadedAction(Number(settings.id), mockCorpusFormat))
+        }
         dispatch(openSnackBar('Configurations loaded'));
         dispatch(hideProgressBarAction());
     }, 2000);

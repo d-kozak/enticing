@@ -35,10 +35,18 @@ const SnippetComponent = (props: SnippetComponentProps) => {
 
     return <Grid container justify="center" direction="column" className={classes.root}>
         <Grid item>
-            <EditContextButton searchResult={snippet} requestContextExtension={requestContextExtension}/>
-            <EditAnnotationsButton/>
-            <ShowDocumentButton searchResult={snippet} openDocument={openDocument} corpusFormat={corpusFormat}/>
-            <GotoSourceButton searchResult={snippet}/>
+            <Grid container direction="row" justify="space-between" alignItems="center" className={classes.root}>
+                <Grid item>
+                    <EditContextButton searchResult={snippet} requestContextExtension={requestContextExtension}/>
+                    <EditAnnotationsButton/>
+                    <ShowDocumentButton searchResult={snippet} openDocument={openDocument} corpusFormat={corpusFormat}/>
+                    <GotoSourceButton searchResult={snippet}/>
+                </Grid>
+                <Grid item>
+                    <b>{snippet.documentTitle}</b>
+                    <span> from '{snippet.host}'</span>
+                </Grid>
+            </Grid>
         </Grid>
         <Grid item>
             <NewAnnotatedTextComponent text={snippet.payload.content} corpusFormat={corpusFormat}/>

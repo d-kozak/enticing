@@ -14,7 +14,9 @@ import {openSnackBar} from "./SnackBarActions";
 import axios from "axios";
 import {hideProgressBarAction, showProgressBarAction} from "./ProgressBarActions";
 import {parseValidationErrors} from "./errors";
-import {CorpusFormatLoadedAction} from "./CorpusFormatActions";
+import {corpusFormatLoadedAction, CorpusFormatLoadedAction} from "./CorpusFormatActions";
+import {UserState} from "../reducers/UserReducer";
+import {isCorpusFormat} from "../entities/CorpusFormat";
 
 export const SEARCH_SETTINGS_LOADED = "[SEARCH SETTINGS] LOADED";
 export const SEARCH_SETTINGS_ADDED = "[SEARCH SETTINGS] ADDED";
@@ -91,7 +93,8 @@ export const searchSettingsAddingCancelledAction = (): SearchSettingsAddingCance
     type: SEARCH_SETTINGS_ADDING_CANCELLED
 })
 
-export const loadSearchSettingsAction = (isAdmin: boolean): ThunkResult<void> => (dispatch) => {
+export const loadSearchSettingsAction = (userState: UserState | null): ThunkResult<void> => (dispatch) => {
+    const isAdmin = (userState && userState.user && userState.user.roles.indexOf("ADMIN") !== -1) || false; // || false just here to make type system happy :X....
     if (useMockApi()) {
         mockLoadSearchSettings(dispatch, isAdmin);
         return;
@@ -103,11 +106,44 @@ export const loadSearchSettingsAction = (isAdmin: boolean): ThunkResult<void> =>
             if (searchSettings.length == 0) {
                 dispatch(openSnackBar('No search settings loaded'));
             }
+            const selectedSettings = findSelectedSettings(userState, searchSettings);
+            if (selectedSettings !== null) {
+                axios.get(`${API_BASE_PATH}/query/format/${selectedSettings.id}`, {withCredentials: true})
+                    .then(response => {
+                        if (isCorpusFormat(response.data)) {
+                            dispatch(corpusFormatLoadedAction(Number(selectedSettings.id), response.data))
+                        } else {
+                            throw "could not parse";
+                        }
+                    }).catch(error => {
+                    console.error(error);
+                    dispatch(openSnackBar(`Could load format for selected configuration ${selectedSettings.name}`));
+                })
+            } else {
+                console.warn("No selected search settings found, could not pre-load corpus format...")
+            }
         })
         .catch(() => {
             dispatch(openSnackBar('Could not load configurations'));
         });
 }
+
+const findSelectedSettings = (userState: UserState | null, searchSettings: Array<SearchSettings>): SearchSettings | null => {
+    if (userState !== null && userState.selectedSettings !== null) {
+        for (let i in searchSettings) {
+            if (searchSettings[i].id == userState.selectedSettings) {
+                return searchSettings[i];
+            }
+        }
+    } else {
+        for (let i in searchSettings) {
+            if (searchSettings[i].default) {
+                return searchSettings[i];
+            }
+        }
+    }
+    return null
+};
 
 export const updateSearchSettingsRequestAction = (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void): ThunkResult<void> => (dispatch) => {
     if (useMockApi()) {
