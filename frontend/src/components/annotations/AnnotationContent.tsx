@@ -6,7 +6,7 @@ import React from 'react';
 import Typography from "@material-ui/core/es/Typography";
 import {CorpusFormat, EntityInfo} from "../../entities/CorpusFormat";
 import {Entity, Word} from "./NewAnnotatedText";
-import Divider from "@material-ui/core/es/Divider";
+import Grid from "@material-ui/core/es/Grid";
 
 const styles = createStyles({
     image: {
@@ -50,6 +50,28 @@ const EntityComponent = ({data, entityInfo, classes}: { data: Entity, entityInfo
     </div>
 }
 
+export const WordComponent = ({word, indexNames, classes}: { word: Word, indexNames: Array<string>, classes: any }) => {
+    const indexes: Array<[string, string]> = word.indexes
+        .map((value, i) => ([value, indexNames[i]]) as [string, string])
+        .filter(([, name]) => name !== "token");
+    const split: Array<Array<[string, string]>> = indexes.length < 6 ? [indexes] : [indexes.slice(0, indexes.length / 2), indexes.slice(indexes.length / 2, indexes.length)]
+    return <React.Fragment>
+        <Typography variant="h6">Word info</Typography>
+        <Grid container direction="row">
+            {split.map((column, i) =>
+                <Grid key={i} item>
+                    {column.map(
+                        ([indexValue, indexName]) => <div key={indexName}>
+                            <Typography variant="body1"><span
+                                className={classes.attributeName}>{indexName} : </span>{indexValue}</Typography>
+                        </div>
+                    )}
+                </Grid>
+            )}
+        </Grid>
+    </React.Fragment>
+}
+
 const AnnotationContent = (props: AnnotationContentProps) => {
     const {classes, word, enclosingEntity: entityData, corpusFormat} = props;
     const entityInfo = entityData && corpusFormat.entities[entityData.entityClass]
@@ -58,20 +80,11 @@ const AnnotationContent = (props: AnnotationContentProps) => {
     }
     const indexNames = Object.keys(corpusFormat.indexes);
 
-    return <div>
-        {entityInfo && <EntityComponent data={entityData!} entityInfo={entityInfo} classes={classes}/>}
-        {entityInfo && <Divider/>}
-        {entityInfo && word.indexes.length > 1 && <Typography variant="h6">Word info</Typography>}
-        {word.indexes
-            .map((value, i) => ([value, indexNames[i]]) as [string, string])
-            .filter(([, name]) => name !== "token")
-            .map(
-                ([indexValue, indexName]) => <div key={indexName}>
-                    <Typography variant="body1"><span
-                        className={classes.attributeName}>{indexName} : </span>{indexValue}</Typography>
-                </div>
-            )}
-    </div>
+    return <Grid direction="row" container>
+        {entityInfo &&
+        <Grid item> <EntityComponent data={entityData!} entityInfo={entityInfo} classes={classes}/> </Grid>}
+        <Grid item> <WordComponent word={word} indexNames={indexNames} classes={classes}/> </Grid>
+    </Grid>
 };
 
 export default withStyles(styles, {
