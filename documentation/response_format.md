@@ -3,8 +3,9 @@
 This document describes various response formats that the index-server supports (or will support in the future) to return data.
 
 ## HTML
-In this format, the response is a single string containing html. Since the exact details of this format were not discussed yet, it was implemented only a simple prototype was implemented, but nevertheless it has already been useful for debugging.
+In this format, the response is a single string containing html. Since the exact details of this format were not discussed yet, only a simple prototype was implemented, but nevertheless it has already been useful for debugging.
 Each word is a \<span> tag with attribute **eql-word**, each of the metadadata is included as attributes with prefix eql, e.g. eql-lemma. Each entity is also a \<span> tag, but with attribute **eql-entity** instead. 
+The matched region is denoted using a \<b> tag.
 
 ```html
 <b>
