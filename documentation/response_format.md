@@ -3,8 +3,8 @@
 This document describes various response formats that the index-server supports (or will support in the future) to return data.
 
 ## HTML
-In this format, the response is a single string containing html. Since the exact details of this format were not discussed yet, only a simple prototype was implemented, but nevertheless it has already been useful for debugging.
-Each word is a \<span> tag with attribute **eql-word**, each of the metadadata is included as attributes with prefix eql, e.g. eql-lemma. Each entity is also a \<span> tag, but with attribute **eql-entity** instead. 
+In this format, the response is a single string containing html. Since the exact details of this format were not discussed yet, only a simple prototype has been implemented, but nevertheless it has already proofed itself useful for debugging.
+Each word is a \<span> tag with attribute **eql-word**, each of the metadadata is included as attribute with eql- prefix, e.g. eql-lemma. Each entity is also a \<span> tag, but with attribute **eql-entity** instead. 
 The matched region is denoted using a \<b> tag.
 
 ```html
@@ -32,8 +32,7 @@ The matched region is denoted using a \<b> tag.
 In this format, the text from default index is sent as a string and the metadata are intervals over this string.
 It is represented using the [following classes](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/AnnotatedText.kt).
 Though it is not that hard to generate, it requires quite a lot of processing on the frontend before it can be rendered. 
-Also it has unnecessary overhead, because it is not necessary to sent the name for each index in each annotation, only an array of values can actually be sent. 
-It's meaning can be extracted using the corpus format.
+Also it has unnecessary overhead, because it is not necessary to sent the name for each index in each annotation.
 ```javascript
 const oldFormatExample = {
     "content": {
@@ -82,7 +81,7 @@ const oldFormatExample = {
 ```
 
 ## New annotated text
-This format was developed while trying to fix some of the problems of the old format.
+This format was developed while trying to fix some of the issues of the old format.
  
 When we look at the mg4j format, we can notice two things.
 
