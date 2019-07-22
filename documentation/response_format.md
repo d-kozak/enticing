@@ -93,7 +93,7 @@ When taking into account the previously mentioned observations, we can use the f
 ![alt text](../img/annotated_text_1.png)
 First version is more generic, allowing for arbitrary nesting, while the second is more restrictive, allowing units to only have "simpler" units as children.
 ![alt text](../img/annotated_text_2.png)
-
+It is represented using the [following classes](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/NewAnnotatedText.kt).
 
 ```javascript
 const newFormatExample = {
@@ -118,7 +118,7 @@ const newFormatExample = {
 }
 ```
 
-Advantages of this data structure.
+Advantages of this data format
 * It is similar to the format which is used on the index servers internally, so serialization would become much simpler.
 * Does not need so much preprocessing on the client side.
 * Easy to render
@@ -127,8 +127,8 @@ Advantages of this data structure.
 
 
 Disadvantages
-* It requires more processing on the backend.
+* It requires more processing in the backend.
 
 ## Plain text
-This format should be used in situations when only a simple answer from a single index is needed.
-In such case using the new annotated text has unnecessary overhead. This format only returns the text from the default index without any metadata.
+This format only returns the text from the default index as a single string without any metadata. It is meant to be used in situations when only a simple answer from a single index is needed.
+In such case using the new annotated text has unnecessary overhead. 
