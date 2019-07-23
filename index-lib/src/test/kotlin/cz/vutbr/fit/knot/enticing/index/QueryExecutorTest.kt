@@ -113,7 +113,7 @@ class QueryExecutorTest {
             // it is necessary to validate the configuration, because some initialization happens at that phase
             builderConfig.validate()
             clientConfig.validate()
-            //startIndexing(builderConfig)
+            startIndexing(builderConfig)
         }
 
     }
