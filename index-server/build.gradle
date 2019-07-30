@@ -17,6 +17,7 @@ libsDirName= "../../lib"
 
 repositories {
     mavenCentral()
+    jcenter()
     maven {
         setUrl("https://dl.bintray.com/s1m0nw1/KtsRunner")
     }
@@ -29,6 +30,7 @@ bootJar {
 dependencies {
     implementation(project(":dto"))
     implementation(project(":index-lib"))
+    implementation(project(":query-dispatcher"))
 
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-security")

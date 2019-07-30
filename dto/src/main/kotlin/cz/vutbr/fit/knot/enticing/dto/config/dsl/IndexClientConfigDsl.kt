@@ -1,74 +1,36 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl
 
-import java.io.File
-
 fun indexClient(block: IndexClientConfig.() -> Unit): IndexClientConfig = IndexClientConfig().apply(block)
+
+fun MutableList<CollectionConfiguration>.collection(name: String, block: (CollectionConfiguration) -> Unit) {
+    val config = CollectionConfiguration(name)
+    config.apply(block)
+    this.add(config)
+}
 
 open class IndexClientConfig {
 
+    val collections = mutableListOf<CollectionConfiguration>()
 
-    lateinit var mg4jFiles: List<File>
-    lateinit var indexDirectory: File
     lateinit var corpusConfiguration: CorpusConfiguration
-
-    /**
-     * for errors that were discovered during creation, but their test cannot be postponed so easily
-     *
-     * e.g. mg4j directory
-     */
-    private val errors = mutableListOf<String>()
 
     val indexes
         get() = corpusConfiguration.indexes.values.toList()
 
-    fun mg4jFiles(vararg files: String) {
-        mg4jFiles(files.toList())
+
+    fun collections(block: (MutableList<CollectionConfiguration>) -> Unit) {
+        this.collections.apply(block)
     }
 
-    fun mg4jFiles(files: List<String>) {
-        this.mg4jFiles = files.map { File(it) }
-    }
-
-    fun mg4jDirectory(path: String) {
-        val inputDirectory = File(path)
-        checkDirectory(inputDirectory, errors)
-        if (errors.isEmpty()) {
-            this.mg4jFiles = inputDirectory.listFiles { _, name -> name.endsWith(".mg4j") }?.toList() ?: emptyList()
-        } else {
-            this.mg4jFiles = emptyList()
-        }
-    }
-
-    fun indexDirectory(path: String) {
-        this.indexDirectory = File(path)
-    }
 
     fun corpus(name: String, block: CorpusConfiguration.() -> Unit): CorpusConfiguration = corpusConfig(name, block).also {
         this.corpusConfiguration = it
     }
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is IndexClientConfig) return false
-
-        if (mg4jFiles != other.mg4jFiles) return false
-        if (indexDirectory != other.indexDirectory) return false
-        if (corpusConfiguration != other.corpusConfiguration) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = mg4jFiles.hashCode()
-        result = 31 * result + indexDirectory.hashCode()
-        result = 31 * result + corpusConfiguration.hashCode()
-        return result
-    }
 
     override fun toString(): String = buildString {
         append("Index client config {\n")
-        append("\tmg4jFiles: $mg4jFiles\n")
-        append("\tindexDirectory: $indexDirectory\n")
+        append("\tcollections: $collections\n")
         append("\tcorpus: ${corpusConfiguration.corpusName}\n")
         append("\tindexes:\n")
         for (index in corpusConfiguration.indexes.values) {
@@ -82,11 +44,29 @@ open class IndexClientConfig {
     }
 
     fun validate(): List<String> {
-        val errors = errors.toMutableList()
-        checkMg4jFiles(mg4jFiles, errors)
-        checkDirectory(this.indexDirectory, errors)
+        val errors = mutableListOf<String>()
+        if (collections.isEmpty()) {
+            errors.add("No collections specified, at least one is necessary")
+        }
+        collections.forEach { it.validate(errors) }
         corpusConfiguration.validate(errors)
         return errors
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is IndexClientConfig) return false
+
+        if (collections != other.collections) return false
+        if (corpusConfiguration != other.corpusConfiguration) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = collections.hashCode()
+        result = 31 * result + corpusConfiguration.hashCode()
+        return result
     }
 }
 

@@ -9,6 +9,7 @@ libsDirName= "../../lib"
 
 repositories {
     mavenCentral()
+    jcenter()
     maven {
         setUrl("https://dl.bintray.com/s1m0nw1/KtsRunner")
     }
@@ -25,6 +26,7 @@ jar {
 dependencies {
     implementation(project(":dto"))
     implementation(project(":eql-compiler"))
+    implementation(project(":query-dispatcher"))
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 

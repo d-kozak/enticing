@@ -3,7 +3,10 @@ package cz.vutbr.fit.knot.enticing.index.server.config
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexClientConfig
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
+import cz.vutbr.fit.knot.enticing.index.query.CollectionRequestData
+import cz.vutbr.fit.knot.enticing.index.query.CollectionRequestDispatcher
 import cz.vutbr.fit.knot.enticing.index.query.initQueryExecutor
+import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -21,16 +24,11 @@ class QueryConfig(
     private val log: Logger = LoggerFactory.getLogger(QueryConfig::class.java)
 
     @Bean
-    @Incomplete("each index server should support multiple collections, not just one")
+    @Incomplete("add support for tweaking the configuration via commandline arguments")
     fun indexClientConfig(): IndexClientConfig {
         log.info("Loading configuration from $configFile")
         val config = executeScript<IndexClientConfig>(configFile)
         log.info("Loaded config $config")
-        config.indexDirectory(indexDirectory)
-        log.info("Using index directory ${this.indexDirectory}")
-        config.mg4jFiles(mg4jFiles)
-        log.info("Using mg4j files ${this.mg4jFiles}")
-
         val errors = config.validate()
         if (errors.isNotEmpty()) {
             throw IllegalArgumentException("$errors")
@@ -39,5 +37,13 @@ class QueryConfig(
     }
 
     @Bean
-    fun queryExecutor(config: IndexClientConfig) = initQueryExecutor(config)
+    fun queryDispatcher(config: IndexClientConfig): QueryDispatcher<CollectionRequestData> {
+        val queryExecutors = config.collections.asSequence()
+                .map { initQueryExecutor(config.corpusConfiguration, it) }
+                .map { it.collectionName to it }
+                .toMap()
+
+        val dispatcher = CollectionRequestDispatcher(queryExecutors)
+        return QueryDispatcher(dispatcher)
+    }
 }

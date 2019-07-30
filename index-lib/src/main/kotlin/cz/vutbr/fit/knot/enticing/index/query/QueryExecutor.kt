@@ -4,8 +4,8 @@ import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.CollectionConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexClientConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.filterBy
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jCompositeDocumentCollection
@@ -32,18 +32,18 @@ const val SNIPPET_SIZE = 50
 
 private val log = LoggerFactory.getLogger(QueryExecutor::class.java)
 
-fun initQueryExecutor(config: IndexClientConfig): QueryExecutor {
-    log.info("initializing with config $config")
-    val collection = Mg4jCompositeDocumentCollection(config.corpusConfiguration, config.mg4jFiles)
-    val factory = Mg4jDocumentFactory(config.corpusConfiguration)
+fun initQueryExecutor(corpusConfiguration: CorpusConfiguration, collectionConfig: CollectionConfiguration): QueryExecutor {
+    log.info("initializing with config $corpusConfiguration,$collectionConfig")
+    val collection = Mg4jCompositeDocumentCollection(corpusConfiguration, collectionConfig.mg4jFiles)
+    val factory = Mg4jDocumentFactory(corpusConfiguration)
 
-    val indexDir = config.indexDirectory
+    val indexDir = collectionConfig.indexDirectory
 
     val indexMap = Object2ReferenceLinkedOpenHashMap<String, Index>()
     val termProcessors = Object2ObjectOpenHashMap<String, TermProcessor>()
     val index2weight = Reference2DoubleOpenHashMap<Index>()
-    for (index in config.indexes) {
-        val mg4jIndex = Index.getInstance(indexDir.resolve("${config.corpusConfiguration.corpusName}-${index.name}").path)
+    for (index in corpusConfiguration.indexes.values.toList()) {
+        val mg4jIndex = Index.getInstance(indexDir.resolve("${corpusConfiguration.corpusName}-${index.name}").path)
         requireNotNull(mg4jIndex.field)
         indexMap[mg4jIndex.field] = mg4jIndex
         termProcessors[mg4jIndex.field] = mg4jIndex.termProcessor
@@ -60,7 +60,7 @@ fun initQueryExecutor(config: IndexClientConfig): QueryExecutor {
     engine.intervalSelector = IntervalSelector(Integer.MAX_VALUE, Integer.MAX_VALUE)
     engine.multiplex = false
 
-    return QueryExecutor("name", collection, engine, config.corpusConfiguration)
+    return QueryExecutor(collectionConfig.name, collection, engine, corpusConfiguration)
 }
 
 internal typealias Mg4jSearchResult = DocumentScoreInfo<Reference2ObjectMap<Index, Array<SelectedInterval>>>
@@ -68,7 +68,7 @@ internal typealias Mg4jSearchResult = DocumentScoreInfo<Reference2ObjectMap<Inde
 @Cleanup("Refactor into multiple classes/functions in different files")
 @WhatIf("? decouple from mg4j for easier and faster testing ?")
 class QueryExecutor internal constructor(
-        private val collectionName: String,
+        val collectionName: String,
         private val collection: Mg4jCompositeDocumentCollection,
         private val engine: QueryEngine,
         private val corpusConfiguration: CorpusConfiguration
