@@ -11,8 +11,10 @@ import org.junit.jupiter.api.Test
 /**
  * lambda to interface conversion
  */
-internal fun dummyDispatcher(fn: (SearchQuery, ServerInfo) -> MResult<IndexServer.SearchResult>): RequestDispatcher = object : RequestDispatcher {
+internal fun dummyDispatcher(fn: (SearchQuery, ServerInfo) -> MResult<IndexServer.SearchResult>): RequestDispatcher<ServerInfo> = object : RequestDispatcher<ServerInfo> {
     override suspend fun invoke(searchQuery: SearchQuery, serverInfo: ServerInfo): MResult<IndexServer.SearchResult> = fn(searchQuery, serverInfo)
+
+    override fun createRequestData(address: String, offset: Offset): ServerInfo = ServerInfo(address, offset)
 }
 
 internal class QueryDispatcherTest {
@@ -22,7 +24,7 @@ internal class QueryDispatcherTest {
     fun `everything fails test`() {
         val servers = listOf(ServerInfo("yahoo.com"), ServerInfo("google.com"), ServerInfo("foo.bar"))
 
-        val fail: RequestDispatcher = dummyDispatcher { _, server -> MResult.failure(FailOnPurposeException(server.address)) }
+        val fail: RequestDispatcher<ServerInfo> = dummyDispatcher { _, server -> MResult.failure(FailOnPurposeException(server.address)) }
 
         val dispatcher = QueryDispatcher(fail)
         val result = dispatcher.dispatchQuery(templateQuery, servers)
@@ -39,7 +41,7 @@ internal class QueryDispatcherTest {
     fun `servers should be called with specific offsets`() {
         val servers = listOf(ServerInfo("yahoo.com", Offset(1, 2)), ServerInfo("google.com", Offset(3, 4)), ServerInfo("foo.bar", Offset(5, 6)))
 
-        val requestDispatcher: RequestDispatcher = dummyDispatcher { query, server ->
+        val requestDispatcher: RequestDispatcher<ServerInfo> = dummyDispatcher { query, server ->
             when (server.address) {
                 "yahoo.com" -> assertThat(server.offset)
                         .isEqualTo(Offset(1, 2))
@@ -67,7 +69,7 @@ internal class QueryDispatcherTest {
     fun `first server is successful and is called twice`() {
         val servers = listOf(ServerInfo("yahoo.com"), ServerInfo("google.com", offset = Offset(10, 20)), ServerInfo("foo.bar"))
 
-        val fail: RequestDispatcher = dummyDispatcher { _, server ->
+        val fail: RequestDispatcher<ServerInfo> = dummyDispatcher { _, server ->
             when {
                 server.address != "google.com" -> MResult.failure(FailOnPurposeException(server.address))
                 server.offset == Offset(10, 20) -> MResult.success(googleFirstResult)

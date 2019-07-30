@@ -1,19 +1,19 @@
 package cz.vutbr.fit.knot.enticing.query.processor
 
 import cz.vutbr.fit.knot.enticing.dto.IndexServer
+import cz.vutbr.fit.knot.enticing.dto.RequestData
 import cz.vutbr.fit.knot.enticing.dto.SearchQuery
-import cz.vutbr.fit.knot.enticing.dto.ServerInfo
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 
 
-class QueryDispatcher(
-        private val requestDispatcher: RequestDispatcher
+class QueryDispatcher<T : RequestData>(
+        private val requestDispatcher: RequestDispatcher<T>
 ) {
 
-    fun dispatchQuery(searchQuery: SearchQuery, servers: List<ServerInfo>): Map<String, List<MResult<IndexServer.SearchResult>>> = runBlocking {
+    fun dispatchQuery(searchQuery: SearchQuery, servers: List<T>): Map<String, List<MResult<IndexServer.SearchResult>>> = runBlocking {
         val serversToCall = servers.toMutableList()
         var collectedSnippetsCount = 0
         val serverResults = mutableMapOf<String, MutableList<MResult<IndexServer.SearchResult>>>()
@@ -33,7 +33,7 @@ class QueryDispatcher(
                 val resultsPerServer = serverResults[server] ?: mutableListOf()
                 if (result.isSuccess && result.value.matched.isNotEmpty()) {
                     if (result.value.offset != null)
-                        serversToCall.add(ServerInfo(server, result.value.offset!!))
+                        serversToCall.add(requestDispatcher.createRequestData(server, result.value.offset!!))
                     collectedSnippetsCount += result.value.matched.size
                 }
                 resultsPerServer.add(result)

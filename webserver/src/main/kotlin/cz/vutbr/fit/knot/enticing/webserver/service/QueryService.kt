@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class QueryService(
-        private val dispatcher: QueryDispatcher,
+        private val dispatcher: QueryDispatcher<ServerInfo>,
         private val searchSettingsRepository: SearchSettingsRepository,
         private val userService: EnticingUserService,
         private val indexServerConnector: IndexServerConnector
