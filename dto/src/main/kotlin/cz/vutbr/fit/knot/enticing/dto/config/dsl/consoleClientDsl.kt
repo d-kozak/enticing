@@ -1,7 +1,6 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl
 
 import cz.vutbr.fit.knot.enticing.dto.config.SearchConfig
-import cz.vutbr.fit.knot.enticing.dto.ServerInfo
 import cz.vutbr.fit.knot.enticing.dto.utils.regex.urlRegex
 
 fun consoleClient(block: ConsoleClientConfig.() -> Unit): ConsoleClientConfig = ConsoleClientConfig().apply(block)
@@ -58,19 +57,19 @@ sealed class ConsoleClientType {
     }
 
     data class RemoteIndex(
-            var servers: MutableList<ServerInfo> = mutableListOf()
+            var servers: MutableList<String> = mutableListOf()
     ) : ConsoleClientType() {
 
         fun servers(vararg servers: String) {
-            servers(servers.toList())
+            servers(servers.toMutableList())
         }
 
-        fun servers(servers: List<String>) {
+        fun servers(servers: MutableList<String>) {
             val nonMatching = servers.filter { !it.matches(urlRegex) }
             if (nonMatching.isNotEmpty()) {
                 throw IllegalArgumentException("$nonMatching are not valid urls")
             }
-            this.servers = servers.asSequence().map { ServerInfo(it) }.toMutableList()
+            this.servers = servers
         }
 
         override fun validate(): List<String> {
@@ -78,11 +77,11 @@ sealed class ConsoleClientType {
             if (servers.isEmpty())
                 errors.add("No servers specified")
             for (server in servers) {
-                if (server.address.isBlank()) {
-                    errors.add("Server address ${server.address} should be neither empty not blank")
+                if (server.isBlank()) {
+                    errors.add("Server ${server} should be neither empty not blank")
                 }
-                if (!server.address.matches(urlRegex)) {
-                    errors.add("${server.address} is not a valid address")
+                if (!server.matches(urlRegex)) {
+                    errors.add("${server} is not a valid address")
                 }
             }
             return errors

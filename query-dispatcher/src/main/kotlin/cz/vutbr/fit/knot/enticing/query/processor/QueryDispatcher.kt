@@ -7,13 +7,11 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 
 
-
-
-class QueryDispatcher<T: Query<T>,NodeInfo : RequestData,Result:QueryResult>(
-        private val requestDispatcher: RequestDispatcher<T,NodeInfo,Result>
+class QueryDispatcher<QueryType: Query<QueryType>,OffsetType,Result:QueryResult<OffsetType>>(
+        private val requestDispatcher: RequestDispatcher<QueryType,OffsetType,Result>
 ) {
 
-    fun dispatchQuery(searchQuery: T, servers: List<NodeInfo>): Map<String, List<MResult<Result>>> = runBlocking {
+    fun dispatchQuery(searchQuery: QueryType, servers: List<RequestData<OffsetType>>): Map<String, List<MResult<Result>>> = runBlocking {
         val serversToCall = servers.toMutableList()
         var collectedSnippetsCount = 0
         val serverResults = mutableMapOf<String, MutableList<MResult<Result>>>()
@@ -32,8 +30,8 @@ class QueryDispatcher<T: Query<T>,NodeInfo : RequestData,Result:QueryResult>(
             for ((server, result) in lastResults) {
                 val resultsPerServer = serverResults[server] ?: mutableListOf()
                 if (result.isSuccess && result.value.matched.isNotEmpty()) {
-                    if (result.value.offset.isNotEmpty())
-                        serversToCall.add(requestDispatcher.createRequestData(server, result.value.offset))
+                    if (result.value.offset != null)
+                        serversToCall.add(result.value.createRequest(server))
                     collectedSnippetsCount += result.value.matched.size
                 }
                 resultsPerServer.add(result)

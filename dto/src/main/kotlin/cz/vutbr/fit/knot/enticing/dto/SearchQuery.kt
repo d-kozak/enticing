@@ -25,10 +25,10 @@ data class SearchQuery(
         @field:Positive
         override val snippetCount: Int = Defaults.snippetCount,
         /**
-         * Offset at which to start, for pagination
+         * Offset at which to start, for pagination, null means start from the beginning
          */
         @field:Valid
-        val offset: Map<String, Offset> = emptyMap(),
+        val offset: Map<String, Offset>? = null,
         /**
          * Which other indexes and entities should be included
          */

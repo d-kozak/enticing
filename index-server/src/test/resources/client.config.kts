@@ -1,8 +1,12 @@
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.*
 
 indexClient {
-    mg4jDirectory("../data/mg4j")
-    indexDirectory("../data/indexed")
+    collections{
+        collection("one"){
+            mg4jDirectory("../data/mg4j")
+            indexDirectory("../data/indexed")
+        }
+    }
 
     corpus("CC") {
         indexes {

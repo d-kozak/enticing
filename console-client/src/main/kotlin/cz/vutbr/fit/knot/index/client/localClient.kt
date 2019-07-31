@@ -1,6 +1,9 @@
 package cz.vutbr.fit.knot.index.client
 
-import cz.vutbr.fit.knot.enticing.dto.*
+import cz.vutbr.fit.knot.enticing.dto.ResponseFormat
+import cz.vutbr.fit.knot.enticing.dto.ResponseType
+import cz.vutbr.fit.knot.enticing.dto.SearchQuery
+import cz.vutbr.fit.knot.enticing.dto.TextMetadata
 import cz.vutbr.fit.knot.enticing.dto.config.SearchConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.ConsoleClientType
 import cz.vutbr.fit.knot.enticing.index.query.QueryExecutor
@@ -18,7 +21,7 @@ internal fun executeLocally(queryExecutor: QueryExecutor, input: String) {
     val query = SearchQuery(
             input,
             33,
-            Offset(0, 0),
+            null,
             TextMetadata.Predefined("all"),
             ResponseType.FULL,
             ResponseFormat.NEW_ANNOTATED_TEXT

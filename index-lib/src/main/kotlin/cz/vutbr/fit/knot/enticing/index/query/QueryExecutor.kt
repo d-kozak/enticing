@@ -76,10 +76,10 @@ class QueryExecutor internal constructor(
 
     private val log: Logger = LoggerFactory.getLogger(QueryExecutor::class.java)
 
-    fun query(query: SearchQuery): MResult<IndexServer.SearchResult> = MResult.runCatching {
+    fun query(query: SearchQuery,offset:Offset = Offset(0,0)): MResult<IndexServer.CollectionSearchResult> = MResult.runCatching {
         log.info("Executing query $query")
         val resultList = ObjectArrayList<Mg4jSearchResult>()
-        val (documentOffset, matchOffset) = query.offset
+        val (documentOffset, matchOffset) = offset
 
         val processed = engine.process(query.query, documentOffset, query.snippetCount, resultList)
         log.info("Processed $processed documents")
@@ -96,10 +96,10 @@ class QueryExecutor internal constructor(
                     i != resultList.size - 1 -> Offset(resultList[i + 1].document.toInt(), 0)
                     else -> null
                 }
-                return@runCatching IndexServer.SearchResult(matched, offset)
+                return@runCatching IndexServer.CollectionSearchResult(matched, offset)
             }
         }
-        return@runCatching IndexServer.SearchResult(matched, null)
+        return@runCatching IndexServer.CollectionSearchResult(matched, null)
     }
 
     @Incomplete("Better snippet creation algorithm needed")

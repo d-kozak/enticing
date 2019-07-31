@@ -1,9 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver.service
 
-import cz.vutbr.fit.knot.enticing.dto.IndexServer
-import cz.vutbr.fit.knot.enticing.dto.SearchQuery
-import cz.vutbr.fit.knot.enticing.dto.ServerInfo
-import cz.vutbr.fit.knot.enticing.dto.Webserver
+import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
 import cz.vutbr.fit.knot.enticing.webserver.dto.User
@@ -28,7 +25,7 @@ internal class QueryServiceTest {
     @Nested
     inner class SearchQueryTest {
 
-        private val dispatcher: QueryDispatcher<SearchQuery,ServerInfo, IndexServer.SearchResult> = mockk()
+        private val dispatcher: QueryDispatcher<SearchQuery,Map<CollectionName, Offset>, IndexServer.SearchResult> = mockk()
         private val searchSettingsRepository: SearchSettingsRepository = mockk()
         private val userService: EnticingUserService = mockk()
         private val indexServerConnector: IndexServerConnector = mockk()
@@ -46,7 +43,7 @@ internal class QueryServiceTest {
             val expected = Webserver.SearchResult(listOf(firstResult))
             val dummyQuery = SearchQuery("nertag:person", snippetCount = 33)
             val foo = mapOf("server1" to listOf(MResult.success(IndexServer.SearchResult(listOf(firstResult.toIndexServerFormat())))))
-            every { dispatcher.dispatchQuery(dummyQuery, dummyServers.map { ServerInfo(it) }) } returns foo
+            every { dispatcher.dispatchQuery(dummyQuery, dummyServers.map { IndexServerRequestData(it) }) } returns foo
 
             val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector)
 
@@ -56,7 +53,7 @@ internal class QueryServiceTest {
 
             verify(exactly = 1) { userService.currentUser }
             verify(exactly = 1) { searchSettingsRepository.findById(42) }
-            verify(exactly = 1) { dispatcher.dispatchQuery(dummyQuery, dummyServers.map { ServerInfo(it) }) }
+            verify(exactly = 1) { dispatcher.dispatchQuery(dummyQuery, dummyServers.map { IndexServerRequestData(it) }) }
         }
 
         @Test
@@ -71,7 +68,7 @@ internal class QueryServiceTest {
             val expected = Webserver.SearchResult(listOf(firstResult))
             val dummyQuery = SearchQuery("nertag:person", snippetCount = 33)
             val foo = mapOf("server1" to listOf(MResult.success(IndexServer.SearchResult(listOf(firstResult.toIndexServerFormat())))))
-            every { dispatcher.dispatchQuery(dummyQuery, dummyServers.map { ServerInfo(it) }) } returns foo
+            every { dispatcher.dispatchQuery(dummyQuery, dummyServers.map { IndexServerRequestData(it) }) } returns foo
 
             val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector)
 
@@ -81,7 +78,7 @@ internal class QueryServiceTest {
 
             verify(exactly = 1) { userService.currentUser }
             verify(exactly = 1) { searchSettingsRepository.findById(42) }
-            verify(exactly = 1) { dispatcher.dispatchQuery(dummyQuery, dummyServers.map { ServerInfo(it) }) }
+            verify(exactly = 1) { dispatcher.dispatchQuery(dummyQuery, dummyServers.map { IndexServerRequestData(it) }) }
         }
 
         @Test
@@ -135,7 +132,7 @@ internal class QueryServiceTest {
     @Nested
     inner class DocumentRetrieval {
 
-        private val dispatcher: QueryDispatcher<SearchQuery,ServerInfo, IndexServer.SearchResult> = mockk()
+        private val dispatcher: QueryDispatcher<SearchQuery,Map<CollectionName,Offset>, IndexServer.SearchResult> = mockk()
         private val searchSettingsRepository: SearchSettingsRepository = mockk()
         private val userService: EnticingUserService = mockk()
         private val indexServerConnector: IndexServerConnector = mockk()
@@ -173,7 +170,7 @@ internal class QueryServiceTest {
     @Nested
     inner class ContextExtension {
 
-        private val dispatcher: QueryDispatcher<SearchQuery,ServerInfo, IndexServer.SearchResult> = mockk()
+        private val dispatcher: QueryDispatcher<SearchQuery,Map<CollectionName,Offset>, IndexServer.SearchResult> = mockk()
         private val searchSettingsRepository: SearchSettingsRepository = mockk()
         private val userService: EnticingUserService = mockk()
         private val indexServerConnector: IndexServerConnector = mockk()

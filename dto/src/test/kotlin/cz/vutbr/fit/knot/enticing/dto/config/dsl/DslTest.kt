@@ -1069,7 +1069,7 @@ class DslTest {
                 }
             }
 
-            val servers = listOf("localhost:8001", "localhost:8001", "localhost:8003").map { ServerInfo(it) }.toMutableList()
+            val servers = listOf("localhost:8001", "localhost:8001", "localhost:8003").toMutableList()
             val expected = ConsoleClientConfig()
             expected.searchConfig = SearchConfig(42, TextMetadata.Predefined("all"), ResponseType.IDENTIFIERS, ResponseFormat.HTML, "lemma")
             expected.clientType = ConsoleClientType.RemoteIndex(servers)

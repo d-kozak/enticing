@@ -9,18 +9,10 @@ import cz.vutbr.fit.knot.enticing.query.processor.RequestDispatcher
 
 class CollectionRequestDispatcher(
         private val executors: Map<String, QueryExecutor>
-) : RequestDispatcher<CollectionRequestData> {
-    override suspend fun invoke(searchQuery: SearchQuery, requestData: CollectionRequestData): MResult<IndexServer.SearchResult> = MResult.runCatching {
+) : RequestDispatcher<SearchQuery,Offset,IndexServer.CollectionSearchResult> {
+    override suspend fun invoke(searchQuery: SearchQuery, requestData: RequestData<Offset>): MResult<IndexServer.CollectionSearchResult> = MResult.runCatching {
         val executor = executors[requestData.address]
-                ?: throw IllegalArgumentException("Unkown executor for collection ${requestData.address}")
-        executor.query(searchQuery).unwrap()
+                ?: throw IllegalArgumentException("Unknown executor for collection ${requestData.address}")
+        executor.query(searchQuery,requestData.offset ?: Offset(0,0)).unwrap()
     }
-
-    override fun createRequestData(address: String, offset: Offset): CollectionRequestData = CollectionRequestData(address, offset)
 }
-
-
-data class CollectionRequestData(
-        override val address: String,
-        override val offset: Offset
-) : RequestData

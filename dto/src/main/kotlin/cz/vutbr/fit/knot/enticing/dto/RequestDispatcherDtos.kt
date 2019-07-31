@@ -10,7 +10,9 @@ interface Query<T:Query<T>>{
     fun updateSnippetCount(newSnippetCount:Int):T
 }
 
-interface QueryResult{
+interface QueryResult<OffsetType>{
     val matched: List<IndexServer.Snippet>
-    val offset: Map<String, Offset>
+    val offset: OffsetType?
+
+    fun createRequest(address:String):RequestData<OffsetType>
 }

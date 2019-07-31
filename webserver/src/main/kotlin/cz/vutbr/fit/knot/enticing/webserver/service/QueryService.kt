@@ -8,16 +8,19 @@ import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 
 @Service
 class QueryService(
-        private val dispatcher: QueryDispatcher<SearchQuery,ServerInfo, IndexServer.SearchResult>,
+        private val dispatcher: QueryDispatcher<SearchQuery,Map<CollectionName,Offset>, IndexServer.SearchResult>,
         private val searchSettingsRepository: SearchSettingsRepository,
         private val userService: EnticingUserService,
         private val indexServerConnector: IndexServerConnector
 ) {
+
+    private val log = LoggerFactory.getLogger(QueryService::class.java)
 
     fun query(query: String, selectedSettings: Long): Webserver.SearchResult {
         val currentUser = userService.currentUser
@@ -30,8 +33,9 @@ class QueryService(
             throw IllegalArgumentException("Settings is private, current user (or anonymous user) cannot use it")
         }
 
-        val serverInfo = searchSettings.servers.map { ServerInfo(it) }
-        return flatten(dispatcher.dispatchQuery(searchQuery, serverInfo))
+        val requestData = searchSettings.servers.map { IndexServerRequestData(it) }
+        log.info("Executing query $query with requestData $requestData")
+        return flatten(dispatcher.dispatchQuery(searchQuery, requestData))
     }
 
 

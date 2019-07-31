@@ -12,7 +12,7 @@ class SerializationTest {
         private val templateQuery = SearchQuery(
                 "foo bar baz",
                 42,
-                Offset(10, 10),
+                mapOf("one" to Offset(10, 10)),
                 metadata = TextMetadata.Predefined("all"),
                 responseType = ResponseType.FULL,
                 responseFormat = ResponseFormat.ANNOTATED_TEXT,
@@ -80,7 +80,7 @@ class SerializationTest {
                             url = "google.com",
                             payload = Payload.FullResponse.Html("hello html")
                     )),
-                    offset = Offset(10, 20)
+                    offset = mapOf("one" to Offset(10, 20))
             )
             val content = """"payload":{"type":"html","content":"hello html"}"""
             assertSerialization(input, content)
@@ -104,7 +104,7 @@ class SerializationTest {
                                     emptyList()
                             ))
                     )),
-                    offset = Offset(10, 20)
+                    offset =mapOf("one" to Offset(10, 20))
             )
             val content = """"payload":{"type":"annotated","content":{"text":"foo bar baz","annotations":{},"positions":[],"queryMapping":[]}}"""
             assertSerialization(input, content)
@@ -132,7 +132,7 @@ class SerializationTest {
                                     )
                             )
                     )),
-                    offset = Offset(10, 20)
+                    offset = mapOf("one" to Offset(10, 20))
             )
             val content = """"payload":{"type":"identifiers","list":[{"identifier":"x","snippet":{"type":"annotated","content":{"text":"foo bar baz","annotations":{},"positions":[],"queryMapping":[]}}}]}"""
             assertSerialization(input, content)

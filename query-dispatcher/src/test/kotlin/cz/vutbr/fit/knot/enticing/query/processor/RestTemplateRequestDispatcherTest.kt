@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.query.processor
 
-import cz.vutbr.fit.knot.enticing.dto.ServerInfo
+import cz.vutbr.fit.knot.enticing.dto.IndexServerRequestData
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import io.mockk.every
 import io.mockk.mockk
@@ -21,7 +21,7 @@ internal class RestTemplateRequestDispatcherTest {
     @Test
     fun success() {
         val mockTemplate = mockk<RestTemplate>()
-        val serverInfo = ServerInfo("google.com")
+        val serverInfo = IndexServerRequestData("google.com")
         every {
             mockTemplate.exchange<String>("http://" + serverInfo.address + "/api/v1/query", HttpMethod.POST, any())
         } returns ResponseEntity(googleFirstResult.toJson(), HttpStatus.OK)
@@ -41,7 +41,7 @@ internal class RestTemplateRequestDispatcherTest {
     @Test
     fun fail() {
         val mockTemplate = mockk<RestTemplate>()
-        val serverInfo = ServerInfo("google.com")
+        val serverInfo = IndexServerRequestData("google.com")
         every {
             mockTemplate.exchange<String>("http://" + serverInfo.address + "/api/v1/query", HttpMethod.POST, any())
         } throws FailOnPurposeException("fail!")

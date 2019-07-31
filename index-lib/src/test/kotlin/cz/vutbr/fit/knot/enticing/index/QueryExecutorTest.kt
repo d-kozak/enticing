@@ -103,7 +103,7 @@ class QueryExecutorTest {
     private val templateQuery = SearchQuery(
             "",
             20,
-            Offset(0, 0),
+            mapOf("one" to Offset(0, 0)),
             TextMetadata.Predefined("all"),
             ResponseType.FULL,
             ResponseFormat.ANNOTATED_TEXT
@@ -165,7 +165,7 @@ class QueryExecutorTest {
     @Warning("it seems that different documents are being returned in test environment, why?")
     @Test
     fun problematicQuery() {
-        val query = SearchQuery(query = "job work", snippetCount = 33, offset = Offset(document = 0, snippet = 0), metadata = TextMetadata.Predefined(value = "all"), responseType = ResponseType.FULL, responseFormat = ResponseFormat.NEW_ANNOTATED_TEXT, defaultIndex = "token")
+        val query = SearchQuery(query = "job work", snippetCount = 33, offset = mapOf("one" to Offset(document = 0, snippet = 0)), metadata = TextMetadata.Predefined(value = "all"), responseType = ResponseType.FULL, responseFormat = ResponseFormat.NEW_ANNOTATED_TEXT, defaultIndex = "token")
         val queryEngine = initQueryExecutor(clientConfig.corpusConfiguration, clientConfig.collections[0])
         val result = queryEngine.query(query)
         println(result)

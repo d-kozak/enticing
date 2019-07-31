@@ -137,13 +137,33 @@ object IndexServer {
              *
              */
             @field:Valid
-            override val offset: Map<CollectionName,Offset> = emptyMap(),
+            override val offset: Map<CollectionName, Offset> = emptyMap(),
 
             /**
              * Errors from collections, if any
              */
-            val errors:Map<CollectionName,ErrorMessage> = emptyMap()
-    ):QueryResult
+            val errors: Map<CollectionName, ErrorMessage> = emptyMap()
+    ) : QueryResult<Map<CollectionName, Offset>> {
+        override fun createRequest(address: String): RequestData<Map<CollectionName, Offset>> = IndexServerRequestData(address, offset)
+    }
+
+
+    data class CollectionSearchResult(
+            /**
+             * List of snippets that matched the query
+             */
+            @field:Valid
+            override val matched: List<Snippet>,
+            /**
+             * For pagination, where to start next
+             *
+             */
+            @field:Valid
+            override val offset: Offset? = Offset(0, 0)
+    ) : QueryResult<Offset> {
+        override fun createRequest(address: String): RequestData<Offset> = CollectionRequestData(address, offset
+                ?: Offset(0, 0))
+    }
 
     /**
      * Part of document that was matched by the query
@@ -154,7 +174,6 @@ object IndexServer {
              */
             @field:NotEmpty
             val collection: String,
-
 
             /**
              * What document the snippet came from

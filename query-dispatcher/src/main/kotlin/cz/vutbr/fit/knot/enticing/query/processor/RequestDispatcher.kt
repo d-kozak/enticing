@@ -1,6 +1,5 @@
 package cz.vutbr.fit.knot.enticing.query.processor
 
-
 import com.github.kittinunf.fuel.httpPost
 import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
@@ -12,13 +11,9 @@ import cz.vutbr.fit.knot.enticing.query.processor.fuel.jsonBody
 import org.springframework.http.*
 import org.springframework.web.client.RestTemplate
 
-
-interface RequestDispatcher<T:Query<T>,NodeInfo : RequestData,Result:QueryResult> {
-    suspend operator fun invoke(searchQuery: T, requestData: NodeInfo): MResult<Result>
-
-    fun createRequestData(address: String, offset: Map<String,Offset>): NodeInfo
+interface RequestDispatcher<T : Query<T>,OffsetType, Result : QueryResult<OffsetType>> {
+    suspend operator fun invoke(searchQuery: T, requestData: RequestData<OffsetType>): MResult<Result>
 }
-
 
 /**
  * Request dispatcher implemented using the Fuel library
@@ -26,22 +21,23 @@ interface RequestDispatcher<T:Query<T>,NodeInfo : RequestData,Result:QueryResult
  * @see https://github.com/kittinunf/fuel
  * It is asynchronous and integrated with coroutines
  */
-class FuelRequestDispatcher(private val path: String = "/api/v1/query") : RequestDispatcher<SearchQuery,ServerInfo,IndexServer.SearchResult> {
+class FuelRequestDispatcher(private val path: String = "/api/v1/query") : RequestDispatcher<SearchQuery,Map<CollectionName,Offset>, IndexServer.SearchResult> {
 
-    override suspend fun invoke(searchQuery: SearchQuery, requestData: ServerInfo): MResult<IndexServer.SearchResult> = MResult.runCatching {
-        val url = "http://" + requestData.address + path
+    override suspend fun invoke(searchQuery: SearchQuery, requestData: RequestData<Map<CollectionName, Offset>>): MResult<IndexServer.SearchResult> = MResult.runCatching {
+        val url = "http://${requestData.address}$path"
         url.httpPost()
-                .jsonBody(searchQuery)
+                .jsonBody(searchQuery.copy(offset = requestData.offset))
                 .awaitDto<IndexServer.SearchResult>()
     }
-
-    override fun createRequestData(address: String, offset: Map<String,Offset>): ServerInfo = ServerInfo(address, offset)
 }
 
-class RestTemplateRequestDispatcher(private val restTemplate: RestTemplate = RestTemplate(), private val path: String = "/api/v1/query") : RequestDispatcher<SearchQuery,ServerInfo,IndexServer.SearchResult> {
 
-    override suspend fun invoke(searchQuery: SearchQuery, requestData: ServerInfo): MResult<IndexServer.SearchResult> = MResult.runCatching {
-        val input = searchQuery.toJson()
+class RestTemplateRequestDispatcher(private val restTemplate: RestTemplate = RestTemplate(), private val path: String = "/api/v1/query") : RequestDispatcher<SearchQuery,Map<CollectionName,Offset>, IndexServer.SearchResult> {
+
+    override suspend fun invoke(searchQuery: SearchQuery, requestData: RequestData<Map<CollectionName, Offset>>): MResult<IndexServer.SearchResult> = MResult.runCatching {
+        val input = searchQuery
+                .copy(offset = requestData.offset)
+                .toJson()
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
         val entity = HttpEntity(input, headers)
@@ -53,8 +49,6 @@ class RestTemplateRequestDispatcher(private val restTemplate: RestTemplate = Res
             throw RuntimeException(result.body.toString())
         }
     }
-
-    override fun createRequestData(address: String, offset: Map<String,Offset>): ServerInfo = ServerInfo(address, offset)
 }
 
 

@@ -5,7 +5,7 @@ import cz.vutbr.fit.knot.enticing.dto.*
 internal val templateSearchQuery = SearchQuery(
         "foo bar baz",
         20,
-        Offset(0, 0),
+        mapOf("one" to Offset(0, 0)),
         TextMetadata.Predefined("none"),
         ResponseType.FULL,
         ResponseFormat.ANNOTATED_TEXT
@@ -22,7 +22,7 @@ internal val searchDummyResult = IndexServer.SearchResult(
                 Payload.FullResponse.Html("texty text"),
                 false
         )),
-        Offset(42, 84)
+        mapOf("one" to Offset(42, 84))
 )
 
 internal val templateDocumentQuery = IndexServer.DocumentQuery(
