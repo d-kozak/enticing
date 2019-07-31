@@ -7,7 +7,7 @@ import cz.vutbr.fit.knot.enticing.index.query.QueryExecutor
 import cz.vutbr.fit.knot.enticing.index.query.initQueryExecutor
 
 fun startLocalClient(config: ConsoleClientType.LocalIndex, searchConfig: SearchConfig, input: Sequence<String>) {
-    val queryExecutor = initQueryExecutor(config.indexClientConfig)
+    val queryExecutor = initQueryExecutor(config.indexClientConfig.corpusConfiguration,config.indexClientConfig.collections[0])
 
     for (line in input) {
         executeLocally(queryExecutor, line)

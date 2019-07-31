@@ -13,10 +13,10 @@ import org.springframework.http.*
 import org.springframework.web.client.RestTemplate
 
 
-interface RequestDispatcher<T : RequestData> {
-    suspend operator fun invoke(searchQuery: SearchQuery, requestData: T): MResult<IndexServer.SearchResult>
+interface RequestDispatcher<T:Query<T>,NodeInfo : RequestData,Result:QueryResult> {
+    suspend operator fun invoke(searchQuery: T, requestData: NodeInfo): MResult<Result>
 
-    fun createRequestData(address: String, offset: Offset): T
+    fun createRequestData(address: String, offset: Map<String,Offset>): NodeInfo
 }
 
 
@@ -26,7 +26,7 @@ interface RequestDispatcher<T : RequestData> {
  * @see https://github.com/kittinunf/fuel
  * It is asynchronous and integrated with coroutines
  */
-class FuelRequestDispatcher(private val path: String = "/api/v1/query") : RequestDispatcher<ServerInfo> {
+class FuelRequestDispatcher(private val path: String = "/api/v1/query") : RequestDispatcher<SearchQuery,ServerInfo,IndexServer.SearchResult> {
 
     override suspend fun invoke(searchQuery: SearchQuery, requestData: ServerInfo): MResult<IndexServer.SearchResult> = MResult.runCatching {
         val url = "http://" + requestData.address + path
@@ -35,10 +35,10 @@ class FuelRequestDispatcher(private val path: String = "/api/v1/query") : Reques
                 .awaitDto<IndexServer.SearchResult>()
     }
 
-    override fun createRequestData(address: String, offset: Offset): ServerInfo = ServerInfo(address, offset)
+    override fun createRequestData(address: String, offset: Map<String,Offset>): ServerInfo = ServerInfo(address, offset)
 }
 
-class RestTemplateRequestDispatcher(private val restTemplate: RestTemplate = RestTemplate(), private val path: String = "/api/v1/query") : RequestDispatcher<ServerInfo> {
+class RestTemplateRequestDispatcher(private val restTemplate: RestTemplate = RestTemplate(), private val path: String = "/api/v1/query") : RequestDispatcher<SearchQuery,ServerInfo,IndexServer.SearchResult> {
 
     override suspend fun invoke(searchQuery: SearchQuery, requestData: ServerInfo): MResult<IndexServer.SearchResult> = MResult.runCatching {
         val input = searchQuery.toJson()
@@ -54,7 +54,7 @@ class RestTemplateRequestDispatcher(private val restTemplate: RestTemplate = Res
         }
     }
 
-    override fun createRequestData(address: String, offset: Offset): ServerInfo = ServerInfo(address, offset)
+    override fun createRequestData(address: String, offset: Map<String,Offset>): ServerInfo = ServerInfo(address, offset)
 }
 
 

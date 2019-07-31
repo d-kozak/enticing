@@ -28,7 +28,7 @@ internal class QueryServiceTest {
     @Nested
     inner class SearchQueryTest {
 
-        private val dispatcher: QueryDispatcher<ServerInfo> = mockk()
+        private val dispatcher: QueryDispatcher<SearchQuery,ServerInfo, IndexServer.SearchResult> = mockk()
         private val searchSettingsRepository: SearchSettingsRepository = mockk()
         private val userService: EnticingUserService = mockk()
         private val indexServerConnector: IndexServerConnector = mockk()
@@ -135,7 +135,7 @@ internal class QueryServiceTest {
     @Nested
     inner class DocumentRetrieval {
 
-        private val dispatcher: QueryDispatcher<ServerInfo> = mockk()
+        private val dispatcher: QueryDispatcher<SearchQuery,ServerInfo, IndexServer.SearchResult> = mockk()
         private val searchSettingsRepository: SearchSettingsRepository = mockk()
         private val userService: EnticingUserService = mockk()
         private val indexServerConnector: IndexServerConnector = mockk()
@@ -173,7 +173,7 @@ internal class QueryServiceTest {
     @Nested
     inner class ContextExtension {
 
-        private val dispatcher: QueryDispatcher<ServerInfo> = mockk()
+        private val dispatcher: QueryDispatcher<SearchQuery,ServerInfo, IndexServer.SearchResult> = mockk()
         private val searchSettingsRepository: SearchSettingsRepository = mockk()
         private val userService: EnticingUserService = mockk()
         private val indexServerConnector: IndexServerConnector = mockk()

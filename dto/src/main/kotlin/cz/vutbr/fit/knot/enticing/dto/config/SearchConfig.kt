@@ -17,7 +17,7 @@ data class SearchConfig(
     fun toTemplateQuery(): SearchQuery = SearchQuery(
             query = "",
             snippetCount = snippetCount,
-            offset = Offset(0, 0),
+            offset = emptyMap(),
             metadata = metadata,
             defaultIndex = defaultIndex,
             responseFormat = responseFormat,

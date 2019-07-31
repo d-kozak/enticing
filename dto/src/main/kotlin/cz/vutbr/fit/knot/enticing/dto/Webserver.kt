@@ -7,6 +7,7 @@ import javax.validation.constraints.*
 
 typealias ServerId = String
 typealias ErrorMessage = String
+typealias CollectionName = String
 
 object Webserver {
 

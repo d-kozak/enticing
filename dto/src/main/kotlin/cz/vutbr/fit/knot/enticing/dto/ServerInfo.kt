@@ -11,5 +11,5 @@ data class ServerInfo(
         @field:Pattern(regexp = urlRegexStr)
         override val address: String,
         @field:Valid
-        override val offset: Offset = Offset(0, 0)
+        override val offset: Map<String,Offset> = emptyMap()
 ) : RequestData

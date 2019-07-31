@@ -88,8 +88,12 @@ val builderConfig = indexBuilder {
 }
 
 val clientConfig = indexClient {
-    mg4jDirectory("../data/mg4j")
-    indexDirectory("../data/indexed")
+    collections{
+        collection("one"){
+            mg4jDirectory("../data/mg4j")
+            indexDirectory("../data/indexed")
+        }
+    }
     corpusConfiguration = corpusConfig
 }
 
@@ -120,7 +124,7 @@ class QueryExecutorTest {
 
     @Test
     fun `valid queries`() {
-        val queryEngine = initQueryExecutor(clientConfig)
+        val queryEngine = initQueryExecutor(clientConfig.corpusConfiguration, clientConfig.collections[0])
         for (input in listOf(
                 "hello",
                 "john",
@@ -140,7 +144,7 @@ class QueryExecutorTest {
 
     @Test
     fun `valid queries with new data format requested`() {
-        val queryEngine = initQueryExecutor(clientConfig)
+        val queryEngine = initQueryExecutor(clientConfig.corpusConfiguration, clientConfig.collections[0])
         for (input in listOf(
                 "hello",
                 "john",
@@ -162,7 +166,7 @@ class QueryExecutorTest {
     @Test
     fun problematicQuery() {
         val query = SearchQuery(query = "job work", snippetCount = 33, offset = Offset(document = 0, snippet = 0), metadata = TextMetadata.Predefined(value = "all"), responseType = ResponseType.FULL, responseFormat = ResponseFormat.NEW_ANNOTATED_TEXT, defaultIndex = "token")
-        val queryEngine = initQueryExecutor(clientConfig)
+        val queryEngine = initQueryExecutor(clientConfig.corpusConfiguration, clientConfig.collections[0])
         val result = queryEngine.query(query)
         println(result)
         if (result.isFailure) {
@@ -172,7 +176,7 @@ class QueryExecutorTest {
 
     @Test
     fun `syntax error should be caught`() {
-        val queryEngine = initQueryExecutor(clientConfig)
+        val queryEngine = initQueryExecutor(clientConfig.corpusConfiguration, clientConfig.collections[0])
         val query = templateQuery.copy(query = "lemma:work{{lemma->")
 
         assertThrows<QueryParserException> {
@@ -184,7 +188,7 @@ class QueryExecutorTest {
 
     @Test
     fun `document retrieval test`() {
-        val executor = initQueryExecutor(clientConfig)
+        val executor = initQueryExecutor(clientConfig.corpusConfiguration, clientConfig.collections[0])
         for (i in 0..10) {
             val query = IndexServer.DocumentQuery("col1", i)
 
@@ -200,7 +204,7 @@ class QueryExecutorTest {
 
     @Test
     fun `context extension test`() {
-        val executor = initQueryExecutor(clientConfig)
+        val executor = initQueryExecutor(clientConfig.corpusConfiguration, clientConfig.collections[0])
 
         val (prefix, suffix, _) = executor.extendSnippet(
                 IndexServer.ContextExtensionQuery("col1", 2, 5, 5, 10, responseFormat = ResponseFormat.ANNOTATED_TEXT
@@ -216,7 +220,7 @@ class QueryExecutorTest {
     @Test
     fun `real context extension request`() {
         val query = """{"collection":"name","docId":56,"defaultIndex":"token","location":349,"size":50,"extension":20}""".toDto<IndexServer.ContextExtensionQuery>()
-        val executor = initQueryExecutor(clientConfig)
+        val executor = initQueryExecutor(clientConfig.corpusConfiguration, clientConfig.collections[0])
         val (prefix, suffix, _) = executor.extendSnippet(query).unwrap()
 
         println(prefix)

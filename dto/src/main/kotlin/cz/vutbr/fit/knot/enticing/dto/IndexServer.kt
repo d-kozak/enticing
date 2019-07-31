@@ -123,7 +123,6 @@ object IndexServer {
         fun toWebserverFormat(host: String, collection: String, documentId: Int, query: String? = null) = Webserver.FullDocument(host, collection, documentId, title, url, payload, query, queryMapping)
     }
 
-
     /**
      * Result for SearchQuery
      */
@@ -132,15 +131,19 @@ object IndexServer {
              * List of snippets that matched the query
              */
             @field:Valid
-            val matched: List<Snippet>,
+            override val matched: List<Snippet>,
             /**
              * For pagination, where to start next
              *
-             * null means that there are no more snippets available
              */
             @field:Valid
-            val offset: Offset? = null
-    )
+            override val offset: Map<CollectionName,Offset> = emptyMap(),
+
+            /**
+             * Errors from collections, if any
+             */
+            val errors:Map<CollectionName,ErrorMessage> = emptyMap()
+    ):QueryResult
 
     /**
      * Part of document that was matched by the query

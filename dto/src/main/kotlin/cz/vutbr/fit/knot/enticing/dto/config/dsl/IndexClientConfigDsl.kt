@@ -2,7 +2,7 @@ package cz.vutbr.fit.knot.enticing.dto.config.dsl
 
 fun indexClient(block: IndexClientConfig.() -> Unit): IndexClientConfig = IndexClientConfig().apply(block)
 
-fun MutableList<CollectionConfiguration>.collection(name: String, block: (CollectionConfiguration) -> Unit) {
+fun MutableList<CollectionConfiguration>.collection(name: String, block: CollectionConfiguration.() -> Unit) {
     val config = CollectionConfiguration(name)
     config.apply(block)
     this.add(config)
@@ -18,7 +18,7 @@ open class IndexClientConfig {
         get() = corpusConfiguration.indexes.values.toList()
 
 
-    fun collections(block: (MutableList<CollectionConfiguration>) -> Unit) {
+    fun collections(block: MutableList<CollectionConfiguration>.() -> Unit) {
         this.collections.apply(block)
     }
 

@@ -9,7 +9,7 @@ internal data class FailOnPurposeException(val msg: String) : Exception()
 internal val templateQuery = SearchQuery(
         "foo bar baz",
         20,
-        Offset(0, 0),
+        emptyMap(),
         TextMetadata.Predefined("none"),
         ResponseType.FULL,
         ResponseFormat.ANNOTATED_TEXT
@@ -26,5 +26,5 @@ internal val googleFirstResult = IndexServer.SearchResult(
                 Payload.FullResponse.Html("texty text"),
                 false
         )),
-        Offset(42, 84)
+        mapOf("one" to Offset(42, 84))
 )

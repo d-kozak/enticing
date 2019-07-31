@@ -40,4 +40,27 @@ class CollectionConfiguration(val name: String) {
         checkMg4jFiles(mg4jFiles, errors)
         checkDirectory(this.indexDirectory, errors)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is CollectionConfiguration) return false
+
+        if (name != other.name) return false
+        if (mg4jFiles != other.mg4jFiles) return false
+        if (indexDirectory != other.indexDirectory) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = name.hashCode()
+        result = 31 * result + mg4jFiles.hashCode()
+        result = 31 * result + indexDirectory.hashCode()
+        return result
+    }
+
+    override fun toString(): String {
+        return "CollectionConfiguration(name='$name', mg4jFiles=$mg4jFiles, indexDirectory=$indexDirectory)"
+    }
+
 }

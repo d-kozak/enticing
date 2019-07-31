@@ -23,12 +23,12 @@ data class SearchQuery(
          * Number of snippets to be returned
          */
         @field:Positive
-        val snippetCount: Int = Defaults.snippetCount,
+        override val snippetCount: Int = Defaults.snippetCount,
         /**
          * Offset at which to start, for pagination
          */
         @field:Valid
-        val offset: Offset = Offset(0, 0),
+        val offset: Map<String, Offset> = emptyMap(),
         /**
          * Which other indexes and entities should be included
          */
@@ -52,7 +52,9 @@ data class SearchQuery(
          */
         @field:NotBlank
         override val defaultIndex: String = Defaults.defaultIndex
-) : Mg4jQuery
+) : Mg4jQuery, Query<SearchQuery> {
+    override fun updateSnippetCount(newSnippetCount: Int): SearchQuery = this.copy(snippetCount = newSnippetCount)
+}
 
 
 /**
@@ -72,6 +74,7 @@ sealed class TextMetadata {
      * Currently supported are "all" and "none"
      */
     data class Predefined(val value: String) : TextMetadata()
+
     data class ExactDefinition(
             val entities: Entities,
             val indexes: Indexes

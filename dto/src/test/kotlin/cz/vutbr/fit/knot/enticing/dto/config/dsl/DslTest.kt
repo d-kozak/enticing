@@ -898,8 +898,12 @@ class DslTest {
         fun `local client`() {
             val config = consoleClient {
                 local {
-                    mg4jDirectory("../data/mg4j")
-                    indexDirectory("../data/indexed")
+                    collections{
+                        collection("one"){
+                            mg4jDirectory("../data/mg4j")
+                            indexDirectory("../data/indexed")
+                        }
+                    }
 
                     corpus("CC") {
                         indexes {
@@ -974,8 +978,12 @@ class DslTest {
             val expected = ConsoleClientConfig()
             expected.searchConfig = SearchConfig(42)
             expected.clientType = ConsoleClientType.LocalIndex(indexClient {
-                mg4jDirectory("../data/mg4j")
-                indexDirectory("../data/indexed")
+                collections{
+                    collection("one"){
+                        mg4jDirectory("../data/mg4j")
+                        indexDirectory("../data/indexed")
+                    }
+                }
 
                 corpus("CC") {
                     indexes {
