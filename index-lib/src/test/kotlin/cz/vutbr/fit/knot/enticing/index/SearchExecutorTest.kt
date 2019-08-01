@@ -135,9 +135,6 @@ class SearchExecutorTest {
             val query = templateQuery.copy(query = input)
 
             val result = queryEngine.query(query)
-            if (result.isFailure) {
-                result.rethrowException()
-            }
             println(result)
         }
     }
@@ -155,9 +152,6 @@ class SearchExecutorTest {
             val query = templateQuery.copy(query = input, responseFormat = ResponseFormat.NEW_ANNOTATED_TEXT)
 
             val result = queryEngine.query(query)
-            if (result.isFailure) {
-                result.rethrowException()
-            }
             println(result)
         }
     }
@@ -169,9 +163,6 @@ class SearchExecutorTest {
         val queryEngine = initQueryExecutor(clientConfig.corpusConfiguration, clientConfig.collections[0])
         val result = queryEngine.query(query)
         println(result)
-        if (result.isFailure) {
-            result.rethrowException()
-        }
     }
 
     @Test
@@ -181,8 +172,6 @@ class SearchExecutorTest {
 
         assertThrows<QueryParserException> {
             val result = queryEngine.query(query)
-            assertThat(result.isFailure)
-            result.rethrowException()
         }
     }
 
@@ -192,7 +181,7 @@ class SearchExecutorTest {
         for (i in 0..10) {
             val query = IndexServer.DocumentQuery("col1", i)
 
-            val document = executor.getDocument(query).unwrap()
+            val document = executor.getDocument(query)
 
             if (document.payload is Payload.FullResponse.Annotated) {
                 val annotated = document.payload as Payload.FullResponse.Annotated
@@ -208,7 +197,7 @@ class SearchExecutorTest {
 
         val (prefix, suffix, _) = executor.extendSnippet(
                 IndexServer.ContextExtensionQuery("col1", 2, 5, 5, 10, responseFormat = ResponseFormat.ANNOTATED_TEXT
-                )).unwrap()
+                ))
 
         for (text in listOf(prefix, suffix)) {
             val annotated = text as Payload.FullResponse.Annotated
@@ -221,13 +210,13 @@ class SearchExecutorTest {
     fun `real context extension request`() {
         val query = """{"collection":"name","docId":56,"defaultIndex":"token","location":349,"size":50,"extension":20}""".toDto<IndexServer.ContextExtensionQuery>()
         val executor = initQueryExecutor(clientConfig.corpusConfiguration, clientConfig.collections[0])
-        val (prefix, suffix, _) = executor.extendSnippet(query).unwrap()
+        val (prefix, suffix, _) = executor.extendSnippet(query)
 
         println(prefix)
         println(suffix)
     }
 
-    fun validateAnnotatedText(text: AnnotatedText): List<String> {
+    private fun validateAnnotatedText(text: AnnotatedText): List<String> {
         val errors = mutableListOf<String>()
         for (position in text.positions) {
             val (id, _, subAnnotations) = position

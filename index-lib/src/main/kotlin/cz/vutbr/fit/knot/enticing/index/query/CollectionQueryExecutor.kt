@@ -16,6 +16,6 @@ class CollectionQueryExecutor(
     override suspend fun invoke(searchQuery: SearchQuery, requestData: RequestData<Offset>): MResult<IndexServer.CollectionSearchResult> = MResult.runCatching {
         val executor = executors[requestData.address]
                 ?: throw IllegalArgumentException("Unknown executor for collection ${requestData.address}")
-        executor.query(searchQuery,requestData.offset ?: Offset(0,0)).unwrap()
+        executor.query(searchQuery, requestData.offset ?: Offset(0, 0))
     }
 }

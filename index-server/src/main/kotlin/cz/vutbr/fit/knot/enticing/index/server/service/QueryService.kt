@@ -27,10 +27,10 @@ class QueryService(
         return flatten(queryDispatcher.dispatchQuery(query, requestData))
     }
 
-    fun extendContext(query: IndexServer.ContextExtensionQuery) = searchExecutors[query.collection]?.extendSnippet(query)?.unwrap()
+    fun extendContext(query: IndexServer.ContextExtensionQuery) = searchExecutors[query.collection]?.extendSnippet(query)
             ?: throw IllegalArgumentException("Unknown collection ${query.collection}")
 
-    fun getDocument(query: IndexServer.DocumentQuery) = searchExecutors[query.collection]?.getDocument(query)?.unwrap()
+    fun getDocument(query: IndexServer.DocumentQuery) = searchExecutors[query.collection]?.getDocument(query)
             ?: throw IllegalArgumentException("Unknown collection ${query.collection}")
 
     fun loadCorpusFormat(): CorpusFormat = indexClientConfig.corpusConfiguration.toCorpusFormat()

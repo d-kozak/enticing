@@ -7,7 +7,6 @@ import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CollectionConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.filterBy
-import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jCompositeDocumentCollection
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jDocument
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jDocumentFactory
@@ -80,7 +79,7 @@ class SearchExecutor internal constructor(
 
     private val log: Logger = LoggerFactory.getLogger(SearchExecutor::class.java)
 
-    fun query(query: SearchQuery, offset:Offset = Offset(0,0)): MResult<IndexServer.CollectionSearchResult> = MResult.runCatching {
+    fun query(query: SearchQuery, offset: Offset = Offset(0, 0)): IndexServer.CollectionSearchResult {
         log.info("Executing query $query")
         val resultList = ObjectArrayList<Mg4jSearchResult>()
         val (documentOffset, matchOffset) = offset
@@ -95,15 +94,15 @@ class SearchExecutor internal constructor(
             val (matchList, nextSnippet) = processDocument(query, result, config, query.snippetCount - matched.size, if (i == 0) matchOffset else 0)
             matched.addAll(matchList)
             if (matched.size >= query.snippetCount || nextSnippet != null) {
-                val offset = when {
+                val finalOffset = when {
                     nextSnippet != null -> Offset(result.document.toInt(), nextSnippet)
                     i != resultList.size - 1 -> Offset(resultList[i + 1].document.toInt(), 0)
                     else -> null
                 }
-                return@runCatching IndexServer.CollectionSearchResult(matched, offset)
+                return IndexServer.CollectionSearchResult(matched, finalOffset)
             }
         }
-        return@runCatching IndexServer.CollectionSearchResult(matched, null)
+        return IndexServer.CollectionSearchResult(matched, null)
     }
 
     @Incomplete("Better snippet creation algorithm needed")
@@ -167,7 +166,7 @@ class SearchExecutor internal constructor(
         log.warn("No results for index $index")
     }
 
-    fun extendSnippet(query: IndexServer.ContextExtensionQuery): MResult<SnippetExtension> = MResult.runCatching {
+    fun extendSnippet(query: IndexServer.ContextExtensionQuery): SnippetExtension {
         val document = collection.document(query.docId.toLong()) as Mg4jDocument
         val (prefix, suffix) = computeExtensionIntervals(left = query.location, right = query.location + query.size, extension = query.extension, documentSize = document.size())
 
@@ -176,14 +175,14 @@ class SearchExecutor internal constructor(
         val prefixPayload = createPayload(query, document.loadSnippetPartsFields(prefix, filteredConfig), emptyList()) as Payload.FullResponse
         val suffixPayload = createPayload(query, document.loadSnippetPartsFields(suffix, filteredConfig), emptyList()) as Payload.FullResponse
 
-        SnippetExtension(
+        return SnippetExtension(
                 prefixPayload,
                 suffixPayload,
                 canExtend = document.size() > prefix.size + query.size + suffix.size
         )
     }
 
-    fun getDocument(query: IndexServer.DocumentQuery): MResult<IndexServer.FullDocument> = MResult.runCatching {
+    fun getDocument(query: IndexServer.DocumentQuery): IndexServer.FullDocument {
         val document = collection.document(query.documentId.toLong()) as Mg4jDocument
 
         val filteredConfig = corpusConfiguration.filterBy(query.metadata, query.defaultIndex)
@@ -191,7 +190,7 @@ class SearchExecutor internal constructor(
         val content = document.loadSnippetPartsFields(filteredConfig = filteredConfig)
 
         val payload = createPayload(query, content, emptyList()) as Payload.FullResponse
-        IndexServer.FullDocument(
+        return IndexServer.FullDocument(
                 document.title().toString(),
                 document.uri().toString(),
                 payload

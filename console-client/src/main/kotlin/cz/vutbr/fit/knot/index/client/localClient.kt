@@ -26,12 +26,11 @@ internal fun executeLine(searchExecutor: SearchExecutor, input: String) {
             ResponseType.FULL,
             ResponseFormat.NEW_ANNOTATED_TEXT
     )
-    val response = searchExecutor.query(query)
-    println("Response $response")
-    if (response.isSuccess) {
-        printResult(response.value)
-    } else {
-        response.exception.printStackTrace()
+    try {
+        val response = searchExecutor.query(query)
+        println(response)
+    } catch (ex: Exception) {
+        ex.printStackTrace()
     }
 }
 
