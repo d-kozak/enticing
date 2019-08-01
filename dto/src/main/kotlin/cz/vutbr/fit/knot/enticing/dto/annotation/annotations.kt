@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.dto.annotation
 
 // todo find out how to configure IDEA to treat these annotations as TODO items
+// not possible yet, see  https://youtrack.jetbrains.com/issue/IDEA-169745
 
 /**
  * Denotes a region of code that is a potential performance bottleneck

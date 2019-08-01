@@ -1,5 +1,8 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
+/**
+ * Meta marks from mg4j documents
+ */
 enum class DocumentMarks(val mark: String) {
     DOC("%%#DOC"),
     PAGE("%%#PAGE"),

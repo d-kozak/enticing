@@ -98,7 +98,7 @@ val clientConfig = indexClient {
 }
 
 @Incomplete("write a more complete test suite")
-class QueryExecutorTest {
+class SearchExecutorTest {
 
     private val templateQuery = SearchQuery(
             "",

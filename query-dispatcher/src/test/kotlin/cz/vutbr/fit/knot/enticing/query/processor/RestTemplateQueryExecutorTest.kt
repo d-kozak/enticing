@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.client.RestTemplate
 
 
-internal class RestTemplateRequestDispatcherTest {
+internal class RestTemplateQueryExecutorTest {
 
     @Test
     fun success() {
@@ -27,7 +27,7 @@ internal class RestTemplateRequestDispatcherTest {
         } returns ResponseEntity(googleFirstResult.toJson(), HttpStatus.OK)
 
 
-        val requestDispatcher = RestTemplateRequestDispatcher(mockTemplate)
+        val requestDispatcher = RestTemplateQueryExecutor(mockTemplate)
         val result = runBlocking { requestDispatcher(templateQuery, serverInfo) }
         if (result.isFailure) {
             result.rethrowException()
@@ -47,7 +47,7 @@ internal class RestTemplateRequestDispatcherTest {
         } throws FailOnPurposeException("fail!")
 
 
-        val requestDispatcher = RestTemplateRequestDispatcher(mockTemplate)
+        val requestDispatcher = RestTemplateQueryExecutor(mockTemplate)
         val result = runBlocking { requestDispatcher(templateQuery, serverInfo) }
 
         assertThat(result.isFailure)

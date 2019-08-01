@@ -5,6 +5,9 @@ import cz.vutbr.fit.knot.enticing.index.mg4j.DirectoryIOFactory
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jCompositeDocumentCollection
 import it.unimi.di.big.mg4j.tool.IndexBuilder
 
+/**
+ * Executes indexing based on the configuration passed in
+ */
 fun startIndexing(config: IndexBuilderConfig) {
     val documentCollection = Mg4jCompositeDocumentCollection(config.corpusConfiguration, config.input)
     IndexBuilder(config.corpusConfiguration.corpusName, documentCollection)

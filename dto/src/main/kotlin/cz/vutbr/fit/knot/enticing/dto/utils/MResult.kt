@@ -1,6 +1,9 @@
 package cz.vutbr.fit.knot.enticing.dto.utils
 
 
+/**
+ * Temporary substitute for @see Result from kotlin standard lib, which is still experimental
+ */
 data class MResult<T> internal constructor(val value: T) {
 
     val isSuccess get() = value !is Failure

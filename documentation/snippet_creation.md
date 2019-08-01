@@ -8,6 +8,6 @@ The output of the algorithm is a list of intervals, each representing one snippe
 
 
 
-Current code, which only implements the simple algorithm described above, can be found [here](../index-lib/src/main/kotlin/cz/vutbr/fit/knot/enticing/index/query/QueryExecutor.kt).
+Current code, which only implements the simple algorithm described above, can be found [here](../index-lib/src/main/kotlin/cz/vutbr/fit/knot/enticing/index/query/SearchExecutor.kt).
 It is hardcoded into QueryExecutor. It can be refactored using the Strategy pattern to support multiple snippet creation algorithms.
 

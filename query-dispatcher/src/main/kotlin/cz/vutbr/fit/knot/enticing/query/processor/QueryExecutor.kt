@@ -11,17 +11,20 @@ import cz.vutbr.fit.knot.enticing.query.processor.fuel.jsonBody
 import org.springframework.http.*
 import org.springframework.web.client.RestTemplate
 
-interface RequestDispatcher<T : Query<T>,OffsetType, Result : QueryResult<OffsetType>> {
+/**
+ * Component of QueryDispatcher whose responsibility is to execute the query (which might actually mean sending a request to an index server and therefore delegating the execution further)
+ */
+interface QueryExecutor<T : Query<T>, OffsetType, Result : QueryResult<OffsetType>> {
     suspend operator fun invoke(searchQuery: T, requestData: RequestData<OffsetType>): MResult<Result>
 }
 
 /**
- * Request dispatcher implemented using the Fuel library
+ * Remote query executor that sends request to indexserver via fuel
  *
  * @see https://github.com/kittinunf/fuel
  * It is asynchronous and integrated with coroutines
  */
-class FuelRequestDispatcher(private val path: String = "/api/v1/query") : RequestDispatcher<SearchQuery,Map<CollectionName,Offset>, IndexServer.SearchResult> {
+class FuelQueryExecutor(private val path: String = "/api/v1/query") : QueryExecutor<SearchQuery, Map<CollectionName, Offset>, IndexServer.SearchResult> {
 
     override suspend fun invoke(searchQuery: SearchQuery, requestData: RequestData<Map<CollectionName, Offset>>): MResult<IndexServer.SearchResult> = MResult.runCatching {
         val url = "http://${requestData.address}$path"
@@ -32,7 +35,10 @@ class FuelRequestDispatcher(private val path: String = "/api/v1/query") : Reques
 }
 
 
-class RestTemplateRequestDispatcher(private val restTemplate: RestTemplate = RestTemplate(), private val path: String = "/api/v1/query") : RequestDispatcher<SearchQuery,Map<CollectionName,Offset>, IndexServer.SearchResult> {
+/**
+ * Remote query executor that sends request to indexserver via restTemplate
+ */
+class RestTemplateQueryExecutor(private val restTemplate: RestTemplate = RestTemplate(), private val path: String = "/api/v1/query") : QueryExecutor<SearchQuery, Map<CollectionName, Offset>, IndexServer.SearchResult> {
 
     override suspend fun invoke(searchQuery: SearchQuery, requestData: RequestData<Map<CollectionName, Offset>>): MResult<IndexServer.SearchResult> = MResult.runCatching {
         val input = searchQuery

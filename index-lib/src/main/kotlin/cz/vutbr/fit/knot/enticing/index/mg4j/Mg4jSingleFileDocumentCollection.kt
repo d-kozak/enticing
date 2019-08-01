@@ -13,6 +13,9 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.InputStream
 
+/**
+ * Mg4j collection handling one mg4j file ( which usually consists of multiple mg4j documents )
+ */
 class Mg4jSingleFileDocumentCollection(
         private val inputFile: File,
         private val factory: DocumentFactory)

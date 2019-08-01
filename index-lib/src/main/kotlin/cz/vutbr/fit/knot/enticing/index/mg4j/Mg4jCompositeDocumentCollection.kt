@@ -9,18 +9,22 @@ import it.unimi.dsi.fastutil.objects.Reference2ObjectMap
 import java.io.File
 import java.io.InputStream
 
+
+/**
+ * Transforms a list of sizes of collections into an array containing highest document indexes in each collection
+ */
 internal fun initDocumentRanges(limits: List<Long>): Array<Long> {
     val result = Array(limits.size) { 0L }
     for (i in 0 until limits.size) {
-        val prev = if (i > 0) result[i - 1] else 0
+        val prev = if (i > 0) result[i - 1] else -1
         result[i] = prev + limits[i]
-    }
-    for (i in 0 until limits.size) {
-        result[i] = result[i] - 1
     }
     return result
 }
 
+/**
+ * Composite collection that handles multiple @see Mg4jSingleFileDocumentCollection and delegates requests to the appropriate ones based on the index
+ */
 class Mg4jCompositeDocumentCollection(
         private val corpusConfiguration: CorpusConfiguration,
         private val files: List<File>)
@@ -47,6 +51,9 @@ class Mg4jCompositeDocumentCollection(
         return collection.document(localIndex)
     }
 
+    /**
+     * Finds SingleFileCollection at which the document is located and computes the local index of that document inside the collection
+     */
     private fun findCollection(index: Long): Pair<Mg4jSingleFileDocumentCollection, Long> {
         var insertionPoint = documentRanges.binarySearch(index)
         if (insertionPoint < 0) {

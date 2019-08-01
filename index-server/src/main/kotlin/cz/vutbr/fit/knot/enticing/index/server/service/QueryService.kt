@@ -3,8 +3,8 @@ package cz.vutbr.fit.knot.enticing.index.server.service
 import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexClientConfig
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
-import cz.vutbr.fit.knot.enticing.index.query.CollectionRequestDispatcher
-import cz.vutbr.fit.knot.enticing.index.query.QueryExecutor
+import cz.vutbr.fit.knot.enticing.index.query.CollectionQueryExecutor
+import cz.vutbr.fit.knot.enticing.index.query.SearchExecutor
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -12,25 +12,25 @@ import org.springframework.stereotype.Service
 
 @Service
 class QueryService(
-        private val queryExecutors: Map<String, QueryExecutor>,
+        private val searchExecutors: Map<String, SearchExecutor>,
         private val indexClientConfig: IndexClientConfig
 ) {
 
     private val log = LoggerFactory.getLogger(QueryService::class.java)
 
-    val queryDispatcher = QueryDispatcher(CollectionRequestDispatcher(queryExecutors))
+    val queryDispatcher = QueryDispatcher(CollectionQueryExecutor(searchExecutors))
 
     fun processQuery(query: SearchQuery): IndexServer.SearchResult {
         val requestData = if(query.offset != null) query.offset!!.map { (collection, offset) -> CollectionRequestData(collection, offset) }
-        else queryExecutors.keys.map { CollectionRequestData(it,Offset(0,0)) }
+        else searchExecutors.keys.map { CollectionRequestData(it, Offset(0, 0)) }
         log.info("Executing query $query with requestData $requestData")
         return flatten(queryDispatcher.dispatchQuery(query, requestData))
     }
 
-    fun extendContext(query: IndexServer.ContextExtensionQuery) = queryExecutors[query.collection]?.extendSnippet(query)?.unwrap()
+    fun extendContext(query: IndexServer.ContextExtensionQuery) = searchExecutors[query.collection]?.extendSnippet(query)?.unwrap()
             ?: throw IllegalArgumentException("Unknown collection ${query.collection}")
 
-    fun getDocument(query: IndexServer.DocumentQuery) = queryExecutors[query.collection]?.getDocument(query)?.unwrap()
+    fun getDocument(query: IndexServer.DocumentQuery) = searchExecutors[query.collection]?.getDocument(query)?.unwrap()
             ?: throw IllegalArgumentException("Unknown collection ${query.collection}")
 
     fun loadCorpusFormat(): CorpusFormat = indexClientConfig.corpusConfiguration.toCorpusFormat()
@@ -50,9 +50,10 @@ internal fun flatten(result: Map<String, List<MResult<IndexServer.CollectionSear
         }
     }
 
-    val offset:Map<CollectionName, Offset> = result.map { (collectionName,collectionResults) -> collectionName to collectionResults.findLast { it.isSuccess && it.value.offset != null }?.value?.offset }
-            .filter { it.second != null }
-            .toMap() as Map<CollectionName, Offset>
+    val offset: Map<CollectionName, Offset> =
+            result.map { (collectionName, collectionResults) -> collectionResults.findLast { it.isSuccess && it.value.offset != null }?.value?.offset?.let { collectionName to it } }
+                    .filterNotNull()
+                    .toMap()
 
     return IndexServer.SearchResult(matched, offset, errors)
 }

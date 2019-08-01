@@ -26,13 +26,14 @@ import it.unimi.dsi.util.Interval
 import it.unimi.dsi.util.Intervals
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import kotlin.math.min
 
 @Cleanup("put into configuration?")
 const val SNIPPET_SIZE = 50
 
-private val log = LoggerFactory.getLogger(QueryExecutor::class.java)
+private val log = LoggerFactory.getLogger(SearchExecutor::class.java)
 
-fun initQueryExecutor(corpusConfiguration: CorpusConfiguration, collectionConfig: CollectionConfiguration): QueryExecutor {
+fun initQueryExecutor(corpusConfiguration: CorpusConfiguration, collectionConfig: CollectionConfiguration): SearchExecutor {
     log.info("initializing with config $corpusConfiguration,$collectionConfig")
     val collection = Mg4jCompositeDocumentCollection(corpusConfiguration, collectionConfig.mg4jFiles)
     val factory = Mg4jDocumentFactory(corpusConfiguration)
@@ -60,23 +61,26 @@ fun initQueryExecutor(corpusConfiguration: CorpusConfiguration, collectionConfig
     engine.intervalSelector = IntervalSelector(Integer.MAX_VALUE, Integer.MAX_VALUE)
     engine.multiplex = false
 
-    return QueryExecutor(collectionConfig.name, collection, engine, corpusConfiguration)
+    return SearchExecutor(collectionConfig.name, collection, engine, corpusConfiguration)
 }
 
 internal typealias Mg4jSearchResult = DocumentScoreInfo<Reference2ObjectMap<Index, Array<SelectedInterval>>>
 
+/**
+ * Interface of the underlying mg4j indexing library, performs requests and processes results
+ */
 @Cleanup("Refactor into multiple classes/functions in different files")
 @WhatIf("? decouple from mg4j for easier and faster testing ?")
-class QueryExecutor internal constructor(
+class SearchExecutor internal constructor(
         val collectionName: String,
         private val collection: Mg4jCompositeDocumentCollection,
         private val engine: QueryEngine,
         private val corpusConfiguration: CorpusConfiguration
 ) {
 
-    private val log: Logger = LoggerFactory.getLogger(QueryExecutor::class.java)
+    private val log: Logger = LoggerFactory.getLogger(SearchExecutor::class.java)
 
-    fun query(query: SearchQuery,offset:Offset = Offset(0,0)): MResult<IndexServer.CollectionSearchResult> = MResult.runCatching {
+    fun query(query: SearchQuery, offset:Offset = Offset(0,0)): MResult<IndexServer.CollectionSearchResult> = MResult.runCatching {
         log.info("Executing query $query")
         val resultList = ObjectArrayList<Mg4jSearchResult>()
         val (documentOffset, matchOffset) = offset
@@ -229,23 +233,23 @@ private fun checkPostconditions(leftInterval: Interval, maxPrefixSize: Int, righ
 
 @Cleanup("This is ugly and should be refactored somehow, hopefully there is an easier way to express this operation")
 private fun computePrefixAndSuffixSize(extension: Int, maxPrefixSize: Int, maxSuffixSize: Int): Pair<Int, Int> {
-    var prefixSize = Math.min(extension / 2, maxPrefixSize)
-    var suffixSize = Math.min(extension / 2, maxSuffixSize)
+    var prefixSize = min(extension / 2, maxPrefixSize)
+    var suffixSize = min(extension / 2, maxSuffixSize)
 
     loop@ while (prefixSize + suffixSize < extension) {
         val remaining = extension - prefixSize - suffixSize
         when {
             prefixSize == maxPrefixSize -> {
-                suffixSize = Math.min(suffixSize + remaining, maxSuffixSize)
+                suffixSize = min(suffixSize + remaining, maxSuffixSize)
                 break@loop
             }
             suffixSize == maxSuffixSize -> {
-                prefixSize = Math.min(prefixSize + remaining, maxPrefixSize)
+                prefixSize = min(prefixSize + remaining, maxPrefixSize)
                 break@loop
             }
             else -> {
-                prefixSize = Math.min(suffixSize + remaining / 2, maxPrefixSize)
-                suffixSize = Math.min(suffixSize + remaining / 2, maxSuffixSize)
+                prefixSize = min(suffixSize + remaining / 2, maxPrefixSize)
+                suffixSize = min(suffixSize + remaining / 2, maxSuffixSize)
 
                 if (extension % 2 == 1) {
                     if (prefixSize < maxPrefixSize)

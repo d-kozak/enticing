@@ -12,10 +12,23 @@ import it.unimi.dsi.io.WordReader
 import it.unimi.dsi.lang.MutableString
 import it.unimi.dsi.util.Interval
 import java.io.StringReader
+import kotlin.math.max
+import kotlin.math.min
 
 internal val wordReader = WhitespaceWordReader()
 
+/**
+ * Keys for accessing document metadata
+ */
+enum class DocumentMetadata {
+    TITLE,
+    URI,
+    SIZE;
+}
 
+/**
+ * Represents one single document, the content is currently preloaded when the document instance is created
+ */
 class Mg4jDocument(
         private val corpusConfiguration: CorpusConfiguration,
         private val metadata: Reference2ObjectMap<Enum<*>, Any>,
@@ -42,6 +55,7 @@ class Mg4jDocument(
      * @param interval interval which should be loaded
      */
     fun loadSnippetPartsFields(interval: Interval, filteredConfig: CorpusConfiguration): SnippetPartsFields = loadSnippetPartsFields(interval.left, interval.right, filteredConfig)
+
     /**
      * Loads SnippetPartsFields from part of the document
      *
@@ -55,21 +69,21 @@ class Mg4jDocument(
         val indexContent = indexes.asSequence()
                 .map { it.name to readIndex(it.columnIndex, left, right) }
                 .toMap()
-        val loadedDataSize = indexContent["token"]!!.size
-        fun collectIndexValuesAt(i: Int): List<String> = indexes.map { indexContent[it.name]!![i] }
+        val loadedDataSize = indexContent.getValue("token").size
+        fun collectIndexValuesAt(i: Int): List<String> = indexes.map { indexContent.getValue(it.name)[i] }
 
         val result = mutableListOf<SnippetElement>()
         var i = 0
-        val limit = Math.min(right - left, loadedDataSize)
+        val limit = min(right - left, loadedDataSize)
         while (i < limit) {
-            val entityClass = indexContent[filteredConfig.entityMapping.entityIndex]!![i]
+            val entityClass = indexContent.getValue(filteredConfig.entityMapping.entityIndex)[i]
             if (entityClass != "0") {
                 val entityInfo: List<String> = filteredConfig.entities[entityClass]?.let { entity ->
-                    entity.attributes.values.map { indexContent[it.correspondingIndex]!![i] }
+                    entity.attributes.values.map { indexContent.getValue(it.correspondingIndex)[i] }
                 } ?: listOf()
 
-                val nerlen = Math.max(indexContent["nerlength"]!![i].toIntOrNull() ?: 1, 1)
-                val words = (i until Math.min(i + nerlen, loadedDataSize))
+                val nerlen = max(indexContent.getValue("nerlength")[i].toIntOrNull() ?: 1, 1)
+                val words = (i until min(i + nerlen, loadedDataSize))
                         .map { SnippetElement.Word(left + it, collectIndexValuesAt(it)) }
                 result.add(SnippetElement.Entity(left + i, entityClass, entityInfo, words))
                 i += nerlen
@@ -106,3 +120,4 @@ class Mg4jDocument(
         return result
     }
 }
+

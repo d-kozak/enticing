@@ -3,12 +3,12 @@ package cz.vutbr.fit.knot.index.client
 import cz.vutbr.fit.knot.enticing.dto.IndexServerRequestData
 import cz.vutbr.fit.knot.enticing.dto.config.SearchConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.ConsoleClientType
-import cz.vutbr.fit.knot.enticing.query.processor.FuelRequestDispatcher
+import cz.vutbr.fit.knot.enticing.query.processor.FuelQueryExecutor
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
 
 fun startRemoteClient(config: ConsoleClientType.RemoteIndex, searchConfig: SearchConfig, input: Sequence<String>) {
 
-    val dispatcher = QueryDispatcher(FuelRequestDispatcher())
+    val dispatcher = QueryDispatcher(FuelQueryExecutor())
 
     for (line in input) {
         val servers = config.servers

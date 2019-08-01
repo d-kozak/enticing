@@ -20,8 +20,8 @@ fun main(args: Array<String>) {
     val (clientType, searchConfig) = handleArguments(args)
 
     @Incomplete("todo setup search config updates here")
-
     val inputSequence = prepareUserInput()
+
 
     when (clientType) {
         is ConsoleClientType.LocalIndex -> {
@@ -35,6 +35,9 @@ fun main(args: Array<String>) {
 }
 
 
+/**
+ * Transforms input form stdin into a sequence of strings, one for each line
+ */
 private fun prepareUserInput() = sequence<String> {
     println("Engine started")
     print("query>")
