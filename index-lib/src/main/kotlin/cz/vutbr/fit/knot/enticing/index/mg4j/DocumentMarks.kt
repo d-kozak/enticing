@@ -6,6 +6,8 @@ package cz.vutbr.fit.knot.enticing.index.mg4j
 enum class DocumentMarks(val mark: String) {
     DOC("%%#DOC"),
     PAGE("%%#PAGE"),
+    PAR("%%#PAR"),
+    SENT("%%#SEN"),
     META("%%#");
 
     val bytes = mark.toByteArray()
@@ -13,8 +15,9 @@ enum class DocumentMarks(val mark: String) {
 
 fun String.isDoc() = this.startsWith(DocumentMarks.DOC.mark)
 fun String.isPage() = this.startsWith(DocumentMarks.PAGE.mark)
+fun String.isPar() = this.startsWith(DocumentMarks.PAR.mark)
+fun String.isSent() = this.startsWith(DocumentMarks.SENT.mark)
 fun String.isMetaInfo() = this.startsWith(DocumentMarks.META.mark)
-
 
 fun ByteArray.isDoc() = this.startsWith(DocumentMarks.DOC.bytes)
 fun ByteArray.isPage() = this.startsWith(DocumentMarks.PAGE.bytes)

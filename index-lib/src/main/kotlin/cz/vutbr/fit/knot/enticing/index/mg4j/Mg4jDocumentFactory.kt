@@ -1,6 +1,5 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
-import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.annotation.Speed
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.Index
@@ -38,20 +37,25 @@ class Mg4jDocumentFactory(private val corpusConfiguration: CorpusConfiguration) 
         val fields = indexes.map { StringBuilder() }
 
         stream.readLine() // skip doc line
+        stream.readLine() // skip page line
         var line = stream.readLine()
         var lineIndex = 0
-        while (line != null && !line.isDoc()) {
-            @Incomplete("some meta info like PAR and SENT should be counted")
-            if (!line.isMetaInfo()) {
-                processLine(line, fields, lineIndex)
+        loop@ while (line != null) {
+            when {
+                line.isPage() -> log.error("page tag should never be encountered at this context, only after the start of another document and the stream should not proceed that far")
+                line.isDoc() -> break@loop // reach the end of current document
+                line.isPar() || line.isSent() -> {
+                    // @Incomplete("PAR and SENT should be saved as well")
+                }
+                !line.isMetaInfo() -> {
+                    processLine(line, fields, lineIndex)
+                    lineIndex++
+                }
+                else -> log.error("Unnown meta line $line")
             }
             line = stream.readLine()
-            lineIndex++
         }
-
-        @Incomplete("PAR and SENT not counted yet, therefore this size is not correct")
         metadata[DocumentMetadata.SIZE] = lineIndex
-        @Speed("avoid copying of the content from bytelist to bytearray")
         return Mg4jDocument(corpusConfiguration, metadata, fields.map { it.toString() })
     }
 }

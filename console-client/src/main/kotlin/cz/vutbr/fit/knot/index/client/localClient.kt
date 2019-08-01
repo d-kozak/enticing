@@ -7,10 +7,10 @@ import cz.vutbr.fit.knot.enticing.dto.TextMetadata
 import cz.vutbr.fit.knot.enticing.dto.config.SearchConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.ConsoleClientType
 import cz.vutbr.fit.knot.enticing.index.query.SearchExecutor
-import cz.vutbr.fit.knot.enticing.index.query.initQueryExecutor
+import cz.vutbr.fit.knot.enticing.index.query.initSearchExecutor
 
 fun startLocalClient(config: ConsoleClientType.LocalIndex, searchConfig: SearchConfig, input: Sequence<String>) {
-    val queryExecutor = initQueryExecutor(config.indexClientConfig.corpusConfiguration,config.indexClientConfig.collections[0])
+    val queryExecutor = initSearchExecutor(config.indexClientConfig.corpusConfiguration, config.indexClientConfig.collections[0])
 
     for (line in input) {
         executeLine(queryExecutor, line)

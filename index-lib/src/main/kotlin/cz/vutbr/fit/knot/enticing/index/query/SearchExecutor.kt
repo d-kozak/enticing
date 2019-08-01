@@ -32,7 +32,7 @@ const val SNIPPET_SIZE = 50
 
 private val log = LoggerFactory.getLogger(SearchExecutor::class.java)
 
-fun initQueryExecutor(corpusConfiguration: CorpusConfiguration, collectionConfig: CollectionConfiguration): SearchExecutor {
+fun initSearchExecutor(corpusConfiguration: CorpusConfiguration, collectionConfig: CollectionConfiguration): SearchExecutor {
     log.info("initializing with config $corpusConfiguration,$collectionConfig")
     val collection = Mg4jCompositeDocumentCollection(corpusConfiguration, collectionConfig.mg4jFiles)
     val factory = Mg4jDocumentFactory(corpusConfiguration)

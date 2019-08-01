@@ -7,3 +7,8 @@ The work eql is doing can be divided into three parts.
 3. postprocessing 
 
 Each of them will now be described in more details.
+
+```
+_PAR_ => §
+_SENT_ => ¶
+```
