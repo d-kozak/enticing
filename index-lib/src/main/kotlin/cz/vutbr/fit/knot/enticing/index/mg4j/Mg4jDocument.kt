@@ -35,8 +35,9 @@ class Mg4jDocument(
         private val content: List<String>
 ) : AbstractDocument() {
 
-    private val indexes: List<Index>
-        get() = corpusConfiguration.indexes.values.toList()
+    private val indexes: List<Index> = corpusConfiguration.indexes.values.toMutableList().also {
+        it.add(Index("_glue", "secret glue index", columnIndex = corpusConfiguration.indexes.size))
+    }
 
     override fun title(): CharSequence = metadata[DocumentMetadata.TITLE] as CharSequence
 
@@ -69,6 +70,7 @@ class Mg4jDocument(
         val indexContent = indexes.asSequence()
                 .map { it.name to readIndex(it.columnIndex, left, right) }
                 .toMap()
+
         val loadedDataSize = indexContent.getValue("token").size
         fun collectIndexValuesAt(i: Int): List<String> = indexes.map { indexContent.getValue(it.name)[i] }
 

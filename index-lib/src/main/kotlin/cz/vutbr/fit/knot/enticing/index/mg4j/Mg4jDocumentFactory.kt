@@ -126,7 +126,7 @@ internal fun processLine(line: String, fields: List<StringBuilder>, lineIndex: I
             }
         }
 
-        val elem = if (cell.isGlued()) cell else cell
+        val elem = if (cell.isGlued()) cell.removeGlue() else cell
 
         if (i < firstEntityCell) {
             if (elem.isBlank()) {

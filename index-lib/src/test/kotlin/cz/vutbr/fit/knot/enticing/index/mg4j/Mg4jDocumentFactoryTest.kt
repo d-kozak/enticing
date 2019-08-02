@@ -33,7 +33,7 @@ internal class Mg4jDocumentFactoryTest {
 
 
         assertStreamStartsWith(document.content(0), "0 0 1 2 0 0 1 2 3 4 5 6 7 8")
-        assertStreamStartsWith(document.content(1), "§ ¶ II/20c Ptolemaic § ¶ 166 BC - 54 BC ( Hellenistic|G__ - Egyptian )|G__ DBA|G__ 2.2Army Composition :|G__ (")
+        assertStreamStartsWith(document.content(1), "§ ¶ II/20c Ptolemaic § ¶ 166 BC - 54 BC ( Hellenistic - Egyptian ) DBA 2.2Army Composition : ( 14 elements ) 1")
     }
 
     @Test
@@ -47,6 +47,16 @@ internal class Mg4jDocumentFactoryTest {
 
 
         assertStreamStartsWith(document.content(corpusConfig.indexes.size), "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 N P 0 0 0 0 0 0 0 0 0 0 N P 0 0 N P 0 0 0 N P 0 N P 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 N P 0 0 0 0 0 0 0 N P 0 0 0 0 0 0 0 0 0 0 0 0 0 N P")
+    }
+
+
+    @Test
+    fun `glue index is present in snippet parts fields`() {
+        val factory = Mg4jDocumentFactory(corpusConfig)
+        val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), factory)
+
+        val document = collection.document(0) as Mg4jDocument
+        val snippetPartsFields = document.loadSnippetPartsFields(filteredConfig = corpusConfig)
     }
 
     @Test
