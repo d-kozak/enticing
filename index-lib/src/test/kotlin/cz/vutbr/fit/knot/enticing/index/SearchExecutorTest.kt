@@ -97,7 +97,7 @@ val clientConfig = indexClient {
     corpusConfiguration = corpusConfig
 }
 
-@Incomplete("write a more complete test suite")
+@Incomplete("more complete test suite needed")
 class SearchExecutorTest {
 
     private val templateQuery = SearchQuery(
@@ -228,7 +228,7 @@ class SearchExecutorTest {
                     errors.add("$subId not found in annotations")
                 }
                 if (subsub.isNotEmpty()) {
-                    errors.add("only two level nesting allowed, this one is deeper $")
+                    errors.add("only two level nesting allowed, this one is deeper")
                 }
             }
         }
