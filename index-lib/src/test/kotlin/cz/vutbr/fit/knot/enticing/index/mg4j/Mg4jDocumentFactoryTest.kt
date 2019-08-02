@@ -112,7 +112,6 @@ internal class Mg4jDocumentFactoryTest {
             val wholeContent = document.loadSnippetPartsFields(filteredConfig = corpusConfig)
             for (index in indexes) {
                 val highLevel = wholeContent[index.name].joinToString(separator = " ")
-//                        .replace("$glueSymbol ","")
                 val lowLevel = (document.content(index.columnIndex) as StringReader).readText()
                 assertThat(highLevel)
                         .isEqualTo(lowLevel)
