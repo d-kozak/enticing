@@ -1,6 +1,5 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
-import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.annotation.Speed
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.Index
@@ -35,7 +34,8 @@ class Mg4jDocumentFactory(private val corpusConfiguration: CorpusConfiguration) 
     override fun getDocument(rawContent: InputStream, metadata: Reference2ObjectMap<Enum<*>, Any>): Document {
         val stream = (rawContent as FastBufferedInputStream).bufferedReader()
 
-        val fields = indexes.map { StringBuilder() }
+        // + 1 for hidden glue index
+        val fields = List(indexes.size + 1) { StringBuilder() }
 
         stream.readLine() // skip doc line
         stream.readLine() // skip page line
@@ -107,7 +107,25 @@ internal fun processLine(line: String, fields: List<StringBuilder>, lineIndex: I
         if (stringBuilder.isNotBlank())
             stringBuilder.append(' ')
 
-        @Incomplete("Handle glue")
+        if (i == tokenIndex) {
+            if (cell.isGlued()) {
+                fields.last().run {
+                    if (isNotBlank()) {
+                        setLength(length - 1) // remove last char
+                        append('N')
+                        append(' ')
+                    }
+                    append('P')
+                }
+            } else {
+                fields.last().run {
+                    if (isNotBlank())
+                        append(' ')
+                    append('0')
+                }
+            }
+        }
+
         val elem = if (cell.isGlued()) cell else cell
 
         if (i < firstEntityCell) {

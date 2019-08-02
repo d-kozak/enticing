@@ -37,6 +37,19 @@ internal class Mg4jDocumentFactoryTest {
     }
 
     @Test
+    fun `special glue index is present`() {
+        val factory = Mg4jDocumentFactory(corpusConfig)
+        val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), factory)
+
+        val document = collection.document(0) as Mg4jDocument
+        assertThat(document.uri())
+                .isEqualTo("http://119.doorblog.jp/archives/51981348.html")
+
+
+        assertStreamStartsWith(document.content(corpusConfig.indexes.size), "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 N P 0 0 0 0 0 0 0 0 0 0 N P 0 0 N P 0 0 0 N P 0 N P 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 N P 0 0 0 0 0 0 0 N P 0 0 0 0 0 0 0 0 0 0 0 0 0 N P")
+    }
+
+    @Test
     fun `nerlength should be used to extend entities over multiple words`() {
         val factory = Mg4jDocumentFactory(corpusConfig)
         val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), factory)
