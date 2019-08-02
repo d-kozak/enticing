@@ -82,10 +82,12 @@ internal fun processLine(line: String, fields: List<StringBuilder>, lineIndex: I
         log.warn("was split into $cells")
         return
     }
-    for ((i, elem) in cells.withIndex()) {
+    for ((i, cell) in cells.withIndex()) {
         val stringBuilder = fields[i]
-        if (stringBuilder.isNotBlank())
+        if (stringBuilder.isNotBlank() && !cell.isGlued())
             stringBuilder.append(' ')
+
+        val elem = if (cell.isGlued()) cell.removeGlue() else cell
 
         if (i < firstEntityCell) {
             if (elem.isBlank()) {

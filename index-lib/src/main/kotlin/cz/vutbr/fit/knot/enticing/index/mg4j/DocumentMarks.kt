@@ -19,6 +19,14 @@ fun String.isPar() = this.startsWith(DocumentMarks.PAR.mark)
 fun String.isSent() = this.startsWith(DocumentMarks.SENT.mark)
 fun String.isMetaInfo() = this.startsWith(DocumentMarks.META.mark)
 
+/**
+ * Signals that there should be no space between current token and the previous one
+ */
+private const val glueSymbol = "|G__"
+
+fun String.isGlued() = this.endsWith(glueSymbol)
+fun String.removeGlue(): String = this.substring(0, this.length - glueSymbol.length)
+
 fun ByteArray.isDoc() = this.startsWith(DocumentMarks.DOC.bytes)
 fun ByteArray.isPage() = this.startsWith(DocumentMarks.PAGE.bytes)
 fun ByteArray.isMetaInfo() = this.startsWith(DocumentMarks.META.bytes)
