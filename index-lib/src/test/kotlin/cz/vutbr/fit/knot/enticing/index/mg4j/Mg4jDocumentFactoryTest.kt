@@ -5,6 +5,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.io.File
 import java.io.StringReader
+import kotlin.math.max
+import kotlin.math.min
 
 private val corpusConfig = testConfiguration.corpusConfiguration
 private val indexes = testConfiguration.indexes
@@ -54,7 +56,7 @@ internal class Mg4jDocumentFactoryTest {
                 if (count != 0) {
                     for (j in i + 1 until count) {
                         if (type != result[j].first) {
-                            val sublist = result.subList(Math.max(0, j - 5), Math.min(j + 5, result.size))
+                            val sublist = result.subList(max(0, j - 5), min(j + 5, result.size))
                             System.err.println("... $sublist ...")
                             throw AssertionError("Expected type $type at index $j")
                         }
@@ -89,14 +91,15 @@ internal class Mg4jDocumentFactoryTest {
     }
 
     @Test
-    fun `problematic line 448 test missing index token`() {
+    fun `if token is missing line should be skipped`() {
         val input = """43		CC	0	1	NMOD	In	in	-42	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0"""
 
         val output = indexes.map { StringBuilder() }
-        processLine(input, output, 0)
-        val columns = output.map { it.toString() }
-        assertThat(columns)
-                .isEqualTo(listOf("43", "null", "CC", "0", "1", "NMOD", "In", "in", "-42", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"))
+        processLine(input, output, 0, corpusConfig)
+        val allEmpty = output.map { it.isEmpty() }.all { it }
+        println(allEmpty)
+        assertThat(allEmpty).isTrue()
+
     }
 
     @Test

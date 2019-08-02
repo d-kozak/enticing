@@ -54,7 +54,7 @@ class Mg4jDocumentFactory(private val corpusConfiguration: CorpusConfiguration) 
                     lineIndex++
                 }
                 !line.isMetaInfo() -> {
-                    processLine(line, fields, lineIndex)
+                    processLine(line, fields, lineIndex, corpusConfiguration)
                     lineIndex++
                 }
                 else -> log.error("Unnown meta line $line")
@@ -83,13 +83,18 @@ val whitespaceRegex = """\s""".toRegex()
 var replicationInfo: EntityReplicationInfo? = null
 
 @Speed("rewrite using MutableStrings and whitespace readers?")
-internal fun processLine(line: String, fields: List<StringBuilder>, lineIndex: Int) {
+internal fun processLine(line: String, fields: List<StringBuilder>, lineIndex: Int, corpusConfiguration: CorpusConfiguration) {
     val cells = line.split(whitespaceRegex)
     val cellCount = 27
     val nerlenIndex = 26
     val firstEntityCell = 13
 
+    val tokenIndex = corpusConfiguration.indexes.getValue("token").columnIndex
 
+    if (cells[tokenIndex].isBlank()) {
+        log.warn("$lineIndex: token is blank, skipping...")
+        return
+    }
 
     if (cells.size != cellCount) {
         log.warn("$lineIndex: $line does not have correct format, skipping")
