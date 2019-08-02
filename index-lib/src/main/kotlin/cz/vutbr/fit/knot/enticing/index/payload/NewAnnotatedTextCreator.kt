@@ -3,12 +3,13 @@ package cz.vutbr.fit.knot.enticing.index.payload
 import cz.vutbr.fit.knot.enticing.dto.NewAnnotatedText
 import cz.vutbr.fit.knot.enticing.dto.TextUnit
 import cz.vutbr.fit.knot.enticing.dto.annotation.Warning
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetPartsFields
 import cz.vutbr.fit.knot.enticing.index.query.clamp
 import it.unimi.dsi.util.Interval
 
-fun createNewAnnotatedText(data: SnippetPartsFields, intervals: List<Interval>): NewAnnotatedText {
+fun createNewAnnotatedText(data: SnippetPartsFields, intervals: List<Interval>, corpusConfiguration: CorpusConfiguration): NewAnnotatedText {
     if (data.elements.isEmpty()) {
         return NewAnnotatedText()
     }
@@ -44,7 +45,10 @@ fun createNewAnnotatedText(data: SnippetPartsFields, intervals: List<Interval>):
         @Warning("When the beginning of the interval was incorrectly set to 0, it was returning the first element from the SnippetPartsFields (containing only subset of the document) instead of failing, should be fixed")
         getElementsAt(items.first().index to items.last().index, items)
     }
-    return NewAnnotatedText(textUnits)
+    val tokenIndex = corpusConfiguration.indexes.getValue("token").columnIndex
+    return NewAnnotatedText(
+            textUnits.filter { it !is TextUnit.Word || (it.indexes[tokenIndex] != "¶" && it.indexes[tokenIndex] != "§") }
+    )
 }
 
 fun getElementsAt(interval: Pair<Int, Int>, elements: SnippetPartsFields): List<TextUnit> {

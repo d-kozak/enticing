@@ -130,10 +130,10 @@ class SearchExecutor internal constructor(
 
             val content = document.loadSnippetPartsFields(left, right + 1, config)
 
-            val payload = if (content.elements.isNotEmpty()) createPayload(query, content, relevantScores.map { it.clampRight(left + content.elements.size - 1) })
+            val payload = if (content.elements.isNotEmpty()) createPayload(query, content, relevantScores.map { it.clampRight(left + content.elements.size - 1) }, corpusConfiguration)
             else {
                 log.warn("loaded empty document, why? ${document.title()}")
-                createPayload(query, content, emptyList())
+                createPayload(query, content, emptyList(), corpusConfiguration)
             }
 
             val match = IndexServer.Snippet(
@@ -172,8 +172,8 @@ class SearchExecutor internal constructor(
 
         val filteredConfig = corpusConfiguration.filterBy(query.metadata, query.defaultIndex)
 
-        val prefixPayload = createPayload(query, document.loadSnippetPartsFields(prefix, filteredConfig), emptyList()) as Payload.FullResponse
-        val suffixPayload = createPayload(query, document.loadSnippetPartsFields(suffix, filteredConfig), emptyList()) as Payload.FullResponse
+        val prefixPayload = createPayload(query, document.loadSnippetPartsFields(prefix, filteredConfig), emptyList(), corpusConfiguration) as Payload.FullResponse
+        val suffixPayload = createPayload(query, document.loadSnippetPartsFields(suffix, filteredConfig), emptyList(), corpusConfiguration) as Payload.FullResponse
 
         return SnippetExtension(
                 prefixPayload,
@@ -189,7 +189,7 @@ class SearchExecutor internal constructor(
 
         val content = document.loadSnippetPartsFields(filteredConfig = filteredConfig)
 
-        val payload = createPayload(query, content, emptyList()) as Payload.FullResponse
+        val payload = createPayload(query, content, emptyList(), corpusConfiguration) as Payload.FullResponse
         return IndexServer.FullDocument(
                 document.title().toString(),
                 document.uri().toString(),
