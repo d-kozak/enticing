@@ -1,8 +1,10 @@
 package cz.vutbr.fit.knot.enticing.index.postprocess
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import java.util.*
 
+@Cleanup("Merge together with TextUnit")
 data class SnippetPartsFields(
         val elements: List<SnippetElement>,
         val corpusConfiguration: CorpusConfiguration
