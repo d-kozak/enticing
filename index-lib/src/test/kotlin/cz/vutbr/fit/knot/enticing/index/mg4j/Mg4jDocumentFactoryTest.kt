@@ -30,8 +30,8 @@ internal class Mg4jDocumentFactoryTest {
                 .isEqualTo("http://15mm25mm.blogspot.com/2014/07/ii20c-ptolemaic.html")
 
 
-        assertStreamStartsWith(document.content(0), "1 2 1 2 3 4 5 6 7 8")
-        assertStreamStartsWith(document.content(1), "II/20c Ptolemaic 166 BC - 54 BC ( Hellenistic - Egyptian ) DBA 2.2Army Composition : ( 14 elements ) 1")
+        assertStreamStartsWith(document.content(0), "0 0 1 2 0 0 1 2 3 4 5 6 7 8")
+        assertStreamStartsWith(document.content(1), "§ ¶ II/20c Ptolemaic § ¶ 166 BC - 54 BC ( Hellenistic|G__ - Egyptian )|G__ DBA|G__ 2.2Army Composition :|G__ (")
     }
 
     @Test

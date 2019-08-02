@@ -45,8 +45,13 @@ class Mg4jDocumentFactory(private val corpusConfiguration: CorpusConfiguration) 
             when {
                 line.isPage() -> log.error("page tag should never be encountered at this context, only after the start of another document and the stream should not proceed that far")
                 line.isDoc() -> break@loop // reach the end of current document
-                line.isPar() || line.isSent() -> {
-                    // @Incomplete("PAR and SENT should be saved as well")
+                line.isPar() -> {
+                    addSpecialToken("§", fields, lineIndex)
+                    lineIndex++
+                }
+                line.isSent() -> {
+                    addSpecialToken("¶", fields, lineIndex)
+                    lineIndex++
                 }
                 !line.isMetaInfo() -> {
                     processLine(line, fields, lineIndex)
@@ -58,6 +63,15 @@ class Mg4jDocumentFactory(private val corpusConfiguration: CorpusConfiguration) 
         }
         metadata[DocumentMetadata.SIZE] = lineIndex
         return Mg4jDocument(corpusConfiguration, metadata, fields.map { it.toString() })
+    }
+
+    private fun addSpecialToken(tokenValue: String, fields: List<StringBuilder>, lineIndex: Int) {
+        val tokenIndex = corpusConfiguration.indexes.getValue("token").columnIndex
+        for ((i, builder) in fields.withIndex()) {
+            if (builder.isNotBlank())
+                builder.append(' ')
+            builder.append(if (i == tokenIndex) tokenValue else '0')
+        }
     }
 }
 
