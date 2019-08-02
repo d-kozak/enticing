@@ -187,7 +187,7 @@ internal class PayloadCreatorTest {
 
         @Test
         fun `simple format no metadata`() {
-            var payload = createPayload(newFormatQuery, noMetadata, listOf(Interval.valueOf(0, 2)), testConfiguration.corpusConfiguration)
+            var payload = createPayload(newFormatQuery, noMetadata, listOf(Interval.valueOf(0, 2)), noMetadata.corpusConfiguration)
             assertThat(payload)
                     .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
                             TextUnit.QueryMatch(Interval(0, 1),
@@ -196,7 +196,7 @@ internal class PayloadCreatorTest {
                                             TextUnit.Word("three")))
                     )))
 
-            payload = createPayload(newFormatQuery, noMetadata, listOf(Interval.valueOf(1, 2)), testConfiguration.corpusConfiguration)
+            payload = createPayload(newFormatQuery, noMetadata, listOf(Interval.valueOf(1, 2)), noMetadata.corpusConfiguration)
             assertThat(payload)
                     .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
                             TextUnit.Word("one"),
@@ -205,7 +205,7 @@ internal class PayloadCreatorTest {
                                             TextUnit.Word("two"),
                                             TextUnit.Word("three")))
                     )))
-            payload = createPayload(newFormatQuery, noMetadata, listOf(Interval.valueOf(1, 1)), testConfiguration.corpusConfiguration)
+            payload = createPayload(newFormatQuery, noMetadata, listOf(Interval.valueOf(1, 1)), noMetadata.corpusConfiguration)
             assertThat(payload)
                     .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
                             TextUnit.Word("one"),
@@ -217,7 +217,7 @@ internal class PayloadCreatorTest {
 
         @Test
         fun `two other indexes`() {
-            val payload = createPayload(newFormatQuery, simpleStructure, listOf(Interval.valueOf(1, 2)), testConfiguration.corpusConfiguration)
+            val payload = createPayload(newFormatQuery, simpleStructure, listOf(Interval.valueOf(1, 2)), simpleStructure.corpusConfiguration)
             assertThat(payload)
                     .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
                             TextUnit.Word("one", "1", "google.com"),
@@ -230,7 +230,7 @@ internal class PayloadCreatorTest {
 
         @Test
         fun `with one entity no intervals`() {
-            val payload = createPayload(newFormatQuery, withEntities, emptyList(), testConfiguration.corpusConfiguration)
+            val payload = createPayload(newFormatQuery, withEntities, emptyList(), withEntities.corpusConfiguration)
             assertThat(payload)
                     .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
                             TextUnit.Word("one", "1", "google.com", "0", "0"),
@@ -243,7 +243,7 @@ internal class PayloadCreatorTest {
 
         @Test
         fun `with one entity that is broken by interval`() {
-            val payload = createPayload(newFormatQuery, withEntities, listOf(Interval.valueOf(2, 3)), testConfiguration.corpusConfiguration)
+            val payload = createPayload(newFormatQuery, withEntities, listOf(Interval.valueOf(2, 3)), withEntities.corpusConfiguration)
             assertThat(payload)
                     .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
                             TextUnit.Word("one", "1", "google.com", "0", "0"),
@@ -261,7 +261,7 @@ internal class PayloadCreatorTest {
 
         @Test
         fun `with one entity that is broken by two intervals`() {
-            val payload = createPayload(newFormatQuery, withEntities, listOf(Interval.valueOf(2, 3), Interval.valueOf(4, 4)), testConfiguration.corpusConfiguration)
+            val payload = createPayload(newFormatQuery, withEntities, listOf(Interval.valueOf(2, 3), Interval.valueOf(4, 4)), withEntities.corpusConfiguration)
             assertThat(payload)
                     .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
                             TextUnit.Word("one", "1", "google.com", "0", "0"),
