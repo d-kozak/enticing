@@ -22,7 +22,7 @@ fun String.isMetaInfo() = this.startsWith(DocumentMarks.META.mark)
 /**
  * Signals that there should be no space between current token and the previous one
  */
-private const val glueSymbol = "|G__"
+internal const val glueSymbol = "|G__"
 
 fun String.isGlued() = this.endsWith(glueSymbol)
 fun String.removeGlue(): String = this.substring(0, this.length - glueSymbol.length)

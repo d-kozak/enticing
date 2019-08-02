@@ -8,9 +8,9 @@ Main components of the system can be seen on the following diagram.
 * Webserver
     * handles the web frontend
 * Console client
-    * To query index servers from the command line
+    * Queries index servers from the command line
 * Index server
-    * processes EQL queries, on it's indexed data
+    * processes EQL queries on it's indexed data
 * Index builder
     * prepares indexes for index servers
 
@@ -28,7 +28,7 @@ Responsibilities of each module are the following.
     * user management
 * console client
     * query submission from the command line
-* query processor
+* query-dispatcher
     * execute query on multiple index servers 
     * query validation(using eql-compiler)
 * eql-compiler

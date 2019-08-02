@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.annotation.Speed
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.Index
@@ -84,10 +85,11 @@ internal fun processLine(line: String, fields: List<StringBuilder>, lineIndex: I
     }
     for ((i, cell) in cells.withIndex()) {
         val stringBuilder = fields[i]
-        if (stringBuilder.isNotBlank() && !cell.isGlued())
+        if (stringBuilder.isNotBlank())
             stringBuilder.append(' ')
 
-        val elem = if (cell.isGlued()) cell.removeGlue() else cell
+        @Incomplete("Handle glue")
+        val elem = if (cell.isGlued()) cell else cell
 
         if (i < firstEntityCell) {
             if (elem.isBlank()) {
