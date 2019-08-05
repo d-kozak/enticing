@@ -38,10 +38,30 @@ data class Interval private constructor(
         override fun next(): Int = current++
     }
 
-    fun extendWith(other: Interval): Interval = when {
+    fun combineWith(other: Interval): Interval = when {
         this.isEmpty() -> other
         other.isEmpty() -> this
         else -> valueOf(min(this.from, other.from), max(this.to, other.to))
+    }
+
+    fun expand(wantedSize: Int, lowerBound: Int, upperBound: Int): Interval {
+        require(lowerBound <= from) { "lower bound should be <= from" }
+        require(upperBound >= to) { "upper bound should be <= to" }
+        require(wantedSize >= this.size) { "cannot expand to this size, the interval is already bigger than that" }
+
+        val toBeAdded = wantedSize - this.size
+
+        var newFrom = max(from - toBeAdded / 2, lowerBound)
+        var newTo = min(to + toBeAdded / 2, upperBound)
+
+        fun currentSize() = newTo - newFrom + 1
+
+        if (currentSize() < wantedSize && newFrom > lowerBound)
+            newFrom = max(lowerBound, newFrom - (wantedSize - currentSize()))
+        if (currentSize() < wantedSize && newTo < upperBound)
+            newTo = min(upperBound, newTo + (wantedSize - currentSize()))
+
+        return valueOf(newFrom, newTo)
     }
 
     @JsonIgnore

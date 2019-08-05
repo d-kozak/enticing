@@ -2,7 +2,6 @@ package cz.vutbr.fit.knot.enticing.index.query
 
 import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
-import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CollectionConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
@@ -110,7 +109,7 @@ class SearchExecutor internal constructor(
 
         val document = collection.document(result.document) as Mg4jDocument
 
-        val allIntervals = computeSnippets(result.info.values)
+        val allIntervals = generateSnippetIntervals(result.info.values, document.size())
         val wantedIntervals = allIntervals.subList(offset, min(wantedSnippets, allIntervals.size))
 
 
@@ -175,38 +174,6 @@ class SearchExecutor internal constructor(
     }
 }
 
-/**
- * The algorithm works in the following way:
- *
- * 1) generate all regions that match the query
- * 2) sort them based on their length
- * 3) filter out longer ones that contain the shorter as subintervals
- * 4) filters out those longer than X units
- */
-internal fun computeSnippets(result: Collection<Array<SelectedInterval>>): List<cz.vutbr.fit.knot.enticing.dto.Interval> {
-    require(result.isNotEmpty()) { "Cannot compute snippets for empty result" }
-
-    var list = listOf(cz.vutbr.fit.knot.enticing.dto.Interval.empty())
-
-    for (indexResults in result) {
-        val newList = mutableListOf<cz.vutbr.fit.knot.enticing.dto.Interval>()
-        for (x in list) {
-            for (y in indexResults) {
-                newList.add(x.extendWith(cz.vutbr.fit.knot.enticing.dto.Interval.valueOf(y.interval.left, y.interval.right)))
-            }
-        }
-        list = newList
-    }
-
-
-    val sorted = list
-            .filter { it.size < 200 }
-            .sortedBy { it.size }
-
-
-    @Incomplete("filter out the ones that are too overlapping")
-    return sorted
-}
 
 /**
  * Compute the intervals for prefix and suffix for snippet extension

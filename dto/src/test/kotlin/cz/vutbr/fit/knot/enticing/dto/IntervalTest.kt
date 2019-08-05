@@ -88,7 +88,7 @@ internal class IntervalTest {
     fun `extend with test`() {
         val one = Interval.valueOf(10, 20)
         val two = Interval.valueOf(40, 50)
-        assertThat(one.extendWith(two))
+        assertThat(one.combineWith(two))
                 .isEqualTo(Interval.valueOf(10, 50))
     }
 
@@ -96,7 +96,7 @@ internal class IntervalTest {
     fun `extend with test overlap`() {
         val one = Interval.valueOf(10, 20)
         val two = Interval.valueOf(15, 25)
-        assertThat(one.extendWith(two))
+        assertThat(one.combineWith(two))
                 .isEqualTo(Interval.valueOf(10, 25))
     }
 
@@ -104,7 +104,7 @@ internal class IntervalTest {
     fun `extend with this interval is empty`() {
         val one = Interval.empty()
         val two = Interval.valueOf(15, 25)
-        assertThat(one.extendWith(two))
+        assertThat(one.combineWith(two))
                 .isEqualTo(Interval.valueOf(15, 25))
     }
 
@@ -112,7 +112,7 @@ internal class IntervalTest {
     fun `extend with second interval is empty`() {
         val one = Interval.valueOf(15, 25)
         val two = Interval.empty()
-        assertThat(one.extendWith(two))
+        assertThat(one.combineWith(two))
                 .isEqualTo(Interval.valueOf(15, 25))
     }
 
@@ -131,6 +131,60 @@ internal class IntervalTest {
                 .isEqualTo(0)
     }
 
+
+    @Nested
+    inner class Expand {
+
+        @Test
+        fun `even expansion on both sides`() {
+            val input = Interval.valueOf(41, 50)
+            assertThat(input.expand(20, 0, 100))
+                    .isEqualTo(Interval.valueOf(36, 55))
+        }
+
+        @Test
+        fun `everything goes left no space right`() {
+            val input = Interval.valueOf(21, 30)
+            assertThat(input.expand(20, 0, 30))
+                    .isEqualTo(Interval.valueOf(11, 30))
+        }
+
+        @Test
+        fun `everything goes right not space left`() {
+            val input = Interval.valueOf(31, 50)
+            assertThat(input.expand(30, 31, 100))
+                    .isEqualTo(Interval.valueOf(31, 60))
+        }
+
+        @Test
+        fun `cannot expand at all`() {
+            val input = Interval.valueOf(10, 20)
+            assertThat(input.expand(100, 10, 20))
+                    .isEqualTo(Interval.valueOf(10, 20))
+        }
+
+        @Test
+        fun `no need to expand`() {
+            val input = Interval.valueOf(10)
+            assertThat(input.expand(1, 0, 100))
+                    .isEqualTo(Interval.valueOf(10))
+        }
+
+        @Test
+        fun `expand one left`() {
+            val input = Interval.valueOf(11, 14)
+            assertThat(input.expand(5, 0, 14))
+                    .isEqualTo(Interval.valueOf(10, 14))
+        }
+
+        @Test
+        fun `expand one left three right`() {
+            val input = Interval.valueOf(11, 14)
+            assertThat(input.expand(8, 10, 100))
+                    .isEqualTo(Interval.valueOf(10, 17))
+        }
+
+    }
 
     @Nested
     inner class Serialization {
