@@ -45,7 +45,10 @@ const AnnotatedWord = (props: AnnotatedWordProps) => {
     };
 
     const tokenIndex = Object.keys(corpusFormat.indexes).indexOf("token")
-    const text = tokenIndex != -1 ? word.indexes[tokenIndex] + " " : " !NULL! "
+
+    // last index contains glue info, N means next (there should be no space between this and next character)
+    const followSpace = (word.indexes[word.indexes.length - 1] != 'N') ? " " : "";
+    const text = tokenIndex != -1 ? word.indexes[tokenIndex] + followSpace : " !NULL! "
 
     return <React.Fragment>
         <ClickAwayListener onClickAway={() => setOpen(false)}>

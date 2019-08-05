@@ -39,7 +39,7 @@ const colors = ["red", "green", "blue"];
 
 export const renderElement = (text: TextUnit, corpusFormat: CorpusFormat): React.ReactNode => {
     if (text instanceof Word) {
-        if (text.indexes.length === 1) return <span>{text.indexes[0] + " "}</span>
+        if (text.indexes.length === 1) return <span>{text.indexes[0] + text.indexes[text.indexes.length - 1] != 'N' ? ' ' : ''}</span>
         return <AnnotatedWord word={text} corpusFormat={corpusFormat}/>
     } else if (text instanceof Entity) {
         const color = colors[Math.floor(Math.random() * colors.length)];
