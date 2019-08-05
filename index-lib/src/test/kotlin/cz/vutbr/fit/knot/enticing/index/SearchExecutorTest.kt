@@ -152,7 +152,6 @@ class SearchExecutorTest {
             val query = templateQuery.copy(query = input, responseFormat = ResponseFormat.NEW_ANNOTATED_TEXT)
 
             val result = queryEngine.query(query)
-            println(result)
         }
     }
 
@@ -162,7 +161,6 @@ class SearchExecutorTest {
         val query = SearchQuery(query = "job work", snippetCount = 33, offset = mapOf("one" to Offset(document = 0, snippet = 0)), metadata = TextMetadata.Predefined(value = "all"), responseType = ResponseType.FULL, responseFormat = ResponseFormat.NEW_ANNOTATED_TEXT, defaultIndex = "token")
         val queryEngine = initSearchExecutor(clientConfig.corpusConfiguration, clientConfig.collections[0])
         val result = queryEngine.query(query)
-        println(result)
     }
 
     @Test
@@ -202,7 +200,6 @@ class SearchExecutorTest {
         for (text in listOf(prefix, suffix)) {
             val annotated = text as Payload.FullResponse.Annotated
             validateAnnotatedText(annotated.content)
-            println(annotated)
         }
     }
 
@@ -212,8 +209,6 @@ class SearchExecutorTest {
         val executor = initSearchExecutor(clientConfig.corpusConfiguration, clientConfig.collections[0])
         val (prefix, suffix, _) = executor.extendSnippet(query)
 
-        println(prefix)
-        println(suffix)
     }
 
     private fun validateAnnotatedText(text: AnnotatedText): List<String> {
