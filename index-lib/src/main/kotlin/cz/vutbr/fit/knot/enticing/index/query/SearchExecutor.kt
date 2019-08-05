@@ -113,11 +113,11 @@ class SearchExecutor internal constructor(
         val wantedIntervals = allIntervals.subList(offset, min(wantedSnippets, allIntervals.size))
 
 
-        for (interval in wantedIntervals) {
+        for ((interval, subIntervals) in wantedIntervals) {
             val (from, to) = interval
             val content = document.loadSnippetPartsFields(from, to + 1, config)
 
-            val payload = if (content.elements.isNotEmpty()) createPayload(query, content, listOf(interval), corpusConfiguration)
+            val payload = if (content.elements.isNotEmpty()) createPayload(query, content, subIntervals, corpusConfiguration)
             else {
                 log.warn("loaded empty document, why? ${document.title()}")
                 createPayload(query, content, emptyList(), corpusConfiguration)

@@ -13,7 +13,7 @@ internal class SnippetIntervalGeneratorTest {
     fun `single result`() {
         val input = listOf(arrayOf(SelectedInterval(Interval.valueOf(42), SelectedInterval.IntervalType.WHOLE)))
         Assertions.assertThat(computeAllIntervalCombinations(input))
-                .isEqualTo(listOf(cz.vutbr.fit.knot.enticing.dto.Interval.valueOf(42)))
+                .isEqualTo(listOf(cz.vutbr.fit.knot.enticing.dto.Interval.valueOf(42) to listOf(cz.vutbr.fit.knot.enticing.dto.Interval.valueOf(42))))
     }
 
     @Test
@@ -24,7 +24,11 @@ internal class SnippetIntervalGeneratorTest {
                 arrayOf(SelectedInterval(Interval.valueOf(50, 75), SelectedInterval.IntervalType.WHOLE))
         )
         Assertions.assertThat(computeAllIntervalCombinations(input))
-                .isEqualTo(listOf(cz.vutbr.fit.knot.enticing.dto.Interval.valueOf(10, 75)))
+                .isEqualTo(listOf(cz.vutbr.fit.knot.enticing.dto.Interval.valueOf(10, 75)
+                        to listOf(cz.vutbr.fit.knot.enticing.dto.Interval.valueOf(42),
+                        cz.vutbr.fit.knot.enticing.dto.Interval.valueOf(10, 20),
+                        cz.vutbr.fit.knot.enticing.dto.Interval.valueOf(50, 75))
+                ))
     }
 
 
@@ -36,6 +40,10 @@ internal class SnippetIntervalGeneratorTest {
                 arrayOf(SelectedInterval(Interval.valueOf(50, 75), SelectedInterval.IntervalType.WHOLE))
         )
         Assertions.assertThat(computeAllIntervalCombinations(input))
-                .isEqualTo(listOf(cz.vutbr.fit.knot.enticing.dto.Interval.valueOf(10, 75), cz.vutbr.fit.knot.enticing.dto.Interval.valueOf(42, 110)))
+                .isEqualTo(listOf(cz.vutbr.fit.knot.enticing.dto.Interval.valueOf(10, 75)
+                        to listOf(cz.vutbr.fit.knot.enticing.dto.Interval.valueOf(42), cz.vutbr.fit.knot.enticing.dto.Interval.valueOf(10, 20),
+                        cz.vutbr.fit.knot.enticing.dto.Interval.valueOf(50, 75)), cz.vutbr.fit.knot.enticing.dto.Interval.valueOf(42, 110)
+                        to listOf(cz.vutbr.fit.knot.enticing.dto.Interval.valueOf(42), cz.vutbr.fit.knot.enticing.dto.Interval.valueOf(100, 110), cz.vutbr.fit.knot.enticing.dto.Interval.valueOf(50, 75))
+                ))
     }
 }
