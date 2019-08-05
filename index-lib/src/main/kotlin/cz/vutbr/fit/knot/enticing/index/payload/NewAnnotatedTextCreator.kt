@@ -12,6 +12,7 @@ fun createNewAnnotatedText(data: StructuredDocumentContent, intervals: List<Inte
     if (data.elements.isEmpty()) {
         return NewAnnotatedText()
     }
+    val tokenIndex = corpusConfiguration.indexes.getValue("token").columnIndex
     val items = splitEntities(intervals, data)
     check(items.elements.isNotEmpty()) { "Items should never be empty" }
 
@@ -20,39 +21,39 @@ fun createNewAnnotatedText(data: StructuredDocumentContent, intervals: List<Inte
             val elements = mutableListOf<TextUnit>()
             if (interval == intervals.first()) {
                 elements.addAll(
-                        getElementsAt(items.elements.first().index to interval.from - 1, items)
+                        getElementsAt(items.elements.first().index to interval.from - 1, items, tokenIndex)
                 )
             }
 
-            val match = TextUnit.QueryMatch(Interval.valueOf(0, 1), getElementsAt(interval.from to interval.to, items))
+            val match = TextUnit.QueryMatch(Interval.valueOf(0, 1), getElementsAt(interval.from to interval.to, items, tokenIndex))
             elements.add(match)
             if (i < intervals.size - 1) {
                 val nextStart = intervals[i + 1].from - 1
                 elements.addAll(
-                        getElementsAt(interval.to + 1 to nextStart, items)
+                        getElementsAt(interval.to + 1 to nextStart, items, tokenIndex)
                 )
             }
 
             if (interval == intervals.last()) {
                 elements.addAll(
-                        getElementsAt(interval.to + 1 to items.elements.last().index, items)
+                        getElementsAt(interval.to + 1 to items.elements.last().index, items, tokenIndex)
                 )
             }
             elements
         }.flatten()
     } else {
         @Warning("When the beginning of the interval was incorrectly set to 0, it was returning the first element from the SnippetPartsFields (containing only subset of the document) instead of failing, should be fixed")
-        getElementsAt(items.first().index to items.last().index, items)
+        getElementsAt(items.first().index to items.last().index, items, tokenIndex)
     }
-    val tokenIndex = corpusConfiguration.indexes.getValue("token").columnIndex
-    return NewAnnotatedText(
-            textUnits.filter { it !is TextUnit.Word || (it.indexes[tokenIndex] != "¶" && it.indexes[tokenIndex] != "§") }
-    )
+
+    return NewAnnotatedText(textUnits)
 }
 
-fun getElementsAt(interval: Pair<Int, Int>, elements: StructuredDocumentContent): List<TextUnit> {
+fun getElementsAt(interval: Pair<Int, Int>, elements: StructuredDocumentContent, tokenIndex: Int): List<TextUnit> {
     val (left, right) = interval
-    return (left..right).map { elements[it] }.map { toTextUnit(it) }
+    return (left..right).map { elements[it] }
+            .map { toTextUnit(it) }
+            .filter { it !is TextUnit.Word || (it.indexes[tokenIndex] != "¶" && it.indexes[tokenIndex] != "§") }
 }
 
 fun toTextUnit(element: DocumentElement): TextUnit = when (element) {
