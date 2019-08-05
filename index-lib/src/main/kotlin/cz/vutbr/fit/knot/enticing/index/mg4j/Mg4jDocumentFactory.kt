@@ -91,8 +91,8 @@ internal fun processLine(line: String, fields: List<StringBuilder>, lineIndex: I
 
     val tokenIndex = corpusConfiguration.indexes.getValue("token").columnIndex
 
-    if (cells[tokenIndex].isBlank()) {
-        log.warn("$lineIndex: token is blank, skipping...")
+    if (cells[tokenIndex].isBlank() || cells[tokenIndex] == glueSymbol) {
+        log.warn("$lineIndex: token is blank, skipping... at line '$line'")
         return
     }
 
@@ -130,7 +130,7 @@ internal fun processLine(line: String, fields: List<StringBuilder>, lineIndex: I
 
         if (i < firstEntityCell) {
             if (elem.isBlank()) {
-                log.warn("$lineIndex:$i is blank")
+                log.warn("$lineIndex:$i is blank, at line '$line'")
                 stringBuilder.append(NULL)
             } else {
                 stringBuilder.append(elem)

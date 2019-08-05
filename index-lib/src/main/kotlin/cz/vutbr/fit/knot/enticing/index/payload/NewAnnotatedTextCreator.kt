@@ -1,13 +1,12 @@
 package cz.vutbr.fit.knot.enticing.index.payload
 
+import cz.vutbr.fit.knot.enticing.dto.Interval
 import cz.vutbr.fit.knot.enticing.dto.NewAnnotatedText
 import cz.vutbr.fit.knot.enticing.dto.TextUnit
 import cz.vutbr.fit.knot.enticing.dto.annotation.Warning
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetPartsFields
-import cz.vutbr.fit.knot.enticing.index.query.clamp
-import it.unimi.dsi.util.Interval
 
 fun createNewAnnotatedText(data: SnippetPartsFields, intervals: List<Interval>, corpusConfiguration: CorpusConfiguration): NewAnnotatedText {
     if (data.elements.isEmpty()) {
@@ -21,22 +20,22 @@ fun createNewAnnotatedText(data: SnippetPartsFields, intervals: List<Interval>, 
             val elements = mutableListOf<TextUnit>()
             if (interval == intervals.first()) {
                 elements.addAll(
-                        getElementsAt(items.elements.first().index to interval.left - 1, items)
+                        getElementsAt(items.elements.first().index to interval.from - 1, items)
                 )
             }
 
-            val match = TextUnit.QueryMatch(cz.vutbr.fit.knot.enticing.dto.Interval(0, 1), getElementsAt(interval.left to interval.right, items))
+            val match = TextUnit.QueryMatch(Interval.valueOf(0, 1), getElementsAt(interval.from to interval.to, items))
             elements.add(match)
             if (i < intervals.size - 1) {
-                val nextStart = intervals[i + 1].left - 1
+                val nextStart = intervals[i + 1].from - 1
                 elements.addAll(
-                        getElementsAt(interval.right + 1 to nextStart, items)
+                        getElementsAt(interval.to + 1 to nextStart, items)
                 )
             }
 
             if (interval == intervals.last()) {
                 elements.addAll(
-                        getElementsAt(interval.right + 1 to items.elements.last().index, items)
+                        getElementsAt(interval.to + 1 to items.elements.last().index, items)
                 )
             }
             elements
@@ -74,7 +73,7 @@ fun splitEntity(entity: SnippetElement.Entity, intervals: List<Interval>): List<
     val minIndex = entity.index
     val maxIndex = entity.words.last().index
     val entityRange = minIndex..maxIndex
-    val relevantIntervals = intervals.filter { it.left in entityRange || it.right in entityRange }
+    val relevantIntervals = intervals.filter { it.from in entityRange || it.to in entityRange }
             .map { it.clamp(minIndex, maxIndex) }
     if (relevantIntervals.isEmpty())
         return listOf(entity)
@@ -83,16 +82,16 @@ fun splitEntity(entity: SnippetElement.Entity, intervals: List<Interval>): List<
         val prev = if (i > 0) relevantIntervals[i - 1] else Interval.valueOf(minIndex - 1)
         val next = if (i < relevantIntervals.size - 1) relevantIntervals[i + 1] else Interval.valueOf(maxIndex + 1)
 
-        val includeLeft = prev.right + 1 <= interval.left - 1
-        val includeRight = interval.right + 1 <= next.left - 1
+        val includeLeft = prev.to + 1 <= interval.from - 1
+        val includeRight = interval.to + 1 <= next.from - 1
 
         when {
-            includeLeft && includeRight -> listOf(Interval.valueOf(prev.right + 1, interval.left - 1), Interval.valueOf(interval.left, interval.right), Interval.valueOf(interval.right + 1, next.left - 1))
-            includeLeft -> listOf(Interval.valueOf(prev.right + 1, interval.left - 1), Interval.valueOf(interval.left, interval.right))
-            includeRight -> listOf(Interval.valueOf(interval.left, interval.right), Interval.valueOf(interval.right + 1, next.left - 1))
-            else -> listOf(Interval.valueOf(interval.left, interval.right))
+            includeLeft && includeRight -> listOf(Interval.valueOf(prev.to + 1, interval.from - 1), Interval.valueOf(interval.from, interval.to), Interval.valueOf(interval.to + 1, next.from - 1))
+            includeLeft -> listOf(Interval.valueOf(prev.to + 1, interval.from - 1), Interval.valueOf(interval.from, interval.to))
+            includeRight -> listOf(Interval.valueOf(interval.from, interval.to), Interval.valueOf(interval.to + 1, next.from - 1))
+            else -> listOf(Interval.valueOf(interval.from, interval.to))
         }
     }.flatten()
 
-    return splitIntervals.map { entity.copy(index = it.left, words = entity.words.subList(it.left - entity.index, it.right - entity.index + 1)) }
+    return splitIntervals.map { entity.copy(index = it.from, words = entity.words.subList(it.from - entity.index, it.to - entity.index + 1)) }
 }

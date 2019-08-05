@@ -1,11 +1,10 @@
 package cz.vutbr.fit.knot.enticing.index.payload
 
+import cz.vutbr.fit.knot.enticing.dto.Interval
 import cz.vutbr.fit.knot.enticing.dto.Mg4jQuery
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
-import cz.vutbr.fit.knot.enticing.index.query.component1
-import cz.vutbr.fit.knot.enticing.index.query.component2
-import it.unimi.dsi.util.Interval
+
 
 interface PayloadBuilderVisitor<T> {
 

@@ -1,6 +1,9 @@
 package cz.vutbr.fit.knot.enticing.dto
 
+import cz.vutbr.fit.knot.enticing.dto.utils.toDto
+import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 
@@ -73,4 +76,80 @@ internal class IntervalTest {
         assertThat(empty.isEmpty()).isTrue()
     }
 
+    @Test
+    fun `destructuring test`() {
+        val (from, to) = Interval.valueOf(11, 13)
+
+        assertThat(from).isEqualTo(11)
+        assertThat(to).isEqualTo(13)
+    }
+
+    @Test
+    fun `extend with test`() {
+        val one = Interval.valueOf(10, 20)
+        val two = Interval.valueOf(40, 50)
+        assertThat(one.extendWith(two))
+                .isEqualTo(Interval.valueOf(10, 50))
+    }
+
+    @Test
+    fun `extend with test overlap`() {
+        val one = Interval.valueOf(10, 20)
+        val two = Interval.valueOf(15, 25)
+        assertThat(one.extendWith(two))
+                .isEqualTo(Interval.valueOf(10, 25))
+    }
+
+    @Test
+    fun `extend with this interval is empty`() {
+        val one = Interval.empty()
+        val two = Interval.valueOf(15, 25)
+        assertThat(one.extendWith(two))
+                .isEqualTo(Interval.valueOf(15, 25))
+    }
+
+    @Test
+    fun `extend with second interval is empty`() {
+        val one = Interval.valueOf(15, 25)
+        val two = Interval.empty()
+        assertThat(one.extendWith(two))
+                .isEqualTo(Interval.valueOf(15, 25))
+    }
+
+    @Test
+    fun `size test`() {
+        val normal = Interval.valueOf(10, 20)
+        assertThat(normal.size)
+                .isEqualTo(11)
+
+        val oneElem = Interval.valueOf(42)
+        assertThat(oneElem.size)
+                .isEqualTo(1)
+
+        val empty = Interval.empty()
+        assertThat(empty.size)
+                .isEqualTo(0)
+    }
+
+
+    @Nested
+    inner class Serialization {
+
+
+        @Test
+        fun `serialization test`() {
+            val input = Interval.valueOf(20, 40)
+            assertThat(input.toJson())
+                    .contains("from", "to")
+                    .doesNotContain("size", "empty")
+        }
+
+        @Test
+        fun `serialization and deserialization`() {
+            val input = Interval.valueOf(100, 200)
+            assertThat(input.toJson().toDto<Interval>())
+                    .isEqualTo(Interval.valueOf(100, 200))
+        }
+
+    }
 }

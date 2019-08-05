@@ -105,32 +105,20 @@ class SearchExecutor internal constructor(
         return IndexServer.CollectionSearchResult(matched, null)
     }
 
-    @Incomplete("Better snippet creation algorithm needed")
-    @Incomplete("Offset is not being used")
     internal fun processDocument(query: SearchQuery, result: Mg4jSearchResult, config: CorpusConfiguration, wantedSnippets: Int, offset: Int): Pair<List<IndexServer.Snippet>, Int?> {
         val matched = mutableListOf<IndexServer.Snippet>()
-        val defaultIndex = engine.indexMap[query.defaultIndex]
-                ?: throw IllegalArgumentException("Index ${query.defaultIndex} not found")
 
         val document = collection.document(result.document) as Mg4jDocument
-        val scores = getScoresForIndex(result, defaultIndex)
 
-        var lastProcessedIndex = -1
+        val allIntervals = computeSnippets(result.info.values)
+        val wantedIntervals = allIntervals.subList(offset, min(wantedSnippets, allIntervals.size))
 
-        for ((i, score) in scores.withIndex()) {
-            val (left, right) = if (score.right - score.left + 1 > 50) score.clampRight(score.left + SNIPPET_SIZE) else Interval.valueOf(score.left, score.left + 50)
-            if (right <= lastProcessedIndex) continue
 
-            val relevantScores = scores
-                    .asSequence()
-                    .filterIndexed { j, _ -> j >= i }
-                    .filter { (it, _) -> it < left + SNIPPET_SIZE }
-                    .map { it.clampRight(left + SNIPPET_SIZE) }
-                    .toList()
+        for (interval in wantedIntervals) {
+            val (from, to) = interval
+            val content = document.loadSnippetPartsFields(from, to + 1, config)
 
-            val content = document.loadSnippetPartsFields(left, right + 1, config)
-
-            val payload = if (content.elements.isNotEmpty()) createPayload(query, content, relevantScores.map { it.clampRight(left + content.elements.size - 1) }, corpusConfiguration)
+            val payload = if (content.elements.isNotEmpty()) createPayload(query, content, listOf(interval), corpusConfiguration)
             else {
                 log.warn("loaded empty document, why? ${document.title()}")
                 createPayload(query, content, emptyList(), corpusConfiguration)
@@ -139,32 +127,21 @@ class SearchExecutor internal constructor(
             val match = IndexServer.Snippet(
                     collectionName,
                     result.document,
-                    left,
-                    right - left,
+                    from,
+                    to - from,
                     document.uri().toString(),
                     document.title().toString(),
                     payload,
-                    canExtend = left > 0 || left + SNIPPET_SIZE < document.size()
+                    canExtend = from > 0 || to < document.size()
             )
             matched.add(match)
             log.info("Found match $match")
-            if (matched.size >= wantedSnippets) {
-                return matched to matched.size + 1
-            }
-
-            lastProcessedIndex = if (relevantScores.isNotEmpty()) relevantScores.last().right else right
         }
 
-        return matched to null
+        val nextOffset = if (offset + wantedIntervals.size < allIntervals.size) offset + wantedIntervals.size + 1 else null
+        return matched to nextOffset
     }
 
-
-    private fun getScoresForIndex(
-            result: DocumentScoreInfo<Reference2ObjectMap<Index, Array<SelectedInterval>>>,
-            index: Index
-    ): List<Interval> = result.info[index]?.asSequence()?.map { it.interval }?.toList() ?: listOf<Interval>().also {
-        log.warn("No results for index $index")
-    }
 
     fun extendSnippet(query: IndexServer.ContextExtensionQuery): SnippetExtension {
         val document = collection.document(query.docId.toLong()) as Mg4jDocument
@@ -196,6 +173,39 @@ class SearchExecutor internal constructor(
                 payload
         )
     }
+}
+
+/**
+ * The algorithm works in the following way:
+ *
+ * 1) generate all regions that match the query
+ * 2) sort them based on their length
+ * 3) filter out longer ones that contain the shorter as subintervals
+ * 4) filters out those longer than X units
+ */
+internal fun computeSnippets(result: Collection<Array<SelectedInterval>>): List<cz.vutbr.fit.knot.enticing.dto.Interval> {
+    require(result.isNotEmpty()) { "Cannot compute snippets for empty result" }
+
+    var list = listOf(cz.vutbr.fit.knot.enticing.dto.Interval.empty())
+
+    for (indexResults in result) {
+        val newList = mutableListOf<cz.vutbr.fit.knot.enticing.dto.Interval>()
+        for (x in list) {
+            for (y in indexResults) {
+                newList.add(x.extendWith(cz.vutbr.fit.knot.enticing.dto.Interval.valueOf(y.interval.left, y.interval.right)))
+            }
+        }
+        list = newList
+    }
+
+
+    val sorted = list
+            .filter { it.size < 200 }
+            .sortedBy { it.size }
+
+
+    @Incomplete("filter out the ones that are too overlapping")
+    return sorted
 }
 
 /**

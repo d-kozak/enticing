@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.payload
 
+import cz.vutbr.fit.knot.enticing.dto.Interval
 import cz.vutbr.fit.knot.enticing.dto.Mg4jQuery
 import cz.vutbr.fit.knot.enticing.dto.Payload
 import cz.vutbr.fit.knot.enticing.dto.ResponseFormat
@@ -7,7 +8,6 @@ import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetPartsFields
-import it.unimi.dsi.util.Interval
 
 internal fun createPayload(query: Mg4jQuery, content: SnippetPartsFields, intervals: List<Interval>, corpusConfiguration: CorpusConfiguration): Payload {
 

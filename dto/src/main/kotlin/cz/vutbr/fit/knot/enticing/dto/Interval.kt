@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.dto
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.validation.constraints.PositiveOrZero
 import kotlin.math.max
 import kotlin.math.min
@@ -7,7 +8,7 @@ import kotlin.math.min
 /**
  * Class representing a closed range. Meant to be used instead of mg4j's Interval to decouple the high level classes from mg4j
  */
-class Interval private constructor(
+data class Interval private constructor(
         @field:PositiveOrZero
         val from: Int,
         @field:PositiveOrZero
@@ -23,6 +24,7 @@ class Interval private constructor(
 
     fun clamp(left: Int = from, right: Int = to) = valueOf(max(left, from), min(right, to))
 
+    @JsonIgnore
     fun isEmpty() = from > to
 
     operator fun contains(value: Int) = value in from..to
@@ -35,4 +37,13 @@ class Interval private constructor(
 
         override fun next(): Int = current++
     }
+
+    fun extendWith(other: Interval): Interval = when {
+        this.isEmpty() -> other
+        other.isEmpty() -> this
+        else -> valueOf(min(this.from, other.from), max(this.to, other.to))
+    }
+
+    @JsonIgnore
+    val size: Int = if (isEmpty()) 0 else to - from + 1
 }

@@ -7,7 +7,6 @@ import cz.vutbr.fit.knot.enticing.index.mg4j.testConfiguration
 import cz.vutbr.fit.knot.enticing.index.payload.createPayload
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
 import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetPartsFields
-import it.unimi.dsi.util.Interval
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -190,7 +189,7 @@ internal class PayloadCreatorTest {
             var payload = createPayload(newFormatQuery, noMetadata, listOf(Interval.valueOf(0, 2)), noMetadata.corpusConfiguration)
             assertThat(payload)
                     .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
-                            TextUnit.QueryMatch(Interval(0, 1),
+                            TextUnit.QueryMatch(Interval.valueOf(0, 1),
                                     listOf(TextUnit.Word("one"),
                                             TextUnit.Word("two"),
                                             TextUnit.Word("three")))
@@ -200,7 +199,7 @@ internal class PayloadCreatorTest {
             assertThat(payload)
                     .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
                             TextUnit.Word("one"),
-                            TextUnit.QueryMatch(Interval(0, 1),
+                            TextUnit.QueryMatch(Interval.valueOf(0, 1),
                                     listOf(
                                             TextUnit.Word("two"),
                                             TextUnit.Word("three")))
@@ -209,7 +208,7 @@ internal class PayloadCreatorTest {
             assertThat(payload)
                     .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
                             TextUnit.Word("one"),
-                            TextUnit.QueryMatch(Interval(0, 1),
+                            TextUnit.QueryMatch(Interval.valueOf(0, 1),
                                     listOf(TextUnit.Word("two"))),
                             TextUnit.Word("three")
                     )))
@@ -221,7 +220,7 @@ internal class PayloadCreatorTest {
             assertThat(payload)
                     .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
                             TextUnit.Word("one", "1", "google.com"),
-                            TextUnit.QueryMatch(Interval(0, 1),
+                            TextUnit.QueryMatch(Interval.valueOf(0, 1),
                                     listOf(
                                             TextUnit.Word("two", "2", "yahoo.com"),
                                             TextUnit.Word("three", "3", "localhost")))
@@ -248,7 +247,7 @@ internal class PayloadCreatorTest {
                     .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
                             TextUnit.Word("one", "1", "google.com", "0", "0"),
                             TextUnit.Word("two", "2", "yahoo.com", "0", "0"),
-                            TextUnit.QueryMatch(Interval(0, 1), listOf(
+                            TextUnit.QueryMatch(Interval.valueOf(0, 1), listOf(
                                     TextUnit.Word("three", "3", "localhost", "0", "0"),
                                     TextUnit.Entity(attributes = listOf("harry"), entityClass = "person",
                                             words = listOf(TextUnit.Word("harry", "3", "localhost", "person", "harry"))
@@ -266,12 +265,12 @@ internal class PayloadCreatorTest {
                     .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
                             TextUnit.Word("one", "1", "google.com", "0", "0"),
                             TextUnit.Word("two", "2", "yahoo.com", "0", "0"),
-                            TextUnit.QueryMatch(Interval(0, 1), listOf(
+                            TextUnit.QueryMatch(Interval.valueOf(0, 1), listOf(
                                     TextUnit.Word("three", "3", "localhost", "0", "0"),
                                     TextUnit.Entity(attributes = listOf("harry"), entityClass = "person",
                                             words = listOf(TextUnit.Word("harry", "3", "localhost", "person", "harry"))
                                     ))),
-                            TextUnit.QueryMatch(Interval(0, 1), listOf(
+                            TextUnit.QueryMatch(Interval.valueOf(0, 1), listOf(
                                     TextUnit.Entity(attributes = listOf("harry"), entityClass = "person",
                                             words = listOf(TextUnit.Word("potter", "3", "localhost", "0", "0"))
                                     ))
@@ -280,14 +279,6 @@ internal class PayloadCreatorTest {
 
 
     }
-
-    @Test
-    fun `left should be smaller or equal to right`() {
-        assertThrows<IllegalArgumentException> {
-            createPayload(templateQuery, noMetadata, listOf(Interval.valueOf(2, 1)), testConfiguration.corpusConfiguration)
-        }
-    }
-
 
     @Test
     fun `default index should be present in the document`() {
