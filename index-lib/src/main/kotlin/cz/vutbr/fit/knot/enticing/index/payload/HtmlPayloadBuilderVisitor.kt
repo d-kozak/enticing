@@ -4,7 +4,7 @@ import cz.vutbr.fit.knot.enticing.dto.Interval
 import cz.vutbr.fit.knot.enticing.dto.Mg4jQuery
 import cz.vutbr.fit.knot.enticing.dto.Payload
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
-import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
+import cz.vutbr.fit.knot.enticing.index.postprocess.DocumentElement
 
 class HtmlPayloadBuilderVisitor(
         config: CorpusConfiguration, query: Mg4jQuery, intervals: List<Interval>
@@ -14,7 +14,7 @@ class HtmlPayloadBuilderVisitor(
         builder.append("<b>")
     }
 
-    override fun visitWord(word: SnippetElement.Word) {
+    override fun visitWord(word: DocumentElement.Word) {
         with(builder) {
             if (metaIndexes.isNotEmpty()) {
                 append("<span eql-word")
@@ -38,7 +38,7 @@ class HtmlPayloadBuilderVisitor(
         }
     }
 
-    override fun visitEntity(entity: SnippetElement.Entity) {
+    override fun visitEntity(entity: DocumentElement.Entity) {
         with(builder) {
             val eqlEntity = config.entities[entity.entityClass]
             if (eqlEntity != null) {

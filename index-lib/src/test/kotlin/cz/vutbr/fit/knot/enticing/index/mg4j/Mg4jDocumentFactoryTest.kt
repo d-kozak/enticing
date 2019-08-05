@@ -56,7 +56,7 @@ internal class Mg4jDocumentFactoryTest {
         val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), factory)
 
         val document = collection.document(0) as Mg4jDocument
-        val snippetPartsFields = document.loadSnippetPartsFields(filteredConfig = corpusConfig)
+        val snippetPartsFields = document.loadStructuredContent(filteredConfig = corpusConfig)
     }
 
     @Test
@@ -67,7 +67,7 @@ internal class Mg4jDocumentFactoryTest {
         for (docId in 0L..10L) {
             val document = collection.document(docId) as Mg4jDocument
 
-            val content = document.loadSnippetPartsFields(filteredConfig = corpusConfig)
+            val content = document.loadStructuredContent(filteredConfig = corpusConfig)
             val nertag = content["nertag"]
             val nerlength = content["nerlength"].map { it.toInt() }
 
@@ -99,7 +99,7 @@ internal class Mg4jDocumentFactoryTest {
 
         for (i in 0L..10L) {
             val document = collection.document(i) as Mg4jDocument
-            val wholeContent = document.loadSnippetPartsFields(filteredConfig = corpusConfig).toMap()
+            val wholeContent = document.loadStructuredContent(filteredConfig = corpusConfig).toMap()
 
             val sizePerIndex = wholeContent.values.map { it.size }
             val sizeSet = sizePerIndex.toSet()
@@ -132,7 +132,7 @@ internal class Mg4jDocumentFactoryTest {
 
         for (i in 0L..10L) {
             val document = collection.document(i) as Mg4jDocument
-            val wholeContent = document.loadSnippetPartsFields(filteredConfig = corpusConfig)
+            val wholeContent = document.loadStructuredContent(filteredConfig = corpusConfig)
             for (index in indexes) {
                 val highLevel = wholeContent[index.name].joinToString(separator = " ")
                 val lowLevel = (document.content(index.columnIndex) as StringReader).readText()

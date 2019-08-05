@@ -4,7 +4,7 @@ import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.Annotation
 import cz.vutbr.fit.knot.enticing.dto.annotation.Temporary
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
-import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
+import cz.vutbr.fit.knot.enticing.index.postprocess.DocumentElement
 import org.slf4j.LoggerFactory
 
 
@@ -26,7 +26,7 @@ class JsonPayloadBuilderVisitor(config: CorpusConfiguration, query: Mg4jQuery, i
         startPosition = builder.length
     }
 
-    override fun visitWord(elem: SnippetElement.Word) {
+    override fun visitWord(elem: DocumentElement.Word) {
         val word = elem[query.defaultIndex]
 
         val annotationContent = metaIndexes.map { it to elem[it] }.toMap()
@@ -35,7 +35,7 @@ class JsonPayloadBuilderVisitor(config: CorpusConfiguration, query: Mg4jQuery, i
         builder.append(word)
     }
 
-    override fun visitEntity(entity: SnippetElement.Entity) {
+    override fun visitEntity(entity: DocumentElement.Entity) {
         val currentPosition = builder.length
 
         val subAnnotations = mutableListOf<AnnotationPosition>()

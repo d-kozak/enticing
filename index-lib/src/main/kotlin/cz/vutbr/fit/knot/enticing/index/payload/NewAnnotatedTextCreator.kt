@@ -5,10 +5,10 @@ import cz.vutbr.fit.knot.enticing.dto.NewAnnotatedText
 import cz.vutbr.fit.knot.enticing.dto.TextUnit
 import cz.vutbr.fit.knot.enticing.dto.annotation.Warning
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
-import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
-import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetPartsFields
+import cz.vutbr.fit.knot.enticing.index.postprocess.DocumentElement
+import cz.vutbr.fit.knot.enticing.index.postprocess.StructuredDocumentContent
 
-fun createNewAnnotatedText(data: SnippetPartsFields, intervals: List<Interval>, corpusConfiguration: CorpusConfiguration): NewAnnotatedText {
+fun createNewAnnotatedText(data: StructuredDocumentContent, intervals: List<Interval>, corpusConfiguration: CorpusConfiguration): NewAnnotatedText {
     if (data.elements.isEmpty()) {
         return NewAnnotatedText()
     }
@@ -50,26 +50,26 @@ fun createNewAnnotatedText(data: SnippetPartsFields, intervals: List<Interval>, 
     )
 }
 
-fun getElementsAt(interval: Pair<Int, Int>, elements: SnippetPartsFields): List<TextUnit> {
+fun getElementsAt(interval: Pair<Int, Int>, elements: StructuredDocumentContent): List<TextUnit> {
     val (left, right) = interval
     return (left..right).map { elements[it] }.map { toTextUnit(it) }
 }
 
-fun toTextUnit(element: SnippetElement): TextUnit = when (element) {
-    is SnippetElement.Word -> TextUnit.Word(element.indexes)
-    is SnippetElement.Entity -> TextUnit.Entity(element.entityInfo, element.entityClass, element.words.map { toTextUnit(it) as TextUnit.Word })
+fun toTextUnit(element: DocumentElement): TextUnit = when (element) {
+    is DocumentElement.Word -> TextUnit.Word(element.indexes)
+    is DocumentElement.Entity -> TextUnit.Entity(element.entityInfo, element.entityClass, element.words.map { toTextUnit(it) as TextUnit.Word })
 }
 
-internal fun splitEntities(intervals: List<Interval>, data: SnippetPartsFields): SnippetPartsFields {
+internal fun splitEntities(intervals: List<Interval>, data: StructuredDocumentContent): StructuredDocumentContent {
     val newElements = data.elements.flatMap { element ->
-        if (element is SnippetElement.Entity) {
+        if (element is DocumentElement.Entity) {
             splitEntity(element, intervals)
         } else listOf(element)
     }
     return data.copy(elements = newElements)
 }
 
-fun splitEntity(entity: SnippetElement.Entity, intervals: List<Interval>): List<SnippetElement> {
+fun splitEntity(entity: DocumentElement.Entity, intervals: List<Interval>): List<DocumentElement> {
     val minIndex = entity.index
     val maxIndex = entity.words.last().index
     val entityRange = minIndex..maxIndex

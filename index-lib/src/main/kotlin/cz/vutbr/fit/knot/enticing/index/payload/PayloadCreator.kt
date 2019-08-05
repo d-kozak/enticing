@@ -6,10 +6,10 @@ import cz.vutbr.fit.knot.enticing.dto.Payload
 import cz.vutbr.fit.knot.enticing.dto.ResponseFormat
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
-import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
-import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetPartsFields
+import cz.vutbr.fit.knot.enticing.index.postprocess.DocumentElement
+import cz.vutbr.fit.knot.enticing.index.postprocess.StructuredDocumentContent
 
-internal fun createPayload(query: Mg4jQuery, content: SnippetPartsFields, intervals: List<Interval>, corpusConfiguration: CorpusConfiguration): Payload {
+internal fun createPayload(query: Mg4jQuery, content: StructuredDocumentContent, intervals: List<Interval>, corpusConfiguration: CorpusConfiguration): Payload {
 
     @Incomplete("check for ResponseType once EQL stuff is in place")
     val visitor = when (query.responseFormat) {
@@ -22,8 +22,8 @@ internal fun createPayload(query: Mg4jQuery, content: SnippetPartsFields, interv
         if (visitor.isMatchStart(elem.index))
             visitor.visitMatchStart()
         when (elem) {
-            is SnippetElement.Word -> visitor.visitWord(elem)
-            is SnippetElement.Entity -> visitor.visitEntity(elem)
+            is DocumentElement.Word -> visitor.visitWord(elem)
+            is DocumentElement.Entity -> visitor.visitEntity(elem)
         }
         if (visitor.isMatchEnd(elem.index)) {
             visitor.visitMatchEnd()

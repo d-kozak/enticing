@@ -1,11 +1,10 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
-import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.annotation.Speed
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.Index
-import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
-import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetPartsFields
+import cz.vutbr.fit.knot.enticing.index.postprocess.DocumentElement
+import cz.vutbr.fit.knot.enticing.index.postprocess.StructuredDocumentContent
 import it.unimi.di.big.mg4j.document.AbstractDocument
 import it.unimi.dsi.fastutil.objects.Reference2ObjectMap
 import it.unimi.dsi.io.WordReader
@@ -55,7 +54,7 @@ class Mg4jDocument(
      *
      * @param interval interval which should be loaded
      */
-    fun loadSnippetPartsFields(interval: Interval, filteredConfig: CorpusConfiguration): SnippetPartsFields = loadSnippetPartsFields(interval.left, interval.right, filteredConfig)
+    fun loadStructuredContent(interval: Interval, filteredConfig: CorpusConfiguration): StructuredDocumentContent = loadStructuredContent(interval.left, interval.right, filteredConfig)
 
     /**
      * Loads SnippetPartsFields from part of the document
@@ -63,9 +62,8 @@ class Mg4jDocument(
      * @param left left limit, inclusive
      * @param right right limit, inclusive
      */
-    @Cleanup("Ugly code, should be refactored")
-    @Speed("This is probably slower than necessary")
-    fun loadSnippetPartsFields(left: Int = 0, _right: Int = -1, filteredConfig: CorpusConfiguration): SnippetPartsFields {
+    @Speed("Could be rewritten using a set of mutable strings and advancing over them")
+    fun loadStructuredContent(left: Int = 0, _right: Int = -1, filteredConfig: CorpusConfiguration): StructuredDocumentContent {
         val right = if (_right == -1) size() else _right
         val indexContent = indexes.asSequence()
                 .map { it.name to readIndex(it.columnIndex, left, right) }
@@ -74,7 +72,7 @@ class Mg4jDocument(
         val loadedDataSize = indexContent.getValue("token").size
         fun collectIndexValuesAt(i: Int): List<String> = indexes.map { indexContent.getValue(it.name)[i] }
 
-        val result = mutableListOf<SnippetElement>()
+        val result = mutableListOf<DocumentElement>()
         var i = 0
         val limit = min(right - left, loadedDataSize)
         while (i < limit) {
@@ -86,16 +84,16 @@ class Mg4jDocument(
 
                 val nerlen = max(indexContent.getValue("nerlength")[i].toIntOrNull() ?: 1, 1)
                 val words = (i until min(i + nerlen, loadedDataSize))
-                        .map { SnippetElement.Word(left + it, collectIndexValuesAt(it)) }
-                result.add(SnippetElement.Entity(left + i, entityClass, entityInfo, words))
+                        .map { DocumentElement.Word(left + it, collectIndexValuesAt(it)) }
+                result.add(DocumentElement.Entity(left + i, entityClass, entityInfo, words))
                 i += nerlen
 
             } else {
-                result.add(SnippetElement.Word(left + i, collectIndexValuesAt(i)))
+                result.add(DocumentElement.Word(left + i, collectIndexValuesAt(i)))
                 i++
             }
         }
-        return SnippetPartsFields(result, filteredConfig)
+        return StructuredDocumentContent(result, filteredConfig)
     }
 
 

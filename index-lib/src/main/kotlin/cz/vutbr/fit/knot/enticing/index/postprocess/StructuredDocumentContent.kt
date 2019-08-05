@@ -1,19 +1,17 @@
 package cz.vutbr.fit.knot.enticing.index.postprocess
 
-import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import java.util.*
 
-@Cleanup("Merge together with TextUnit")
-data class SnippetPartsFields(
-        val elements: List<SnippetElement>,
+data class StructuredDocumentContent(
+        val elements: List<DocumentElement>,
         val corpusConfiguration: CorpusConfiguration
-) : Iterable<SnippetElement> {
+) : Iterable<DocumentElement> {
 
     init {
         for (element in elements) {
             element.parent = this
-            if (element is SnippetElement.Entity) {
+            if (element is DocumentElement.Entity) {
                 for (word in element.words) {
                     word.parent = this
                 }
@@ -26,11 +24,11 @@ data class SnippetPartsFields(
 
         for (element in elements) {
             when (element) {
-                is SnippetElement.Word -> {
+                is DocumentElement.Word -> {
                     result.add(element[corpusConfiguration.indexOf(index)])
                 }
 
-                is SnippetElement.Entity -> {
+                is DocumentElement.Entity -> {
                     result.addAll(element[corpusConfiguration.indexOf(index)])
                 }
             }
@@ -39,7 +37,7 @@ data class SnippetPartsFields(
         return result
     }
 
-    operator fun get(i: Int): SnippetElement {
+    operator fun get(i: Int): DocumentElement {
         val indexes = elements.map { it.index }
         val j = Collections.binarySearch(indexes, i)
         return if (j >= 0) elements[j] else elements[-j - 1]
@@ -52,14 +50,14 @@ data class SnippetPartsFields(
             .map { it to this[it] }
             .toMap()
 
-    override fun iterator(): Iterator<SnippetElement> = elements.iterator()
+    override fun iterator(): Iterator<DocumentElement> = elements.iterator()
 }
 
-sealed class SnippetElement {
+sealed class DocumentElement {
 
-    internal lateinit var parent: SnippetPartsFields
+    internal lateinit var parent: StructuredDocumentContent
 
-    data class Word(override val index: Int, val indexes: List<String>) : SnippetElement() {
+    data class Word(override val index: Int, val indexes: List<String>) : DocumentElement() {
         operator fun get(i: Int) = if (i < indexes.size) indexes[i] else {
             System.err.println("$i is too big")
             "NULL"
@@ -68,7 +66,7 @@ sealed class SnippetElement {
         operator fun get(key: String) = this[parent.corpusConfiguration.indexOf(key)]
     }
 
-    data class Entity(override val index: Int, val entityClass: String, val entityInfo: List<String>, val words: List<Word>) : SnippetElement() {
+    data class Entity(override val index: Int, val entityClass: String, val entityInfo: List<String>, val words: List<Word>) : DocumentElement() {
         operator fun get(i: Int): List<String> = words.map { it[i] }
 
         operator fun get(key: String) = this[parent.corpusConfiguration.indexOf(key)]

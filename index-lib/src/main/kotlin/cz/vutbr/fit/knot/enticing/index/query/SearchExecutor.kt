@@ -115,7 +115,7 @@ class SearchExecutor internal constructor(
 
         for ((interval, subIntervals) in wantedIntervals) {
             val (from, to) = interval
-            val content = document.loadSnippetPartsFields(from, to + 1, config)
+            val content = document.loadStructuredContent(from, to + 1, config)
 
             val payload = if (content.elements.isNotEmpty()) createPayload(query, content, subIntervals, corpusConfiguration)
             else {
@@ -148,8 +148,8 @@ class SearchExecutor internal constructor(
 
         val filteredConfig = corpusConfiguration.filterBy(query.metadata, query.defaultIndex)
 
-        val prefixPayload = createPayload(query, document.loadSnippetPartsFields(prefix, filteredConfig), emptyList(), corpusConfiguration) as Payload.FullResponse
-        val suffixPayload = createPayload(query, document.loadSnippetPartsFields(suffix, filteredConfig), emptyList(), corpusConfiguration) as Payload.FullResponse
+        val prefixPayload = createPayload(query, document.loadStructuredContent(prefix, filteredConfig), emptyList(), corpusConfiguration) as Payload.FullResponse
+        val suffixPayload = createPayload(query, document.loadStructuredContent(suffix, filteredConfig), emptyList(), corpusConfiguration) as Payload.FullResponse
 
         return SnippetExtension(
                 prefixPayload,
@@ -163,7 +163,7 @@ class SearchExecutor internal constructor(
 
         val filteredConfig = corpusConfiguration.filterBy(query.metadata, query.defaultIndex)
 
-        val content = document.loadSnippetPartsFields(filteredConfig = filteredConfig)
+        val content = document.loadStructuredContent(filteredConfig = filteredConfig)
 
         val payload = createPayload(query, content, emptyList(), corpusConfiguration) as Payload.FullResponse
         return IndexServer.FullDocument(

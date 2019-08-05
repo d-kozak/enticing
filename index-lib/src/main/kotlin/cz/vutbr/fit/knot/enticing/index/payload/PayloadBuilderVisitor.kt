@@ -3,16 +3,16 @@ package cz.vutbr.fit.knot.enticing.index.payload
 import cz.vutbr.fit.knot.enticing.dto.Interval
 import cz.vutbr.fit.knot.enticing.dto.Mg4jQuery
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
-import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
+import cz.vutbr.fit.knot.enticing.index.postprocess.DocumentElement
 
 
 interface PayloadBuilderVisitor<T> {
 
     fun visitMatchStart()
 
-    fun visitWord(word: SnippetElement.Word)
+    fun visitWord(word: DocumentElement.Word)
 
-    fun visitEntity(entity: SnippetElement.Entity)
+    fun visitEntity(entity: DocumentElement.Entity)
 
     fun visitMatchEnd()
 

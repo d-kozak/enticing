@@ -5,8 +5,8 @@ import cz.vutbr.fit.knot.enticing.dto.Annotation
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.*
 import cz.vutbr.fit.knot.enticing.index.mg4j.testConfiguration
 import cz.vutbr.fit.knot.enticing.index.payload.createPayload
-import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetElement
-import cz.vutbr.fit.knot.enticing.index.postprocess.SnippetPartsFields
+import cz.vutbr.fit.knot.enticing.index.postprocess.DocumentElement
+import cz.vutbr.fit.knot.enticing.index.postprocess.StructuredDocumentContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -24,10 +24,10 @@ internal class PayloadCreatorTest {
             ResponseFormat.ANNOTATED_TEXT
     )
 
-    private val noMetadata = SnippetPartsFields(listOf(
-            SnippetElement.Word(0, listOf("one")),
-            SnippetElement.Word(1, listOf("two")),
-            SnippetElement.Word(2, listOf("three"))),
+    private val noMetadata = StructuredDocumentContent(listOf(
+            DocumentElement.Word(0, listOf("one")),
+            DocumentElement.Word(1, listOf("two")),
+            DocumentElement.Word(2, listOf("three"))),
             corpusConfig("empty") {
                 indexes {
                     index("token")
@@ -35,10 +35,10 @@ internal class PayloadCreatorTest {
             }
     )
 
-    private val simpleStructure = SnippetPartsFields(listOf(
-            SnippetElement.Word(0, listOf("one", "1", "google.com")),
-            SnippetElement.Word(1, listOf("two", "2", "yahoo.com")),
-            SnippetElement.Word(2, listOf("three", "3", "localhost"))),
+    private val simpleStructure = StructuredDocumentContent(listOf(
+            DocumentElement.Word(0, listOf("one", "1", "google.com")),
+            DocumentElement.Word(1, listOf("two", "2", "yahoo.com")),
+            DocumentElement.Word(2, listOf("three", "3", "localhost"))),
             corpusConfig("simple") {
                 indexes {
                     index("token")
@@ -48,13 +48,13 @@ internal class PayloadCreatorTest {
             }
     )
 
-    private val withEntities = SnippetPartsFields(listOf(
-            SnippetElement.Word(0, listOf("one", "1", "google.com", "0", "0")),
-            SnippetElement.Word(1, listOf("two", "2", "yahoo.com", "0", "0")),
-            SnippetElement.Word(2, listOf("three", "3", "localhost", "0", "0")),
-            SnippetElement.Entity(3, "person", listOf("harry"),
-                    words = listOf(SnippetElement.Word(3, listOf("harry", "3", "localhost", "person", "harry")),
-                            SnippetElement.Word(4, listOf("potter", "3", "localhost", "0", "0")))
+    private val withEntities = StructuredDocumentContent(listOf(
+            DocumentElement.Word(0, listOf("one", "1", "google.com", "0", "0")),
+            DocumentElement.Word(1, listOf("two", "2", "yahoo.com", "0", "0")),
+            DocumentElement.Word(2, listOf("three", "3", "localhost", "0", "0")),
+            DocumentElement.Entity(3, "person", listOf("harry"),
+                    words = listOf(DocumentElement.Word(3, listOf("harry", "3", "localhost", "person", "harry")),
+                            DocumentElement.Word(4, listOf("potter", "3", "localhost", "0", "0")))
             )),
             corpusConfig("simple") {
                 indexes {
