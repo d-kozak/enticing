@@ -134,7 +134,8 @@ class SearchExecutor internal constructor(
                     canExtend = from > 0 || to < document.size()
             )
             matched.add(match)
-            log.info("Found match $match")
+            @WhatIf("Might be nice to log a piece of document as well, but just a piece, maybe default index?")
+            log.info("Found match in document ${match.documentTitle}")
         }
 
         val nextOffset = if (offset + wantedIntervals.size < allIntervals.size) offset + wantedIntervals.size + 1 else null
