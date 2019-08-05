@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotEmpty
-import javax.validation.constraints.PositiveOrZero
 
 data class NewAnnotatedText(
         @field:Valid
@@ -14,12 +13,6 @@ data class NewAnnotatedText(
 ) {
     constructor(vararg textUnits: TextUnit) : this(textUnits.toList())
 }
-
-data class Interval(
-        @field:PositiveOrZero
-        val from: Int,
-        @field:PositiveOrZero
-        val to: Int)
 
 
 @JsonTypeInfo(
