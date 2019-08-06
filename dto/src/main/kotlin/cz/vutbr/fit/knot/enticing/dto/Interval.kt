@@ -45,9 +45,9 @@ data class Interval private constructor(
     }
 
     fun expand(wantedSize: Int, lowerBound: Int, upperBound: Int): Interval {
-        require(lowerBound <= from) { "lower bound should be <= from" }
-        require(upperBound >= to) { "upper bound should be <= to" }
-        require(wantedSize >= this.size) { "cannot expand to this size, the interval is already bigger than that" }
+        require(lowerBound <= from) { "lower bound should be <= from, $lowerBound,$from" }
+        require(upperBound >= to) { "upper bound should be >= to, $upperBound, $to" }
+        require(wantedSize >= this.size) { "cannot expand to this size, the interval is already bigger than that, $wantedSize, ${this.size}" }
 
         val toBeAdded = wantedSize - this.size
 
