@@ -91,17 +91,18 @@ internal fun processLine(line: String, fields: List<StringBuilder>, lineIndex: I
 
     val tokenIndex = corpusConfiguration.indexes.getValue("token").columnIndex
 
-    if (cells[tokenIndex].isBlank() || cells[tokenIndex] == glueSymbol) {
-        log.warn("$lineIndex: token is blank, skipping... at line '$line'")
-        return
-    }
-
     if (cells.size != cellCount) {
         log.warn("$lineIndex: $line does not have correct format, skipping")
         log.warn("It has size ${cells.size}, but it should be 27")
         log.warn("was split into $cells")
         return
     }
+
+    if (cells[tokenIndex].isBlank() || cells[tokenIndex] == glueSymbol) {
+        log.warn("$lineIndex: token is blank, skipping... at line '$line'")
+        return
+    }
+
     for ((i, cell) in cells.withIndex()) {
         val stringBuilder = fields[i]
         if (stringBuilder.isNotBlank())
