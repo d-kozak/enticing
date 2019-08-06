@@ -9,9 +9,12 @@ import it.unimi.dsi.fastutil.longs.LongArrayList
 import it.unimi.dsi.fastutil.objects.Reference2ObjectArrayMap
 import it.unimi.dsi.fastutil.objects.Reference2ObjectMap
 import it.unimi.dsi.sux4j.util.EliasFanoMonotoneLongBigList
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStream
+
+private val log = LoggerFactory.getLogger(Mg4jSingleFileDocumentCollection::class.java)
 
 /**
  * Mg4j collection handling one mg4j file ( which usually consists of multiple mg4j documents )
@@ -30,8 +33,16 @@ class Mg4jSingleFileDocumentCollection(
 
     override fun metadata(index: Long): Reference2ObjectMap<Enum<*>, Any> = metadataAndStream(index).second
 
-    override fun stream(index: Long): InputStream = FastBufferedInputStream(FileInputStream(inputFile)).also {
-        it.position(documentIndexes.getLong(index))
+
+    private var last: FastBufferedInputStream? = null
+    override fun stream(index: Long): InputStream {
+        if (last != null) {
+            last!!.close()
+        }
+        last = FastBufferedInputStream(FileInputStream(inputFile)).also {
+            it.position(documentIndexes.getLong(index))
+        }
+        return last!!
     }
 
     private fun metadataAndStream(index: Long): Pair<FastBufferedInputStream, Reference2ObjectArrayMap<Enum<*>, Any>> {
@@ -56,17 +67,20 @@ class Mg4jSingleFileDocumentCollection(
         return stream to map
     }
 
-    override fun document(index: Long): Document = metadataAndStream(index).let { (stream, metadata) ->
-        stream.use {
-            factory.getDocument(stream, metadata)
-        }
-    }
+    override fun document(index: Long): Document = metadataAndStream(index).let { (stream, metadata) -> factory.getDocument(stream, metadata) }
 
     override fun size(): Long = documentIndexes.size64()
+
+    override fun close() {
+        super.close()
+        if (last != null)
+            last!!.close()
+    }
 }
 
 internal fun findDocumentIndexes(inputFile: File): EliasFanoMonotoneLongBigList =
         FastBufferedInputStream(FileInputStream(inputFile)).use { stream ->
+            log.info("Preprocessing file ${inputFile.name}")
             val list = LongArrayList()
             val buffer = ByteArray(1024)
 
