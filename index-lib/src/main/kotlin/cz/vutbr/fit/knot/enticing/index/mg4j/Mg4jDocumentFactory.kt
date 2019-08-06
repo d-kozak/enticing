@@ -169,7 +169,7 @@ fun ByteArray.next(b: Byte, offset: Int = 0, size: Int = this.size): Int {
 }
 
 internal fun parsePageLine(buffer: ByteArray, bufferSize: Int): Pair<String, String> {
-    val splitPoint = findSplitPoint(buffer, bufferSize)
+    val splitPoint = findSplitPoint(buffer, bufferSize) ?: return Pair("none", "none")
 
     val titleStart = DocumentMarks.PAGE.mark.length + 1
     val titleLen = splitPoint - titleStart
@@ -182,11 +182,11 @@ internal fun parsePageLine(buffer: ByteArray, bufferSize: Int): Pair<String, Str
 }
 
 private const val tabByte = '\t'.toByte()
-internal fun findSplitPoint(buffer: ByteArray, bufferSize: Int): Int {
+internal fun findSplitPoint(buffer: ByteArray, bufferSize: Int): Int? {
     for (i in bufferSize - 1 downTo 0) {
         if (buffer[i] == tabByte) {
             return i
         }
     }
-    throw IllegalArgumentException("Cannot find \\t that should separate title and uri")
+    return null
 }
