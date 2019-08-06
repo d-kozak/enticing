@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.annotation.Speed
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.Index
@@ -85,6 +86,7 @@ var replicationInfo: EntityReplicationInfo? = null
 @Speed("rewrite using MutableStrings and whitespace readers?")
 internal fun processLine(line: String, fields: List<StringBuilder>, lineIndex: Int, corpusConfiguration: CorpusConfiguration) {
     val cells = line.split(whitespaceRegex)
+    @Incomplete("this should be loaded from the config")
     val cellCount = 27
     val nerlenIndex = 26
     val firstEntityCell = 13

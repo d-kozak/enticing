@@ -21,11 +21,11 @@ class Mg4jSingleFileDocumentCollection(
         private val factory: DocumentFactory)
     : AbstractDocumentCollection() {
 
+    private val documentIndexes = findDocumentIndexes(inputFile)
+
     override fun factory(): DocumentFactory = factory
 
     override fun copy(): DocumentCollection = Mg4jSingleFileDocumentCollection(inputFile, factory)
-
-    private val documentIndexes = findDocumentIndexes(inputFile)
 
 
     override fun metadata(index: Long): Reference2ObjectMap<Enum<*>, Any> = metadataAndStream(index).second
@@ -65,7 +65,7 @@ class Mg4jSingleFileDocumentCollection(
     override fun size(): Long = documentIndexes.size64()
 }
 
-fun findDocumentIndexes(inputFile: File): EliasFanoMonotoneLongBigList =
+internal fun findDocumentIndexes(inputFile: File): EliasFanoMonotoneLongBigList =
         FastBufferedInputStream(FileInputStream(inputFile)).use { stream ->
             val list = LongArrayList()
             val buffer = ByteArray(1024)
