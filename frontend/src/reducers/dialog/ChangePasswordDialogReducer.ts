@@ -5,18 +5,12 @@ import {
     CHANGE_PASSWORD_DIALOG_SHOW_PROGRESS,
     ChangePasswordDialogAction
 } from "../../actions/dialog/ChangePasswordDialogActions";
-import {User} from "../../entities/User";
+import {ChangePasswordDialogState, initialState} from "../ApplicationState";
 
-const initialState = {
-    user: null as User | null,
-    showProgress: false
-}
-
-export type ChangePasswordDialogState = Readonly<typeof initialState>
 
 type ChangePasswordDialogReducer = (state: ChangePasswordDialogState | undefined, action: ChangePasswordDialogAction) => ChangePasswordDialogState
 
-const changePasswordDialogReducer: ChangePasswordDialogReducer = (state = initialState, action) => {
+const changePasswordDialogReducer: ChangePasswordDialogReducer = (state = initialState.dialog.changePasswordDialog, action) => {
     switch (action.type) {
         case CHANGE_PASSWORD_DIALOG_OPEN:
             return {

@@ -5,7 +5,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {User} from "../../entities/User";
-import {AppState} from "../../reducers/RootReducer";
+import {ApplicationState} from "../../reducers/ApplicationState";
 import {connect} from "react-redux";
 import {LinearProgress} from "@material-ui/core";
 import {changePasswordDialogClosedAction} from "../../actions/dialog/ChangePasswordDialogActions";
@@ -104,7 +104,7 @@ const ChangePasswordDialog = (props: ChangePasswordDialogProps) => {
     </div>
 }
 
-const mapStateToProps = (state: AppState) => ({
+const mapStateToProps = (state: ApplicationState) => ({
     showProgress: state.dialog.changePasswordDialog.showProgress,
     user: state.dialog.changePasswordDialog.user
 });

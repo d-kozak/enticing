@@ -10,16 +10,12 @@ import {
 import {SearchSettings} from "../entities/SearchSettings";
 import {mapValues} from 'lodash';
 import {CORPUS_FORMAT_LOADED} from "../actions/CorpusFormatActions";
+import {initialState, SearchSettingsState} from "./ApplicationState";
 
-const initialState = {
-    settings: {} as { [key: string]: SearchSettings }
-};
-
-type SearchSettingsState = Readonly<typeof initialState>;
 
 type SearchSettingsReducer = (state: SearchSettingsState | undefined, action: SearchSettingsAction) => SearchSettingsState;
 
-const searchSettingsReducer: SearchSettingsReducer = (state = initialState, action) => {
+const searchSettingsReducer: SearchSettingsReducer = (state = initialState.searchSettings, action) => {
     switch (action.type) {
         case SEARCH_SETTINGS_LOADED:
             return {

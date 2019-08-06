@@ -4,7 +4,7 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React, {useState} from 'react';
 import {connect} from "react-redux";
-import {AppState} from "../../reducers/RootReducer";
+import {ApplicationState} from "../../reducers/RootReducer";
 
 import CMInputWrapper from "./CMInputWrapper";
 import {SearchQuery} from "../../entities/SearchQuery";
@@ -48,7 +48,7 @@ const SearchInput = (props: SearchInputProps) => {
     </div>
 };
 
-const mapStateToProps = (state: AppState) => ({
+const mapStateToProps = (state: ApplicationState) => ({
     selectedSettings: selectedSearchSettingsSelector(state)
 });
 

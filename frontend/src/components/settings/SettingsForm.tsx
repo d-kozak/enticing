@@ -14,7 +14,7 @@ import {SearchSettings} from "../../entities/SearchSettings";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
-import {AppState} from "../../reducers/RootReducer";
+import {ApplicationState} from "../../reducers/RootReducer";
 import withStyles from "@material-ui/core/styles/withStyles";
 import {connect} from "react-redux";
 import {
@@ -203,7 +203,7 @@ const SettingsForm = (props: SettingsFormProps) => {
     </Formik>
 };
 
-const mapStateToProps = (state: AppState) => ({});
+const mapStateToProps = (state: ApplicationState) => ({});
 const mapDispatchToProps = {
     saveSettings: saveNewSearchSettingsAction as (newSettings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void,
     updateSettings: updateSearchSettingsRequestAction as (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void,

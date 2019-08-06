@@ -5,17 +5,12 @@ import {
     ADMIN_USERS_LOADED,
     AdminAction
 } from "../actions/AdminActions";
-import {User} from "../entities/User";
+import {AdminState, initialState} from "./ApplicationState";
 
-const initialState = {
-    users: [] as Array<User>
-}
-
-export type AdminState = Readonly<typeof initialState>
 
 type AdminReducer = (state: AdminState | undefined, action: AdminAction) => AdminState
 
-const adminReducer: AdminReducer = (state = initialState, action) => {
+const adminReducer: AdminReducer = (state = initialState.adminState, action) => {
     switch (action.type) {
         case ADMIN_USERS_LOADED:
             return {

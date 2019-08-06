@@ -13,7 +13,7 @@ import Checkbox from "@material-ui/core/es/Checkbox";
 import Button from "@material-ui/core/es/Button";
 import DeleteUserDialog from "./DeleteUserDialog";
 import {connect} from "react-redux";
-import {AppState} from "../../reducers/RootReducer";
+import {ApplicationState} from "../../reducers/ApplicationState";
 import {changePasswordAction, loadUsersAction, updateUserAction} from "../../actions/AdminActions";
 import {deleteUserDialogOpenAction} from "../../actions/dialog/DeleteUserDialogActions";
 import ChangePasswordDialog from "../changepassworddialog/ChangePasswordDialog";
@@ -101,8 +101,8 @@ const UserTable = (props: UserTableProps) => {
 };
 
 
-const mapStateToProps = (state: AppState) => ({
-    users: state.admin.users
+const mapStateToProps = (state: ApplicationState) => ({
+    users: state.adminState.users
 })
 const mapDispatchToProps = {
     loadUsers: loadUsersAction as () => void,

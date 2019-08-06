@@ -9,7 +9,7 @@ import Paper from "@material-ui/core/es/Paper";
 import Pagination from "../pagination/Pagination";
 import Divider from "@material-ui/core/es/Divider";
 import DocumentDialog from "./documentdialog/DocumentDialog";
-import {AppState} from "../../reducers/RootReducer";
+import {ApplicationState} from "../../reducers/RootReducer";
 import {connect} from "react-redux";
 import {documentDialogRequestedAction} from "../../actions/dialog/DocumentDialogAction";
 import {Snippet} from "../../entities/Snippet";
@@ -68,7 +68,7 @@ const SnippetList = (props: SnippetListProps) => {
     </Paper>
 };
 
-const mapStateToProps = (state: AppState) => ({});
+const mapStateToProps = (state: ApplicationState) => ({});
 
 const mapDispatchToProps = {
     openDocumentDialog: documentDialogRequestedAction as (searchResult: Snippet, corpusFormat: CorpusFormat) => void

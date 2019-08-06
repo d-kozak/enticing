@@ -1,4 +1,4 @@
-import {AppState} from "../../reducers/RootReducer";
+import {ApplicationState} from "../../reducers/RootReducer";
 import {connect} from "react-redux";
 import React, {ReactNode} from 'react';
 import {isLoggedInSelector} from "../../reducers/selectors";
@@ -20,7 +20,7 @@ const UserRoute = (props: UserRouteProps) => {
     }
 };
 
-const mapStateToProps = (state: AppState) => ({
+const mapStateToProps = (state: ApplicationState) => ({
     isLoggedIn: isLoggedInSelector(state)
 });
 const mapDispatchToProps = {

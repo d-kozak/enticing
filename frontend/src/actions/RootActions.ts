@@ -1,12 +1,12 @@
 import {SearchResultAction} from "./SearchResultActions";
 import {UserAction} from "./UserActions";
 import {ThunkAction} from "redux-thunk";
-import {AppState} from "../reducers/RootReducer";
 import {AdminAction} from "./AdminActions";
 import {DialogAction} from "./dialog/DialogActions";
 import {SnackBarAction} from "./SnackBarActions";
 import {ProgressBarAction} from "./ProgressBarActions";
 import {SearchSettingsAction} from "./SearchSettingsActions";
+import {ApplicationState} from "../reducers/ApplicationState";
 
 export type RootAction =
     SearchResultAction
@@ -17,4 +17,4 @@ export type RootAction =
     | ProgressBarAction
     | SearchSettingsAction;
 
-export type ThunkResult<R> = ThunkAction<R, AppState, undefined, RootAction>
+export type ThunkResult<R> = ThunkAction<R, ApplicationState, undefined, RootAction>

@@ -15,8 +15,8 @@ import axios from "axios";
 import {hideProgressBarAction, showProgressBarAction} from "./ProgressBarActions";
 import {parseValidationErrors} from "./errors";
 import {corpusFormatLoadedAction, CorpusFormatLoadedAction} from "./CorpusFormatActions";
-import {UserState} from "../reducers/UserReducer";
 import {isCorpusFormat} from "../entities/CorpusFormat";
+import {UserState} from "../reducers/ApplicationState";
 
 export const SEARCH_SETTINGS_LOADED = "[SEARCH SETTINGS] LOADED";
 export const SEARCH_SETTINGS_ADDED = "[SEARCH SETTINGS] ADDED";

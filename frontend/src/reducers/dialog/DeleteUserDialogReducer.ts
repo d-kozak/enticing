@@ -5,20 +5,12 @@ import {
     DELETE_USER_DIALOG_SHOW_PROGRESS,
     DeleteUserDialogAction
 } from "../../actions/dialog/DeleteUserDialogActions";
-import {User} from "../../entities/User";
+import {DeleteUserDialogState, initialState} from "../ApplicationState";
 
-
-const initialState = {
-    userToDelete: null as User | null,
-    showProgress: false
-}
-
-export type DeleteUserDialogState = Readonly<typeof initialState>
 
 type DeleteUserDialogReducer = (state: DeleteUserDialogState | undefined, action: DeleteUserDialogAction) => DeleteUserDialogState
 
-
-const deleteUserDialogReducer: DeleteUserDialogReducer = (state = initialState, action) => {
+const deleteUserDialogReducer: DeleteUserDialogReducer = (state = initialState.dialog.deleteUserDialog, action) => {
     switch (action.type) {
         case DELETE_USER_DIALOG_OPEN:
             return {

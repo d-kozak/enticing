@@ -3,19 +3,12 @@ import {
     DOCUMENT_DIALOG_DOCUMENT_LOADED,
     DocumentDialogAction
 } from "../../actions/dialog/DocumentDialogAction";
-import {FullDocument} from "../../entities/FullDocument";
-import {CorpusFormat} from "../../entities/CorpusFormat";
+import {DocumentDialogState, initialState} from "../ApplicationState";
 
-const initialState = {
-    document: null as FullDocument | null,
-    corpusFormat: null as CorpusFormat | null
-}
-
-export type DocumentDialogState = Readonly<typeof initialState>
 
 type DocumentDialogReducer = (state: DocumentDialogState | undefined, action: DocumentDialogAction) => DocumentDialogState
 
-const documentDialogReducer: DocumentDialogReducer = (state = initialState, action) => {
+const documentDialogReducer: DocumentDialogReducer = (state = initialState.dialog.documentDialog, action) => {
     switch (action.type) {
         case DOCUMENT_DIALOG_DOCUMENT_LOADED:
             return {

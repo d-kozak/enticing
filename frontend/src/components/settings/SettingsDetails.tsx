@@ -1,7 +1,7 @@
 import createStyles from "@material-ui/core/es/styles/createStyles";
 import {Theme, WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
-import {AppState} from "../../reducers/RootReducer";
+import {ApplicationState} from "../../reducers/RootReducer";
 import {connect} from "react-redux";
 import React, {useState} from 'react';
 import List from "@material-ui/core/List";
@@ -46,7 +46,7 @@ const SettingsDetails = (props: SettingsDetailsProps) => {
 };
 
 
-const mapStateToProps = (state: AppState) => ({});
+const mapStateToProps = (state: ApplicationState) => ({});
 const mapDispatchToProps = {};
 
 export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(SettingsDetails));

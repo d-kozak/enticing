@@ -11,7 +11,7 @@ import {logoutRequestAction} from "../../actions/UserActions";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 import {connect} from "react-redux";
 import {isAdminSelector} from "../../reducers/selectors";
-import {AppState} from "../../reducers/RootReducer";
+import {ApplicationState} from "../../reducers/ApplicationState";
 import AppBarButtonsRouter from "./AppBarButtonsRouter";
 import {IconButton} from "@material-ui/core";
 
@@ -65,7 +65,7 @@ const EnticingAppBar = (props: EnticingAppBarProps) => {
     </div>
 };
 
-const mapStateToProps = (state: AppState) => ({
+const mapStateToProps = (state: ApplicationState) => ({
     user: state.userState.user,
     isAdmin: isAdminSelector(state),
     searchSettings: state.searchSettings.settings

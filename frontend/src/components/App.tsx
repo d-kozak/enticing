@@ -13,7 +13,7 @@ import UserManagement from "./maincontent/UserManagement";
 import AdminRoute from "./routes/AdminRoute";
 import {openSnackBar} from "../actions/SnackBarActions";
 import {connect} from "react-redux";
-import {AppState} from "../reducers/RootReducer";
+import {ApplicationState} from "../reducers/ApplicationState";
 import UserSettings from "./maincontent/UserSettings";
 import SelectSearchSettingsPage from "./maincontent/SearchSettingsPage";
 import {isAdminSelector} from "../reducers/selectors";
@@ -56,7 +56,7 @@ const App = ({loginAttempt, showSnackBarMessage, isAdmin, progressBarVisible}: A
 };
 
 
-const mapStateToProps = (state: AppState) => ({
+const mapStateToProps = (state: ApplicationState) => ({
     isAdmin: isAdminSelector(state),
     progressBarVisible: state.progressBar.isVisible
 })

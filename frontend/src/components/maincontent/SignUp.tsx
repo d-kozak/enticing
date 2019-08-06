@@ -10,7 +10,7 @@ import {TextField} from "formik-material-ui";
 import Button from "@material-ui/core/es/Button";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
 import Typography from "@material-ui/core/Typography";
-import {AppState} from "../../reducers/RootReducer";
+import {ApplicationState} from "../../reducers/ApplicationState";
 import {signUpAction} from "../../actions/UserActions";
 import {connect} from "react-redux";
 import {isLoggedInSelector} from "../../reducers/selectors";
@@ -116,7 +116,7 @@ const SignUp = (props: SignUpProps) => {
 };
 
 
-const mapStateToProps = (state: AppState) => ({
+const mapStateToProps = (state: ApplicationState) => ({
     isLoggedIn: isLoggedInSelector(state)
 })
 

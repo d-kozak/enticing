@@ -1,7 +1,7 @@
 import createStyles from "@material-ui/core/es/styles/createStyles";
 import {Theme, WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
-import {AppState} from "../../reducers/RootReducer";
+import {ApplicationState} from "../../reducers/ApplicationState";
 import {connect} from "react-redux";
 import React, {useState} from 'react';
 import Paper from "@material-ui/core/Paper";
@@ -122,7 +122,7 @@ const UserSettings = (props: UserSettingsProps) => {
 };
 
 
-const mapStateToProps = (state: AppState) => ({
+const mapStateToProps = (state: ApplicationState) => ({
     isLoggedIn: isLoggedInSelector(state),
     userSettings: (state.userState.user && state.userState.user.userSettings) || undefined,
     user: state.userState.user!

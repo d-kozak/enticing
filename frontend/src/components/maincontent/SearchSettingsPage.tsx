@@ -12,7 +12,7 @@ import Grid from "@material-ui/core/es/Grid";
 import Button from "@material-ui/core/es/Button";
 import Paper from "@material-ui/core/es/Paper";
 import SettingsDetails from "../settings/SettingsDetails";
-import {AppState} from "../../reducers/RootReducer";
+import {ApplicationState} from "../../reducers/ApplicationState";
 import {searchSettingsSelectedRequestAction} from "../../actions/UserActions";
 import {SearchSettings} from "../../entities/SearchSettings";
 import {connect} from "react-redux";
@@ -128,7 +128,7 @@ const SearchSettingsPage = (props: SearchSettingsPageProps) => {
     </Paper>
 };
 
-const mapStateToProps = (state: AppState) => ({
+const mapStateToProps = (state: ApplicationState) => ({
     isAdmin: isAdminSelector(state),
     isLoggedIn: isLoggedInSelector(state),
     searchSettings: state.searchSettings.settings,

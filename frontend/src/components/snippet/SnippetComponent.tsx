@@ -3,7 +3,7 @@ import {WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React from 'react';
-import {AppState} from "../../reducers/RootReducer";
+import {ApplicationState} from "../../reducers/RootReducer";
 import {connect} from "react-redux";
 import {contextExtensionRequestAction} from "../../actions/ContextActions";
 import {GotoSourceButton} from "./snippetbuttons/GotoSourceButton";
@@ -55,7 +55,7 @@ const SnippetComponent = (props: SnippetComponentProps) => {
 };
 
 
-const mapStateToProps = (state: AppState) => ({});
+const mapStateToProps = (state: ApplicationState) => ({});
 
 const mapDispatchToProps = {
     requestContextExtension: contextExtensionRequestAction as (searchResult: Snippet) => void

@@ -1,17 +1,10 @@
 import {SEARCH_RESULT_UPDATED, SEARCH_RESULTS_NEW, SearchResultAction} from "../actions/SearchResultActions";
-import {Snippet} from "../entities/Snippet";
-import {CorpusFormat} from "../entities/CorpusFormat";
+import {initialState, SearchResultsState} from "./ApplicationState";
 
-const initialState = {
-    snippets: null as Array<Snippet> | null,
-    corpusFormat: null as CorpusFormat | null
-}
-
-export type SearchResultsState = Readonly<typeof initialState>
 
 type SearchResultReducer = (state: SearchResultsState | undefined, action: SearchResultAction) => SearchResultsState
 
-const searchResultReducer: SearchResultReducer = (state = initialState, action) => {
+const searchResultReducer: SearchResultReducer = (state = initialState.searchResult, action) => {
     switch (action.type) {
         case SEARCH_RESULTS_NEW:
             return {

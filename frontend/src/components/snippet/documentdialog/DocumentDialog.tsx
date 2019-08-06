@@ -13,7 +13,7 @@ import {Theme} from "@material-ui/core/es";
 
 
 import DocumentDialogContent from './DocumentDialogContent';
-import {AppState} from "../../../reducers/RootReducer";
+import {ApplicationState} from "../../../reducers/RootReducer";
 import {documentDialogClosedAction} from "../../../actions/dialog/DocumentDialogAction";
 import {connect} from "react-redux";
 
@@ -72,7 +72,7 @@ const DocumentDialog = (props: DocumentDialogProps) => {
     </Dialog>
 };
 
-const mapStateToProps = (state: AppState) => ({
+const mapStateToProps = (state: ApplicationState) => ({
     document: state.dialog.documentDialog.document,
     corpusFormat: state.dialog.documentDialog.corpusFormat
 });

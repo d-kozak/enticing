@@ -6,7 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {User} from "../../entities/User";
-import {AppState} from "../../reducers/RootReducer";
+import {ApplicationState} from "../../reducers/ApplicationState";
 import {connect} from "react-redux";
 import {LinearProgress} from "@material-ui/core";
 import {deleteUserAction} from "../../actions/AdminActions";
@@ -42,7 +42,7 @@ const DeleteUserDialog = (props: DeleteUserDialogProps) => {
     </div>
 }
 
-const mapStateToProps = (state: AppState) => ({
+const mapStateToProps = (state: ApplicationState) => ({
     showProgress: state.dialog.deleteUserDialog.showProgress,
     user: state.dialog.deleteUserDialog.userToDelete
 });

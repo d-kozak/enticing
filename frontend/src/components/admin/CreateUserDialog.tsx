@@ -1,7 +1,7 @@
 import createStyles from "@material-ui/core/es/styles/createStyles";
 import {LinearProgress, Theme, WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
-import {AppState} from "../../reducers/RootReducer";
+import {ApplicationState} from "../../reducers/ApplicationState";
 import {connect} from "react-redux";
 import React, {useState} from 'react';
 import Dialog from "@material-ui/core/Dialog";
@@ -115,7 +115,7 @@ const CreateUserDialog = (props: CreateUserDialogProps) => {
 };
 
 
-const mapStateToProps = (state: AppState) => ({});
+const mapStateToProps = (state: ApplicationState) => ({});
 const mapDispatchToProps = {
     createNewUser: createNewUserActionRequest as (login: string, password: string, roles: Array<string>, onDone: () => void, onError: (errors: any) => void) => void
 };

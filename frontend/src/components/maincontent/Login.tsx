@@ -16,7 +16,7 @@ import {TextField} from "formik-material-ui";
 import {Redirect} from "react-router";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
 import LinkTo from "../utils/linkTo";
-import {AppState} from "../../reducers/RootReducer";
+import {ApplicationState} from "../../reducers/ApplicationState";
 import {connect} from "react-redux";
 import {loginRequestAction} from "../../actions/UserActions";
 import {isLoggedInSelector} from "../../reducers/selectors";
@@ -126,7 +126,7 @@ const Login = (props: LoginProps) => {
 };
 
 
-const mapStateToProps = (state: AppState) => ({isLoggedIn: isLoggedInSelector(state)})
+const mapStateToProps = (state: ApplicationState) => ({isLoggedIn: isLoggedInSelector(state)})
 
 const mapDispatchToProps = {
     login: loginRequestAction as (login: string, password: string, onError: (errors: { login?: string, password?: string }) => void) => void

@@ -5,18 +5,11 @@ import {
     USER_SETTINGS_UPDATED,
     UserAction
 } from "../actions/UserActions";
-import {User} from "../entities/User";
-
-const initialState = {
-    user: null as User | null,
-    selectedSettings: null as string | null
-}
-
-export type UserState = Readonly<typeof initialState>
+import {initialState, UserState} from "./ApplicationState";
 
 type UserReducer = (state: UserState | undefined, action: UserAction) => UserState
 
-const userReducer: UserReducer = (state = initialState, action) => {
+const userReducer: UserReducer = (state = initialState.userState, action) => {
     switch (action.type) {
         case USER_LOGIN_SUCCESS:
             return {
