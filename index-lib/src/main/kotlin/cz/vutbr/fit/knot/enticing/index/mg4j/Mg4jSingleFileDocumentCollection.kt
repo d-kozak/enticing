@@ -57,7 +57,9 @@ class Mg4jSingleFileDocumentCollection(
     }
 
     override fun document(index: Long): Document = metadataAndStream(index).let { (stream, metadata) ->
-        factory.getDocument(stream, metadata)
+        stream.use {
+            factory.getDocument(stream, metadata)
+        }
     }
 
     override fun size(): Long = documentIndexes.size64()
