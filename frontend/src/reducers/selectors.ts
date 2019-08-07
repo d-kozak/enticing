@@ -1,5 +1,5 @@
 import {createSelector} from "reselect";
-import {ApplicationState} from "./RootReducer";
+import {ApplicationState} from "./ApplicationState";
 
 export const isAdminSelector = (state: ApplicationState) => {
     if (state.userState.user !== null) {

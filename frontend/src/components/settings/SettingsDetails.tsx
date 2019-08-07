@@ -1,7 +1,7 @@
 import createStyles from "@material-ui/core/es/styles/createStyles";
 import {Theme, WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
-import {ApplicationState} from "../../reducers/RootReducer";
+import {ApplicationState} from "../../reducers/ApplicationState";
 import {connect} from "react-redux";
 import React, {useState} from 'react';
 import List from "@material-ui/core/List";

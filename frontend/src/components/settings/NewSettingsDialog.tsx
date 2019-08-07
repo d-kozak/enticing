@@ -3,7 +3,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-import {ApplicationState} from "../../reducers/RootReducer";
+import {ApplicationState} from "../../reducers/ApplicationState";
 import {connect} from "react-redux";
 import {newSearchSettingsSelector} from "../../reducers/selectors";
 import {searchSettingsAddingCancelledAction} from "../../actions/SearchSettingsActions";

@@ -4,7 +4,7 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React, {useState} from 'react';
 import {connect} from "react-redux";
-import {ApplicationState} from "../../reducers/RootReducer";
+import {ApplicationState} from "../../reducers/ApplicationState";
 
 import CMInputWrapper from "./CMInputWrapper";
 import {SearchQuery} from "../../entities/SearchQuery";

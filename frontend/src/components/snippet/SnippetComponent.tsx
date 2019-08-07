@@ -3,7 +3,7 @@ import {WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React from 'react';
-import {ApplicationState} from "../../reducers/RootReducer";
+import {ApplicationState} from "../../reducers/ApplicationState";
 import {connect} from "react-redux";
 import {contextExtensionRequestAction} from "../../actions/ContextActions";
 import {GotoSourceButton} from "./snippetbuttons/GotoSourceButton";

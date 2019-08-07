@@ -5,7 +5,7 @@ import {Theme, WithStyles} from "@material-ui/core/es";
 import CloseIcon from '@material-ui/icons/Close';
 import withStyles from "@material-ui/core/es/styles/withStyles";
 import {connect} from "react-redux";
-import {ApplicationState} from "../../reducers/RootReducer";
+import {ApplicationState} from "../../reducers/ApplicationState";
 import {closeSnackBar} from "../../actions/SnackBarActions";
 
 const styles = (theme: Theme) => ({

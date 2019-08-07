@@ -1,4 +1,4 @@
-import {ApplicationState} from "../../reducers/RootReducer";
+import {ApplicationState} from "../../reducers/ApplicationState";
 import {connect} from "react-redux";
 import React, {ReactNode} from 'react';
 import {isLoggedInSelector} from "../../reducers/selectors";
