@@ -25,7 +25,7 @@ import {addEmptySearchSettingsRequestAction, loadSettingsFromFileAction} from ".
 import NewSearchSettingsDialog from "../settings/NewSettingsDialog";
 import FolderOpenIcon from "@material-ui/icons/FolderOpen";
 import {FilePicker} from 'react-file-picker';
-import BasicExample from "../corpusformat/BasicExample";
+import CorpusFormatSelector from "../corpusformat/CorpusFormatSelector";
 
 const styles = (theme: Theme) => createStyles({
     rootElement: {
@@ -93,7 +93,7 @@ const SearchSettingsPage = (props: SearchSettingsPageProps) => {
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails className={classes.expansionPanelDetails}>
                         {isAdmin ? <SettingsForm settings={settings}/> : <SettingsDetails settings={settings}/>}
-                        <BasicExample/>
+                        <CorpusFormatSelector searchSettings={settings}/>
                         <Grid container justify="flex-end" alignItems="center">
                             <Grid item>
                                 <Button
