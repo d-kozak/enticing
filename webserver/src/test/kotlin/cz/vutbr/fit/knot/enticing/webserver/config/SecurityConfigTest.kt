@@ -7,7 +7,9 @@ import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.MockNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.dto.ParsedQuery
 import cz.vutbr.fit.knot.enticing.webserver.dto.*
+import cz.vutbr.fit.knot.enticing.webserver.entity.AttributeList
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
+import cz.vutbr.fit.knot.enticing.webserver.entity.SelectedMetadata
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
@@ -208,6 +210,32 @@ internal class SecurityConfigTest(
             @WithMockUser
             fun `Delete is accessible when logged in`() {
                 mockMvc.perform(delete("$apiBasePath/user/1"))
+                        .andExpect(status().isOk)
+            }
+
+
+            @Test
+            fun `Load wanted metadata is not accessible when not logged in`() {
+                mockMvc.perform(get("$apiBasePath/user/text-metadata/42"))
+                        .andExpect(status().`is`(401))
+            }
+
+            @Test
+            @WithMockUser
+            fun `Load wanted metadata is accessible when logged in`() {
+                mockMvc.perform(get("$apiBasePath/user/text-metadata/42"))
+                        .andExpect(status().isOk)
+            }
+
+            @Test
+            @WithMockUser
+            fun `save wanted metadata is accessible when looged in`() {
+                val metadata = SelectedMetadata(10, listOf("word", "lemma"), mapOf("person" to AttributeList("name", "age")))
+                Mockito.`when`(userService.loadSelectedMetadata(42))
+                        .thenReturn(metadata)
+                mockMvc.perform(post("$apiBasePath/user/text-metadata/42")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(metadata.toJson()))
                         .andExpect(status().isOk)
             }
         }

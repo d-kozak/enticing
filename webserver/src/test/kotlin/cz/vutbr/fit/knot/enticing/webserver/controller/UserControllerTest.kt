@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 
 import cz.vutbr.fit.knot.enticing.webserver.dto.*
+import cz.vutbr.fit.knot.enticing.webserver.entity.AttributeList
+import cz.vutbr.fit.knot.enticing.webserver.entity.SelectedMetadata
 import cz.vutbr.fit.knot.enticing.webserver.exception.InvalidPasswordException
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
@@ -278,5 +280,28 @@ internal class UserControllerTest(
         Mockito.verifyZeroInteractions(userService)
         Mockito.clearInvocations(userService)
 
+    }
+
+    @Test
+    fun `load selected metadata test`() {
+        val metadata = SelectedMetadata(10, listOf("foo"))
+        Mockito.`when`(userService.loadSelectedMetadata(42))
+                .thenReturn(metadata)
+        mockMvc.perform(get("$apiBasePath/user/text-metadata/42"))
+                .andExpect(status().isOk)
+                .andExpect(content().json(metadata.toJson()))
+        Mockito.verify(userService).loadSelectedMetadata(42)
+    }
+
+    @Test
+    fun `save selected metadata test`() {
+        val metadata = SelectedMetadata(10, listOf("word", "lemma"), mapOf("person" to AttributeList("name", "age")))
+        Mockito.`when`(userService.loadSelectedMetadata(42))
+                .thenReturn(metadata)
+        mockMvc.perform(post("$apiBasePath/user/text-metadata/42")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(metadata.toJson()))
+                .andExpect(status().isOk)
+        Mockito.verify(userService).saveSelectedMetadata(metadata, 42)
     }
 }

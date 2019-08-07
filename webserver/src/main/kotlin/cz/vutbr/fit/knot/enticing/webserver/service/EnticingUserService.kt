@@ -1,6 +1,8 @@
 package cz.vutbr.fit.knot.enticing.webserver.service
 
 import cz.vutbr.fit.knot.enticing.webserver.dto.*
+import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettingsId
+import cz.vutbr.fit.knot.enticing.webserver.entity.SelectedMetadata
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
 import cz.vutbr.fit.knot.enticing.webserver.exception.InsufficientRoleException
 import cz.vutbr.fit.knot.enticing.webserver.exception.InvalidPasswordException
@@ -80,6 +82,18 @@ class EnticingUserService(private val userRepository: UserRepository, private va
         if (!canEditUser(user)) {
             throw InsufficientRoleException("User $currentUser cannot edit user $user")
         }
+    }
+
+
+    fun loadSelectedMetadata(searchSettingsId: SearchSettingsId): SelectedMetadata? {
+        return currentUser?.let { userRepository.findByLogin(it.login) }
+                ?.let { it.selectedMetadata[searchSettingsId] }
+    }
+
+    fun saveSelectedMetadata(metadata: SelectedMetadata, searchSettingsId: SearchSettingsId) {
+        val userEntity = currentUser?.let { userRepository.findByLogin(it.login) }
+                ?: throw IllegalArgumentException("could not find necessary user information")
+        userEntity.selectedMetadata[searchSettingsId] = metadata
     }
 
     private fun canEditUser(targetUser: User): Boolean = currentUser != null && (currentUser!!.isAdmin || currentUser!!.id == targetUser.id)

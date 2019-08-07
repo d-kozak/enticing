@@ -25,7 +25,9 @@ class UserEntity(
         @field:Valid
         var userSettings: UserSettings = UserSettings(),
         @OneToOne
-        var selectedSettings: SearchSettings? = null
+        var selectedSettings: SearchSettings? = null,
+        @OneToMany
+        var selectedMetadata: MutableMap<SearchSettingsId, SelectedMetadata> = mutableMapOf()
 ) : UserDetails {
 
 

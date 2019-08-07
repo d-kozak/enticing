@@ -6,12 +6,13 @@ import javax.persistence.*
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Pattern
 
+typealias SearchSettingsId = Long
 
 @Entity
 class SearchSettings(
         @field:Id
         @field:GeneratedValue
-        var id: Long = 0,
+        var id: SearchSettingsId = 0,
         @field:NotEmpty
         @field:Column(unique = true)
         var name: String = "",
