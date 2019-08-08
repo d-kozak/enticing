@@ -9,8 +9,8 @@ import {User} from "../../entities/User";
 import {ApplicationState} from "../../reducers/ApplicationState";
 import {connect} from "react-redux";
 import {LinearProgress} from "@material-ui/core";
-import {deleteUserAction} from "../../actions/AdminActions";
 import {deleteUserDialogClosedAction} from "../../actions/dialog/DeleteUserDialogActions";
+import {adminDeleteUserRequest} from "../../reducers/AdminReducer";
 
 export type DeleteUserDialogProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>
 
@@ -47,7 +47,7 @@ const mapStateToProps = (state: ApplicationState) => ({
     user: state.dialog.deleteUserDialog.userToDelete
 });
 const mapDispatchToProps = {
-    deleteUser: deleteUserAction as (user: User) => void,
+    deleteUser: adminDeleteUserRequest as (user: User) => void,
     onClose: deleteUserDialogClosedAction
 };
 export default connect(mapStateToProps, mapDispatchToProps)(DeleteUserDialog);

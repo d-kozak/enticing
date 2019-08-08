@@ -1,19 +1,11 @@
 import {ThunkResult} from "./RootActions";
-import {
-    mockChangePassword,
-    mockLogin,
-    mockLogout,
-    mockSignup,
-    mockUpdateUserSettings,
-    mockUserSettingsSelectedRequest
-} from "../mocks/mockUserApi";
 import {SearchSettings} from "../entities/SearchSettings";
 import {User} from "../entities/User";
 import axios from "axios";
-import {API_BASE_PATH, useMockApi} from "../globals";
+import {API_BASE_PATH} from "../globals";
 import {loadSearchSettingsAction} from "./SearchSettingsActions";
 import {UserSettings} from "../entities/UserSettings";
-import {hideProgressBarAction, showProgressBarAction} from "./ProgressBarActions";
+import {hideProgressbar, showProgressbar} from "../reducers/ProgressBarReducer";
 import {
     changePasswordDialogClosedAction,
     changePasswordDialogHideProgressAction,
@@ -67,22 +59,18 @@ export const userSettingsUpdatedAction = (userSettings: UserSettings): UserSetti
 })
 
 export const logoutRequestAction = (): ThunkResult<void> => dispatch => {
-    if (useMockApi()) {
-        mockLogout(dispatch);
-        return
-    }
-    dispatch(showProgressBarAction());
+    dispatch(showProgressbar());
     axios.get(`${API_BASE_PATH}/logout`)
         .then(() => {
             dispatch(openSnackbar('Logged out'));
             // @ts-ignore
             dispatch(loadSearchSettingsAction(null));
             dispatch(logoutSuccessAction());
-            dispatch(hideProgressBarAction());
+            dispatch(hideProgressbar());
         })
         .catch(error => {
             dispatch(openSnackbar('Could not logout'));
-            dispatch(hideProgressBarAction());
+            dispatch(hideProgressbar());
         });
 };
 
@@ -92,10 +80,6 @@ export const loginSuccessAction = (user: User): LoginSuccessAction => ({
 });
 
 export const searchSettingsSelectedRequestAction = (settings: SearchSettings, previousSelectedSettings: string, isLoggedIn: boolean): ThunkResult<void> => (dispatch) => {
-    if (useMockApi()) {
-        mockUserSettingsSelectedRequest(settings, dispatch);
-        return;
-    }
     dispatch(userSearchSettingsSelectedSuccessAction(settings));
     if (isLoggedIn) {
         axios.get(`${API_BASE_PATH}/search-settings/select/${settings.id}`, {withCredentials: true})
@@ -133,10 +117,6 @@ export const searchSettingsSelectedRequestAction = (settings: SearchSettings, pr
 };
 
 export const loginRequestAction = (login: string, password: string, onError: (errors: any) => void): ThunkResult<void> => (dispatch) => {
-    if (useMockApi()) {
-        mockLogin(login, password, dispatch, onError);
-        return;
-    }
     const formData = new FormData()
     formData.set("username", login)
     formData.set("password", password)
@@ -162,10 +142,6 @@ export const loginRequestAction = (login: string, password: string, onError: (er
 
 
 export const signUpAction = (login: string, password: string, onError: (error: any) => void): ThunkResult<void> => (dispatch) => {
-    if (useMockApi()) {
-        mockSignup(login, password, dispatch, onError);
-        return;
-    }
     axios.post(`${API_BASE_PATH}/user`, {
         login, password
     }).then(() => {
@@ -185,11 +161,6 @@ export const signUpAction = (login: string, password: string, onError: (error: a
 };
 
 export const attemptLoginAction = (): ThunkResult<void> => (dispatch) => {
-    if (useMockApi()) {
-        // login should fail, just load search actions
-        dispatch(loadSearchSettingsAction(null));
-        return;
-    }
     axios.get<User>(`${API_BASE_PATH}/user`, {withCredentials: true})
         .then(response => {
             const user = response.data;
@@ -205,10 +176,6 @@ export const attemptLoginAction = (): ThunkResult<void> => (dispatch) => {
 
 
 export const userSettingsUpdateRequest = (user: User, onDone: () => void, onError: () => void): ThunkResult<void> => (dispatch) => {
-    if (useMockApi()) {
-        mockUpdateUserSettings(user.userSettings, onDone, dispatch);
-        return;
-    }
     axios.put(`${API_BASE_PATH}/user`, user, {withCredentials: true})
         .then(() => {
             dispatch(userSettingsUpdatedAction(user.userSettings));
@@ -222,10 +189,6 @@ export const userSettingsUpdateRequest = (user: User, onDone: () => void, onErro
 }
 
 export const changeUserPasswordRequestAction = (user: User, oldPassword: String, newPassword: string, onError: (errors: any) => void): ThunkResult<void> => (dispatch) => {
-    if (useMockApi()) {
-        mockChangePassword(user, newPassword, dispatch);
-        return;
-    }
     dispatch(changePasswordDialogShowProgressAction());
     axios.put(`${API_BASE_PATH}/user/password`, {
         login: user.login,

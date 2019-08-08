@@ -14,10 +14,10 @@ import Button from "@material-ui/core/es/Button";
 import DeleteUserDialog from "./DeleteUserDialog";
 import {connect} from "react-redux";
 import {ApplicationState} from "../../reducers/ApplicationState";
-import {changePasswordAction, loadUsersAction, updateUserAction} from "../../actions/AdminActions";
 import {deleteUserDialogOpenAction} from "../../actions/dialog/DeleteUserDialogActions";
 import ChangePasswordDialog from "../changepassworddialog/ChangePasswordDialog";
 import {changePasswordDialogOpenAction} from "../../actions/dialog/ChangePasswordDialogActions";
+import {adminChangePasswordRequest, adminLoadUserRequest, adminUpdateUserRequest} from "../../reducers/AdminReducer";
 
 
 const styles = createStyles({
@@ -105,11 +105,11 @@ const mapStateToProps = (state: ApplicationState) => ({
     users: state.adminState.users
 })
 const mapDispatchToProps = {
-    loadUsers: loadUsersAction as () => void,
-    updateUser: updateUserAction as (user: User) => void,
+    loadUsers: adminLoadUserRequest as () => void,
+    updateUser: adminUpdateUserRequest as (user: User) => void,
     deleteUser: deleteUserDialogOpenAction,
     openChangePasswordDialog: changePasswordDialogOpenAction,
-    changePassword: changePasswordAction as (user: User, newPassword: string) => void
+    changePassword: adminChangePasswordRequest as (user: User, newPassword: string) => void
 };
 
 export default withStyles(styles, {

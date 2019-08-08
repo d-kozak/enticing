@@ -1,9 +1,8 @@
 import {ThunkResult} from "./RootActions";
-import {mockContextRequested} from "../mocks/mockContextApi";
-import {API_BASE_PATH, useMockApi} from "../globals";
+import {API_BASE_PATH} from "../globals";
 
 import axios from "axios";
-import {hideProgressBarAction, showProgressBarAction} from "./ProgressBarActions";
+import {hideProgressbar, showProgressbar} from "../reducers/ProgressBarReducer";
 import {searchResultUpdatedAction} from "./SearchResultActions";
 import {Snippet} from "../entities/Snippet";
 import {isSnippetExtension, SnippetExtension} from "../entities/SnippetExtension";
@@ -32,11 +31,7 @@ function mergeSnippet(searchResult: Snippet, data: SnippetExtension): Snippet {
 }
 
 export const contextExtensionRequestAction = (searchResult: Snippet): ThunkResult<void> => dispatch => {
-    if (useMockApi()) {
-        mockContextRequested(searchResult, dispatch);
-        return;
-    }
-    dispatch(showProgressBarAction())
+    dispatch(showProgressbar());
     const query: ContextExtensionQuery = {
         host: searchResult.host,
         collection: searchResult.collection,
@@ -64,10 +59,10 @@ export const contextExtensionRequestAction = (searchResult: Snippet): ThunkResul
 
         const merged: Snippet = mergeSnippet(searchResult, response.data);
         dispatch(searchResultUpdatedAction(merged));
-        dispatch(hideProgressBarAction());
+        dispatch(hideProgressbar());
     }).catch((error) => {
         console.error(error);
         dispatch(openSnackbar('Could not extend context'));
-        dispatch(hideProgressBarAction());
+        dispatch(hideProgressbar());
     })
 };

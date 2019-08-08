@@ -1,14 +1,13 @@
 import {FullDocument, isDocument} from "../../entities/FullDocument";
 import {ThunkResult} from "../RootActions";
-import {mockDocumentRequested} from "../../mocks/mockDocumentApi";
-import {API_BASE_PATH, useMockApi} from "../../globals";
+import {API_BASE_PATH} from "../../globals";
 import axios from "axios";
-import {hideProgressBarAction, showProgressBarAction} from "../ProgressBarActions";
 import {Snippet} from "../../entities/Snippet";
 import {DocumentQuery} from "../../entities/DocumentQuery";
 import {parseNewAnnotatedText} from "../../components/annotations/NewAnnotatedText";
 import {CorpusFormat} from "../../entities/CorpusFormat";
 import {openSnackbar} from "../../reducers/SnackBarReducer";
+import {hideProgressbar, showProgressbar} from "../../reducers/ProgressBarReducer";
 
 export const DOCUMENT_DIALOG_DOCUMENT_LOADED = '[DOCUMENT DIALOG] DOCUMENT LOADED';
 export const DOCUMENT_DIALOG_CLOSED = '[DOCUMENT DIALOG] CLOSED';
@@ -37,17 +36,13 @@ export const documentDialogClosedAction = (): DialogClosedAction => ({
 });
 
 export const documentDialogRequestedAction = (searchResult: Snippet, corpusFormat: CorpusFormat): ThunkResult<void> => dispatch => {
-    if (useMockApi()) {
-        mockDocumentRequested(searchResult, dispatch);
-        return;
-    }
-    dispatch(showProgressBarAction())
+    dispatch(showProgressbar())
     const documentQuery: DocumentQuery = {
         host: searchResult.host,
         collection: searchResult.collection,
         documentId: searchResult.documentId,
         defaultIndex: "token",
-    }
+    };
     axios.post(`${API_BASE_PATH}/query/document`, documentQuery, {
         withCredentials: true
     }).then(response => {
@@ -56,12 +51,12 @@ export const documentDialogRequestedAction = (searchResult: Snippet, corpusForma
         }
         const parsed = parseNewAnnotatedText(response.data.payload.content);
         if (parsed == null)
-            throw "could not parse"
+            throw "could not parse";
         response.data.payload.content = parsed
-        dispatch(hideProgressBarAction());
+        dispatch(hideProgressbar());
         dispatch(documentLoadedAction(response.data, corpusFormat));
     }).catch(() => {
         dispatch(openSnackbar('Could not load document'));
-        dispatch(hideProgressBarAction());
+        dispatch(hideProgressbar());
     })
 };

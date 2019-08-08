@@ -1,17 +1,9 @@
 import {isSearchSettingsContent, SearchSettings} from "../entities/SearchSettings";
 import {ThunkResult} from "./RootActions";
-import {
-    mockChangeDefaultSearchSettings,
-    mockLoadSearchSettings,
-    mockRemoveSearchSettings,
-    mockSaveNewSearchSettings,
-    mockUpdateSearchSettings,
-    mockUploadSettings
-} from "../mocks/mockSearchSettings";
 import {uploadFile} from "../utils/file";
-import {API_BASE_PATH, useMockApi} from "../globals";
+import {API_BASE_PATH} from "../globals";
 import axios from "axios";
-import {hideProgressBarAction, showProgressBarAction} from "./ProgressBarActions";
+import {hideProgressbar, showProgressbar} from "../reducers/ProgressBarReducer";
 import {parseValidationErrors} from "./errors";
 import {corpusFormatLoadedAction, CorpusFormatLoadedAction} from "./CorpusFormatActions";
 import {isCorpusFormat} from "../entities/CorpusFormat";
@@ -94,11 +86,8 @@ export const searchSettingsAddingCancelledAction = (): SearchSettingsAddingCance
 })
 
 export const loadSearchSettingsAction = (userState: UserState | null): ThunkResult<void> => (dispatch) => {
+    // todo use selector
     const isAdmin = (userState && userState.user && userState.user.roles.indexOf("ADMIN") !== -1) || false; // || false just here to make type system happy :X....
-    if (useMockApi()) {
-        mockLoadSearchSettings(dispatch, isAdmin);
-        return;
-    }
     axios.get<Array<SearchSettings>>(`${API_BASE_PATH}/search-settings`, {withCredentials: true})
         .then(response => {
             const searchSettings = response.data;
@@ -146,10 +135,6 @@ const findSelectedSettings = (userState: UserState | null, searchSettings: Array
 };
 
 export const updateSearchSettingsRequestAction = (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void): ThunkResult<void> => (dispatch) => {
-    if (useMockApi()) {
-        mockUpdateSearchSettings(dispatch, settings, onDone);
-        return;
-    }
     axios.put(`${API_BASE_PATH}/search-settings`, settings, {withCredentials: true})
         .then(() => {
             dispatch(searchSettingsUpdatedAction(settings))
@@ -183,15 +168,11 @@ export const loadSettingsFromFileAction = (file: File): ThunkResult<void> => (di
         try {
             const settings = JSON.parse(content);
             if (isSearchSettingsContent(settings)) {
-                if (useMockApi()) {
-                    mockUploadSettings(settings, dispatch);
-                    return;
-                }
-                dispatch(showProgressBarAction());
+                dispatch(showProgressbar());
                 axios.post<SearchSettings>(`${API_BASE_PATH}/search-settings/import`, settings, {withCredentials: true})
                     .then((response) => {
                         dispatch(searchSettingsAddedAction(response.data))
-                        dispatch(hideProgressBarAction());
+                        dispatch(hideProgressbar());
                     })
                     .catch((response) => {
                         if (response.response.data.status == 400) {
@@ -200,7 +181,7 @@ export const loadSettingsFromFileAction = (file: File): ThunkResult<void> => (di
                         } else {
                             dispatch(openSnackbar(`Could not import settings ${settings.name}`));
                         }
-                        dispatch(hideProgressBarAction());
+                        dispatch(hideProgressbar());
                     })
             } else {
                 dispatch(openSnackbar(`File ${file.name} does not contains valid settings`));
@@ -215,10 +196,6 @@ export const loadSettingsFromFileAction = (file: File): ThunkResult<void> => (di
 };
 
 export const saveNewSearchSettingsAction = (searchSettings: SearchSettings, onDone: () => void, onError: (errors: any) => void): ThunkResult<void> => (dispatch) => {
-    if (useMockApi()) {
-        mockSaveNewSearchSettings(dispatch, searchSettings, onDone);
-        return;
-    }
     axios.post<SearchSettings>(`${API_BASE_PATH}/search-settings`, searchSettings, {withCredentials: true})
         .then((response) => {
             dispatch(openSnackbar(`Search settings ${searchSettings.name} added`));
@@ -233,10 +210,6 @@ export const saveNewSearchSettingsAction = (searchSettings: SearchSettings, onDo
 }
 
 export const removeSearchSettingsRequestAction = (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void): ThunkResult<void> => (dispatch) => {
-    if (useMockApi()) {
-        mockRemoveSearchSettings(dispatch, settings, onDone);
-        return;
-    }
     axios.delete(`${API_BASE_PATH}/search-settings/${settings.id}`, {withCredentials: true})
         .then(() => {
             dispatch(searchSettingsRemovedAction(settings))
@@ -249,10 +222,6 @@ export const removeSearchSettingsRequestAction = (settings: SearchSettings, onDo
 
 
 export const changeDefaultSearchSettingsRequestAction = (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void): ThunkResult<void> => (dispatch) => {
-    if (useMockApi()) {
-        mockChangeDefaultSearchSettings(dispatch, settings, onDone);
-        return;
-    }
     axios.put(`${API_BASE_PATH}/search-settings/default/${settings.id}`, null, {withCredentials: true})
         .then(() => {
             dispatch(searchSettingsNewDefaultAction(settings))

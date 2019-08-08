@@ -13,7 +13,7 @@ import {Switch, TextField} from "formik-material-ui";
 import Button from "@material-ui/core/es/Button";
 import FormControlLabel from "@material-ui/core/es/FormControlLabel";
 import Grid from "@material-ui/core/es/Grid";
-import {createNewUserActionRequest} from "../../actions/AdminActions";
+import {adminCreateNewUserRequest} from "../../reducers/AdminReducer";
 
 
 const styles = (theme: Theme) => createStyles({
@@ -117,7 +117,7 @@ const CreateUserDialog = (props: CreateUserDialogProps) => {
 
 const mapStateToProps = (state: ApplicationState) => ({});
 const mapDispatchToProps = {
-    createNewUser: createNewUserActionRequest as (login: string, password: string, roles: Array<string>, onDone: () => void, onError: (errors: any) => void) => void
+    createNewUser: adminCreateNewUserRequest as (login: string, password: string, roles: Array<string>, onDone: () => void, onError: (errors: any) => void) => void
 };
 
 export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(CreateUserDialog));

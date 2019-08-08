@@ -1,23 +1,21 @@
-import {PROGRESS_BAR_HIDE, PROGRESS_BAR_SHOW, ProgressBarAction} from "../actions/ProgressBarActions";
-import {initialState, ProgressBarState} from "./ApplicationState";
+import {ProgressBarState} from "./ApplicationState";
+import {createSlice} from "redux-starter-kit";
 
 
-type ProgressBarReducer = (state: ProgressBarState | undefined, action: ProgressBarAction) => ProgressBarState
-
-const progressBarReducer: ProgressBarReducer = (state = initialState.progressBar, action) => {
-    switch (action.type) {
-        case PROGRESS_BAR_SHOW:
-            return {
-                isVisible: true
-            };
-
-        case PROGRESS_BAR_HIDE:
-            return {
-                isVisible: false
-            }
+const {reducer, actions} = createSlice({
+    slice: 'progressBar',
+    initialState: {
+        isVisible: false
+    } as ProgressBarState,
+    reducers: {
+        showProgressbar: (state: ProgressBarState) => {
+            state.isVisible = true;
+        },
+        hideProgressbar: (state: ProgressBarState) => {
+            state.isVisible = false;
+        }
     }
+});
 
-    return state;
-}
-
-export default progressBarReducer;
+export const {showProgressbar, hideProgressbar} = actions;
+export default reducer;

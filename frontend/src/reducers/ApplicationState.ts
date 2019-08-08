@@ -46,12 +46,16 @@ export const initialState = {
 
 interface NewState {
     snackbar: SnackbarState
+    progressbar: ProgressBarState,
+    admin: AdminState
 }
 
 
 export type UserState = Readonly<typeof initialState.userState>
 
-export type AdminState = Readonly<typeof initialState.adminState>
+export interface AdminState {
+    users: Array<User>
+}
 
 export type SearchResultsState = Readonly<typeof initialState.searchResult>
 
@@ -60,7 +64,9 @@ export interface SnackbarState {
     message: string
 }
 
-export type ProgressBarState = Readonly<typeof initialState.progressBar>
+export interface ProgressBarState {
+    isVisible: boolean
+}
 
 export type SearchSettingsState = Readonly<typeof initialState.searchSettings>;
 

@@ -16,7 +16,7 @@ import './CodeMirror.css';
 import {EQL} from "../../codemirror/eqlmode";
 
 import debounce from "debounce";
-import {API_BASE_PATH, useMockApi} from "../../globals";
+import {API_BASE_PATH} from "../../globals";
 
 const styles = (theme: Theme) => createStyles({
     reactCodeMirror: {
@@ -76,7 +76,7 @@ const CMInputWrapper = (props: CMInputWrapperProps) => {
 
     const queryChanged = (query: string) => {
         setQuery(query);
-        if (codeMirrorRef.current && !useMockApi()) {
+        if (codeMirrorRef.current) {
             const doc = codeMirrorRef.current.getCodeMirror().getDoc();
             analyzeQuery(query, doc);
         }
