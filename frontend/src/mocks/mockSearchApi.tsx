@@ -3,13 +3,14 @@ import {Dispatch} from "redux";
 import * as H from "history";
 import {hideProgressBarAction, showProgressBarAction} from "../actions/ProgressBarActions";
 import {newSearchResultsAction} from "../actions/SearchResultActions";
-import {openSnackBar} from "../actions/SnackBarActions";
 import {SearchQuery} from "../entities/SearchQuery";
 import {Snippet} from "../entities/Snippet";
 import {Interval, NewAnnotatedText, QueryMatch, Word} from "../components/annotations/NewAnnotatedText";
 import {CorpusFormat} from "../entities/CorpusFormat";
 import {DonaldTrump, EdSheeran, KarlovyVary} from "./mockAnnotations";
+import {snackbarActions} from "../reducers/SnackBarReducer";
 
+const openSnackbar = snackbarActions.openSnackbar;
 
 export const mockCorpusFormat: CorpusFormat = {
     corpusName: "mockCorpus",
@@ -121,7 +122,7 @@ export const mockSearch = (query: SearchQuery, dispatch: Dispatch, history?: H.H
                 history.push(`/search?query=${encodedQuery}`);
             }
         }).catch(error => {
-        dispatch(openSnackBar(`Error ${error}`));
+        dispatch(openSnackbar(`Error ${error}`));
     }).finally(() => {
         dispatch(hideProgressBarAction());
     });

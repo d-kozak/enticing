@@ -6,10 +6,12 @@ import {API_BASE_PATH, useMockApi} from "../globals";
 import axios from "axios";
 import {hideProgressBarAction, showProgressBarAction} from "./ProgressBarActions";
 import {newSearchResultsAction} from "./SearchResultActions";
-import {openSnackBar} from "./SnackBarActions";
 import {isSearchResult} from "../entities/SearchResult";
 import {parseNewAnnotatedText} from "../components/annotations/NewAnnotatedText";
 import {SearchSettings} from "../entities/SearchSettings";
+import {snackbarActions} from "../reducers/SnackBarReducer";
+
+const openSnackbar = snackbarActions.openSnackbar;
 
 
 export const startSearchingAction = (query: SearchQuery, searchSettings: SearchSettings, history?: H.History): ThunkResult<void> => (dispatch) => {
@@ -34,7 +36,7 @@ export const startSearchingAction = (query: SearchQuery, searchSettings: SearchS
             throw `Invalid search result ${JSON.stringify(response.data, null, 2)}`;
         }
         for (let error in response.data.errors) {
-            dispatch(openSnackBar(`Error from ${error}: ${response.data.errors[error]}`))
+            dispatch(openSnackbar(`Error from ${error}: ${response.data.errors[error]}`))
         }
         for (let snippet of response.data.snippets) {
             snippet.id = `${snippet.host}:${snippet.collection}:${snippet.documentId}`
@@ -53,7 +55,7 @@ export const startSearchingAction = (query: SearchQuery, searchSettings: SearchS
         }
     }).catch((error) => {
         console.error(error);
-        dispatch(openSnackBar(`Could not load search results`));
+        dispatch(openSnackbar(`Could not load search results`));
         dispatch(hideProgressBarAction());
     })
 }

@@ -1,5 +1,4 @@
 import {Dispatch} from "redux";
-import {openSnackBar} from "../actions/SnackBarActions";
 import {
     loginSuccessAction,
     logoutSuccessAction,
@@ -24,7 +23,9 @@ import {loadSearchSettingsAction} from "../actions/SearchSettingsActions";
 import {UserSettings as UserSettingsModel} from "../entities/UserSettings";
 import {corpusFormatLoadedAction} from "../actions/CorpusFormatActions";
 import {mockCorpusFormat} from "./mockSearchApi";
+import {snackbarActions} from "../reducers/SnackBarReducer";
 
+const openSnackbar = snackbarActions.openSnackbar;
 
 interface MockUser extends User {
     password: string,
@@ -94,7 +95,7 @@ export const mockSignup = (login: string, password: string, dispatch: Dispatch, 
                 }
             };
             mockUsers.set(login, newUser);
-            dispatch(openSnackBar('Signed up successfully'));
+            dispatch(openSnackbar('Signed up successfully'));
             dispatch(loginSuccessAction(newUser))
         } else {
             onError({
@@ -111,7 +112,7 @@ export const mockLogin = (login: string, password: string, dispatch: Dispatch, o
             if (!user.active) {
                 onError({login: 'Your account is not active anymore'});
             } else if (user.password === password) {
-                dispatch(openSnackBar('Logged in'));
+                dispatch(openSnackbar('Logged in'));
 
                 // @ts-ignore
                 dispatch(loadSearchSettingsAction(user));
@@ -127,7 +128,7 @@ export const mockLogin = (login: string, password: string, dispatch: Dispatch, o
 }
 
 export const mockLogout = (dispatch: Dispatch) => {
-    dispatch(openSnackBar('Logged out'));
+    dispatch(openSnackbar('Logged out'));
     // @ts-ignore
     dispatch(loadSearchSettingsAction(null));
     dispatch(logoutSuccessAction());
@@ -152,10 +153,10 @@ export const mockUpdateUser = (user: User, dispatch: Dispatch) => {
                 ...user,
                 password: mockUser.password
             });
-            dispatch(openSnackBar(`User with login ${user.login} updated`));
+            dispatch(openSnackbar(`User with login ${user.login} updated`));
             dispatch(updateUserSuccessAction(user));
         } else {
-            dispatch(openSnackBar(`User with login ${user.login} does not exist`));
+            dispatch(openSnackbar(`User with login ${user.login} does not exist`));
         }
         dispatch(hideProgressBarAction());
     }, 2000);
@@ -166,10 +167,10 @@ export const mockDeleteUser = (user: User, dispatch: Dispatch) => {
     dispatch(deleteUserDialogShowProgressAction());
     setTimeout(() => {
         if (mockUsers.delete(user.login)) {
-            dispatch(openSnackBar(`User with login ${user.login} deleted`));
+            dispatch(openSnackbar(`User with login ${user.login} deleted`));
             dispatch(deleteUserSuccessAction(user))
         } else {
-            dispatch(openSnackBar(`User with login ${user.login} does not exist, cannot be deleted`));
+            dispatch(openSnackbar(`User with login ${user.login} does not exist, cannot be deleted`));
         }
         dispatch(deleteUserDialogHideProgressAction());
         dispatch(deleteUserDialogClosedAction());
@@ -180,7 +181,7 @@ export const mockDeleteUser = (user: User, dispatch: Dispatch) => {
 export const mockUpdateUserSettings = (settings: UserSettingsModel, onDone: () => void, dispatch: Dispatch) => {
     setTimeout(() => {
         dispatch(userSettingsUpdatedAction(settings));
-        dispatch(openSnackBar("User settings updated"));
+        dispatch(openSnackbar("User settings updated"));
         onDone()
     }, 2000);
 }
@@ -191,9 +192,9 @@ export const mockChangePassword = (user: User, newPassword: string, dispatch: Di
         const userToChange = mockUsers.get(user.login);
         if (userToChange) {
             userToChange.password = newPassword;
-            dispatch(openSnackBar(`Changed password of user ${user.login}`));
+            dispatch(openSnackbar(`Changed password of user ${user.login}`));
         } else {
-            dispatch(openSnackBar(`User with login ${user.login} does not exist, cannot change his password`));
+            dispatch(openSnackbar(`User with login ${user.login} does not exist, cannot change his password`));
         }
 
         dispatch(changePasswordDialogHideProgressAction());
@@ -206,7 +207,7 @@ export const mockUserSettingsSelectedRequest = (settings: SearchSettings, dispat
     setTimeout(() => {
         dispatch(userSearchSettingsSelectedSuccessAction(settings));
         dispatch(corpusFormatLoadedAction(Number(settings.id), mockCorpusFormat));
-        dispatch(openSnackBar(`Selected configuration ${settings.name}`));
+        dispatch(openSnackbar(`Selected configuration ${settings.name}`));
         dispatch(hideProgressBarAction());
     }, 2000);
 };

@@ -4,7 +4,6 @@ import {mockChangePassword, mockDeleteUser, mockLoadUsers, mockUpdateUser} from 
 import {API_BASE_PATH, useMockApi} from "../globals";
 import axios from "axios";
 import {hideProgressBarAction, showProgressBarAction} from "./ProgressBarActions";
-import {openSnackBar} from "./SnackBarActions";
 import {
     changePasswordDialogClosedAction,
     changePasswordDialogHideProgressAction,
@@ -16,11 +15,14 @@ import {
     deleteUserDialogShowProgressAction
 } from "./dialog/DeleteUserDialogActions";
 import {parseValidationErrors} from "./errors";
+import {snackbarActions} from "../reducers/SnackBarReducer";
 
 export const ADMIN_USERS_LOADED = '[ADMIN] USERS LOADED';
 export const ADMIN_USER_UPDATE_SUCCESS = '[ADMIN] UPDATE USER SUCCESS';
 export const ADMIN_DELETE_USER_SUCCESS = '[ADMIN] DELETE USER SUCCESS';
 export const ADMIN_USER_CREATE_SUCCESS = '[ADMIN] CREATE USER SUCCESS';
+
+const openSnackbar = snackbarActions.openSnackbar;
 
 interface UsersLoadedAction {
     type: typeof ADMIN_USERS_LOADED,
@@ -82,7 +84,7 @@ export const loadUsersAction = (): ThunkResult<void> => (dispatch) => {
             }
         )
         .catch(() => {
-            dispatch(openSnackBar('Could not load users'))
+            dispatch(openSnackbar("Could not load users"))
             dispatch(hideProgressBarAction());
         })
 };
@@ -96,12 +98,12 @@ export const updateUserAction = (user: User): ThunkResult<void> => (dispatch) =>
     dispatch(showProgressBarAction());
     axios.put(`${API_BASE_PATH}/user`, user, {withCredentials: true})
         .then(() => {
-            dispatch(openSnackBar(`User with login ${user.login} updated`));
+            dispatch(openSnackbar(`User with login ${user.login} updated`));
             dispatch(updateUserSuccessAction(user));
             dispatch(hideProgressBarAction());
         })
         .catch(() => {
-            dispatch(openSnackBar(`Failed to updated user${user.login}`));
+            dispatch(openSnackbar(`Failed to updated user${user.login}`));
             dispatch(hideProgressBarAction());
         })
 };
@@ -114,13 +116,13 @@ export const deleteUserAction = (user: User): ThunkResult<void> => dispatch => {
     dispatch(deleteUserDialogShowProgressAction());
     axios.delete(`${API_BASE_PATH}/user/${user.id}`, {withCredentials: true})
         .then(() => {
-            dispatch(openSnackBar(`User with login ${user.login} deleted`));
+            dispatch(openSnackbar(`User with login ${user.login} deleted`));
             dispatch(deleteUserSuccessAction(user))
             dispatch(deleteUserDialogHideProgressAction());
             dispatch(deleteUserDialogClosedAction());
         })
         .catch(() => {
-            dispatch(openSnackBar(`Could not delete user with ${user.login}`));
+            dispatch(openSnackbar(`Could not delete user with ${user.login}`));
             dispatch(deleteUserDialogHideProgressAction());
         })
 };
@@ -137,12 +139,12 @@ export const changePasswordAction = (user: User, newPassword: string): ThunkResu
         oldPassword: 'NULL_PASSWORD'
     }, {withCredentials: true})
         .then(() => {
-            dispatch(openSnackBar(`Changed password of user ${user.login}`));
+            dispatch(openSnackbar(`Changed password of user ${user.login}`));
             dispatch(changePasswordDialogHideProgressAction());
             dispatch(changePasswordDialogClosedAction());
         })
         .catch(() => {
-            dispatch(openSnackBar(`Failed to change password of ${user.login}`));
+            dispatch(openSnackbar(`Failed to change password of ${user.login}`));
             dispatch(changePasswordDialogHideProgressAction());
         });
 };
@@ -154,13 +156,13 @@ export const createNewUserActionRequest = (login: string, password: string, role
         roles
     }, {withCredentials: true})
         .then(response => {
-            dispatch(openSnackBar(`Created user ${login}`));
+            dispatch(openSnackbar(`Created user ${login}`));
             dispatch(createUserSuccessAction(response.data))
             onDone();
         })
         .catch((response) => {
             const errors = response.response.data.status === 400 ? parseValidationErrors(response) : {}
             onError(errors);
-            dispatch(openSnackBar(`Failed to create user ${login}`));
+            dispatch(openSnackbar(`Failed to create user ${login}`));
         })
 }

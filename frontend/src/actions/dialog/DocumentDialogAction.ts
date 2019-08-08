@@ -4,11 +4,11 @@ import {mockDocumentRequested} from "../../mocks/mockDocumentApi";
 import {API_BASE_PATH, useMockApi} from "../../globals";
 import axios from "axios";
 import {hideProgressBarAction, showProgressBarAction} from "../ProgressBarActions";
-import {openSnackBar} from "../SnackBarActions";
 import {Snippet} from "../../entities/Snippet";
 import {DocumentQuery} from "../../entities/DocumentQuery";
 import {parseNewAnnotatedText} from "../../components/annotations/NewAnnotatedText";
 import {CorpusFormat} from "../../entities/CorpusFormat";
+import {snackbarActions} from "../../reducers/SnackBarReducer";
 
 export const DOCUMENT_DIALOG_DOCUMENT_LOADED = '[DOCUMENT DIALOG] DOCUMENT LOADED';
 export const DOCUMENT_DIALOG_CLOSED = '[DOCUMENT DIALOG] CLOSED';
@@ -61,7 +61,7 @@ export const documentDialogRequestedAction = (searchResult: Snippet, corpusForma
         dispatch(hideProgressBarAction());
         dispatch(documentLoadedAction(response.data, corpusFormat));
     }).catch(() => {
-        dispatch(openSnackBar('Could not load document'))
+        dispatch(snackbarActions.openSnackbar('Could not load document'));
         dispatch(hideProgressBarAction());
     })
 };

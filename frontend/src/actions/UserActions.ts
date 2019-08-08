@@ -11,7 +11,6 @@ import {SearchSettings} from "../entities/SearchSettings";
 import {User} from "../entities/User";
 import axios from "axios";
 import {API_BASE_PATH, useMockApi} from "../globals";
-import {openSnackBar} from "./SnackBarActions";
 import {loadSearchSettingsAction} from "./SearchSettingsActions";
 import {UserSettings} from "../entities/UserSettings";
 import {hideProgressBarAction, showProgressBarAction} from "./ProgressBarActions";
@@ -23,6 +22,10 @@ import {
 import {parseValidationErrors} from "./errors";
 import {isCorpusFormat} from "../entities/CorpusFormat";
 import {corpusFormatLoadedAction} from "./CorpusFormatActions";
+
+import {snackbarActions} from "../reducers/SnackBarReducer";
+
+const openSnackbar = snackbarActions.openSnackbar;
 
 export const USER_LOGOUT = "[USER] LOGOUT";
 export const USER_LOGIN_SUCCESS = "[USER] LOGIN SUCCESS";
@@ -74,14 +77,14 @@ export const logoutRequestAction = (): ThunkResult<void> => dispatch => {
     dispatch(showProgressBarAction());
     axios.get(`${API_BASE_PATH}/logout`)
         .then(() => {
-            dispatch(openSnackBar('Logged out'));
+            dispatch(openSnackbar('Logged out'));
             // @ts-ignore
             dispatch(loadSearchSettingsAction(null));
             dispatch(logoutSuccessAction());
             dispatch(hideProgressBarAction());
         })
         .catch(error => {
-            dispatch(openSnackBar('Could not logout'));
+            dispatch(openSnackbar('Could not logout'));
             dispatch(hideProgressBarAction());
         });
 };
@@ -110,7 +113,7 @@ export const searchSettingsSelectedRequestAction = (settings: SearchSettings, pr
                 }
             }).catch((error) => {
             console.error(error);
-            dispatch(openSnackBar(`Failed to select settings ${settings.name}`));
+            dispatch(openSnackbar(`Failed to select settings ${settings.name}`));
             // rollback to previously selected
             dispatch(userSearchSettingsSelectedSuccessAction(previousSelectedSettings));
         })
@@ -127,7 +130,7 @@ export const searchSettingsSelectedRequestAction = (settings: SearchSettings, pr
             })
             .catch((error) => {
                 console.error(error);
-                dispatch(openSnackBar(`Failed to load corpus format for settings ${settings.name}`));
+                dispatch(openSnackbar(`Failed to load corpus format for settings ${settings.name}`));
             })
     }
 };
@@ -146,7 +149,7 @@ export const loginRequestAction = (login: string, password: string, onError: (er
             const user = response.data
             dispatch(loginSuccessAction(user));
 
-            dispatch(openSnackBar('Logged in'));
+            dispatch(openSnackbar('Logged in'));
             // @ts-ignore
             dispatch(loadSearchSettingsAction(user.roles.indexOf("ADMIN") != -1));
         })
@@ -154,7 +157,7 @@ export const loginRequestAction = (login: string, password: string, onError: (er
             if (error.response.data.status === 401) {
                 onError({login: 'Invalid login or password'});
             } else {
-                dispatch(openSnackBar('Could not log in'));
+                dispatch(openSnackbar('Could not log in'));
                 onError({});
             }
         });
@@ -170,14 +173,14 @@ export const signUpAction = (login: string, password: string, onError: (error: a
         login, password
     }).then(() => {
         dispatch(loginRequestAction(login, password, () => {
-            dispatch(openSnackBar('Signup was successful, but subsequent login failed, please try to log in manually'))
+            dispatch(openSnackbar('Signup was successful, but subsequent login failed, please try to log in manually'))
         }))
         }
     ).catch(error => {
         if (error.response.data.status === 400) {
             onError(parseValidationErrors(error));
         } else {
-            dispatch(openSnackBar('Could not log in'));
+            dispatch(openSnackbar('Could not log in'));
             onError({});
         }
         }
@@ -212,11 +215,11 @@ export const userSettingsUpdateRequest = (user: User, onDone: () => void, onErro
     axios.put(`${API_BASE_PATH}/user`, user, {withCredentials: true})
         .then(() => {
             dispatch(userSettingsUpdatedAction(user.userSettings));
-            dispatch(openSnackBar("User settings updated"));
+            dispatch(openSnackbar("User settings updated"));
             onDone();
         })
         .catch(() => {
-            dispatch(openSnackBar("Could not update user settings"));
+            dispatch(openSnackbar("Could not update user settings"));
             onError();
         });
 }
@@ -233,7 +236,7 @@ export const changeUserPasswordRequestAction = (user: User, oldPassword: String,
         newPassword
     }, {withCredentials: true})
         .then(() => {
-            dispatch(openSnackBar(`Password changed successfully`));
+            dispatch(openSnackbar(`Password changed successfully`));
             dispatch(changePasswordDialogHideProgressAction());
             dispatch(changePasswordDialogClosedAction());
         })
@@ -241,7 +244,7 @@ export const changeUserPasswordRequestAction = (user: User, oldPassword: String,
             if (error.response.data.status === 400) {
                 onError(parseValidationErrors(error));
             }
-            dispatch(openSnackBar(`Could  not change password`));
+            dispatch(openSnackbar(`Could  not change password`));
             dispatch(changePasswordDialogHideProgressAction());
         })
 };

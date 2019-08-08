@@ -11,8 +11,8 @@ import {SearchQuery} from "../../entities/SearchQuery";
 import {startSearchingAction} from "../../actions/QueryActions";
 import * as H from "history";
 import {getSelectedSearchSettings} from "../../reducers/selectors";
-import {openSnackBar} from "../../actions/SnackBarActions";
 import {SearchSettings} from "../../entities/SearchSettings";
+import {snackbarActions} from "../../reducers/SnackBarReducer";
 
 const styles = createStyles({});
 
@@ -27,14 +27,14 @@ export type SearchInputProps =
 }
 
 const SearchInput = (props: SearchInputProps) => {
-    const {className = '', initialQuery = '', history, selectedSettings, startSearching: parentStartSearching, openSnackBar} = props;
+    const {className = '', initialQuery = '', history, selectedSettings, startSearching: parentStartSearching, openSnackbar} = props;
 
     const [query, setQuery] = useState<string>(initialQuery);
 
     const startSearching = () => {
         if (query.length == 0) return
         if (selectedSettings === null) {
-            openSnackBar("no search settings selected");
+            openSnackbar("no search settings selected");
             return
         }
         if (query.length > 0) {
@@ -54,7 +54,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 
 const mapDispatchToProps = {
     startSearching: startSearchingAction as (query: SearchQuery, searchSettings: SearchSettings, history?: H.History) => void,
-    openSnackBar: openSnackBar
+    openSnackbar: snackbarActions.openSnackbar
 };
 
 export default withStyles(styles, {

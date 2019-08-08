@@ -2,8 +2,9 @@ import {ApplicationState} from "../../reducers/ApplicationState";
 import {connect} from "react-redux";
 import React, {ReactNode} from 'react';
 import {isLoggedIn} from "../../reducers/selectors";
-import {openSnackBar} from "../../actions/SnackBarActions";
+
 import {Redirect, Route, RouteComponentProps} from "react-router";
+import {snackbarActions} from "../../reducers/SnackBarReducer";
 
 type UserRouteProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {
     path: String,
@@ -11,9 +12,9 @@ type UserRouteProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToP
 }
 
 const UserRoute = (props: UserRouteProps) => {
-    const {isLoggedIn, path, render, openSnackBar} = props;
+    const {isLoggedIn, path, render, openSnackbar} = props;
     if (!isLoggedIn) {
-        openSnackBar(`You have to be logged in to visit ${path}`);
+        openSnackbar(`You have to be logged in to visit ${path}`);
         return <Redirect to="/"/>
     } else {
         return <Route to={path} render={render}/>
@@ -24,7 +25,7 @@ const mapStateToProps = (state: ApplicationState) => ({
     isLoggedIn: isLoggedIn(state)
 });
 const mapDispatchToProps = {
-    openSnackBar: openSnackBar
+    openSnackbar: snackbarActions.openSnackbar
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserRoute);

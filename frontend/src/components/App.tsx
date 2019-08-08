@@ -11,7 +11,6 @@ import SearchPage from "./maincontent/SearchPage";
 import MainPage from "./maincontent/MainPage";
 import UserManagement from "./maincontent/UserManagement";
 import AdminRoute from "./routes/AdminRoute";
-import {openSnackBar} from "../actions/SnackBarActions";
 import {connect} from "react-redux";
 import {ApplicationState} from "../reducers/ApplicationState";
 import UserSettings from "./maincontent/UserSettings";
@@ -19,6 +18,7 @@ import SelectSearchSettingsPage from "./maincontent/SearchSettingsPage";
 import {isUserAdmin} from "../reducers/selectors";
 import UserRoute from "./routes/UserRoute";
 import {attemptLoginAction} from "../actions/UserActions";
+import {snackbarActions} from "../reducers/SnackBarReducer";
 
 type AppProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>
 
@@ -59,10 +59,10 @@ const App = ({loginAttempt, showSnackBarMessage, isAdmin, progressBarVisible}: A
 const mapStateToProps = (state: ApplicationState) => ({
     isAdmin: isUserAdmin(state),
     progressBarVisible: state.progressBar.isVisible
-})
+});
 const mapDispatchToProps = {
-    showSnackBarMessage: openSnackBar,
+    showSnackBarMessage: snackbarActions.openSnackbar,
     loginAttempt: attemptLoginAction as () => void
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

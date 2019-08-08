@@ -10,13 +10,15 @@ import {
 } from "../mocks/mockSearchSettings";
 import {uploadFile} from "../utils/file";
 import {API_BASE_PATH, useMockApi} from "../globals";
-import {openSnackBar} from "./SnackBarActions";
 import axios from "axios";
 import {hideProgressBarAction, showProgressBarAction} from "./ProgressBarActions";
 import {parseValidationErrors} from "./errors";
 import {corpusFormatLoadedAction, CorpusFormatLoadedAction} from "./CorpusFormatActions";
 import {isCorpusFormat} from "../entities/CorpusFormat";
 import {UserState} from "../reducers/ApplicationState";
+import {snackbarActions} from "../reducers/SnackBarReducer";
+
+const openSnackbar = snackbarActions.openSnackbar;
 
 export const SEARCH_SETTINGS_LOADED = "[SEARCH SETTINGS] LOADED";
 export const SEARCH_SETTINGS_ADDED = "[SEARCH SETTINGS] ADDED";
@@ -104,7 +106,7 @@ export const loadSearchSettingsAction = (userState: UserState | null): ThunkResu
             const searchSettings = response.data;
             dispatch(searchSettingsLoadedAction(searchSettings));
             if (searchSettings.length == 0) {
-                dispatch(openSnackBar('No search settings loaded'));
+                dispatch(openSnackbar('No search settings loaded'));
             }
             const selectedSettings = findSelectedSettings(userState, searchSettings);
             if (selectedSettings !== null) {
@@ -117,14 +119,14 @@ export const loadSearchSettingsAction = (userState: UserState | null): ThunkResu
                         }
                     }).catch(error => {
                     console.error(error);
-                    dispatch(openSnackBar(`Could load format for selected configuration ${selectedSettings.name}`));
+                    dispatch(openSnackbar(`Could load format for selected configuration ${selectedSettings.name}`));
                 })
             } else {
                 console.warn("No selected search settings found, could not pre-load corpus format...")
             }
         })
         .catch(() => {
-            dispatch(openSnackBar('Could not load configurations'));
+            dispatch(openSnackbar('Could not load configurations'));
         });
 }
 
@@ -153,13 +155,13 @@ export const updateSearchSettingsRequestAction = (settings: SearchSettings, onDo
     axios.put(`${API_BASE_PATH}/search-settings`, settings, {withCredentials: true})
         .then(() => {
             dispatch(searchSettingsUpdatedAction(settings))
-            dispatch(openSnackBar(`Search settings ${settings.name} updated`));
+            dispatch(openSnackbar(`Search settings ${settings.name} updated`));
             onDone();
         })
         .catch((response) => {
             const errors = response.response.data.status === 400 ? parseValidationErrors(response) : {}
             onError(errors);
-            dispatch(openSnackBar(`Failed to updated ${settings.name}`));
+            dispatch(openSnackbar(`Failed to updated ${settings.name}`));
         });
 };
 
@@ -195,20 +197,20 @@ export const loadSettingsFromFileAction = (file: File): ThunkResult<void> => (di
                     })
                     .catch((response) => {
                         if (response.response.data.status == 400) {
-                            dispatch(openSnackBar(`Could not import settings  - they are not valid`));
+                            dispatch(openSnackbar(`Could not import settings  - they are not valid`));
                             console.error(parseValidationErrors(response));
                         } else {
-                            dispatch(openSnackBar(`Could not import settings ${settings.name}`));
+                            dispatch(openSnackbar(`Could not import settings ${settings.name}`));
                         }
                         dispatch(hideProgressBarAction());
                     })
             } else {
-                dispatch(openSnackBar(`File ${file.name} does not contains valid settings`));
+                dispatch(openSnackbar(`File ${file.name} does not contains valid settings`));
                 console.error(settings);
             }
         } catch (e) {
             if (e instanceof SyntaxError) {
-                dispatch(openSnackBar(`File ${file.name} does not contains valid JSON`));
+                dispatch(openSnackbar(`File ${file.name} does not contains valid JSON`));
             } else throw e;
         }
     });
@@ -221,14 +223,14 @@ export const saveNewSearchSettingsAction = (searchSettings: SearchSettings, onDo
     }
     axios.post<SearchSettings>(`${API_BASE_PATH}/search-settings`, searchSettings, {withCredentials: true})
         .then((response) => {
-            dispatch(openSnackBar(`Search settings ${searchSettings.name} added`));
+            dispatch(openSnackbar(`Search settings ${searchSettings.name} added`));
             response.data.isTransient = true; // reducer has to recognize this as a newly added search settings
             dispatch(searchSettingsUpdatedAction(response.data));
         })
         .catch((response) => {
             const errors = response.response.data.status === 400 ? parseValidationErrors(response) : {}
             onError(errors);
-            dispatch(openSnackBar(`Adding search settings ${searchSettings.name} failed`));
+            dispatch(openSnackbar(`Adding search settings ${searchSettings.name} failed`));
         })
 }
 
@@ -240,9 +242,9 @@ export const removeSearchSettingsRequestAction = (settings: SearchSettings, onDo
     axios.delete(`${API_BASE_PATH}/search-settings/${settings.id}`, {withCredentials: true})
         .then(() => {
             dispatch(searchSettingsRemovedAction(settings))
-            dispatch(openSnackBar(`Search settings ${settings.name} removed`));
+            dispatch(openSnackbar(`Search settings ${settings.name} removed`));
         }).catch(() => {
-        dispatch(openSnackBar(`Failed to remove search settings ${settings.name}`));
+        dispatch(openSnackbar(`Failed to remove search settings ${settings.name}`));
         onError({})
     })
 };
@@ -256,11 +258,11 @@ export const changeDefaultSearchSettingsRequestAction = (settings: SearchSetting
     axios.put(`${API_BASE_PATH}/search-settings/default/${settings.id}`, null, {withCredentials: true})
         .then(() => {
             dispatch(searchSettingsNewDefaultAction(settings))
-            dispatch(openSnackBar(`Search settings ${settings.name} were made default`));
+            dispatch(openSnackbar(`Search settings ${settings.name} were made default`));
             onDone();
         })
         .catch(() => {
-            dispatch(openSnackBar(`Could not make ${settings.name} default`));
+            dispatch(openSnackbar(`Could not make ${settings.name} default`));
             onError({})
         })
 };

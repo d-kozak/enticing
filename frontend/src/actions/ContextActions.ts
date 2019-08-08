@@ -5,12 +5,13 @@ import {API_BASE_PATH, useMockApi} from "../globals";
 import axios from "axios";
 import {hideProgressBarAction, showProgressBarAction} from "./ProgressBarActions";
 import {searchResultUpdatedAction} from "./SearchResultActions";
-import {openSnackBar} from "./SnackBarActions";
 import {Snippet} from "../entities/Snippet";
 import {isSnippetExtension, SnippetExtension} from "../entities/SnippetExtension";
 import {ContextExtensionQuery} from "../entities/ContextExtensionQuery";
 import {NewAnnotatedText, parseNewAnnotatedText} from "../components/annotations/NewAnnotatedText";
+import {snackbarActions} from "../reducers/SnackBarReducer";
 
+const openSnackbar = snackbarActions.openSnackbar;
 
 function mergeSnippet(searchResult: Snippet, data: SnippetExtension): Snippet {
     const prefix = data.prefix.content
@@ -68,7 +69,7 @@ export const contextExtensionRequestAction = (searchResult: Snippet): ThunkResul
         dispatch(hideProgressBarAction());
     }).catch((error) => {
         console.error(error);
-        dispatch(openSnackBar('Could not extend context'));
+        dispatch(openSnackbar('Could not extend context'));
         dispatch(hideProgressBarAction());
     })
 };

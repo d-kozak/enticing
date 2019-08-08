@@ -1,24 +1,24 @@
-import {SNACKBAR_CLOSE, SNACKBAR_OPEN, SnackBarAction} from "../actions/SnackBarActions";
-import {initialState, SnackBarState} from "./ApplicationState";
+import {SnackbarState} from "./ApplicationState";
+import {createSlice, PayloadAction} from "redux-starter-kit";
 
-
-type SnackBarReducer = (state: SnackBarState | undefined, action: SnackBarAction) => SnackBarState
-
-const SnackBarReducer: SnackBarReducer = (state = initialState.snackBar, action) => {
-    switch (action.type) {
-        case SNACKBAR_OPEN:
-            return {
-                isOpen: true,
-                message: action.message
-            }
-        case SNACKBAR_CLOSE:
-            return {
-                isOpen: false,
-                message: ''
-            }
+const snackbarSlice = createSlice({
+    slice: 'snackbar',
+    initialState: {
+        isOpen: false,
+        message: ''
+    } as SnackbarState,
+    reducers: {
+        openSnackbar: (state: SnackbarState, action: PayloadAction<string>) => {
+            state.isOpen = true;
+            state.message = action.payload;
+        },
+        closeSnackbar: (state: SnackbarState) => {
+            state.isOpen = false;
+            state.message = '';
+        }
     }
-    return state
-}
+});
 
+export const snackbarActions = snackbarSlice.actions;
 
-export default SnackBarReducer;
+export default snackbarSlice.reducer;

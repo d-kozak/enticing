@@ -6,7 +6,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import withStyles from "@material-ui/core/es/styles/withStyles";
 import {connect} from "react-redux";
 import {ApplicationState} from "../../reducers/ApplicationState";
-import {closeSnackBar} from "../../actions/SnackBarActions";
+import {snackbarActions} from "../../reducers/SnackBarReducer";
 
 const styles = (theme: Theme) => ({
     close: {
@@ -20,13 +20,13 @@ export type EnticingSnackBarProps =
     & ReturnType<typeof mapStateToProps>
 
 const EnticingSnackbar = (props: EnticingSnackBarProps) => {
-    const {isOpen, setClosed, message, classes} = props;
+    const {isOpen, closeSnackbar, message, classes} = props;
 
     const handleClose = (event: React.SyntheticEvent<any>, reason: string) => {
         if (reason === 'clickaway') {
             return;
         }
-        setClosed();
+        closeSnackbar();
     };
 
     return <Snackbar
@@ -47,7 +47,7 @@ const EnticingSnackbar = (props: EnticingSnackBarProps) => {
                 aria-label="Close"
                 color="inherit"
                 className={classes.close}
-                onClick={() => setClosed()}
+                onClick={() => closeSnackbar()}
             >
                 <CloseIcon/>
             </IconButton>,
@@ -57,15 +57,15 @@ const EnticingSnackbar = (props: EnticingSnackBarProps) => {
 
 
 const mapStateToProps = (state: ApplicationState) => {
-    const {isOpen, message} = state.snackBar
+    const {isOpen, message} = state.snackBar;
     return {
         isOpen,
         message
     }
-}
+};
 
 const mapDispatchToProps = {
-    setClosed: closeSnackBar
-}
+    closeSnackbar: snackbarActions.closeSnackbar
+};
 
 export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(EnticingSnackbar));

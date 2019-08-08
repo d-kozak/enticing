@@ -8,9 +8,11 @@ import {
     searchSettingsRemovedAction,
     searchSettingsUpdatedAction
 } from "../actions/SearchSettingsActions";
-import {openSnackBar} from "../actions/SnackBarActions";
 import {corpusFormatLoadedAction} from "../actions/CorpusFormatActions";
 import {mockCorpusFormat} from "./mockSearchApi";
+import {snackbarActions} from "../reducers/SnackBarReducer";
+
+const openSnackbar = snackbarActions.openSnackbar;
 
 const searchSettings: Array<SearchSettings> = [
     {
@@ -50,7 +52,7 @@ export const mockLoadSearchSettings = (dispatch: Dispatch, isAdmin: boolean) => 
         for (let settings of settingsToLoad) {
             dispatch(corpusFormatLoadedAction(Number(settings.id), mockCorpusFormat))
         }
-        dispatch(openSnackBar('Configurations loaded'));
+        dispatch(openSnackbar('Configurations loaded'));
         dispatch(hideProgressBarAction());
     }, 2000);
 }
@@ -58,7 +60,7 @@ export const mockLoadSearchSettings = (dispatch: Dispatch, isAdmin: boolean) => 
 export const mockUpdateSearchSettings = (dispatch: Dispatch, newSettings: SearchSettings, onDone: () => void) => {
     setTimeout(() => {
         dispatch(searchSettingsUpdatedAction(newSettings))
-        dispatch(openSnackBar(`Search settings ${newSettings.name} updated`));
+        dispatch(openSnackbar(`Search settings ${newSettings.name} updated`));
         onDone();
     }, 2000);
 }
@@ -66,7 +68,7 @@ export const mockUpdateSearchSettings = (dispatch: Dispatch, newSettings: Search
 export const mockRemoveSearchSettings = (dispatch: Dispatch, newSettings: SearchSettings, onDone: () => void) => {
     setTimeout(() => {
         dispatch(searchSettingsRemovedAction(newSettings))
-        dispatch(openSnackBar(`Search settings ${newSettings.name} removed`));
+        dispatch(openSnackbar(`Search settings ${newSettings.name} removed`));
         onDone();
     }, 2000);
 }
@@ -74,7 +76,7 @@ export const mockRemoveSearchSettings = (dispatch: Dispatch, newSettings: Search
 export const mockChangeDefaultSearchSettings = (dispatch: Dispatch, settings: SearchSettings, onDone: () => void) => {
     setTimeout(() => {
         dispatch(searchSettingsNewDefaultAction(settings))
-        dispatch(openSnackBar(`Search settings ${settings.name} were made default`));
+        dispatch(openSnackbar(`Search settings ${settings.name} were made default`));
         onDone();
     }, 2000);
 }
@@ -83,7 +85,7 @@ let counter = 3;
 
 export const mockSaveNewSearchSettings = (dispatch: Dispatch, searchSettings: SearchSettings, onDone: () => void) => {
     setTimeout(() => {
-        dispatch(openSnackBar(`New settings ${searchSettings.name} added`));
+        dispatch(openSnackbar(`New settings ${searchSettings.name} added`));
         searchSettings.id = `${counter++}`;
         dispatch(searchSettingsUpdatedAction(searchSettings));
         onDone();
