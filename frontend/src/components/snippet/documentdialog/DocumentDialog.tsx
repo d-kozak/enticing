@@ -14,7 +14,7 @@ import {Theme} from "@material-ui/core/es";
 
 import DocumentDialogContent from './DocumentDialogContent';
 import {ApplicationState} from "../../../reducers/ApplicationState";
-import {documentDialogClosedAction} from "../../../actions/dialog/DocumentDialogAction";
+import {closeDocumentDialog} from "../../../reducers/dialog/DocumentDialogReducer";
 import {connect} from "react-redux";
 
 
@@ -78,7 +78,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 });
 
 const mapDispatchToProps = {
-    dialogClosed: documentDialogClosedAction
+    dialogClosed: closeDocumentDialog
 };
 
 export default withStyles(styles, {

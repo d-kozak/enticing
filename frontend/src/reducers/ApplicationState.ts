@@ -50,7 +50,8 @@ interface NewState {
     adminState: AdminState
     dialog: {
         deleteUserDialog: DeleteUserDialogState,
-        changePasswordDialog: ChangePasswordDialogState
+        changePasswordDialog: ChangePasswordDialogState,
+        documentDialog: DocumentDialogState
     }
 }
 
@@ -77,7 +78,10 @@ export interface ProgressBarState {
 
 export type SearchSettingsState = Readonly<typeof initialState.searchSettings>;
 
-export type DocumentDialogState = Readonly<typeof initialState.dialog.documentDialog>
+export interface DocumentDialogState {
+    document: FullDocument | null,
+    corpusFormat: CorpusFormat | null
+}
 
 export interface DeleteUserDialogState {
     userToDelete: User | null,

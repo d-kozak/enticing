@@ -11,7 +11,7 @@ import Divider from "@material-ui/core/es/Divider";
 import DocumentDialog from "./documentdialog/DocumentDialog";
 import {ApplicationState} from "../../reducers/ApplicationState";
 import {connect} from "react-redux";
-import {documentDialogRequestedAction} from "../../actions/dialog/DocumentDialogAction";
+import {openDocumentDialogRequest} from "../../reducers/dialog/DocumentDialogReducer";
 import {Snippet} from "../../entities/Snippet";
 import {CorpusFormat} from "../../entities/CorpusFormat";
 
@@ -71,8 +71,8 @@ const SnippetList = (props: SnippetListProps) => {
 const mapStateToProps = (state: ApplicationState) => ({});
 
 const mapDispatchToProps = {
-    openDocumentDialog: documentDialogRequestedAction as (searchResult: Snippet, corpusFormat: CorpusFormat) => void
-}
+    openDocumentDialog: openDocumentDialogRequest as (searchResult: Snippet, corpusFormat: CorpusFormat) => void
+};
 
 export default withStyles(styles, {
     withTheme: true
