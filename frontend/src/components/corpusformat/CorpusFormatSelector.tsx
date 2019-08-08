@@ -24,7 +24,7 @@ export type CorpusFormatSelectorProps =
 }
 
 const CorpusFormatSelector = (props: CorpusFormatSelectorProps) => {
-    const {searchSettings} = props;
+    const {searchSettings, user} = props;
     if (!searchSettings.corpusFormat) {
         return <span>no corpus format</span>
     }
@@ -68,7 +68,9 @@ const CorpusFormatSelector = (props: CorpusFormatSelectorProps) => {
 };
 
 
-const mapStateToProps = (state: ApplicationState) => ({});
+const mapStateToProps = (state: ApplicationState) => ({
+    user: state.userState.user
+});
 
 const mapDispatchToProps = {};
 

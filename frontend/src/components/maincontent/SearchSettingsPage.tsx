@@ -16,7 +16,7 @@ import {ApplicationState} from "../../reducers/ApplicationState";
 import {searchSettingsSelectedRequestAction} from "../../actions/UserActions";
 import {SearchSettings} from "../../entities/SearchSettings";
 import {connect} from "react-redux";
-import {isAdminSelector, isLoggedInSelector, selectedSearchSettingsSelector} from "../../reducers/selectors";
+import {getSelectedSearchSettings, isLoggedIn, isUserAdmin} from "../../reducers/selectors";
 import Chip from "@material-ui/core/Chip";
 import DoneIcon from '@material-ui/icons/Done';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
@@ -131,10 +131,10 @@ const SearchSettingsPage = (props: SearchSettingsPageProps) => {
 };
 
 const mapStateToProps = (state: ApplicationState) => ({
-    isAdmin: isAdminSelector(state),
-    isLoggedIn: isLoggedInSelector(state),
+    isAdmin: isUserAdmin(state),
+    isLoggedIn: isLoggedIn(state),
     searchSettings: state.searchSettings.settings,
-    selectedSearchSettings: selectedSearchSettingsSelector(state)
+    selectedSearchSettings: getSelectedSearchSettings(state)
 });
 const mapDispatchToProps = {
     addSearchSettings: addEmptySearchSettingsRequestAction as () => void,

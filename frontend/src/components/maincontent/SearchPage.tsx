@@ -13,7 +13,7 @@ import {SearchQuery} from "../../entities/SearchQuery";
 import SearchInput from "../searchbar/SearchInput";
 
 import * as H from 'history';
-import {selectedSearchSettingsSelector} from "../../reducers/selectors";
+import {getSelectedSearchSettings} from "../../reducers/selectors";
 import {SearchSettings} from "../../entities/SearchSettings";
 import {openSnackBar} from "../../actions/SnackBarActions";
 
@@ -60,7 +60,7 @@ const SearchPage = (props: SearchPageProps) => {
 const mapStateToProps = (state: ApplicationState) => ({
     snippets: state.searchResult.snippets,
     corpusFormat: state.searchResult.corpusFormat,
-    selectedSettings: selectedSearchSettingsSelector(state)
+    selectedSettings: getSelectedSearchSettings(state)
 });
 
 const mapDispatchToProps = {

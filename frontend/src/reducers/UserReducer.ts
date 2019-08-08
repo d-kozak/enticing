@@ -14,10 +14,11 @@ const userReducer: UserReducer = (state = initialState.userState, action) => {
         case USER_LOGIN_SUCCESS:
             return {
                 user: action.user,
-                selectedSettings: action.user.selectedSettings
+                selectedSettings: null,
+                selectedMetadata: null
             }
         case USER_LOGOUT:
-            return {user: null, selectedSettings: null}
+            return {user: null, selectedSettings: null, selectedMetadata: null}
         case USER_SETTINGS_UPDATED: {
             if (!state.user) {
                 throw new Error("Cannot update settings when no user is logged in")

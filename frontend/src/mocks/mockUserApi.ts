@@ -39,6 +39,7 @@ const mockUsers = new Map<string, MockUser>([
         active: true,
         roles: [],
         selectedSettings: null,
+        selectedMetadata: null,
         userSettings: {
             resultsPerPage: 20
         }
@@ -52,6 +53,7 @@ const mockUsers = new Map<string, MockUser>([
         active: false,
         roles: [],
         selectedSettings: null,
+        selectedMetadata: null,
         userSettings: {
             resultsPerPage: 25
         }
@@ -65,6 +67,7 @@ const mockUsers = new Map<string, MockUser>([
         active: true,
         roles: ['ADMIN'],
         selectedSettings: null,
+        selectedMetadata: null,
         userSettings: {
             resultsPerPage: 50
         }
@@ -85,12 +88,13 @@ export const mockSignup = (login: string, password: string, dispatch: Dispatch, 
                 active: true,
                 roles: [],
                 selectedSettings: null,
+                selectedMetadata: null,
                 userSettings: {
                     resultsPerPage: 20
                 }
             };
             mockUsers.set(login, newUser);
-            dispatch(openSnackBar('Signed up successfully'))
+            dispatch(openSnackBar('Signed up successfully'));
             dispatch(loginSuccessAction(newUser))
         } else {
             onError({
@@ -195,7 +199,7 @@ export const mockChangePassword = (user: User, newPassword: string, dispatch: Di
         dispatch(changePasswordDialogHideProgressAction());
         dispatch(changePasswordDialogClosedAction());
     }, 2000);
-}
+};
 
 export const mockUserSettingsSelectedRequest = (settings: SearchSettings, dispatch: Dispatch) => {
     dispatch(showProgressBarAction());

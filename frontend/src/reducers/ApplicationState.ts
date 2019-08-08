@@ -3,11 +3,13 @@ import {Snippet} from "../entities/Snippet";
 import {CorpusFormat} from "../entities/CorpusFormat";
 import {SearchSettings} from "../entities/SearchSettings";
 import {FullDocument} from "../entities/FullDocument";
+import {SelectedMetadata} from "../entities/SelectedMetadata";
 
 export const initialState = {
     userState: {
         user: null as User | null,
-        selectedSettings: null as string | null
+        selectedSettings: null as string | null,
+        selectedMetadata: null as SelectedMetadata | null
     },
     searchResult: {
         snippets: null as Array<Snippet> | null,

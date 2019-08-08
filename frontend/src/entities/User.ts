@@ -1,4 +1,5 @@
 import {UserSettings} from "./UserSettings";
+import {SelectedMetadata} from "./SelectedMetadata";
 
 export interface User {
     id: number,
@@ -6,5 +7,6 @@ export interface User {
     active: boolean,
     roles: Array<String>,
     selectedSettings: string | null,
+    selectedMetadata: SelectedMetadata | null,
     userSettings: UserSettings
 }

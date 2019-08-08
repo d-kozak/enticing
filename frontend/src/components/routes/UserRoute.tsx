@@ -1,7 +1,7 @@
 import {ApplicationState} from "../../reducers/ApplicationState";
 import {connect} from "react-redux";
 import React, {ReactNode} from 'react';
-import {isLoggedInSelector} from "../../reducers/selectors";
+import {isLoggedIn} from "../../reducers/selectors";
 import {openSnackBar} from "../../actions/SnackBarActions";
 import {Redirect, Route, RouteComponentProps} from "react-router";
 
@@ -21,7 +21,7 @@ const UserRoute = (props: UserRouteProps) => {
 };
 
 const mapStateToProps = (state: ApplicationState) => ({
-    isLoggedIn: isLoggedInSelector(state)
+    isLoggedIn: isLoggedIn(state)
 });
 const mapDispatchToProps = {
     openSnackBar: openSnackBar

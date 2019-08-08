@@ -15,7 +15,7 @@ import ChangePasswordDialog from "../changepassworddialog/ChangePasswordDialog";
 import {changePasswordDialogOpenAction} from "../../actions/dialog/ChangePasswordDialogActions";
 import {changeUserPasswordRequestAction, userSettingsUpdateRequest} from "../../actions/UserActions";
 import {User} from "../../entities/User";
-import {isLoggedInSelector} from "../../reducers/selectors";
+import {isLoggedIn} from "../../reducers/selectors";
 import {Redirect} from "react-router";
 import Divider from "@material-ui/core/Divider";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
@@ -123,7 +123,7 @@ const UserSettings = (props: UserSettingsProps) => {
 
 
 const mapStateToProps = (state: ApplicationState) => ({
-    isLoggedIn: isLoggedInSelector(state),
+    isLoggedIn: isLoggedIn(state),
     userSettings: (state.userState.user && state.userState.user.userSettings) || undefined,
     user: state.userState.user!
 });

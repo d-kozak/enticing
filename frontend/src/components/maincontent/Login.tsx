@@ -19,7 +19,7 @@ import LinkTo from "../utils/linkTo";
 import {ApplicationState} from "../../reducers/ApplicationState";
 import {connect} from "react-redux";
 import {loginRequestAction} from "../../actions/UserActions";
-import {isLoggedInSelector} from "../../reducers/selectors";
+import {isLoggedIn} from "../../reducers/selectors";
 
 const styles = (theme: Theme) => createStyles({
     mainElement: {
@@ -126,7 +126,7 @@ const Login = (props: LoginProps) => {
 };
 
 
-const mapStateToProps = (state: ApplicationState) => ({isLoggedIn: isLoggedInSelector(state)})
+const mapStateToProps = (state: ApplicationState) => ({isLoggedIn: isLoggedIn(state)})
 
 const mapDispatchToProps = {
     login: loginRequestAction as (login: string, password: string, onError: (errors: { login?: string, password?: string }) => void) => void

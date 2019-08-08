@@ -16,7 +16,7 @@ import {connect} from "react-redux";
 import {ApplicationState} from "../reducers/ApplicationState";
 import UserSettings from "./maincontent/UserSettings";
 import SelectSearchSettingsPage from "./maincontent/SearchSettingsPage";
-import {isAdminSelector} from "../reducers/selectors";
+import {isUserAdmin} from "../reducers/selectors";
 import UserRoute from "./routes/UserRoute";
 import {attemptLoginAction} from "../actions/UserActions";
 
@@ -57,7 +57,7 @@ const App = ({loginAttempt, showSnackBarMessage, isAdmin, progressBarVisible}: A
 
 
 const mapStateToProps = (state: ApplicationState) => ({
-    isAdmin: isAdminSelector(state),
+    isAdmin: isUserAdmin(state),
     progressBarVisible: state.progressBar.isVisible
 })
 const mapDispatchToProps = {

@@ -10,7 +10,7 @@ import WarningIcon from "@material-ui/icons/Warning";
 import {logoutRequestAction} from "../../actions/UserActions";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 import {connect} from "react-redux";
-import {isAdminSelector} from "../../reducers/selectors";
+import {isUserAdmin} from "../../reducers/selectors";
 import {ApplicationState} from "../../reducers/ApplicationState";
 import AppBarButtonsRouter from "./AppBarButtonsRouter";
 import {IconButton} from "@material-ui/core";
@@ -67,7 +67,7 @@ const EnticingAppBar = (props: EnticingAppBarProps) => {
 
 const mapStateToProps = (state: ApplicationState) => ({
     user: state.userState.user,
-    isAdmin: isAdminSelector(state),
+    isAdmin: isUserAdmin(state),
     searchSettings: state.searchSettings.settings
 });
 

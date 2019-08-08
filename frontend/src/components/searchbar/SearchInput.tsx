@@ -10,7 +10,7 @@ import CMInputWrapper from "./CMInputWrapper";
 import {SearchQuery} from "../../entities/SearchQuery";
 import {startSearchingAction} from "../../actions/QueryActions";
 import * as H from "history";
-import {selectedSearchSettingsSelector} from "../../reducers/selectors";
+import {getSelectedSearchSettings} from "../../reducers/selectors";
 import {openSnackBar} from "../../actions/SnackBarActions";
 import {SearchSettings} from "../../entities/SearchSettings";
 
@@ -49,7 +49,7 @@ const SearchInput = (props: SearchInputProps) => {
 };
 
 const mapStateToProps = (state: ApplicationState) => ({
-    selectedSettings: selectedSearchSettingsSelector(state)
+    selectedSettings: getSelectedSearchSettings(state)
 });
 
 const mapDispatchToProps = {
