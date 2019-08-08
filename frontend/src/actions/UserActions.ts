@@ -7,10 +7,10 @@ import {loadSearchSettingsAction} from "./SearchSettingsActions";
 import {UserSettings} from "../entities/UserSettings";
 import {hideProgressbar, showProgressbar} from "../reducers/ProgressBarReducer";
 import {
-    changePasswordDialogClosedAction,
-    changePasswordDialogHideProgressAction,
-    changePasswordDialogShowProgressAction
-} from "./dialog/ChangePasswordDialogActions";
+    closeChangePasswordDialog,
+    hideChangePasswordDialogProgress,
+    showChangePasswordDialogProgress
+} from "../reducers/dialog/ChangePasswordDialogReducer";
 import {parseValidationErrors} from "./errors";
 import {isCorpusFormat} from "../entities/CorpusFormat";
 import {corpusFormatLoadedAction} from "./CorpusFormatActions";
@@ -189,7 +189,7 @@ export const userSettingsUpdateRequest = (user: User, onDone: () => void, onErro
 }
 
 export const changeUserPasswordRequestAction = (user: User, oldPassword: String, newPassword: string, onError: (errors: any) => void): ThunkResult<void> => (dispatch) => {
-    dispatch(changePasswordDialogShowProgressAction());
+    dispatch(showChangePasswordDialogProgress());
     axios.put(`${API_BASE_PATH}/user/password`, {
         login: user.login,
         oldPassword,
@@ -197,14 +197,14 @@ export const changeUserPasswordRequestAction = (user: User, oldPassword: String,
     }, {withCredentials: true})
         .then(() => {
             dispatch(openSnackbar(`Password changed successfully`));
-            dispatch(changePasswordDialogHideProgressAction());
-            dispatch(changePasswordDialogClosedAction());
+            dispatch(hideChangePasswordDialogProgress());
+            dispatch(closeChangePasswordDialog());
         })
         .catch(error => {
             if (error.response.data.status === 400) {
                 onError(parseValidationErrors(error));
             }
             dispatch(openSnackbar(`Could  not change password`));
-            dispatch(changePasswordDialogHideProgressAction());
+            dispatch(hideChangePasswordDialogProgress());
         })
 };

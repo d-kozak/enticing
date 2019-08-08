@@ -8,7 +8,8 @@ import {User} from "../../entities/User";
 import {ApplicationState} from "../../reducers/ApplicationState";
 import {connect} from "react-redux";
 import {LinearProgress} from "@material-ui/core";
-import {changePasswordDialogClosedAction} from "../../actions/dialog/ChangePasswordDialogActions";
+import {closeChangePasswordDialog} from "../../reducers/dialog/ChangePasswordDialogReducer";
+
 import {Field, Form, Formik} from "formik";
 
 import * as Yup from "yup";
@@ -109,7 +110,7 @@ const mapStateToProps = (state: ApplicationState) => ({
     user: state.dialog.changePasswordDialog.user
 });
 const mapDispatchToProps = {
-    onClose: changePasswordDialogClosedAction,
+    onClose: closeChangePasswordDialog,
 };
 
 export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(ChangePasswordDialog));

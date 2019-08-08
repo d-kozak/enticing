@@ -16,8 +16,8 @@ import {connect} from "react-redux";
 import {ApplicationState} from "../../reducers/ApplicationState";
 import {deleteUserDialogOpenAction} from "../../actions/dialog/DeleteUserDialogActions";
 import ChangePasswordDialog from "../changepassworddialog/ChangePasswordDialog";
-import {changePasswordDialogOpenAction} from "../../actions/dialog/ChangePasswordDialogActions";
 import {adminChangePasswordRequest, adminLoadUserRequest, adminUpdateUserRequest} from "../../reducers/AdminReducer";
+import {openChangePasswordDialog} from "../../reducers/dialog/ChangePasswordDialogReducer";
 
 
 const styles = createStyles({
@@ -108,7 +108,7 @@ const mapDispatchToProps = {
     loadUsers: adminLoadUserRequest as () => void,
     updateUser: adminUpdateUserRequest as (user: User) => void,
     deleteUser: deleteUserDialogOpenAction,
-    openChangePasswordDialog: changePasswordDialogOpenAction,
+    openChangePasswordDialog: openChangePasswordDialog,
     changePassword: adminChangePasswordRequest as (user: User, newPassword: string) => void
 };
 

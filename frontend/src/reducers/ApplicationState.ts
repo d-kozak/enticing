@@ -77,6 +77,9 @@ export type DocumentDialogState = Readonly<typeof initialState.dialog.documentDi
 
 export type DeleteUserDialogState = Readonly<typeof initialState.dialog.deleteUserDialog>
 
-export type ChangePasswordDialogState = Readonly<typeof initialState.dialog.changePasswordDialog>
+export interface ChangePasswordDialogState {
+    user: User | null,
+    showProgress: boolean
+}
 
 export type ApplicationState = typeof initialState;

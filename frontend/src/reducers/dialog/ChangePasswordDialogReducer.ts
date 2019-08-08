@@ -1,39 +1,31 @@
-import {
-    CHANGE_PASSWORD_DIALOG_CLOSE,
-    CHANGE_PASSWORD_DIALOG_HIDE_PROGRESS,
-    CHANGE_PASSWORD_DIALOG_OPEN,
-    CHANGE_PASSWORD_DIALOG_SHOW_PROGRESS,
-    ChangePasswordDialogAction
-} from "../../actions/dialog/ChangePasswordDialogActions";
-import {ChangePasswordDialogState, initialState} from "../ApplicationState";
+import {ChangePasswordDialogState} from "../ApplicationState";
+import {createSlice, PayloadAction} from "redux-starter-kit";
+import {User} from "../../entities/User";
 
-
-type ChangePasswordDialogReducer = (state: ChangePasswordDialogState | undefined, action: ChangePasswordDialogAction) => ChangePasswordDialogState
-
-const changePasswordDialogReducer: ChangePasswordDialogReducer = (state = initialState.dialog.changePasswordDialog, action) => {
-    switch (action.type) {
-        case CHANGE_PASSWORD_DIALOG_OPEN:
-            return {
-                user: action.user,
-                showProgress: false
-            };
-        case CHANGE_PASSWORD_DIALOG_CLOSE:
-            return {
-                user: null,
-                showProgress: false
-            };
-        case CHANGE_PASSWORD_DIALOG_SHOW_PROGRESS:
-            return {
-                ...state,
-                showProgress: true
-            }
-        case CHANGE_PASSWORD_DIALOG_HIDE_PROGRESS:
-            return {
-                ...state,
-                showProgress: false
-            };
+const {reducer, actions} = createSlice({
+    slice: 'changePasswordDialog',
+    initialState: {
+        user: null,
+        showProgress: false
+    } as ChangePasswordDialogState,
+    reducers: {
+        openChangePasswordDialog: (state: ChangePasswordDialogState, {payload}: PayloadAction<User>) => {
+            state.user = payload;
+            state.showProgress = false;
+        },
+        closeChangePasswordDialog: (state: ChangePasswordDialogState) => {
+            state.user = null;
+            state.showProgress = false;
+        },
+        showChangePasswordDialogProgress: (state: ChangePasswordDialogState) => {
+            state.showProgress = true;
+        },
+        hideChangePasswordDialogProgress: (state: ChangePasswordDialogState) => {
+            state.showProgress = false;
+        }
     }
-    return state;
-};
+});
 
-export default changePasswordDialogReducer;
+
+export const {openChangePasswordDialog, closeChangePasswordDialog, showChangePasswordDialogProgress, hideChangePasswordDialogProgress} = actions;
+export default reducer;

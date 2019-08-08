@@ -12,10 +12,10 @@ import {
     deleteUserDialogShowProgressAction
 } from "../actions/dialog/DeleteUserDialogActions";
 import {
-    changePasswordDialogClosedAction,
-    changePasswordDialogHideProgressAction,
-    changePasswordDialogShowProgressAction
-} from "../actions/dialog/ChangePasswordDialogActions";
+    closeChangePasswordDialog,
+    hideChangePasswordDialogProgress,
+    showChangePasswordDialogProgress
+} from "../reducers/dialog/ChangePasswordDialogReducer";
 import {parseValidationErrors} from "../actions/errors";
 
 
@@ -93,7 +93,7 @@ export const adminDeleteUserRequest = (user: User): ThunkResult<void> => dispatc
 };
 
 export const adminChangePasswordRequest = (user: User, newPassword: string): ThunkResult<void> => dispatch => {
-    dispatch(changePasswordDialogShowProgressAction());
+    dispatch(showChangePasswordDialogProgress());
     axios.put(`${API_BASE_PATH}/user/password`, {
         login: user.login,
         newPassword,
@@ -101,12 +101,12 @@ export const adminChangePasswordRequest = (user: User, newPassword: string): Thu
     }, {withCredentials: true})
         .then(() => {
             dispatch(openSnackbar(`Changed password of user ${user.login}`));
-            dispatch(changePasswordDialogHideProgressAction());
-            dispatch(changePasswordDialogClosedAction());
+            dispatch(hideChangePasswordDialogProgress());
+            dispatch(closeChangePasswordDialog());
         })
         .catch(() => {
             dispatch(openSnackbar(`Failed to change password of ${user.login}`));
-            dispatch(changePasswordDialogHideProgressAction());
+            dispatch(hideChangePasswordDialogProgress());
         });
 };
 

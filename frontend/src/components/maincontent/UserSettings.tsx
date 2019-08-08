@@ -12,7 +12,7 @@ import {TextField} from "formik-material-ui";
 import Grid from "@material-ui/core/es/Grid";
 import Button from "@material-ui/core/es/Button";
 import ChangePasswordDialog from "../changepassworddialog/ChangePasswordDialog";
-import {changePasswordDialogOpenAction} from "../../actions/dialog/ChangePasswordDialogActions";
+import {openChangePasswordDialog} from "../../reducers/dialog/ChangePasswordDialogReducer";
 import {changeUserPasswordRequestAction, userSettingsUpdateRequest} from "../../actions/UserActions";
 import {User} from "../../entities/User";
 import {isLoggedIn} from "../../reducers/selectors";
@@ -128,7 +128,7 @@ const mapStateToProps = (state: ApplicationState) => ({
     user: state.userState.user!
 });
 const mapDispatchToProps = {
-    openChangePasswordDialog: changePasswordDialogOpenAction,
+    openChangePasswordDialog: openChangePasswordDialog,
     changePassword: changeUserPasswordRequestAction as (user: User, oldPassword: String, newPassword: string, onError: (errors: any) => void) => void,
     updateUserSettings: userSettingsUpdateRequest as (settings: User, onDone: () => void, onError: () => void) => void
 };
