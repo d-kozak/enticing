@@ -18,12 +18,12 @@ import {ApplicationState} from "../../reducers/ApplicationState";
 import withStyles from "@material-ui/core/styles/withStyles";
 import {connect} from "react-redux";
 import {
-    changeDefaultSearchSettingsRequestAction,
-    removeSearchSettingsRequestAction,
-    saveNewSearchSettingsAction,
-    searchSettingsAddingCancelledAction,
-    updateSearchSettingsRequestAction
-} from '../../actions/SearchSettingsActions'
+    changeDefaultSearchSettingsRequest,
+    removeSearchSettingsRequest,
+    removeTransientSettings,
+    saveNewSearchSettingsRequest,
+    updateSearchSettingsRequest
+} from '../../reducers/SearchSettingsReducer'
 import {downloadFile} from '../../utils/file';
 
 const styles = (theme: Theme) => createStyles({
@@ -205,11 +205,11 @@ const SettingsForm = (props: SettingsFormProps) => {
 
 const mapStateToProps = (state: ApplicationState) => ({});
 const mapDispatchToProps = {
-    saveSettings: saveNewSearchSettingsAction as (newSettings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void,
-    updateSettings: updateSearchSettingsRequestAction as (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void,
-    removeSettings: removeSearchSettingsRequestAction as (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void,
-    makeDefault: changeDefaultSearchSettingsRequestAction as (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void,
-    cancelAdding: searchSettingsAddingCancelledAction
+    saveSettings: saveNewSearchSettingsRequest as (newSettings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void,
+    updateSettings: updateSearchSettingsRequest as (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void,
+    removeSettings: removeSearchSettingsRequest as (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void,
+    makeDefault: changeDefaultSearchSettingsRequest as (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void) => void,
+    cancelAdding: removeTransientSettings
 };
 
 export default withStyles(styles, {

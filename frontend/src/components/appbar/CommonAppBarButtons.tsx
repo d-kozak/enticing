@@ -12,7 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import {User} from "../../entities/User";
 
 const styles = createStyles({
-    userLogin: {
+    login: {
         margin: '0px 10px'
     }
 });
@@ -50,7 +50,7 @@ const CommonAppBarButtons = (props: CommonAppBarButtonsProps) => {
             color="inherit"
         >
             <AccountCircle/>
-            <Typography className={classes.userLogin} variant="body1" color="inherit">{user.login}</Typography>
+            <Typography className={classes.login} variant="body1" color="inherit">{user.login}</Typography>
         </IconButton>
         <Menu
             id="menu-appbar"

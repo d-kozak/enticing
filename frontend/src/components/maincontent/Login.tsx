@@ -18,7 +18,7 @@ import LinearProgress from "@material-ui/core/es/LinearProgress";
 import LinkTo from "../utils/linkTo";
 import {ApplicationState} from "../../reducers/ApplicationState";
 import {connect} from "react-redux";
-import {loginRequestAction} from "../../actions/UserActions";
+import {loginRequest} from "../../reducers/UserReducer";
 import {isLoggedIn} from "../../reducers/selectors";
 
 const styles = (theme: Theme) => createStyles({
@@ -126,10 +126,10 @@ const Login = (props: LoginProps) => {
 };
 
 
-const mapStateToProps = (state: ApplicationState) => ({isLoggedIn: isLoggedIn(state)})
+const mapStateToProps = (state: ApplicationState) => ({isLoggedIn: isLoggedIn(state)});
 
 const mapDispatchToProps = {
-    login: loginRequestAction as (login: string, password: string, onError: (errors: { login?: string, password?: string }) => void) => void
-}
+    login: loginRequest as (login: string, password: string, onError: (errors: { login?: string, password?: string }) => void) => void
+};
 
 export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(Login))

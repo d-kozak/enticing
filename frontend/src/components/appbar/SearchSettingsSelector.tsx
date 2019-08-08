@@ -11,7 +11,7 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
 import {SearchSettings} from "../../entities/SearchSettings";
-import {searchSettingsSelectedRequestAction} from "../../actions/UserActions";
+import {selectSearchSettingsRequest} from "../../reducers/UserReducer";
 import LinkTo from "../utils/linkTo";
 import {getSelectedSearchSettings, isLoggedIn, isUserAdmin} from "../../reducers/selectors";
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
@@ -110,7 +110,7 @@ const mapStateToProps = (state: ApplicationState) => ({
     openSnackbar
 });
 const mapDispatchToProps = {
-    selectSearchSettings: searchSettingsSelectedRequestAction as (settings: SearchSettings, previousSelectedIndex: string, isLoggedIn: boolean) => void
+    selectSearchSettings: selectSearchSettingsRequest as (settings: SearchSettings, previousSelectedIndex: string, isLoggedIn: boolean) => void
 };
 
 export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(SearchSettingsSelector));

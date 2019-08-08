@@ -1,96 +1,219 @@
-import {
-    SEARCH_SETTINGS_ADDED,
-    SEARCH_SETTINGS_ADDING_CANCELLED,
-    SEARCH_SETTINGS_LOADED,
-    SEARCH_SETTINGS_NEW_DEFAULT,
-    SEARCH_SETTINGS_REMOVED,
-    SEARCH_SETTINGS_UPDATED,
-    SearchSettingsAction
-} from "../actions/SearchSettingsActions";
-import {SearchSettings} from "../entities/SearchSettings";
-import {mapValues} from 'lodash';
-import {CORPUS_FORMAT_LOADED} from "../actions/CorpusFormatActions";
-import {initialState, SearchSettingsState} from "./ApplicationState";
+import {isSearchSettingsContent, SearchSettings} from "../entities/SearchSettings";
+import {SearchSettingsState} from "./ApplicationState";
+import {createSlice, PayloadAction} from "redux-starter-kit";
+import {CorpusFormat, isCorpusFormat} from "../entities/CorpusFormat";
+import {ThunkResult} from "../actions/RootActions";
+import axios from "axios";
+import {API_BASE_PATH} from "../globals";
+import {openSnackbar} from "./SnackBarReducer";
+import {parseValidationErrors} from "../actions/errors";
+import {uploadFile} from "../utils/file";
+import {hideProgressbar, showProgressbar} from "./ProgressBarReducer";
 
 
-type SearchSettingsReducer = (state: SearchSettingsState | undefined, action: SearchSettingsAction) => SearchSettingsState;
+const {reducer, actions} = createSlice({
+    slice: 'searchSettings',
+    initialState: {settings: {}} as SearchSettingsState,
+    reducers: {
+        loadSearchSettings: (state: SearchSettingsState, {payload}: PayloadAction<Array<SearchSettings>>) => {
+            for (let settings of payload) {
+                state.settings[settings.id] = settings;
+            }
+        },
+        addSearchSettings: (state: SearchSettingsState, {payload}: PayloadAction<SearchSettings>) => {
+            state.settings[payload.id] = payload;
+        },
+        updateSearchSettings: (state: SearchSettingsState, {payload}: PayloadAction<SearchSettings>) => {
+            if (payload.isTransient)
+                payload.isTransient = false;
+            for (let settings of Object.values(state.settings)) {
+                if (settings.isTransient) {
+                    // @ts-ignore
+                    state.settings[settings.id] = undefined
+                }
+            }
 
-const searchSettingsReducer: SearchSettingsReducer = (state = initialState.searchSettings, action) => {
-    switch (action.type) {
-        case SEARCH_SETTINGS_LOADED:
-            return {
-                settings: action.settings.reduce((obj, item) => {
-                    obj[item.id] = item;
-                    return obj;
-                }, {} as { [key: string]: SearchSettings })
-            };
-        case SEARCH_SETTINGS_ADDED:
-            if (action.settings.isTransient && Object.values(state.settings).find(setting => setting.isTransient == true)) {
-                throw new Error("Cannot create second transient settings.")
-            }
-            return {
-                settings: {
-                    ...state.settings,
-                    "transient": action.settings
-                }
-            };
-        case SEARCH_SETTINGS_UPDATED:
-            if (action.settings.isTransient) {
-                const newSettings: SearchSettings = {
-                    ...action.settings,
-                    isTransient: false
-                }
-                return {
-                    settings: mapValues(state.settings, item => item.id === action.settings.id ? newSettings : item)
-                }
-            }
-            return {
-                settings: mapValues(state.settings, item => item.id === action.settings.id ? action.settings : item)
-            };
+            state.settings[payload.id] = payload;
+        },
+        removeSearchSettings: (state: SearchSettingsState, {payload}: PayloadAction<SearchSettings>) => {
 
-        case SEARCH_SETTINGS_REMOVED: {
-            return {
-                settings: Object.values(state.settings)
-                    .filter(item => item.id == action.settings.id)
-                    .reduce((obj, item) => {
-                        obj[item.id] = item;
-                        return obj;
-                    }, {} as { [key: string]: SearchSettings })
-            };
-        }
-        case SEARCH_SETTINGS_NEW_DEFAULT: {
-            return {
-                settings: mapValues(state.settings, item => ({...item, default: item.id === action.settings.id}))
+            // @ts-ignore
+            state.settings[payload.id] = undefined;
+        },
+        setNewDefaultSettings: (state: SearchSettingsState, {payload}: PayloadAction<SearchSettings>) => {
+            for (let settings of Object.values(state.settings)) {
+                settings.default = settings.id == payload.id;
             }
-        }
-        case SEARCH_SETTINGS_ADDING_CANCELLED:
-            return {
-                settings: Object.values(state.settings)
-                    .filter(item => !item.isTransient)
-                    .reduce((obj, item) => {
-                        obj[item.id] = item;
-                        return obj;
-                    }, {} as { [key: string]: SearchSettings })
+        },
+        removeTransientSettings: (state: SearchSettingsState) => {
+            for (let settings of Object.values(state.settings)) {
+                if (settings.isTransient) {
+                    // @ts-ignore
+                    state.settings[settings.id] = undefined
+                }
             }
-        case CORPUS_FORMAT_LOADED: {
-            const toUpdate = state.settings[action.id]
-            if (toUpdate) {
-                const updated = {
-                    ...toUpdate,
-                    corpusFormat: action.format
-                }
-                return {
-                    settings: {
-                        ...state.settings,
-                        [action.id]: updated
-                    }
-                }
+        },
+        loadCorpusFormat: (state: SearchSettingsState, {payload}: PayloadAction<{ id: number, format: CorpusFormat }>) => {
+            const settings = state.settings[payload.id];
+            if (settings) {
+                settings.corpusFormat = payload.format;
             } else {
-                console.error(`Settings with id ${action.id} not found, therefore this is no-op`)
+                throw new Error(`could save corpus format for settings with id ${payload.id}, not such settings found`)
             }
         }
     }
-    return state;
+});
+
+const {addSearchSettings, loadSearchSettings, removeSearchSettings, setNewDefaultSettings, updateSearchSettings} = actions;
+export const {removeTransientSettings, loadCorpusFormat} = actions;
+export default reducer;
+
+export const loadSearchSettingsRequest = (selectedSettingsId: string | null): ThunkResult<void> => (dispatch) => {
+    axios.get<Array<SearchSettings>>(`${API_BASE_PATH}/search-settings`, {withCredentials: true})
+        .then(response => {
+            const searchSettings = response.data;
+            dispatch(loadSearchSettings(searchSettings));
+            if (searchSettings.length == 0) {
+                dispatch(openSnackbar('No search settings loaded'));
+            }
+            const selectedSettings = findSelectedSettings(selectedSettingsId, searchSettings);
+            if (selectedSettings !== null) {
+                axios.get(`${API_BASE_PATH}/query/format/${selectedSettings.id}`, {withCredentials: true})
+                    .then(response => {
+                        if (isCorpusFormat(response.data)) {
+                            dispatch(loadCorpusFormat({id: Number(selectedSettings.id), format: response.data}))
+                        } else {
+                            throw "could not parse";
+                        }
+                    }).catch(error => {
+                    console.error(error);
+                    dispatch(openSnackbar(`Could load format for selected configuration ${selectedSettings.name}`));
+                })
+            } else {
+                console.warn("No selected search settings found, could not pre-load corpus format...")
+            }
+        })
+        .catch(() => {
+            dispatch(openSnackbar('Could not load configurations'));
+        });
 };
 
-export default searchSettingsReducer;
+const findSelectedSettings = (selectedSettings: string | null, searchSettings: Array<SearchSettings>): SearchSettings | null => {
+    if (selectedSettings !== null) {
+        for (let i in searchSettings) {
+            if (searchSettings[i].id == selectedSettings) {
+                return searchSettings[i];
+            }
+        }
+    } else {
+        for (let i in searchSettings) {
+            if (searchSettings[i].default) {
+                return searchSettings[i];
+            }
+        }
+    }
+    return null
+};
+
+export const updateSearchSettingsRequest = (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void): ThunkResult<void> => (dispatch) => {
+    axios.put(`${API_BASE_PATH}/search-settings`, settings, {withCredentials: true})
+        .then(() => {
+            dispatch(updateSearchSettings(settings));
+            dispatch(openSnackbar(`Search settings ${settings.name} updated`));
+            onDone();
+        })
+        .catch((response) => {
+            const errors = response.response.data.status === 400 ? parseValidationErrors(response) : {}
+            onError(errors);
+            dispatch(openSnackbar(`Failed to updated ${settings.name}`));
+        });
+};
+
+
+export const addTransientSearchSettings = (): ThunkResult<void> => (dispatch) => {
+    const newSettings: SearchSettings = {
+        id: "0",
+        name: '',
+        private: true,
+        default: false,
+        annotationDataServer: '',
+        annotationServer: '',
+        servers: [],
+        isTransient: true
+    };
+    dispatch(addSearchSettings(newSettings));
+};
+
+export const loadSettingsFromFileRequest = (file: File): ThunkResult<void> => (dispatch) => {
+    uploadFile(file, content => {
+        try {
+            const settings = JSON.parse(content);
+            if (isSearchSettingsContent(settings)) {
+                dispatch(showProgressbar());
+                axios.post<SearchSettings>(`${API_BASE_PATH}/search-settings/import`, settings, {withCredentials: true})
+                    .then((response) => {
+                        dispatch(addSearchSettings(response.data));
+                        dispatch(hideProgressbar());
+                    })
+                    .catch((response) => {
+                        if (response.response.data.status == 400) {
+                            dispatch(openSnackbar(`Could not import settings  - they are not valid`));
+                            console.error(parseValidationErrors(response));
+                        } else {
+                            dispatch(openSnackbar(`Could not import settings ${settings.name}`));
+                        }
+                        dispatch(hideProgressbar());
+                    })
+            } else {
+                dispatch(openSnackbar(`File ${file.name} does not contains valid settings`));
+                console.error(settings);
+            }
+        } catch (e) {
+            if (e instanceof SyntaxError) {
+                dispatch(openSnackbar(`File ${file.name} does not contains valid JSON`));
+            } else throw e;
+        }
+    });
+};
+
+export const saveNewSearchSettingsRequest = (searchSettings: SearchSettings, onDone: () => void, onError: (errors: any) => void): ThunkResult<void> => (dispatch) => {
+    axios.post<SearchSettings>(`${API_BASE_PATH}/search-settings`, searchSettings, {withCredentials: true})
+        .then((response) => {
+            dispatch(openSnackbar(`Search settings ${searchSettings.name} added`));
+            response.data.isTransient = true; // reducer has to recognize this as a newly added search settings
+            dispatch(updateSearchSettings(response.data));
+        })
+        .catch((response) => {
+            const errors = response.response.data.status === 400 ? parseValidationErrors(response) : {}
+            onError(errors);
+            dispatch(openSnackbar(`Adding search settings ${searchSettings.name} failed`));
+        })
+}
+
+export const removeSearchSettingsRequest = (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void): ThunkResult<void> => (dispatch) => {
+    axios.delete(`${API_BASE_PATH}/search-settings/${settings.id}`, {withCredentials: true})
+        .then(() => {
+            dispatch(removeSearchSettings(settings));
+            dispatch(openSnackbar(`Search settings ${settings.name} removed`));
+        }).catch(() => {
+        dispatch(openSnackbar(`Failed to remove search settings ${settings.name}`));
+        onError({})
+    })
+};
+
+
+export const changeDefaultSearchSettingsRequest = (settings: SearchSettings, onDone: () => void, onError: (errors: any) => void): ThunkResult<void> => (dispatch) => {
+    axios.put(`${API_BASE_PATH}/search-settings/default/${settings.id}`, null, {withCredentials: true})
+        .then(() => {
+            dispatch(setNewDefaultSettings(settings));
+            dispatch(openSnackbar(`Search settings ${settings.name} were made default`));
+            onDone();
+        })
+        .catch(() => {
+            dispatch(openSnackbar(`Could not make ${settings.name} default`));
+            onError({})
+        })
+};
+
+
+

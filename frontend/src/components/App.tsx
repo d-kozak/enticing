@@ -17,7 +17,7 @@ import UserSettings from "./maincontent/UserSettings";
 import SelectSearchSettingsPage from "./maincontent/SearchSettingsPage";
 import {isUserAdmin} from "../reducers/selectors";
 import UserRoute from "./routes/UserRoute";
-import {attemptLoginAction} from "../actions/UserActions";
+import {attemptLoginRequest} from "../reducers/UserReducer";
 import {openSnackbar} from "../reducers/SnackBarReducer";
 
 type AppProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>
@@ -62,7 +62,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 });
 const mapDispatchToProps = {
     showSnackBarMessage: openSnackbar,
-    loginAttempt: attemptLoginAction as () => void
+    loginAttempt: attemptLoginRequest as () => void
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

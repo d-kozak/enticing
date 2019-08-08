@@ -72,7 +72,7 @@ export const adminUpdateUserRequest = (user: User): ThunkResult<void> => (dispat
             dispatch(hideProgressbar());
         })
         .catch(() => {
-            dispatch(openSnackbar(`Failed to updated user${user.login}`));
+            dispatch(openSnackbar(`Failed to updated user ${user.login}`));
             dispatch(hideProgressbar());
         })
 };

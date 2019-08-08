@@ -13,7 +13,7 @@ import Button from "@material-ui/core/es/Button";
 import Paper from "@material-ui/core/es/Paper";
 import SettingsDetails from "../settings/SettingsDetails";
 import {ApplicationState} from "../../reducers/ApplicationState";
-import {searchSettingsSelectedRequestAction} from "../../actions/UserActions";
+import {selectSearchSettingsRequest} from "../../reducers/UserReducer";
 import {SearchSettings} from "../../entities/SearchSettings";
 import {connect} from "react-redux";
 import {getSelectedSearchSettings, isLoggedIn, isUserAdmin} from "../../reducers/selectors";
@@ -21,7 +21,7 @@ import Chip from "@material-ui/core/Chip";
 import DoneIcon from '@material-ui/icons/Done';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import SettingsForm from "../settings/SettingsForm";
-import {addEmptySearchSettingsRequestAction, loadSettingsFromFileAction} from "../../actions/SearchSettingsActions";
+import {addTransientSearchSettings, loadSettingsFromFileRequest} from "../../reducers/SearchSettingsReducer";
 import NewSearchSettingsDialog from "../settings/NewSettingsDialog";
 import FolderOpenIcon from "@material-ui/icons/FolderOpen";
 import {FilePicker} from 'react-file-picker';
@@ -137,9 +137,9 @@ const mapStateToProps = (state: ApplicationState) => ({
     selectedSearchSettings: getSelectedSearchSettings(state)
 });
 const mapDispatchToProps = {
-    addSearchSettings: addEmptySearchSettingsRequestAction as () => void,
-    loadFile: loadSettingsFromFileAction as (file: File) => void,
-    selectSearchSettings: searchSettingsSelectedRequestAction as (settings: SearchSettings, previousSelectedIndex: string, isLoggedIn: boolean) => void
+    addSearchSettings: addTransientSearchSettings as () => void,
+    loadFile: loadSettingsFromFileRequest as (file: File) => void,
+    selectSearchSettings: selectSearchSettingsRequest as (settings: SearchSettings, previousSelectedIndex: string, isLoggedIn: boolean) => void
 };
 
 export default withStyles(styles, {

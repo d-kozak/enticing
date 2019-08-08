@@ -11,7 +11,7 @@ import Button from "@material-ui/core/es/Button";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 import {ApplicationState} from "../../reducers/ApplicationState";
-import {signUpAction} from "../../actions/UserActions";
+import {signUpRequest} from "../../reducers/UserReducer";
 import {connect} from "react-redux";
 import {isLoggedIn} from "../../reducers/selectors";
 
@@ -118,10 +118,10 @@ const SignUp = (props: SignUpProps) => {
 
 const mapStateToProps = (state: ApplicationState) => ({
     isLoggedIn: isLoggedIn(state)
-})
+});
 
 const mapDispatchToProps = {
-    signUp: signUpAction as (login: string, password: string, onError: (errors: any) => void) => void
+    signUp: signUpRequest as (login: string, password: string, onError: (errors: any) => void) => void
 };
 
 export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(SignUp));

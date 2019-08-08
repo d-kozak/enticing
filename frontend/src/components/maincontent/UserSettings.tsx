@@ -13,7 +13,7 @@ import Grid from "@material-ui/core/es/Grid";
 import Button from "@material-ui/core/es/Button";
 import ChangePasswordDialog from "../changepassworddialog/ChangePasswordDialog";
 import {openChangePasswordDialog} from "../../reducers/dialog/ChangePasswordDialogReducer";
-import {changeUserPasswordRequestAction, userSettingsUpdateRequest} from "../../actions/UserActions";
+import {changePasswordRequest, userSettingsUpdateRequest} from "../../reducers/UserReducer";
 import {User} from "../../entities/User";
 import {isLoggedIn} from "../../reducers/selectors";
 import {Redirect} from "react-router";
@@ -129,7 +129,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 });
 const mapDispatchToProps = {
     openChangePasswordDialog: openChangePasswordDialog,
-    changePassword: changeUserPasswordRequestAction as (user: User, oldPassword: String, newPassword: string, onError: (errors: any) => void) => void,
+    changePassword: changePasswordRequest as (user: User, oldPassword: String, newPassword: string, onError: (errors: any) => void) => void,
     updateUserSettings: userSettingsUpdateRequest as (settings: User, onDone: () => void, onError: () => void) => void
 };
 

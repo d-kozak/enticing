@@ -6,7 +6,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import {ApplicationState} from "../../reducers/ApplicationState";
 import {connect} from "react-redux";
 import {getNewSearchSettings} from "../../reducers/selectors";
-import {searchSettingsAddingCancelledAction} from "../../actions/SearchSettingsActions";
+import {removeTransientSettings} from "../../reducers/SearchSettingsReducer";
 import SettingsForm from "./SettingsForm";
 
 
@@ -33,6 +33,6 @@ const mapStateToProps = (state: ApplicationState) => ({
     newSearchSettings: getNewSearchSettings(state)
 });
 const mapDispatchToProps = {
-    closeDialog: searchSettingsAddingCancelledAction
+    closeDialog: removeTransientSettings
 };
 export default connect(mapStateToProps, mapDispatchToProps)(NewSearchSettingsDialog);

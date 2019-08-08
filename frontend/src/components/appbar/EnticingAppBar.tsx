@@ -7,7 +7,7 @@ import {WithStyles} from "@material-ui/core/es";
 import {Link} from "react-router-dom";
 import SearchSettingsSelector from "./SearchSettingsSelector";
 import WarningIcon from "@material-ui/icons/Warning";
-import {logoutRequestAction} from "../../actions/UserActions";
+import {logoutRequest} from "../../reducers/UserReducer";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 import {connect} from "react-redux";
 import {isUserAdmin} from "../../reducers/selectors";
@@ -72,7 +72,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 });
 
 const mapDispatchToProps = {
-    handleLogout: logoutRequestAction as () => void
+    handleLogout: logoutRequest as () => void
 };
 
 export default withStyles(styles, {withTheme: true})((connect(mapStateToProps, mapDispatchToProps))(EnticingAppBar));
