@@ -205,7 +205,7 @@ class SearchExecutorTest {
 
     @Test
     fun `real context extension request`() {
-        val query = """{"collection":"name","docId":56,"defaultIndex":"token","location":349,"size":50,"extension":20}""".toDto<IndexServer.ContextExtensionQuery>()
+        val query = """{"collection":"name","docId":56,"defaultIndex":"token","location":10,"size":50,"extension":20}""".toDto<IndexServer.ContextExtensionQuery>()
         val executor = initSearchExecutor(clientConfig.corpusConfiguration, clientConfig.collections[0])
         val (prefix, suffix, _) = executor.extendSnippet(query)
 
