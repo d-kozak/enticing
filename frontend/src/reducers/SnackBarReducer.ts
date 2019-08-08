@@ -1,4 +1,4 @@
-import {SnackbarState} from "./ApplicationState";
+import {SnackbarState} from "../ApplicationState";
 import {createSlice, PayloadAction} from "redux-starter-kit";
 
 const {reducer, actions} = createSlice({

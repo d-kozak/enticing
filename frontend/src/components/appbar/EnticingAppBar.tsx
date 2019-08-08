@@ -11,7 +11,7 @@ import {logoutRequest} from "../../reducers/UserReducer";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 import {connect} from "react-redux";
 import {isUserAdmin} from "../../reducers/selectors";
-import {ApplicationState} from "../../reducers/ApplicationState";
+import {ApplicationState} from "../../ApplicationState";
 import AppBarButtonsRouter from "./AppBarButtonsRouter";
 import {IconButton} from "@material-ui/core";
 

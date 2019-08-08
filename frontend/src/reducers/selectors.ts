@@ -1,5 +1,5 @@
 import {createSelector} from "reselect";
-import {ApplicationState} from "./ApplicationState";
+import {ApplicationState} from "../ApplicationState";
 
 export const isUserAdmin = (state: ApplicationState) => {
     if (state.userState.user !== null) {

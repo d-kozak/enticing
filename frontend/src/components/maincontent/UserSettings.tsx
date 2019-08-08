@@ -1,7 +1,7 @@
 import createStyles from "@material-ui/core/es/styles/createStyles";
 import {Theme, WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
-import {ApplicationState} from "../../reducers/ApplicationState";
+import {ApplicationState} from "../../ApplicationState";
 import {connect} from "react-redux";
 import React, {useState} from 'react';
 import Paper from "@material-ui/core/Paper";

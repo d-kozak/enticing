@@ -9,7 +9,7 @@ import Paper from "@material-ui/core/es/Paper";
 import Pagination from "../pagination/Pagination";
 import Divider from "@material-ui/core/es/Divider";
 import DocumentDialog from "./documentdialog/DocumentDialog";
-import {ApplicationState} from "../../reducers/ApplicationState";
+import {ApplicationState} from "../../ApplicationState";
 import {connect} from "react-redux";
 import {openDocumentDialogRequest} from "../../reducers/dialog/DocumentDialogReducer";
 import {Snippet} from "../../entities/Snippet";

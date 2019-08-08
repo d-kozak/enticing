@@ -1,5 +1,5 @@
 import {Button, createStyles, Grid, WithStyles, withStyles} from "@material-ui/core";
-import {ApplicationState} from "../../reducers/ApplicationState";
+import {ApplicationState} from "../../ApplicationState";
 import {connect} from "react-redux";
 import * as React from "react";
 import {useState} from "react";

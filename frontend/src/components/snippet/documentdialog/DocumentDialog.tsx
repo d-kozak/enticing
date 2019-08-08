@@ -13,7 +13,7 @@ import {Theme} from "@material-ui/core/es";
 
 
 import DocumentDialogContent from './DocumentDialogContent';
-import {ApplicationState} from "../../../reducers/ApplicationState";
+import {ApplicationState} from "../../../ApplicationState";
 import {closeDocumentDialog} from "../../../reducers/dialog/DocumentDialogReducer";
 import {connect} from "react-redux";
 

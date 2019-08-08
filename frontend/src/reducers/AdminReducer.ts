@@ -1,4 +1,4 @@
-import {AdminState} from "./ApplicationState";
+import {AdminState} from "../ApplicationState";
 import {createSlice, PayloadAction} from "redux-starter-kit";
 import {User} from "../entities/User";
 import {ThunkResult} from "../actions/RootActions";

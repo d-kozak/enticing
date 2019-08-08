@@ -1,4 +1,4 @@
-import {ProgressBarState} from "./ApplicationState";
+import {ProgressBarState} from "../ApplicationState";
 import {createSlice} from "redux-starter-kit";
 
 

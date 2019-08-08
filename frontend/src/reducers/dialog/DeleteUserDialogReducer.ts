@@ -1,4 +1,4 @@
-import {DeleteUserDialogState} from "../ApplicationState";
+import {DeleteUserDialogState} from "../../ApplicationState";
 import {createSlice, PayloadAction} from "redux-starter-kit";
 import {User} from "../../entities/User";
 

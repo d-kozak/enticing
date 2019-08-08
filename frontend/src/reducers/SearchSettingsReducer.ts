@@ -1,5 +1,5 @@
 import {isSearchSettingsContent, SearchSettings} from "../entities/SearchSettings";
-import {SearchSettingsState} from "./ApplicationState";
+import {SearchSettingsState} from "../ApplicationState";
 import {createSlice, PayloadAction} from "redux-starter-kit";
 import {CorpusFormat, isCorpusFormat} from "../entities/CorpusFormat";
 import {ThunkResult} from "../actions/RootActions";

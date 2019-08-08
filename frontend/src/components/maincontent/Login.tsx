@@ -16,7 +16,7 @@ import {TextField} from "formik-material-ui";
 import {Redirect} from "react-router";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
 import LinkTo from "../utils/linkTo";
-import {ApplicationState} from "../../reducers/ApplicationState";
+import {ApplicationState} from "../../ApplicationState";
 import {connect} from "react-redux";
 import {loginRequest} from "../../reducers/UserReducer";
 import {isLoggedIn} from "../../reducers/selectors";

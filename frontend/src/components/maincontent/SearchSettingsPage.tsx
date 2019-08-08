@@ -12,7 +12,7 @@ import Grid from "@material-ui/core/es/Grid";
 import Button from "@material-ui/core/es/Button";
 import Paper from "@material-ui/core/es/Paper";
 import SettingsDetails from "../settings/SettingsDetails";
-import {ApplicationState} from "../../reducers/ApplicationState";
+import {ApplicationState} from "../../ApplicationState";
 import {selectSearchSettingsRequest} from "../../reducers/UserReducer";
 import {SearchSettings} from "../../entities/SearchSettings";
 import {connect} from "react-redux";

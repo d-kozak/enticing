@@ -1,4 +1,4 @@
-import {DocumentDialogState} from "../ApplicationState";
+import {DocumentDialogState} from "../../ApplicationState";
 import {createSlice, PayloadAction} from "redux-starter-kit";
 import {Snippet} from "../../entities/Snippet";
 import {CorpusFormat} from "../../entities/CorpusFormat";

@@ -1,4 +1,4 @@
-import {UserState} from "./ApplicationState";
+import {UserState} from "../ApplicationState";
 import {createSlice, PayloadAction} from "redux-starter-kit";
 import {User} from "../entities/User";
 import {UserSettings} from "../entities/UserSettings";

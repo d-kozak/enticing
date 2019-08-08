@@ -1,4 +1,4 @@
-import {SearchResultsState} from "./ApplicationState";
+import {SearchResultsState} from "../ApplicationState";
 import {createSlice, PayloadAction} from "redux-starter-kit";
 import {Snippet} from "../entities/Snippet";
 import {CorpusFormat} from "../entities/CorpusFormat";

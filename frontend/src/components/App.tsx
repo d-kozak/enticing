@@ -12,7 +12,7 @@ import MainPage from "./maincontent/MainPage";
 import UserManagement from "./maincontent/UserManagement";
 import AdminRoute from "./routes/AdminRoute";
 import {connect} from "react-redux";
-import {ApplicationState} from "../reducers/ApplicationState";
+import {ApplicationState} from "../ApplicationState";
 import UserSettings from "./maincontent/UserSettings";
 import SelectSearchSettingsPage from "./maincontent/SearchSettingsPage";
 import {isUserAdmin} from "../reducers/selectors";

@@ -1,4 +1,4 @@
-import {ChangePasswordDialogState} from "../ApplicationState";
+import {ChangePasswordDialogState} from "../../ApplicationState";
 import {createSlice, PayloadAction} from "redux-starter-kit";
 import {User} from "../../entities/User";
 
