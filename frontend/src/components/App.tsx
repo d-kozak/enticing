@@ -18,7 +18,7 @@ import SelectSearchSettingsPage from "./maincontent/SearchSettingsPage";
 import {isUserAdmin} from "../reducers/selectors";
 import UserRoute from "./routes/UserRoute";
 import {attemptLoginAction} from "../actions/UserActions";
-import {snackbarActions} from "../reducers/SnackBarReducer";
+import {openSnackbar} from "../reducers/SnackBarReducer";
 
 type AppProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>
 
@@ -61,7 +61,7 @@ const mapStateToProps = (state: ApplicationState) => ({
     progressBarVisible: state.progressBar.isVisible
 });
 const mapDispatchToProps = {
-    showSnackBarMessage: snackbarActions.openSnackbar,
+    showSnackBarMessage: openSnackbar,
     loginAttempt: attemptLoginAction as () => void
 };
 

@@ -8,9 +8,7 @@ import {Snippet} from "../entities/Snippet";
 import {Interval, NewAnnotatedText, QueryMatch, Word} from "../components/annotations/NewAnnotatedText";
 import {CorpusFormat} from "../entities/CorpusFormat";
 import {DonaldTrump, EdSheeran, KarlovyVary} from "./mockAnnotations";
-import {snackbarActions} from "../reducers/SnackBarReducer";
-
-const openSnackbar = snackbarActions.openSnackbar;
+import {openSnackbar} from "../reducers/SnackBarReducer";
 
 export const mockCorpusFormat: CorpusFormat = {
     corpusName: "mockCorpus",

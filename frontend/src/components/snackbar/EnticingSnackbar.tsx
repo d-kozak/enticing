@@ -6,7 +6,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import withStyles from "@material-ui/core/es/styles/withStyles";
 import {connect} from "react-redux";
 import {ApplicationState} from "../../reducers/ApplicationState";
-import {snackbarActions} from "../../reducers/SnackBarReducer";
+import {closeSnackbar} from "../../reducers/SnackBarReducer";
 
 const styles = (theme: Theme) => ({
     close: {
@@ -65,7 +65,7 @@ const mapStateToProps = (state: ApplicationState) => {
 };
 
 const mapDispatchToProps = {
-    closeSnackbar: snackbarActions.closeSnackbar
+    closeSnackbar
 };
 
 export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(EnticingSnackbar));

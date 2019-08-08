@@ -23,9 +23,8 @@ import {loadSearchSettingsAction} from "../actions/SearchSettingsActions";
 import {UserSettings as UserSettingsModel} from "../entities/UserSettings";
 import {corpusFormatLoadedAction} from "../actions/CorpusFormatActions";
 import {mockCorpusFormat} from "./mockSearchApi";
-import {snackbarActions} from "../reducers/SnackBarReducer";
+import {openSnackbar} from "../reducers/SnackBarReducer";
 
-const openSnackbar = snackbarActions.openSnackbar;
 
 interface MockUser extends User {
     password: string,

@@ -16,9 +16,7 @@ import {parseValidationErrors} from "./errors";
 import {corpusFormatLoadedAction, CorpusFormatLoadedAction} from "./CorpusFormatActions";
 import {isCorpusFormat} from "../entities/CorpusFormat";
 import {UserState} from "../reducers/ApplicationState";
-import {snackbarActions} from "../reducers/SnackBarReducer";
-
-const openSnackbar = snackbarActions.openSnackbar;
+import {openSnackbar} from "../reducers/SnackBarReducer";
 
 export const SEARCH_SETTINGS_LOADED = "[SEARCH SETTINGS] LOADED";
 export const SEARCH_SETTINGS_ADDED = "[SEARCH SETTINGS] ADDED";

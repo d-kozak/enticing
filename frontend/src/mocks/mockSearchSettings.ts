@@ -10,9 +10,7 @@ import {
 } from "../actions/SearchSettingsActions";
 import {corpusFormatLoadedAction} from "../actions/CorpusFormatActions";
 import {mockCorpusFormat} from "./mockSearchApi";
-import {snackbarActions} from "../reducers/SnackBarReducer";
-
-const openSnackbar = snackbarActions.openSnackbar;
+import {openSnackbar} from "../reducers/SnackBarReducer";
 
 const searchSettings: Array<SearchSettings> = [
     {

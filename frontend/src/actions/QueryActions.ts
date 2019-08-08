@@ -9,9 +9,7 @@ import {newSearchResultsAction} from "./SearchResultActions";
 import {isSearchResult} from "../entities/SearchResult";
 import {parseNewAnnotatedText} from "../components/annotations/NewAnnotatedText";
 import {SearchSettings} from "../entities/SearchSettings";
-import {snackbarActions} from "../reducers/SnackBarReducer";
-
-const openSnackbar = snackbarActions.openSnackbar;
+import {openSnackbar} from "../reducers/SnackBarReducer";
 
 
 export const startSearchingAction = (query: SearchQuery, searchSettings: SearchSettings, history?: H.History): ThunkResult<void> => (dispatch) => {

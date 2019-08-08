@@ -8,7 +8,7 @@ import {Snippet} from "../../entities/Snippet";
 import {DocumentQuery} from "../../entities/DocumentQuery";
 import {parseNewAnnotatedText} from "../../components/annotations/NewAnnotatedText";
 import {CorpusFormat} from "../../entities/CorpusFormat";
-import {snackbarActions} from "../../reducers/SnackBarReducer";
+import {openSnackbar} from "../../reducers/SnackBarReducer";
 
 export const DOCUMENT_DIALOG_DOCUMENT_LOADED = '[DOCUMENT DIALOG] DOCUMENT LOADED';
 export const DOCUMENT_DIALOG_CLOSED = '[DOCUMENT DIALOG] CLOSED';
@@ -61,7 +61,7 @@ export const documentDialogRequestedAction = (searchResult: Snippet, corpusForma
         dispatch(hideProgressBarAction());
         dispatch(documentLoadedAction(response.data, corpusFormat));
     }).catch(() => {
-        dispatch(snackbarActions.openSnackbar('Could not load document'));
+        dispatch(openSnackbar('Could not load document'));
         dispatch(hideProgressBarAction());
     })
 };

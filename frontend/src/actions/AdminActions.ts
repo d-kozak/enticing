@@ -15,14 +15,13 @@ import {
     deleteUserDialogShowProgressAction
 } from "./dialog/DeleteUserDialogActions";
 import {parseValidationErrors} from "./errors";
-import {snackbarActions} from "../reducers/SnackBarReducer";
+import {openSnackbar} from "../reducers/SnackBarReducer";
 
 export const ADMIN_USERS_LOADED = '[ADMIN] USERS LOADED';
 export const ADMIN_USER_UPDATE_SUCCESS = '[ADMIN] UPDATE USER SUCCESS';
 export const ADMIN_DELETE_USER_SUCCESS = '[ADMIN] DELETE USER SUCCESS';
 export const ADMIN_USER_CREATE_SUCCESS = '[ADMIN] CREATE USER SUCCESS';
 
-const openSnackbar = snackbarActions.openSnackbar;
 
 interface UsersLoadedAction {
     type: typeof ADMIN_USERS_LOADED,

@@ -1,7 +1,7 @@
 import {SnackbarState} from "./ApplicationState";
 import {createSlice, PayloadAction} from "redux-starter-kit";
 
-const snackbarSlice = createSlice({
+const {reducer, actions} = createSlice({
     slice: 'snackbar',
     initialState: {
         isOpen: false,
@@ -19,6 +19,6 @@ const snackbarSlice = createSlice({
     }
 });
 
-export const snackbarActions = snackbarSlice.actions;
+export const {openSnackbar, closeSnackbar} = actions;
 
-export default snackbarSlice.reducer;
+export default reducer;

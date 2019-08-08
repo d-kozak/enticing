@@ -15,7 +15,7 @@ import SearchInput from "../searchbar/SearchInput";
 import * as H from 'history';
 import {getSelectedSearchSettings} from "../../reducers/selectors";
 import {SearchSettings} from "../../entities/SearchSettings";
-import {snackbarActions} from "../../reducers/SnackBarReducer";
+import {openSnackbar} from "../../reducers/SnackBarReducer";
 
 const styles = createStyles({
     searchInput: {
@@ -65,7 +65,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 
 const mapDispatchToProps = {
     startSearching: startSearchingAction as (query: SearchQuery, searchSettings: SearchSettings, history?: H.History) => void,
-    openSnackbar: snackbarActions.openSnackbar
+    openSnackbar
 
 };
 

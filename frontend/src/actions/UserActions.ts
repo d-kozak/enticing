@@ -22,10 +22,7 @@ import {
 import {parseValidationErrors} from "./errors";
 import {isCorpusFormat} from "../entities/CorpusFormat";
 import {corpusFormatLoadedAction} from "./CorpusFormatActions";
-
-import {snackbarActions} from "../reducers/SnackBarReducer";
-
-const openSnackbar = snackbarActions.openSnackbar;
+import {openSnackbar} from "../reducers/SnackBarReducer";
 
 export const USER_LOGOUT = "[USER] LOGOUT";
 export const USER_LOGIN_SUCCESS = "[USER] LOGIN SUCCESS";

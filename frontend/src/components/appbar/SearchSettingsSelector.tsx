@@ -18,7 +18,7 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import EditIcon from '@material-ui/icons/Edit';
 import InfoIcon from '@material-ui/icons/Info';
 import Divider from "@material-ui/core/Divider";
-import {snackbarActions} from "../../reducers/SnackBarReducer";
+import {openSnackbar} from "../../reducers/SnackBarReducer";
 
 
 const styles = (theme: Theme) => createStyles({
@@ -107,7 +107,7 @@ const mapStateToProps = (state: ApplicationState) => ({
     isLoggedIn: isLoggedIn(state),
     searchSettings: state.searchSettings.settings,
     selectedSearchSettings: getSelectedSearchSettings(state),
-    openSnackbar: snackbarActions.openSnackbar
+    openSnackbar
 });
 const mapDispatchToProps = {
     selectSearchSettings: searchSettingsSelectedRequestAction as (settings: SearchSettings, previousSelectedIndex: string, isLoggedIn: boolean) => void
