@@ -7,15 +7,15 @@ import {hideProgressbar, showProgressbar} from "./ProgressBarReducer";
 import axios from "axios";
 import {openSnackbar} from "./SnackBarReducer";
 import {
-    deleteUserDialogClosedAction,
-    deleteUserDialogHideProgressAction,
-    deleteUserDialogShowProgressAction
-} from "../actions/dialog/DeleteUserDialogActions";
+    closeDeleteUserDialog,
+    hideDeleteUserDialogProgress,
+    showDeleteUserDialogProgress
+} from "./dialog/DeleteUserDialogReducer";
 import {
     closeChangePasswordDialog,
     hideChangePasswordDialogProgress,
     showChangePasswordDialogProgress
-} from "../reducers/dialog/ChangePasswordDialogReducer";
+} from "./dialog/ChangePasswordDialogReducer";
 import {parseValidationErrors} from "../actions/errors";
 
 
@@ -78,17 +78,17 @@ export const adminUpdateUserRequest = (user: User): ThunkResult<void> => (dispat
 };
 
 export const adminDeleteUserRequest = (user: User): ThunkResult<void> => dispatch => {
-    dispatch(deleteUserDialogShowProgressAction());
+    dispatch(showDeleteUserDialogProgress());
     axios.delete(`${API_BASE_PATH}/user/${user.id}`, {withCredentials: true})
         .then(() => {
             dispatch(openSnackbar(`User with login ${user.login} deleted`));
             dispatch(adminDeleteUser(user));
-            dispatch(deleteUserDialogHideProgressAction());
-            dispatch(deleteUserDialogClosedAction());
+            dispatch(hideDeleteUserDialogProgress());
+            dispatch(closeDeleteUserDialog());
         })
         .catch(() => {
             dispatch(openSnackbar(`Could not delete user with ${user.login}`));
-            dispatch(deleteUserDialogHideProgressAction());
+            dispatch(hideDeleteUserDialogProgress());
         })
 };
 
@@ -122,7 +122,7 @@ export const adminCreateNewUserRequest = (login: string, password: string, roles
             onDone();
         })
         .catch((response) => {
-            const errors = response.response.data.status === 400 ? parseValidationErrors(response) : {}
+            const errors = response.response.data.status === 400 ? parseValidationErrors(response) : {};
             onError(errors);
             dispatch(openSnackbar(`Failed to create user ${login}`));
         })

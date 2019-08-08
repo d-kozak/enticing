@@ -45,9 +45,13 @@ export const initialState = {
 };
 
 interface NewState {
-    snackbar: SnackbarState
-    progressbar: ProgressBarState,
-    admin: AdminState
+    snackBar: SnackbarState
+    progressBar: ProgressBarState,
+    adminState: AdminState
+    dialog: {
+        deleteUserDialog: DeleteUserDialogState,
+        changePasswordDialog: ChangePasswordDialogState
+    }
 }
 
 
@@ -75,7 +79,10 @@ export type SearchSettingsState = Readonly<typeof initialState.searchSettings>;
 
 export type DocumentDialogState = Readonly<typeof initialState.dialog.documentDialog>
 
-export type DeleteUserDialogState = Readonly<typeof initialState.dialog.deleteUserDialog>
+export interface DeleteUserDialogState {
+    userToDelete: User | null,
+    showProgress: boolean
+}
 
 export interface ChangePasswordDialogState {
     user: User | null,

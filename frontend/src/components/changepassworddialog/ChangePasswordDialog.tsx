@@ -103,7 +103,7 @@ const ChangePasswordDialog = (props: ChangePasswordDialogProps) => {
             </Formik>
         </Dialog>
     </div>
-}
+};
 
 const mapStateToProps = (state: ApplicationState) => ({
     showProgress: state.dialog.changePasswordDialog.showProgress,

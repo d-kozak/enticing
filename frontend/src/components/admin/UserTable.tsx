@@ -14,7 +14,7 @@ import Button from "@material-ui/core/es/Button";
 import DeleteUserDialog from "./DeleteUserDialog";
 import {connect} from "react-redux";
 import {ApplicationState} from "../../reducers/ApplicationState";
-import {deleteUserDialogOpenAction} from "../../actions/dialog/DeleteUserDialogActions";
+import {openDeleteUserDialog} from "../../reducers/dialog/DeleteUserDialogReducer";
 import ChangePasswordDialog from "../changepassworddialog/ChangePasswordDialog";
 import {adminChangePasswordRequest, adminLoadUserRequest, adminUpdateUserRequest} from "../../reducers/AdminReducer";
 import {openChangePasswordDialog} from "../../reducers/dialog/ChangePasswordDialogReducer";
@@ -103,11 +103,12 @@ const UserTable = (props: UserTableProps) => {
 
 const mapStateToProps = (state: ApplicationState) => ({
     users: state.adminState.users
-})
+});
+
 const mapDispatchToProps = {
     loadUsers: adminLoadUserRequest as () => void,
     updateUser: adminUpdateUserRequest as (user: User) => void,
-    deleteUser: deleteUserDialogOpenAction,
+    deleteUser: openDeleteUserDialog,
     openChangePasswordDialog: openChangePasswordDialog,
     changePassword: adminChangePasswordRequest as (user: User, newPassword: string) => void
 };

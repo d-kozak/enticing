@@ -1,41 +1,31 @@
-import {
-    DELETE_USER_DIALOG_CLOSED,
-    DELETE_USER_DIALOG_HIDE_PROGRESS,
-    DELETE_USER_DIALOG_OPEN,
-    DELETE_USER_DIALOG_SHOW_PROGRESS,
-    DeleteUserDialogAction
-} from "../../actions/dialog/DeleteUserDialogActions";
-import {DeleteUserDialogState, initialState} from "../ApplicationState";
+import {DeleteUserDialogState} from "../ApplicationState";
+import {createSlice, PayloadAction} from "redux-starter-kit";
+import {User} from "../../entities/User";
 
-
-type DeleteUserDialogReducer = (state: DeleteUserDialogState | undefined, action: DeleteUserDialogAction) => DeleteUserDialogState
-
-const deleteUserDialogReducer: DeleteUserDialogReducer = (state = initialState.dialog.deleteUserDialog, action) => {
-    switch (action.type) {
-        case DELETE_USER_DIALOG_OPEN:
-            return {
-                userToDelete: action.userToDelete,
-                showProgress: false
-            };
-        case DELETE_USER_DIALOG_CLOSED:
-            return {
-                userToDelete: null,
-                showProgress: false
-            };
-
-        case DELETE_USER_DIALOG_SHOW_PROGRESS:
-            return {
-                ...state,
-                showProgress: true
-            };
-        case DELETE_USER_DIALOG_HIDE_PROGRESS:
-            return {
-                ...state,
-                showProgress: false
-            };
-
+const {reducer, actions} = createSlice({
+    slice: 'deleteUserDialog',
+    initialState: {
+        userToDelete: null as User | null,
+        showProgress: false
+    } as DeleteUserDialogState,
+    reducers: {
+        openDeleteUserDialog: (state: DeleteUserDialogState, {payload}: PayloadAction<User>) => {
+            state.userToDelete = payload;
+            state.showProgress = false;
+        },
+        closeDeleteUserDialog: (state: DeleteUserDialogState) => {
+            state.userToDelete = null;
+            state.showProgress = false;
+        },
+        showDeleteUserDialogProgress: (state: DeleteUserDialogState) => {
+            state.showProgress = true;
+        },
+        hideDeleteUserDialogProgress: (state: DeleteUserDialogState) => {
+            state.showProgress = false;
+        }
     }
-    return state;
-};
+});
 
-export default deleteUserDialogReducer;
+
+export const {closeDeleteUserDialog, hideDeleteUserDialogProgress, openDeleteUserDialog, showDeleteUserDialogProgress} = actions;
+export default reducer;
