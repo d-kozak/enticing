@@ -36,6 +36,7 @@
     "redux": "^4.0.1",
     "redux-devtools-extension": "^2.13.8",
     "redux-logger": "^3.0.6",
+    "redux-starter-kit": "^0.6.3",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
     "typescript": "3.4.2",
