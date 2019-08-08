@@ -1,27 +1,33 @@
-import {SEARCH_RESULT_UPDATED, SEARCH_RESULTS_NEW, SearchResultAction} from "../actions/SearchResultActions";
-import {initialState, SearchResultsState} from "./ApplicationState";
+import {SearchResultsState} from "./ApplicationState";
+import {createSlice, PayloadAction} from "redux-starter-kit";
+import {Snippet} from "../entities/Snippet";
+import {CorpusFormat} from "../entities/CorpusFormat";
 
 
-type SearchResultReducer = (state: SearchResultsState | undefined, action: SearchResultAction) => SearchResultsState
-
-const searchResultReducer: SearchResultReducer = (state = initialState.searchResult, action) => {
-    switch (action.type) {
-        case SEARCH_RESULTS_NEW:
-            return {
-                snippets: action.snippets,
-                corpusFormat: action.corpusFormat
-            };
-        case SEARCH_RESULT_UPDATED:
+const {reducer, actions} = createSlice({
+    slice: 'searchResults',
+    initialState: {
+        snippets: null as Array<Snippet> | null,
+        corpusFormat: null as CorpusFormat | null
+    } as SearchResultsState,
+    reducers: {
+        newSearchResults: (state: SearchResultsState, {payload}: PayloadAction<SearchResultsState>) => {
+            state.corpusFormat = payload.corpusFormat;
+            state.snippets = payload.snippets;
+        },
+        updateSearchResult: (state: SearchResultsState, {payload}: PayloadAction<Snippet>) => {
             if (!state.snippets) {
                 throw new Error("Invalid state, cannot update a single result when no results are in the state");
             }
-            return {
-                ...state,
-                snippets: state.snippets
-                    .map(item => item.id === action.snippet.id ? action.snippet : item)
+            const index = state.snippets.findIndex(snippet => snippet.id == payload.id);
+            if (index !== -1) {
+                state.snippets[index] = payload;
+            } else {
+                throw new Error("could not find corresponding snippet");
             }
+        }
     }
-    return state
-}
+});
 
-export default searchResultReducer;
+export const {newSearchResults, updateSearchResult} = actions;
+export default reducer;

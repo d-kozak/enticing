@@ -3,12 +3,13 @@ import {API_BASE_PATH} from "../globals";
 
 import axios from "axios";
 import {hideProgressbar, showProgressbar} from "../reducers/ProgressBarReducer";
-import {searchResultUpdatedAction} from "./SearchResultActions";
 import {Snippet} from "../entities/Snippet";
 import {isSnippetExtension, SnippetExtension} from "../entities/SnippetExtension";
 import {ContextExtensionQuery} from "../entities/ContextExtensionQuery";
 import {NewAnnotatedText, parseNewAnnotatedText} from "../components/annotations/NewAnnotatedText";
 import {openSnackbar} from "../reducers/SnackBarReducer";
+
+import {updateSearchResult} from "../reducers/SearchResultReducer";
 
 function mergeSnippet(searchResult: Snippet, data: SnippetExtension): Snippet {
     const prefix = data.prefix.content
@@ -58,7 +59,7 @@ export const contextExtensionRequestAction = (searchResult: Snippet): ThunkResul
 
 
         const merged: Snippet = mergeSnippet(searchResult, response.data);
-        dispatch(searchResultUpdatedAction(merged));
+        dispatch(updateSearchResult(merged));
         dispatch(hideProgressbar());
     }).catch((error) => {
         console.error(error);

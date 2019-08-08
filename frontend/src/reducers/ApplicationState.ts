@@ -57,7 +57,10 @@ export interface AdminState {
     users: Array<User>
 }
 
-export type SearchResultsState = Readonly<typeof initialState.searchResult>
+export interface SearchResultsState {
+    snippets: Array<Snippet> | null,
+    corpusFormat: CorpusFormat | null
+}
 
 export interface SnackbarState {
     isOpen: boolean,

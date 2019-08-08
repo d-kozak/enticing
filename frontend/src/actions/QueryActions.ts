@@ -4,12 +4,11 @@ import {SearchQuery} from "../entities/SearchQuery";
 import {API_BASE_PATH} from "../globals";
 import axios from "axios";
 import {hideProgressbar, showProgressbar} from "../reducers/ProgressBarReducer";
-import {newSearchResultsAction} from "./SearchResultActions";
 import {isSearchResult} from "../entities/SearchResult";
 import {parseNewAnnotatedText} from "../components/annotations/NewAnnotatedText";
 import {SearchSettings} from "../entities/SearchSettings";
 import {openSnackbar} from "../reducers/SnackBarReducer";
-
+import {newSearchResults} from "../reducers/SearchResultReducer";
 
 export const startSearchingAction = (query: SearchQuery, searchSettings: SearchSettings, history?: H.History): ThunkResult<void> => (dispatch) => {
     const encodedQuery = encodeURI(query);
@@ -41,7 +40,7 @@ export const startSearchingAction = (query: SearchQuery, searchSettings: SearchS
             }
         }
 
-        dispatch(newSearchResultsAction(response.data.snippets, searchSettings.corpusFormat!));
+        dispatch(newSearchResults({snippets: response.data.snippets, corpusFormat: searchSettings.corpusFormat!}));
         dispatch(hideProgressbar());
         if (history) {
             history.push(`/search?query=${encodedQuery}`);
