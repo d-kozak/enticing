@@ -3,6 +3,7 @@ package cz.vutbr.fit.knot.enticing.webserver.entity
 import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.*
 
+val defaultSelectedMetadata = SelectedMetadata(indexes = listOf("token"))
 
 /**
  * Describes the subset of all corpusFormat metadata that should be returned from index servers

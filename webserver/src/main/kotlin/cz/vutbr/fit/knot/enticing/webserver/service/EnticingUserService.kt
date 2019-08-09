@@ -4,6 +4,7 @@ import cz.vutbr.fit.knot.enticing.webserver.dto.*
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettingsId
 import cz.vutbr.fit.knot.enticing.webserver.entity.SelectedMetadata
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
+import cz.vutbr.fit.knot.enticing.webserver.entity.defaultSelectedMetadata
 import cz.vutbr.fit.knot.enticing.webserver.exception.InsufficientRoleException
 import cz.vutbr.fit.knot.enticing.webserver.exception.InvalidPasswordException
 import cz.vutbr.fit.knot.enticing.webserver.exception.ValueNotUniqueException
@@ -85,9 +86,10 @@ class EnticingUserService(private val userRepository: UserRepository, private va
     }
 
 
-    fun loadSelectedMetadata(searchSettingsId: SearchSettingsId): SelectedMetadata? {
+    fun loadSelectedMetadata(searchSettingsId: SearchSettingsId): SelectedMetadata {
         return currentUser?.let { userRepository.findByLogin(it.login) }
                 ?.let { it.selectedMetadata[searchSettingsId] }
+                ?: defaultSelectedMetadata
     }
 
     fun saveSelectedMetadata(metadata: SelectedMetadata, searchSettingsId: SearchSettingsId) {
