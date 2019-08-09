@@ -67,6 +67,15 @@ export const loadSelectedMetadataRequest = (searchSettingsId: string): ThunkResu
     }
 };
 
+export const saveSelectedMetadataRequest = (metadata: SelectedMetadata, settingsId: string): ThunkResult<void> => async dispatch => {
+    try {
+        await axios.post(`${API_BASE_PATH}/user/text-metadata/${settingsId}`, metadata, {withCredentials: true});
+        dispatch(openSnackbar(`metadata saved`));
+    } catch (e) {
+        dispatch(openSnackbar(`Failed save selected metadata`));
+    }
+};
+
 export const logoutRequest = (): ThunkResult<void> => dispatch => {
     dispatch(showProgressbar());
     axios.get(`${API_BASE_PATH}/logout`)

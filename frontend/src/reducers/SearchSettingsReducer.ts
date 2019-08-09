@@ -190,7 +190,7 @@ export const saveNewSearchSettingsRequest = (searchSettings: SearchSettings, onD
             dispatch(updateSearchSettings(response.data));
         })
         .catch((response) => {
-            const errors = response.response.data.status === 400 ? parseValidationErrors(response) : {}
+            const errors = response.data.status === 400 ? parseValidationErrors(response) : {}
             onError(errors);
             dispatch(openSnackbar(`Adding search settings ${searchSettings.name} failed`));
         })
