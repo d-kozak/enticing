@@ -23,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import java.util.*
+import javax.persistence.EntityManager
 
 
 internal class EnticingUserServiceTest {
@@ -30,7 +31,8 @@ internal class EnticingUserServiceTest {
     private val searchSettingsRepositoryMock = mockk<SearchSettingsRepository>()
     private val userRepositoryMock = mockk<UserRepository>()
     private val encoder = BCryptPasswordEncoder(11)
-    private val userService = EnticingUserService(userRepositoryMock, encoder, searchSettingsRepositoryMock)
+    private val entityManagerMock = mockk<EntityManager>()
+    private val userService = EnticingUserService(userRepositoryMock, entityManagerMock, encoder, searchSettingsRepositoryMock)
 
     @Test
     fun `loadUserByUsername Test`() {
