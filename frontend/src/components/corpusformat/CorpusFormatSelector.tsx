@@ -1,31 +1,29 @@
-import {createStyles, Grid, WithStyles, withStyles} from "@material-ui/core";
-import {ApplicationState} from "../../ApplicationState";
+import createStyles from "@material-ui/core/es/styles/createStyles";
+import {Grid, Theme, WithStyles} from "@material-ui/core";
+import withStyles from "@material-ui/core/styles/withStyles";
 import {connect} from "react-redux";
-import * as React from "react";
-import {useEffect, useState} from "react";
-import {SearchSettings} from "../../entities/SearchSettings";
-import {Node} from 'react-checkbox-tree';
-
-import Button from '@material-ui/core/Button';
-
-import 'react-checkbox-tree/lib/react-checkbox-tree.css';
+import React, {useState} from 'react';
+import {Node} from "react-checkbox-tree";
 import Typography from "@material-ui/core/es/Typography";
 import TreeElementSelector from "./TreeElementSelector";
-import {loadCorpusFormatRequest} from "../../reducers/SearchSettingsReducer";
-import {getUser, isLoggedIn, loadSelectedMetadataRequest} from "../../reducers/UserReducer";
+import Button from "@material-ui/core/Button";
+import {SearchSettings} from "../../entities/SearchSettings";
+import {CorpusFormat} from "../../entities/CorpusFormat";
 import {SelectedMetadata} from "../../entities/SelectedMetadata";
+import {ApplicationState} from "../../ApplicationState";
 
-const styles = createStyles({});
 
+const styles = (theme: Theme) => createStyles({});
 
-export type CorpusFormatSelectorProps =
+type CorpusFormatSelectorProps =
     WithStyles<typeof styles>
-    & typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
+    & typeof mapDispatchToProps
     & {
-    searchSettings: SearchSettings
+    searchSettings: SearchSettings,
+    corpusFormat: CorpusFormat,
+    selectedMetadata: SelectedMetadata
 }
-
 
 const splitMetadata = (metadata: SelectedMetadata | undefined): [Array<string>, Array<string>] => {
     if (!metadata) return [[], []];
@@ -42,33 +40,11 @@ const splitMetadata = (metadata: SelectedMetadata | undefined): [Array<string>, 
     return [metadata.indexes, attributes];
 };
 
+
 const CorpusFormatSelector = (props: CorpusFormatSelectorProps) => {
-    const {searchSettings, isLoggedIn, user, loadCorpusFormat, loadSelectedMetadata} = props;
+    const {searchSettings, corpusFormat, selectedMetadata} = props;
 
-    if (!searchSettings.corpusFormat || (isLoggedIn && !user.selectedMetadata[searchSettings.id])) {
-        return <div>
-            <Typography variant="body1">Loading...</Typography>
-            <Button onClick={() => loadCorpusFormat(searchSettings)}>Try again</Button>
-        </div>
-    }
-
-    useEffect(() => {
-        if (!searchSettings.corpusFormat) {
-            loadCorpusFormat(searchSettings);
-        }
-    }, []);
-
-
-    useEffect(() => {
-        if (isLoggedIn && !user.selectedMetadata[searchSettings.id]) {
-            loadSelectedMetadata(searchSettings.id);
-        }
-    }, []);
-
-
-    const corpusFormat = searchSettings.corpusFormat;
-
-    const [indexes, attributes] = splitMetadata(user.selectedMetadata[searchSettings.id]);
+    const [indexes, attributes] = splitMetadata(selectedMetadata);
 
     const [selectedIndexes, setSelectedIndexes] = useState(indexes);
     const [selectedAttributes, setSelectedAttributes] = useState(attributes);
@@ -107,15 +83,7 @@ const CorpusFormatSelector = (props: CorpusFormatSelectorProps) => {
     </div>
 };
 
+const mapStateToProps = (state: ApplicationState) => ({});
+const mapDispatchToProps = {};
 
-const mapStateToProps = (state: ApplicationState) => ({
-    isLoggedIn: isLoggedIn(state),
-    user: getUser(state)
-});
-
-const mapDispatchToProps = {
-    loadCorpusFormat: loadCorpusFormatRequest as (settings: SearchSettings) => void,
-    loadSelectedMetadata: loadSelectedMetadataRequest as (settingsId: string) => void
-};
-
-export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(CorpusFormatSelector))
+export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(CorpusFormatSelector));

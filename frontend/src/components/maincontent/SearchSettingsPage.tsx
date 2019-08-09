@@ -25,7 +25,7 @@ import {addTransientSearchSettings, loadSettingsFromFileRequest} from "../../red
 import NewSearchSettingsDialog from "../settings/NewSettingsDialog";
 import FolderOpenIcon from "@material-ui/icons/FolderOpen";
 import {FilePicker} from 'react-file-picker';
-import CorpusFormatSelector from "../corpusformat/CorpusFormatSelector";
+import CorpusFormatSelector from "../corpusformat/CorpusFormatConfig";
 
 const styles = (theme: Theme) => createStyles({
     rootElement: {
