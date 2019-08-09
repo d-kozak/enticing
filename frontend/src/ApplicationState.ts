@@ -3,8 +3,6 @@ import {Snippet} from "./entities/Snippet";
 import {CorpusFormat} from "./entities/CorpusFormat";
 import {SearchSettings} from "./entities/SearchSettings";
 import {FullDocument} from "./entities/FullDocument";
-import {SelectedMetadata} from "./entities/SelectedMetadata";
-
 
 export interface ApplicationState {
     userState: UserState,
@@ -21,9 +19,8 @@ export interface ApplicationState {
 }
 
 export interface UserState {
-    user: User | null,
-    selectedSettings: string | null,
-    selectedMetadata: SelectedMetadata | null
+    user: User
+    isLoggedIn: boolean
 }
 
 export interface AdminState {

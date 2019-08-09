@@ -16,6 +16,7 @@ const {reducer, actions} = createSlice({
     initialState: {settings: {}} as SearchSettingsState,
     reducers: {
         loadSearchSettings: (state: SearchSettingsState, {payload}: PayloadAction<Array<SearchSettings>>) => {
+            state.settings = {};
             for (let settings of payload) {
                 state.settings[settings.id] = settings;
             }
@@ -68,6 +69,21 @@ const {addSearchSettings, loadSearchSettings, removeSearchSettings, setNewDefaul
 export const {removeTransientSettings, loadCorpusFormat} = actions;
 export default reducer;
 
+
+export const loadCorpusFormatRequest = (searchSettings: SearchSettings): ThunkResult<void> => (dispatch) => {
+    axios.get(`${API_BASE_PATH}/query/format/${searchSettings.id}`, {withCredentials: true})
+        .then(response => {
+            if (isCorpusFormat(response.data)) {
+                dispatch(loadCorpusFormat({id: Number(searchSettings.id), format: response.data}))
+            } else {
+                throw "could not parse";
+            }
+        }).catch(error => {
+        console.error(error);
+        dispatch(openSnackbar(`Could load format for selected configuration ${searchSettings.name}`));
+    })
+};
+
 export const loadSearchSettingsRequest = (selectedSettingsId: string | null): ThunkResult<void> => (dispatch) => {
     axios.get<Array<SearchSettings>>(`${API_BASE_PATH}/search-settings`, {withCredentials: true})
         .then(response => {
@@ -78,17 +94,7 @@ export const loadSearchSettingsRequest = (selectedSettingsId: string | null): Th
             }
             const selectedSettings = findSelectedSettings(selectedSettingsId, searchSettings);
             if (selectedSettings !== null) {
-                axios.get(`${API_BASE_PATH}/query/format/${selectedSettings.id}`, {withCredentials: true})
-                    .then(response => {
-                        if (isCorpusFormat(response.data)) {
-                            dispatch(loadCorpusFormat({id: Number(selectedSettings.id), format: response.data}))
-                        } else {
-                            throw "could not parse";
-                        }
-                    }).catch(error => {
-                    console.error(error);
-                    dispatch(openSnackbar(`Could load format for selected configuration ${selectedSettings.name}`));
-                })
+                dispatch(loadCorpusFormatRequest(selectedSettings))
             } else {
                 console.warn("No selected search settings found, could not pre-load corpus format...")
             }

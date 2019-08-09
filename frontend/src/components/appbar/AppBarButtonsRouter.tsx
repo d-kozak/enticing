@@ -5,25 +5,37 @@ import React from "react";
 import CommonAppBarButtons from "./CommonAppBarButtons";
 import LinkTo from "../utils/linkTo";
 import Button from "@material-ui/core/es/Button";
-import {User} from "../../entities/User";
+import {ApplicationState} from "../../ApplicationState";
+import {getUser, isLoggedIn, logoutRequest} from "../../reducers/UserReducer";
+import {connect} from "react-redux";
+
 
 const styles = createStyles({});
 
-export interface AppBarButtonsProps extends WithStyles<typeof styles> {
-    handleLogout: () => void,
-    user: User | null
-}
+export type AppBarButtonsProps =
+    WithStyles<typeof styles>
+    & typeof mapDispatchToProps
+    & ReturnType<typeof mapStateToProps>
 
 const AppBarButtonsRouter = (props: AppBarButtonsProps) => {
-    const {user, handleLogout} = props;
+    const {user, isUserLoggedId, handleLogout} = props;
 
     const LoginLink = LinkTo("/login");
     return <Switch>
         <Route path={["/", "/search", "/settings", "/users", "/search-settings"]} exact
-               render={() => user !== null ? <CommonAppBarButtons user={user} handleLogout={handleLogout}/> :
+               render={() => isUserLoggedId ? <CommonAppBarButtons user={user} handleLogout={handleLogout}/> :
                    <Button component={LoginLink} color="inherit">Login</Button>}/>}/>
     </Switch>
 };
 
 
-export default withStyles(styles, {withTheme: true})(AppBarButtonsRouter)
+const mapStateToProps = (state: ApplicationState) => ({
+    user: getUser(state),
+    isUserLoggedId: isLoggedIn(state)
+});
+
+const mapDispatchToProps = {
+    handleLogout: logoutRequest as () => void
+};
+
+export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(AppBarButtonsRouter))

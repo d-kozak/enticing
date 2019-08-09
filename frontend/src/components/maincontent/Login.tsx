@@ -18,8 +18,7 @@ import LinearProgress from "@material-ui/core/es/LinearProgress";
 import LinkTo from "../utils/linkTo";
 import {ApplicationState} from "../../ApplicationState";
 import {connect} from "react-redux";
-import {loginRequest} from "../../reducers/UserReducer";
-import {isLoggedIn} from "../../reducers/selectors";
+import {isLoggedIn, loginRequest} from "../../reducers/UserReducer";
 
 const styles = (theme: Theme) => createStyles({
     mainElement: {

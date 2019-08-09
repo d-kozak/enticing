@@ -4,7 +4,7 @@ import {
     CheckBox,
     CheckBoxOutlineBlank,
     IndeterminateCheckBox,
-    KeyboardArrowDown,
+    KeyboardArrowRight,
     KeyboardArrowUp
 } from "@material-ui/icons";
 
@@ -85,7 +85,7 @@ const TreeElementSelector = (props: TreeElementSelectorProps) => {
                 check: <CheckBox color="primary"/>,
                 uncheck: <CheckBoxOutlineBlank color="primary"/>,
                 halfCheck: <IndeterminateCheckBox color="primary"/>,
-                expandClose: <KeyboardArrowDown/>,
+                expandClose: <KeyboardArrowRight/>,
                 expandOpen: <KeyboardArrowUp/>,
                 expandAll: <span/>,
                 collapseAll: <span/>,

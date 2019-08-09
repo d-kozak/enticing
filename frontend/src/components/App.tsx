@@ -15,9 +15,8 @@ import {connect} from "react-redux";
 import {ApplicationState} from "../ApplicationState";
 import UserSettings from "./maincontent/UserSettings";
 import SelectSearchSettingsPage from "./maincontent/SearchSettingsPage";
-import {isUserAdmin} from "../reducers/selectors";
+import {attemptLoginRequest, isUserAdmin} from "../reducers/UserReducer";
 import UserRoute from "./routes/UserRoute";
-import {attemptLoginRequest} from "../reducers/UserReducer";
 import {openSnackbar} from "../reducers/SnackBarReducer";
 
 type AppProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>

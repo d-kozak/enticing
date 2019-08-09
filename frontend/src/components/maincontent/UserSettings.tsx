@@ -13,9 +13,8 @@ import Grid from "@material-ui/core/es/Grid";
 import Button from "@material-ui/core/es/Button";
 import ChangePasswordDialog from "../changepassworddialog/ChangePasswordDialog";
 import {openChangePasswordDialog} from "../../reducers/dialog/ChangePasswordDialogReducer";
-import {changePasswordRequest, userSettingsUpdateRequest} from "../../reducers/UserReducer";
+import {changePasswordRequest, getUser, isLoggedIn, userSettingsUpdateRequest} from "../../reducers/UserReducer";
 import {User} from "../../entities/User";
-import {isLoggedIn} from "../../reducers/selectors";
 import {Redirect} from "react-router";
 import Divider from "@material-ui/core/Divider";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
@@ -59,9 +58,9 @@ const schema = Yup.object({
 });
 
 const UserSettings = (props: UserSettingsProps) => {
-    const {isLoggedIn, history, user, classes, userSettings, updateUserSettings, openChangePasswordDialog, changePassword} = props;
+    const {isLoggedIn, history, user, classes, updateUserSettings, openChangePasswordDialog, changePassword} = props;
 
-    if (!isLoggedIn || !userSettings) {
+    if (!isLoggedIn) {
         return <Redirect to="/"/>
     }
 
@@ -71,14 +70,14 @@ const UserSettings = (props: UserSettingsProps) => {
         {showProgress && <LinearProgress className={classes.progress}/>}
         <Typography variant="h3" className={classes.title}>User settings</Typography>
         <Formik
-            initialValues={userSettings}
+            initialValues={user.userSettings}
             onSubmit={(values, actions) => {
                 setShowProgress(true);
 
                 const newUserInfo = {
                     ...user,
                     userSettings: values
-                }
+                };
                 updateUserSettings(newUserInfo, () => {
                     actions.setSubmitting(false);
                     setShowProgress(false);
@@ -124,8 +123,7 @@ const UserSettings = (props: UserSettingsProps) => {
 
 const mapStateToProps = (state: ApplicationState) => ({
     isLoggedIn: isLoggedIn(state),
-    userSettings: (state.userState.user && state.userState.user.userSettings) || undefined,
-    user: state.userState.user!
+    user: getUser(state)
 });
 const mapDispatchToProps = {
     openChangePasswordDialog: openChangePasswordDialog,

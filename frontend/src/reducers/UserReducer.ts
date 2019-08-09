@@ -1,6 +1,6 @@
-import {UserState} from "../ApplicationState";
+import {ApplicationState, UserState} from "../ApplicationState";
 import {createSlice, PayloadAction} from "redux-starter-kit";
-import {User} from "../entities/User";
+import {createAnonymousUser, User} from "../entities/User";
 import {UserSettings} from "../entities/UserSettings";
 import {ThunkResult} from "../actions/RootActions";
 import {hideProgressbar, showProgressbar} from "./ProgressBarReducer";
@@ -16,43 +16,56 @@ import {
     hideChangePasswordDialogProgress,
     showChangePasswordDialogProgress
 } from "./dialog/ChangePasswordDialogReducer";
+import {SelectedMetadata} from "../entities/SelectedMetadata";
 
 
 const {reducer, actions} = createSlice({
     slice: 'user',
     initialState: {
-        user: null,
-        selectedSettings: null,
-        selectedMetadata: null
+        user: createAnonymousUser(),
+        isLoggedIn: false
     } as UserState,
     reducers: {
         userLogin: (state: UserState, {payload}: PayloadAction<User>) => {
             state.user = payload;
-            state.selectedSettings = payload.selectedSettings;
+            if (!state.user.selectedMetadata) {
+                state.user.selectedMetadata = {};
+            }
+            state.isLoggedIn = true;
         },
         userLogout: (state: UserState) => {
-            state.user = null;
-            state.selectedSettings = null
+            state.user = createAnonymousUser();
+            state.isLoggedIn = false;
         },
         updateUserSettings: (state: UserState, {payload}: PayloadAction<UserSettings>) => {
-            if (!state.user) {
-                throw new Error("Cannot update settings when no user is logged in")
-            }
             state.user.userSettings = payload;
         },
         selectSearchSettings: (state: UserState, {payload}: PayloadAction<string>) => {
-            if (!state.user) {
-                throw new Error("Cannot update settings when no user is logged in")
-            }
             state.user.selectedSettings = payload;
+        },
+        loadSelectedMetadata: (state: UserState, {payload}: PayloadAction<{ settingsId: string, metadata: SelectedMetadata }>) => {
+            state.user.selectedMetadata[payload.settingsId] = payload.metadata;
         }
     }
 });
 
 
-const {userLogin, userLogout, updateUserSettings, selectSearchSettings} = actions;
+export const isUserAdmin = (state: ApplicationState) => state.userState.user.roles.indexOf("ADMIN") != -1;
+export const isLoggedIn = (state: ApplicationState) => state.userState.isLoggedIn;
+export const getUser = (state: ApplicationState) => state.userState.user;
+
+const {userLogin, userLogout, updateUserSettings, selectSearchSettings, loadSelectedMetadata} = actions;
 export default reducer;
 
+export const loadSelectedMetadataRequest = (searchSettingsId: string): ThunkResult<void> => async (dispatch) => {
+    try {
+        const {data} = await axios.get(`${API_BASE_PATH}/user/text-metadata/${searchSettingsId}`);
+        console.log(JSON.stringify(data, null, 2));
+        dispatch(loadSelectedMetadata({settingsId: searchSettingsId, metadata: data}))
+    } catch (e) {
+        dispatch(openSnackbar(`Could not load selected metadata for settings ${searchSettingsId}`));
+    }
+};
 
 export const logoutRequest = (): ThunkResult<void> => dispatch => {
     dispatch(showProgressbar());

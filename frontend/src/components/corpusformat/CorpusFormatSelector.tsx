@@ -1,18 +1,21 @@
-import {Button, createStyles, Grid, WithStyles, withStyles} from "@material-ui/core";
+import {createStyles, Grid, WithStyles, withStyles} from "@material-ui/core";
 import {ApplicationState} from "../../ApplicationState";
 import {connect} from "react-redux";
 import * as React from "react";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {SearchSettings} from "../../entities/SearchSettings";
 import {Node} from 'react-checkbox-tree';
 
+import Button from '@material-ui/core/Button';
 
 import 'react-checkbox-tree/lib/react-checkbox-tree.css';
 import Typography from "@material-ui/core/es/Typography";
 import TreeElementSelector from "./TreeElementSelector";
+import {loadCorpusFormatRequest} from "../../reducers/SearchSettingsReducer";
+import {getUser, isLoggedIn, loadSelectedMetadataRequest} from "../../reducers/UserReducer";
+import {SelectedMetadata} from "../../entities/SelectedMetadata";
 
 const styles = createStyles({});
-
 
 
 export type CorpusFormatSelectorProps =
@@ -23,15 +26,52 @@ export type CorpusFormatSelectorProps =
     searchSettings: SearchSettings
 }
 
-const CorpusFormatSelector = (props: CorpusFormatSelectorProps) => {
-    const {searchSettings, user} = props;
-    if (!searchSettings.corpusFormat) {
-        return <span>no corpus format</span>
+
+const splitMetadata = (metadata: SelectedMetadata | undefined): [Array<string>, Array<string>] => {
+    if (!metadata) return [[], []];
+
+    const attributes = [] as Array<string>;
+
+    for (let entityName of Object.keys(metadata.entities)) {
+        attributes.push(entityName);
+        for (let attribute of metadata.entities[entityName].attributes) {
+            attributes.push(`${entityName}/${attribute}`);
+        }
     }
+
+    return [metadata.indexes, attributes];
+};
+
+const CorpusFormatSelector = (props: CorpusFormatSelectorProps) => {
+    const {searchSettings, isLoggedIn, user, loadCorpusFormat, loadSelectedMetadata} = props;
+
+    if (!searchSettings.corpusFormat || (isLoggedIn && !user.selectedMetadata[searchSettings.id])) {
+        return <div>
+            <Typography variant="body1">Loading...</Typography>
+            <Button onClick={() => loadCorpusFormat(searchSettings)}>Try again</Button>
+        </div>
+    }
+
+    useEffect(() => {
+        if (!searchSettings.corpusFormat) {
+            loadCorpusFormat(searchSettings);
+        }
+    }, []);
+
+
+    useEffect(() => {
+        if (isLoggedIn && !user.selectedMetadata[searchSettings.id]) {
+            loadSelectedMetadata(searchSettings.id);
+        }
+    }, []);
+
+
     const corpusFormat = searchSettings.corpusFormat;
 
-    const [selectedIndexes, setSelectedIndexes] = useState(Object.keys(corpusFormat.indexes));
-    const [selectedAttributes, setSelectedAttributes] = useState([...Object.keys(corpusFormat.entities)])
+    const [indexes, attributes] = splitMetadata(user.selectedMetadata[searchSettings.id]);
+
+    const [selectedIndexes, setSelectedIndexes] = useState(indexes);
+    const [selectedAttributes, setSelectedAttributes] = useState(attributes);
 
 
     const indexNodes = Object.keys(corpusFormat.indexes)
@@ -69,9 +109,13 @@ const CorpusFormatSelector = (props: CorpusFormatSelectorProps) => {
 
 
 const mapStateToProps = (state: ApplicationState) => ({
-    user: state.userState.user
+    isLoggedIn: isLoggedIn(state),
+    user: getUser(state)
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+    loadCorpusFormat: loadCorpusFormatRequest as (settings: SearchSettings) => void,
+    loadSelectedMetadata: loadSelectedMetadataRequest as (settingsId: string) => void
+};
 
 export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(CorpusFormatSelector))

@@ -16,7 +16,12 @@ import {connect} from "react-redux";
 import {ApplicationState} from "../../ApplicationState";
 import {openDeleteUserDialog} from "../../reducers/dialog/DeleteUserDialogReducer";
 import ChangePasswordDialog from "../changepassworddialog/ChangePasswordDialog";
-import {adminChangePasswordRequest, adminLoadUserRequest, adminUpdateUserRequest} from "../../reducers/AdminReducer";
+import {
+    adminChangePasswordRequest,
+    adminLoadUserRequest,
+    adminUpdateUserRequest,
+    getUsers
+} from "../../reducers/AdminReducer";
 import {openChangePasswordDialog} from "../../reducers/dialog/ChangePasswordDialogReducer";
 
 
@@ -102,7 +107,7 @@ const UserTable = (props: UserTableProps) => {
 
 
 const mapStateToProps = (state: ApplicationState) => ({
-    users: state.adminState.users
+    users: getUsers(state)
 });
 
 const mapDispatchToProps = {

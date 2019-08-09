@@ -11,9 +11,8 @@ import Button from "@material-ui/core/es/Button";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 import {ApplicationState} from "../../ApplicationState";
-import {signUpRequest} from "../../reducers/UserReducer";
+import {isLoggedIn, signUpRequest} from "../../reducers/UserReducer";
 import {connect} from "react-redux";
-import {isLoggedIn} from "../../reducers/selectors";
 
 const styles = createStyles({
     mainElement: {

@@ -7,10 +7,9 @@ import {WithStyles} from "@material-ui/core/es";
 import {Link} from "react-router-dom";
 import SearchSettingsSelector from "./SearchSettingsSelector";
 import WarningIcon from "@material-ui/icons/Warning";
-import {logoutRequest} from "../../reducers/UserReducer";
+import {getUser, isUserAdmin, logoutRequest} from "../../reducers/UserReducer";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 import {connect} from "react-redux";
-import {isUserAdmin} from "../../reducers/selectors";
 import {ApplicationState} from "../../ApplicationState";
 import AppBarButtonsRouter from "./AppBarButtonsRouter";
 import {IconButton} from "@material-ui/core";
@@ -59,14 +58,14 @@ const EnticingAppBar = (props: EnticingAppBarProps) => {
                             available</Typography>
                     </IconButton>
                 </Link>}
-                <AppBarButtonsRouter user={user} handleLogout={handleLogout}/>
+                <AppBarButtonsRouter/>
             </Toolbar>
         </AppBar>
     </div>
 };
 
 const mapStateToProps = (state: ApplicationState) => ({
-    user: state.userState.user,
+    user: getUser(state),
     isAdmin: isUserAdmin(state),
     searchSettings: state.searchSettings.settings
 });

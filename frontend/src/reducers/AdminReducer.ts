@@ -1,4 +1,4 @@
-import {AdminState} from "../ApplicationState";
+import {AdminState, ApplicationState} from "../ApplicationState";
 import {createSlice, PayloadAction} from "redux-starter-kit";
 import {User} from "../entities/User";
 import {ThunkResult} from "../actions/RootActions";
@@ -19,7 +19,7 @@ import {
 import {parseValidationErrors} from "../actions/errors";
 
 
-const {reducer, actions} = createSlice({
+const {reducer, actions, selectors} = createSlice({
     slice: 'admin',
     initialState: {users: []} as AdminState,
     reducers: {
@@ -45,6 +45,8 @@ const {reducer, actions} = createSlice({
 });
 
 const {adminCreateUser, adminDeleteUser, adminLoadUsers, adminUpdateUser} = actions;
+
+export const getUsers = (state: ApplicationState) => state.adminState.users;
 export default reducer;
 
 export const adminLoadUserRequest = (): ThunkResult<void> => (dispatch) => {
