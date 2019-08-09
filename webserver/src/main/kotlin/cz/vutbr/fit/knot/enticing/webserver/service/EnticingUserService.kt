@@ -17,9 +17,12 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import javax.persistence.EntityManager
+import javax.transaction.Transactional
 
 @Service
-class EnticingUserService(private val userRepository: UserRepository, private val encoder: PasswordEncoder, private val searchSettingsRepository: SearchSettingsRepository) : UserDetailsService {
+@Transactional
+class EnticingUserService(private val userRepository: UserRepository, private val entityManager: EntityManager, private val encoder: PasswordEncoder, private val searchSettingsRepository: SearchSettingsRepository) : UserDetailsService {
 
     private val logger = LoggerFactory.getLogger(EnticingUserService::class.java)
 
@@ -93,6 +96,8 @@ class EnticingUserService(private val userRepository: UserRepository, private va
     }
 
     fun saveSelectedMetadata(metadata: SelectedMetadata, searchSettingsId: SearchSettingsId) {
+        metadata.entities.forEach { (_, attributeList) -> entityManager.persist(attributeList) }
+        entityManager.persist(metadata)
         val userEntity = currentUser?.let { userRepository.findByLogin(it.login) }
                 ?: throw IllegalArgumentException("could not find necessary user information")
         userEntity.selectedMetadata[searchSettingsId] = metadata
