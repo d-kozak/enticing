@@ -1,0 +1,1 @@
+java -jar ../lib/index-server-0.0.1-SNAPSHOT.jar "$@"
