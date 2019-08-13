@@ -54,5 +54,5 @@ enum class LogicUnaryOperator {
 }
 
 
-data class MockNode(val message: String = "") : AstNode
+data class MockNode(val query: String = "") : AstNode
 

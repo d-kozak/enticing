@@ -3,6 +3,7 @@ package cz.vutbr.fit.knot.enticing.eql.compiler.parser
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.MockNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.dto.ParsedQuery
 import org.antlr.v4.runtime.*
+import kotlin.math.min
 
 class EqlCompiler {
 
@@ -15,7 +16,7 @@ class EqlCompiler {
                 }.let {
                     it.root()
                 }
-        val root = MockNode("ast node implemented yet")
+        val root = MockNode(input)
         return ParsedQuery(root, errorListener.errors)
     }
 
@@ -30,8 +31,8 @@ class EqlCompiler {
 
         override fun syntaxError(recognizer: Recognizer<*, *>?, offendingSymbol: Any?, line: Int, charPositionInLine: Int, msg: String, e: RecognitionException?) {
             val token = offendingSymbol as Token
-            val from = Math.min(token.startIndex, token.stopIndex)
-            val to = Math.min(token.startIndex, token.stopIndex)
+            val from = min(token.startIndex, token.stopIndex)
+            val to = min(token.startIndex, token.stopIndex)
             _errors.add(SyntaxError(msg, from, to))
         }
 
