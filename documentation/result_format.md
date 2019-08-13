@@ -4,6 +4,8 @@ are sent back to the client, while text formats describe what is the structure o
 
 The plan is to support two result formats. Currently only Snippet is implemented. For IdentifierList, [EQL](./eql_spec.md) has to be implemented first. 
 
+TODO "add interval match to result"
+
 ## Snippet
 If this format is requested, the response contains whole matched region, possibly extended if it was too small on it's own. 
 

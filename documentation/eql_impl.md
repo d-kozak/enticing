@@ -8,6 +8,8 @@ The work eql is doing can be divided into three parts.
 
 Each of them will now be described in more details.
 
+TODO finish
+
 ```
 _PAR_ => §
 _SENT_ => ¶
