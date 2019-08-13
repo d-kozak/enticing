@@ -1,6 +1,6 @@
 # Specification of the Enticing indexing-related components
 
-This document covers the design of the components of the Enticing platform that contribute to it's indexing and searching functionality. 
+This document covers the design of the components of the Enticing platform that contribute to it's searching and indexing functionality. 
 Currently I propose to create three components: 
 
 * IndexBuilder
@@ -37,7 +37,7 @@ When started, it loads it's configuration, which is required as an input paramet
 If no information about indexed files is provided, the server will respond with error messages to all query, document and snippet requests 
 until a new configuration is set using the rest api. 
 
-### Rest interface
+### Rest interface of the IndexServer
 * all paths prefixed (e.g /api/v1/* )
     * to support multiple APIs simultaneously (v1,v2,v3), if necessary
     * to add GUI at '/', if deemed useful in the future

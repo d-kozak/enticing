@@ -19,6 +19,6 @@ Because EQL provides features such as global constraints that cannot be directly
 
 After the postprocessing finishes, all the necessary information to create SearchResults is available. Therefore the ResultCreator is called and CollectionSearchResult is created.
 
-However, the ResultCreator deserves more discussion. IndexServers support different ResponseFormats and TextFormats and a different result creation algorithm is used based on what was requested. More on this topic of different response formats can be found in [here](./snippet_creation.md).
+However, the ResultCreator deserves more discussion. IndexServers support multiple ResponseFormats and TextFormats and a different result creation algorithm is used based on what was requested. More on the topic of how actual SearchResults are selected based on matched intervals and wanted ResponseType can be found [here](./snippet_creation.md).
 The second part of the offset is used in ResultCreator to skip already used SearchResults. 
 

@@ -1,6 +1,10 @@
-# Response format
+# Text format
 
-This document describes various response formats that the index-server supports (or will support in the future) to return data.
+This document describes formats for annotated text that the index-server supports (or will support in the future).
+
+## Plain text
+This format only returns the text from the default index as a single string without any metadata. It is meant to be used in situations when only a simple answer from a single index is needed.
+In such case using the new annotated text has unnecessary overhead.
 
 ## HTML
 In this format, the response is a single string containing html. Since the exact details of this format were not discussed yet, only a simple prototype has been implemented, but nevertheless it has already proofed itself useful for debugging.
@@ -28,7 +32,7 @@ The matched region is denoted using a \<b> tag.
 </span> 
 ```
 
-## Old annotated text
+## StringWithMetadata
 In this format, the text from default index is sent as a string and the metadata are intervals over this string.
 It is represented using the [following classes](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/AnnotatedText.kt).
 Though it is not that hard to generate, it requires quite a lot of processing on the frontend before it can be rendered. 
@@ -80,7 +84,7 @@ const oldFormatExample = {
 }
 ```
 
-## New annotated text
+## TextUnitList
 This format was developed while trying to fix some of the issues of the old format.
  
 When we look at the mg4j format, we can notice two things.
@@ -129,6 +133,4 @@ Advantages of this data format
 Disadvantages
 * It requires more processing in the backend.
 
-## Plain text
-This format only returns the text from the default index as a single string without any metadata. It is meant to be used in situations when only a simple answer from a single index is needed.
-In such case using the new annotated text has unnecessary overhead. 
+ 
