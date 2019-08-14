@@ -3,11 +3,11 @@ This document describes result formats that the index server supports. The diffe
 are sent back to the client, while the text format describes what is the structure of the annotated text inside the result. Text formats are discussed [here](text_format.md).
 
 The component responsible for creating results is the ResultCreator. As mentioned in the [query processing](query_processing.md), the input for the result creator is a document, 
-interval to query mapping and a result offset. Interval to query mapping contains information which intervals over which indexes were matched by which parts of the query. If we represent each index as a 
-set of intervals, we can compute the Cartesian product **X** over all indexes. Any member of **X** contains one interval for each index. For each member of **X**, we can find the smallest and the biggest 
-value of all intervals it consists of. The interval between these two values represents a part of the document that should be returned for this combination. Let's call it the MatchedRegion. 
-Using some of the members of **X** would result in MatchedRegions that are either too big or overlapping with other MatchedRegions, which can be confusing. Therefore some kind of filtering
-can be performed. For each result format, a different strategy is used.  
+matched regions and a result offset. Matched regions are a list of sets of intervals, where each set represents one requirement from the query that should be highlighted in the response and the intervals 
+inside are parts of document fulfilling the requirement. We can compute the Cartesian product **X** of these sets. Any member of **X** contains one interval per requirement. For each member of **X**, 
+we can find the smallest and the biggest value of all intervals it consists of. The interval between these two values represents a part of the document that should be returned for this combination. 
+Let's call it the MatchedRegion. Using some of the members of **X** would result in MatchedRegions that are either too big or overlapping with other MatchedRegions, which can be confusing. 
+Therefore some kind of filtering can be performed. For each result format, a different strategy is used.  
 
 ## Snippet
 If this format is requested, the response contains the whole matched region, possibly extended if it was too small on it's own. 
