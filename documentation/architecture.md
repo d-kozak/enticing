@@ -5,18 +5,21 @@ Main components of the system can be seen on the following diagram.
 ![alt text](../img/components.png)
 * Web frontend
     * web interface of the search engine
-* Webserver
+* WebServer
     * handles the web frontend
-* Console client
+    * provides user authentication
+    * maintains a database with search configurations
+* ConsoleClient
     * Queries index servers from the command line
-* Index server
+* IndexServer
     * processes EQL queries on it's indexed data
-* Index builder
-    * prepares indexes for index servers
+    * returns CorpusFormat, SearchResults, ContextExtensions or FullDocuments
+* IndexBuilder
+    * prepares indexes from mg4j files for IndexServers
 
 
 ## Modules
-The whole repository is a gradle multi-project consisting of the submodules shown on the following diagram.
+The whole repository is a gradle multi-module project consisting of the submodules shown in the following diagram.
 ![alt text](../img/modules.png)
 Responsibilities of each module are the following.
 * frontend
@@ -26,21 +29,25 @@ Responsibilities of each module are the following.
     * query submission
     * search settings
     * user management
+    * validations and intellisence for search input in the frontend
 * console client
-    * query submission from the command line
+    * handle queries from the command line
 * query-dispatcher
-    * execute query on multiple index servers 
-    * query validation(using eql-compiler)
+    * dispatch queries to multiple nodes, split wanted amounts of results evenly
 * eql-compiler
     * compile EQL to mg4j
-    * query validation
+    * semantic validations
+    * postprocessing
 * dto
+    * data transfer objects used for communication between components 
     * domain objects used in all modules
-    * configuration dsls for all modules
+    * configuration DSLs for all modules
 * index-lib
-    * index data using mg4j
+    * index mg4j files using mg4j
     * query indexed data
+    * transform results into serializable text formats described [here](text_format.md) 
 * index-server
-    * handle queries using index-common
+    * provide REST API user by webserver and console client
+    * internally uses index-lib to handle queries
 * index-builder
-    * index data using index-common
+    * index data using index-lib

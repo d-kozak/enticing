@@ -7,22 +7,23 @@ Currently I propose to create three components:
 * \[slave\] IndexServer
 * Console client
 
-And on top of that, I present the possibility to add master index service, either immediately or in the future. 
+And on top of that, I present the possibility to add master index service in the future. 
   
 ## IndexBuilder
 The responsibility of the IndexBuilder is to create indexes out of .mg4j files. Part of this process is to evenly divide the 
 indexed data into N parts, so that multiple index servers can each handle one part. 
-This component can start as a simple command line tool, but there is an option to eventually extend it 
-into a spring boot app with rest interface that can be used to start the index process or to ask for the current status 
-(since indexing is a time consuming process). Therefore even the initial version should be implemented with this extension in mind.
+This component will start as a simple command line tool that should be executed via scripts on multiple machines, but there is an option to eventually extend it 
+into a microservice with rest interface that can be used to start the index process or to ask for the current status 
+(since indexing is a time and resource consuming process). Therefore even the initial version should be implemented with this extension in mind.
 
 ## Console client
-To allow for automated querying, for example for performance testing, a simple command line client can be implemented. 
-This client will either talk to only one index server or the whole indexed corpus. 
+To allow for automated querying, for example for performance testing, command line client will be implemented. 
+This client will be able to talk to a group of index servers and query them. It will also be able to perform queries on locally available data, 
+mostly for debugging purposes. 
 The results will be printed into standard output or into a file.  
 
 ## Index server
-Slave index service manages already indexed .mg4j files and uses [mg4j](http://mg4j.di.unimi.it/) to perform queries on them.
+Slave index service manages already indexed .mg4j files and uses index lib to perform queries on them.
 
 ### Lifecycle
 When started, it loads it's configuration, which is required as an input parameter. The configuration contains the following. 
@@ -34,8 +35,7 @@ When started, it loads it's configuration, which is required as an input paramet
     * the directory where the indexed data are stored
 *  url of the manager-service (for automatic registration) - \[extension\]
 
-If no information about indexed files is provided, the server will respond with error messages to all query, document and snippet requests 
-until a new configuration is set using the rest api. 
+If no information about indexed files is provided, the server will respond with error messages and stop it's execution.
 
 ### Rest interface of the IndexServer
 * all paths prefixed (e.g /api/v1/* )
@@ -53,7 +53,7 @@ until a new configuration is set using the rest api.
         * returns [CorpusFormat](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/CorpusFormat.kt) 
 * /document
     * POST 
-        * get whole document
+        * get the whole document
         * accepts [DocumentQuery](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/IndexServer.kt)
         * returns [FullDocument](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/IndexServer.kt)
     
@@ -62,16 +62,6 @@ until a new configuration is set using the rest api.
         * extend context
         * accepts [ContextExtensionQuery](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/IndexServer.kt)
         * returns [SnippetExtension](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/IndexServer.kt)
-        
- * /config \[Extension\]
-    * change index configuration 
-    * POST
-    ```javascript
-    requestPayload = {   
-        directory: string, // which directory the query
-        corpusName: string // what index the data belong to
-    }
-    ```
  
  * /actuator/health
     * to check availability
@@ -80,15 +70,15 @@ until a new configuration is set using the rest api.
     
  ### Updates of annotations in indexed documents
  Since the automated process of semantic annotation is not always correct, the system should be able to update annotations in the indexed documents.
- A component for updated .mg4j files has already been implemented, but it is necessary to integrate it into the platform.
+ A component for updating .mg4j files has already been implemented, but it is necessary to integrate it into the platform.
  
  This process can be implemented as follows. Every index service will maintain a set of outdated documents. That is documents that have been updated 
  and therefore their indexed version is incorrect. When returning a snippet or a document, the uuid of the document is checked and 
- if it matches one of the outdated ones, it is filtered out. New endpoint will be added to the index server to inform it that a document has been updated. 
+ if it is one of the outdated ones, it is filtered out. New endpoint will be added to the index server to inform it that a document has been updated. 
  This set of document ids will also be persisted in a single file to survive restarting the service.    
  
  For each corpus, there will be extra index service, whose job is to maintain documents with updated annotations. 
- Once the size of documents handled by this index service grows too large, indexer can be run to reindex the corpus.
+ Once the size of documents handled by this index service is to big, indexer can be run to reindex the corpus.
  
  
  ## Master index service - \[Extension\]
@@ -133,20 +123,14 @@ until a new configuration is set using the rest api.
  We could move the query functionality from the webserver to the master index service.
  The webserver's responsibility would be only to serve and handle the frontend, while the searching functionality would 
  belong to the master index service. I believe that this would probably also allow for better scaling support in the future, 
- because it will be easier to deploy multiple master services, one main and other with readonly views of the indexed corpuses.
+ because it will be easier to deploy multiple master index services.
  
  However, one must consider security when building such system and it can actually be quite hard to make 
  such infrastructure that allows automatic registration of components secure. One must be able to verify that the component 
  that wants to be registered is really our index server etc...
  And all of this would make the infrastructure significantly more complex.
- Therefore it might be better to keep this as a possible extension.
+ Therefore I suggest to keep this as a possible extension.
  
  Also it is worth mentioning that there already are libraries out there, like projects in Spring Cloud or Spring Boot Admin 
- that handle the monitoring quite well, so maybe adding one of these might be 'just good enough' solution for the monitoring problem to start with.
+ that handle the monitoring of Spring Boot apps quite well, so maybe adding one of these might be 'just good enough' solution for the monitoring problem for now.
  And the registration and classification of index services based on the index they are querying can be added to the webserver.
- 
- ## Note on security
- Even if the Master-slave architecture is not going to be used, some kind of security has to be employed anyways.
- For example the /config endpoint of slave index service should be accessible only to it's master component, 
- regardless whether it is gonna be a specialized component or the webserver itself. 
- Currently I can't think of anything better than public/private key cryptography. 
