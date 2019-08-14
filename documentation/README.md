@@ -2,7 +2,7 @@
 This document contains the documentation for the whole project. It covers mostly high-level design choices. For low-level details, please consult the source code itself or the javadoc.
 The documentation is divided into the following parts.
 * [Architecture](architecture.md) - Describes the architecture of the project, modules, and dependencies between them.
-* [Deployment units](deployment_units.md) - Introduces individual deployment units, shows how to build them from source and how to start them 
+* [Deployment units](deployment_units.md) - Introduces individual deployment units, shows how to build them from source and how to start them. 
 * [Indexing](indexing.md) - Talks in more details about components performing indexing and searching.
 * [Dispatcher](dispatcher.md) - Describes the dispatcher algorithm used to dispatch queries to IndexServers in the WebServer and to collections in the IndexServers.
 * [EQL specification](eql_spec.md) - Contains the specification of EQL - Enticing Query Language.
