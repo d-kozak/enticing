@@ -32,13 +32,13 @@ Now the three words are required to appear next to each other.
 Let's go back to the original ```Bonaparte visits Jaffa``` and try to improve it differently. Even though the order is not be important, 
 we might want these words to appear close to each other. Without any modification, the words can be anywhere inside the document. We can use the **Context constraints** to change that.
 ```
-Bonaparte visits Jaffa ~ _PAR_
-Bonaparte visits Jaffa ~ _SENT_
+Bonaparte visits Jaffa - _PAR_
+Bonaparte visits Jaffa - _SENT_
 ```
 These two queries require the words to appear in one paragraph or in one sentence, respectively. Let's go with the latter option for now.
 Using just one verb might be a bit too specific. Let's add a second option, the verb explore. The **or** operator can be used for that.
 ```
-Bonaparte ( visits | explores ) Jaffa ~ _SENT_
+Bonaparte ( visits | explores ) Jaffa - _SENT_
 ```
 Now we are saying that we are looking for documents containing words Bonaparte, Jaffa and either visited or explored, or both. Note that the parenthesis are not necessary in the case. The query ```Bonaparte visites | explores Jaffa ~ _SENT_```
 has the same meaning, but the first version might be more explicit. Without the parenthesis it might look like both words on each side are part of the **or**, which is not the case. If we actually wanted that, we can use parenthesis ```(Bonaparte visites) | (explores Jaffa) ~ _SENT_```, 
@@ -48,20 +48,20 @@ Let's keep focusing on the verbs a bit longer. There might be documents out ther
 Maybe the documents are written in the past tense. To be able to match documents like that, we can use the **index** operator. So far our query used only the default index, which is _token_. 
 This index contains words from the original document. The metadata about words can be found on the other indexes. 
 ```
-Bonaparte lemma:(visit|explore) Jaffa ~ _SENT_
+Bonaparte lemma:(visit|explore) Jaffa - _SENT_
 ```
 So far we used only basic indexes, logic operator and constraints. Let's utilize the semantic enhancement more now. EQL allows you the query for an entity instead of an exact word. 
 Let's say that there is a sentence talking about Bonaparte and Jaffa, but it uses pronouns instead of the direct names. We want to match those as well.
 ```
-person.name:Bonaparte lemma:(visit|explore) Jaffa ~ _SENT_
+person.name:Bonaparte lemma:(visit|explore) Jaffa - _SENT_
 ``` 
 We replaced ```Bonaparte``` with ```person.name:Bonaparte```. In this example _person_ and _name_ are just another indexes that we are querying, just like _lemma_ or _token_.
 Here we say that we are looking for an entity of type person whose name is Bonaparte. If we wanted to by more generic and look for any person, we could just use the **index** operator
-and ask a query like this ```nertag:person lemma:(visit|explore) Jaffa ~ _SENT_```
+and ask a query like this ```nertag:person lemma:(visit|explore) Jaffa - _SENT_```
   
 Now that we understand our new query, let's change Jaffa the same way.
 ```
-person.name:Bonaparte lemma:(visit|explore)  place.name:Jaffa ~ _SENT_
+person.name:Bonaparte lemma:(visit|explore)  place.name:Jaffa - _SENT_
 ```
 This new query shouldn't be surprising for you. Instead of an exact word Jaffa, we are using an entity, whose name is Jaffa, but the real word used in the sentence can be a pronoun for example. 
 
@@ -70,7 +70,7 @@ By applying a few operators, we got a query, which is more generic and therefore
 There is still one more group of operators to talk about, **global constraints**. To illustrate what they are for, let's say that we are searching for two artists and a relationship between them.
 The skeleton of the query is ```artist influenced artist```, but we are going to need a few operators to make the query more generic.
 ```
-nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < nertag:(person|artist) ~ _PAR_
+nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < nertag:(person|artist) - _PAR_
 ``` 
 We should already be familiar with the operators used in this query, but as an exercise, let's translate it to English. We are searching for a document where there is an entity followed by a word or words followed by an entity. 
 Both entities should be of type person or artist.  The word can be either by a single word,
@@ -78,13 +78,13 @@ whose lemma is either influence or impact, or 'paid tribute', again in any form 
 Currently, we didn't express that these two entities should be different people, and that is actually really important, isn't it? Now comes the time to use **global constraints**. 
 First we will identify parts of the query we are interested in using the **assignment operator**, than we will use them to express our global constraint.
 ```
-influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) ~ _PAR_ && influencer.nerid != influencee.nerid
+influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) - _PAR_ && influencer.nerid != influencee.nerid
 ``` 
 Now we have ensured that the two artist should be different and our query should work as expected.
 
 Let us finish with one more query.
 ```
-a:=nertag:(person|artist) < lemma:visit < b:=nertag:(person|artist) nertag:place^place.name:Barcelona nertag:event^event.date:[1/1/1960..12/12/2012] ~ _PAR_ && a.nerid != b.nerid
+a:=nertag:(person|artist) < lemma:visit < b:=nertag:(person|artist) nertag:place^place.name:Barcelona nertag:event^event.date:[1/1/1960..12/12/2012] - _PAR_ && a.nerid != b.nerid
 ```
 In this example we are looking for documents talking about one artist visiting another in Barcelona during an event that happened between 1/1/1960 and 12/12/2012. 
 The context is limited to a single paragraph and global constraints are used to ensure that the two artists are different. 
@@ -115,7 +115,7 @@ At least one of A, B have to be in the document.
 You can use parenthesis to build more complex logic expressions, such as this example, where we want at least one of A or B and C.  
 * **Proximity** - ```A B ~ 5```
  
-A and B should appear exactly 5 positions next to each other.
+A and B should appear at most 5 positions next to each other.
 
 ### Index operators
 To work with meta information, you have to specify index which you are querying. That can be done using the following operators.
@@ -139,8 +139,8 @@ for a noun, whose lemma is do. This query can be written as ```pos:noun ^ lemma:
 ### Context constraints
 The default context in which we are searching is the whole document. For more granular queries, 
 you can add the following limitation to the end of the query.
-* **Paragraph limit**  ``` ~ _PAR_``` The whole query has to be matched in one paragraph. 
-* **Sentence limit** ``` ~ _SENT_ ``` The whole query has to be matched in one sentence.
+* **Paragraph limit**  ``` - _PAR_``` The whole query has to be matched in one paragraph. 
+* **Sentence limit** ``` - _SENT_ ``` The whole query has to be matched in one sentence.
 
 ### Global constraints
 Sometimes we might want to specify some relationship between multiple entities that can't be expressed using the previous operators.
