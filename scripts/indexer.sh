@@ -1,1 +1,0 @@
-java -cp "../lib/*:../lib/mg4j-bin/*" cz.vutbr.fit.knot.enticing.indexer.MainKt "$@"
