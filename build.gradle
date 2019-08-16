@@ -1,8 +1,36 @@
 /**
  * Task executed by Heroku for building the app
  */
-task("stage") {
+task stage {
     dependsOn "frontend:packageApp" 
     dependsOn "webserver:bootJar"
 }
 
+task buildAll {
+    dependsOn "downloadDeps"
+    subprojects.each{
+        if(it.name == "frontend"){
+            dependsOn "frontend:packageApp"
+        } else {
+            dependsOn "${it.name}:jar"
+        }
+    }
+    dependsOn "webserver:bootJar"
+    dependsOn "index-server:bootJar"
+}
+
+task downloadDeps(type:Exec) {
+    def enticingHome = System.env.ENTICING_HOME
+    if(!enticingHome){
+        System.err.println("downloadDeps: ENTICING_HOME is not set, assuming it is the current directory");
+        enticingHome = "."
+    }
+    if(!file(enticingHome).isDirectory()){
+        throw new GradleException("downloadDeps:'${enticingHome}' is not a valid directory")
+    }
+    def getDepsScripts = "${enticingHome}/scripts/get_deps.sh"
+    if(!file(getDepsScripts).exists()){
+        throw new GradleException("downloadDeps:'${getDepsScripts}' does not exist")
+    }
+    commandLine getDepsScripts
+}
