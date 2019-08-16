@@ -6,16 +6,12 @@ App deployed at [enticing.herokuapp.com](https://enticing.herokuapp.com/)
 
 All source code related to the Enticing project. 
 
+Documentation can be found [here](./documentation).
 
 ## Build
-### Webserver & frontend
-Production build
+Build all components
 ```
-gradle stage
-```
-Run locally
-```
-gradle bootRun
+gradle buildAll
 ```
 
 ## Test
