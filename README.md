@@ -6,6 +6,7 @@ App deployed at [enticing.herokuapp.com](https://enticing.herokuapp.com/)
 
 All source code related to the Enticing project. 
 
+## Documentation
 Documentation can be found [here](./documentation).
 
 ## Build
