@@ -54,13 +54,7 @@ The goal of this step is to find out how the query matched the document. The inp
 The algorithm appends additional information to the AST. When it finishes, each AST node contains information whether it matched the document and if so, which intervals of the document
 were matched by it. Since one node can match the query in multiple ways, there might be and quite often will be more than one such intervals per node.
 
-Actually, here we can use the [algorithms used inside mg4j](http://vigna.di.unimi.it/ftp/papers/EfficientAlgorithmsMinimalIntervalSemantics.pdf), or use them to inspire us at least.
-
-The algorithm works as follows. First it iterates over the document and notifies the leaves of the AST about words that were encountered. The leaves save all intervals that satisfy their requirement. Since
-the leaves always express requirements on single words, all saved intervals will have length 1 at this point. Then the AST is traversed and the intervals for each node are computed based on it's children. 
-For example for the AND node all children has to be matched successfully and the saved intervals will be produced by combining intervals of the children together, creating longer intervals in the end 
-(Because the answer to the question what matched the AND nodes are intervals matching all the children). For the OR node, the results will be any intervals produced by it's children. Other intermediary nodes 
-are handled similarly. Another question to answer is how to represent unsuccessful nodes that haven't matched anything. For these nodes, their set of intervals will be empty.
+To implement it, we can use the [algorithms used inside mg4j](http://vigna.di.unimi.it/ftp/papers/EfficientAlgorithmsMinimalIntervalSemantics.pdf), with some modifications.
 
 ### Global Constraints Check
 The global constraint expression is evaluated. It is again a recursive operation on the AST of the constraint. For leaves, their values are fetched based on what they point to. Internal nodes are again

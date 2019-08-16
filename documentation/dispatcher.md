@@ -1,5 +1,6 @@
 # Dispatcher algorithm
-This document describes the dispatcher algorithm. This algorithm is used for dispatching requests to a set of nodes, dividing the amount of wanted snippets between them. It is used in [two different parts](./query_processing.md) of the system.
+This document describes the dispatcher algorithm. This algorithm is used for dispatching requests to a set of nodes, dividing the amount of wanted snippets between them, with specified lower bound in order not to 
+send requests for too few snippets. It is used in [two different parts](./query_processing.md) of the system.
 1) In the webserver to dispatch a request to a group of IndexServers
 2) In IndexServers to dispatch a request to collections that the IndexServer handles
 

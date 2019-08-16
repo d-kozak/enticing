@@ -1,4 +1,4 @@
-#  ENTICING - Entities in Context Interface (New Generation) 
+# ENTICING - Entities in Context Interface (New Generation) 
 master [![CircleCI](https://circleci.com/gh/d-kozak/enticing/tree/master.svg?style=svg&circle-token=6229d8e724544b9e418fdbbe97d704de68388098)](https://circleci.com/gh/d-kozak/enticing/tree/master)
 release [![CircleCI](https://circleci.com/gh/d-kozak/enticing/tree/release.svg?style=svg&circle-token=6229d8e724544b9e418fdbbe97d704de68388098)](https://circleci.com/gh/d-kozak/enticing/tree/release)
 
@@ -7,7 +7,7 @@ App deployed at [enticing.herokuapp.com](https://enticing.herokuapp.com/)
 All source code related to the Enticing project. 
 
 ## Documentation
-Documentation can be found [here](./documentation).
+Documentation can be found [here](./documentation/README.md).
 
 ## Build
 Build all components

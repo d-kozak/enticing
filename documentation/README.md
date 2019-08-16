@@ -1,8 +1,8 @@
 # Enticing Documentation
 This document contains the documentation for the whole project. It covers mostly high-level design choices. For low-level details, please consult the source code itself or the javadoc.
 The documentation is divided into the following parts.
-* [Architecture](architecture.md) - Describes the architecture of the project, components, modules, and dependencies between them.
-* [Main components](components.md) - Describes how to compile the main components and what is their interface. 
+* [Main components](components.md) - Describes how to compile the main components and how to use them.
+* [Architecture](architecture.md) - Describes the architecture of the project, components, modules, and dependencies between them. 
 * [Indexing](indexing.md) - Talks in more details about components performing indexing and searching.
 * [Dispatcher](dispatcher.md) - Describes the dispatcher algorithm used to dispatch queries to IndexServers in the WebServer and to collections in the IndexServers.
 * [EQL specification](eql_spec.md) - Contains the specification of EQL - Enticing Query Language.
