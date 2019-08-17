@@ -24,10 +24,11 @@ In the end, it is also possible to limit the number of results per document to *
 or in some cases they can be computed for each document. For example parameter **O** can be computed based on the size of the document.
 
 ## IdentifierList
-EQL allows to assign identifiers to parts of the query, constructing identified subqueries. If this format is requested, the response will contain only parts of the document matched by the 
-identified subqueries. Therefore only intervals for nodes representing named subqueries will be processed. All members of **X** can be used in this format.
+EQL allows to assign identifiers to parts of the query, constructing named subqueries. If this format is requested, the response will contain only parts of the document matched by the 
+identified subqueries. Therefore only intervals for nodes representing named subqueries will be processed. All members of **X** can be used in this format, because any combination of them
+might be interesting for the user.
 
 A small context can also be requested, containing  either the sentence or the paragraph at which these subqueries were matched. If they do not appear in the same unit of context, 
-the response will contain all sentences starting from the one containing the first match until the one containing the last match.  
+the response will contain all sentences starting from the one containing the first match to the one containing the last match.  
 
 Currently only Snippet is implemented. For IdentifierList, [EQL](./eql_spec.md) has to be implemented first.

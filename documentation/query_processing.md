@@ -22,8 +22,8 @@ CollectionManager calls SearchEngine which returns a list of documents that matc
 skip documents that have already been used before. SearchEngine is also the only part that directly interacts with Mg4j. 
 
 Because EQL provides features such as global constraints that cannot be directly implemented using mg4j, it is necessary to perform postprocessing. Postprocessing computes how the query matched 
-the document for individual parts of the query. Each node in the AST of the query is associated with a set of intervals over the document that matched the node. Then additional checks such as 
-global constraints are made which potentially filter out some of the results.
+the document for individual parts of the query. Each node in the AST of the query is associated with a set of intervals over the document that matched the node. (More details on this topic can be found in
+the [EQL implementation details](./eql_impl.md)). Then additional checks such as global constraints are made which potentially filter out some of the results.
 
 When the postprocessing finishes, all the necessary information to create SearchResults is available. Therefore the ResultCreator is called and CollectionSearchResult is created. Since IndexServers 
 support multiple ResultFormats and TextFormats, a different result creation algorithm is used based on what was requested. More on the topic of how actual SearchResults are selected based on matched 

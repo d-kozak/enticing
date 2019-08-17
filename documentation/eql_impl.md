@@ -41,7 +41,7 @@ If it proves to be false, it will still be possible to implement the second appr
 
 ## Postprocessing
 There are two pieces of functionality inside EQL that are unfortunately not directly handled by mg4j. The first problem is that mgj4 does not return the information how the query was matched. 
-It returns intervals for each index, but does not tell what parts of query matched them. Also if there are multiple requirements on one index, the resulting interval will be the whole interval 
+It returns intervals for each index, but does not tell what parts of the query matched them. Also if there are multiple requirements on one index, the resulting interval will be the whole interval 
 fulfilling all of these requirements, so we don't know what exactly matched these individual requirements. Therefore to support named subqueries and in general to be able to tell the user why the 
 given result was returned with respect to the query, it is necessary to compute this on our own. The second problem is that mg4j does not support global constraints. EQL allows to express relationships 
 between entities matched by named subqueries. Therefore some results returned by mg4j are invalid and has to be filtered out. This actually requires the first problem to be solved, because otherwise 
@@ -50,7 +50,7 @@ we don't have the information needed to do this.
 The postprocessing consists of two steps, Query Match Analysis and Global Constraints Check.
 
 ### Query Match Analysis
-The goal of this step is to find out how the query matched the document. The inputs are interval of the document that should be analyzed and an EQL query in the form of it's AST.
+The goal of this step is to find out how the query matched the document. The inputs are interval of the document that should be analyzed, the document itself and an EQL query in the form of it's AST.
 The algorithm appends additional information to the AST. When it finishes, each AST node contains information whether it matched the document and if so, which intervals of the document
 were matched by it. Since one node can match the query in multiple ways, there might be and quite often will be more than one such intervals per node.
 
