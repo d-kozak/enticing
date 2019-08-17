@@ -46,4 +46,6 @@ The _dispatcher_ sends a message to each _executor_ informing it how many snippe
 it processes it and forwards the result immediately using the callback function. After all _executors_ replied or timed out, next iteration is performed if possible(some actors provided results) and 
 necessary(there is not enough snippets collected yet).
 
-To provide a support for bidirectional communication over http, [WebSockets](https://docs.spring.io/spring-framework/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/html/websocket.html) can be used. 
+To provide a support for bidirectional communication over http, [WebSockets](https://docs.spring.io/spring-framework/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/html/websocket.html) can be used.
+
+Small example how coroutines, channels and actors can used for this can found [here](../query-dispatcher/src/main/kotlin/cz/vutbr/fit/knot/enticing/query/processor/asynchron/dispatcher.kt) 
