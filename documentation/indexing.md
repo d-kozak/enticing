@@ -78,7 +78,7 @@ If no information about indexed files is provided, the server will respond with 
  This set of document ids will also be persisted in a single file to survive restarting the service.    
  
  For each corpus, there will be extra index service, whose job is to maintain documents with updated annotations. 
- Once the size of documents handled by this index service is to big, indexer can be run to reindex the corpus.
+ Once the size of documents handled by this index service is too big, indexer can be run to reindex the corpus.
  
  
  ## Master index service - \[Extension\]

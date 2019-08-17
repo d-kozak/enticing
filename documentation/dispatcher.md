@@ -1,9 +1,12 @@
 # Dispatcher algorithm
-This document describes the dispatcher algorithm. This algorithm is used for dispatching requests to a set of nodes, dividing the amount of wanted snippets between them, with specified lower bound in order not to 
-send requests for too few snippets. It is used in [two different parts](./query_processing.md) of the system.
-1) In the webserver to dispatch a request to a group of IndexServers
+This document describes the dispatcher algorithm. Two versions of this algorithm are presented, one synchronous and one asynchronous that returns results as they arrive.
+The synchronous version is concurrent in the sense that requests on all nodes are processed concurrently, but it waits for all results before returning, which is bottleneck.
+This algorithm is used for dispatching requests to a set of nodes, dividing the amount of wanted snippets between them, with a specified lower bound in order not to send requests for too 
+few snippets. It is used in [two different parts](./query_processing.md) of the system.
+1) In the WebServer to dispatch a request to a group of IndexServers
 2) In IndexServers to dispatch a request to collections that the IndexServer handles
 
+## Synchronous version
 Simplified pseudocode of the algorithm is the following:
 ```
 snippets = []
@@ -26,3 +29,6 @@ Since in each step a node is kept for the next iteration only if it successfully
 the algorithm is guaranteed to terminate.
 
 Full implementation of the algorithm can be found [here](../query-dispatcher/src/main/kotlin/cz/vutbr/fit/knot/enticing/query/processor/QueryDispatcher.kt).
+
+## Asynchronous version
+To be done...

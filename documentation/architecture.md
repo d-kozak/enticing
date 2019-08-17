@@ -47,7 +47,7 @@ Responsibilities of each module are the following.
     * query indexed data
     * transform results into serializable text formats described [here](text_format.md) 
 * index-server
-    * provide REST API user by webserver and console client
+    * provide REST API used by webserver and console client
     * internally uses index-lib to handle queries
 * index-builder
     * index data using index-lib

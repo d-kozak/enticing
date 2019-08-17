@@ -31,10 +31,10 @@ they will take precedence over what is in the configuration file. This allows fo
 to generate new one for each collection.
 
 ## Index-server
-This component maintains a set of collections, each of which was indexed by the index-builder. It is able to search them using EQL queries, respond to context extension requests and 
+This component maintains a set of collections, each of which has been indexed by the index-builder. It is able to search in them using EQL queries, respond to context extension requests and 
 return the whole documents as well.
 ```
-./scripts/index-server /path/to/config.kts [collectionsInfo] [...any spring boot params]
+./scripts/index-server.sh /path/to/config.kts [collectionsInfo] [...any spring boot params]
 ```
 * **config.kts** configuration script
 * **collectionsInfo** string of the format {collectionId1:[mg4j1,mg4j2,..mg4jN,indexedDir],...,collectionIdN:[...]}
@@ -50,7 +50,7 @@ otherwise it starts with an h2 in-memory database, so all the data are lost when
 ```
 ./scripts/webserver.sh [...any spring boot params]
 ```
-* **spring boot params** any parameters are passed directly to the started spring boot app, so you can use them to change the values for example for the port to connect to* **spring boot params** any other parameters are passed directly to the started spring boot app, so you can use them to change values for example the port to connect to
+* **spring boot params** any parameters are passed directly to the started spring boot app, so you can use them to change the values for example for the port to connect to* 
 
 ## ConsoleClient
 This component allows to query index-servers from the command line. It has interactive and non-interactive mode. Because it has many optional parameters, they are non positional.
@@ -61,4 +61,4 @@ This component allows to query index-servers from the command line. It has inter
 * **result_format** [details](./result_format.md)
 * **text_format** [details](./text_format.md)
 * **config.kts** configuration script 
-* **query** if a query was specified, it's results are shown and the client terminates, otherwise it starts in an interactive mode in which you can ask queries.
+* **query** if a query was specified, it's results are shown and the client terminates, otherwise it starts in an interactive mode in which you can ask queries in a loop.
