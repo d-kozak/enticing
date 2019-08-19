@@ -54,7 +54,7 @@ object IndexServer {
             /**
              * What should be the format of the response
              */
-            override val textFormat: TextFormat = Defaults.responseFormat,
+            override val textFormat: TextFormat = Defaults.textFormat,
 
             /**
              * Query, optional
@@ -96,7 +96,7 @@ object IndexServer {
             /**
              * What should be the format of the response
              */
-            override val textFormat: TextFormat = Defaults.responseFormat,
+            override val textFormat: TextFormat = Defaults.textFormat,
 
             /**
              * Query, optional

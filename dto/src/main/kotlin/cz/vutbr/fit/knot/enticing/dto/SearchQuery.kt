@@ -37,12 +37,12 @@ data class SearchQuery(
         /**
          * What should be the response type
          */
-        val resultFormat: ResultFormat = Defaults.RESULT_FORMAT,
+        val resultFormat: ResultFormat = Defaults.resultFormat,
 
         /**
          * What should be the format of the response
          */
-        override val textFormat: TextFormat = Defaults.responseFormat,
+        override val textFormat: TextFormat = Defaults.textFormat,
 
         /**
          * What is the default index

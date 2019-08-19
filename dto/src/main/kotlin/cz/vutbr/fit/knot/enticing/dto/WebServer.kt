@@ -79,7 +79,7 @@ object WebServer {
             /**
              * What should be the format of the response
              */
-            val textFormat: TextFormat = Defaults.responseFormat,
+            val textFormat: TextFormat = Defaults.textFormat,
 
             /**
              * Query, optional
@@ -129,7 +129,7 @@ object WebServer {
             /**
              * What should be the format of the response
              */
-            val textFormat: TextFormat = Defaults.responseFormat,
+            val textFormat: TextFormat = Defaults.textFormat,
 
             /**
              * Query, optional
