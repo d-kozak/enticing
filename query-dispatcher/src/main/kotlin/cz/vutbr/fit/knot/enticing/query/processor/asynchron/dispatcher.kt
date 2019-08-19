@@ -1,14 +1,10 @@
 package cz.vutbr.fit.knot.enticing.query.processor.asynchron
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.actor
-import kotlinx.coroutines.delay
 import java.lang.Thread.sleep
-import kotlin.coroutines.CoroutineContext
 
 sealed class DispatcherMessage
 data class InputMessage(val value: Int) : DispatcherMessage()
@@ -48,11 +44,8 @@ fun CoroutineScope.dispatcher(serverCount: Int, outputChannel: SendChannel<Int>)
 }
 
 
-class WrapperService : CoroutineScope {
-    override val coroutineContext: CoroutineContext
-        get() = Job()
-
-    fun startIt(input: Int, callback: (Int) -> Unit) = async(coroutineContext) {
+class WrapperService : CoroutineScope by CoroutineScope(Dispatchers.Default), AutoCloseable {
+    fun startIt(input: Int, callback: (Int) -> Unit) = async {
         val outputChannel = Channel<Int>()
         val dispatcher = dispatcher(10, outputChannel)
         dispatcher.send(InputMessage(input))
@@ -61,6 +54,9 @@ class WrapperService : CoroutineScope {
         }
     }
 
+    override fun close() {
+        this.cancel()
+    }
 }
 
 fun main() {
@@ -68,5 +64,6 @@ fun main() {
     service.startIt(42) {
         log("main: received $it")
     }
-    sleep(10000)
+    sleep(2000)
+    service.close()
 }

@@ -1,15 +1,18 @@
-package cz.vutbr.fit.knot.enticing.index.payload
+package cz.vutbr.fit.knot.enticing.index.collection.manager.format.text
 
-import cz.vutbr.fit.knot.enticing.dto.*
-import cz.vutbr.fit.knot.enticing.dto.Annotation
+import cz.vutbr.fit.knot.enticing.dto.Mg4jQuery
 import cz.vutbr.fit.knot.enticing.dto.annotation.Temporary
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
-import cz.vutbr.fit.knot.enticing.index.postprocess.DocumentElement
+import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
+import cz.vutbr.fit.knot.enticing.dto.format.text.*
+import cz.vutbr.fit.knot.enticing.dto.format.text.Annotation
+import cz.vutbr.fit.knot.enticing.dto.interval.Interval
+import cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess.DocumentElement
 import org.slf4j.LoggerFactory
 
 
 class JsonPayloadBuilderVisitor(config: CorpusConfiguration, query: Mg4jQuery, intervals: List<Interval>
-) : AbstractPayloadBuilderVisitor<Payload>(config, query, intervals) {
+) : AbstractPayloadBuilderVisitor<ResultFormat>(config, query, intervals) {
 
     private val log = LoggerFactory.getLogger(JsonPayloadBuilderVisitor::class.java)
 
@@ -101,11 +104,11 @@ class JsonPayloadBuilderVisitor(config: CorpusConfiguration, query: Mg4jQuery, i
         positions.add(AnnotationPosition(id, MatchedRegion(from, size), subAnnotations))
     }
 
-    override fun getResult(): Payload {
+    override fun getResult(): ResultFormat {
         @Temporary("The result should actually never be empty, this is here only until the query processing is not finalized")
         val text = if (builder.isNotEmpty()) builder.toString() else "!!!EMPTY!!!"
-        return Payload.FullResponse.Annotated(
-                AnnotatedText(text, annotations, positions, queryMapping))
+        return ResultFormat.FullResponse.Annotated(
+                StringWithMetadata(text, annotations, positions, queryMapping))
     }
 }
 

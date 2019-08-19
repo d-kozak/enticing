@@ -1,6 +1,9 @@
 package cz.vutbr.fit.knot.enticing.dto.query
 
 import cz.vutbr.fit.knot.enticing.dto.*
+import cz.vutbr.fit.knot.enticing.dto.format.result.Identifier
+import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
+import cz.vutbr.fit.knot.enticing.dto.format.text.StringWithMetadata
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -65,11 +68,11 @@ class SerializationTest {
 
 
     @Nested
-    inner class SearchResultTest {
+    inner class IndexResultListTest {
 
         @Test
         fun `snippet html`() {
-            val input = IndexServer.SearchResult(
+            val input = IndexServer.IndexResultList(
                     matched = listOf(IndexServer.Snippet(
                             collection = "collection1",
                             documentId = 23,
@@ -78,7 +81,7 @@ class SerializationTest {
                             canExtend = false,
                             size = 20,
                             url = "google.com",
-                            payload = Payload.FullResponse.Html("hello html")
+                            payload = ResultFormat.FullResponse.Html("hello html")
                     )),
                     offset = mapOf("one" to Offset(10, 20))
             )
@@ -88,7 +91,7 @@ class SerializationTest {
 
         @Test
         fun `snippet json`() {
-            val input = IndexServer.SearchResult(
+            val input = IndexServer.IndexResultList(
                     matched = listOf(IndexServer.Snippet(
                             collection = "collection1",
                             documentId = 23,
@@ -97,7 +100,7 @@ class SerializationTest {
                             canExtend = false,
                             size = 20,
                             url = "google.com",
-                            payload = Payload.FullResponse.Annotated(AnnotatedText(
+                            payload = ResultFormat.FullResponse.Annotated(StringWithMetadata(
                                     "foo bar baz",
                                     emptyMap(),
                                     emptyList(),
@@ -112,7 +115,7 @@ class SerializationTest {
 
         @Test
         fun `identifier list`() {
-            val input = IndexServer.SearchResult(
+            val input = IndexServer.IndexResultList(
                     matched = listOf(IndexServer.Snippet(
                             collection = "collection1",
                             documentId = 23,
@@ -121,9 +124,9 @@ class SerializationTest {
                             canExtend = false,
                             size = 20,
                             url = "google.com",
-                            payload = Payload.Identifiers(
+                            payload = ResultFormat.IdentifierList(
                                     listOf(
-                                            Identifier("x", Payload.FullResponse.Annotated(AnnotatedText(
+                                            Identifier("x", ResultFormat.FullResponse.Annotated(StringWithMetadata(
                                                     "foo bar baz",
                                                     emptyMap(),
                                                     emptyList(),

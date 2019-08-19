@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class QueryService(
-        private val dispatcher: QueryDispatcher<SearchQuery,Map<CollectionName,Offset>, IndexServer.SearchResult>,
+        private val dispatcher: QueryDispatcher<SearchQuery, Map<CollectionName, Offset>, IndexServer.IndexResultList>,
         private val searchSettingsRepository: SearchSettingsRepository,
         private val userService: EnticingUserService,
         private val indexServerConnector: IndexServerConnector
@@ -22,7 +22,7 @@ class QueryService(
 
     private val log = LoggerFactory.getLogger(QueryService::class.java)
 
-    fun query(query: String, selectedSettings: Long): Webserver.SearchResult {
+    fun query(query: String, selectedSettings: Long): Webserver.ResultList {
         val currentUser = userService.currentUser
         val searchQuery = SearchQuery(query, currentUser?.userSettings?.resultsPerPage
                 ?: Defaults.snippetCount)
@@ -68,7 +68,7 @@ class QueryService(
     }
 }
 
-fun flatten(result: Map<String, List<MResult<IndexServer.SearchResult>>>): Webserver.SearchResult {
+fun flatten(result: Map<String, List<MResult<IndexServer.IndexResultList>>>): Webserver.ResultList {
     val snippets = mutableListOf<Webserver.Snippet>()
     val errors = mutableMapOf<ServerId, ErrorMessage>()
 
@@ -88,5 +88,5 @@ fun flatten(result: Map<String, List<MResult<IndexServer.SearchResult>>>): Webse
         }
     }
 
-    return Webserver.SearchResult(snippets, errors)
+    return Webserver.ResultList(snippets, errors)
 }

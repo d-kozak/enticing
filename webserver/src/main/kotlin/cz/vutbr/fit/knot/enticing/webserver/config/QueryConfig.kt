@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate
 class QueryConfig {
 
     @Bean
-    fun queryDispatcher(@Value("\${index.server.api.base.path}") apiBasePath: String): QueryDispatcher<SearchQuery, Map<CollectionName, Offset>, IndexServer.SearchResult> = QueryDispatcher(FuelQueryExecutor("$apiBasePath/query"))
+    fun queryDispatcher(@Value("\${index.server.api.base.path}") apiBasePath: String): QueryDispatcher<SearchQuery, Map<CollectionName, Offset>, IndexServer.IndexResultList> = QueryDispatcher(FuelQueryExecutor("$apiBasePath/query"))
 
     @Bean
     fun indexServerConnector(@Value("\${index.server.api.base.path}") apiBasePath: String) = IndexServerConnector(RestTemplate(), apiBasePath)

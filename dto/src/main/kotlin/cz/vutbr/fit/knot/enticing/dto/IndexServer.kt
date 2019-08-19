@@ -1,6 +1,8 @@
 package cz.vutbr.fit.knot.enticing.dto
 
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
+import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
+import cz.vutbr.fit.knot.enticing.dto.format.text.QueryMapping
 import cz.vutbr.fit.knot.enticing.dto.utils.regex.urlRegexStr
 import javax.validation.Valid
 import javax.validation.constraints.*
@@ -116,7 +118,7 @@ object IndexServer {
             @field:Pattern(regexp = urlRegexStr)
             val url: String,
             @field:Valid
-            val payload: Payload.FullResponse,
+            val payload: ResultFormat.FullResponse,
             @field:Valid
             val queryMapping: List<QueryMapping> = emptyList()
     ) {
@@ -124,9 +126,9 @@ object IndexServer {
     }
 
     /**
-     * Result for SearchQuery
+     * Result of the whole index server
      */
-    data class SearchResult(
+    data class IndexResultList(
             /**
              * List of snippets that matched the query
              */
@@ -148,7 +150,10 @@ object IndexServer {
     }
 
 
-    data class CollectionSearchResult(
+    /**
+     * Result of a single collection
+     */
+    data class CollectionResultList(
             /**
              * List of snippets that matched the query
              */
@@ -210,7 +215,7 @@ object IndexServer {
              * The actual snippet
              */
             @field:Valid
-            val payload: Payload,
+            val payload: ResultFormat,
 
             /**
              * Is it possible to further extend the snippet?

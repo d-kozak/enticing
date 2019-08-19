@@ -1,12 +1,13 @@
-package cz.vutbr.fit.knot.enticing.dto
+package cz.vutbr.fit.knot.enticing.dto.format.text
 
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
+import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotEmpty
 
-data class NewAnnotatedText(
+data class TextUnitList(
         @field:Valid
         @field:NotEmpty
         val content: List<TextUnit>

@@ -14,7 +14,7 @@ class QueryController(
 ) {
 
     @PostMapping("/query")
-    fun query(@RequestBody @Valid query: SearchQuery): IndexServer.SearchResult = queryService.processQuery(query)
+    fun query(@RequestBody @Valid query: SearchQuery): IndexServer.IndexResultList = queryService.processQuery(query)
 
     @PostMapping("/context")
     fun context(@RequestBody @Valid query: IndexServer.ContextExtensionQuery): SnippetExtension = queryService.extendContext(query)

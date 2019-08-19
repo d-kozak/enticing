@@ -4,9 +4,11 @@ import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.annotation.Warning
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.*
+import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
+import cz.vutbr.fit.knot.enticing.dto.format.text.StringWithMetadata
 import cz.vutbr.fit.knot.enticing.dto.utils.toDto
-import cz.vutbr.fit.knot.enticing.index.query.computeExtensionIntervals
-import cz.vutbr.fit.knot.enticing.index.query.initSearchExecutor
+import cz.vutbr.fit.knot.enticing.index.collection.manager.computeExtensionIntervals
+import cz.vutbr.fit.knot.enticing.index.collection.manager.initCollectionManager
 import it.unimi.di.big.mg4j.query.parser.QueryParserException
 import it.unimi.dsi.util.Interval
 import it.unimi.dsi.util.Intervals
@@ -98,7 +100,7 @@ val clientConfig = indexClient {
 }
 
 @Incomplete("more complete test suite needed")
-class SearchExecutorTest {
+class CollectionManagerTest {
 
     private val templateQuery = SearchQuery(
             "",
@@ -124,7 +126,7 @@ class SearchExecutorTest {
 
     @Test
     fun `valid queries`() {
-        val queryEngine = initSearchExecutor(clientConfig.corpusConfiguration, clientConfig.collections[0])
+        val queryEngine = initCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
         for (input in listOf(
                 "hello",
                 "john",
@@ -141,7 +143,7 @@ class SearchExecutorTest {
 
     @Test
     fun `valid queries with new data format requested`() {
-        val queryEngine = initSearchExecutor(clientConfig.corpusConfiguration, clientConfig.collections[0])
+        val queryEngine = initCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
         for (input in listOf(
                 "hello",
                 "john",
@@ -159,13 +161,13 @@ class SearchExecutorTest {
     @Test
     fun problematicQuery() {
         val query = SearchQuery(query = "job work", snippetCount = 33, offset = mapOf("one" to Offset(document = 0, snippet = 0)), metadata = TextMetadata.Predefined(value = "all"), responseType = ResponseType.FULL, responseFormat = ResponseFormat.NEW_ANNOTATED_TEXT, defaultIndex = "token")
-        val queryEngine = initSearchExecutor(clientConfig.corpusConfiguration, clientConfig.collections[0])
+        val queryEngine = initCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
         val result = queryEngine.query(query)
     }
 
     @Test
     fun `syntax error should be caught`() {
-        val queryEngine = initSearchExecutor(clientConfig.corpusConfiguration, clientConfig.collections[0])
+        val queryEngine = initCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
         val query = templateQuery.copy(query = "lemma:work{{lemma->")
 
         assertThrows<QueryParserException> {
@@ -175,14 +177,14 @@ class SearchExecutorTest {
 
     @Test
     fun `document retrieval test`() {
-        val executor = initSearchExecutor(clientConfig.corpusConfiguration, clientConfig.collections[0])
+        val executor = initCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
         for (i in 0..10) {
             val query = IndexServer.DocumentQuery("col1", i)
 
             val document = executor.getDocument(query)
 
-            if (document.payload is Payload.FullResponse.Annotated) {
-                val annotated = document.payload as Payload.FullResponse.Annotated
+            if (document.payload is ResultFormat.FullResponse.Annotated) {
+                val annotated = document.payload as ResultFormat.FullResponse.Annotated
                 assertThat(validateAnnotatedText(annotated.content))
                         .isEmpty()
             }
@@ -191,14 +193,14 @@ class SearchExecutorTest {
 
     @Test
     fun `context extension test`() {
-        val executor = initSearchExecutor(clientConfig.corpusConfiguration, clientConfig.collections[0])
+        val executor = initCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
 
         val (prefix, suffix, _) = executor.extendSnippet(
                 IndexServer.ContextExtensionQuery("col1", 2, 5, 5, 10, responseFormat = ResponseFormat.ANNOTATED_TEXT
                 ))
 
         for (text in listOf(prefix, suffix)) {
-            val annotated = text as Payload.FullResponse.Annotated
+            val annotated = text as ResultFormat.FullResponse.Annotated
             validateAnnotatedText(annotated.content)
         }
     }
@@ -206,12 +208,12 @@ class SearchExecutorTest {
     @Test
     fun `real context extension request`() {
         val query = """{"collection":"name","docId":56,"defaultIndex":"token","location":10,"size":50,"extension":20}""".toDto<IndexServer.ContextExtensionQuery>()
-        val executor = initSearchExecutor(clientConfig.corpusConfiguration, clientConfig.collections[0])
+        val executor = initCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
         val (prefix, suffix, _) = executor.extendSnippet(query)
 
     }
 
-    private fun validateAnnotatedText(text: AnnotatedText): List<String> {
+    private fun validateAnnotatedText(text: StringWithMetadata): List<String> {
         val errors = mutableListOf<String>()
         for (position in text.positions) {
             val (id, _, subAnnotations) = position

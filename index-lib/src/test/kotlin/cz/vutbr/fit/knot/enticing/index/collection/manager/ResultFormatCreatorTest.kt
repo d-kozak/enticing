@@ -1,19 +1,22 @@
-package cz.vutbr.fit.knot.enticing.index.query
+package cz.vutbr.fit.knot.enticing.index.collection.manager
 
 import cz.vutbr.fit.knot.enticing.dto.*
-import cz.vutbr.fit.knot.enticing.dto.Annotation
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.*
+import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
+import cz.vutbr.fit.knot.enticing.dto.format.text.*
+import cz.vutbr.fit.knot.enticing.dto.format.text.Annotation
+import cz.vutbr.fit.knot.enticing.dto.interval.Interval
+import cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.createPayload
+import cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess.DocumentElement
+import cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess.StructuredDocumentContent
 import cz.vutbr.fit.knot.enticing.index.mg4j.testConfiguration
-import cz.vutbr.fit.knot.enticing.index.payload.createPayload
-import cz.vutbr.fit.knot.enticing.index.postprocess.DocumentElement
-import cz.vutbr.fit.knot.enticing.index.postprocess.StructuredDocumentContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
 
-internal class PayloadCreatorTest {
+internal class ResultFormatCreatorTest {
 
     private val templateQuery = SearchQuery(
             "foo bar baz",
@@ -84,27 +87,27 @@ internal class PayloadCreatorTest {
         fun `simple format no metadata`() {
             var payload = createPayload(htmlQuery, noMetadata, listOf(Interval.valueOf(0, 2)), testConfiguration.corpusConfiguration)
             assertThat(payload)
-                    .isEqualTo(Payload.FullResponse.Html("<b>one two three</b>"))
+                    .isEqualTo(ResultFormat.FullResponse.Html("<b>one two three</b>"))
             payload = createPayload(htmlQuery, noMetadata, listOf(Interval.valueOf(1, 2)), testConfiguration.corpusConfiguration)
             assertThat(payload)
-                    .isEqualTo(Payload.FullResponse.Html("one <b>two three</b>"))
+                    .isEqualTo(ResultFormat.FullResponse.Html("one <b>two three</b>"))
             payload = createPayload(htmlQuery, noMetadata, listOf(Interval.valueOf(1, 1)), testConfiguration.corpusConfiguration)
             assertThat(payload)
-                    .isEqualTo(Payload.FullResponse.Html("one <b>two</b> three"))
+                    .isEqualTo(ResultFormat.FullResponse.Html("one <b>two</b> three"))
         }
 
         @Test
         fun `two other indexes`() {
             val payload = createPayload(htmlQuery, simpleStructure, listOf(Interval.valueOf(1, 2)), testConfiguration.corpusConfiguration)
             assertThat(payload)
-                    .isEqualTo(Payload.FullResponse.Html("""<span eql-word eql-lemma="1" eql-url="google.com">one</span> <b><span eql-word eql-lemma="2" eql-url="yahoo.com">two</span> <span eql-word eql-lemma="3" eql-url="localhost">three</span></b>"""))
+                    .isEqualTo(ResultFormat.FullResponse.Html("""<span eql-word eql-lemma="1" eql-url="google.com">one</span> <b><span eql-word eql-lemma="2" eql-url="yahoo.com">two</span> <span eql-word eql-lemma="3" eql-url="localhost">three</span></b>"""))
         }
 
         @Test
         fun `with one entity`() {
             val payload = createPayload(htmlQuery, withEntities, listOf(Interval.valueOf(1, 2)), testConfiguration.corpusConfiguration)
             assertThat(payload)
-                    .isEqualTo(Payload.FullResponse.Html("""<span eql-word eql-lemma="1" eql-url="google.com" eql-nertag="0" eql-param="0">one</span> <b><span eql-word eql-lemma="2" eql-url="yahoo.com" eql-nertag="0" eql-param="0">two</span> <span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="0" eql-param="0">three</span></b> <span eql-entity eql-name="harry"><span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="person" eql-param="harry">harry</span><span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="0" eql-param="0">potter</span></span>"""))
+                    .isEqualTo(ResultFormat.FullResponse.Html("""<span eql-word eql-lemma="1" eql-url="google.com" eql-nertag="0" eql-param="0">one</span> <b><span eql-word eql-lemma="2" eql-url="yahoo.com" eql-nertag="0" eql-param="0">two</span> <span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="0" eql-param="0">three</span></b> <span eql-entity eql-name="harry"><span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="person" eql-param="harry">harry</span><span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="0" eql-param="0">potter</span></span>"""))
         }
     }
 
@@ -117,7 +120,7 @@ internal class PayloadCreatorTest {
         fun `simple format no metadata`() {
             var payload = createPayload(jsonQuery, noMetadata, listOf(Interval.valueOf(0, 2)), testConfiguration.corpusConfiguration)
             assertThat(payload)
-                    .isEqualTo(Payload.FullResponse.Annotated(AnnotatedText(
+                    .isEqualTo(ResultFormat.FullResponse.Annotated(StringWithMetadata(
                             "one two three",
                             emptyMap(),
                             emptyList(),
@@ -125,7 +128,7 @@ internal class PayloadCreatorTest {
                     )))
             payload = createPayload(jsonQuery, noMetadata, listOf(Interval.valueOf(1, 2)), testConfiguration.corpusConfiguration)
             assertThat(payload)
-                    .isEqualTo(Payload.FullResponse.Annotated(AnnotatedText(
+                    .isEqualTo(ResultFormat.FullResponse.Annotated(StringWithMetadata(
                             "one two three",
                             emptyMap(),
                             emptyList(),
@@ -133,7 +136,7 @@ internal class PayloadCreatorTest {
                     )))
             payload = createPayload(jsonQuery, noMetadata, listOf(Interval.valueOf(1, 1)), testConfiguration.corpusConfiguration)
             assertThat(payload)
-                    .isEqualTo(Payload.FullResponse.Annotated(AnnotatedText(
+                    .isEqualTo(ResultFormat.FullResponse.Annotated(StringWithMetadata(
                             "one two three",
                             emptyMap(),
                             emptyList(),
@@ -145,7 +148,7 @@ internal class PayloadCreatorTest {
         fun `two other indexes`() {
             val payload = createPayload(jsonQuery, simpleStructure, listOf(Interval.valueOf(1, 2)), testConfiguration.corpusConfiguration)
             assertThat(payload)
-                    .isEqualTo(Payload.FullResponse.Annotated(AnnotatedText(
+                    .isEqualTo(ResultFormat.FullResponse.Annotated(StringWithMetadata(
                             "one two three",
                             mapOf(
                                     "w-0" to Annotation("w-0", mapOf("lemma" to "1", "url" to "google.com")),
@@ -161,7 +164,7 @@ internal class PayloadCreatorTest {
         fun `with one entity`() {
             val payload = createPayload(jsonQuery, withEntities, listOf(Interval.valueOf(1, 2)), testConfiguration.corpusConfiguration)
             assertThat(payload)
-                    .isEqualTo(Payload.FullResponse.Annotated(AnnotatedText(
+                    .isEqualTo(ResultFormat.FullResponse.Annotated(StringWithMetadata(
                             "one two three harry potter",
                             mapOf(
                                     "w-0" to Annotation("w-0", mapOf("lemma" to "1", "url" to "google.com", "nertag" to "0", "param" to "0")),
@@ -188,7 +191,7 @@ internal class PayloadCreatorTest {
         fun `simple format no metadata`() {
             var payload = createPayload(newFormatQuery, noMetadata, listOf(Interval.valueOf(0, 2)), noMetadata.corpusConfiguration)
             assertThat(payload)
-                    .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
+                    .isEqualTo(ResultFormat.FullResponse.NewAnnotated(TextUnitList(
                             TextUnit.QueryMatch(Interval.valueOf(0, 1),
                                     listOf(TextUnit.Word("one"),
                                             TextUnit.Word("two"),
@@ -197,7 +200,7 @@ internal class PayloadCreatorTest {
 
             payload = createPayload(newFormatQuery, noMetadata, listOf(Interval.valueOf(1, 2)), noMetadata.corpusConfiguration)
             assertThat(payload)
-                    .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
+                    .isEqualTo(ResultFormat.FullResponse.NewAnnotated(TextUnitList(
                             TextUnit.Word("one"),
                             TextUnit.QueryMatch(Interval.valueOf(0, 1),
                                     listOf(
@@ -206,7 +209,7 @@ internal class PayloadCreatorTest {
                     )))
             payload = createPayload(newFormatQuery, noMetadata, listOf(Interval.valueOf(1, 1)), noMetadata.corpusConfiguration)
             assertThat(payload)
-                    .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
+                    .isEqualTo(ResultFormat.FullResponse.NewAnnotated(TextUnitList(
                             TextUnit.Word("one"),
                             TextUnit.QueryMatch(Interval.valueOf(0, 1),
                                     listOf(TextUnit.Word("two"))),
@@ -218,7 +221,7 @@ internal class PayloadCreatorTest {
         fun `two other indexes`() {
             val payload = createPayload(newFormatQuery, simpleStructure, listOf(Interval.valueOf(1, 2)), simpleStructure.corpusConfiguration)
             assertThat(payload)
-                    .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
+                    .isEqualTo(ResultFormat.FullResponse.NewAnnotated(TextUnitList(
                             TextUnit.Word("one", "1", "google.com"),
                             TextUnit.QueryMatch(Interval.valueOf(0, 1),
                                     listOf(
@@ -231,7 +234,7 @@ internal class PayloadCreatorTest {
         fun `with one entity no intervals`() {
             val payload = createPayload(newFormatQuery, withEntities, emptyList(), withEntities.corpusConfiguration)
             assertThat(payload)
-                    .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
+                    .isEqualTo(ResultFormat.FullResponse.NewAnnotated(TextUnitList(
                             TextUnit.Word("one", "1", "google.com", "0", "0"),
                             TextUnit.Word("two", "2", "yahoo.com", "0", "0"),
                             TextUnit.Word("three", "3", "localhost", "0", "0"),
@@ -244,7 +247,7 @@ internal class PayloadCreatorTest {
         fun `with one entity that is broken by interval`() {
             val payload = createPayload(newFormatQuery, withEntities, listOf(Interval.valueOf(2, 3)), withEntities.corpusConfiguration)
             assertThat(payload)
-                    .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
+                    .isEqualTo(ResultFormat.FullResponse.NewAnnotated(TextUnitList(
                             TextUnit.Word("one", "1", "google.com", "0", "0"),
                             TextUnit.Word("two", "2", "yahoo.com", "0", "0"),
                             TextUnit.QueryMatch(Interval.valueOf(0, 1), listOf(
@@ -262,7 +265,7 @@ internal class PayloadCreatorTest {
         fun `with one entity that is broken by two intervals`() {
             val payload = createPayload(newFormatQuery, withEntities, listOf(Interval.valueOf(2, 3), Interval.valueOf(4, 4)), withEntities.corpusConfiguration)
             assertThat(payload)
-                    .isEqualTo(Payload.FullResponse.NewAnnotated(NewAnnotatedText(
+                    .isEqualTo(ResultFormat.FullResponse.NewAnnotated(TextUnitList(
                             TextUnit.Word("one", "1", "google.com", "0", "0"),
                             TextUnit.Word("two", "2", "yahoo.com", "0", "0"),
                             TextUnit.QueryMatch(Interval.valueOf(0, 1), listOf(

@@ -25,7 +25,7 @@ internal class QueryServiceTest {
     @Nested
     inner class SearchQueryTest {
 
-        private val dispatcher: QueryDispatcher<SearchQuery,Map<CollectionName, Offset>, IndexServer.SearchResult> = mockk()
+        private val dispatcher: QueryDispatcher<SearchQuery, Map<CollectionName, Offset>, IndexServer.IndexResultList> = mockk()
         private val searchSettingsRepository: SearchSettingsRepository = mockk()
         private val userService: EnticingUserService = mockk()
         private val indexServerConnector: IndexServerConnector = mockk()
@@ -40,9 +40,9 @@ internal class QueryServiceTest {
             val mockSearchSettings = SearchSettings(42, private = false, servers = dummyServers)
             every { searchSettingsRepository.findById(42) } returns Optional.of(mockSearchSettings)
 
-            val expected = Webserver.SearchResult(listOf(firstResult))
+            val expected = Webserver.ResultList(listOf(firstResult))
             val dummyQuery = SearchQuery("nertag:person", snippetCount = 33)
-            val foo = mapOf("server1" to listOf(MResult.success(IndexServer.SearchResult(listOf(firstResult.toIndexServerFormat())))))
+            val foo = mapOf("server1" to listOf(MResult.success(IndexServer.IndexResultList(listOf(firstResult.toIndexServerFormat())))))
             every { dispatcher.dispatchQuery(dummyQuery, dummyServers.map { IndexServerRequestData(it) }) } returns foo
 
             val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector)
@@ -65,9 +65,9 @@ internal class QueryServiceTest {
             val mockSearchSettings = SearchSettings(42, private = true, servers = dummyServers)
             every { searchSettingsRepository.findById(42) } returns Optional.of(mockSearchSettings)
 
-            val expected = Webserver.SearchResult(listOf(firstResult))
+            val expected = Webserver.ResultList(listOf(firstResult))
             val dummyQuery = SearchQuery("nertag:person", snippetCount = 33)
-            val foo = mapOf("server1" to listOf(MResult.success(IndexServer.SearchResult(listOf(firstResult.toIndexServerFormat())))))
+            val foo = mapOf("server1" to listOf(MResult.success(IndexServer.IndexResultList(listOf(firstResult.toIndexServerFormat())))))
             every { dispatcher.dispatchQuery(dummyQuery, dummyServers.map { IndexServerRequestData(it) }) } returns foo
 
             val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector)
@@ -132,7 +132,7 @@ internal class QueryServiceTest {
     @Nested
     inner class DocumentRetrieval {
 
-        private val dispatcher: QueryDispatcher<SearchQuery,Map<CollectionName,Offset>, IndexServer.SearchResult> = mockk()
+        private val dispatcher: QueryDispatcher<SearchQuery, Map<CollectionName, Offset>, IndexServer.IndexResultList> = mockk()
         private val searchSettingsRepository: SearchSettingsRepository = mockk()
         private val userService: EnticingUserService = mockk()
         private val indexServerConnector: IndexServerConnector = mockk()
@@ -170,7 +170,7 @@ internal class QueryServiceTest {
     @Nested
     inner class ContextExtension {
 
-        private val dispatcher: QueryDispatcher<SearchQuery,Map<CollectionName,Offset>, IndexServer.SearchResult> = mockk()
+        private val dispatcher: QueryDispatcher<SearchQuery, Map<CollectionName, Offset>, IndexServer.IndexResultList> = mockk()
         private val searchSettingsRepository: SearchSettingsRepository = mockk()
         private val userService: EnticingUserService = mockk()
         private val indexServerConnector: IndexServerConnector = mockk()
@@ -209,42 +209,42 @@ internal class QueryServiceTest {
         @Test
         fun `no errors`() {
             val input = mapOf(
-                    "server1" to listOf(MResult.success(IndexServer.SearchResult(listOf(firstResult.toIndexServerFormat())))),
-                    "server2" to listOf(MResult.success(IndexServer.SearchResult(listOf(secondResult.toIndexServerFormat())))),
-                    "server3" to listOf(MResult.success(IndexServer.SearchResult(listOf(thirdResult.toIndexServerFormat()))))
+                    "server1" to listOf(MResult.success(IndexServer.IndexResultList(listOf(firstResult.toIndexServerFormat())))),
+                    "server2" to listOf(MResult.success(IndexServer.IndexResultList(listOf(secondResult.toIndexServerFormat())))),
+                    "server3" to listOf(MResult.success(IndexServer.IndexResultList(listOf(thirdResult.toIndexServerFormat()))))
             )
             val actual = flatten(input)
             assertThat(actual)
                     .isEqualTo(
-                            Webserver.SearchResult(listOf(firstResult, secondResult, thirdResult))
+                            Webserver.ResultList(listOf(firstResult, secondResult, thirdResult))
                     )
         }
 
         @Test
         fun `one error`() {
             val input = mapOf(
-                    "server1" to listOf(MResult.success(IndexServer.SearchResult(listOf(firstResult.toIndexServerFormat())))),
-                    "server2" to listOf(MResult.success(IndexServer.SearchResult(listOf(secondResult.toIndexServerFormat())))),
+                    "server1" to listOf(MResult.success(IndexServer.IndexResultList(listOf(firstResult.toIndexServerFormat())))),
+                    "server2" to listOf(MResult.success(IndexServer.IndexResultList(listOf(secondResult.toIndexServerFormat())))),
                     "server3" to listOf(MResult.failure(IllegalStateException("my secret reason to fail")))
             )
             val actual = flatten(input)
             assertThat(actual)
                     .isEqualTo(
-                            Webserver.SearchResult(listOf(firstResult, secondResult), mapOf("server3" to "IllegalStateException:my secret reason to fail"))
+                            Webserver.ResultList(listOf(firstResult, secondResult), mapOf("server3" to "IllegalStateException:my secret reason to fail"))
                     )
         }
 
         @Test
         fun `two errors`() {
             val input = mapOf(
-                    "server1" to listOf(MResult.success(IndexServer.SearchResult(listOf(firstResult.toIndexServerFormat()))), MResult.failure(NullPointerException("oh no...again? :("))),
-                    "server2" to listOf(MResult.success(IndexServer.SearchResult(listOf(secondResult.toIndexServerFormat())))),
+                    "server1" to listOf(MResult.success(IndexServer.IndexResultList(listOf(firstResult.toIndexServerFormat()))), MResult.failure(NullPointerException("oh no...again? :("))),
+                    "server2" to listOf(MResult.success(IndexServer.IndexResultList(listOf(secondResult.toIndexServerFormat())))),
                     "server3" to listOf(MResult.failure(IllegalStateException("my secret reason to fail")))
             )
             val actual = flatten(input)
             assertThat(actual)
                     .isEqualTo(
-                            Webserver.SearchResult(listOf(firstResult, secondResult),
+                            Webserver.ResultList(listOf(firstResult, secondResult),
                                     mapOf("server1" to "NullPointerException:oh no...again? :(",
                                             "server3" to "IllegalStateException:my secret reason to fail")
                             )

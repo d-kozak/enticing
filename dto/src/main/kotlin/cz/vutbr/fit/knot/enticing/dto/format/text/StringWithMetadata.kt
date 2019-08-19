@@ -1,4 +1,4 @@
-package cz.vutbr.fit.knot.enticing.dto
+package cz.vutbr.fit.knot.enticing.dto.format.text
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
@@ -11,7 +11,7 @@ import javax.validation.constraints.PositiveOrZero
 /**
  * A piece of text and it's annotations
  */
-data class AnnotatedText(
+data class StringWithMetadata(
 
         @field:NotEmpty
         val text: String,

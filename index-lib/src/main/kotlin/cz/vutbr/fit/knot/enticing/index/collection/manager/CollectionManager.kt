@@ -1,15 +1,19 @@
-package cz.vutbr.fit.knot.enticing.index.query
+package cz.vutbr.fit.knot.enticing.index.collection.manager
 
-import cz.vutbr.fit.knot.enticing.dto.*
+import cz.vutbr.fit.knot.enticing.dto.IndexServer
+import cz.vutbr.fit.knot.enticing.dto.Offset
+import cz.vutbr.fit.knot.enticing.dto.SearchQuery
+import cz.vutbr.fit.knot.enticing.dto.SnippetExtension
 import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CollectionConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.filterBy
+import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
+import cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.createPayload
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jCompositeDocumentCollection
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jDocument
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jDocumentFactory
-import cz.vutbr.fit.knot.enticing.index.payload.createPayload
 import it.unimi.di.big.mg4j.index.Index
 import it.unimi.di.big.mg4j.index.TermProcessor
 import it.unimi.di.big.mg4j.query.IntervalSelector
@@ -22,16 +26,15 @@ import it.unimi.di.big.mg4j.search.score.DocumentScoreInfo
 import it.unimi.dsi.fastutil.objects.*
 import it.unimi.dsi.util.Interval
 import it.unimi.dsi.util.Intervals
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import kotlin.math.min
 
 @Cleanup("put into configuration?")
 const val SNIPPET_SIZE = 50
 
-private val log = LoggerFactory.getLogger(SearchExecutor::class.java)
+private val log = LoggerFactory.getLogger(CollectionManager::class.java)
 
-fun initSearchExecutor(corpusConfiguration: CorpusConfiguration, collectionConfig: CollectionConfiguration): SearchExecutor {
+fun initCollectionManager(corpusConfiguration: CorpusConfiguration, collectionConfig: CollectionConfiguration): CollectionManager {
     log.info("initializing with config $corpusConfiguration,$collectionConfig")
     val collection = Mg4jCompositeDocumentCollection(corpusConfiguration, collectionConfig.mg4jFiles)
     val factory = Mg4jDocumentFactory(corpusConfiguration)
@@ -59,7 +62,7 @@ fun initSearchExecutor(corpusConfiguration: CorpusConfiguration, collectionConfi
     engine.intervalSelector = IntervalSelector(Integer.MAX_VALUE, Integer.MAX_VALUE)
     engine.multiplex = false
 
-    return SearchExecutor(collectionConfig.name, collection, engine, corpusConfiguration)
+    return CollectionManager(collectionConfig.name, collection, engine, corpusConfiguration)
 }
 
 internal typealias Mg4jSearchResult = DocumentScoreInfo<Reference2ObjectMap<Index, Array<SelectedInterval>>>
@@ -69,16 +72,14 @@ internal typealias Mg4jSearchResult = DocumentScoreInfo<Reference2ObjectMap<Inde
  */
 @Cleanup("Refactor into multiple classes/functions in different files")
 @WhatIf("? decouple from mg4j for easier and faster testing ?")
-class SearchExecutor internal constructor(
+class CollectionManager internal constructor(
         val collectionName: String,
         private val collection: Mg4jCompositeDocumentCollection,
         private val engine: QueryEngine,
         private val corpusConfiguration: CorpusConfiguration
 ) {
 
-    private val log: Logger = LoggerFactory.getLogger(SearchExecutor::class.java)
-
-    fun query(query: SearchQuery, offset: Offset = Offset(0, 0)): IndexServer.CollectionSearchResult {
+    fun query(query: SearchQuery, offset: Offset = Offset(0, 0)): IndexServer.CollectionResultList {
         log.info("Executing query $query")
         val resultList = ObjectArrayList<Mg4jSearchResult>()
         val (documentOffset, matchOffset) = offset
@@ -98,10 +99,10 @@ class SearchExecutor internal constructor(
                     i != resultList.size - 1 -> Offset(resultList[i + 1].document.toInt(), 0)
                     else -> null
                 }
-                return IndexServer.CollectionSearchResult(matched, finalOffset)
+                return IndexServer.CollectionResultList(matched, finalOffset)
             }
         }
-        return IndexServer.CollectionSearchResult(matched, null)
+        return IndexServer.CollectionResultList(matched, null)
     }
 
     internal fun processDocument(query: SearchQuery, result: Mg4jSearchResult, config: CorpusConfiguration, wantedSnippets: Int, offset: Int): Pair<List<IndexServer.Snippet>, Int?> {
@@ -149,8 +150,8 @@ class SearchExecutor internal constructor(
 
         val filteredConfig = corpusConfiguration.filterBy(query.metadata, query.defaultIndex)
 
-        val prefixPayload = createPayload(query, document.loadStructuredContent(prefix, filteredConfig), emptyList(), corpusConfiguration) as Payload.FullResponse
-        val suffixPayload = createPayload(query, document.loadStructuredContent(suffix, filteredConfig), emptyList(), corpusConfiguration) as Payload.FullResponse
+        val prefixPayload = createPayload(query, document.loadStructuredContent(prefix, filteredConfig), emptyList(), corpusConfiguration) as ResultFormat.FullResponse
+        val suffixPayload = createPayload(query, document.loadStructuredContent(suffix, filteredConfig), emptyList(), corpusConfiguration) as ResultFormat.FullResponse
 
         return SnippetExtension(
                 prefixPayload,
@@ -166,7 +167,7 @@ class SearchExecutor internal constructor(
 
         val content = document.loadStructuredContent(filteredConfig = filteredConfig)
 
-        val payload = createPayload(query, content, emptyList(), corpusConfiguration) as Payload.FullResponse
+        val payload = createPayload(query, content, emptyList(), corpusConfiguration) as ResultFormat.FullResponse
         return IndexServer.FullDocument(
                 document.title().toString(),
                 document.uri().toString(),

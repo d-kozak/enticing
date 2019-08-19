@@ -1,7 +1,9 @@
-package cz.vutbr.fit.knot.enticing.dto
+package cz.vutbr.fit.knot.enticing.dto.format.result
 
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
+import cz.vutbr.fit.knot.enticing.dto.format.text.StringWithMetadata
+import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnitList
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 
@@ -15,14 +17,14 @@ import javax.validation.constraints.NotBlank
         property = "type"
 )
 @JsonSubTypes(
-        JsonSubTypes.Type(Payload.Identifiers::class, name = "identifiers"),
-        JsonSubTypes.Type(Payload.FullResponse::class, name = "full")
+        JsonSubTypes.Type(ResultFormat.IdentifierList::class, name = "identifiers"),
+        JsonSubTypes.Type(ResultFormat.FullResponse::class, name = "full")
 )
-sealed class Payload {
+sealed class ResultFormat {
     /**
      * List of identifiers from the query and their values
      */
-    data class Identifiers(@field:Valid val list: List<Identifier>) : Payload()
+    data class IdentifierList(@field:Valid val list: List<Identifier>) : ResultFormat()
 
     /**
      * Part of the document that was matched
@@ -37,7 +39,7 @@ sealed class Payload {
             JsonSubTypes.Type(FullResponse.Annotated::class, name = "annotated"),
             JsonSubTypes.Type(FullResponse.NewAnnotated::class, name = "new")
     )
-    sealed class FullResponse : Payload() {
+    sealed class FullResponse : ResultFormat() {
         /**
          * Simple html format
          */
@@ -46,12 +48,12 @@ sealed class Payload {
         /**
          * Text with annotations
          */
-        data class Annotated(@field:Valid val content: AnnotatedText) : FullResponse()
+        data class Annotated(@field:Valid val content: StringWithMetadata) : FullResponse()
 
         /**
          * New annotated format
          */
-        data class NewAnnotated(@field:Valid val content: NewAnnotatedText) : FullResponse()
+        data class NewAnnotated(@field:Valid val content: TextUnitList) : FullResponse()
     }
 }
 
@@ -62,5 +64,5 @@ data class Identifier(
         @field:NotBlank
         val identifier: String,
         @field:Valid
-        val snippet: Payload.FullResponse
+        val snippet: ResultFormat.FullResponse
 )

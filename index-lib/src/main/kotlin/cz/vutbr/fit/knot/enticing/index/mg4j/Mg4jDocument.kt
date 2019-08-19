@@ -3,8 +3,8 @@ package cz.vutbr.fit.knot.enticing.index.mg4j
 import cz.vutbr.fit.knot.enticing.dto.annotation.Speed
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.Index
-import cz.vutbr.fit.knot.enticing.index.postprocess.DocumentElement
-import cz.vutbr.fit.knot.enticing.index.postprocess.StructuredDocumentContent
+import cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess.DocumentElement
+import cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess.StructuredDocumentContent
 import it.unimi.di.big.mg4j.document.AbstractDocument
 import it.unimi.dsi.fastutil.objects.Reference2ObjectMap
 import it.unimi.dsi.io.WordReader

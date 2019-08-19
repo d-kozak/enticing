@@ -1,4 +1,4 @@
-package cz.vutbr.fit.knot.enticing.index.query
+package cz.vutbr.fit.knot.enticing.index.collection.manager
 
 import it.unimi.dsi.util.Interval
 

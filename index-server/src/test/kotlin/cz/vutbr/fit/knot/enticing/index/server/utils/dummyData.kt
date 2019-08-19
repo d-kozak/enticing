@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.index.server.utils
 
 import cz.vutbr.fit.knot.enticing.dto.*
+import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 
 internal val templateSearchQuery = SearchQuery(
         "foo bar baz",
@@ -11,7 +12,7 @@ internal val templateSearchQuery = SearchQuery(
         ResponseFormat.ANNOTATED_TEXT
 )
 
-internal val searchDummyResult = IndexServer.SearchResult(
+internal val searchDummyResult = IndexServer.IndexResultList(
         listOf(IndexServer.Snippet(
                 "col",
                 10,
@@ -19,7 +20,7 @@ internal val searchDummyResult = IndexServer.SearchResult(
                 5,
                 "google.com",
                 "title",
-                Payload.FullResponse.Html("texty text"),
+                ResultFormat.FullResponse.Html("texty text"),
                 false
         )),
         mapOf("one" to Offset(42, 84))
@@ -33,7 +34,7 @@ internal val templateDocumentQuery = IndexServer.DocumentQuery(
 internal val documentDummyResult = IndexServer.FullDocument(
         "how to use google",
         "google.com/howto",
-        Payload.FullResponse.Html("how to use google for dummies")
+        ResultFormat.FullResponse.Html("how to use google for dummies")
 )
 
 
@@ -46,6 +47,6 @@ internal val templateContextExtensionQuery = IndexServer.ContextExtensionQuery(
 )
 
 internal val contextExtensionDummyResult = SnippetExtension(
-        Payload.FullResponse.Html("null"),
-        Payload.FullResponse.Html("null"),
+        ResultFormat.FullResponse.Html("null"),
+        ResultFormat.FullResponse.Html("null"),
         false)

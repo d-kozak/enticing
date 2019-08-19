@@ -1,4 +1,4 @@
-package cz.vutbr.fit.knot.enticing.index.postprocess
+package cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import java.util.*

@@ -1,7 +1,7 @@
-package cz.vutbr.fit.knot.enticing.index.query
+package cz.vutbr.fit.knot.enticing.index.collection.manager
 
-import cz.vutbr.fit.knot.enticing.dto.Interval
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
+import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import it.unimi.di.big.mg4j.query.SelectedInterval
 
 

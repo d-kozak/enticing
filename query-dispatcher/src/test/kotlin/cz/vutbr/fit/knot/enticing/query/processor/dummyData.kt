@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.query.processor
 
 import cz.vutbr.fit.knot.enticing.dto.*
+import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 
 
 internal data class FailOnPurposeException(val msg: String) : Exception()
@@ -15,7 +16,7 @@ internal val templateQuery = SearchQuery(
         ResponseFormat.ANNOTATED_TEXT
 )
 
-internal val googleFirstResult = IndexServer.SearchResult(
+internal val googleFirstResult = IndexServer.IndexResultList(
         listOf(IndexServer.Snippet(
                 "col",
                 10,
@@ -23,7 +24,7 @@ internal val googleFirstResult = IndexServer.SearchResult(
                 5,
                 "google.com",
                 "title",
-                Payload.FullResponse.Html("texty text"),
+                ResultFormat.FullResponse.Html("texty text"),
                 false
         )),
         mapOf("one" to Offset(42, 84))

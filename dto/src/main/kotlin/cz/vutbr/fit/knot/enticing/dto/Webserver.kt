@@ -1,6 +1,8 @@
 package cz.vutbr.fit.knot.enticing.dto
 
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
+import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
+import cz.vutbr.fit.knot.enticing.dto.format.text.QueryMapping
 import cz.vutbr.fit.knot.enticing.dto.utils.regex.urlRegexStr
 import javax.validation.Valid
 import javax.validation.constraints.*
@@ -14,7 +16,7 @@ object Webserver {
     /**
      * Result for SearchQuery
      */
-    data class SearchResult(
+    data class ResultList(
             /**
              * Merged results from all servers
              */
@@ -167,7 +169,7 @@ object Webserver {
             @field:Pattern(regexp = urlRegexStr)
             val url: String,
             @field:Valid
-            val payload: Payload.FullResponse,
+            val resultFormat: ResultFormat.FullResponse,
             /**
              * Query, optional
              *
@@ -178,7 +180,7 @@ object Webserver {
             @field:Valid
             val queryMapping: List<QueryMapping> = emptyList()
     ) {
-        fun toIndexFormat() = IndexServer.FullDocument(title, url, payload, queryMapping)
+        fun toIndexFormat() = IndexServer.FullDocument(title, url, resultFormat, queryMapping)
     }
 
     /**
@@ -234,13 +236,13 @@ object Webserver {
              * The actual snippet
              */
             @field:Valid
-            val payload: Payload,
+            val resultFormat: ResultFormat,
 
             /**
              * Is it possible to further extend the snippet?
              */
             val canExtend: Boolean
     ) {
-        fun toIndexServerFormat() = IndexServer.Snippet(collection, documentId, location, size, url, documentTitle, payload, canExtend)
+        fun toIndexServerFormat() = IndexServer.Snippet(collection, documentId, location, size, url, documentTitle, resultFormat, canExtend)
     }
 }

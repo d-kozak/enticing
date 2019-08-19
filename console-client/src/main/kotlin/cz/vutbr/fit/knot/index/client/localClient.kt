@@ -6,18 +6,18 @@ import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.TextMetadata
 import cz.vutbr.fit.knot.enticing.dto.config.SearchConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.ConsoleClientType
-import cz.vutbr.fit.knot.enticing.index.query.SearchExecutor
-import cz.vutbr.fit.knot.enticing.index.query.initSearchExecutor
+import cz.vutbr.fit.knot.enticing.index.collection.manager.CollectionManager
+import cz.vutbr.fit.knot.enticing.index.collection.manager.initCollectionManager
 
 fun startLocalClient(config: ConsoleClientType.LocalIndex, searchConfig: SearchConfig, input: Sequence<String>) {
-    val queryExecutor = initSearchExecutor(config.indexClientConfig.corpusConfiguration, config.indexClientConfig.collections[0])
+    val queryExecutor = initCollectionManager(config.indexClientConfig.corpusConfiguration, config.indexClientConfig.collections[0])
 
     for (line in input) {
         executeLine(queryExecutor, line)
     }
 }
 
-internal fun executeLine(searchExecutor: SearchExecutor, input: String) {
+internal fun executeLine(collectionManager: CollectionManager, input: String) {
     val query = SearchQuery(
             input,
             33,
@@ -27,7 +27,7 @@ internal fun executeLine(searchExecutor: SearchExecutor, input: String) {
             ResponseFormat.NEW_ANNOTATED_TEXT
     )
     try {
-        val response = searchExecutor.query(query)
+        val response = collectionManager.query(query)
         println(response)
     } catch (ex: Exception) {
         ex.printStackTrace()

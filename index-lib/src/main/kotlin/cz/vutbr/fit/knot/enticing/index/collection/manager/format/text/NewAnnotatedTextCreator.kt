@@ -1,16 +1,16 @@
-package cz.vutbr.fit.knot.enticing.index.payload
+package cz.vutbr.fit.knot.enticing.index.collection.manager.format.text
 
-import cz.vutbr.fit.knot.enticing.dto.Interval
-import cz.vutbr.fit.knot.enticing.dto.NewAnnotatedText
-import cz.vutbr.fit.knot.enticing.dto.TextUnit
 import cz.vutbr.fit.knot.enticing.dto.annotation.Warning
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
-import cz.vutbr.fit.knot.enticing.index.postprocess.DocumentElement
-import cz.vutbr.fit.knot.enticing.index.postprocess.StructuredDocumentContent
+import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnit
+import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnitList
+import cz.vutbr.fit.knot.enticing.dto.interval.Interval
+import cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess.DocumentElement
+import cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess.StructuredDocumentContent
 
-fun createNewAnnotatedText(data: StructuredDocumentContent, intervals: List<Interval>, corpusConfiguration: CorpusConfiguration): NewAnnotatedText {
+fun createNewAnnotatedText(data: StructuredDocumentContent, intervals: List<Interval>, corpusConfiguration: CorpusConfiguration): TextUnitList {
     if (data.elements.isEmpty()) {
-        return NewAnnotatedText()
+        return TextUnitList()
     }
     val tokenIndex = corpusConfiguration.indexes.getValue("token").columnIndex
     val items = splitEntities(intervals, data)
@@ -43,10 +43,10 @@ fun createNewAnnotatedText(data: StructuredDocumentContent, intervals: List<Inte
         }.flatten()
     } else {
         @Warning("When the beginning of the interval was incorrectly set to 0, it was returning the first element from the SnippetPartsFields (containing only subset of the document) instead of failing, should be fixed")
-        getElementsAt(items.first().index to items.last().index, items, tokenIndex)
+        (getElementsAt(items.first().index to items.last().index, items, tokenIndex))
     }
 
-    return NewAnnotatedText(textUnits)
+    return TextUnitList(textUnits)
 }
 
 fun getElementsAt(interval: Pair<Int, Int>, elements: StructuredDocumentContent, tokenIndex: Int): List<TextUnit> {

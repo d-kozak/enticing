@@ -35,7 +35,7 @@ The matched region is denoted using a \<b> tag.
 
 ## StringWithMetadata
 In this format, the text from the default index is sent as a string and the metadata as intervals over this string.
-It is represented using the [following classes](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/AnnotatedText.kt).
+It is represented using the [following classes](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/StringWithMetadata.kt).
 Though it is not that hard to generate, it requires quite a lot of processing on the frontend before it can be rendered. 
 Also it has unnecessary overhead, because it is not necessary to sent the name for each index in each annotation.
 ```javascript
@@ -98,7 +98,7 @@ When taking into account the previously mentioned observations, we can use the f
 ![alt text](../img/annotated_text_1.png)
 First version is more generic, allowing for arbitrary nesting, while the second is more restrictive, allowing units to only have "simpler" units as children.
 ![alt text](../img/annotated_text_2.png)
-It is represented using the [following classes](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/NewAnnotatedText.kt).
+It is represented using the [following classes](../dto/src/main/kotlin/cz/vutbr/fit/knot/enticing/dto/TextUnitList.kt).
 
 ```javascript
 const newFormatExample = {

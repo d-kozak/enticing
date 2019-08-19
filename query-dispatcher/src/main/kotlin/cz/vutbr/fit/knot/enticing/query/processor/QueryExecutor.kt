@@ -24,13 +24,13 @@ interface QueryExecutor<T : Query<T>, OffsetType, Result : QueryResult<OffsetTyp
  * @see https://github.com/kittinunf/fuel
  * It is asynchronous and integrated with coroutines
  */
-class FuelQueryExecutor(private val path: String = "/api/v1/query") : QueryExecutor<SearchQuery, Map<CollectionName, Offset>, IndexServer.SearchResult> {
+class FuelQueryExecutor(private val path: String = "/api/v1/query") : QueryExecutor<SearchQuery, Map<CollectionName, Offset>, IndexServer.IndexResultList> {
 
-    override suspend fun invoke(searchQuery: SearchQuery, requestData: RequestData<Map<CollectionName, Offset>>): MResult<IndexServer.SearchResult> = MResult.runCatching {
+    override suspend fun invoke(searchQuery: SearchQuery, requestData: RequestData<Map<CollectionName, Offset>>): MResult<IndexServer.IndexResultList> = MResult.runCatching {
         val url = "http://${requestData.address}$path"
         url.httpPost()
                 .jsonBody(searchQuery.copy(offset = requestData.offset))
-                .awaitDto<IndexServer.SearchResult>()
+                .awaitDto<IndexServer.IndexResultList>()
     }
 }
 
@@ -38,9 +38,9 @@ class FuelQueryExecutor(private val path: String = "/api/v1/query") : QueryExecu
 /**
  * Remote query executor that sends request to indexserver via restTemplate
  */
-class RestTemplateQueryExecutor(private val restTemplate: RestTemplate = RestTemplate(), private val path: String = "/api/v1/query") : QueryExecutor<SearchQuery, Map<CollectionName, Offset>, IndexServer.SearchResult> {
+class RestTemplateQueryExecutor(private val restTemplate: RestTemplate = RestTemplate(), private val path: String = "/api/v1/query") : QueryExecutor<SearchQuery, Map<CollectionName, Offset>, IndexServer.IndexResultList> {
 
-    override suspend fun invoke(searchQuery: SearchQuery, requestData: RequestData<Map<CollectionName, Offset>>): MResult<IndexServer.SearchResult> = MResult.runCatching {
+    override suspend fun invoke(searchQuery: SearchQuery, requestData: RequestData<Map<CollectionName, Offset>>): MResult<IndexServer.IndexResultList> = MResult.runCatching {
         val input = searchQuery
                 .copy(offset = requestData.offset)
                 .toJson()
@@ -49,7 +49,7 @@ class RestTemplateQueryExecutor(private val restTemplate: RestTemplate = RestTem
         val entity = HttpEntity(input, headers)
         val result = restTemplate.exchange<String>("http://" + requestData.address + path, HttpMethod.POST, entity)
         if (result.statusCode == HttpStatus.OK) {
-            result.body!!.toDto<IndexServer.SearchResult>()
+            result.body!!.toDto<IndexServer.IndexResultList>()
         } else {
             @Incomplete("somehow rethrow the real exception?")
             throw RuntimeException(result.body.toString())

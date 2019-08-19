@@ -1,8 +1,8 @@
 package cz.vutbr.fit.knot.enticing.webserver.service.mock
 
-import cz.vutbr.fit.knot.enticing.dto.AnnotatedText
-import cz.vutbr.fit.knot.enticing.dto.Payload
 import cz.vutbr.fit.knot.enticing.dto.Webserver
+import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
+import cz.vutbr.fit.knot.enticing.dto.format.text.StringWithMetadata
 
 
 val loremOneSentence = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit."
@@ -26,7 +26,7 @@ val dummyDocument = Webserver.FullDocument(
         1,
         "Document One",
         "https://www.google.com",
-        Payload.FullResponse.Annotated(AnnotatedText(
+        ResultFormat.FullResponse.Annotated(StringWithMetadata(
                 documentText,
                 emptyMap(),
                 emptyList(),

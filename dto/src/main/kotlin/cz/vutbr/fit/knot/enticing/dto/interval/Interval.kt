@@ -1,4 +1,4 @@
-package cz.vutbr.fit.knot.enticing.dto
+package cz.vutbr.fit.knot.enticing.dto.interval
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.validation.constraints.PositiveOrZero
