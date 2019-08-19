@@ -2,8 +2,6 @@ package cz.vutbr.fit.knot.enticing.dto.format.result
 
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import cz.vutbr.fit.knot.enticing.dto.format.text.StringWithMetadata
-import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnitList
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 
@@ -18,7 +16,7 @@ import javax.validation.constraints.NotBlank
 )
 @JsonSubTypes(
         JsonSubTypes.Type(ResultFormat.IdentifierList::class, name = "identifiers"),
-        JsonSubTypes.Type(ResultFormat.FullResponse::class, name = "full")
+        JsonSubTypes.Type(ResultFormat.Snippet::class, name = "full")
 )
 sealed class ResultFormat {
     /**
@@ -35,25 +33,30 @@ sealed class ResultFormat {
             property = "type"
     )
     @JsonSubTypes(
-            JsonSubTypes.Type(FullResponse.Html::class, name = "html"),
-            JsonSubTypes.Type(FullResponse.Annotated::class, name = "annotated"),
-            JsonSubTypes.Type(FullResponse.NewAnnotated::class, name = "new")
+            JsonSubTypes.Type(Snippet.PlainText::class, name = "plain"),
+            JsonSubTypes.Type(Snippet.Html::class, name = "html"),
+            JsonSubTypes.Type(Snippet.StringWithMetadata::class, name = "annotated"),
+            JsonSubTypes.Type(Snippet.TextUnitList::class, name = "new")
     )
-    sealed class FullResponse : ResultFormat() {
+    sealed class Snippet : ResultFormat() {
+        /**
+         * Just the text from the default index
+         */
+        data class PlainText(val content: String) : Snippet()
         /**
          * Simple html format
          */
-        data class Html(val content: String) : FullResponse()
+        data class Html(val content: String) : Snippet()
 
         /**
          * Text with annotations
          */
-        data class Annotated(@field:Valid val content: StringWithMetadata) : FullResponse()
+        data class StringWithMetadata(@field:Valid val content: cz.vutbr.fit.knot.enticing.dto.format.text.StringWithMetadata) : Snippet()
 
         /**
          * New annotated format
          */
-        data class NewAnnotated(@field:Valid val content: TextUnitList) : FullResponse()
+        data class TextUnitList(@field:Valid val content: cz.vutbr.fit.knot.enticing.dto.format.text.TextUnitList) : Snippet()
     }
 }
 
@@ -64,5 +67,5 @@ data class Identifier(
         @field:NotBlank
         val identifier: String,
         @field:Valid
-        val snippet: ResultFormat.FullResponse
+        val snippet: ResultFormat.Snippet
 )

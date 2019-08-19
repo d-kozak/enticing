@@ -1,8 +1,8 @@
 package cz.vutbr.fit.knot.index.client
 
-import cz.vutbr.fit.knot.enticing.dto.ResponseFormat
-import cz.vutbr.fit.knot.enticing.dto.ResponseType
+import cz.vutbr.fit.knot.enticing.dto.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.SearchQuery
+import cz.vutbr.fit.knot.enticing.dto.TextFormat
 import cz.vutbr.fit.knot.enticing.dto.TextMetadata
 import cz.vutbr.fit.knot.enticing.dto.config.SearchConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.ConsoleClientType
@@ -23,8 +23,8 @@ internal fun executeLine(collectionManager: CollectionManager, input: String) {
             33,
             null,
             TextMetadata.Predefined("all"),
-            ResponseType.FULL,
-            ResponseFormat.NEW_ANNOTATED_TEXT
+            ResultFormat.SNIPPET,
+            TextFormat.TEXT_UNIT_LIST
     )
     try {
         val response = collectionManager.query(query)

@@ -11,7 +11,7 @@ typealias ServerId = String
 typealias ErrorMessage = String
 typealias CollectionName = String
 
-object Webserver {
+object WebServer {
 
     /**
      * Result for SearchQuery
@@ -79,7 +79,7 @@ object Webserver {
             /**
              * What should be the format of the response
              */
-            val responseFormat: ResponseFormat = Defaults.responseFormat,
+            val textFormat: TextFormat = Defaults.responseFormat,
 
             /**
              * Query, optional
@@ -90,7 +90,7 @@ object Webserver {
             @Incomplete("can be used only when postprocessing is ready")
             val query: String? = null
     ) {
-        fun toIndexFormat() = IndexServer.ContextExtensionQuery(collection, documentId, location, size, extension, metadata, defaultIndex, responseFormat)
+        fun toIndexFormat() = IndexServer.ContextExtensionQuery(collection, documentId, location, size, extension, metadata, defaultIndex, textFormat)
     }
 
 
@@ -129,7 +129,7 @@ object Webserver {
             /**
              * What should be the format of the response
              */
-            val responseFormat: ResponseFormat = Defaults.responseFormat,
+            val textFormat: TextFormat = Defaults.responseFormat,
 
             /**
              * Query, optional
@@ -139,7 +139,7 @@ object Webserver {
              */
             val query: String? = null
     ) {
-        fun toIndexFormat() = IndexServer.DocumentQuery(collection, documentId, metadata, defaultIndex, responseFormat)
+        fun toIndexFormat() = IndexServer.DocumentQuery(collection, documentId, metadata, defaultIndex, textFormat)
     }
 
 
@@ -169,7 +169,7 @@ object Webserver {
             @field:Pattern(regexp = urlRegexStr)
             val url: String,
             @field:Valid
-            val payload: ResultFormat.FullResponse,
+            val payload: ResultFormat.Snippet,
             /**
              * Query, optional
              *

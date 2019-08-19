@@ -22,7 +22,7 @@ class QueryService(
 
     private val log = LoggerFactory.getLogger(QueryService::class.java)
 
-    fun query(query: String, selectedSettings: Long): Webserver.ResultList {
+    fun query(query: String, selectedSettings: Long): WebServer.ResultList {
         val currentUser = userService.currentUser
         val searchQuery = SearchQuery(query, currentUser?.userSettings?.resultsPerPage
                 ?: Defaults.snippetCount)
@@ -39,9 +39,9 @@ class QueryService(
     }
 
 
-    fun context(query: Webserver.ContextExtensionQuery): SnippetExtension = indexServerConnector.contextExtension(query)
+    fun context(query: WebServer.ContextExtensionQuery): SnippetExtension = indexServerConnector.contextExtension(query)
 
-    fun document(query: Webserver.DocumentQuery): Webserver.FullDocument {
+    fun document(query: WebServer.DocumentQuery): WebServer.FullDocument {
         val indexDocument = indexServerConnector.getDocument(query)
         return indexDocument.toWebserverFormat(query.host, query.collection, query.documentId, query.query)
     }
@@ -68,8 +68,8 @@ class QueryService(
     }
 }
 
-fun flatten(result: Map<String, List<MResult<IndexServer.IndexResultList>>>): Webserver.ResultList {
-    val snippets = mutableListOf<Webserver.SearchResult>()
+fun flatten(result: Map<String, List<MResult<IndexServer.IndexResultList>>>): WebServer.ResultList {
+    val snippets = mutableListOf<WebServer.SearchResult>()
     val errors = mutableMapOf<ServerId, ErrorMessage>()
 
     for ((serverId, results) in result) {
@@ -88,5 +88,5 @@ fun flatten(result: Map<String, List<MResult<IndexServer.IndexResultList>>>): We
         }
     }
 
-    return Webserver.ResultList(snippets, errors)
+    return WebServer.ResultList(snippets, errors)
 }

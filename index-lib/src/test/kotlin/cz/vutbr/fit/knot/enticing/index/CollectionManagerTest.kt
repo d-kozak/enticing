@@ -107,8 +107,8 @@ class CollectionManagerTest {
             20,
             mapOf("one" to Offset(0, 0)),
             TextMetadata.Predefined("all"),
-            ResponseType.FULL,
-            ResponseFormat.ANNOTATED_TEXT
+            ResultFormat.FULL,
+            TextFormat.STRING_WITH_METADATA
     )
 
     companion object {
@@ -151,7 +151,7 @@ class CollectionManagerTest {
                 "nertag:person{{nertag->token}}",
                 "job work"
         )) {
-            val query = templateQuery.copy(query = input, responseFormat = ResponseFormat.NEW_ANNOTATED_TEXT)
+            val query = templateQuery.copy(query = input, textFormat = TextFormat.TEXT_UNIT_LIST)
 
             val result = queryEngine.query(query)
         }
@@ -160,7 +160,7 @@ class CollectionManagerTest {
     @Warning("it seems that different documents are being returned in test environment, why?")
     @Test
     fun problematicQuery() {
-        val query = SearchQuery(query = "job work", snippetCount = 33, offset = mapOf("one" to Offset(document = 0, snippet = 0)), metadata = TextMetadata.Predefined(value = "all"), responseType = ResponseType.FULL, responseFormat = ResponseFormat.NEW_ANNOTATED_TEXT, defaultIndex = "token")
+        val query = SearchQuery(query = "job work", snippetCount = 33, offset = mapOf("one" to Offset(document = 0, snippet = 0)), metadata = TextMetadata.Predefined(value = "all"), resultFormat = ResultFormat.FULL, textFormat = TextFormat.TEXT_UNIT_LIST, defaultIndex = "token")
         val queryEngine = initCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
         val result = queryEngine.query(query)
     }
@@ -183,8 +183,8 @@ class CollectionManagerTest {
 
             val document = executor.getDocument(query)
 
-            if (document.payload is ResultFormat.FullResponse.Annotated) {
-                val annotated = document.payload as ResultFormat.FullResponse.Annotated
+            if (document.payload is ResultFormat.Snippet.StringWithMetadata) {
+                val annotated = document.payload as ResultFormat.Snippet.StringWithMetadata
                 assertThat(validateAnnotatedText(annotated.content))
                         .isEmpty()
             }
@@ -196,11 +196,11 @@ class CollectionManagerTest {
         val executor = initCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
 
         val (prefix, suffix, _) = executor.extendSnippet(
-                IndexServer.ContextExtensionQuery("col1", 2, 5, 5, 10, responseFormat = ResponseFormat.ANNOTATED_TEXT
+                IndexServer.ContextExtensionQuery("col1", 2, 5, 5, 10, textFormat = TextFormat.STRING_WITH_METADATA
                 ))
 
         for (text in listOf(prefix, suffix)) {
-            val annotated = text as ResultFormat.FullResponse.Annotated
+            val annotated = text as ResultFormat.Snippet.StringWithMetadata
             validateAnnotatedText(annotated.content)
         }
     }

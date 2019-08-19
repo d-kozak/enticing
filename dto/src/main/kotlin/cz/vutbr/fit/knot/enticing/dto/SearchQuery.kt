@@ -37,12 +37,12 @@ data class SearchQuery(
         /**
          * What should be the response type
          */
-        val responseType: ResponseType = Defaults.responseType,
+        val resultFormat: ResultFormat = Defaults.RESULT_FORMAT,
 
         /**
          * What should be the format of the response
          */
-        override val responseFormat: ResponseFormat = Defaults.responseFormat,
+        override val textFormat: TextFormat = Defaults.responseFormat,
 
         /**
          * What is the default index
@@ -147,23 +147,27 @@ data class Offset(
 /**
  * Types of responses
  */
-enum class ResponseType {
+enum class ResultFormat {
     /**
      * What was matched by the query and it's surroundings
      */
-    FULL,
+    SNIPPET,
     /**
      * Only return the values of identifiers used in the query
      *
      */
     @Incomplete("can only be used when EQL is in place")
-    IDENTIFIERS
+    IDENTIFIER_LIST
 }
 
 /**
  * Format of response
  */
-enum class ResponseFormat {
+enum class TextFormat {
+    /**
+     * Just the text from the default index
+     */
+    PLAIN_TEXT,
     /**
      * Response should be a single string containing html
      */
@@ -172,10 +176,10 @@ enum class ResponseFormat {
     /**
      * Response should be AnnotatedText
      */
-    ANNOTATED_TEXT,
+    STRING_WITH_METADATA,
 
     /**
      * New format of annotated text, eventually meant to replace it
      */
-    NEW_ANNOTATED_TEXT;
+    TEXT_UNIT_LIST;
 }

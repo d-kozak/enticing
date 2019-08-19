@@ -107,7 +107,7 @@ class JsonPayloadBuilderVisitor(config: CorpusConfiguration, query: Mg4jQuery, i
     override fun getResult(): ResultFormat {
         @Temporary("The result should actually never be empty, this is here only until the query processing is not finalized")
         val text = if (builder.isNotEmpty()) builder.toString() else "!!!EMPTY!!!"
-        return ResultFormat.FullResponse.Annotated(
+        return ResultFormat.Snippet.StringWithMetadata(
                 StringWithMetadata(text, annotations, positions, queryMapping))
     }
 }

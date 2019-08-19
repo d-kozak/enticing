@@ -4,7 +4,7 @@ package cz.vutbr.fit.knot.enticing.webserver.service
 import cz.vutbr.fit.knot.enticing.dto.CorpusFormat
 import cz.vutbr.fit.knot.enticing.dto.IndexServer
 import cz.vutbr.fit.knot.enticing.dto.SnippetExtension
-import cz.vutbr.fit.knot.enticing.dto.Webserver
+import cz.vutbr.fit.knot.enticing.dto.WebServer
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import cz.vutbr.fit.knot.enticing.query.processor.exchange
@@ -16,9 +16,9 @@ class IndexServerConnector(private val template: RestTemplate = RestTemplate(), 
 
     private val log = LoggerFactory.getLogger(IndexServerConnector::class.java)
 
-    fun getDocument(query: Webserver.DocumentQuery): IndexServer.FullDocument = resultOrThrow(query.host, query.toIndexFormat(), "document")
+    fun getDocument(query: WebServer.DocumentQuery): IndexServer.FullDocument = resultOrThrow(query.host, query.toIndexFormat(), "document")
 
-    fun contextExtension(query: Webserver.ContextExtensionQuery): SnippetExtension = resultOrThrow(query.host, query.toIndexFormat(), "context")
+    fun contextExtension(query: WebServer.ContextExtensionQuery): SnippetExtension = resultOrThrow(query.host, query.toIndexFormat(), "context")
 
     fun getFormat(server: String): CorpusFormat {
         val url = "http://$server$apiBathPath/format"

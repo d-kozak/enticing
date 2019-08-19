@@ -12,8 +12,8 @@ internal val templateQuery = SearchQuery(
         20,
         emptyMap(),
         TextMetadata.Predefined("none"),
-        ResponseType.FULL,
-        ResponseFormat.ANNOTATED_TEXT
+        ResultFormat.FULL,
+        TextFormat.STRING_WITH_METADATA
 )
 
 internal val googleFirstResult = IndexServer.IndexResultList(
@@ -24,7 +24,7 @@ internal val googleFirstResult = IndexServer.IndexResultList(
                 5,
                 "google.com",
                 "title",
-                ResultFormat.FullResponse.Html("texty text"),
+                ResultFormat.Snippet.Html("texty text"),
                 false
         )),
         mapOf("one" to Offset(42, 84))

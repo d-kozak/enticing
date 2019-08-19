@@ -13,13 +13,13 @@ data class SnippetExtension(
          * Text to include before
          */
         @field:Valid
-        val prefix: ResultFormat.FullResponse,
+        val prefix: ResultFormat.Snippet,
 
         /**
          * Text to include after
          */
         @field:Valid
-        val suffix: ResultFormat.FullResponse,
+        val suffix: ResultFormat.Snippet,
         /**
          * Is it possible to extend further?
          */

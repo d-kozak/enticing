@@ -8,8 +8,8 @@ internal val templateSearchQuery = SearchQuery(
         20,
         mapOf("one" to Offset(0, 0)),
         TextMetadata.Predefined("none"),
-        ResponseType.FULL,
-        ResponseFormat.ANNOTATED_TEXT
+        ResultFormat.FULL,
+        TextFormat.STRING_WITH_METADATA
 )
 
 internal val searchDummyResult = IndexServer.IndexResultList(
@@ -20,7 +20,7 @@ internal val searchDummyResult = IndexServer.IndexResultList(
                 5,
                 "google.com",
                 "title",
-                ResultFormat.FullResponse.Html("texty text"),
+                ResultFormat.Snippet.Html("texty text"),
                 false
         )),
         mapOf("one" to Offset(42, 84))
@@ -34,7 +34,7 @@ internal val templateDocumentQuery = IndexServer.DocumentQuery(
 internal val documentDummyResult = IndexServer.FullDocument(
         "how to use google",
         "google.com/howto",
-        ResultFormat.FullResponse.Html("how to use google for dummies")
+        ResultFormat.Snippet.Html("how to use google for dummies")
 )
 
 
@@ -47,6 +47,6 @@ internal val templateContextExtensionQuery = IndexServer.ContextExtensionQuery(
 )
 
 internal val contextExtensionDummyResult = SnippetExtension(
-        ResultFormat.FullResponse.Html("null"),
-        ResultFormat.FullResponse.Html("null"),
+        ResultFormat.Snippet.Html("null"),
+        ResultFormat.Snippet.Html("null"),
         false)

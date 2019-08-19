@@ -2,7 +2,7 @@ package cz.vutbr.fit.knot.enticing.dto
 
 interface Mg4jQuery {
     val defaultIndex: String
-    val responseFormat: ResponseFormat
+    val textFormat: TextFormat
 }
 
 interface Query<T:Query<T>>{

@@ -54,7 +54,7 @@ object IndexServer {
             /**
              * What should be the format of the response
              */
-            override val responseFormat: ResponseFormat = Defaults.responseFormat,
+            override val textFormat: TextFormat = Defaults.responseFormat,
 
             /**
              * Query, optional
@@ -96,7 +96,7 @@ object IndexServer {
             /**
              * What should be the format of the response
              */
-            override val responseFormat: ResponseFormat = Defaults.responseFormat,
+            override val textFormat: TextFormat = Defaults.responseFormat,
 
             /**
              * Query, optional
@@ -118,11 +118,11 @@ object IndexServer {
             @field:Pattern(regexp = urlRegexStr)
             val url: String,
             @field:Valid
-            val payload: ResultFormat.FullResponse,
+            val payload: ResultFormat.Snippet,
             @field:Valid
             val queryMapping: List<QueryMapping> = emptyList()
     ) {
-        fun toWebserverFormat(host: String, collection: String, documentId: Int, query: String? = null) = Webserver.FullDocument(host, collection, documentId, title, url, payload, query, queryMapping)
+        fun toWebserverFormat(host: String, collection: String, documentId: Int, query: String? = null) = WebServer.FullDocument(host, collection, documentId, title, url, payload, query, queryMapping)
     }
 
     /**
@@ -223,7 +223,7 @@ object IndexServer {
             val canExtend: Boolean
     ) {
 
-        fun withHost(host: String): Webserver.SearchResult = Webserver.SearchResult(host, collection, documentId, location, size, url, documentTitle, payload, canExtend)
+        fun withHost(host: String): WebServer.SearchResult = WebServer.SearchResult(host, collection, documentId, location, size, url, documentTitle, payload, canExtend)
     }
 
 }

@@ -17,8 +17,8 @@ class SerializationTest {
                 42,
                 mapOf("one" to Offset(10, 10)),
                 metadata = TextMetadata.Predefined("all"),
-                responseType = ResponseType.FULL,
-                responseFormat = ResponseFormat.ANNOTATED_TEXT,
+                resultFormat = ResultFormat.FULL,
+                textFormat = TextFormat.STRING_WITH_METADATA,
                 defaultIndex = "lemma"
         )
 
@@ -81,7 +81,7 @@ class SerializationTest {
                             canExtend = false,
                             size = 20,
                             url = "google.com",
-                            payload = ResultFormat.FullResponse.Html("hello html")
+                            payload = ResultFormat.Snippet.Html("hello html")
                     )),
                     offset = mapOf("one" to Offset(10, 20))
             )
@@ -100,7 +100,7 @@ class SerializationTest {
                             canExtend = false,
                             size = 20,
                             url = "google.com",
-                            payload = ResultFormat.FullResponse.Annotated(StringWithMetadata(
+                            payload = ResultFormat.Snippet.StringWithMetadata(StringWithMetadata(
                                     "foo bar baz",
                                     emptyMap(),
                                     emptyList(),
@@ -126,7 +126,7 @@ class SerializationTest {
                             url = "google.com",
                             payload = ResultFormat.IdentifierList(
                                     listOf(
-                                            Identifier("x", ResultFormat.FullResponse.Annotated(StringWithMetadata(
+                                            Identifier("x", ResultFormat.Snippet.StringWithMetadata(StringWithMetadata(
                                                     "foo bar baz",
                                                     emptyMap(),
                                                     emptyList(),

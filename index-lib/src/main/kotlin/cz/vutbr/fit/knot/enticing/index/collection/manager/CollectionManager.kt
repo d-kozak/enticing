@@ -150,8 +150,8 @@ class CollectionManager internal constructor(
 
         val filteredConfig = corpusConfiguration.filterBy(query.metadata, query.defaultIndex)
 
-        val prefixPayload = createPayload(query, document.loadStructuredContent(prefix, filteredConfig), emptyList(), corpusConfiguration) as ResultFormat.FullResponse
-        val suffixPayload = createPayload(query, document.loadStructuredContent(suffix, filteredConfig), emptyList(), corpusConfiguration) as ResultFormat.FullResponse
+        val prefixPayload = createPayload(query, document.loadStructuredContent(prefix, filteredConfig), emptyList(), corpusConfiguration) as ResultFormat.Snippet
+        val suffixPayload = createPayload(query, document.loadStructuredContent(suffix, filteredConfig), emptyList(), corpusConfiguration) as ResultFormat.Snippet
 
         return SnippetExtension(
                 prefixPayload,
@@ -167,7 +167,7 @@ class CollectionManager internal constructor(
 
         val content = document.loadStructuredContent(filteredConfig = filteredConfig)
 
-        val payload = createPayload(query, content, emptyList(), corpusConfiguration) as ResultFormat.FullResponse
+        val payload = createPayload(query, content, emptyList(), corpusConfiguration) as ResultFormat.Snippet
         return IndexServer.FullDocument(
                 document.title().toString(),
                 document.uri().toString(),

@@ -40,7 +40,7 @@ internal class QueryServiceTest {
             val mockSearchSettings = SearchSettings(42, private = false, servers = dummyServers)
             every { searchSettingsRepository.findById(42) } returns Optional.of(mockSearchSettings)
 
-            val expected = Webserver.ResultList(listOf(firstResult))
+            val expected = WebServer.ResultList(listOf(firstResult))
             val dummyQuery = SearchQuery("nertag:person", snippetCount = 33)
             val foo = mapOf("server1" to listOf(MResult.success(IndexServer.IndexResultList(listOf(firstResult.toIndexServerFormat())))))
             every { dispatcher.dispatchQuery(dummyQuery, dummyServers.map { IndexServerRequestData(it) }) } returns foo
@@ -65,7 +65,7 @@ internal class QueryServiceTest {
             val mockSearchSettings = SearchSettings(42, private = true, servers = dummyServers)
             every { searchSettingsRepository.findById(42) } returns Optional.of(mockSearchSettings)
 
-            val expected = Webserver.ResultList(listOf(firstResult))
+            val expected = WebServer.ResultList(listOf(firstResult))
             val dummyQuery = SearchQuery("nertag:person", snippetCount = 33)
             val foo = mapOf("server1" to listOf(MResult.success(IndexServer.IndexResultList(listOf(firstResult.toIndexServerFormat())))))
             every { dispatcher.dispatchQuery(dummyQuery, dummyServers.map { IndexServerRequestData(it) }) } returns foo
@@ -140,7 +140,7 @@ internal class QueryServiceTest {
         @Test
         fun `valid request`() {
             val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector)
-            val query = Webserver.DocumentQuery("google", "col1", 21, query = "nertag:person")
+            val query = WebServer.DocumentQuery("google", "col1", 21, query = "nertag:person")
             val expected = dummyDocument.copy(host = "google", collection = "col1", documentId = 21, query = "nertag:person")
 
             every { indexServerConnector.getDocument(query) } returns expected.toIndexFormat()
@@ -153,7 +153,7 @@ internal class QueryServiceTest {
         @Test
         fun `exception propagated`() {
             val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector)
-            val query = Webserver.DocumentQuery("google", "col1", 21)
+            val query = WebServer.DocumentQuery("google", "col1", 21)
 
             every { indexServerConnector.getDocument(any()) } throws IllegalArgumentException("booom!")
             assertThrows<IllegalArgumentException> {
@@ -178,7 +178,7 @@ internal class QueryServiceTest {
         @Test
         fun `valid request`() {
             val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector)
-            val query = Webserver.ContextExtensionQuery("google", "col1", 21, 30, 20, 40, query = "foo")
+            val query = WebServer.ContextExtensionQuery("google", "col1", 21, 30, 20, 40, query = "foo")
             every { indexServerConnector.contextExtension(query) } returns snippetExtension
             val actual = queryService.context(query)
             assertThat(actual)
@@ -189,7 +189,7 @@ internal class QueryServiceTest {
         @Test
         fun `exception propagated`() {
             val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector)
-            val query = Webserver.ContextExtensionQuery("google", "col1", 21, 30, 20, 40, query = "foo")
+            val query = WebServer.ContextExtensionQuery("google", "col1", 21, 30, 20, 40, query = "foo")
 
             every { indexServerConnector.contextExtension(any()) } throws IllegalArgumentException("booom!")
             assertThrows<IllegalArgumentException> {
@@ -216,7 +216,7 @@ internal class QueryServiceTest {
             val actual = flatten(input)
             assertThat(actual)
                     .isEqualTo(
-                            Webserver.ResultList(listOf(firstResult, secondResult, thirdResult))
+                            WebServer.ResultList(listOf(firstResult, secondResult, thirdResult))
                     )
         }
 
@@ -230,7 +230,7 @@ internal class QueryServiceTest {
             val actual = flatten(input)
             assertThat(actual)
                     .isEqualTo(
-                            Webserver.ResultList(listOf(firstResult, secondResult), mapOf("server3" to "IllegalStateException:my secret reason to fail"))
+                            WebServer.ResultList(listOf(firstResult, secondResult), mapOf("server3" to "IllegalStateException:my secret reason to fail"))
                     )
         }
 
@@ -244,7 +244,7 @@ internal class QueryServiceTest {
             val actual = flatten(input)
             assertThat(actual)
                     .isEqualTo(
-                            Webserver.ResultList(listOf(firstResult, secondResult),
+                            WebServer.ResultList(listOf(firstResult, secondResult),
                                     mapOf("server1" to "NullPointerException:oh no...again? :(",
                                             "server3" to "IllegalStateException:my secret reason to fail")
                             )

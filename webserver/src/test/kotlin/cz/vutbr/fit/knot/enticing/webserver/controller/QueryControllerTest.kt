@@ -3,7 +3,7 @@ package cz.vutbr.fit.knot.enticing.webserver.controller
 
 import cz.vutbr.fit.knot.enticing.dto.CorpusFormat
 import cz.vutbr.fit.knot.enticing.dto.TextMetadata
-import cz.vutbr.fit.knot.enticing.dto.Webserver
+import cz.vutbr.fit.knot.enticing.dto.WebServer
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
@@ -56,7 +56,7 @@ internal class QueryControllerTest(
         val query = URLEncoder.encode("ahoj cau", "UTF-8")
         val selectedSettings = 1
 
-        val dummyResult = Webserver.ResultList(listOf(firstResult))
+        val dummyResult = WebServer.ResultList(listOf(firstResult))
         Mockito.`when`(queryService.query("ahoj cau", 1)).thenReturn(dummyResult)
 
         mockMvc.perform(MockMvcRequestBuilders.get("$apiBasePath/query?query=$query&settings=$selectedSettings"))
@@ -68,7 +68,7 @@ internal class QueryControllerTest(
 
     @Test
     fun context() {
-        val query = Webserver.ContextExtensionQuery("foo.baz", "col1", 2, 201, 42, 10)
+        val query = WebServer.ContextExtensionQuery("foo.baz", "col1", 2, 201, 42, 10)
 
         Mockito.`when`(queryService.context(query)).thenReturn(snippetExtension)
 
@@ -85,7 +85,7 @@ internal class QueryControllerTest(
 
     @Test
     fun document() {
-        val query = Webserver.DocumentQuery("google.com", "col1", 1, TextMetadata.Predefined("none"), query = "foo")
+        val query = WebServer.DocumentQuery("google.com", "col1", 1, TextMetadata.Predefined("none"), query = "foo")
 
         Mockito.`when`(queryService.document(query)).thenReturn(dummyDocument)
 

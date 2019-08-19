@@ -1,4 +1,4 @@
-import cz.vutbr.fit.knot.enticing.dto.ResponseFormat
+import cz.vutbr.fit.knot.enticing.dto.TextFormat
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.consoleClient
 
 consoleClient {
@@ -7,6 +7,6 @@ consoleClient {
         servers("localhost:8001")
     }
     searchConfig {
-        responseFormat = ResponseFormat.HTML
+        textFormat = TextFormat.HTML
     }
 }

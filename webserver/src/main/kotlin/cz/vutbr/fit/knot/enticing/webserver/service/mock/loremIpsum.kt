@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver.service.mock
 
-import cz.vutbr.fit.knot.enticing.dto.Webserver
+import cz.vutbr.fit.knot.enticing.dto.WebServer
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.format.text.StringWithMetadata
 
@@ -20,13 +20,13 @@ Curabitur bibendum justo non orci. Donec ipsum massa, ullamcorper in, auctor et,
 """.trimIndent()
 
 
-val dummyDocument = Webserver.FullDocument(
+val dummyDocument = WebServer.FullDocument(
         "google.com",
         "col1",
         1,
         "Document One",
         "https://www.google.com",
-        ResultFormat.FullResponse.Annotated(StringWithMetadata(
+        ResultFormat.Snippet.StringWithMetadata(StringWithMetadata(
                 documentText,
                 emptyMap(),
                 emptyList(),
