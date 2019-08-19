@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager.format.text
 
-import cz.vutbr.fit.knot.enticing.dto.Mg4jQuery
+import cz.vutbr.fit.knot.enticing.dto.GeneralFormatInfo
 import cz.vutbr.fit.knot.enticing.dto.TextFormat
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
@@ -9,7 +9,7 @@ import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess.DocumentElement
 import cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess.StructuredDocumentContent
 
-internal fun createPayload(query: Mg4jQuery, content: StructuredDocumentContent, intervals: List<Interval>, corpusConfiguration: CorpusConfiguration): ResultFormat {
+internal fun createPayload(query: GeneralFormatInfo, content: StructuredDocumentContent, intervals: List<Interval>, corpusConfiguration: CorpusConfiguration): ResultFormat {
 
     @Incomplete("check for ResponseType once EQL stuff is in place")
     val visitor = when (query.textFormat) {

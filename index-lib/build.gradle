@@ -24,8 +24,9 @@ jar {
 }
 
 dependencies {
+    compile(project(":eql-compiler"))
+
     implementation(project(":dto"))
-    implementation(project(":eql-compiler"))
     implementation(project(":query-dispatcher"))
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")

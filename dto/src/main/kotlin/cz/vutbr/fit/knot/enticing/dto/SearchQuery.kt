@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.dto
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
@@ -33,7 +34,7 @@ data class SearchQuery(
          * Which other indexes and entities should be included
          */
         @field:Valid
-        val metadata: TextMetadata = Defaults.metadata,
+        override val metadata: TextMetadata = Defaults.metadata,
         /**
          * What should be the response type
          */
@@ -52,8 +53,13 @@ data class SearchQuery(
          */
         @field:NotBlank
         override val defaultIndex: String = Defaults.defaultIndex
-) : Mg4jQuery, Query<SearchQuery> {
+) : GeneralFormatInfo, Query<SearchQuery> {
     override fun updateSnippetCount(newSnippetCount: Int): SearchQuery = this.copy(snippetCount = newSnippetCount)
+
+    fun copyWithAst(): SearchQuery = this.copy().also { it.eqlAst = it.eqlAst.copy() }
+
+    @JsonIgnore
+    lateinit var eqlAst: AstNode
 }
 
 

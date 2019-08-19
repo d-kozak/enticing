@@ -2,7 +2,6 @@ package cz.vutbr.fit.knot.enticing.dto
 
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
-import cz.vutbr.fit.knot.enticing.dto.format.text.QueryMapping
 import cz.vutbr.fit.knot.enticing.dto.utils.regex.urlRegexStr
 import javax.validation.Valid
 import javax.validation.constraints.*
@@ -45,7 +44,7 @@ object IndexServer {
              * Which metadata to include
              */
             @field:Valid
-            val metadata: TextMetadata = Defaults.metadata,
+            override val metadata: TextMetadata = Defaults.metadata,
             /**
              * What should be the defaultIndex
              */
@@ -64,7 +63,7 @@ object IndexServer {
              */
             @Incomplete("can be used only when postprocessing is ready")
             val query: String? = null
-    ) : Mg4jQuery
+    ) : GeneralFormatInfo
 
 
     /**
@@ -85,7 +84,7 @@ object IndexServer {
              * Which metadata to include
              */
             @field:Valid
-            val metadata: TextMetadata = Defaults.metadata,
+            override val metadata: TextMetadata = Defaults.metadata,
 
             /**
              * What should be the defaultIndex
@@ -106,7 +105,7 @@ object IndexServer {
              */
             @Incomplete("can be used only when postprocessing is ready")
             val query: String? = null
-    ) : Mg4jQuery
+    ) : GeneralFormatInfo
 
     /**
      * Full document content returned from an IndexServer
@@ -118,11 +117,9 @@ object IndexServer {
             @field:Pattern(regexp = urlRegexStr)
             val url: String,
             @field:Valid
-            val payload: ResultFormat.Snippet,
-            @field:Valid
-            val queryMapping: List<QueryMapping> = emptyList()
+            val payload: ResultFormat.Snippet
     ) {
-        fun toWebserverFormat(host: String, collection: String, documentId: Int, query: String? = null) = WebServer.FullDocument(host, collection, documentId, title, url, payload, query, queryMapping)
+        fun toWebserverFormat(host: String, collection: String, documentId: Int, query: String? = null) = WebServer.FullDocument(host, collection, documentId, title, url, payload, query)
     }
 
     /**
@@ -184,7 +181,7 @@ object IndexServer {
              * What document the snippet came from
              */
             @field:PositiveOrZero
-            val documentId: Long,
+            val documentId: Int,
 
             /**
              * At which index in the document the snippet starts

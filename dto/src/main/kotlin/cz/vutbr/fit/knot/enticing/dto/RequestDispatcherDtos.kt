@@ -1,8 +1,9 @@
 package cz.vutbr.fit.knot.enticing.dto
 
-interface Mg4jQuery {
+interface GeneralFormatInfo {
     val defaultIndex: String
     val textFormat: TextFormat
+    val metadata: TextMetadata
 }
 
 interface Query<T:Query<T>>{

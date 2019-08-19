@@ -3,6 +3,7 @@ package cz.vutbr.fit.knot.enticing.index.server.service
 import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexClientConfig
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
+import cz.vutbr.fit.knot.enticing.eql.compiler.parser.EqlCompiler
 import cz.vutbr.fit.knot.enticing.index.collection.manager.CollectionManager
 import cz.vutbr.fit.knot.enticing.index.collection.manager.CollectionQueryExecutor
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
@@ -13,7 +14,8 @@ import org.springframework.stereotype.Service
 @Service
 class QueryService(
         private val collectionManagers: Map<String, CollectionManager>,
-        private val indexClientConfig: IndexClientConfig
+        private val indexClientConfig: IndexClientConfig,
+        private val eqlCompiler: EqlCompiler
 ) {
 
     private val log = LoggerFactory.getLogger(QueryService::class.java)
@@ -21,8 +23,11 @@ class QueryService(
     val queryDispatcher = QueryDispatcher(CollectionQueryExecutor(collectionManagers))
 
     fun processQuery(query: SearchQuery): IndexServer.IndexResultList {
+        query.eqlAst = eqlCompiler.parseOrFail(query.query)
+
         val requestData = if(query.offset != null) query.offset!!.map { (collection, offset) -> CollectionRequestData(collection, offset) }
         else collectionManagers.keys.map { CollectionRequestData(it, Offset(0, 0)) }
+
         log.info("Executing query $query with requestData $requestData")
         return flatten(queryDispatcher.dispatchQuery(query, requestData))
     }

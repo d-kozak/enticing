@@ -1,7 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
 import it.unimi.di.big.mg4j.document.AbstractDocumentCollection
-import it.unimi.di.big.mg4j.document.Document
 import it.unimi.di.big.mg4j.document.DocumentCollection
 import it.unimi.di.big.mg4j.document.DocumentFactory
 import it.unimi.dsi.fastutil.io.FastBufferedInputStream
@@ -21,7 +20,7 @@ private val log = LoggerFactory.getLogger(Mg4jSingleFileDocumentCollection::clas
  */
 class Mg4jSingleFileDocumentCollection(
         private val inputFile: File,
-        private val factory: DocumentFactory)
+        private val factory: Mg4jDocumentFactory)
     : AbstractDocumentCollection() {
 
     private val documentIndexes = findDocumentIndexes(inputFile)
@@ -54,6 +53,7 @@ class Mg4jSingleFileDocumentCollection(
         val buffer = ByteArray(1024)
         var lineSize = stream.readLine(buffer)
         require(lineSize > 0) { "Doc line should not be empty" }
+        map[DocumentMetadata.UUID] = parseUuid(buffer, lineSize) ?: "NULL"
         lineSize = stream.readLine(buffer)
         require(lineSize > 0) { "Page line should not be empty" }
         require(buffer.isPage()) { "Should be a page line" }
@@ -67,7 +67,8 @@ class Mg4jSingleFileDocumentCollection(
         return stream to map
     }
 
-    override fun document(index: Long): Document = metadataAndStream(index).let { (stream, metadata) -> factory.getDocument(stream, metadata) }
+
+    override fun document(index: Long): Mg4jDocument = metadataAndStream(index).let { (stream, metadata) -> factory.getDocument(stream, metadata) }
 
     override fun size(): Long = documentIndexes.size64()
 

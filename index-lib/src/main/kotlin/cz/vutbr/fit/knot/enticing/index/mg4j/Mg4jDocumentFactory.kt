@@ -5,7 +5,6 @@ import cz.vutbr.fit.knot.enticing.dto.annotation.Speed
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.Index
 import it.unimi.di.big.mg4j.document.AbstractDocumentFactory
-import it.unimi.di.big.mg4j.document.Document
 import it.unimi.di.big.mg4j.document.DocumentFactory
 import it.unimi.dsi.fastutil.bytes.ByteArrays
 import it.unimi.dsi.fastutil.io.FastBufferedInputStream
@@ -32,7 +31,7 @@ class Mg4jDocumentFactory(private val corpusConfiguration: CorpusConfiguration) 
 
     override fun copy(): DocumentFactory = Mg4jDocumentFactory(corpusConfiguration)
 
-    override fun getDocument(rawContent: InputStream, metadata: Reference2ObjectMap<Enum<*>, Any>): Document {
+    override fun getDocument(rawContent: InputStream, metadata: Reference2ObjectMap<Enum<*>, Any>): Mg4jDocument {
         val stream = (rawContent as FastBufferedInputStream).bufferedReader()
 
         // + 1 for hidden glue index
@@ -168,6 +167,11 @@ fun ByteArray.next(b: Byte, offset: Int = 0, size: Int = this.size): Int {
             return i
     }
     return -1
+}
+
+internal fun parseUuid(buffer: ByteArray, bufferSize: Int): String? {
+    val splitPoint = findSplitPoint(buffer, bufferSize) ?: return null
+    return String(buffer, splitPoint + 1, bufferSize - (splitPoint + 1))
 }
 
 internal fun parsePageLine(buffer: ByteArray, bufferSize: Int): Pair<String, String> {

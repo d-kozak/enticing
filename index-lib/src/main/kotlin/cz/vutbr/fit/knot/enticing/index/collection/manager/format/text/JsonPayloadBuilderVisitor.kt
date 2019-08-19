@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager.format.text
 
-import cz.vutbr.fit.knot.enticing.dto.Mg4jQuery
+import cz.vutbr.fit.knot.enticing.dto.GeneralFormatInfo
 import cz.vutbr.fit.knot.enticing.dto.annotation.Temporary
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
@@ -11,7 +11,7 @@ import cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess.DocumentE
 import org.slf4j.LoggerFactory
 
 
-class JsonPayloadBuilderVisitor(config: CorpusConfiguration, query: Mg4jQuery, intervals: List<Interval>
+class JsonPayloadBuilderVisitor(config: CorpusConfiguration, query: GeneralFormatInfo, intervals: List<Interval>
 ) : AbstractPayloadBuilderVisitor<ResultFormat>(config, query, intervals) {
 
     private val log = LoggerFactory.getLogger(JsonPayloadBuilderVisitor::class.java)

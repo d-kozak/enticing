@@ -1,31 +1,29 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager
 
-import cz.vutbr.fit.knot.enticing.dto.IndexServer
-import cz.vutbr.fit.knot.enticing.dto.Offset
-import cz.vutbr.fit.knot.enticing.dto.SearchQuery
-import cz.vutbr.fit.knot.enticing.dto.SnippetExtension
+import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CollectionConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.filterBy
-import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
-import cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.createPayload
+import cz.vutbr.fit.knot.enticing.dto.interval.Interval
+import cz.vutbr.fit.knot.enticing.dto.interval.findEnclosingInterval
+import cz.vutbr.fit.knot.enticing.eql.compiler.parser.EqlCompiler
+import cz.vutbr.fit.knot.enticing.index.boundary.PostProcessor
+import cz.vutbr.fit.knot.enticing.index.boundary.ResultCreator
+import cz.vutbr.fit.knot.enticing.index.boundary.SearchEngine
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jCompositeDocumentCollection
-import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jDocument
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jDocumentFactory
+import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jSearchEngine
 import it.unimi.di.big.mg4j.index.Index
 import it.unimi.di.big.mg4j.index.TermProcessor
 import it.unimi.di.big.mg4j.query.IntervalSelector
 import it.unimi.di.big.mg4j.query.Query
 import it.unimi.di.big.mg4j.query.QueryEngine
-import it.unimi.di.big.mg4j.query.SelectedInterval
 import it.unimi.di.big.mg4j.query.parser.SimpleParser
 import it.unimi.di.big.mg4j.search.DocumentIteratorBuilderVisitor
-import it.unimi.di.big.mg4j.search.score.DocumentScoreInfo
-import it.unimi.dsi.fastutil.objects.*
-import it.unimi.dsi.util.Interval
-import it.unimi.dsi.util.Intervals
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
+import it.unimi.dsi.fastutil.objects.Object2ReferenceLinkedOpenHashMap
+import it.unimi.dsi.fastutil.objects.Reference2DoubleOpenHashMap
 import org.slf4j.LoggerFactory
 import kotlin.math.min
 
@@ -62,10 +60,10 @@ fun initCollectionManager(corpusConfiguration: CorpusConfiguration, collectionCo
     engine.intervalSelector = IntervalSelector(Integer.MAX_VALUE, Integer.MAX_VALUE)
     engine.multiplex = false
 
-    return CollectionManager(collectionConfig.name, collection, engine, corpusConfiguration)
+    val mg4jSearchEngine = Mg4jSearchEngine(collection, engine)
+    return CollectionManager(collectionConfig.name, mg4jSearchEngine, corpusConfiguration)
 }
 
-internal typealias Mg4jSearchResult = DocumentScoreInfo<Reference2ObjectMap<Index, Array<SelectedInterval>>>
 
 /**
  * Interface of the underlying mg4j indexing library, performs requests and processes results
@@ -74,103 +72,72 @@ internal typealias Mg4jSearchResult = DocumentScoreInfo<Reference2ObjectMap<Inde
 @WhatIf("? decouple from mg4j for easier and faster testing ?")
 class CollectionManager internal constructor(
         val collectionName: String,
-        private val collection: Mg4jCompositeDocumentCollection,
-        private val engine: QueryEngine,
-        private val corpusConfiguration: CorpusConfiguration
+        private val searchEngine: SearchEngine,
+        private val postProcessor: PostProcessor,
+        private val resultCreator: ResultCreator,
+        private val eqlCompiler: EqlCompiler
 ) {
 
-    fun query(query: SearchQuery, offset: Offset = Offset(0, 0)): IndexServer.CollectionResultList {
-        log.info("Executing query $query")
-        val resultList = ObjectArrayList<Mg4jSearchResult>()
-        val (documentOffset, matchOffset) = offset
+    fun query(_query: SearchQuery, offset: Offset = Offset(0, 0)): IndexServer.CollectionResultList {
+        log.info("Executing query $_query")
+        val query = _query.copyWithAst() // make a local copy because the postprocessing modifies the AST
+        val (documentOffset, resultOffset) = offset
 
-        val processed = engine.process(query.query, documentOffset, query.snippetCount, resultList)
-        log.info("Processed $processed documents")
-
-        val config = corpusConfiguration.filterBy(query.metadata, query.defaultIndex)
+        val (resultList, processed) = searchEngine.search(query.query, query.snippetCount, documentOffset - 1)
 
         val matched = mutableListOf<IndexServer.SearchResult>()
         for ((i, result) in resultList.withIndex()) {
-            val (matchList, nextSnippet) = processDocument(query, result, config, query.snippetCount - matched.size, if (i == 0) matchOffset else 0)
-            matched.addAll(matchList)
-            if (matched.size >= query.snippetCount || nextSnippet != null) {
-                val finalOffset = when {
-                    nextSnippet != null -> Offset(result.document.toInt(), nextSnippet)
-                    i != resultList.size - 1 -> Offset(resultList[i + 1].document.toInt(), 0)
-                    else -> null
+            val document = searchEngine.loadDocument(result.documentId)
+            val enclosingInterval = findEnclosingInterval(result.intervals)
+            if (!postProcessor.process(query.eqlAst, document, enclosingInterval)) continue
+            val (results, hasMore) = resultCreator.multipleResults(query, document, if (document.id == documentOffset) resultOffset else 0)
+
+            if (matched.size + results.size >= query.snippetCount) {
+                val nextOffset = when {
+                    results.size > query.snippetCount - matched.size || hasMore -> Offset(document.id, query.snippetCount - matched.size + 1)
+                    i != resultList.size - 1 -> Offset(resultList[i + 1].documentId, 0)
+                    else -> Offset(processed + 1, 0)
                 }
-                return IndexServer.CollectionResultList(matched, finalOffset)
+                matched.addAll(results.subList(0, min(query.snippetCount - matched.size, results.size)))
+                return IndexServer.CollectionResultList(matched, nextOffset)
             }
         }
-        return IndexServer.CollectionResultList(matched, null)
+        return IndexServer.CollectionResultList(matched, if (resultList.isNotEmpty()) Offset(processed + 1, 0) else null)
     }
-
-    internal fun processDocument(query: SearchQuery, result: Mg4jSearchResult, config: CorpusConfiguration, wantedSnippets: Int, offset: Int): Pair<List<IndexServer.SearchResult>, Int?> {
-        val matched = mutableListOf<IndexServer.SearchResult>()
-
-        val document = collection.document(result.document) as Mg4jDocument
-
-        val allIntervals = generateSnippetIntervals(result.info.values, document.size())
-        val wantedIntervals = allIntervals.subList(offset, min(wantedSnippets, allIntervals.size))
-
-
-        for ((interval, subIntervals) in wantedIntervals) {
-            val (from, to) = interval
-            val content = document.loadStructuredContent(from, to + 1, config)
-
-            val payload = if (content.elements.isNotEmpty()) createPayload(query, content, subIntervals, corpusConfiguration)
-            else {
-                log.warn("loaded empty document, why? ${document.title()}")
-                createPayload(query, content, emptyList(), corpusConfiguration)
-            }
-
-            val match = IndexServer.SearchResult(
-                    collectionName,
-                    result.document,
-                    from,
-                    to - from,
-                    document.uri().toString(),
-                    document.title().toString(),
-                    payload,
-                    canExtend = from > 0 || to < document.size()
-            )
-            matched.add(match)
-            @WhatIf("Might be nice to log a piece of document as well, but just a piece, maybe default index?")
-            log.info("Found match in document ${match.documentTitle}")
-        }
-
-        val nextOffset = if (offset + wantedIntervals.size < allIntervals.size) offset + wantedIntervals.size + 1 else null
-        return matched to nextOffset
-    }
-
 
     fun extendSnippet(query: IndexServer.ContextExtensionQuery): SnippetExtension {
-        val document = collection.document(query.docId.toLong()) as Mg4jDocument
-        val (prefix, suffix) = computeExtensionIntervals(left = query.location, right = query.location + query.size, extension = query.extension, documentSize = document.size())
+        val document = searchEngine.loadDocument(query.docId)
+        val (prefix, suffix) = computeExtensionIntervals(left = query.location, right = query.location + query.size, extension = query.extension, documentSize = document.size)
 
-        val filteredConfig = corpusConfiguration.filterBy(query.metadata, query.defaultIndex)
-
-        val prefixPayload = createPayload(query, document.loadStructuredContent(prefix, filteredConfig), emptyList(), corpusConfiguration) as ResultFormat.Snippet
-        val suffixPayload = createPayload(query, document.loadStructuredContent(suffix, filteredConfig), emptyList(), corpusConfiguration) as ResultFormat.Snippet
+        var prefixAst: AstNode? = null
+        var suffixAst: AstNode? = null
+        if (query.query != null) {
+            prefixAst = eqlCompiler.parseOrFail(query.query!!)
+            postProcessor.process(prefixAst, document, prefix)
+            suffixAst = eqlCompiler.parseOrFail(query.query!!)
+            postProcessor.process(suffixAst, document, suffix)
+        }
 
         return SnippetExtension(
-                prefixPayload,
-                suffixPayload,
-                canExtend = document.size() > prefix.size + query.size + suffix.size
+                prefix = resultCreator.singleResult(query, document, prefixAst, prefix),
+                suffix = resultCreator.singleResult(query, document, suffixAst, suffix),
+                canExtend = document.size > prefix.size + query.size + suffix.size
         )
     }
 
     fun getDocument(query: IndexServer.DocumentQuery): IndexServer.FullDocument {
-        val document = collection.document(query.documentId.toLong()) as Mg4jDocument
+        val document = searchEngine.loadDocument(query.documentId)
 
-        val filteredConfig = corpusConfiguration.filterBy(query.metadata, query.defaultIndex)
+        var ast: AstNode? = null
+        if (query.query != null) {
+            ast = eqlCompiler.parseOrFail(query.query!!)
+            postProcessor.process(ast, document)
+        }
 
-        val content = document.loadStructuredContent(filteredConfig = filteredConfig)
-
-        val payload = createPayload(query, content, emptyList(), corpusConfiguration) as ResultFormat.Snippet
+        val payload = resultCreator.singleResult(query, document, ast)
         return IndexServer.FullDocument(
-                document.title().toString(),
-                document.uri().toString(),
+                document.title,
+                document.uri,
                 payload
         )
     }
@@ -188,8 +155,8 @@ internal fun computeExtensionIntervals(left: Int, right: Int, extension: Int, do
 
 
     // zero check necessary, because there is no factory supporting empty interval, grrr
-    val leftInterval = if (prefixSize > 0) Interval.valueOf(left - prefixSize, left - 1) else Intervals.EMPTY_INTERVAL
-    val rightInterval = if (suffixSize > 0) Interval.valueOf(right + 1, right + suffixSize) else Intervals.EMPTY_INTERVAL
+    val leftInterval = if (prefixSize > 0) Interval.valueOf(left - prefixSize, left - 1) else Interval.empty()
+    val rightInterval = if (suffixSize > 0) Interval.valueOf(right + 1, right + suffixSize) else Interval.empty()
     checkPostconditions(leftInterval, maxPrefixSize, rightInterval, maxSuffixSize, extension)
     return leftInterval to rightInterval
 }
@@ -245,3 +212,4 @@ private fun computePrefixAndSuffixSize(extension: Int, maxPrefixSize: Int, maxSu
     require(prefixSize + suffixSize <= extension) { "prefix + suffix <= extension,was $prefixSize,$suffixSize,$extension" }
     return prefixSize to suffixSize
 }
+

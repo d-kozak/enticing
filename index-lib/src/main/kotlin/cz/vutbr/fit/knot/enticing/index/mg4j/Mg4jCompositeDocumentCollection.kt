@@ -2,7 +2,6 @@ package cz.vutbr.fit.knot.enticing.index.mg4j
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import it.unimi.di.big.mg4j.document.AbstractDocumentCollection
-import it.unimi.di.big.mg4j.document.Document
 import it.unimi.di.big.mg4j.document.DocumentCollection
 import it.unimi.di.big.mg4j.document.DocumentFactory
 import it.unimi.dsi.fastutil.objects.Reference2ObjectMap
@@ -46,7 +45,7 @@ class Mg4jCompositeDocumentCollection(
         return collection.stream(localIndex)
     }
 
-    override fun document(index: Long): Document {
+    override fun document(index: Long): Mg4jDocument {
         val (collection, localIndex) = findCollection(index)
         return collection.document(localIndex)
     }

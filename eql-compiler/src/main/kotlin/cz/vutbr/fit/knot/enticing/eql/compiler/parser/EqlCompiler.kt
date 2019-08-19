@@ -1,5 +1,7 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.parser
 
+import cz.vutbr.fit.knot.enticing.dto.AstNode
+import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompilerException
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.MockNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.dto.ParsedQuery
 import org.antlr.v4.runtime.*
@@ -18,6 +20,12 @@ class EqlCompiler {
                 }
         val root = MockNode(input)
         return ParsedQuery(root, errorListener.errors)
+    }
+
+    fun parseOrFail(input: String): AstNode {
+        val (ast, errors) = parse(input)
+        if (errors.isNotEmpty()) throw EqlCompilerException(errors.toString())
+        return ast
     }
 
     class ErrorListener : BaseErrorListener() {

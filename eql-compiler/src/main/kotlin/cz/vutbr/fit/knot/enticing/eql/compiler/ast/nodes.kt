@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.ast
 
-interface AstNode
+import cz.vutbr.fit.knot.enticing.dto.AstNode
+
 
 data class QueryNode(val query: List<QueryElem>, val constraint: Constraint?) : AstNode
 

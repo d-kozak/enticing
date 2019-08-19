@@ -67,3 +67,18 @@ data class Interval private constructor(
     @JsonIgnore
     val size: Int = if (isEmpty()) 0 else to - from + 1
 }
+
+fun findEnclosingInterval(intervals: List<List<Interval>>): Interval {
+    require(intervals.isNotEmpty()) { "intervals should not be empty" }
+    var min = Int.MAX_VALUE
+    var max = Int.MIN_VALUE
+    for (x in intervals) {
+        require(x.isNotEmpty()) { "intervals should not be empty" }
+        for (y in x) {
+            if (min > y.from) min = y.from
+            if (max < y.to) max = y.to
+        }
+    }
+    return Interval.valueOf(min, max)
+}
+

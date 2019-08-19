@@ -1,13 +1,13 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager.format.text
 
-import cz.vutbr.fit.knot.enticing.dto.Mg4jQuery
+import cz.vutbr.fit.knot.enticing.dto.GeneralFormatInfo
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess.DocumentElement
 
 class HtmlPayloadBuilderVisitor(
-        config: CorpusConfiguration, query: Mg4jQuery, intervals: List<Interval>
+        config: CorpusConfiguration, query: GeneralFormatInfo, intervals: List<Interval>
 ) : AbstractPayloadBuilderVisitor<ResultFormat>(config, query, intervals) {
 
     override fun visitMatchStart() {

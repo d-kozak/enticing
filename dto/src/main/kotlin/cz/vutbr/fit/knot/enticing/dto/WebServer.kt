@@ -2,7 +2,6 @@ package cz.vutbr.fit.knot.enticing.dto
 
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
-import cz.vutbr.fit.knot.enticing.dto.format.text.QueryMapping
 import cz.vutbr.fit.knot.enticing.dto.utils.regex.urlRegexStr
 import javax.validation.Valid
 import javax.validation.constraints.*
@@ -176,11 +175,9 @@ object WebServer {
              * if provided, QueryMapping informing about the mapping between the query and the document will
              * be included in the response
              */
-            val query: String? = null,
-            @field:Valid
-            val queryMapping: List<QueryMapping> = emptyList()
+            val query: String? = null
     ) {
-        fun toIndexFormat() = IndexServer.FullDocument(title, url, payload, queryMapping)
+        fun toIndexFormat() = IndexServer.FullDocument(title, url, payload)
     }
 
     /**
@@ -205,7 +202,7 @@ object WebServer {
              * What document the snippet came from
              */
             @field:Positive
-            val documentId: Long,
+            val documentId: Int,
 
             /**
              * At which index in the document the snippet starts
