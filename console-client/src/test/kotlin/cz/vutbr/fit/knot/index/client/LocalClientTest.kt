@@ -22,7 +22,7 @@ internal class LocalClientTest {
             // it is solved by executing the indexing from here
             startIndexing(executeScript<IndexBuilderConfig>("../index-builder/src/test/resources/indexer.config.kts").also { it.validate() })
 
-            val wholeConfig = executeScript<ConsoleClientConfig>("src/test/resources/client.config.local.kts")
+            val wholeConfig = executeScript<ConsoleClientConfig>("src/test/resources/client.config.local.kts").also { it.validate() }
             localConfig = wholeConfig.clientType as ConsoleClientType.LocalIndex
         }
 
