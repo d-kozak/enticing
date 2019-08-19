@@ -26,7 +26,7 @@ internal class ResultFormatCreatorTest {
             20,
             mapOf("one" to Offset(0, 0)),
             TextMetadata.Predefined("none"),
-            ResultFormat.FULL,
+            cz.vutbr.fit.knot.enticing.dto.ResultFormat.SNIPPET,
             TextFormat.STRING_WITH_METADATA
     )
 

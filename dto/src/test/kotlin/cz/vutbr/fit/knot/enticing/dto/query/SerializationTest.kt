@@ -17,7 +17,7 @@ class SerializationTest {
                 42,
                 mapOf("one" to Offset(10, 10)),
                 metadata = TextMetadata.Predefined("all"),
-                resultFormat = ResultFormat.FULL,
+                resultFormat = cz.vutbr.fit.knot.enticing.dto.ResultFormat.SNIPPET,
                 textFormat = TextFormat.STRING_WITH_METADATA,
                 defaultIndex = "lemma"
         )

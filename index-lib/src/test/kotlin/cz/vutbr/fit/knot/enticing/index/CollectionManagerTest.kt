@@ -107,7 +107,7 @@ class CollectionManagerTest {
             20,
             mapOf("one" to Offset(0, 0)),
             TextMetadata.Predefined("all"),
-            ResultFormat.FULL,
+            cz.vutbr.fit.knot.enticing.dto.ResultFormat.SNIPPET,
             TextFormat.STRING_WITH_METADATA
     )
 
@@ -160,7 +160,7 @@ class CollectionManagerTest {
     @Warning("it seems that different documents are being returned in test environment, why?")
     @Test
     fun problematicQuery() {
-        val query = SearchQuery(query = "job work", snippetCount = 33, offset = mapOf("one" to Offset(document = 0, snippet = 0)), metadata = TextMetadata.Predefined(value = "all"), resultFormat = ResultFormat.FULL, textFormat = TextFormat.TEXT_UNIT_LIST, defaultIndex = "token")
+        val query = SearchQuery(query = "job work", snippetCount = 33, offset = mapOf("one" to Offset(document = 0, snippet = 0)), metadata = TextMetadata.Predefined(value = "all"), resultFormat = cz.vutbr.fit.knot.enticing.dto.ResultFormat.SNIPPET, textFormat = TextFormat.TEXT_UNIT_LIST, defaultIndex = "token")
         val queryEngine = initCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
         val result = queryEngine.query(query)
     }

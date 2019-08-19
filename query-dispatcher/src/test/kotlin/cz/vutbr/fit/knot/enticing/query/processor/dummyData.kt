@@ -12,7 +12,7 @@ internal val templateQuery = SearchQuery(
         20,
         emptyMap(),
         TextMetadata.Predefined("none"),
-        ResultFormat.FULL,
+        cz.vutbr.fit.knot.enticing.dto.ResultFormat.SNIPPET,
         TextFormat.STRING_WITH_METADATA
 )
 
