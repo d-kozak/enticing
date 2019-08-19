@@ -5,7 +5,7 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 import React from 'react';
 import Typography from "@material-ui/core/es/Typography";
 import {CorpusFormat, EntityInfo} from "../../entities/CorpusFormat";
-import {Entity, Word} from "./NewAnnotatedText";
+import {Entity, Word} from "./TextUnitList";
 import Grid from "@material-ui/core/es/Grid";
 
 const styles = createStyles({

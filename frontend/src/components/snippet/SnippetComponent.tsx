@@ -10,8 +10,8 @@ import {GotoSourceButton} from "./snippetbuttons/GotoSourceButton";
 import {ShowDocumentButton} from "./snippetbuttons/ShowDocumentButton";
 import {EditContextButton} from "./snippetbuttons/EditContextButton";
 import {EditAnnotationsButton} from "./snippetbuttons/EditAnnotationsButton";
-import {Snippet} from "../../entities/Snippet";
-import NewAnnotatedTextComponent from "../annotations/NewAnnotatedTextComponent";
+import {SearchResult} from "../../entities/SearchResult";
+import NewAnnotatedTextComponent from "../annotations/TextUnitListComponent";
 import {CorpusFormat} from "../../entities/CorpusFormat";
 import Grid from "@material-ui/core/es/Grid";
 
@@ -25,9 +25,9 @@ const styles = createStyles({
 
 export type  SnippetComponentProps = WithStyles<typeof styles> & typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps> & {
-    snippet: Snippet,
+    snippet: SearchResult,
     corpusFormat: CorpusFormat,
-    openDocument: (searchResult: Snippet, corpusFormat: CorpusFormat) => void
+    openDocument: (searchResult: SearchResult, corpusFormat: CorpusFormat) => void
 }
 
 const SnippetComponent = (props: SnippetComponentProps) => {
@@ -58,7 +58,7 @@ const SnippetComponent = (props: SnippetComponentProps) => {
 const mapStateToProps = (state: ApplicationState) => ({});
 
 const mapDispatchToProps = {
-    requestContextExtension: contextExtensionRequestAction as (searchResult: Snippet) => void
+    requestContextExtension: contextExtensionRequestAction as (searchResult: SearchResult) => void
 }
 
 

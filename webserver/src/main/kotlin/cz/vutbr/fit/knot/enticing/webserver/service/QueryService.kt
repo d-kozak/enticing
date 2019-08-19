@@ -69,14 +69,14 @@ class QueryService(
 }
 
 fun flatten(result: Map<String, List<MResult<IndexServer.IndexResultList>>>): Webserver.ResultList {
-    val snippets = mutableListOf<Webserver.Snippet>()
+    val snippets = mutableListOf<Webserver.SearchResult>()
     val errors = mutableMapOf<ServerId, ErrorMessage>()
 
     for ((serverId, results) in result) {
         for (serverResult in results) {
             if (serverResult.isSuccess) {
                 snippets.addAll(
-                        serverResult.value.matched.map { it.withHost(serverId) }
+                        serverResult.value.searchResults.map { it.withHost(serverId) }
                 )
             } else {
                 val exception = serverResult.exception

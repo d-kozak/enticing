@@ -1,5 +1,5 @@
 import {QueryMapping, queryMappingSchema} from "./Annotation";
-import {Payload, payloadSchema} from "./Snippet";
+import {Payload, payloadSchema} from "./SearchResult";
 import * as yup from "yup";
 import {validateOrNull} from "./validationUtils";
 

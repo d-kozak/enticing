@@ -8,14 +8,14 @@ import cz.vutbr.fit.knot.enticing.dto.format.text.MatchedRegion
 import cz.vutbr.fit.knot.enticing.dto.format.text.QueryMapping
 import cz.vutbr.fit.knot.enticing.dto.format.text.StringWithMetadata
 
-val firstResult = Webserver.Snippet(
+val firstResult = Webserver.SearchResult(
         host = "server1",
         documentId = 0,
         documentTitle = "Ed",
         collection = "col1",
         location = 0,
         size = 42,
-        resultFormat = ResultFormat.FullResponse.Annotated(
+        payload = ResultFormat.FullResponse.Annotated(
                 StringWithMetadata(
                         text = "Ed Sheeran visited Liberia and meets JD, a homeless Liberian 14-year-old boy. After Sheeran saw an older man hitting JD in public, he knew",
                         annotations = mapOf("ed" to EdSheeran),
@@ -27,14 +27,14 @@ val firstResult = Webserver.Snippet(
         canExtend = true
 )
 
-val secondResult = Webserver.Snippet(
+val secondResult = Webserver.SearchResult(
         host = "server2",
         documentId = 1,
         documentTitle = "donald",
         location = 0,
         collection = "col1",
         size = 42,
-        resultFormat = ResultFormat.FullResponse.Annotated(
+        payload = ResultFormat.FullResponse.Annotated(
                 StringWithMetadata(
                         text = "President Donald Trump visited San Antonio for a closed-door fundraiser at The Argyle, the exclusive dinner club in Alamo Heights. Air Force ...",
                         annotations = mapOf("donald" to DonaldTrump),
@@ -46,14 +46,14 @@ val secondResult = Webserver.Snippet(
         canExtend = true
 )
 
-val thirdResult = Webserver.Snippet(
+val thirdResult = Webserver.SearchResult(
         host = "server3",
         documentId = 2,
         documentTitle = "milos",
         location = 0,
         collection = "col1",
         size = 42,
-        resultFormat = ResultFormat.FullResponse.Annotated(
+        payload = ResultFormat.FullResponse.Annotated(
                 StringWithMetadata(
                         text = "The president of the Czech republic Milos Zeman visited a porcelain factory Thun 1794 within his two-day visit to Karlovy Vary region. The president met with ...",
                         annotations = mapOf("kv" to KarlovyVary),
@@ -66,8 +66,8 @@ val thirdResult = Webserver.Snippet(
 )
 
 val snippetExtension = SnippetExtension(
-        firstResult.resultFormat as ResultFormat.FullResponse,
-        secondResult.resultFormat as ResultFormat.FullResponse,
+        firstResult.payload as ResultFormat.FullResponse,
+        secondResult.payload as ResultFormat.FullResponse,
         false
 )
 

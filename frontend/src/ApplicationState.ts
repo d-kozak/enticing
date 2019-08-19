@@ -1,5 +1,5 @@
 import {User} from "./entities/User";
-import {Snippet} from "./entities/Snippet";
+import {SearchResult} from "./entities/SearchResult";
 import {CorpusFormat} from "./entities/CorpusFormat";
 import {SearchSettings} from "./entities/SearchSettings";
 import {FullDocument} from "./entities/FullDocument";
@@ -28,7 +28,7 @@ export interface AdminState {
 }
 
 export interface SearchResultsState {
-    snippets: Array<Snippet> | null,
+    snippets: Array<SearchResult> | null,
     corpusFormat: CorpusFormat | null
 }
 

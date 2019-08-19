@@ -11,7 +11,7 @@ interface Query<T:Query<T>>{
 }
 
 interface QueryResult<OffsetType>{
-    val matched: List<IndexServer.Snippet>
+    val searchResults: List<IndexServer.SearchResult>
     val offset: OffsetType?
 
     fun createRequest(address:String):RequestData<OffsetType>

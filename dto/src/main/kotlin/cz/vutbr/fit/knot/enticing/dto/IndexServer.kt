@@ -133,7 +133,7 @@ object IndexServer {
              * List of snippets that matched the query
              */
             @field:Valid
-            override val matched: List<Snippet>,
+            override val searchResults: List<SearchResult>,
             /**
              * For pagination, where to start next
              *
@@ -158,7 +158,7 @@ object IndexServer {
              * List of snippets that matched the query
              */
             @field:Valid
-            override val matched: List<Snippet>,
+            override val searchResults: List<SearchResult>,
             /**
              * For pagination, where to start next
              *
@@ -173,7 +173,7 @@ object IndexServer {
     /**
      * Part of document that was matched by the query
      */
-    data class Snippet(
+    data class SearchResult(
             /**
              * What collection the snippet came from
              */
@@ -223,7 +223,7 @@ object IndexServer {
             val canExtend: Boolean
     ) {
 
-        fun withHost(host: String): Webserver.Snippet = Webserver.Snippet(host, collection, documentId, location, size, url, documentTitle, payload, canExtend)
+        fun withHost(host: String): Webserver.SearchResult = Webserver.SearchResult(host, collection, documentId, location, size, url, documentTitle, payload, canExtend)
     }
 
 }

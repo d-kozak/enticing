@@ -13,7 +13,7 @@ internal val templateSearchQuery = SearchQuery(
 )
 
 internal val searchDummyResult = IndexServer.IndexResultList(
-        listOf(IndexServer.Snippet(
+        listOf(IndexServer.SearchResult(
                 "col",
                 10,
                 10,

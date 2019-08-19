@@ -1,4 +1,4 @@
-import {Payload, payloadSchema} from "./Snippet";
+import {Payload, payloadSchema} from "./SearchResult";
 import {validateOrNull} from "./validationUtils";
 
 import * as yup from "yup";

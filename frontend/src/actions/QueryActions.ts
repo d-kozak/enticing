@@ -4,8 +4,8 @@ import {SearchQuery} from "../entities/SearchQuery";
 import {API_BASE_PATH} from "../globals";
 import axios from "axios";
 import {hideProgressbar, showProgressbar} from "../reducers/ProgressBarReducer";
-import {isSearchResult} from "../entities/SearchResult";
-import {parseNewAnnotatedText} from "../components/annotations/NewAnnotatedText";
+import {isResultList} from "../entities/ResultList";
+import {parseNewAnnotatedText} from "../components/annotations/TextUnitList";
 import {SearchSettings} from "../entities/SearchSettings";
 import {openSnackbar} from "../reducers/SnackBarReducer";
 import {newSearchResults} from "../reducers/SearchResultReducer";
@@ -24,13 +24,13 @@ export const startSearchingAction = (query: SearchQuery, searchSettings: SearchS
         },
         withCredentials: true
     }).then(response => {
-        if (!isSearchResult(response.data)) {
+        if (!isResultList(response.data)) {
             throw `Invalid search result ${JSON.stringify(response.data, null, 2)}`;
         }
         for (let error in response.data.errors) {
             dispatch(openSnackbar(`Error from ${error}: ${response.data.errors[error]}`))
         }
-        for (let snippet of response.data.snippets) {
+        for (let snippet of response.data.searchResults) {
             snippet.id = `${snippet.host}:${snippet.collection}:${snippet.documentId}`
             const parsed = parseNewAnnotatedText(snippet.payload.content);
             if (parsed !== null) {
@@ -40,7 +40,7 @@ export const startSearchingAction = (query: SearchQuery, searchSettings: SearchS
             }
         }
 
-        dispatch(newSearchResults({snippets: response.data.snippets, corpusFormat: searchSettings.corpusFormat!}));
+        dispatch(newSearchResults({snippets: response.data.searchResults, corpusFormat: searchSettings.corpusFormat!}));
         dispatch(hideProgressbar());
         if (history) {
             history.push(`/search?query=${encodedQuery}`);

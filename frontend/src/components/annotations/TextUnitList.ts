@@ -26,7 +26,7 @@ export function isInterval(obj: Object): obj is Interval {
     return validateOrNull(intervalSchema, obj) !== null;
 }
 
-export class NewAnnotatedText extends EnticingObject {
+export class TextUnitList extends EnticingObject {
 
     constructor(public content: Array<TextUnit>) {
         super();
@@ -37,12 +37,12 @@ export class NewAnnotatedText extends EnticingObject {
     }
 }
 
-export const newAnnotatedTextSchema = yup.object({
+export const textUnitListSchema = yup.object({
     content: yup.array(yup.object())
-})
+});
 
-export function isNewAnnotatedText(obj: Object): obj is NewAnnotatedText {
-    return validateOrNull(newAnnotatedTextSchema, obj) !== null;
+export function isTextUnitList(obj: Object): obj is TextUnitList {
+    return validateOrNull(textUnitListSchema, obj) !== null;
 }
 
 
@@ -106,9 +106,9 @@ export function isQueryMatch(obj: Object): obj is QueryMatch {
     return validateOrNull(queryMatchSchema, obj) !== null;
 }
 
-export function parseNewAnnotatedText(input: object): NewAnnotatedText | null {
+export function parseNewAnnotatedText(input: object): TextUnitList | null {
     const elements: Array<TextUnit> = []
-    if (!isNewAnnotatedText(input)) {
+    if (!isTextUnitList(input)) {
         console.error("could not parse " + JSON.stringify(input))
         return null
     }
@@ -117,7 +117,7 @@ export function parseNewAnnotatedText(input: object): NewAnnotatedText | null {
         if (parsed != null)
             elements.push(parsed)
     }
-    return new NewAnnotatedText(elements)
+    return new TextUnitList(elements)
 }
 
 function parseElement(elem: TextUnit): TextUnit | null {
@@ -140,4 +140,4 @@ function parseElement(elem: TextUnit): TextUnit | null {
     }
 }
 
-export const dummyText = new NewAnnotatedText([new Word(["ERROR"])])
+export const dummyText = new TextUnitList([new Word(["ERROR"])])

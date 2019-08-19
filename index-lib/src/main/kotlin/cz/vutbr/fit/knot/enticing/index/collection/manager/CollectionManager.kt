@@ -89,7 +89,7 @@ class CollectionManager internal constructor(
 
         val config = corpusConfiguration.filterBy(query.metadata, query.defaultIndex)
 
-        val matched = mutableListOf<IndexServer.Snippet>()
+        val matched = mutableListOf<IndexServer.SearchResult>()
         for ((i, result) in resultList.withIndex()) {
             val (matchList, nextSnippet) = processDocument(query, result, config, query.snippetCount - matched.size, if (i == 0) matchOffset else 0)
             matched.addAll(matchList)
@@ -105,8 +105,8 @@ class CollectionManager internal constructor(
         return IndexServer.CollectionResultList(matched, null)
     }
 
-    internal fun processDocument(query: SearchQuery, result: Mg4jSearchResult, config: CorpusConfiguration, wantedSnippets: Int, offset: Int): Pair<List<IndexServer.Snippet>, Int?> {
-        val matched = mutableListOf<IndexServer.Snippet>()
+    internal fun processDocument(query: SearchQuery, result: Mg4jSearchResult, config: CorpusConfiguration, wantedSnippets: Int, offset: Int): Pair<List<IndexServer.SearchResult>, Int?> {
+        val matched = mutableListOf<IndexServer.SearchResult>()
 
         val document = collection.document(result.document) as Mg4jDocument
 
@@ -124,7 +124,7 @@ class CollectionManager internal constructor(
                 createPayload(query, content, emptyList(), corpusConfiguration)
             }
 
-            val match = IndexServer.Snippet(
+            val match = IndexServer.SearchResult(
                     collectionName,
                     result.document,
                     from,

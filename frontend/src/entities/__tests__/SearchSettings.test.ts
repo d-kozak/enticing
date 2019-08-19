@@ -1,7 +1,7 @@
 import {isSearchSettingsContent} from "../SearchSettings";
 import {searchResults} from "./realInput.test";
+import {isResultList} from "../ResultList";
 import {isSearchResult} from "../SearchResult";
-import {isSnippet} from "../Snippet";
 import {isAnnotatedText} from "../Annotation";
 
 describe("SearchSettings content type guard", () => {
@@ -33,11 +33,11 @@ describe("SearchSettings content type guard", () => {
     it("real backend data", () => {
         const input = searchResults;
 
-        expect(isSearchResult(input))
+        expect(isResultList(input))
             .toBe(true);
 
-        for (let snippet of input.snippets) {
-            expect(isSnippet(snippet))
+        for (let snippet of input.searchResults) {
+            expect(isSearchResult(snippet))
                 .toBe(true);
 
             expect(isAnnotatedText(snippet.payload.content))

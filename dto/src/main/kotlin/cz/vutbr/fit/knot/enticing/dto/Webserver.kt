@@ -20,7 +20,7 @@ object Webserver {
             /**
              * Merged results from all servers
              */
-            val snippets: List<Snippet>,
+            val searchResults: List<SearchResult>,
             /**
              * Any error messages that came from servers
              */
@@ -169,7 +169,7 @@ object Webserver {
             @field:Pattern(regexp = urlRegexStr)
             val url: String,
             @field:Valid
-            val resultFormat: ResultFormat.FullResponse,
+            val payload: ResultFormat.FullResponse,
             /**
              * Query, optional
              *
@@ -180,13 +180,13 @@ object Webserver {
             @field:Valid
             val queryMapping: List<QueryMapping> = emptyList()
     ) {
-        fun toIndexFormat() = IndexServer.FullDocument(title, url, resultFormat, queryMapping)
+        fun toIndexFormat() = IndexServer.FullDocument(title, url, payload, queryMapping)
     }
 
     /**
      * Part of document that was matched by the query
      */
-    data class Snippet(
+    data class SearchResult(
             /**
              * Url of the index server
              */
@@ -236,13 +236,13 @@ object Webserver {
              * The actual snippet
              */
             @field:Valid
-            val resultFormat: ResultFormat,
+            val payload: ResultFormat,
 
             /**
              * Is it possible to further extend the snippet?
              */
             val canExtend: Boolean
     ) {
-        fun toIndexServerFormat() = IndexServer.Snippet(collection, documentId, location, size, url, documentTitle, resultFormat, canExtend)
+        fun toIndexServerFormat() = IndexServer.SearchResult(collection, documentId, location, size, url, documentTitle, payload, canExtend)
     }
 }

@@ -79,7 +79,7 @@ internal class ResultFormatCreatorTest {
 
 
     @Nested
-    inner class SnippetHtml {
+    inner class SearchResultHtml {
 
         private val htmlQuery = templateQuery.copy(responseFormat = ResponseFormat.HTML)
 
@@ -112,7 +112,7 @@ internal class ResultFormatCreatorTest {
     }
 
     @Nested
-    inner class SnippetAnnotated {
+    inner class SearchResultAnnotated {
 
         private val jsonQuery = templateQuery.copy(responseFormat = ResponseFormat.ANNOTATED_TEXT)
 

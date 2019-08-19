@@ -1,12 +1,12 @@
-import {SearchResult} from "../SearchResult";
+import {ResultList} from "../ResultList";
 
 it("dummy", () => {
     // only here not to make the test suite fail
 });
 
 //ts-ignore
-export const searchResults: SearchResult = {
-    "snippets": [
+export const searchResults: ResultList = {
+    "searchResults": [
         {
             "host": "127.0.0.1:8001",
             "collection": "name",

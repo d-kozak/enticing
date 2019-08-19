@@ -1,7 +1,7 @@
 import React from "react";
 import AnnotatedWord from "./AnnotatedWord";
 import QueryMappingTooltip from "./QueryMappingTooltip";
-import {Entity, NewAnnotatedText, QueryMatch, TextUnit, Word} from "./NewAnnotatedText";
+import {Entity, QueryMatch, TextUnit, TextUnitList, Word} from "./TextUnitList";
 import {Theme, WithStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/es/styles/createStyles";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -15,11 +15,11 @@ const styles = (theme: Theme) => createStyles({
 });
 
 type AnnotatedTextComponentProps = WithStyles<typeof styles> & {
-    text: NewAnnotatedText,
+    text: TextUnitList,
     corpusFormat: CorpusFormat
 }
 
-const NewAnnotatedTextComponent = (props: AnnotatedTextComponentProps) => {
+const TextUnitListComponent = (props: AnnotatedTextComponentProps) => {
     const {text, corpusFormat, classes} = props;
     try {
         return <div className={classes.root}>
@@ -32,7 +32,7 @@ const NewAnnotatedTextComponent = (props: AnnotatedTextComponentProps) => {
     }
     return <span>Error when processing result</span>
 };
-export default withStyles(styles, {withTheme: true})(NewAnnotatedTextComponent);
+export default withStyles(styles, {withTheme: true})(TextUnitListComponent);
 
 
 const colors = ["red", "green", "blue"];

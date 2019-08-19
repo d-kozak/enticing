@@ -3,18 +3,18 @@ import {API_BASE_PATH} from "../globals";
 
 import axios from "axios";
 import {hideProgressbar, showProgressbar} from "../reducers/ProgressBarReducer";
-import {Snippet} from "../entities/Snippet";
+import {SearchResult} from "../entities/SearchResult";
 import {isSnippetExtension, SnippetExtension} from "../entities/SnippetExtension";
 import {ContextExtensionQuery} from "../entities/ContextExtensionQuery";
-import {NewAnnotatedText, parseNewAnnotatedText} from "../components/annotations/NewAnnotatedText";
+import {parseNewAnnotatedText, TextUnitList} from "../components/annotations/TextUnitList";
 import {openSnackbar} from "../reducers/SnackBarReducer";
 
 import {updateSearchResult} from "../reducers/SearchResultReducer";
 
-function mergeSnippet(searchResult: Snippet, data: SnippetExtension): Snippet {
+function mergeSnippet(searchResult: SearchResult, data: SnippetExtension): SearchResult {
     const prefix = data.prefix.content
     const suffix = data.suffix.content
-    const newText = new NewAnnotatedText([
+    const newText = new TextUnitList([
         ...prefix.content,
         ...searchResult.payload.content.content,
         ...suffix.content
@@ -31,7 +31,7 @@ function mergeSnippet(searchResult: Snippet, data: SnippetExtension): Snippet {
     };
 }
 
-export const contextExtensionRequestAction = (searchResult: Snippet): ThunkResult<void> => dispatch => {
+export const contextExtensionRequestAction = (searchResult: SearchResult): ThunkResult<void> => dispatch => {
     dispatch(showProgressbar());
     const query: ContextExtensionQuery = {
         host: searchResult.host,
@@ -58,7 +58,7 @@ export const contextExtensionRequestAction = (searchResult: Snippet): ThunkResul
         response.data.suffix.content = parsedSuffix
 
 
-        const merged: Snippet = mergeSnippet(searchResult, response.data);
+        const merged: SearchResult = mergeSnippet(searchResult, response.data);
         dispatch(updateSearchResult(merged));
         dispatch(hideProgressbar());
     }).catch((error) => {

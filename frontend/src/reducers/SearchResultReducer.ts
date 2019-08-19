@@ -1,13 +1,13 @@
 import {SearchResultsState} from "../ApplicationState";
 import {createSlice, PayloadAction} from "redux-starter-kit";
-import {Snippet} from "../entities/Snippet";
+import {SearchResult} from "../entities/SearchResult";
 import {CorpusFormat} from "../entities/CorpusFormat";
 
 
 const {reducer, actions} = createSlice({
     slice: 'searchResults',
     initialState: {
-        snippets: null as Array<Snippet> | null,
+        snippets: null as Array<SearchResult> | null,
         corpusFormat: null as CorpusFormat | null
     } as SearchResultsState,
     reducers: {
@@ -15,7 +15,7 @@ const {reducer, actions} = createSlice({
             state.corpusFormat = payload.corpusFormat;
             state.snippets = payload.snippets;
         },
-        updateSearchResult: (state: SearchResultsState, {payload}: PayloadAction<Snippet>) => {
+        updateSearchResult: (state: SearchResultsState, {payload}: PayloadAction<SearchResult>) => {
             if (!state.snippets) {
                 throw new Error("Invalid state, cannot update a single result when no results are in the state");
             }

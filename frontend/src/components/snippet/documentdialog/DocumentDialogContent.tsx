@@ -5,7 +5,7 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 import React from 'react';
 import Typography from "@material-ui/core/es/Typography";
 import {FullDocument} from "../../../entities/FullDocument";
-import NewAnnotatedTextComponent from "../../annotations/NewAnnotatedTextComponent";
+import NewAnnotatedTextComponent from "../../annotations/TextUnitListComponent";
 import {CorpusFormat} from "../../../entities/CorpusFormat";
 
 const styles = createStyles({

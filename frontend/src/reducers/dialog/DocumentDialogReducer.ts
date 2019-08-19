@@ -1,12 +1,12 @@
 import {DocumentDialogState} from "../../ApplicationState";
 import {createSlice, PayloadAction} from "redux-starter-kit";
-import {Snippet} from "../../entities/Snippet";
+import {SearchResult} from "../../entities/SearchResult";
 import {CorpusFormat} from "../../entities/CorpusFormat";
 import {ThunkResult} from "../../actions/RootActions";
 import {DocumentQuery} from "../../entities/DocumentQuery";
 import {API_BASE_PATH} from "../../globals";
 import {isDocument} from "../../entities/FullDocument";
-import {parseNewAnnotatedText} from "../../components/annotations/NewAnnotatedText";
+import {parseNewAnnotatedText} from "../../components/annotations/TextUnitList";
 import {openSnackbar} from "../SnackBarReducer";
 import {hideProgressbar, showProgressbar} from "../ProgressBarReducer";
 import axios from "axios";
@@ -33,7 +33,7 @@ const {reducer, actions} = createSlice({
 export const {closeDocumentDialog,} = actions;
 export default reducer;
 
-export const openDocumentDialogRequest = (searchResult: Snippet, corpusFormat: CorpusFormat): ThunkResult<void> => dispatch => {
+export const openDocumentDialogRequest = (searchResult: SearchResult, corpusFormat: CorpusFormat): ThunkResult<void> => dispatch => {
     dispatch(showProgressbar());
     const documentQuery: DocumentQuery = {
         host: searchResult.host,

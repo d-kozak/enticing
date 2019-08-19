@@ -37,13 +37,13 @@ class QueryService(
 }
 
 internal fun flatten(resultList: Map<String, List<MResult<IndexServer.CollectionResultList>>>): IndexServer.IndexResultList {
-    val matched = mutableListOf<IndexServer.Snippet>()
+    val matched = mutableListOf<IndexServer.SearchResult>()
     val errors = mutableMapOf<CollectionName, ErrorMessage>()
 
     for ((collectionName, collectionResults) in resultList) {
         for(collectionResult in collectionResults){
             if(collectionResult.isSuccess){
-                matched.addAll(collectionResult.value.matched)
+                matched.addAll(collectionResult.value.searchResults)
             } else {
                 errors[collectionName] = "${collectionResult.exception::class.simpleName}:${collectionResult.exception.message}"
             }

@@ -17,7 +17,7 @@ internal val templateQuery = SearchQuery(
 )
 
 internal val googleFirstResult = IndexServer.IndexResultList(
-        listOf(IndexServer.Snippet(
+        listOf(IndexServer.SearchResult(
                 "col",
                 10,
                 10,

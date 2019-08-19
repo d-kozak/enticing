@@ -7,7 +7,7 @@ import AnnotationContent from "./AnnotationContent";
 import {Theme} from "@material-ui/core/es";
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import {CorpusFormat} from "../../entities/CorpusFormat";
-import {Entity, Word} from "./NewAnnotatedText";
+import {Entity, Word} from "./TextUnitList";
 
 
 const styles = (theme: Theme) => createStyles({

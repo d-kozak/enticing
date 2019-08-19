@@ -73,7 +73,7 @@ class SerializationTest {
         @Test
         fun `snippet html`() {
             val input = IndexServer.IndexResultList(
-                    matched = listOf(IndexServer.Snippet(
+                    searchResults = listOf(IndexServer.SearchResult(
                             collection = "collection1",
                             documentId = 23,
                             documentTitle = "title1",
@@ -92,7 +92,7 @@ class SerializationTest {
         @Test
         fun `snippet json`() {
             val input = IndexServer.IndexResultList(
-                    matched = listOf(IndexServer.Snippet(
+                    searchResults = listOf(IndexServer.SearchResult(
                             collection = "collection1",
                             documentId = 23,
                             documentTitle = "title1",
@@ -116,7 +116,7 @@ class SerializationTest {
         @Test
         fun `identifier list`() {
             val input = IndexServer.IndexResultList(
-                    matched = listOf(IndexServer.Snippet(
+                    searchResults = listOf(IndexServer.SearchResult(
                             collection = "collection1",
                             documentId = 23,
                             documentTitle = "title3",
