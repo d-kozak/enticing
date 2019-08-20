@@ -6,6 +6,7 @@ typealias AttributesDsl = MutableMap<String, Attribute>
 data class Attribute(
         var name: String = "",
         var columnIndex: Int = -1,
+        var attributeIndex: Int = -1,
         var description: String = "",
         var type: FieldType = FieldType.Text,
         var correspondingIndex: String = ""
@@ -18,7 +19,7 @@ data class Entity(
 ) {
     fun attributes(vararg names: String, block: AttributesDsl.() -> Unit = {}): AttributesDsl {
         val predefined = names.asSequence()
-                .mapIndexed { i, name -> name to Attribute(name) }
+                .mapIndexed { i, name -> name to Attribute(name, attributeIndex = i) }
                 .toMap()
                 .toMutableMap()
         return predefined.apply(block)
@@ -38,7 +39,11 @@ infix fun String.with(attributes: Array<String>): Entity {
 fun attributes(vararg names: String): Array<String> = Array(names.size) { names[it] }
 
 fun AttributesDsl.attribute(name: String, block: Attribute.() -> Unit = {}) = Attribute(name).apply(block)
-        .also { this[name] = it }
+        .also {
+            if (it.attributeIndex == -1)
+                it.attributeIndex = this.size
+            this[name] = it
+        }
 
 typealias EntityConfigDsl = MutableMap<String, Entity>
 

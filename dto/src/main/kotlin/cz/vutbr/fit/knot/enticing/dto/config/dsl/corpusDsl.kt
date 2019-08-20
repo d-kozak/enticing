@@ -170,7 +170,7 @@ fun CorpusConfiguration.validate(errors: MutableList<String>) {
         if (index != null) {
             for (entity in entities.values) {
                 if (entity.attributes[indexName] == null) {
-                    entity.attributes[indexName] = Attribute(index.name, entity.attributes.size, index.description, index.type, index.name)
+                    entity.attributes[indexName] = Attribute(index.name, index.columnIndex, entity.attributes.size, index.description, index.type, index.name)
                 } else {
                     errors.add("Attribute with name $indexName already exists in entity ${entity.name}")
                 }

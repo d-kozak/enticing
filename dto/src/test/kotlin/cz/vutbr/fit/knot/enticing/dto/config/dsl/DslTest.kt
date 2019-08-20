@@ -43,7 +43,7 @@ class DslTest {
             }
             assertThat(entities)
                     .isEqualTo(mutableMapOf(
-                            "person" to Entity("person", "Person entity", mutableMapOf("name" to Attribute("name", description = "The name of the person")))
+                            "person" to Entity("person", "Person entity", mutableMapOf("name" to Attribute("name", description = "The name of the person", attributeIndex = 0)))
                     ))
         }
 
@@ -79,7 +79,7 @@ class DslTest {
                                     "lemma" to Index("lemma", "The lemma of the word", columnIndex = 1)
                             ),
                             entities = mutableMapOf(
-                                    "person" to Entity("person", "Person entity", mutableMapOf("name" to Attribute("name", description = "The name of the person")))
+                                    "person" to Entity("person", "Person entity", mutableMapOf("name" to Attribute("name", description = "The name of the person", attributeIndex = 0)))
                             ),
                             entityMapping = EntityMapping().apply {
                                 entityIndex = "nertag"
@@ -140,9 +140,9 @@ class DslTest {
                                 "nerlength" to Index("nerlength", "", columnIndex = 7)
                         ),
                         entities = mutableMapOf(
-                                "person" to Entity("person", "Person entity", mutableMapOf("name" to Attribute("name", description = "The name of the person", correspondingIndex = "param0", columnIndex = 4))),
-                                "artist" to Entity("artist", "", mutableMapOf("name" to Attribute("name", correspondingIndex = "param0", columnIndex = 4), "gender" to Attribute("gender", correspondingIndex = "param1", columnIndex = 5))),
-                                "date" to Entity("date", "", mutableMapOf("year" to Attribute("year", correspondingIndex = "param0", columnIndex = 4), "month" to Attribute("month", correspondingIndex = "param1", columnIndex = 5), "day" to Attribute("day", correspondingIndex = "param2", columnIndex = 6)))
+                                "person" to Entity("person", "Person entity", mutableMapOf("name" to Attribute("name", description = "The name of the person", correspondingIndex = "param0", attributeIndex = 0, columnIndex = 4))),
+                                "artist" to Entity("artist", "", mutableMapOf("name" to Attribute("name", correspondingIndex = "param0", columnIndex = 4, attributeIndex = 0), "gender" to Attribute("gender", correspondingIndex = "param1", columnIndex = 5, attributeIndex = 1))),
+                                "date" to Entity("date", "", mutableMapOf("year" to Attribute("year", correspondingIndex = "param0", columnIndex = 4, attributeIndex = 0), "month" to Attribute("month", correspondingIndex = "param1", columnIndex = 5, attributeIndex = 1), "day" to Attribute("day", correspondingIndex = "param2", columnIndex = 6, attributeIndex = 2)))
                         ),
                         entityMapping = EntityMapping().apply {
                             attributeIndexes = 4 to 6
@@ -356,7 +356,60 @@ class DslTest {
                         }
                     }
                     entities {
-                        "artist" with attributes("url", "image", "name", "gender", "birthplace", "birthdate", "deathplace", "deathdate", "role", "nationality")
+                        entity("artist") {
+                            attributes {
+                                attribute("url") {
+                                    columnIndex = 15
+                                    correspondingIndex = "param0"
+                                }
+                                attribute("image") {
+                                    columnIndex = 16
+                                    correspondingIndex = "param1"
+                                }
+                                attribute("name") {
+                                    columnIndex = 17
+                                    correspondingIndex = "param2"
+                                }
+                                attribute("gender") {
+                                    columnIndex = 18
+                                    correspondingIndex = "param3"
+                                }
+                                attribute("birthplace") {
+                                    columnIndex = 19
+                                    correspondingIndex = "param4"
+                                }
+                                attribute("birthdate") {
+                                    columnIndex = 20
+                                    correspondingIndex = "param5"
+                                }
+                                attribute("deathplace") {
+                                    columnIndex = 21
+                                    correspondingIndex = "param6"
+                                }
+                                attribute("deathdate") {
+                                    columnIndex = 22
+                                    correspondingIndex = "param7"
+                                }
+                                attribute("role") {
+                                    columnIndex = 23
+                                    correspondingIndex = "param8"
+                                }
+                                attribute("nationality") {
+                                    columnIndex = 24
+                                    correspondingIndex = "param9"
+                                }
+                                attribute("nertype") {
+                                    columnIndex = 25
+                                    correspondingIndex = "nertype"
+                                    description = "nertype"
+                                }
+                                attribute("nerlength") {
+                                    columnIndex = 26
+                                    correspondingIndex = "nerlength"
+                                    description = "nerlength"
+                                }
+                            }
+                        }
                     }
                     entityMapping {
                         entityIndex = "nertag"
@@ -394,15 +447,25 @@ class DslTest {
                     entities {
                         entity("event") {
                             attributes {
-                                attribute("url")
+                                attribute("url") {
+                                    columnIndex = 15
+                                    attributeIndex = 0
+                                    correspondingIndex = "param0"
+                                }
                                 attribute("name") {
-                                    columnIndex = 2
+                                    columnIndex = 17
+                                    attributeIndex = 2
+                                    correspondingIndex = "param2"
                                 }
                                 attribute("startdate") {
-                                    columnIndex = 3
+                                    columnIndex = 18
+                                    attributeIndex = 3
+                                    correspondingIndex = "param3"
                                 }
                                 attribute("location") {
-                                    columnIndex = 5
+                                    columnIndex = 20
+                                    attributeIndex = 5
+                                    correspondingIndex = "param5"
                                 }
                             }
                         }
@@ -445,19 +508,92 @@ class DslTest {
                     entities {
                         entity("event") {
                             attributes {
-                                attribute("url")
+                                attribute("url") {
+                                    columnIndex = 15
+                                    attributeIndex = 0
+                                    correspondingIndex = "param0"
+                                }
                                 attribute("name") {
-                                    columnIndex = 2
+                                    columnIndex = 17
+                                    attributeIndex = 2
+                                    correspondingIndex = "param2"
                                 }
                                 attribute("startdate") {
-                                    columnIndex = 3
+                                    columnIndex = 18
+                                    attributeIndex = 3
+                                    correspondingIndex = "param3"
                                 }
                                 attribute("location") {
-                                    columnIndex = 5
+                                    columnIndex = 20
+                                    attributeIndex = 5
+                                    correspondingIndex = "param5"
                                 }
                             }
                         }
-                        "person" with attributes("url", "image", "name", "gender", "birthplace", "birthdate", "deathplace", "deathdate", "profession", "nationality")
+                        entity("person") {
+                            attributes {
+                                attribute("url") {
+                                    columnIndex = 15
+                                    attributeIndex = 0
+                                    correspondingIndex = "param0"
+                                }
+                                attribute("image") {
+                                    columnIndex = 16
+                                    attributeIndex = 1
+                                    correspondingIndex = "param1"
+                                }
+                                attribute("name") {
+                                    columnIndex = 17
+                                    attributeIndex = 2
+                                    correspondingIndex = "param2"
+                                }
+                                attribute("gender") {
+                                    columnIndex = 18
+                                    attributeIndex = 3
+                                    correspondingIndex = "param3"
+                                }
+                                attribute("birthplace") {
+                                    columnIndex = 19
+                                    attributeIndex = 4
+                                    correspondingIndex = "param4"
+                                }
+                                attribute("birthdate") {
+                                    columnIndex = 20
+                                    attributeIndex = 5
+                                    correspondingIndex = "param5"
+                                }
+                                attribute("deathplace") {
+                                    columnIndex = 21
+                                    attributeIndex = 6
+                                    correspondingIndex = "param6"
+                                }
+                                attribute("deathdate") {
+                                    columnIndex = 22
+                                    attributeIndex = 7
+                                    correspondingIndex = "param7"
+                                }
+                                attribute("profession") {
+                                    columnIndex = 23
+                                    attributeIndex = 8
+                                    correspondingIndex = "param8"
+                                }
+                                attribute("nationality") {
+                                    columnIndex = 24
+                                    attributeIndex = 9
+                                    correspondingIndex = "param9"
+                                }
+                                attribute("nertype") {
+                                    columnIndex = 25
+                                    correspondingIndex = "nertype"
+                                    description = "nertype"
+                                }
+                                attribute("nerlength") {
+                                    columnIndex = 26
+                                    correspondingIndex = "nerlength"
+                                    description = "nerlength"
+                                }
+                            }
+                        }
                         entity("form")
                     }
                     entityMapping {
@@ -534,18 +670,13 @@ class DslTest {
                 attributeIndexes = 15 to 24
                 extraAttributes("nertype", "nerlength")
             }
+        }.also {
+            assertThat(it.validate())
+                    .isEmpty()
         }
 
         @Nested
         inner class Validation {
-
-            @Test
-            fun `valid config`() {
-                val errors = fullValidCorpusConfig.validate()
-                assertThat(errors)
-                        .isEmpty()
-            }
-
 
             @Test
             fun `blank config name`() {
@@ -903,8 +1034,8 @@ class DslTest {
         fun `local client`() {
             val config = consoleClient {
                 local {
-                    collections{
-                        collection("one"){
+                    collections {
+                        collection("one") {
                             mg4jDirectory("../data/mg4j")
                             indexDirectory("../data/indexed")
                         }
@@ -983,8 +1114,8 @@ class DslTest {
             val expected = ConsoleClientConfig()
             expected.searchConfig = SearchConfig(42)
             expected.clientType = ConsoleClientType.LocalIndex(indexClient {
-                collections{
-                    collection("one"){
+                collections {
+                    collection("one") {
                         mg4jDirectory("../data/mg4j")
                         indexDirectory("../data/indexed")
                     }

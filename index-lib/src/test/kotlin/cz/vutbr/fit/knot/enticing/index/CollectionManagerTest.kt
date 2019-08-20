@@ -6,12 +6,11 @@ import cz.vutbr.fit.knot.enticing.dto.annotation.Warning
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.*
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.format.text.StringWithMetadata
+import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.dto.utils.toDto
 import cz.vutbr.fit.knot.enticing.index.collection.manager.computeExtensionIntervals
 import cz.vutbr.fit.knot.enticing.index.mg4j.initMg4jCollectionManager
 import it.unimi.di.big.mg4j.query.parser.QueryParserException
-import it.unimi.dsi.util.Interval
-import it.unimi.dsi.util.Intervals
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Nested
@@ -249,7 +248,7 @@ class CollectionManagerTest {
         fun `no prefix available`() {
             val (prefix, suffix) = computeExtensionIntervals(0, 5, 10, 20)
             assertThat(prefix)
-                    .isEqualTo(Intervals.EMPTY_INTERVAL)
+                    .isEqualTo(Interval.empty())
             assertThat(suffix)
                     .isEqualTo(Interval.valueOf(6, 15))
         }
@@ -260,7 +259,7 @@ class CollectionManagerTest {
             assertThat(prefix)
                     .isEqualTo(Interval.valueOf(0, 9))
             assertThat(suffix)
-                    .isEqualTo(Intervals.EMPTY_INTERVAL)
+                    .isEqualTo(Interval.empty())
         }
 
         @Test

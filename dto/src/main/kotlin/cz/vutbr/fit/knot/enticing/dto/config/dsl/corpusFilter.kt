@@ -68,7 +68,7 @@ private fun CorpusConfiguration.filterIndexes(indexes: Indexes, defaultIndex: St
         onlySpecifiedIndexes(indexes.names)
     else {
         val names = indexes.names.toMutableList()
-        names.add(defaultIndex)
+        names.add(0, defaultIndex)
         onlySpecifiedIndexes(names)
     }
 }
