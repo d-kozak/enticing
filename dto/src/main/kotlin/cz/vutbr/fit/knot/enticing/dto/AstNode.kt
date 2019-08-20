@@ -4,5 +4,5 @@ interface AstNode {
     /**
      * Make a deep copy of the ast
      */
-    fun copy(): AstNode
+    fun deepCopy(): AstNode
 }

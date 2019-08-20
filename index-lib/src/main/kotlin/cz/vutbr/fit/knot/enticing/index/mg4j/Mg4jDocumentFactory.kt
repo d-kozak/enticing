@@ -29,7 +29,7 @@ class Mg4jDocumentFactory(private val corpusConfiguration: CorpusConfiguration) 
 
     override fun fieldType(field: Int): DocumentFactory.FieldType = indexes[field].type.mg4jType
 
-    override fun copy(): DocumentFactory = Mg4jDocumentFactory(corpusConfiguration)
+    override fun copy() = Mg4jDocumentFactory(corpusConfiguration)
 
     override fun getDocument(rawContent: InputStream, metadata: Reference2ObjectMap<Enum<*>, Any>): Mg4jDocument {
         val stream = (rawContent as FastBufferedInputStream).bufferedReader()

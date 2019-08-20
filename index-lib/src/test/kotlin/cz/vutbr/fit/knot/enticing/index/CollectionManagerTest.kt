@@ -8,7 +8,7 @@ import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.format.text.StringWithMetadata
 import cz.vutbr.fit.knot.enticing.dto.utils.toDto
 import cz.vutbr.fit.knot.enticing.index.collection.manager.computeExtensionIntervals
-import cz.vutbr.fit.knot.enticing.index.collection.manager.initCollectionManager
+import cz.vutbr.fit.knot.enticing.index.mg4j.initMg4jCollectionManager
 import it.unimi.di.big.mg4j.query.parser.QueryParserException
 import it.unimi.dsi.util.Interval
 import it.unimi.dsi.util.Intervals
@@ -126,7 +126,7 @@ class CollectionManagerTest {
 
     @Test
     fun `valid queries`() {
-        val queryEngine = initCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
+        val queryEngine = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
         for (input in listOf(
                 "hello",
                 "john",
@@ -143,7 +143,7 @@ class CollectionManagerTest {
 
     @Test
     fun `valid queries with new data format requested`() {
-        val queryEngine = initCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
+        val queryEngine = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
         for (input in listOf(
                 "hello",
                 "john",
@@ -161,13 +161,13 @@ class CollectionManagerTest {
     @Test
     fun problematicQuery() {
         val query = SearchQuery(query = "job work", snippetCount = 33, offset = mapOf("one" to Offset(document = 0, snippet = 0)), metadata = TextMetadata.Predefined(value = "all"), resultFormat = cz.vutbr.fit.knot.enticing.dto.ResultFormat.SNIPPET, textFormat = TextFormat.TEXT_UNIT_LIST, defaultIndex = "token")
-        val queryEngine = initCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
+        val queryEngine = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
         val result = queryEngine.query(query)
     }
 
     @Test
     fun `syntax error should be caught`() {
-        val queryEngine = initCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
+        val queryEngine = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
         val query = templateQuery.copy(query = "lemma:work{{lemma->")
 
         assertThrows<QueryParserException> {
@@ -177,7 +177,7 @@ class CollectionManagerTest {
 
     @Test
     fun `document retrieval test`() {
-        val executor = initCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
+        val executor = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
         for (i in 0..10) {
             val query = IndexServer.DocumentQuery("col1", i)
 
@@ -193,7 +193,7 @@ class CollectionManagerTest {
 
     @Test
     fun `context extension test`() {
-        val executor = initCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
+        val executor = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
 
         val (prefix, suffix, _) = executor.extendSnippet(
                 IndexServer.ContextExtensionQuery("col1", 2, 5, 5, 10, textFormat = TextFormat.STRING_WITH_METADATA
@@ -208,7 +208,7 @@ class CollectionManagerTest {
     @Test
     fun `real context extension request`() {
         val query = """{"collection":"name","docId":56,"defaultIndex":"token","location":10,"size":50,"extension":20}""".toDto<IndexServer.ContextExtensionQuery>()
-        val executor = initCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
+        val executor = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
         val (prefix, suffix, _) = executor.extendSnippet(query)
 
     }

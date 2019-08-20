@@ -4,7 +4,7 @@ import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexClientConfig
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
 import cz.vutbr.fit.knot.enticing.index.collection.manager.CollectionManager
-import cz.vutbr.fit.knot.enticing.index.collection.manager.initCollectionManager
+import cz.vutbr.fit.knot.enticing.index.mg4j.initMg4jCollectionManager
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -43,7 +43,7 @@ class SearchConfig(
     @Bean
     fun collectionManagers(config: IndexClientConfig): Map<String, CollectionManager> =
             config.collections.asSequence()
-                    .map { initCollectionManager(config.corpusConfiguration, it) }
+                    .map { initMg4jCollectionManager(config.corpusConfiguration, it) }
                     .map { it.collectionName to it }
                     .toMap()
 }

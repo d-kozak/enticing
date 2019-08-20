@@ -4,7 +4,7 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.ConsoleClientConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.ConsoleClientType
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexBuilderConfig
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
-import cz.vutbr.fit.knot.enticing.index.collection.manager.initCollectionManager
+import cz.vutbr.fit.knot.enticing.index.mg4j.initMg4jCollectionManager
 import cz.vutbr.fit.knot.enticing.index.startIndexing
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -31,7 +31,7 @@ internal class LocalClientTest {
     @Test
     fun `execute locally test`() {
         val input = sequenceOf("foo bar baz", "hello", "nertag:person{{nertag->token}}", "lemma:work{{lemma->token}}")
-        val executor = initCollectionManager(localConfig.indexClientConfig.corpusConfiguration, localConfig.indexClientConfig.collections[0])
+        val executor = initMg4jCollectionManager(localConfig.indexClientConfig.corpusConfiguration, localConfig.indexClientConfig.collections[0])
         for (line in input) {
             executeLine(executor, line)
         }

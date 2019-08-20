@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.parser
 
-import cz.vutbr.fit.knot.enticing.eql.compiler.ast.AstNode
+import cz.vutbr.fit.knot.enticing.dto.AstNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.dto.ParsedQuery
 import org.assertj.core.api.Assertions
 

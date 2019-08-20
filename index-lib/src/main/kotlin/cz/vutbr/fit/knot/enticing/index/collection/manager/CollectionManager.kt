@@ -3,67 +3,13 @@ package cz.vutbr.fit.knot.enticing.index.collection.manager
 import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.CollectionConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
-import cz.vutbr.fit.knot.enticing.dto.interval.findEnclosingInterval
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.EqlCompiler
 import cz.vutbr.fit.knot.enticing.index.boundary.PostProcessor
 import cz.vutbr.fit.knot.enticing.index.boundary.ResultCreator
 import cz.vutbr.fit.knot.enticing.index.boundary.SearchEngine
-import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jCompositeDocumentCollection
-import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jDocumentFactory
-import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jSearchEngine
-import it.unimi.di.big.mg4j.index.Index
-import it.unimi.di.big.mg4j.index.TermProcessor
-import it.unimi.di.big.mg4j.query.IntervalSelector
-import it.unimi.di.big.mg4j.query.Query
-import it.unimi.di.big.mg4j.query.QueryEngine
-import it.unimi.di.big.mg4j.query.parser.SimpleParser
-import it.unimi.di.big.mg4j.search.DocumentIteratorBuilderVisitor
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
-import it.unimi.dsi.fastutil.objects.Object2ReferenceLinkedOpenHashMap
-import it.unimi.dsi.fastutil.objects.Reference2DoubleOpenHashMap
 import org.slf4j.LoggerFactory
 import kotlin.math.min
-
-@Cleanup("put into configuration?")
-const val SNIPPET_SIZE = 50
-
-private val log = LoggerFactory.getLogger(CollectionManager::class.java)
-
-fun initCollectionManager(corpusConfiguration: CorpusConfiguration, collectionConfig: CollectionConfiguration): CollectionManager {
-    log.info("initializing with config $corpusConfiguration,$collectionConfig")
-    val collection = Mg4jCompositeDocumentCollection(corpusConfiguration, collectionConfig.mg4jFiles)
-    val factory = Mg4jDocumentFactory(corpusConfiguration)
-
-    val indexDir = collectionConfig.indexDirectory
-
-    val indexMap = Object2ReferenceLinkedOpenHashMap<String, Index>()
-    val termProcessors = Object2ObjectOpenHashMap<String, TermProcessor>()
-    val index2weight = Reference2DoubleOpenHashMap<Index>()
-    for (index in corpusConfiguration.indexes.values.toList()) {
-        val mg4jIndex = Index.getInstance(indexDir.resolve("${corpusConfiguration.corpusName}-${index.name}").path)
-        requireNotNull(mg4jIndex.field)
-        indexMap[mg4jIndex.field] = mg4jIndex
-        termProcessors[mg4jIndex.field] = mg4jIndex.termProcessor
-        index2weight[mg4jIndex] = 1.0
-    }
-
-    val defaultIndex = "token"
-    val engine = QueryEngine(
-            SimpleParser(indexMap.keys, defaultIndex, termProcessors),
-            DocumentIteratorBuilderVisitor(indexMap, indexMap[defaultIndex], Query.MAX_STEMMING),
-            indexMap
-    )
-    engine.setWeights(index2weight)
-    engine.intervalSelector = IntervalSelector(Integer.MAX_VALUE, Integer.MAX_VALUE)
-    engine.multiplex = false
-
-    val mg4jSearchEngine = Mg4jSearchEngine(collection, engine)
-    return CollectionManager(collectionConfig.name, mg4jSearchEngine, corpusConfiguration)
-}
-
 
 /**
  * Interface of the underlying mg4j indexing library, performs requests and processes results
@@ -78,6 +24,8 @@ class CollectionManager internal constructor(
         private val eqlCompiler: EqlCompiler
 ) {
 
+    private val log = LoggerFactory.getLogger(CollectionManager::class.java)
+
     fun query(_query: SearchQuery, offset: Offset = Offset(0, 0)): IndexServer.CollectionResultList {
         log.info("Executing query $_query")
         val query = _query.copyWithAst() // make a local copy because the postprocessing modifies the AST
@@ -88,8 +36,7 @@ class CollectionManager internal constructor(
         val matched = mutableListOf<IndexServer.SearchResult>()
         for ((i, result) in resultList.withIndex()) {
             val document = searchEngine.loadDocument(result.documentId)
-            val enclosingInterval = findEnclosingInterval(result.intervals)
-            if (!postProcessor.process(query.eqlAst, document, enclosingInterval)) continue
+            if (!postProcessor.process(query.eqlAst, document, result.intervals)) continue
             val (results, hasMore) = resultCreator.multipleResults(query, document, if (document.id == documentOffset) resultOffset else 0)
 
             if (matched.size + results.size >= query.snippetCount) {

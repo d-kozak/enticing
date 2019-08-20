@@ -56,7 +56,10 @@ data class SearchQuery(
 ) : GeneralFormatInfo, Query<SearchQuery> {
     override fun updateSnippetCount(newSnippetCount: Int): SearchQuery = this.copy(snippetCount = newSnippetCount)
 
-    fun copyWithAst(): SearchQuery = this.copy().also { it.eqlAst = it.eqlAst.copy() }
+    /**
+     * fails if eql ast is not initialized
+     */
+    fun copyWithAst(): SearchQuery = this.copy().also { it.eqlAst = it.eqlAst.deepCopy() }
 
     @JsonIgnore
     lateinit var eqlAst: AstNode

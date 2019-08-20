@@ -5,7 +5,6 @@ import cz.vutbr.fit.knot.enticing.dto.Offset
 import cz.vutbr.fit.knot.enticing.dto.RequestData
 import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
-import cz.vutbr.fit.knot.enticing.eql.compiler.ast.AstNode
 import cz.vutbr.fit.knot.enticing.query.processor.QueryExecutor
 
 

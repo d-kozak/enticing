@@ -7,6 +7,7 @@ import cz.vutbr.fit.knot.enticing.dto.annotation.Speed
  */
 interface IndexedDocument {
     val id: Int
+    val uuid: String
     val title: String
     val uri: String
     val size: Int

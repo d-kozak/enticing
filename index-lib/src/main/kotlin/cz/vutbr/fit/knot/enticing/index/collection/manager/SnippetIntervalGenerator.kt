@@ -1,8 +1,11 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 
+@Cleanup("put into configuration?")
+const val SNIPPET_SIZE = 50
 
 internal fun generateSnippetIntervals(result: List<List<Interval>>, documentSize: Int): List<Pair<Interval, List<Interval>>> {
     val allCombinations = computeAllIntervalCombinations(result)

@@ -21,6 +21,7 @@ internal val wordReader = WhitespaceWordReader()
  * Keys for accessing document metadata
  */
 enum class DocumentMetadata {
+    ID,
     UUID,
     TITLE,
     URI,
@@ -36,8 +37,10 @@ class Mg4jDocument(
         override val content: List<String>
 ) : AbstractDocument(), IndexedDocument {
 
+    override val id: Int
+        get() = metadata[DocumentMetadata.ID] as Int
 
-    override val id: String
+    override val uuid: String
         get() = metadata[DocumentMetadata.UUID] as String
 
     override val title: String

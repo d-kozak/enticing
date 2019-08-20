@@ -45,7 +45,8 @@ class Mg4jSingleFileDocumentCollection(
     }
 
     private fun metadataAndStream(index: Long): Pair<FastBufferedInputStream, Reference2ObjectArrayMap<Enum<*>, Any>> {
-        val map = Reference2ObjectArrayMap<Enum<*>, Any>()
+        val metadata = Reference2ObjectArrayMap<Enum<*>, Any>()
+        metadata[DocumentMetadata.ID] = index.toInt()
         val stream = stream(index) as FastBufferedInputStream
         val startPosition = stream.position()
 
@@ -53,18 +54,18 @@ class Mg4jSingleFileDocumentCollection(
         val buffer = ByteArray(1024)
         var lineSize = stream.readLine(buffer)
         require(lineSize > 0) { "Doc line should not be empty" }
-        map[DocumentMetadata.UUID] = parseUuid(buffer, lineSize) ?: "NULL"
+        metadata[DocumentMetadata.UUID] = parseUuid(buffer, lineSize) ?: "NULL"
         lineSize = stream.readLine(buffer)
         require(lineSize > 0) { "Page line should not be empty" }
         require(buffer.isPage()) { "Should be a page line" }
 
 
         val (title, uri) = parsePageLine(buffer, lineSize)
-        map[DocumentMetadata.TITLE] = title
-        map[DocumentMetadata.URI] = uri
+        metadata[DocumentMetadata.TITLE] = title
+        metadata[DocumentMetadata.URI] = uri
 
         stream.position(startPosition)
-        return stream to map
+        return stream to metadata
     }
 
 
