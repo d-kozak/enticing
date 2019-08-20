@@ -1,6 +1,8 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.next
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.Index
+import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import org.slf4j.LoggerFactory
@@ -12,7 +14,14 @@ interface DocumentIteratorListener {
     fun entityStart(attributes: List<String>, entityClass: String)
     fun entityEnd()
     fun word(indexes: List<String>)
+}
 
+abstract class TextFormatGeneratingListener(protected val config: CorpusConfiguration, private val defaultIndexName: String) : DocumentIteratorListener {
+    abstract fun build(): ResultFormat.Snippet
+
+    protected val defaultIndex: Index = config.indexes.getValue(defaultIndexName)
+
+    protected val metaIndexes: List<Index> = config.indexes.values.filter { it.name != defaultIndexName }
 }
 
 
@@ -23,8 +32,8 @@ class StructuredDocumentIterator(private val corpusConfiguration: CorpusConfigur
      * Iterates over a document and notifies the listener about every start and end of matched region, start and end of entity and every word,
      * priority is in this order
      */
-    fun iterateDocument(document: IndexedDocument, matchStarts: Map<Int, Interval>, matchEnds: Set<Int>, listener: DocumentIteratorListener, from: Int = 0, to: Int = document.size) {
-
+    fun iterateDocument(document: IndexedDocument, matchStarts: Map<Int, Interval>, matchEnds: Set<Int>, listener: DocumentIteratorListener, interval: Interval? = null) {
+        val (from, to) = interval ?: Interval.valueOf(0, document.size)
         var startedEntity: Triple<List<String>, String, Int>? = null
 
         for ((i, word) in document.withIndex()) {
