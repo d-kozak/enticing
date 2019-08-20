@@ -22,7 +22,7 @@ fun initMg4jCollectionManager(corpusConfiguration: CorpusConfiguration, collecti
     val engine = initMg4jQueryEngine(collectionConfig, corpusConfiguration)
 
     val mg4jSearchEngine = Mg4jSearchEngine(collection, engine)
-    return CollectionManager(collectionConfig.name, mg4jSearchEngine, EqlPostProcessor(), EqlResultCreator(), EqlCompiler())
+    return CollectionManager(collectionConfig.name, mg4jSearchEngine, EqlPostProcessor(), EqlResultCreator(corpusConfiguration), EqlCompiler())
 }
 
 private fun initMg4jQueryEngine(collectionConfig: CollectionConfiguration, corpusConfiguration: CorpusConfiguration): QueryEngine {

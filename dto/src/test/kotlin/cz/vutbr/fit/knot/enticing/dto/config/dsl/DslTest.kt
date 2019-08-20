@@ -101,6 +101,9 @@ class DslTest {
                         }
                         index("lemma") whichIs "The lemma of the word"
                         "tag" whichIs "Tag of the word"
+                        index("nertag")
+                        params(2)
+                        index("nerlength")
                     }
                     entities {
                         entity("person") {
@@ -117,12 +120,11 @@ class DslTest {
                         "date" with attributes("year", "month", "day")
                     }
                     entityMapping {
-                        entityIndex = "nertag"
-                        attributeIndexes = 15 to 24
-                        extraAttributes("nertype", "nerlength")
+                        attributeIndexes = 4 to 6
                     }
                 }
             }
+            assertThat(config.validate()).isEmpty()
             val expected = IndexBuilderConfig().apply {
                 input = listOf(1, 2, 3).map { "../data/mg4j/cc$it.mg4j" }.map { File(it) }
                 output = File("../data/indexed")
@@ -130,17 +132,20 @@ class DslTest {
                         indexes = mutableMapOf(
                                 "token" to Index("token", "Original token from the document"),
                                 "lemma" to Index("lemma", "The lemma of the word", columnIndex = 1),
-                                "tag" to Index("tag", "Tag of the word", columnIndex = 2)
+                                "tag" to Index("tag", "Tag of the word", columnIndex = 2),
+                                "nertag" to Index("nertag", "", columnIndex = 3),
+                                "param0" to Index("param0", "", columnIndex = 4),
+                                "param1" to Index("param1", "", columnIndex = 5),
+                                "param2" to Index("param2", "", columnIndex = 6),
+                                "nerlength" to Index("nerlength", "", columnIndex = 7)
                         ),
                         entities = mutableMapOf(
-                                "person" to Entity("person", "Person entity", mutableMapOf("name" to Attribute("name", description = "The name of the person"))),
-                                "artist" to Entity("artist", "", mutableMapOf("name" to Attribute("name"), "gender" to Attribute("gender", columnIndex = 1))),
-                                "date" to Entity("date", "", mutableMapOf("year" to Attribute("year"), "month" to Attribute("month", columnIndex = 1), "day" to Attribute("day", columnIndex = 2)))
+                                "person" to Entity("person", "Person entity", mutableMapOf("name" to Attribute("name", description = "The name of the person", correspondingIndex = "param0", columnIndex = 4))),
+                                "artist" to Entity("artist", "", mutableMapOf("name" to Attribute("name", correspondingIndex = "param0", columnIndex = 4), "gender" to Attribute("gender", correspondingIndex = "param1", columnIndex = 5))),
+                                "date" to Entity("date", "", mutableMapOf("year" to Attribute("year", correspondingIndex = "param0", columnIndex = 4), "month" to Attribute("month", correspondingIndex = "param1", columnIndex = 5), "day" to Attribute("day", correspondingIndex = "param2", columnIndex = 6)))
                         ),
                         entityMapping = EntityMapping().apply {
-                            entityIndex = "nertag"
-                            attributeIndexes = 15 to 24
-                            extraAttributes = LinkedHashSet(listOf("nertype", "nerlength"))
+                            attributeIndexes = 4 to 6
                         }
                 )
             }

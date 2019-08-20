@@ -10,6 +10,19 @@ data class CorpusConfiguration(
         var entities: Map<String, Entity> = emptyMap(),
         val entityMapping: EntityMapping = EntityMapping()
 ) {
+
+    var entityIndex: Int = -1
+        get() {
+            if (field == -1) throw IllegalStateException("entity index was not initialized")
+            return field
+        }
+
+    var entityLengthIndex: Int = -1
+        get() {
+            if (field == -1) throw IllegalStateException("entity index was not initialized")
+            return field
+        }
+
     fun indexes(block: IndexConfigDsl.() -> Unit = {}) = indexesDslInternal(block)
             .also { this.indexes = it }
 
@@ -36,7 +49,12 @@ class EntityMapping {
     /**
      * The index based on which the type of entity is determined
      */
-    lateinit var entityIndex: String
+    var entityIndex: String = "nertag"
+
+    /**
+     * The index based on which the length of entity is determined(how many words it consists of)
+     */
+    var lengthIndex: String = "nerlength"
 
     /**
      * Indexes of mg4j indexes that are used for entity attributes, both inclusive
@@ -106,18 +124,27 @@ fun CorpusConfiguration.validate(errors: MutableList<String>) {
         for ((key, entity) in entities) {
             checkName(key, entity.name, errors)
 
-            for (attribute in entity.attributes.values) {
-                val i = from + attribute.columnIndex
-                if (i < 0 || i >= indexList.size) {
+            for ((i, attribute) in entity.attributes.values.withIndex()) {
+                if (attribute.columnIndex == -1)
+                    attribute.columnIndex = from + i
+                if (attribute.columnIndex < 0 || attribute.columnIndex >= indexList.size) {
                     errors.add("Index ${attribute.columnIndex} for attribute ${attribute.name} in entity ${entity.name} is exceeding the number of indexes ${indexList.size}")
                 } else {
-                    attribute.correspondingIndex = indexList[i].name
+                    attribute.correspondingIndex = indexList[attribute.columnIndex].name
                 }
             }
         }
     }
     if (indexes[entityMapping.entityIndex] == null) {
         errors.add("entity index ${entityMapping.entityIndex} not found")
+    } else {
+        entityIndex = indexes.getValue(entityMapping.entityIndex).columnIndex
+    }
+
+    if (indexes[entityMapping.lengthIndex] == null) {
+        errors.add("entity length index ${entityMapping.lengthIndex} not found")
+    } else {
+        entityLengthIndex = indexes.getValue(entityMapping.lengthIndex).columnIndex
     }
 
     val indexRange = 0 until indexes.size

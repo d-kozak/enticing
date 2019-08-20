@@ -20,6 +20,7 @@ class CorpusFormatTest {
                 "url" whichIs "url"
                 index("nertag")
                 index("param0")
+                index("len")
             }
             entities {
                 entity("person") {
@@ -33,6 +34,7 @@ class CorpusFormatTest {
             }
             entityMapping {
                 entityIndex = "nertag"
+                lengthIndex = "len"
                 attributeIndexes = 3 to 3
                 extraAttributes("url")
             }
@@ -46,7 +48,8 @@ class CorpusFormatTest {
                         "lemma" to "The lemma of the word",
                         "url" to "url",
                         "nertag" to "",
-                        "param0" to ""
+                        "param0" to "",
+                        "len" to ""
                 ),
                 entities = mapOf(
                         "person" to ("Person entity" withAttributes mapOf(

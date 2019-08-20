@@ -81,11 +81,11 @@ class IndexBuilderConfig {
         append("\tcorpus: ${corpusConfiguration.corpusName}\n")
         append("\tindexes:\n")
         for (index in corpusConfiguration.indexes.values) {
-            append("\t\t${index.name}\n")
+            append("\t\t${index.name}:[${index.description},${index.columnIndex}]\n")
         }
         append("\tentities:\n")
         for (entity in corpusConfiguration.entities.values) {
-            append("\t\t${entity.name}, attributes: ${entity.attributes.values.map { it.name }}\n")
+            append("\t\t${entity.name}, attributes: ${entity.attributes.values.map { it.name + ": '" + it.correspondingIndex + "'," + it.columnIndex }}\n")
         }
         append("}\n")
     }
