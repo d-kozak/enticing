@@ -67,7 +67,11 @@ class StructuredDocumentIterator(private val corpusConfiguration: CorpusConfigur
                 listener.entityEnd()
                 startedEntity = null
             }
-            if (i in matchEnds) listener.matchEnd()
+            if (i in matchEnds) {
+                if (startedEntity != null) listener.entityEnd()
+                listener.matchEnd()
+                if (startedEntity != null) listener.entityStart(startedEntity.first, startedEntity.second)
+            }
         }
     }
 
