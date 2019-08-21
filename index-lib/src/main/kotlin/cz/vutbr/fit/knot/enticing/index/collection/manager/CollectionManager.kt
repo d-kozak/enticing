@@ -1,10 +1,14 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager
 
-import cz.vutbr.fit.knot.enticing.dto.*
+import cz.vutbr.fit.knot.enticing.dto.IndexServer
+import cz.vutbr.fit.knot.enticing.dto.Offset
+import cz.vutbr.fit.knot.enticing.dto.SearchQuery
+import cz.vutbr.fit.knot.enticing.dto.SnippetExtension
 import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.EqlCompiler
+import cz.vutbr.fit.knot.enticing.index.boundary.EqlMatch
 import cz.vutbr.fit.knot.enticing.index.boundary.PostProcessor
 import cz.vutbr.fit.knot.enticing.index.boundary.ResultCreator
 import cz.vutbr.fit.knot.enticing.index.boundary.SearchEngine
@@ -36,8 +40,8 @@ class CollectionManager internal constructor(
         val matched = mutableListOf<IndexServer.SearchResult>()
         for ((i, result) in resultList.withIndex()) {
             val document = searchEngine.loadDocument(result.documentId)
-            if (!postProcessor.process(query.eqlAst, document, result.intervals)) continue
-            val (results, hasMore) = resultCreator.multipleResults(query, document, if (document.id == documentOffset) resultOffset else 0)
+            val matchList = postProcessor.process(query.eqlAst, document, result.intervals) ?: continue
+            val (results, hasMore) = resultCreator.multipleResults(document, matchList, query, if (document.id == documentOffset) resultOffset else 0)
 
             if (matched.size + results.size >= query.snippetCount) {
                 val nextOffset = when {
@@ -56,18 +60,17 @@ class CollectionManager internal constructor(
         val document = searchEngine.loadDocument(query.docId)
         val (prefix, suffix) = computeExtensionIntervals(left = query.location, right = query.location + query.size, extension = query.extension, documentSize = document.size)
 
-        var prefixAst: AstNode? = null
-        var suffixAst: AstNode? = null
-        if (query.query != null) {
-            prefixAst = eqlCompiler.parseOrFail(query.query!!)
-            postProcessor.process(prefixAst, document, prefix)
-            suffixAst = eqlCompiler.parseOrFail(query.query!!)
-            postProcessor.process(suffixAst, document, suffix)
-        }
+
+        val (prefixInfo, suffixInfo) = if (query.query != null) {
+            val ast = eqlCompiler.parseOrFail(query.query!!)
+            val prefixMatch = postProcessor.process(ast, document, prefix) ?: emptyList()
+            val suffixMatch = postProcessor.process(ast, document, suffix) ?: emptyList()
+            prefixMatch to suffixMatch
+        } else emptyList<EqlMatch>() to emptyList()
 
         return SnippetExtension(
-                prefix = resultCreator.singleResult(query, document, prefixAst, prefix),
-                suffix = resultCreator.singleResult(query, document, suffixAst, suffix),
+                prefix = resultCreator.singleResult(document, prefixInfo, query, prefix),
+                suffix = resultCreator.singleResult(document, suffixInfo, query, suffix),
                 canExtend = document.size > prefix.size + query.size + suffix.size
         )
     }
@@ -75,13 +78,13 @@ class CollectionManager internal constructor(
     fun getDocument(query: IndexServer.DocumentQuery): IndexServer.FullDocument {
         val document = searchEngine.loadDocument(query.documentId)
 
-        var ast: AstNode? = null
-        if (query.query != null) {
-            ast = eqlCompiler.parseOrFail(query.query!!)
-            postProcessor.process(ast, document)
-        }
 
-        val payload = resultCreator.singleResult(query, document, ast)
+        val matchInfo = if (query.query != null) {
+            val ast = eqlCompiler.parseOrFail(query.query!!)
+            postProcessor.process(ast, document) ?: emptyList()
+        } else emptyList()
+
+        val payload = resultCreator.singleResult(document, matchInfo, query)
         return IndexServer.FullDocument(
                 document.title,
                 document.uri,

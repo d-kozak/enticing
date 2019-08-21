@@ -3,6 +3,44 @@ package cz.vutbr.fit.knot.enticing.index.boundary
 import cz.vutbr.fit.knot.enticing.dto.AstNode
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 
+
+/**
+ * Represents how the document was matched by the query
+ */
+sealed class EqlMatch {
+    /**
+     * Represents a match of a simple one token query ( leaf in the ast )
+     */
+    data class IndexMatch(
+            /**
+             * Interval over the query
+             */
+            val queryInterval: Interval,
+            /**
+             * Indexes in the document where the simple query was matched
+             */
+            val documentIndexList: List<Int>
+    ) : EqlMatch()
+
+    /**
+     * Represents a match for some EQL identifier
+     */
+    data class IdentifierMatch(
+            /**
+             * Interval over the query
+             */
+            val queryInterval: Interval,
+            /**
+             * Intervals over the document where the identifier was matched
+             */
+            val documentIntervalList: List<Interval>,
+            /**
+             * Simple index matches that are parts of the Identifier match
+             */
+            val subMatchList: List<IndexMatch>
+    ) : EqlMatch()
+}
+
 /**
  * Execute postprocessing
  */
@@ -14,7 +52,7 @@ interface PostProcessor {
      * @return true if postprocessing was successful, false otherwise
      * when the method finishes, the ast is decorated with detailed match information
      */
-    fun process(ast: AstNode, document: IndexedDocument, enclosingInterval: Interval? = null): Boolean
+    fun process(ast: AstNode, document: IndexedDocument, enclosingInterval: Interval? = null): List<EqlMatch>?
 
     /**
      * @param ast of the search query
@@ -23,5 +61,5 @@ interface PostProcessor {
      * @return true if postprocessing was successful, false otherwise
      * when the method finishes, the ast is decorated with detailed match information
      */
-    fun process(ast: AstNode, document: IndexedDocument, matchedIntervals: List<List<Interval>>): Boolean
+    fun process(ast: AstNode, document: IndexedDocument, matchedIntervals: List<List<Interval>>): List<EqlMatch>?
 }
