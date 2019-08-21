@@ -8,8 +8,7 @@ import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import cz.vutbr.fit.knot.enticing.index.boundary.ResultCreator
-import cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.next.HtmlGeneratingListener
-import cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.next.StructuredDocumentIterator
+import cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.next.*
 
 @Incomplete("not finished yet")
 class EqlResultCreator(private val corpusConfiguration: CorpusConfiguration) : ResultCreator {
@@ -23,8 +22,10 @@ class EqlResultCreator(private val corpusConfiguration: CorpusConfiguration) : R
         val filteredConfig = corpusConfiguration.filterBy(query.metadata, query.defaultIndex)
 
         val listener = when (query.textFormat) {
+            TextFormat.PLAIN_TEXT -> return generatePlainText(document, filteredConfig, query.defaultIndex, astNode, interval)
             TextFormat.HTML -> HtmlGeneratingListener(filteredConfig, query.defaultIndex)
-            else -> throw IllegalArgumentException("other formats not supported yet")
+            TextFormat.STRING_WITH_METADATA -> StringWithAnnotationsGeneratingListener(filteredConfig, query.defaultIndex)
+            TextFormat.TEXT_UNIT_LIST -> TextUnitListGeneratingListener(filteredConfig, query.defaultIndex)
         }
         val iterator = StructuredDocumentIterator(filteredConfig)
         iterator.iterateDocument(document, emptyMap(), emptySet(), listener, interval)

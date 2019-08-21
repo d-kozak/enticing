@@ -53,7 +53,7 @@ class WordReader(input: List<String>, private val separator: Char) {
 
 }
 
-class TokenReader(private val input: String, private val separator: Char) {
+class TokenReader(private val input: String, private val separator: Char) : Iterable<String> {
     var pos = 0
 
     fun nextToken(): String? {
@@ -61,5 +61,22 @@ class TokenReader(private val input: String, private val separator: Char) {
         val start = pos
         while (pos < input.length && input[pos] != separator) pos++
         return input.substring(start, pos++) // another increment to skip the space
+    }
+
+    override fun iterator(): Iterator<String> = object : Iterator<String> {
+
+        private val reader = TokenReader(input, separator)
+
+        private var next: String? = null
+
+        override fun hasNext(): Boolean {
+            next = reader.nextToken()
+            return next != null
+        }
+
+        override fun next(): String {
+            requireNotNull(next)
+            return next!!
+        }
     }
 }
