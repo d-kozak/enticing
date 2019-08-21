@@ -21,10 +21,7 @@ It is also necessary to check if the attributes they request actually exist on t
 Other checks might be added later. Also some AST transformations will probably happen here to perform "syntactic desugaring".  
 
 ## Querying
-There are two possible ways how the querying can be implemented. One important and a bit sad thing to note is that the parsing has to happen for each collection separately. 
-It would be best to parse the query once and then use it in all collections inside IndexServer, but unfortunately even though mg4j allows for custom parsers to be used, 
-it does not have a way to directly input AST instead of a query string, parsers are required to take strings as input and there seems to be no way to skip the parsing without providing a
-custom SearchEngine implementation that would do that.
+There are three possible ways how the querying can be implemented. 
 
 The first approach is to serialize EQL AST into a string containing mg4j query. This query is then processed by mg4j, which parses it again. This approach requires 1 EQL parser invocations 
 and N mg4j parsers invocations, one for each collection.
@@ -32,12 +29,11 @@ and N mg4j parsers invocations, one for each collection.
 The second approach is to directly insert the EQL parser into the mg4j SearchEngine. In this case, the parser would output mg4j AST in the end instead of a string. 
 This approach requires N EQL parser invocations.
 
+The third approach is to pre-parse the query and then feed the AST to the individual SearchEngines. Mg4j API supports that.
+
 In the end, I decided to use the first approach for the following reasons. First of all serializing EQL AST to mg4j string is something that would be implemented anyways, 
 at least for debugging purposes to see what is happening with the query inside the compiler. The second reason is that outputting a string is much simpler than outputting an AST, therefore the
-first version will be simpler and faster to implement. The third reason is based on an assumption, which might not be true, because I haven't done the measurements yet, but I believe is reasonable.
-Assuming that parsing EQL is more time consuming than parsing mg4j, especially because of the extra semantic validations and entity attributes to polymorphic index transformations, 
-it might be faster to do one EQL parse followed by N mgj4 parses instead of N EQL parses. Once the EQL parser is finished, this assumption can be verified. 
-If it proves to be false, it will still be possible to implement the second approach.
+first version will be simpler and faster to implement. If parsing proves be a bottleneck, it will still be possible to implement the third approach, which should be the most effective.
 
 ## Postprocessing
 There are two pieces of functionality inside EQL that are unfortunately not directly handled by mg4j. The first problem is that mgj4 does not return the information how the query was matched. 
