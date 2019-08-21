@@ -5,7 +5,6 @@ import cz.vutbr.fit.knot.enticing.dto.Offset
 import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.SnippetExtension
 import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
-import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.EqlCompiler
 import cz.vutbr.fit.knot.enticing.index.boundary.EqlMatch
@@ -18,8 +17,6 @@ import kotlin.math.min
 /**
  * Interface of the underlying mg4j indexing library, performs requests and processes results
  */
-@Cleanup("Refactor into multiple classes/functions in different files")
-@WhatIf("? decouple from mg4j for easier and faster testing ?")
 class CollectionManager internal constructor(
         val collectionName: String,
         private val searchEngine: SearchEngine,
@@ -97,6 +94,7 @@ class CollectionManager internal constructor(
 /**
  * Compute the intervals for prefix and suffix for snippet extension
  */
+@Cleanup("refactor and move closer to the interval domain class")
 internal fun computeExtensionIntervals(left: Int, right: Int, extension: Int, documentSize: Int): Pair<Interval, Interval> {
     checkPreconditions(documentSize, left, right, extension)
     val maxPrefixSize = left
