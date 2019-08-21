@@ -12,7 +12,7 @@ interface ResultCreator {
     /**
      * @return list of results & hasMore flag - if true, more results can be returned from this document
      */
-    fun multipleResults(document: IndexedDocument, matchInfo: List<EqlMatch>, formatInfo: GeneralFormatInfo, resultOffset: Int): Pair<List<IndexServer.SearchResult>, Boolean>
+    fun multipleResults(document: IndexedDocument, matchInfo: MatchInfo, formatInfo: GeneralFormatInfo, resultOffset: Int, resultFormat: cz.vutbr.fit.knot.enticing.dto.ResultFormat): Pair<List<ResultFormat>, Boolean>
 
-    fun singleResult(document: IndexedDocument, matchInfo: List<EqlMatch>, formatInfo: GeneralFormatInfo, interval: Interval? = null): ResultFormat.Snippet
+    fun singleResult(document: IndexedDocument, matchInfo: MatchInfo, formatInfo: GeneralFormatInfo, interval: Interval? = null): ResultFormat.Snippet
 }

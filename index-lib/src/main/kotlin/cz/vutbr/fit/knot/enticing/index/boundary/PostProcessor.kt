@@ -3,9 +3,22 @@ package cz.vutbr.fit.knot.enticing.index.boundary
 import cz.vutbr.fit.knot.enticing.dto.AstNode
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 
+/**
+ * Represents how the document was matched by the query according to the PostProcessor
+ */
+data class MatchInfo(
+        /**
+         * Intervals that were matched by the root of the AST
+         */
+        val rootIntervals: List<List<Interval>>,
+        /**
+         * Intervals that should be highlighted, that is leaves and identifiers
+         */
+        val leafIntervals: List<EqlMatch>
+)
 
 /**
- * Represents how the document was matched by the query
+ * One single match on the query
  */
 sealed class EqlMatch {
     /**
@@ -52,7 +65,7 @@ interface PostProcessor {
      * @return true if postprocessing was successful, false otherwise
      * when the method finishes, the ast is decorated with detailed match information
      */
-    fun process(ast: AstNode, document: IndexedDocument, enclosingInterval: Interval? = null): List<EqlMatch>?
+    fun process(ast: AstNode, document: IndexedDocument, enclosingInterval: Interval? = null): MatchInfo?
 
     /**
      * @param ast of the search query
@@ -61,5 +74,5 @@ interface PostProcessor {
      * @return true if postprocessing was successful, false otherwise
      * when the method finishes, the ast is decorated with detailed match information
      */
-    fun process(ast: AstNode, document: IndexedDocument, matchedIntervals: List<List<Interval>>): List<EqlMatch>?
+    fun process(ast: AstNode, document: IndexedDocument, matchedIntervals: List<List<Interval>>): MatchInfo?
 }

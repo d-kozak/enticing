@@ -37,8 +37,8 @@ class CollectionManager internal constructor(
         val matched = mutableListOf<IndexServer.SearchResult>()
         for ((i, result) in resultList.withIndex()) {
             val document = searchEngine.loadDocument(result.documentId)
-            val matchList = postProcessor.process(query.eqlAst, document, result.intervals) ?: continue
-            val (results, hasMore) = resultCreator.multipleResults(document, matchList, query, if (document.id == documentOffset) resultOffset else 0)
+            val matchInfo = postProcessor.process(query.eqlAst, document, result.intervals) ?: continue
+            val (results, hasMore) = resultCreator.multipleResults(document, matchInfo, query, if (document.id == documentOffset) resultOffset else 0, query.resultFormat)
 
             if (matched.size + results.size >= query.snippetCount) {
                 val nextOffset = when {
@@ -46,7 +46,14 @@ class CollectionManager internal constructor(
                     i != resultList.size - 1 -> Offset(resultList[i + 1].documentId, 0)
                     else -> Offset(processed + 1, 0)
                 }
-                matched.addAll(results.subList(0, min(query.snippetCount - matched.size, results.size)))
+                val results = results.subList(0, min(query.snippetCount - matched.size, results.size)).map {
+                    IndexServer.SearchResult(
+                            collectionName,
+                            document.id,
+
+                            )
+                }
+                matched.addAll(results)
                 return IndexServer.CollectionResultList(matched, nextOffset)
             }
         }

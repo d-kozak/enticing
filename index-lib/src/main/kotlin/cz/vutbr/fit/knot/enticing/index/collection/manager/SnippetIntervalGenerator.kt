@@ -7,6 +7,14 @@ import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 @Cleanup("put into configuration?")
 const val SNIPPET_SIZE = 50
 
+/**
+ * The algorithm works in the following way:
+ *
+ * 1) generate all regions that match the query
+ * 2) sort them based on their length
+ * 3) filter out longer ones that contain the shorter as subintervals
+ * 4) filters out those longer than X units
+ */
 internal fun generateSnippetIntervals(result: List<List<Interval>>, documentSize: Int): List<Pair<Interval, List<Interval>>> {
     val allCombinations = computeAllIntervalCombinations(result)
     val sorted = allCombinations
@@ -23,14 +31,7 @@ internal fun generateSnippetIntervals(result: List<List<Interval>>, documentSize
     return sorted
 }
 
-/**
- * The algorithm works in the following way:
- *
- * 1) generate all regions that match the query
- * 2) sort them based on their length
- * 3) filter out longer ones that contain the shorter as subintervals
- * 4) filters out those longer than X units
- */
+
 internal fun computeAllIntervalCombinations(result: List<List<Interval>>): List<Pair<Interval, List<Interval>>> {
     require(result.isNotEmpty()) { "Cannot compute snippets for empty result" }
 

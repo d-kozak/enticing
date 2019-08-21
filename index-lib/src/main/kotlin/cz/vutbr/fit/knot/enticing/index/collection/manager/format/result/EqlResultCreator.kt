@@ -1,7 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager.format.result
 
 import cz.vutbr.fit.knot.enticing.dto.GeneralFormatInfo
-import cz.vutbr.fit.knot.enticing.dto.IndexServer
 import cz.vutbr.fit.knot.enticing.dto.TextFormat
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
@@ -10,19 +9,20 @@ import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.index.boundary.EqlMatch
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
+import cz.vutbr.fit.knot.enticing.index.boundary.MatchInfo
 import cz.vutbr.fit.knot.enticing.index.boundary.ResultCreator
 import cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.next.*
 
 @Incomplete("not finished yet")
 class EqlResultCreator(private val corpusConfiguration: CorpusConfiguration) : ResultCreator {
-    override fun multipleResults(document: IndexedDocument, matchInfo: List<EqlMatch>, formatInfo: GeneralFormatInfo, resultOffset: Int): Pair<List<IndexServer.SearchResult>, Boolean> {
+    override fun multipleResults(document: IndexedDocument, matchInfo: MatchInfo, formatInfo: GeneralFormatInfo, resultOffset: Int, resultFormat: cz.vutbr.fit.knot.enticing.dto.ResultFormat): Pair<List<ResultFormat>, Boolean> {
         val filteredConfig = corpusConfiguration.filterBy(formatInfo.metadata, formatInfo.defaultIndex)
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun singleResult(document: IndexedDocument, matchInfo: List<EqlMatch>, formatInfo: GeneralFormatInfo, interval: Interval?): ResultFormat.Snippet {
+    override fun singleResult(document: IndexedDocument, matchInfo: MatchInfo, formatInfo: GeneralFormatInfo, interval: Interval?): ResultFormat.Snippet {
         val filteredConfig = corpusConfiguration.filterBy(formatInfo.metadata, formatInfo.defaultIndex)
-        val (matchStart, matchEnd) = matchInfo.split()
+        val (matchStart, matchEnd) = matchInfo.leafIntervals.split()
 
         val visitor = when (formatInfo.textFormat) {
             TextFormat.PLAIN_TEXT -> return generatePlainText(document, filteredConfig, formatInfo.defaultIndex, interval)
