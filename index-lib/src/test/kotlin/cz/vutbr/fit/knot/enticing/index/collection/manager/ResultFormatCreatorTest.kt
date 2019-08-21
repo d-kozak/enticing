@@ -26,7 +26,7 @@ internal class ResultFormatCreatorTest {
             "foo bar baz",
             20,
             mapOf("one" to Offset(0, 0)),
-            TextMetadata.Predefined("none"),
+            TextMetadata.Predefined("all"),
             cz.vutbr.fit.knot.enticing.dto.ResultFormat.SNIPPET,
             TextFormat.STRING_WITH_METADATA
     )
@@ -37,7 +37,7 @@ internal class ResultFormatCreatorTest {
         }
     }
 
-    private val noMetadataDocument = testDocument("one two three")
+    private val noMetadataDocument = testDocument(3, "one two three")
 
     private val noMetadata = StructuredDocumentContent(listOf(
             DocumentElement.Word(0, listOf("one")),
@@ -71,7 +71,7 @@ internal class ResultFormatCreatorTest {
             }
     )
 
-    private val simpleStructureDocument = testDocument("one two three", "1 2 3", "google.com", "yahoo.com", "localhost")
+    private val simpleStructureDocument = testDocument(3, "one two three", "1 2 3", "google.com yahoo.com localhost")
 
     private val withEntitiesConfig = corpusConfig("simple") {
         indexes {
@@ -80,17 +80,19 @@ internal class ResultFormatCreatorTest {
             index("url")
             index("nertag")
             index("param")
+            index("len")
         }
         entities {
             "person" with attributes("name")
         }
         entityMapping {
             entityIndex = "nertag"
+            lengthIndex = "len"
             attributeIndexes = 4 to 4
         }
     }.also { it.validate() }
 
-    private val withEntitiesDocument = testDocument("one two three harry potter", "1 2 3 3 3", "google.com yahoo.com localhost localhost localhost", "0 0 0 person 0", "0 0 0 harry 0")
+    private val withEntitiesDocument = testDocument(5, "one two three harry potter", "1 2 3 3 3", "google.com yahoo.com localhost localhost localhost", "0 0 0 person 0", "0 0 0 harry 0", "0 0 0 2 0")
 
     private val withEntities = StructuredDocumentContent(listOf(
             DocumentElement.Word(0, listOf("one", "1", "google.com", "0", "0")),
@@ -130,13 +132,13 @@ internal class ResultFormatCreatorTest {
 
             var payload = resultCreator.singleResult(noMetadataDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(0, 2)), emptyList()))), htmlQuery)
             assertThat(payload)
-                    .isEqualTo(ResultFormat.Snippet.Html("<b>one two three</b>", 0, 3, false))
+                    .isEqualTo(ResultFormat.Snippet.Html("<b><span eql-word>one</span><span eql-word>two</span><span eql-word>three</span></b>", 0, 3, false))
             payload = resultCreator.singleResult(noMetadataDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(1, 2)), emptyList()))), htmlQuery)
             assertThat(payload)
-                    .isEqualTo(ResultFormat.Snippet.Html("one <b>two three</b>", 0, 3, false))
-            payload = resultCreator.singleResult(noMetadataDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(1, 2)), emptyList()))), htmlQuery)
+                    .isEqualTo(ResultFormat.Snippet.Html("<span eql-word>one</span><b><span eql-word>two</span><span eql-word>three</span></b>", 0, 3, false))
+            payload = resultCreator.singleResult(noMetadataDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(2)), emptyList()))), htmlQuery)
             assertThat(payload)
-                    .isEqualTo(ResultFormat.Snippet.Html("one <b>two</b> three", 0, 3, false))
+                    .isEqualTo(ResultFormat.Snippet.Html("<span eql-word>one</span><span eql-word>two</span><b><span eql-word>three</span></b>", 0, 3, false))
         }
 
         @Test
@@ -145,7 +147,7 @@ internal class ResultFormatCreatorTest {
 
             val payload = resultCreator.singleResult(simpleStructureDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(1, 2)), emptyList()))), htmlQuery)
             assertThat(payload)
-                    .isEqualTo(ResultFormat.Snippet.Html("""<span eql-word eql-lemma="1" eql-url="google.com">one</span> <b><span eql-word eql-lemma="2" eql-url="yahoo.com">two</span> <span eql-word eql-lemma="3" eql-url="localhost">three</span></b>""", 0, 3, false))
+                    .isEqualTo(ResultFormat.Snippet.Html("""<span eql-word eql-lemma="1" eql-url="google.com">one</span><b><span eql-word eql-lemma="2" eql-url="yahoo.com">two</span><span eql-word eql-lemma="3" eql-url="localhost">three</span></b>""", 0, 3, false))
         }
 
         @Test
@@ -154,7 +156,7 @@ internal class ResultFormatCreatorTest {
 
             val payload = resultCreator.singleResult(withEntitiesDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(1, 2)), emptyList()))), htmlQuery)
             assertThat(payload)
-                    .isEqualTo(ResultFormat.Snippet.Html("""<span eql-word eql-lemma="1" eql-url="google.com" eql-nertag="0" eql-param="0">one</span> <b><span eql-word eql-lemma="2" eql-url="yahoo.com" eql-nertag="0" eql-param="0">two</span> <span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="0" eql-param="0">three</span></b> <span eql-entity eql-name="harry"><span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="person" eql-param="harry">harry</span><span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="0" eql-param="0">potter</span></span>""", 0, 3, false))
+                    .isEqualTo(ResultFormat.Snippet.Html("""<span eql-word eql-lemma="1" eql-url="google.com" eql-nertag="0" eql-param="0" eql-len="0">one</span><b><span eql-word eql-lemma="2" eql-url="yahoo.com" eql-nertag="0" eql-param="0" eql-len="0">two</span><span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="0" eql-param="0" eql-len="0">three</span></b><span eql-entity eql-name="harry"><span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="person" eql-param="harry" eql-len="2">harry</span><span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="0" eql-param="0" eql-len="0">potter</span></span>""", 0, 5, false))
         }
     }
 
@@ -173,23 +175,23 @@ internal class ResultFormatCreatorTest {
                             "one two three",
                             emptyMap(),
                             emptyList(),
-                            listOf(QueryMapping(0 to 13, 0 to 1))
+                            listOf(QueryMapping(0 to 12, 1 to 1))
                     ), 0, 3, false))
-            payload = resultCreator.singleResult(noMetadataDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(1, 2)), emptyList()))), jsonQuery)
+            payload = resultCreator.singleResult(noMetadataDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1, 2), listOf(Interval.valueOf(1, 2)), emptyList()))), jsonQuery)
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.StringWithMetadata(StringWithMetadata(
                             "one two three",
                             emptyMap(),
                             emptyList(),
-                            listOf(QueryMapping(4 to 13, 0 to 1))
+                            listOf(QueryMapping(4 to 12, 1 to 2))
                     ), 0, 3, false))
-            payload = resultCreator.singleResult(noMetadataDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(1)), emptyList()))), jsonQuery)
+            payload = resultCreator.singleResult(noMetadataDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(2), listOf(Interval.valueOf(1)), emptyList()))), jsonQuery)
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.StringWithMetadata(StringWithMetadata(
                             "one two three",
                             emptyMap(),
                             emptyList(),
-                            listOf(QueryMapping(4 to 7, 0 to 1))
+                            listOf(QueryMapping(4 to 6, 2 to 2))
                     ), 0, 3, false))
         }
 

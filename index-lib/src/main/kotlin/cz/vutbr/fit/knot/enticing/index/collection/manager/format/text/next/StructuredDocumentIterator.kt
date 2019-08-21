@@ -69,26 +69,28 @@ class StructuredDocumentIterator(private val corpusConfiguration: CorpusConfigur
                     listener.visitEntityStart(startedEntity!!.first, startedEntity!!.second)
             }
 
-            val entityClass = word[corpusConfiguration.entityIndex]
-            if (entityClass != "0") {
-                if (startedEntity != null) {
-                    log.warn("new entity started before previous one ($startedEntity) finished, old will be finished now")
-                    listener.visitEntityEnd()
-                }
+            if (corpusConfiguration.entities.isNotEmpty()) {
+                val entityClass = word[corpusConfiguration.entityIndex]
+                if (entityClass != "0") {
+                    if (startedEntity != null) {
+                        log.warn("new entity started before previous one ($startedEntity) finished, old will be finished now")
+                        listener.visitEntityEnd()
+                    }
 
-                val attributeInfo = corpusConfiguration.entities[entityClass]
-                startedEntity = if (attributeInfo != null) {
-                    val attributes = attributeInfo.attributes.values.map { it.columnIndex }.map { word[it] }
-                    val len = word[corpusConfiguration.entityLengthIndex].toIntOrNull() ?: {
-                        log.warn("could not parse entity length index ${word[corpusConfiguration.entityLengthIndex]}")
-                        1
-                    }()
-                    listener.visitEntityStart(attributes, entityClass)
-                    Triple(attributes, entityClass, i + len - 1)
-                } else {
-                    log.warn("encountered entity $entityClass for which there is no known format, attributes will be empty")
-                    listener.visitEntityStart(emptyList(), entityClass)
-                    Triple(emptyList(), entityClass, i)
+                    val attributeInfo = corpusConfiguration.entities[entityClass]
+                    startedEntity = if (attributeInfo != null) {
+                        val attributes = attributeInfo.attributes.values.map { it.columnIndex }.map { word[it] }
+                        val len = word[corpusConfiguration.entityLengthIndex].toIntOrNull() ?: {
+                            log.warn("could not parse entity length index ${word[corpusConfiguration.entityLengthIndex]}")
+                            1
+                        }()
+                        listener.visitEntityStart(attributes, entityClass)
+                        Triple(attributes, entityClass, i + len - 1)
+                    } else {
+                        log.warn("encountered entity $entityClass for which there is no known format, attributes will be empty")
+                        listener.visitEntityStart(emptyList(), entityClass)
+                        Triple(emptyList(), entityClass, i)
+                    }
                 }
             }
 

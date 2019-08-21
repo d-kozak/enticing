@@ -19,7 +19,7 @@ data class CorpusConfiguration(
 
     var entityLengthIndex: Int = -1
         get() {
-            if (field == -1) throw IllegalStateException("entity index was not initialized")
+            if (field == -1) throw IllegalStateException("entity length index was not initialized")
             return field
         }
 

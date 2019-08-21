@@ -22,13 +22,13 @@ class StringWithAnnotationsGeneratingVisitor(config: CorpusConfiguration, defaul
     private var queryInterval: Interval? = null
 
     override fun visitMatchStart(queryInterval: Interval) {
-        this.startPosition = builder.length
+        this.startPosition = if (builder.isNotEmpty()) builder.length + 1 else builder.length
         this.queryInterval = queryInterval
     }
 
     override fun visitMatchEnd() {
         if (startPosition != -1 && queryInterval != null) {
-            queryMapping.add(QueryMapping(startPosition to builder.length, queryInterval!!.from to queryInterval!!.to))
+            queryMapping.add(QueryMapping(startPosition to builder.length - 1, queryInterval!!.from to queryInterval!!.to))
             startPosition = -1
             queryInterval = null
         } else {
@@ -63,12 +63,12 @@ class StringWithAnnotationsGeneratingVisitor(config: CorpusConfiguration, defaul
     }
 
     override fun visitWord(indexes: List<String>) {
+        if (builder.isNotEmpty()) builder.append(' ')
         val word = indexes[defaultIndex.columnIndex]
         val annotationContent = metaIndexes.map { it.name to indexes[it.columnIndex] }.toMap()
         if (annotationContent.isNotEmpty())
             addAnnotation("w-${annotations.size}", annotationContent, builder.length, word.length)
         builder.append(word)
-                .append(' ')
     }
 
 
@@ -78,4 +78,5 @@ class StringWithAnnotationsGeneratingVisitor(config: CorpusConfiguration, defaul
     }
 
     override fun build(): ResultFormat.Snippet = ResultFormat.Snippet.StringWithMetadata(StringWithMetadata(builder.toString(), annotations, positions, queryMapping), location, size, canExtend)
+
 }

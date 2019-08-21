@@ -90,7 +90,7 @@ data class QueryMapping(
         @field:Valid
         val queryIndex: MatchedRegion
 ) {
-    constructor(textIndex: Pair<Int, Int>, queryIndex: Pair<Int, Int>) : this(MatchedRegion(textIndex.first, textIndex.second - textIndex.first), MatchedRegion(queryIndex.first, queryIndex.second - queryIndex.first))
+    constructor(textIndex: Pair<Int, Int>, queryIndex: Pair<Int, Int>) : this(MatchedRegion(textIndex.first, textIndex.second - textIndex.first + 1), MatchedRegion(queryIndex.first, queryIndex.second - queryIndex.first + 1))
 }
 
 /**

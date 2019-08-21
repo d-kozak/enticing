@@ -56,7 +56,7 @@ internal class StructuredDocumentIteratorTest {
     @Test
     fun `entity is split by match from entity starts first`() {
         val iterator = StructuredDocumentIterator(withEntities)
-        val document = testDocument(
+        val document = testDocument(8,
                 "Country roads , take Jan Novak home foo",
                 "1 2 3 4 5 6 7 8",
                 "0 0 0 0 person 0 0 0",
@@ -90,7 +90,7 @@ internal class StructuredDocumentIteratorTest {
     @Test
     fun `entity is split because it continues after the matched region`() {
         val iterator = StructuredDocumentIterator(withEntities)
-        val document = testDocument(
+        val document = testDocument(4,
                 "Jan Novak home foo",
                 "1 2 3 4",
                 "person 0 0 0",

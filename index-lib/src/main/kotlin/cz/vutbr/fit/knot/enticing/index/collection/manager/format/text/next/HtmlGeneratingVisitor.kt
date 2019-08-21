@@ -19,23 +19,17 @@ class HtmlGeneratingVisitor(config: CorpusConfiguration, defaultIndexName: Strin
 
     override fun visitWord(indexes: List<String>) {
         with(builder) {
-            if (config.indexes.size > 1) {
-                append("<span eql-word")
-                for (index in metaIndexes) {
-                    append(" eql-")
-                    append(index.name)
-                    append("=\"")
-                    append(indexes[index.columnIndex])
-                    append("\"")
-                }
-                append(">")
-                append(indexes[defaultIndex.columnIndex])
-                append("</span>")
-            } else {
-                append("<span>")
-                append(indexes[config.indexes.values.first().columnIndex])
-                append("</span>")
+            append("<span eql-word")
+            for (index in metaIndexes) {
+                append(" eql-")
+                append(index.name)
+                append("=\"")
+                append(indexes[index.columnIndex])
+                append("\"")
             }
+            append(">")
+            append(indexes[defaultIndex.columnIndex])
+            append("</span>")
         }
     }
 

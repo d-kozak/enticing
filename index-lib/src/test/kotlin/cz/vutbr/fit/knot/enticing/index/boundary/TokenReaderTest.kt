@@ -10,7 +10,7 @@ internal class IndexDocumentIteratorText {
 
     @Test
     fun `simple iteration`() {
-        val dummyDocument = testDocument("one two three four five", "1 2 3 4 5")
+        val dummyDocument = testDocument(5, "one two three four five", "1 2 3 4 5")
         assertThat(dummyDocument.toList())
                 .isEqualTo(listOf(
                         listOf("one", "1"),
