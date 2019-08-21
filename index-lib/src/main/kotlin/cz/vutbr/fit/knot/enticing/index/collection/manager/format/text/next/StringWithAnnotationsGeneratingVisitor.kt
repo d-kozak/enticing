@@ -14,22 +14,22 @@ class StringWithAnnotationsGeneratingVisitor(config: CorpusConfiguration, defaul
 
     private val builder = StringBuilder()
     private val annotations = mutableMapOf<String, Annotation>()
-    private val positions = mutableListOf<AnnotationPosition>()
-    private val queryMapping = mutableListOf<QueryMapping>()
+    private val positions = mutableSetOf<AnnotationPosition>()
+    private val queryMapping = mutableSetOf<QueryMapping>()
 
 
-    private var startPosition = -1
+    private var matchStartPosition = -1
     private var queryInterval: Interval? = null
 
     override fun visitMatchStart(queryInterval: Interval) {
-        this.startPosition = if (builder.isNotEmpty()) builder.length + 1 else builder.length
+        this.matchStartPosition = if (builder.isNotEmpty()) builder.length + 1 else builder.length
         this.queryInterval = queryInterval
     }
 
     override fun visitMatchEnd() {
-        if (startPosition != -1 && queryInterval != null) {
-            queryMapping.add(QueryMapping(startPosition to builder.length - 1, queryInterval!!.from to queryInterval!!.to))
-            startPosition = -1
+        if (matchStartPosition != -1 && queryInterval != null) {
+            queryMapping.add(QueryMapping(matchStartPosition to builder.length - 1, queryInterval!!.from to queryInterval!!.to))
+            matchStartPosition = -1
             queryInterval = null
         } else {
             log.error("matchEnd executed, but there was no start position")
@@ -39,24 +39,29 @@ class StringWithAnnotationsGeneratingVisitor(config: CorpusConfiguration, defaul
 
     private var attributes: List<String>? = null
     private var entityClass: String? = null
+    private var entityStartPosition = -1
 
     override fun visitEntityStart(attributes: List<String>, entityClass: String) {
+        this.entityStartPosition = if (builder.isNotEmpty()) builder.length + 1 else builder.length
         this.attributes = attributes
         this.entityClass = entityClass
     }
 
     override fun visitEntityEnd() {
-        if (attributes != null && entityClass != null) {
+        if (attributes != null && entityClass != null && entityStartPosition != -1) {
             val entityDescription = config.entities[entityClass!!]
             if (entityDescription != null) {
                 val annotationContent = entityDescription.attributes.values.asSequence()
                         .mapIndexed { i, attribute -> attribute.name to attributes!![i] }
                         .toMap()
                         .toMutableMap()
-                val currentPosition = builder.length
-                addAnnotation("e-${annotations.size}", annotationContent, currentPosition, builder.length - currentPosition)
+                if (config.entityMapping.entityIndex !in annotationContent) {
+                    annotationContent[config.entityMapping.entityIndex] = entityClass!!
+                }
+                addAnnotation("e-${annotations.size}", annotationContent, entityStartPosition, builder.length - entityStartPosition)
             }
 
+            entityStartPosition = -1
             entityClass = null
             attributes = null
         }

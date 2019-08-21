@@ -25,13 +25,13 @@ data class StringWithMetadata(
          * Positions of all annotations
          */
         @field:Valid
-        val positions: List<AnnotationPosition>,
+        val positions: Set<AnnotationPosition>,
 
         /**
          * Information how the query was matched by the text
          */
         @field:Valid
-        val queryMapping: List<QueryMapping>
+        val queryMapping: Set<QueryMapping>
 )
 
 

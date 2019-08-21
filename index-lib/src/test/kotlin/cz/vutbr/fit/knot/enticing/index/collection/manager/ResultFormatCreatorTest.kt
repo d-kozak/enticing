@@ -174,24 +174,24 @@ internal class ResultFormatCreatorTest {
                     .isEqualTo(ResultFormat.Snippet.StringWithMetadata(StringWithMetadata(
                             "one two three",
                             emptyMap(),
-                            emptyList(),
-                            listOf(QueryMapping(0 to 12, 1 to 1))
+                            emptySet(),
+                            setOf(QueryMapping(0 to 12, 1 to 1))
                     ), 0, 3, false))
             payload = resultCreator.singleResult(noMetadataDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1, 2), listOf(Interval.valueOf(1, 2)), emptyList()))), jsonQuery)
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.StringWithMetadata(StringWithMetadata(
                             "one two three",
                             emptyMap(),
-                            emptyList(),
-                            listOf(QueryMapping(4 to 12, 1 to 2))
+                            emptySet(),
+                            setOf(QueryMapping(4 to 12, 1 to 2))
                     ), 0, 3, false))
             payload = resultCreator.singleResult(noMetadataDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(2), listOf(Interval.valueOf(1)), emptyList()))), jsonQuery)
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.StringWithMetadata(StringWithMetadata(
                             "one two three",
                             emptyMap(),
-                            emptyList(),
-                            listOf(QueryMapping(4 to 6, 2 to 2))
+                            emptySet(),
+                            setOf(QueryMapping(4 to 6, 2 to 2))
                     ), 0, 3, false))
         }
 
@@ -207,8 +207,8 @@ internal class ResultFormatCreatorTest {
                                     "w-1" to Annotation("w-1", mapOf("lemma" to "2", "url" to "yahoo.com")),
                                     "w-2" to Annotation("w-2", mapOf("lemma" to "3", "url" to "localhost"))
                             ),
-                            listOf(AnnotationPosition("w-0", 0 to 3), AnnotationPosition("w-1", 4 to 7), AnnotationPosition("w-2", 8 to 13)),
-                            listOf(QueryMapping(4 to 13, 0 to 1))
+                            setOf(AnnotationPosition("w-0", 0 to 3), AnnotationPosition("w-1", 4 to 7), AnnotationPosition("w-2", 8 to 13)),
+                            setOf(QueryMapping(4 to 12, 1 to 1))
                     ), 0, 3, false))
         }
 
@@ -220,17 +220,17 @@ internal class ResultFormatCreatorTest {
                     .isEqualTo(ResultFormat.Snippet.StringWithMetadata(StringWithMetadata(
                             "one two three harry potter",
                             mapOf(
-                                    "w-0" to Annotation("w-0", mapOf("lemma" to "1", "url" to "google.com", "nertag" to "0", "param" to "0")),
-                                    "w-1" to Annotation("w-1", mapOf("lemma" to "2", "url" to "yahoo.com", "nertag" to "0", "param" to "0")),
-                                    "w-2" to Annotation("w-2", mapOf("lemma" to "3", "url" to "localhost", "nertag" to "0", "param" to "0")),
-                                    "w-3" to Annotation("w-3", mapOf("lemma" to "3", "url" to "localhost", "nertag" to "person", "param" to "harry")),
-                                    "w-4" to Annotation("w-4", mapOf("lemma" to "3", "url" to "localhost", "nertag" to "0", "param" to "0")),
-                                    "e-5" to Annotation("e-5", mapOf("nertag" to "person", "name" to "harry"))
+                                    "w-0" to Annotation("w-0", mapOf("lemma" to "1", "url" to "google.com", "nertag" to "0", "param" to "0", "len" to "0")),
+                                    "w-1" to Annotation("w-1", mapOf("lemma" to "2", "url" to "yahoo.com", "nertag" to "0", "param" to "0", "len" to "0")),
+                                    "w-2" to Annotation("w-2", mapOf("lemma" to "3", "url" to "localhost", "nertag" to "0", "param" to "0", "len" to "0")),
+                                    "w-3" to Annotation("w-3", mapOf("lemma" to "3", "url" to "localhost", "nertag" to "person", "param" to "harry", "len" to "2")),
+                                    "w-4" to Annotation("w-4", mapOf("lemma" to "3", "url" to "localhost", "nertag" to "0", "param" to "0", "len" to "0")),
+                                    "e-5" to Annotation("e-5", mapOf("name" to "harry", "nertag" to "person"))
                             ),
-                            listOf(AnnotationPosition("w-0", 0 to 3), AnnotationPosition("w-1", 4 to 7), AnnotationPosition("w-2", 8 to 13),
-                                    AnnotationPosition("e-5", 14 to 26, listOf(AnnotationPosition("w-3", 14 to 19), AnnotationPosition("w-4", 20 to 26)))),
-                            listOf(QueryMapping(4 to 13, 0 to 1))
-                    ), 0, 3, false))
+                            setOf(AnnotationPosition("w-0", 0 to 3), AnnotationPosition("w-1", 4 to 7), AnnotationPosition("w-2", 8 to 13),
+                                    AnnotationPosition("w-3", 14 to 19), AnnotationPosition("w-4", 20 to 26), AnnotationPosition("e-5", 14 to 26)),
+                            setOf(QueryMapping(4 to 12, 1 to 1))
+                    ), 0, 5, false))
         }
 
     }
