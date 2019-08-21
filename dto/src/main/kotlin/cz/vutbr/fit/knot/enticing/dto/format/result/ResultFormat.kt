@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
+import javax.validation.constraints.Positive
 
 
 /**
@@ -39,24 +40,29 @@ sealed class ResultFormat {
             JsonSubTypes.Type(Snippet.TextUnitList::class, name = "new")
     )
     sealed class Snippet : ResultFormat() {
+        abstract val location: Int
+        abstract val size: Int
+        abstract val canExtend: Boolean
+
         /**
          * Just the text from the default index
          */
-        data class PlainText(val content: String) : Snippet()
+        data class PlainText(val content: String, @field:Positive override val location: Int, @field:Positive override val size: Int, override val canExtend: Boolean) : Snippet()
+
         /**
          * Simple html format
          */
-        data class Html(val content: String) : Snippet()
+        data class Html(val content: String, @field:Positive override val location: Int, @field:Positive override val size: Int, override val canExtend: Boolean) : Snippet()
 
         /**
          * Text with annotations
          */
-        data class StringWithMetadata(@field:Valid val content: cz.vutbr.fit.knot.enticing.dto.format.text.StringWithMetadata) : Snippet()
+        data class StringWithMetadata(@field:Valid val content: cz.vutbr.fit.knot.enticing.dto.format.text.StringWithMetadata, @field:Positive override val location: Int, @field:Positive override val size: Int, override val canExtend: Boolean) : Snippet()
 
         /**
          * New annotated format
          */
-        data class TextUnitList(@field:Valid val content: cz.vutbr.fit.knot.enticing.dto.format.text.TextUnitList) : Snippet()
+        data class TextUnitList(@field:Valid val content: cz.vutbr.fit.knot.enticing.dto.format.text.TextUnitList, @field:Positive override val location: Int, @field:Positive override val size: Int, override val canExtend: Boolean) : Snippet()
     }
 }
 

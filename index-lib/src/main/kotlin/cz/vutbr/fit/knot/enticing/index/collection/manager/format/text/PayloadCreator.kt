@@ -15,7 +15,7 @@ internal fun createPayload(query: GeneralFormatInfo, content: StructuredDocument
     val visitor = when (query.textFormat) {
         TextFormat.HTML -> HtmlPayloadBuilderVisitor(content.corpusConfiguration, query, intervals)
         TextFormat.STRING_WITH_METADATA -> JsonPayloadBuilderVisitor(content.corpusConfiguration, query, intervals)
-        else -> return ResultFormat.Snippet.TextUnitList(createNewAnnotatedText(content, intervals, corpusConfiguration))
+        else -> return ResultFormat.Snippet.TextUnitList(createNewAnnotatedText(content, intervals, corpusConfiguration), 0, 0, false)
     }
 
     for (elem in content) {

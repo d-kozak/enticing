@@ -74,5 +74,5 @@ class HtmlPayloadBuilderVisitor(
         builder.append(' ')
     }
 
-    override fun getResult(): ResultFormat = ResultFormat.Snippet.Html(builder.toString())
+    override fun getResult(): ResultFormat = ResultFormat.Snippet.Html(builder.toString(), 0, 0, false)
 }

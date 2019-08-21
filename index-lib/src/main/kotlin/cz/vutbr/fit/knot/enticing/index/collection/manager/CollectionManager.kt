@@ -7,7 +7,7 @@ import cz.vutbr.fit.knot.enticing.dto.SnippetExtension
 import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.EqlCompiler
-import cz.vutbr.fit.knot.enticing.index.boundary.EqlMatch
+import cz.vutbr.fit.knot.enticing.index.boundary.MatchInfo
 import cz.vutbr.fit.knot.enticing.index.boundary.PostProcessor
 import cz.vutbr.fit.knot.enticing.index.boundary.ResultCreator
 import cz.vutbr.fit.knot.enticing.index.boundary.SearchEngine
@@ -46,14 +46,15 @@ class CollectionManager internal constructor(
                     i != resultList.size - 1 -> Offset(resultList[i + 1].documentId, 0)
                     else -> Offset(processed + 1, 0)
                 }
-                val results = results.subList(0, min(query.snippetCount - matched.size, results.size)).map {
+                val searchResults = results.subList(0, min(query.snippetCount - matched.size, results.size)).map {
                     IndexServer.SearchResult(
                             collectionName,
                             document.id,
-
-                            )
+                            document.uri,
+                            document.title,
+                            it)
                 }
-                matched.addAll(results)
+                matched.addAll(searchResults)
                 return IndexServer.CollectionResultList(matched, nextOffset)
             }
         }
@@ -65,10 +66,10 @@ class CollectionManager internal constructor(
         val (prefix, suffix) = computeExtensionIntervals(left = query.location, right = query.location + query.size, extension = query.extension, documentSize = document.size)
         val (prefixInfo, suffixInfo) = if (query.query != null) {
             val ast = eqlCompiler.parseOrFail(query.query!!)
-            val prefixMatch = postProcessor.process(ast, document, prefix) ?: emptyList()
-            val suffixMatch = postProcessor.process(ast, document, suffix) ?: emptyList()
+            val prefixMatch = postProcessor.process(ast, document, prefix) ?: MatchInfo.empty()
+            val suffixMatch = postProcessor.process(ast, document, suffix) ?: MatchInfo.empty()
             prefixMatch to suffixMatch
-        } else emptyList<EqlMatch>() to emptyList()
+        } else MatchInfo.empty() to MatchInfo.empty()
 
         return SnippetExtension(
                 prefix = resultCreator.singleResult(document, prefixInfo, query, prefix),
@@ -81,8 +82,8 @@ class CollectionManager internal constructor(
         val document = searchEngine.loadDocument(query.documentId)
         val matchInfo = if (query.query != null) {
             val ast = eqlCompiler.parseOrFail(query.query!!)
-            postProcessor.process(ast, document) ?: emptyList()
-        } else emptyList()
+            postProcessor.process(ast, document) ?: MatchInfo.empty()
+        } else MatchInfo.empty()
 
         val payload = resultCreator.singleResult(document, matchInfo, query)
         return IndexServer.FullDocument(

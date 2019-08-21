@@ -20,12 +20,9 @@ internal val googleFirstResult = IndexServer.IndexResultList(
         listOf(IndexServer.SearchResult(
                 "col",
                 10,
-                10,
-                5,
                 "google.com",
                 "title",
-                ResultFormat.Snippet.Html("texty text"),
-                false
+                ResultFormat.Snippet.Html("texty text", 10, 5, false)
         )),
         mapOf("one" to Offset(42, 84))
 )

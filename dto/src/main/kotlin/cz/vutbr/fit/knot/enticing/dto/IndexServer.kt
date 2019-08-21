@@ -184,18 +184,6 @@ object IndexServer {
             val documentId: Int,
 
             /**
-             * At which index in the document the snippet starts
-             */
-            @field:Positive
-            val location: Int,
-
-            /**
-             * The size of the snippet
-             */
-            @field:Positive
-            val size: Int,
-
-            /**
              * Url of the original document
              */
             @field:NotEmpty
@@ -212,15 +200,10 @@ object IndexServer {
              * The actual snippet
              */
             @field:Valid
-            val payload: ResultFormat,
-
-            /**
-             * Is it possible to further extend the snippet?
-             */
-            val canExtend: Boolean
+            val payload: ResultFormat
     ) {
 
-        fun withHost(host: String): WebServer.SearchResult = WebServer.SearchResult(host, collection, documentId, location, size, url, documentTitle, payload, canExtend)
+        fun withHost(host: String): WebServer.SearchResult = WebServer.SearchResult(host, collection, documentId, url, documentTitle, payload)
     }
 
 }

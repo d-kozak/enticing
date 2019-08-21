@@ -1,7 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.boundary
 
 import cz.vutbr.fit.knot.enticing.dto.GeneralFormatInfo
-import cz.vutbr.fit.knot.enticing.dto.IndexServer
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 
@@ -14,5 +13,5 @@ interface ResultCreator {
      */
     fun multipleResults(document: IndexedDocument, matchInfo: MatchInfo, formatInfo: GeneralFormatInfo, resultOffset: Int, resultFormat: cz.vutbr.fit.knot.enticing.dto.ResultFormat): Pair<List<ResultFormat>, Boolean>
 
-    fun singleResult(document: IndexedDocument, matchInfo: MatchInfo, formatInfo: GeneralFormatInfo, interval: Interval? = null): ResultFormat.Snippet
+    fun singleResult(document: IndexedDocument, matchInfo: MatchInfo, formatInfo: GeneralFormatInfo, interval: Interval = Interval.valueOf(0, document.size - 1)): ResultFormat.Snippet
 }

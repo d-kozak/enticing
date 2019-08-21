@@ -10,11 +10,12 @@ fun generatePlainText(document: IndexedDocument, filteredConfig: CorpusConfigura
     val defaultColumnIndex = filteredConfig.indexes[defaultIndex]?.columnIndex
             ?: throw IllegalArgumentException("Default index $defaultIndex not found")
     val defaultContent = document.content[defaultColumnIndex]
-    val text = if (interval == null) defaultContent
-    else {
+    return if (interval == null) {
+        ResultFormat.Snippet.PlainText(defaultContent, 0, document.size, false)
+    } else {
         val (from, to) = interval
         val reader = TokenReader(defaultContent, ' ')
-        buildString {
+        val text = buildString {
             for ((i, word) in reader.withIndex()) {
                 if (i < from) continue
                 if (i > to) break
@@ -25,7 +26,7 @@ fun generatePlainText(document: IndexedDocument, filteredConfig: CorpusConfigura
                 setLength(length - 1) // remove last space
             }
         }
+        ResultFormat.Snippet.PlainText(text, from, to - from + 1, from > 0 || to < document.size - 1)
     }
-    return ResultFormat.Snippet.PlainText(text)
 }
 

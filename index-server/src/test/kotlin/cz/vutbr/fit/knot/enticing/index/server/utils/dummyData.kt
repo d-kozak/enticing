@@ -16,12 +16,9 @@ internal val searchDummyResult = IndexServer.IndexResultList(
         listOf(IndexServer.SearchResult(
                 "col",
                 10,
-                10,
-                5,
                 "google.com",
                 "title",
-                ResultFormat.Snippet.Html("texty text"),
-                false
+                ResultFormat.Snippet.Html("texty text", 10, 0, false)
         )),
         mapOf("one" to Offset(42, 84))
 )
@@ -34,7 +31,7 @@ internal val templateDocumentQuery = IndexServer.DocumentQuery(
 internal val documentDummyResult = IndexServer.FullDocument(
         "how to use google",
         "google.com/howto",
-        ResultFormat.Snippet.Html("how to use google for dummies")
+        ResultFormat.Snippet.Html("how to use google for dummies", 0, 0, false)
 )
 
 
@@ -47,6 +44,6 @@ internal val templateContextExtensionQuery = IndexServer.ContextExtensionQuery(
 )
 
 internal val contextExtensionDummyResult = SnippetExtension(
-        ResultFormat.Snippet.Html("null"),
-        ResultFormat.Snippet.Html("null"),
+        ResultFormat.Snippet.Html("null", 0, 0, false),
+        ResultFormat.Snippet.Html("null", 0, 0, false),
         false)

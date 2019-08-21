@@ -77,11 +77,8 @@ class SerializationTest {
                             collection = "collection1",
                             documentId = 23,
                             documentTitle = "title1",
-                            location = 10,
-                            canExtend = false,
-                            size = 20,
                             url = "google.com",
-                            payload = ResultFormat.Snippet.Html("hello html")
+                            payload = ResultFormat.Snippet.Html("hello html", 0, 0, false)
                     )),
                     offset = mapOf("one" to Offset(10, 20))
             )
@@ -96,16 +93,13 @@ class SerializationTest {
                             collection = "collection1",
                             documentId = 23,
                             documentTitle = "title1",
-                            location = 10,
-                            canExtend = false,
-                            size = 20,
                             url = "google.com",
                             payload = ResultFormat.Snippet.StringWithMetadata(StringWithMetadata(
                                     "foo bar baz",
                                     emptyMap(),
                                     emptyList(),
                                     emptyList()
-                            ))
+                            ), 0, 0, false)
                     )),
                     offset =mapOf("one" to Offset(10, 20))
             )
@@ -120,9 +114,6 @@ class SerializationTest {
                             collection = "collection1",
                             documentId = 23,
                             documentTitle = "title3",
-                            location = 10,
-                            canExtend = false,
-                            size = 20,
                             url = "google.com",
                             payload = ResultFormat.IdentifierList(
                                     listOf(
@@ -131,7 +122,7 @@ class SerializationTest {
                                                     emptyMap(),
                                                     emptyList(),
                                                     emptyList()
-                                            )))
+                                            ), 0, 0, false))
                                     )
                             )
                     )),

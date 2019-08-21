@@ -31,5 +31,6 @@ val dummyDocument = WebServer.FullDocument(
                 emptyMap(),
                 emptyList(),
                 emptyList()
-        ))
+        ),
+                10, 4, false)
 )

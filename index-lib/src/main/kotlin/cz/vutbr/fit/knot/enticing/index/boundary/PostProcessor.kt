@@ -15,7 +15,11 @@ data class MatchInfo(
          * Intervals that should be highlighted, that is leaves and identifiers
          */
         val leafIntervals: List<EqlMatch>
-)
+) {
+    companion object {
+        fun empty() = MatchInfo(emptyList(), emptyList())
+    }
+}
 
 /**
  * One single match on the query

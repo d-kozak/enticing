@@ -23,12 +23,23 @@ interface DocumentVisitor {
 /**
  * Base class for visitors that generate [ResultFormat.Snippet] formats, provides some helper properties that the subclasses can use
  */
-abstract class TextFormatGeneratingVisitor(protected val config: CorpusConfiguration, private val defaultIndexName: String) : DocumentVisitor {
+abstract class TextFormatGeneratingVisitor(
+        protected val config: CorpusConfiguration,
+        private val defaultIndexName: String,
+        private val interval: Interval,
+        private val document: IndexedDocument
+) : DocumentVisitor {
     abstract fun build(): ResultFormat.Snippet
 
     protected val defaultIndex: Index = config.indexes.getValue(defaultIndexName)
 
     protected val metaIndexes: List<Index> = config.indexes.values.filter { it.name != defaultIndexName }
+
+    protected val location = interval.from
+
+    protected val size = interval.size
+
+    protected val canExtend = interval.from > 0 || interval.to < document.size - 1
 }
 
 

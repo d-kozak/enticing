@@ -3,8 +3,9 @@ package cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.next
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
+import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 
-class HtmlGeneratingVisitor(config: CorpusConfiguration, defaultIndexName: String) : TextFormatGeneratingVisitor(config, defaultIndexName) {
+class HtmlGeneratingVisitor(config: CorpusConfiguration, defaultIndexName: String, interval: Interval, document: IndexedDocument) : TextFormatGeneratingVisitor(config, defaultIndexName, interval, document) {
 
     private val builder = StringBuilder()
 
@@ -65,5 +66,5 @@ class HtmlGeneratingVisitor(config: CorpusConfiguration, defaultIndexName: Strin
         }
     }
 
-    override fun build(): ResultFormat.Snippet = ResultFormat.Snippet.Html(builder.toString())
+    override fun build(): ResultFormat.Snippet = ResultFormat.Snippet.Html(builder.toString(), location, size, canExtend)
 }

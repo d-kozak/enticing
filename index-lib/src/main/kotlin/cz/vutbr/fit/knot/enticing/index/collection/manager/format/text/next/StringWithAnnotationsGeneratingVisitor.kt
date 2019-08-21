@@ -5,9 +5,10 @@ import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.format.text.*
 import cz.vutbr.fit.knot.enticing.dto.format.text.Annotation
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
+import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import org.slf4j.LoggerFactory
 
-class StringWithAnnotationsGeneratingVisitor(config: CorpusConfiguration, defaultIndexName: String) : TextFormatGeneratingVisitor(config, defaultIndexName) {
+class StringWithAnnotationsGeneratingVisitor(config: CorpusConfiguration, defaultIndexName: String, interval: Interval, document: IndexedDocument) : TextFormatGeneratingVisitor(config, defaultIndexName, interval, document) {
 
     private val log = LoggerFactory.getLogger(StringWithAnnotationsGeneratingVisitor::class.java)
 
@@ -76,5 +77,5 @@ class StringWithAnnotationsGeneratingVisitor(config: CorpusConfiguration, defaul
         positions.add(AnnotationPosition(id, MatchedRegion(from, size), subAnnotations))
     }
 
-    override fun build(): ResultFormat.Snippet = ResultFormat.Snippet.StringWithMetadata(StringWithMetadata(builder.toString(), annotations, positions, queryMapping))
+    override fun build(): ResultFormat.Snippet = ResultFormat.Snippet.StringWithMetadata(StringWithMetadata(builder.toString(), annotations, positions, queryMapping), location, size, canExtend)
 }
