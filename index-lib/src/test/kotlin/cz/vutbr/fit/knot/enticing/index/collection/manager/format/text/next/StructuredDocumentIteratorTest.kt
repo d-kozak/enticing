@@ -7,27 +7,27 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 
-class TestListener : DocumentIteratorListener {
+class TestListener : DocumentVisitor {
 
     val content: MutableList<Pair<String, Any?>> = mutableListOf()
 
-    override fun matchStart(queryInterval: Interval) {
+    override fun visitMatchStart(queryInterval: Interval) {
         content.add("ms" to queryInterval)
     }
 
-    override fun matchEnd() {
+    override fun visitMatchEnd() {
         content.add("me" to null)
     }
 
-    override fun entityStart(attributes: List<String>, entityClass: String) {
+    override fun visitEntityStart(attributes: List<String>, entityClass: String) {
         content.add("es" to Pair(attributes, entityClass))
     }
 
-    override fun entityEnd() {
+    override fun visitEntityEnd() {
         content.add("ee" to null)
     }
 
-    override fun word(indexes: List<String>) {
+    override fun visitWord(indexes: List<String>) {
         content.add("w" to indexes)
     }
 }

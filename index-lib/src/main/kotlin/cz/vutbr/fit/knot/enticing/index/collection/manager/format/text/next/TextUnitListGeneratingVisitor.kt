@@ -7,9 +7,9 @@ import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnitList
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import org.slf4j.LoggerFactory
 
-class TextUnitListGeneratingListener(config: CorpusConfiguration, defaultIndexName: String) : TextFormatGeneratingListener(config, defaultIndexName) {
+class TextUnitListGeneratingVisitor(config: CorpusConfiguration, defaultIndexName: String) : TextFormatGeneratingVisitor(config, defaultIndexName) {
 
-    private val log = LoggerFactory.getLogger(TextUnitListGeneratingListener::class.java)
+    private val log = LoggerFactory.getLogger(TextUnitListGeneratingVisitor::class.java)
 
     private val resultList = mutableListOf<TextUnit>()
 
@@ -20,7 +20,7 @@ class TextUnitListGeneratingListener(config: CorpusConfiguration, defaultIndexNa
     private var currentQueryInterval: Interval? = null
     private var unitsForQueryMatch: MutableList<TextUnit>? = null
 
-    override fun matchStart(queryInterval: Interval) {
+    override fun visitMatchStart(queryInterval: Interval) {
         if (currentQueryInterval != null || unitsForQueryMatch != null) {
             log.error("matchStart called while some match interval metadata are still present inside the listener, they will be overwritten")
         }
@@ -28,7 +28,7 @@ class TextUnitListGeneratingListener(config: CorpusConfiguration, defaultIndexNa
         unitsForQueryMatch = mutableListOf()
     }
 
-    override fun entityStart(attributes: List<String>, entityClass: String) {
+    override fun visitEntityStart(attributes: List<String>, entityClass: String) {
         if (this.attributes != null || this.entityClass != null || this.wordsForEntity?.isNotEmpty() == true) {
             log.error("entityStart called while some entity metadata are still present inside the listener, they will be overwritten")
         }
@@ -37,7 +37,7 @@ class TextUnitListGeneratingListener(config: CorpusConfiguration, defaultIndexNa
         this.wordsForEntity = mutableListOf()
     }
 
-    override fun word(indexes: List<String>) {
+    override fun visitWord(indexes: List<String>) {
         val word = TextUnit.Word(indexes)
         when {
             wordsForEntity != null -> wordsForEntity!!.add(word)
@@ -47,7 +47,7 @@ class TextUnitListGeneratingListener(config: CorpusConfiguration, defaultIndexNa
 
     }
 
-    override fun entityEnd() {
+    override fun visitEntityEnd() {
         if (attributes != null && entityClass != null && wordsForEntity?.isEmpty() == true) {
             val newEntity = TextUnit.Entity(attributes!!, entityClass!!, wordsForEntity!!)
             if (unitsForQueryMatch != null) {
@@ -63,7 +63,7 @@ class TextUnitListGeneratingListener(config: CorpusConfiguration, defaultIndexNa
         wordsForEntity = null
     }
 
-    override fun matchEnd() {
+    override fun visitMatchEnd() {
         if (currentQueryInterval != null && unitsForQueryMatch?.isNotEmpty() == true) {
             resultList.add(TextUnit.QueryMatch(currentQueryInterval!!, unitsForQueryMatch!!))
         } else {

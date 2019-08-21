@@ -4,19 +4,19 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 
-class HtmlGeneratingListener(config: CorpusConfiguration, defaultIndexName: String) : TextFormatGeneratingListener(config, defaultIndexName) {
+class HtmlGeneratingVisitor(config: CorpusConfiguration, defaultIndexName: String) : TextFormatGeneratingVisitor(config, defaultIndexName) {
 
     private val builder = StringBuilder()
 
-    override fun matchStart(queryInterval: Interval) {
+    override fun visitMatchStart(queryInterval: Interval) {
         builder.append("<b>")
     }
 
-    override fun matchEnd() {
+    override fun visitMatchEnd() {
         builder.append("</b>")
     }
 
-    override fun word(indexes: List<String>) {
+    override fun visitWord(indexes: List<String>) {
         with(builder) {
             if (config.indexes.size > 1) {
                 append("<span eql-word")
@@ -40,7 +40,7 @@ class HtmlGeneratingListener(config: CorpusConfiguration, defaultIndexName: Stri
 
     private var entityStarted = false
 
-    override fun entityStart(attributes: List<String>, entityClass: String) {
+    override fun visitEntityStart(attributes: List<String>, entityClass: String) {
         with(builder) {
             val entity = config.entities[entityClass]
             if (entity != null) {
@@ -58,7 +58,7 @@ class HtmlGeneratingListener(config: CorpusConfiguration, defaultIndexName: Stri
         }
     }
 
-    override fun entityEnd() {
+    override fun visitEntityEnd() {
         if (entityStarted) {
             entityStarted = false
             builder.append("</span>")

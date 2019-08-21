@@ -24,15 +24,15 @@ class EqlResultCreator(private val corpusConfiguration: CorpusConfiguration) : R
         val filteredConfig = corpusConfiguration.filterBy(formatInfo.metadata, formatInfo.defaultIndex)
         val (matchStart, matchEnd) = matchInfo.split()
 
-        val listener = when (formatInfo.textFormat) {
+        val visitor = when (formatInfo.textFormat) {
             TextFormat.PLAIN_TEXT -> return generatePlainText(document, filteredConfig, formatInfo.defaultIndex, interval)
-            TextFormat.HTML -> HtmlGeneratingListener(filteredConfig, formatInfo.defaultIndex)
-            TextFormat.STRING_WITH_METADATA -> StringWithAnnotationsGeneratingListener(filteredConfig, formatInfo.defaultIndex)
-            TextFormat.TEXT_UNIT_LIST -> TextUnitListGeneratingListener(filteredConfig, formatInfo.defaultIndex)
+            TextFormat.HTML -> HtmlGeneratingVisitor(filteredConfig, formatInfo.defaultIndex)
+            TextFormat.STRING_WITH_METADATA -> StringWithAnnotationsGeneratingVisitor(filteredConfig, formatInfo.defaultIndex)
+            TextFormat.TEXT_UNIT_LIST -> TextUnitListGeneratingVisitor(filteredConfig, formatInfo.defaultIndex)
         }
         val iterator = StructuredDocumentIterator(filteredConfig)
-        iterator.iterateDocument(document, matchStart, matchEnd, listener, interval)
-        return listener.build()
+        iterator.iterateDocument(document, matchStart, matchEnd, visitor, interval)
+        return visitor.build()
     }
 }
 
