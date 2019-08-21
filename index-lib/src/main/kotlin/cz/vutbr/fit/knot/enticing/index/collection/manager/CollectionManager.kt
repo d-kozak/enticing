@@ -56,8 +56,6 @@ class CollectionManager internal constructor(
     fun extendSnippet(query: IndexServer.ContextExtensionQuery): SnippetExtension {
         val document = searchEngine.loadDocument(query.docId)
         val (prefix, suffix) = computeExtensionIntervals(left = query.location, right = query.location + query.size, extension = query.extension, documentSize = document.size)
-
-
         val (prefixInfo, suffixInfo) = if (query.query != null) {
             val ast = eqlCompiler.parseOrFail(query.query!!)
             val prefixMatch = postProcessor.process(ast, document, prefix) ?: emptyList()
@@ -74,8 +72,6 @@ class CollectionManager internal constructor(
 
     fun getDocument(query: IndexServer.DocumentQuery): IndexServer.FullDocument {
         val document = searchEngine.loadDocument(query.documentId)
-
-
         val matchInfo = if (query.query != null) {
             val ast = eqlCompiler.parseOrFail(query.query!!)
             postProcessor.process(ast, document) ?: emptyList()

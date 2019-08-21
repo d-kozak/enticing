@@ -17,7 +17,7 @@ class EqlPostProcessor : PostProcessor {
 
     override fun process(ast: AstNode, document: IndexedDocument, matchedIntervals: List<List<Interval>>): List<EqlMatch>? {
         // just highlight the ends of each interval for now
-        val mg4jIntervals = matchedIntervals.map { EqlMatch.IndexMatch(Interval.valueOf(0, 1), it.map { listOf(it.from, it.to) }.flatten()) }
+        val mg4jIntervals = matchedIntervals.map { EqlMatch.IndexMatch(Interval.valueOf(0, 1), it.map { (from, to) -> listOf(from, to) }.flatten()) }
         return mg4jIntervals
     }
 }
