@@ -8,6 +8,7 @@ import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.format.text.StringWithMetadata
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.dto.utils.toDto
+import cz.vutbr.fit.knot.enticing.eql.compiler.parser.EqlCompiler
 import cz.vutbr.fit.knot.enticing.index.collection.manager.computeExtensionIntervals
 import cz.vutbr.fit.knot.enticing.index.mg4j.initMg4jCollectionManager
 import it.unimi.di.big.mg4j.query.parser.QueryParserException
@@ -134,7 +135,7 @@ class CollectionManagerTest {
                 "job work"
         )) {
             val query = templateQuery.copy(query = input)
-
+            query.eqlAst = EqlCompiler().parseOrFail(input)
             val result = queryEngine.query(query)
             println(result)
         }
@@ -151,7 +152,7 @@ class CollectionManagerTest {
                 "job work"
         )) {
             val query = templateQuery.copy(query = input, textFormat = TextFormat.TEXT_UNIT_LIST)
-
+            query.eqlAst = EqlCompiler().parseOrFail(input)
             val result = queryEngine.query(query)
         }
     }
@@ -159,16 +160,19 @@ class CollectionManagerTest {
     @Warning("it seems that different documents are being returned in test environment, why?")
     @Test
     fun problematicQuery() {
-        val query = SearchQuery(query = "job work", snippetCount = 33, offset = mapOf("one" to Offset(document = 0, snippet = 0)), metadata = TextMetadata.Predefined(value = "all"), resultFormat = cz.vutbr.fit.knot.enticing.dto.ResultFormat.SNIPPET, textFormat = TextFormat.TEXT_UNIT_LIST, defaultIndex = "token")
+        val input = "job work"
+        val query = SearchQuery(query = input, snippetCount = 33, offset = mapOf("one" to Offset(document = 0, snippet = 0)), metadata = TextMetadata.Predefined(value = "all"), resultFormat = cz.vutbr.fit.knot.enticing.dto.ResultFormat.SNIPPET, textFormat = TextFormat.TEXT_UNIT_LIST, defaultIndex = "token")
         val queryEngine = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
+        query.eqlAst = EqlCompiler().parseOrFail(input)
         val result = queryEngine.query(query)
     }
 
     @Test
     fun `syntax error should be caught`() {
         val queryEngine = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
-        val query = templateQuery.copy(query = "lemma:work{{lemma->")
-
+        val input = "lemma:work{{lemma->"
+        val query = templateQuery.copy(query = input)
+        query.eqlAst = EqlCompiler().parseOrFail(input)
         assertThrows<QueryParserException> {
             val result = queryEngine.query(query)
         }

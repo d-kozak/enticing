@@ -59,7 +59,7 @@ data class SearchQuery(
     /**
      * fails if eql ast is not initialized
      */
-    fun copyWithAst(): SearchQuery = this.copy().also { it.eqlAst = it.eqlAst.deepCopy() }
+    fun copyWithAst(): SearchQuery = this.copy().also { it.eqlAst = this.eqlAst.deepCopy() }
 
     @JsonIgnore
     lateinit var eqlAst: AstNode
