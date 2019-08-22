@@ -23,7 +23,7 @@ class TextUnitListGeneratingVisitor(config: CorpusConfiguration, defaultIndexNam
 
     override fun visitMatchStart(queryInterval: Interval) {
         if (currentQueryInterval != null || unitsForQueryMatch != null) {
-            log.error("matchStart called while some match interval metadata are still present inside the listener, they will be overwritten")
+            log.warn("matchStart called while some match interval metadata are still present inside the listener, they will be overwritten")
         }
         currentQueryInterval = queryInterval
         unitsForQueryMatch = mutableListOf()
@@ -31,7 +31,7 @@ class TextUnitListGeneratingVisitor(config: CorpusConfiguration, defaultIndexNam
 
     override fun visitEntityStart(attributes: List<String>, entityClass: String) {
         if (this.attributes != null || this.entityClass != null || this.wordsForEntity?.isNotEmpty() == true) {
-            log.error("entityStart called while some entity metadata are still present inside the listener, they will be overwritten")
+            log.warn("entityStart called while some entity metadata are still present inside the listener, they will be overwritten")
         }
         this.attributes = attributes
         this.entityClass = entityClass
@@ -49,7 +49,7 @@ class TextUnitListGeneratingVisitor(config: CorpusConfiguration, defaultIndexNam
     }
 
     override fun visitEntityEnd() {
-        if (attributes != null && entityClass != null && wordsForEntity?.isEmpty() == true) {
+        if (attributes != null && entityClass != null && wordsForEntity?.isNotEmpty() == true) {
             val newEntity = TextUnit.Entity(attributes!!, entityClass!!, wordsForEntity!!)
             if (unitsForQueryMatch != null) {
                 unitsForQueryMatch!!.add(newEntity)
@@ -57,7 +57,7 @@ class TextUnitListGeneratingVisitor(config: CorpusConfiguration, defaultIndexNam
                 resultList.add(newEntity)
             }
         } else {
-            log.error("entityEnd called, but no data for entity have been collected")
+            log.warn("entityEnd called, but no data for entity have been collected")
         }
         attributes = null
         entityClass = null
@@ -68,7 +68,7 @@ class TextUnitListGeneratingVisitor(config: CorpusConfiguration, defaultIndexNam
         if (currentQueryInterval != null && unitsForQueryMatch?.isNotEmpty() == true) {
             resultList.add(TextUnit.QueryMatch(currentQueryInterval!!, unitsForQueryMatch!!))
         } else {
-            log.error("matchEnd called, but no data for query match have been collected")
+            log.warn("matchEnd called, but no data for query match have been collected")
         }
         currentQueryInterval = null
         unitsForQueryMatch = null

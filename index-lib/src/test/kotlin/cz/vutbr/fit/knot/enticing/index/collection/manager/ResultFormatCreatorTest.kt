@@ -246,26 +246,26 @@ internal class ResultFormatCreatorTest {
             var payload = resultCreator.singleResult(noMetadataDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(0, 2)), emptyList()))), textUnitListQuery)
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.TextUnitList(TextUnitList(
-                            TextUnit.QueryMatch(Interval.valueOf(0, 1),
+                            TextUnit.QueryMatch(Interval.valueOf(1),
                                     listOf(TextUnit.Word("one"),
                                             TextUnit.Word("two"),
                                             TextUnit.Word("three")))
                     ), 0, 3, false))
 
-            payload = resultCreator.singleResult(noMetadataDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(1, 2)), emptyList()))), textUnitListQuery)
+            payload = resultCreator.singleResult(noMetadataDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1, 2), listOf(Interval.valueOf(1, 2)), emptyList()))), textUnitListQuery)
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.TextUnitList(TextUnitList(
                             TextUnit.Word("one"),
-                            TextUnit.QueryMatch(Interval.valueOf(0, 1),
+                            TextUnit.QueryMatch(Interval.valueOf(1, 2),
                                     listOf(
                                             TextUnit.Word("two"),
                                             TextUnit.Word("three")))
                     ), 0, 3, false))
-            payload = resultCreator.singleResult(noMetadataDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(1)), emptyList()))), textUnitListQuery)
+            payload = resultCreator.singleResult(noMetadataDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(3), listOf(Interval.valueOf(1)), emptyList()))), textUnitListQuery)
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.TextUnitList(TextUnitList(
                             TextUnit.Word("one"),
-                            TextUnit.QueryMatch(Interval.valueOf(0, 1),
+                            TextUnit.QueryMatch(Interval.valueOf(3),
                                     listOf(TextUnit.Word("two"))),
                             TextUnit.Word("three")
                     ), 0, 3, false))
@@ -278,7 +278,7 @@ internal class ResultFormatCreatorTest {
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.TextUnitList(TextUnitList(
                             TextUnit.Word("one", "1", "google.com"),
-                            TextUnit.QueryMatch(Interval.valueOf(0, 1),
+                            TextUnit.QueryMatch(Interval.valueOf(1),
                                     listOf(
                                             TextUnit.Word("two", "2", "yahoo.com"),
                                             TextUnit.Word("three", "3", "localhost")))
@@ -291,30 +291,30 @@ internal class ResultFormatCreatorTest {
             val payload = resultCreator.singleResult(withEntitiesDocument, MatchInfo.empty(), textUnitListQuery)
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.TextUnitList(TextUnitList(
-                            TextUnit.Word("one", "1", "google.com", "0", "0"),
-                            TextUnit.Word("two", "2", "yahoo.com", "0", "0"),
-                            TextUnit.Word("three", "3", "localhost", "0", "0"),
+                            TextUnit.Word("one", "1", "google.com", "0", "0", "0"),
+                            TextUnit.Word("two", "2", "yahoo.com", "0", "0", "0"),
+                            TextUnit.Word("three", "3", "localhost", "0", "0", "0"),
                             TextUnit.Entity(attributes = listOf("harry"), entityClass = "person",
-                                    words = listOf(TextUnit.Word("harry", "3", "localhost", "person", "harry"),
-                                            TextUnit.Word("potter", "3", "localhost", "0", "0")))), 0, 3, false))
+                                    words = listOf(TextUnit.Word("harry", "3", "localhost", "person", "harry", "2"),
+                                            TextUnit.Word("potter", "3", "localhost", "0", "0", "0")))), 0, 5, false))
         }
 
         @Test
         fun `with one entity that is broken by interval`() {
             val resultCreator = EqlResultCreator(withEntitiesConfig)
-            val payload = resultCreator.singleResult(withEntitiesDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(2, 3)), emptyList()))), textUnitListQuery)
+            val payload = resultCreator.singleResult(withEntitiesDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(0), listOf(Interval.valueOf(2, 3)), emptyList()))), textUnitListQuery)
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.TextUnitList(TextUnitList(
-                            TextUnit.Word("one", "1", "google.com", "0", "0"),
-                            TextUnit.Word("two", "2", "yahoo.com", "0", "0"),
-                            TextUnit.QueryMatch(Interval.valueOf(0, 1), listOf(
-                                    TextUnit.Word("three", "3", "localhost", "0", "0"),
+                            TextUnit.Word("one", "1", "google.com", "0", "0", "0"),
+                            TextUnit.Word("two", "2", "yahoo.com", "0", "0", "0"),
+                            TextUnit.QueryMatch(Interval.valueOf(0), listOf(
+                                    TextUnit.Word("three", "3", "localhost", "0", "0", "0"),
                                     TextUnit.Entity(attributes = listOf("harry"), entityClass = "person",
-                                            words = listOf(TextUnit.Word("harry", "3", "localhost", "person", "harry"))
+                                            words = listOf(TextUnit.Word("harry", "3", "localhost", "person", "harry", "2"))
                                     ))),
                             TextUnit.Entity(attributes = listOf("harry"), entityClass = "person",
-                                    words = listOf(TextUnit.Word("potter", "3", "localhost", "0", "0")))
-                    ), 0, 3, false))
+                                    words = listOf(TextUnit.Word("potter", "3", "localhost", "0", "0", "0")))
+                    ), 0, 5, false))
         }
 
 
@@ -324,18 +324,18 @@ internal class ResultFormatCreatorTest {
             val payload = resultCreator.singleResult(withEntitiesDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(2, 3), Interval.valueOf(4)), emptyList()))), textUnitListQuery)
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.TextUnitList(TextUnitList(
-                            TextUnit.Word("one", "1", "google.com", "0", "0"),
-                            TextUnit.Word("two", "2", "yahoo.com", "0", "0"),
-                            TextUnit.QueryMatch(Interval.valueOf(0, 1), listOf(
-                                    TextUnit.Word("three", "3", "localhost", "0", "0"),
+                            TextUnit.Word("one", "1", "google.com", "0", "0", "0"),
+                            TextUnit.Word("two", "2", "yahoo.com", "0", "0", "0"),
+                            TextUnit.QueryMatch(Interval.valueOf(1), listOf(
+                                    TextUnit.Word("three", "3", "localhost", "0", "0", "0"),
                                     TextUnit.Entity(attributes = listOf("harry"), entityClass = "person",
-                                            words = listOf(TextUnit.Word("harry", "3", "localhost", "person", "harry"))
+                                            words = listOf(TextUnit.Word("harry", "3", "localhost", "person", "harry", "2"))
                                     ))),
-                            TextUnit.QueryMatch(Interval.valueOf(0, 1), listOf(
+                            TextUnit.QueryMatch(Interval.valueOf(1), listOf(
                                     TextUnit.Entity(attributes = listOf("harry"), entityClass = "person",
-                                            words = listOf(TextUnit.Word("potter", "3", "localhost", "0", "0"))
+                                            words = listOf(TextUnit.Word("potter", "3", "localhost", "0", "0", "0"))
                                     ))
-                            )), 0, 3, false))
+                            )), 0, 5, false))
         }
 
 

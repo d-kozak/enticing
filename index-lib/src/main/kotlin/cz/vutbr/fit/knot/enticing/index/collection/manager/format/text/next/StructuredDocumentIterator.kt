@@ -62,11 +62,11 @@ class StructuredDocumentIterator(private val corpusConfiguration: CorpusConfigur
             if (i < from) continue
             if (i > to) break
 
-            matchStarts[i]?.let {
+            if (i in matchStarts) {
                 if (startedEntity != null) listener.visitEntityEnd()
-                listener.visitMatchStart(it)
+                listener.visitMatchStart(matchStarts.getValue(i))
                 if (startedEntity != null)
-                    listener.visitEntityStart(startedEntity!!.first, startedEntity!!.second)
+                    listener.visitEntityStart(startedEntity.first, startedEntity.second)
             }
 
             if (corpusConfiguration.entities.isNotEmpty()) {
