@@ -1,4 +1,4 @@
-package cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.next
+package cz.vutbr.fit.knot.enticing.index.collection.manager.format.text
 
 import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration

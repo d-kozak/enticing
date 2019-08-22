@@ -11,7 +11,7 @@ import cz.vutbr.fit.knot.enticing.index.boundary.EqlMatch
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import cz.vutbr.fit.knot.enticing.index.boundary.MatchInfo
 import cz.vutbr.fit.knot.enticing.index.boundary.ResultCreator
-import cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.next.*
+import cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.*
 
 @Incomplete("not finished yet")
 class EqlResultCreator(private val corpusConfiguration: CorpusConfiguration) : ResultCreator {

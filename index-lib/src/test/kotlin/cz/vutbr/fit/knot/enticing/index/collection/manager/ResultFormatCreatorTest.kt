@@ -12,8 +12,6 @@ import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.index.boundary.EqlMatch
 import cz.vutbr.fit.knot.enticing.index.boundary.MatchInfo
 import cz.vutbr.fit.knot.enticing.index.collection.manager.format.result.EqlResultCreator
-import cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess.DocumentElement
-import cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess.StructuredDocumentContent
 import cz.vutbr.fit.knot.enticing.index.utils.testDocument
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
@@ -39,17 +37,6 @@ internal class ResultFormatCreatorTest {
 
     private val noMetadataDocument = testDocument(3, "one two three")
 
-    private val noMetadata = StructuredDocumentContent(listOf(
-            DocumentElement.Word(0, listOf("one")),
-            DocumentElement.Word(1, listOf("two")),
-            DocumentElement.Word(2, listOf("three"))),
-            corpusConfig("empty") {
-                indexes {
-                    index("token")
-                }
-            }
-    )
-
     private val simpleStructureConfig = corpusConfig("simple") {
         indexes {
             index("token")
@@ -57,19 +44,6 @@ internal class ResultFormatCreatorTest {
             index("url")
         }
     }
-
-    private val simpleStructure = StructuredDocumentContent(listOf(
-            DocumentElement.Word(0, listOf("one", "1", "google.com")),
-            DocumentElement.Word(1, listOf("two", "2", "yahoo.com")),
-            DocumentElement.Word(2, listOf("three", "3", "localhost"))),
-            corpusConfig("simple") {
-                indexes {
-                    index("token")
-                    index("lemma")
-                    index("url")
-                }
-            }
-    )
 
     private val simpleStructureDocument = testDocument(3, "one two three", "1 2 3", "google.com yahoo.com localhost")
 
@@ -93,33 +67,6 @@ internal class ResultFormatCreatorTest {
     }.also { it.validate() }
 
     private val withEntitiesDocument = testDocument(5, "one two three harry potter", "1 2 3 3 3", "google.com yahoo.com localhost localhost localhost", "0 0 0 person 0", "0 0 0 harry 0", "0 0 0 2 0")
-
-    private val withEntities = StructuredDocumentContent(listOf(
-            DocumentElement.Word(0, listOf("one", "1", "google.com", "0", "0")),
-            DocumentElement.Word(1, listOf("two", "2", "yahoo.com", "0", "0")),
-            DocumentElement.Word(2, listOf("three", "3", "localhost", "0", "0")),
-            DocumentElement.Entity(3, "person", listOf("harry"),
-                    words = listOf(DocumentElement.Word(3, listOf("harry", "3", "localhost", "person", "harry")),
-                            DocumentElement.Word(4, listOf("potter", "3", "localhost", "0", "0")))
-            )),
-            corpusConfig("simple") {
-                indexes {
-                    index("token")
-                    index("lemma")
-                    index("url")
-                    index("nertag")
-                    index("param")
-                }
-                entities {
-                    "person" with attributes("name")
-                }
-                entityMapping {
-                    entityIndex = "nertag"
-                    attributeIndexes = 4 to 4
-                }
-            }.also { it.validate() }
-    )
-
 
     @Nested
     inner class SearchResultHtml {
