@@ -51,6 +51,7 @@ internal fun flatten(resultList: Map<String, List<MResult<IndexServer.Collection
                 matched.addAll(collectionResult.value.searchResults)
             } else {
                 errors[collectionName] = "${collectionResult.exception::class.simpleName}:${collectionResult.exception.message}"
+                collectionResult.exception.printStackTrace()
             }
         }
     }

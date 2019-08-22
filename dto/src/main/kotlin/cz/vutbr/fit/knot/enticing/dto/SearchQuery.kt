@@ -54,7 +54,13 @@ data class SearchQuery(
         @field:NotBlank
         override val defaultIndex: String = Defaults.defaultIndex
 ) : GeneralFormatInfo, Query<SearchQuery> {
-    override fun updateSnippetCount(newSnippetCount: Int): SearchQuery = this.copy(snippetCount = newSnippetCount)
+    override fun updateSnippetCount(newSnippetCount: Int): SearchQuery {
+        val newQuery = this.copy(snippetCount = newSnippetCount)
+        if (this::eqlAst.isInitialized) {
+            newQuery.eqlAst = this.eqlAst.deepCopy()
+        }
+        return newQuery
+    }
 
     /**
      * fails if eql ast is not initialized
