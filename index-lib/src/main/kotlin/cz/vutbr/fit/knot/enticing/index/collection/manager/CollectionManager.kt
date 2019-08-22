@@ -39,22 +39,21 @@ class CollectionManager internal constructor(
             val document = searchEngine.loadDocument(result.documentId)
             val matchInfo = postProcessor.process(query.eqlAst, document, result.intervals) ?: continue
             val (results, hasMore) = resultCreator.multipleResults(document, matchInfo, query, if (document.id == documentOffset) resultOffset else 0, query.snippetCount, query.resultFormat)
-
-            if (matched.size + results.size >= query.snippetCount) {
+            val searchResults = results.map {
+                IndexServer.SearchResult(
+                        collectionName,
+                        document.id,
+                        document.uri,
+                        document.title,
+                        it)
+            }
+            matched.addAll(searchResults)
+            if (matched.size >= query.snippetCount) {
                 val nextOffset = when {
-                    results.size > query.snippetCount - matched.size || hasMore -> Offset(document.id, query.snippetCount - matched.size + 1)
+                    hasMore -> Offset(document.id, resultOffset + results.size)
                     i != resultList.size - 1 -> Offset(resultList[i + 1].documentId, 0)
                     else -> Offset(processed + 1, 0)
                 }
-                val searchResults = results.subList(0, min(query.snippetCount - matched.size, results.size)).map {
-                    IndexServer.SearchResult(
-                            collectionName,
-                            document.id,
-                            document.uri,
-                            document.title,
-                            it)
-                }
-                matched.addAll(searchResults)
                 return IndexServer.CollectionResultList(matched, nextOffset)
             }
         }

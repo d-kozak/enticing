@@ -26,8 +26,8 @@ class EqlResultCreator(private val corpusConfiguration: CorpusConfiguration) : R
                 intervals = intervals.subList(resultOffset, intervals.size)
                 val hasMore = intervals.size > resultCount
                 intervals = intervals.subList(0, min(resultCount, intervals.size))
-
-                emptyList<ResultFormat>() to false
+                val results = intervals.map { (interval, _) -> singleResult(document, matchInfo.limitBy(interval), formatInfo, interval) }
+                results to hasMore
             }
             cz.vutbr.fit.knot.enticing.dto.ResultFormat.IDENTIFIER_LIST -> {
                 emptyList<ResultFormat>() to false
@@ -59,20 +59,21 @@ fun MatchInfo.limitBy(boundary: Interval): MatchInfo {
     val newLeafIntervals = mutableListOf<EqlMatch>()
 
     for (match in this.leafIntervals) {
-        val newMatch = when (match) {
+        when (match) {
             is EqlMatch.IdentifierMatch -> {
                 val documentIntervals = match.documentIntervals.filter { it.first in boundary }
-                if (documentIntervals.isNotEmpty()) match.copy(documentIntervals = documentIntervals)
-                else null
+                if (documentIntervals.isNotEmpty()) {
+                    newLeafIntervals.add(match.copy(documentIntervals = documentIntervals))
+                }
+
             }
             is EqlMatch.IndexMatch -> {
                 val indexes = match.documentIndexes.filter { it in boundary }
-                if (indexes.isNotEmpty()) match.copy(documentIndexes = indexes)
-                else null
+                if (indexes.isNotEmpty()) {
+                    newLeafIntervals.add(match.copy(documentIndexes = indexes))
+                }
             }
         }
-        if (newMatch != null)
-            newLeafIntervals.add(newMatch)
     }
 
     return MatchInfo(newRootIntervals, newLeafIntervals)
@@ -85,16 +86,16 @@ fun List<EqlMatch>.split(): Pair<Map<Int, Interval>, Set<Int>> {
     for (match in this) {
         when (match) {
             is EqlMatch.IndexMatch -> {
-                for (i in match.documentIndexes) {
-                    matchStart[i] = match.queryInterval
-                    matchEnd.add(i)
+                for (index in match.documentIndexes) {
+                    matchStart[index] = match.queryInterval
+                    matchEnd.add(index)
                 }
             }
 
             is EqlMatch.IdentifierMatch -> {
-                for (i in match.documentIntervals) {
-                    matchStart[i.from] = match.queryInterval
-                    matchEnd.add(i.to)
+                for ((interval, _) in match.documentIntervals) {
+                    matchStart[interval.from] = match.queryInterval
+                    matchEnd.add(interval.to)
                 }
             }
         }
