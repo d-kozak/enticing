@@ -1,0 +1,1 @@
+cloc . --exclude-dir=node_modules,lib,build,out,data,gradle,.gradle,.idea --not-match-f=package\.lock\.json
