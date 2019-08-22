@@ -11,6 +11,7 @@ import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
+private val log = LoggerFactory.getLogger(QueryService::class.java)
 
 @Service
 class QueryService(
@@ -20,7 +21,7 @@ class QueryService(
         private val indexServerConnector: IndexServerConnector
 ) {
 
-    private val log = LoggerFactory.getLogger(QueryService::class.java)
+
 
     fun query(query: String, selectedSettings: Long): WebServer.ResultList {
         val currentUser = userService.currentUser
@@ -78,6 +79,11 @@ fun flatten(result: Map<String, List<MResult<IndexServer.IndexResultList>>>): We
                 snippets.addAll(
                         serverResult.value.searchResults.map { it.withHost(serverId) }
                 )
+                if (serverResult.value.errors.isNotEmpty()) {
+                    val msg = serverResult.value.errors.toString()
+                    errors[serverId] = msg
+                    log.warn("Server $serverId responded with $msg")
+                }
             } else {
                 val exception = serverResult.exception
                 errors[serverId] = "${exception::class.simpleName}:${exception.message}"
