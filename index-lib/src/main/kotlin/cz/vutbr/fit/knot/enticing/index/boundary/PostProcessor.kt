@@ -36,7 +36,7 @@ sealed class EqlMatch {
             /**
              * Indexes in the document where the simple query was matched
              */
-            val documentIndexList: List<Int>
+            val documentIndexes: List<Int>
     ) : EqlMatch()
 
     /**
@@ -50,11 +50,7 @@ sealed class EqlMatch {
             /**
              * Intervals over the document where the identifier was matched
              */
-            val documentIntervalList: List<Interval>,
-            /**
-             * Simple index matches that are parts of the Identifier match
-             */
-            val subMatchList: List<IndexMatch>
+            val documentIntervals: List<Pair<Interval, List<IndexMatch>>>
     ) : EqlMatch()
 }
 

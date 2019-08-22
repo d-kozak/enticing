@@ -29,6 +29,8 @@ data class Interval private constructor(
 
     operator fun contains(value: Int) = value in from..to
 
+    operator fun contains(interval: Interval) = from <= interval.from && to >= interval.to
+
     override fun iterator(): Iterator<Int> = object : Iterator<Int> {
 
         private var current = from

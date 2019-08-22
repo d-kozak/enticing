@@ -38,7 +38,7 @@ class CollectionManager internal constructor(
         for ((i, result) in resultList.withIndex()) {
             val document = searchEngine.loadDocument(result.documentId)
             val matchInfo = postProcessor.process(query.eqlAst, document, result.intervals) ?: continue
-            val (results, hasMore) = resultCreator.multipleResults(document, matchInfo, query, if (document.id == documentOffset) resultOffset else 0, query.resultFormat)
+            val (results, hasMore) = resultCreator.multipleResults(document, matchInfo, query, if (document.id == documentOffset) resultOffset else 0, query.snippetCount, query.resultFormat)
 
             if (matched.size + results.size >= query.snippetCount) {
                 val nextOffset = when {

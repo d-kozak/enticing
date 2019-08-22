@@ -12,12 +12,27 @@ import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import cz.vutbr.fit.knot.enticing.index.boundary.MatchInfo
 import cz.vutbr.fit.knot.enticing.index.boundary.ResultCreator
 import cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.*
+import cz.vutbr.fit.knot.enticing.index.collection.manager.generateSnippetIntervals
+import java.lang.Math.min
 
 @Incomplete("not finished yet")
 class EqlResultCreator(private val corpusConfiguration: CorpusConfiguration) : ResultCreator {
-    override fun multipleResults(document: IndexedDocument, matchInfo: MatchInfo, formatInfo: GeneralFormatInfo, resultOffset: Int, resultFormat: cz.vutbr.fit.knot.enticing.dto.ResultFormat): Pair<List<ResultFormat>, Boolean> {
+    override fun multipleResults(document: IndexedDocument, matchInfo: MatchInfo, formatInfo: GeneralFormatInfo, resultOffset: Int, resultCount: Int, resultFormat: cz.vutbr.fit.knot.enticing.dto.ResultFormat): Pair<List<ResultFormat>, Boolean> {
         val filteredConfig = corpusConfiguration.filterBy(formatInfo.metadata, formatInfo.defaultIndex)
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return when (resultFormat) {
+            cz.vutbr.fit.knot.enticing.dto.ResultFormat.SNIPPET -> {
+                var intervals = generateSnippetIntervals(matchInfo.rootIntervals, document.size)
+                if (intervals.size < resultOffset) return Pair(emptyList(), false)
+                intervals = intervals.subList(resultOffset, intervals.size)
+                val hasMore = intervals.size > resultCount
+                intervals = intervals.subList(0, min(resultCount, intervals.size))
+
+                emptyList<ResultFormat>() to false
+            }
+            cz.vutbr.fit.knot.enticing.dto.ResultFormat.IDENTIFIER_LIST -> {
+                emptyList<ResultFormat>() to false
+            }
+        }
     }
 
     override fun singleResult(document: IndexedDocument, matchInfo: MatchInfo, formatInfo: GeneralFormatInfo, interval: Interval): ResultFormat.Snippet {
@@ -36,6 +51,32 @@ class EqlResultCreator(private val corpusConfiguration: CorpusConfiguration) : R
     }
 }
 
+/**
+ * @return new MatchInfo containing only subinterval of the interval passed as param
+ */
+fun MatchInfo.limitBy(boundary: Interval): MatchInfo {
+    val newRootIntervals = this.rootIntervals.map { it.filter { it in boundary } }
+    val newLeafIntervals = mutableListOf<EqlMatch>()
+
+    for (match in this.leafIntervals) {
+        val newMatch = when (match) {
+            is EqlMatch.IdentifierMatch -> {
+                val documentIntervals = match.documentIntervals.filter { it.first in boundary }
+                if (documentIntervals.isNotEmpty()) match.copy(documentIntervals = documentIntervals)
+                else null
+            }
+            is EqlMatch.IndexMatch -> {
+                val indexes = match.documentIndexes.filter { it in boundary }
+                if (indexes.isNotEmpty()) match.copy(documentIndexes = indexes)
+                else null
+            }
+        }
+        if (newMatch != null)
+            newLeafIntervals.add(newMatch)
+    }
+
+    return MatchInfo(newRootIntervals, newLeafIntervals)
+}
 
 fun List<EqlMatch>.split(): Pair<Map<Int, Interval>, Set<Int>> {
     val matchStart = mutableMapOf<Int, Interval>()
@@ -44,14 +85,14 @@ fun List<EqlMatch>.split(): Pair<Map<Int, Interval>, Set<Int>> {
     for (match in this) {
         when (match) {
             is EqlMatch.IndexMatch -> {
-                for (i in match.documentIndexList) {
+                for (i in match.documentIndexes) {
                     matchStart[i] = match.queryInterval
                     matchEnd.add(i)
                 }
             }
 
             is EqlMatch.IdentifierMatch -> {
-                for (i in match.documentIntervalList) {
+                for (i in match.documentIntervals) {
                     matchStart[i.from] = match.queryInterval
                     matchEnd.add(i.to)
                 }
