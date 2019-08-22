@@ -12,22 +12,19 @@ import {openSnackbar} from "../reducers/SnackBarReducer";
 import {updateSearchResult} from "../reducers/SearchResultReducer";
 
 function mergeSnippet(searchResult: SearchResult, data: SnippetExtension): SearchResult {
-    const prefix = data.prefix.content
-    const suffix = data.suffix.content
+    const newLocation = data.prefix.content.location;
+    const newSize = data.prefix.content.size + searchResult.payload.content.size + data.suffix.content.size;
     const newText = new TextUnitList([
-        ...prefix.content,
+        ...data.prefix.content.content,
         ...searchResult.payload.content.content,
-        ...suffix.content
-    ])
+        ...data.suffix.content.content
+    ], newLocation, newSize, data.canExtend);
 
     return {
         ...searchResult,
         payload: {
-            content: newText
-        },
-        location: searchResult.location - prefix.size(),
-        size: prefix.size() + searchResult.size + suffix.size(),
-        canExtend: data.canExtend
+            content: newText,
+        }
     };
 }
 
@@ -38,8 +35,8 @@ export const contextExtensionRequestAction = (searchResult: SearchResult): Thunk
         collection: searchResult.collection,
         documentId: searchResult.documentId,
         defaultIndex: "token",
-        location: searchResult.location,
-        size: searchResult.size,
+        location: searchResult.payload.content.location,
+        size: searchResult.payload.content.size,
         extension: 20,
     };
     axios.post(`${API_BASE_PATH}/query/context`, query, {

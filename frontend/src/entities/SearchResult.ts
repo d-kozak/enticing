@@ -20,12 +20,9 @@ export interface SearchResult {
     host: string
     collection: string
     documentId: number
-    location: number
-    size: number
     url: string
     documentTitle: string
     payload: Payload
-    canExtend: boolean
 }
 
 
@@ -33,12 +30,9 @@ export const searchResultSchema = yup.object({
     host: yup.string().required(),
     collection: yup.string().required(),
     documentId: yup.number().integer().required(),
-    location: yup.number().integer().required(),
-    size: yup.number().integer().required(),
     url: yup.string().url().required(),
     documentTitle: yup.string().required(),
-    payload: payloadSchema,
-    canExtend: yup.boolean().required()
+    payload: payloadSchema
 })
 
 export function isSearchResult(obj: Object): obj is SearchResult {

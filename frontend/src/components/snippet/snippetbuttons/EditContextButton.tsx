@@ -10,9 +10,9 @@ interface EditContextButtonProps {
 }
 
 export const EditContextButton = ({searchResult, requestContextExtension}: EditContextButtonProps) => <Tooltip
-    title={searchResult.canExtend ? 'Extend the context' : 'Full length reached'}>
+    title={searchResult.payload.content.canExtend ? 'Extend the context' : 'Full length reached'}>
             <span>
-                <IconButton disabled={!searchResult.canExtend}
+                <IconButton disabled={!searchResult.payload.content.canExtend}
                             onClick={() => requestContextExtension(searchResult)}
                             color="primary">
                 <AddIcon fontSize="small"/>
