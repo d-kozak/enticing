@@ -82,7 +82,7 @@ class SerializationTest {
                     )),
                     offset = mapOf("one" to Offset(10, 20))
             )
-            val content = """"payload":{"type":"html","content":"hello html"}"""
+            val content = """"payload":{"type":"html","content":"hello html""""
             assertSerialization(input, content)
         }
 
@@ -97,13 +97,13 @@ class SerializationTest {
                             payload = ResultFormat.Snippet.StringWithMetadata(StringWithMetadata(
                                     "foo bar baz",
                                     emptyMap(),
-                                    emptyList(),
-                                    emptyList()
+                                    emptySet(),
+                                    emptySet()
                             ), 0, 0, false)
                     )),
                     offset =mapOf("one" to Offset(10, 20))
             )
-            val content = """"payload":{"type":"annotated","content":{"text":"foo bar baz","annotations":{},"positions":[],"queryMapping":[]}}"""
+            val content = """"payload":{"type":"annotated","content":{"text":"foo bar baz","annotations":{},"positions":[],"queryMapping":[]"""
             assertSerialization(input, content)
         }
 
@@ -120,15 +120,15 @@ class SerializationTest {
                                             Identifier("x", ResultFormat.Snippet.StringWithMetadata(StringWithMetadata(
                                                     "foo bar baz",
                                                     emptyMap(),
-                                                    emptyList(),
-                                                    emptyList()
+                                                    emptySet(),
+                                                    emptySet()
                                             ), 0, 0, false))
                                     )
                             )
                     )),
                     offset = mapOf("one" to Offset(10, 20))
             )
-            val content = """"payload":{"type":"identifiers","list":[{"identifier":"x","snippet":{"type":"annotated","content":{"text":"foo bar baz","annotations":{},"positions":[],"queryMapping":[]}}}]}"""
+            val content = """"payload":{"type":"identifiers","list":[{"identifier":"x","snippet":{"type":"annotated","content":{"text":"foo bar baz","annotations":{},"positions":[],"queryMapping":[]"""
             assertSerialization(input, content)
         }
     }

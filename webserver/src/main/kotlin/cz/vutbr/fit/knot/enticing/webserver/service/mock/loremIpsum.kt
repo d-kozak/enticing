@@ -29,8 +29,8 @@ val dummyDocument = WebServer.FullDocument(
         ResultFormat.Snippet.StringWithMetadata(StringWithMetadata(
                 documentText,
                 emptyMap(),
-                emptyList(),
-                emptyList()
+                emptySet(),
+                emptySet()
         ),
                 10, 4, false)
 )
