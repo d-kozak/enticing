@@ -3,9 +3,11 @@ package cz.vutbr.fit.knot.enticing.index
 import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.annotation.Warning
+import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.*
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.format.text.StringWithMetadata
+import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnit
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.dto.utils.toDto
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.EqlCompiler
@@ -13,10 +15,7 @@ import cz.vutbr.fit.knot.enticing.index.collection.manager.computeExtensionInter
 import cz.vutbr.fit.knot.enticing.index.mg4j.initMg4jCollectionManager
 import it.unimi.di.big.mg4j.query.parser.QueryParserException
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.api.*
 
 val corpusConfig = corpusConfig("CC") {
     indexes {
@@ -90,8 +89,8 @@ val builderConfig = indexBuilder {
 }
 
 val clientConfig = indexClient {
-    collections{
-        collection("one"){
+    collections {
+        collection("one") {
             mg4jDirectory("../data/mg4j")
             indexDirectory("../data/indexed")
         }
@@ -150,6 +149,76 @@ class CollectionManagerTest {
         val query = templateQuery.copy(query = input, textFormat = TextFormat.TEXT_UNIT_LIST)
         query.eqlAst = EqlCompiler().parseOrFail(input)
         val result = queryEngine.query(query)
+    }
+
+    @Nested
+    @Disabled
+    @WhatIf("We might actually want these to be included, because they will allow clients to format the text accordingly")
+    inner class ParagraphsAndSentenceMarksShouldBeRemoved {
+
+
+        private fun <T : ResultFormat> check(textFormat: TextFormat, resultFormatClass: Class<T>, check: (T) -> Unit) {
+            val queryEngine = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
+            val input = "nertag:person (killed|visited)"
+            val query = templateQuery.copy(query = input, textFormat = textFormat)
+            query.eqlAst = EqlCompiler().parseOrFail(input)
+            for (result in queryEngine.query(query).searchResults) {
+                assertThat(result.payload).isInstanceOf(resultFormatClass)
+                check(result.payload as T)
+            }
+        }
+
+        @Test
+        fun plainText() {
+            check(TextFormat.PLAIN_TEXT, ResultFormat.Snippet.PlainText::class.java) {
+                assertThat(it.content).doesNotContain("§", "¶")
+            }
+        }
+
+        @Test
+        fun html() {
+            check(TextFormat.HTML, ResultFormat.Snippet.Html::class.java) {
+                assertThat(it.content).doesNotContain("§", "¶")
+            }
+        }
+
+        @Test
+        fun stringWithMetadata() {
+            check(TextFormat.STRING_WITH_METADATA, ResultFormat.Snippet.StringWithMetadata::class.java) {
+                assertThat(it.content.text).doesNotContain("§", "¶")
+            }
+        }
+
+        @Test
+        fun textUnitList() {
+            fun checkWord(word: TextUnit.Word) {
+                assertThat(word.indexes[corpusConfig.indexes.getValue("token").columnIndex]).doesNotContain("§", "¶")
+            }
+
+            fun checkEntity(entity: TextUnit.Entity) {
+                entity.words.forEach(::checkWord)
+            }
+
+            fun checkQueryMatch(match: TextUnit.QueryMatch) {
+                for (unit in match.content) {
+                    when (unit) {
+                        is TextUnit.Word -> checkWord(unit)
+                        is TextUnit.Entity -> checkEntity(unit)
+                        else -> throw AssertionError("only words and entities expected here")
+                    }
+                }
+            }
+
+            check(TextFormat.TEXT_UNIT_LIST, ResultFormat.Snippet.TextUnitList::class.java) {
+                for (unit in it.content.content) {
+                    when (unit) {
+                        is TextUnit.Word -> checkWord(unit)
+                        is TextUnit.Entity -> checkEntity(unit)
+                        is TextUnit.QueryMatch -> checkQueryMatch(unit)
+                    }
+                }
+            }
+        }
     }
 
     @Warning("it seems that different documents are being returned in test environment, why?")
