@@ -5,10 +5,16 @@ import {TextUnitList, textUnitListSchema} from "../components/annotations/TextUn
 
 export interface Payload {
     content: TextUnitList
+    location: number
+    size: number
+    canExtend: boolean
 }
 
 export const payloadSchema = yup.object({
-    content: textUnitListSchema
+    content: textUnitListSchema,
+    location: yup.number().integer().required(),
+    size: yup.number().integer().required(),
+    canExtend: yup.boolean().required()
 });
 
 export function isPayload(obj: Object): obj is Payload {

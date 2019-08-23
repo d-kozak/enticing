@@ -28,16 +28,13 @@ export function isInterval(obj: Object): obj is Interval {
 
 export class TextUnitList extends EnticingObject {
 
-    constructor(public content: Array<TextUnit>, public location: number, public size: number, public canExtend: boolean) {
+    constructor(public content: Array<TextUnit>) {
         super();
     }
 }
 
 export const textUnitListSchema = yup.object({
-    content: yup.array(yup.object()).required(),
-    location: yup.number().integer().required(),
-    size: yup.number().integer().required(),
-    canExtend: yup.boolean().required()
+    content: yup.array(yup.object()).required()
 });
 
 export function isTextUnitList(obj: Object): obj is TextUnitList {
@@ -116,7 +113,7 @@ export function parseNewAnnotatedText(input: object): TextUnitList | null {
         if (parsed != null)
             elements.push(parsed)
     }
-    return new TextUnitList(elements, input.location, input.size, input.canExtend)
+    return new TextUnitList(elements)
 }
 
 function parseElement(elem: TextUnit): TextUnit | null {
@@ -139,4 +136,4 @@ function parseElement(elem: TextUnit): TextUnit | null {
     }
 }
 
-export const dummyText = new TextUnitList([new Word(["ERROR"])], 0, 0, false)
+export const dummyText = new TextUnitList([new Word(["ERROR"])])
