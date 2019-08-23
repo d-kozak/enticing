@@ -1,7 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager
 
 import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
-import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 
 @Cleanup("put into configuration?")
@@ -25,21 +24,18 @@ internal fun generateSnippetIntervals(result: List<List<Interval>>, documentSize
             }
             .sortedBy { it.size }
             .toList()
-
-
-    @Incomplete("filter out the ones that are too overlapping")
-    return sorted
+    return sorted.filterIndexed { i, interval -> (0 until i).none { sorted[it].computeOverlap(interval) > 0.2 } }
 }
 
 
-internal fun computeAllIntervalCombinations(result: List<List<Interval>>): List<Interval> {
+internal fun computeAllIntervalCombinations(result: List<List<Interval>>): Set<Interval> {
     require(result.isNotEmpty()) { "Cannot compute snippets for empty result" }
 
-    var list = result.first().map { Interval.valueOf(it.from, it.to) }
+    var list = result.first().map { Interval.valueOf(it.from, it.to) }.toSet()
 
     for ((i, indexResults) in result.withIndex()) {
         if (i == 0) continue
-        val newList = mutableListOf<Interval>()
+        val newList = mutableSetOf<Interval>()
         for (x in list) {
             for (y in indexResults) {
                 val newInterval = Interval.valueOf(y.from, y.to)
