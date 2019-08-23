@@ -66,6 +66,19 @@ data class Interval private constructor(
         return valueOf(newFrom, newTo)
     }
 
+    fun computeOverlap(other: Interval): Double {
+        val common = this.commonSubInterval(other)
+        if (common.isEmpty()) return 0.0
+        return common.size.toDouble() / this.size.toDouble()
+    }
+
+    fun commonSubInterval(other: Interval): Interval {
+        val (x1, y1) = this
+        val (x2, y2) = other
+        if (y1 < x2 || y2 < x1) return empty()
+        return valueOf(max(x1, x2), min(y1, y2))
+    }
+
     @JsonIgnore
     val size: Int = if (isEmpty()) 0 else to - from + 1
 }

@@ -12,7 +12,7 @@ internal class SearchResultIntervalGeneratorTest {
     fun `single result`() {
         val input = listOf(listOf(Interval.valueOf(42)))
         Assertions.assertThat(computeAllIntervalCombinations(input))
-                .isEqualTo(listOf(Interval.valueOf(42) to listOf(Interval.valueOf(42))))
+                .isEqualTo(listOf(Interval.valueOf(42)))
     }
 
     @Test
@@ -23,11 +23,7 @@ internal class SearchResultIntervalGeneratorTest {
                 listOf(Interval.valueOf(50, 75))
         )
         Assertions.assertThat(computeAllIntervalCombinations(input))
-                .isEqualTo(listOf(Interval.valueOf(10, 75)
-                        to listOf(Interval.valueOf(42),
-                        Interval.valueOf(10, 20),
-                        Interval.valueOf(50, 75))
-                ))
+                .isEqualTo(listOf(Interval.valueOf(10, 75)))
     }
 
 
@@ -39,10 +35,6 @@ internal class SearchResultIntervalGeneratorTest {
                 listOf(Interval.valueOf(50, 75))
         )
         Assertions.assertThat(computeAllIntervalCombinations(input))
-                .isEqualTo(listOf(Interval.valueOf(10, 75)
-                        to listOf(Interval.valueOf(42), Interval.valueOf(10, 20),
-                        Interval.valueOf(50, 75)), Interval.valueOf(42, 110)
-                        to listOf(Interval.valueOf(42), Interval.valueOf(100, 110), Interval.valueOf(50, 75))
-                ))
+                .isEqualTo(listOf(Interval.valueOf(10, 75), Interval.valueOf(42, 110)))
     }
 }

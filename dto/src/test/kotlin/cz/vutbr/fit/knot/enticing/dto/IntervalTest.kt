@@ -118,6 +118,12 @@ internal class IntervalTest {
     }
 
     @Test
+    fun `empty intervals are equal`() {
+        assertThat(Interval.empty())
+                .isEqualTo(Interval.empty())
+    }
+
+    @Test
     fun `size test`() {
         val normal = Interval.valueOf(10, 20)
         assertThat(normal.size)
@@ -206,5 +212,95 @@ internal class IntervalTest {
                     .isEqualTo(Interval.valueOf(100, 200))
         }
 
+    }
+
+    @Nested
+    inner class CommonSubInterval {
+
+        @Test
+        fun `nothing in common`() {
+            val x = Interval.valueOf(10, 20)
+            val y = Interval.valueOf(30, 40)
+            assertThat(x.commonSubInterval(y))
+                    .isEqualTo(Interval.empty())
+        }
+
+        @Test
+        fun `share three to five`() {
+            val x = Interval.valueOf(1, 5)
+            val y = Interval.valueOf(3, 7)
+            assertThat(x.commonSubInterval(y))
+                    .isEqualTo(Interval.valueOf(3, 5))
+        }
+
+        @Test
+        fun `y in subinterval of x`() {
+            val x = Interval.valueOf(1, 5)
+            val y = Interval.valueOf(2, 3)
+            assertThat(x.commonSubInterval(y))
+                    .isEqualTo(Interval.valueOf(2, 3))
+        }
+
+        @Test
+        fun `x in subinterval of y`() {
+            val x = Interval.valueOf(2, 3)
+            val y = Interval.valueOf(1, 5)
+            assertThat(x.commonSubInterval(y))
+                    .isEqualTo(Interval.valueOf(2, 3))
+        }
+
+        @Test
+        fun `same intervals`() {
+            val x = Interval.valueOf(2, 3)
+            val y = Interval.valueOf(2, 3)
+            assertThat(x.commonSubInterval(y))
+                    .isEqualTo(Interval.valueOf(2, 3))
+        }
+    }
+
+
+    @Nested
+    inner class Overlapping {
+
+        @Test
+        fun `interval have nothing in common`() {
+            val x = Interval.valueOf(10, 20)
+            val y = Interval.valueOf(30, 40)
+            assertThat(x.computeOverlap(y))
+                    .isEqualTo(0.0)
+
+        }
+
+        @Test
+        fun `share three to five`() {
+            val x = Interval.valueOf(1, 5)
+            val y = Interval.valueOf(3, 7)
+            assertThat(x.computeOverlap(y))
+                    .isEqualTo(3.0 / 5.0)
+        }
+
+        @Test
+        fun `y in subinterval of x`() {
+            val x = Interval.valueOf(1, 5)
+            val y = Interval.valueOf(2, 3)
+            assertThat(x.computeOverlap(y))
+                    .isEqualTo(2.0 / 5.0)
+        }
+
+        @Test
+        fun `x in subinterval of y`() {
+            val x = Interval.valueOf(2, 3)
+            val y = Interval.valueOf(1, 5)
+            assertThat(x.computeOverlap(y))
+                    .isEqualTo(1.0)
+        }
+
+        @Test
+        fun `same intervals`() {
+            val x = Interval.valueOf(2, 3)
+            val y = Interval.valueOf(2, 3)
+            assertThat(x.computeOverlap(y))
+                    .isEqualTo(1.0)
+        }
     }
 }
