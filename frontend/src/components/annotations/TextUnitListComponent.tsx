@@ -40,8 +40,14 @@ const colors = ["red", "green", "blue"];
 
 export const renderElement = (text: TextUnit, corpusFormat: CorpusFormat, tokenIndex: number): React.ReactNode => {
     if (text instanceof Word) {
-        if (tokenIndex != -1 && (text.indexes[tokenIndex] == "§" || text.indexes[tokenIndex] == "¶")) {
-            return <span/>
+        if (tokenIndex != -1) {
+            if (text.indexes[tokenIndex] == "¶")
+                return <span/>
+            if (text.indexes[tokenIndex] == "§")
+                return <span>
+                    <br/>
+                    <br/>
+                </span>
         }
         if (text.indexes.length === 1) return <span>{text.indexes[0] + text.indexes[text.indexes.length - 1] != 'N' ? ' ' : ''}</span>
         return <AnnotatedWord word={text} corpusFormat={corpusFormat}/>
