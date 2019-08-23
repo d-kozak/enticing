@@ -34,7 +34,7 @@ export class TextUnitList extends EnticingObject {
 }
 
 export const textUnitListSchema = yup.object({
-    content: yup.array(yup.object()).required()
+    content: yup.array(yup.object()).min(0)
 });
 
 export function isTextUnitList(obj: Object): obj is TextUnitList {
