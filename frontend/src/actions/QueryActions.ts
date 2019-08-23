@@ -30,8 +30,9 @@ export const startSearchingAction = (query: SearchQuery, searchSettings: SearchS
         for (let error in response.data.errors) {
             dispatch(openSnackbar(`Error from ${error}: ${response.data.errors[error]}`))
         }
-        for (let snippet of response.data.searchResults) {
-            snippet.id = `${snippet.host}:${snippet.collection}:${snippet.documentId}`
+        for (let i in response.data.searchResults) {
+            const snippet = response.data.searchResults[i];
+            snippet.id = `${snippet.host}:${snippet.collection}:${snippet.documentId}:${i}`;
             const parsed = parseNewAnnotatedText(snippet.payload.content);
             if (parsed !== null) {
                 snippet.payload.content = parsed
