@@ -2,10 +2,20 @@ package cz.vutbr.fit.knot.enticing.dto.format.result
 
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
+import cz.vutbr.fit.knot.enticing.dto.TextFormat
+import cz.vutbr.fit.knot.enticing.dto.format.text.StringWithMetadata
+import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnitList
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Positive
 
+
+fun emptySnippet(format: TextFormat): ResultFormat.Snippet = when (format) {
+    TextFormat.PLAIN_TEXT -> ResultFormat.Snippet.PlainText("", 0, 0, false)
+    TextFormat.HTML -> ResultFormat.Snippet.Html("", 0, 0, false)
+    TextFormat.STRING_WITH_METADATA -> ResultFormat.Snippet.StringWithMetadata(StringWithMetadata("", emptyMap(), emptySet(), emptySet()), 0, 0, false)
+    TextFormat.TEXT_UNIT_LIST -> ResultFormat.Snippet.TextUnitList(TextUnitList(emptyList()), 0, 0, false)
+}
 
 /**
  * The actual data in the snippet

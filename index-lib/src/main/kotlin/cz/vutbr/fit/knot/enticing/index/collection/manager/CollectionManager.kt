@@ -5,6 +5,7 @@ import cz.vutbr.fit.knot.enticing.dto.Offset
 import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.SnippetExtension
 import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
+import cz.vutbr.fit.knot.enticing.dto.format.result.emptySnippet
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.EqlCompiler
 import cz.vutbr.fit.knot.enticing.index.boundary.MatchInfo
@@ -63,6 +64,8 @@ class CollectionManager internal constructor(
     fun extendSnippet(query: IndexServer.ContextExtensionQuery): SnippetExtension {
         val document = searchEngine.loadDocument(query.docId)
         val (prefix, suffix) = computeExtensionIntervals(left = query.location, right = query.location + query.size, extension = query.extension, documentSize = document.size)
+        if (prefix.isEmpty() && suffix.isEmpty()) return SnippetExtension(emptySnippet(query.textFormat), emptySnippet(query.textFormat), false)
+
         val (prefixInfo, suffixInfo) = if (query.query != null) {
             val ast = eqlCompiler.parseOrFail(query.query!!)
             val prefixMatch = postProcessor.process(ast, document, prefix) ?: MatchInfo.empty()
