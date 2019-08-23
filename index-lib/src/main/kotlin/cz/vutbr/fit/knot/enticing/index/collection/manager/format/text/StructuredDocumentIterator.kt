@@ -51,10 +51,10 @@ class StructuredDocumentIterator(private val corpusConfiguration: CorpusConfigur
     private val log = LoggerFactory.getLogger(StructuredDocumentIterator::class.java)
 
     /**
-     * Iterates over a document and notifies the listener about every start and end of matched region, start and end of entity and every word,
+     * Iterates over a document and notifies the visitor about every start and end of matched region, start and end of entity and every word,
      * priority is in this order
      */
-    fun iterateDocument(document: IndexedDocument, matchStarts: Map<Int, Interval>, matchEnds: Set<Int>, listener: DocumentVisitor, interval: Interval? = null) {
+    fun iterateDocument(document: IndexedDocument, matchStarts: Map<Int, Interval>, matchEnds: Set<Int>, visitor: DocumentVisitor, interval: Interval? = null) {
         val (from, to) = interval ?: Interval.valueOf(0, document.size)
         var startedEntity: Triple<List<String>, String, Int>? = null
 
@@ -63,10 +63,10 @@ class StructuredDocumentIterator(private val corpusConfiguration: CorpusConfigur
             if (i > to) break
 
             if (i in matchStarts) {
-                if (startedEntity != null) listener.visitEntityEnd()
-                listener.visitMatchStart(matchStarts.getValue(i))
+                if (startedEntity != null) visitor.visitEntityEnd()
+                visitor.visitMatchStart(matchStarts.getValue(i))
                 if (startedEntity != null)
-                    listener.visitEntityStart(startedEntity.first, startedEntity.second)
+                    visitor.visitEntityStart(startedEntity.first, startedEntity.second)
             }
 
             if (corpusConfiguration.entities.isNotEmpty()) {
@@ -74,7 +74,7 @@ class StructuredDocumentIterator(private val corpusConfiguration: CorpusConfigur
                 if (entityClass != "0") {
                     if (startedEntity != null) {
                         log.warn("new entity started before previous one ($startedEntity) finished, old will be finished now")
-                        listener.visitEntityEnd()
+                        visitor.visitEntityEnd()
                     }
 
                     val attributeInfo = corpusConfiguration.entities[entityClass]
@@ -84,26 +84,26 @@ class StructuredDocumentIterator(private val corpusConfiguration: CorpusConfigur
                             log.warn("could not parse entity length index ${word[corpusConfiguration.entityLengthIndex]}")
                             1
                         }()
-                        listener.visitEntityStart(attributes, entityClass)
+                        visitor.visitEntityStart(attributes, entityClass)
                         Triple(attributes, entityClass, i + len - 1)
                     } else {
                         log.warn("encountered entity $entityClass for which there is no known format, attributes will be empty")
-                        listener.visitEntityStart(emptyList(), entityClass)
+                        visitor.visitEntityStart(emptyList(), entityClass)
                         Triple(emptyList(), entityClass, i)
                     }
                 }
             }
 
-            listener.visitWord(word)
+            visitor.visitWord(word)
 
             if (startedEntity != null && i == startedEntity.third) {
-                listener.visitEntityEnd()
+                visitor.visitEntityEnd()
                 startedEntity = null
             }
             if (i in matchEnds) {
-                if (startedEntity != null) listener.visitEntityEnd()
-                listener.visitMatchEnd()
-                if (startedEntity != null) listener.visitEntityStart(startedEntity.first, startedEntity.second)
+                if (startedEntity != null) visitor.visitEntityEnd()
+                visitor.visitMatchEnd()
+                if (startedEntity != null) visitor.visitEntityStart(startedEntity.first, startedEntity.second)
             }
         }
     }

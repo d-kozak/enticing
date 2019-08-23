@@ -7,7 +7,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 
-class TestListener : DocumentVisitor {
+private class TestVisitor : DocumentVisitor {
 
     val content: MutableList<Pair<String, Any?>> = mutableListOf()
 
@@ -54,7 +54,7 @@ internal class StructuredDocumentIteratorTest {
 
 
     @Test
-    fun `entity is split by match from entity starts first`() {
+    fun `entity and match start at the same index and match goes on`() {
         val iterator = StructuredDocumentIterator(withEntities)
         val document = testDocument(8,
                 "Country roads , take Jan Novak home foo",
@@ -63,12 +63,77 @@ internal class StructuredDocumentIteratorTest {
                 "0 0 0 0 Jan_Novak 0 0 0",
                 "0 0 0 0 2 0 0 0"
         )
-        val listener = TestListener()
+        val visitor = TestVisitor()
+        iterator.iterateDocument(document,
+                matchStarts = mapOf(4 to Interval.valueOf(42)),
+                matchEnds = setOf(7),
+                visitor = visitor)
+        assertThat(visitor.content)
+                .isEqualTo(listOf(
+                        "w" to listOf("Country", "1", "0", "0", "0"),
+                        "w" to listOf("roads", "2", "0", "0", "0"),
+                        "w" to listOf(",", "3", "0", "0", "0"),
+                        "w" to listOf("take", "4", "0", "0", "0"),
+                        "ms" to Interval.valueOf(42),
+                        "es" to (listOf("Jan_Novak") to "person"),
+                        "w" to listOf("Jan", "5", "person", "Jan_Novak", "2"),
+                        "w" to listOf("Novak", "6", "0", "0", "0"),
+                        "ee" to null,
+                        "w" to listOf("home", "7", "0", "0", "0"),
+                        "w" to listOf("foo", "8", "0", "0", "0"),
+                        "me" to null)
+                )
+    }
+
+    @Test
+    fun `entity is within the match`() {
+        val iterator = StructuredDocumentIterator(withEntities)
+        val document = testDocument(8,
+                "Country roads , take Jan Novak home foo",
+                "1 2 3 4 5 6 7 8",
+                "0 0 0 0 person 0 0 0",
+                "0 0 0 0 Jan_Novak 0 0 0",
+                "0 0 0 0 2 0 0 0"
+        )
+        val visitor = TestVisitor()
+        iterator.iterateDocument(document,
+                matchStarts = mapOf(1 to Interval.valueOf(42)),
+                matchEnds = setOf(6),
+                visitor = visitor)
+        assertThat(visitor.content)
+                .isEqualTo(listOf(
+                        "w" to listOf("Country", "1", "0", "0", "0"),
+                        "ms" to Interval.valueOf(42),
+                        "w" to listOf("roads", "2", "0", "0", "0"),
+                        "w" to listOf(",", "3", "0", "0", "0"),
+                        "w" to listOf("take", "4", "0", "0", "0"),
+                        "es" to (listOf("Jan_Novak") to "person"),
+                        "w" to listOf("Jan", "5", "person", "Jan_Novak", "2"),
+                        "w" to listOf("Novak", "6", "0", "0", "0"),
+                        "ee" to null,
+                        "w" to listOf("home", "7", "0", "0", "0"),
+                        "me" to null,
+                        "w" to listOf("foo", "8", "0", "0", "0"))
+                )
+    }
+
+
+    @Test
+    fun `entity is split by match and entity starts first`() {
+        val iterator = StructuredDocumentIterator(withEntities)
+        val document = testDocument(8,
+                "Country roads , take Jan Novak home foo",
+                "1 2 3 4 5 6 7 8",
+                "0 0 0 0 person 0 0 0",
+                "0 0 0 0 Jan_Novak 0 0 0",
+                "0 0 0 0 2 0 0 0"
+        )
+        val visitor = TestVisitor()
         iterator.iterateDocument(document,
                 matchStarts = mapOf(5 to Interval.valueOf(42)),
                 matchEnds = setOf(6),
-                listener = listener)
-        assertThat(listener.content)
+                visitor = visitor)
+        assertThat(visitor.content)
                 .isEqualTo(listOf(
                         "w" to listOf("Country", "1", "0", "0", "0"),
                         "w" to listOf("roads", "2", "0", "0", "0"),
@@ -97,12 +162,12 @@ internal class StructuredDocumentIteratorTest {
                 "Jan_Novak 0 0 0",
                 "2 0 0 0"
         )
-        val listener = TestListener()
+        val visitor = TestVisitor()
         iterator.iterateDocument(document,
                 matchStarts = mapOf(0 to Interval.valueOf(42)),
                 matchEnds = setOf(0),
-                listener = listener)
-        assertThat(listener.content)
+                visitor = visitor)
+        assertThat(visitor.content)
                 .isEqualTo(listOf(
                         "ms" to Interval.valueOf(from = 42, to = 42),
                         "es" to (listOf("Jan_Novak") to "person"),

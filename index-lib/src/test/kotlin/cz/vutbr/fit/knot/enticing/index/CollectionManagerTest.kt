@@ -125,36 +125,31 @@ class CollectionManagerTest {
     }
 
     @Test
-    fun `valid queries`() {
+    fun `valid queries with all text formats`() {
         val queryEngine = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
-        for (input in listOf(
-                "hello",
-                "john",
-                "lemma:work{{lemma->token}}",
-                "nertag:person{{nertag->token}}",
-                "job work"
-        )) {
-            val query = templateQuery.copy(query = input)
-            query.eqlAst = EqlCompiler().parseOrFail(input)
-            val result = queryEngine.query(query)
-            println(result)
+        for (textFormat in TextFormat.values()) {
+            for (input in listOf(
+                    "hello",
+                    "john",
+                    "lemma:work{{lemma->token}}",
+                    "nertag:person{{nertag->token}}",
+                    "job work"
+            )) {
+                val query = templateQuery.copy(query = input, textFormat = textFormat)
+                query.eqlAst = EqlCompiler().parseOrFail(input)
+                val result = queryEngine.query(query)
+            }
         }
     }
 
+
     @Test
-    fun `valid queries with new data format requested`() {
+    fun exampleQuery() {
         val queryEngine = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
-        for (input in listOf(
-                "hello",
-                "john",
-                "lemma:work{{lemma->token}}",
-                "nertag:person{{nertag->token}}",
-                "job work"
-        )) {
-            val query = templateQuery.copy(query = input, textFormat = TextFormat.TEXT_UNIT_LIST)
-            query.eqlAst = EqlCompiler().parseOrFail(input)
-            val result = queryEngine.query(query)
-        }
+        val input = "nertag:person (killed|visited)"
+        val query = templateQuery.copy(query = input, textFormat = TextFormat.TEXT_UNIT_LIST)
+        query.eqlAst = EqlCompiler().parseOrFail(input)
+        val result = queryEngine.query(query)
     }
 
     @Warning("it seems that different documents are being returned in test environment, why?")
