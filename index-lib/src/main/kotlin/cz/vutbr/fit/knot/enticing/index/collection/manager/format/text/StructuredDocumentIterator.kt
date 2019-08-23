@@ -73,23 +73,26 @@ class StructuredDocumentIterator(private val corpusConfiguration: CorpusConfigur
                 val entityClass = word[corpusConfiguration.entityIndex]
                 if (entityClass != "0") {
                     if (startedEntity != null) {
-                        log.warn("new entity started before previous one ($startedEntity) finished, old will be finished now")
+                        log.warn("${document.title}:${document.id}:[$i]:new entity started before previous one ($startedEntity) finished, old will be finished now")
                         visitor.visitEntityEnd()
                     }
+                    val len = word[corpusConfiguration.entityLengthIndex].toIntOrNull() ?: {
+                        log.warn("${document.title}:${document.id}:[$i]:could not parse entity length index ${word[corpusConfiguration.entityLengthIndex]}")
+                        1
+                    }()
+                    // -1 signals replicated entity
+                    if (len != -1) {
+                        val attributeInfo = corpusConfiguration.entities[entityClass]
+                        startedEntity = if (attributeInfo != null) {
+                            val attributes = attributeInfo.attributes.values.map { it.columnIndex }.map { word[it] }
 
-                    val attributeInfo = corpusConfiguration.entities[entityClass]
-                    startedEntity = if (attributeInfo != null) {
-                        val attributes = attributeInfo.attributes.values.map { it.columnIndex }.map { word[it] }
-                        val len = word[corpusConfiguration.entityLengthIndex].toIntOrNull() ?: {
-                            log.warn("could not parse entity length index ${word[corpusConfiguration.entityLengthIndex]}")
-                            1
-                        }()
-                        visitor.visitEntityStart(attributes, entityClass)
-                        Triple(attributes, entityClass, i + len - 1)
-                    } else {
-                        log.warn("encountered entity $entityClass for which there is no known format, attributes will be empty")
-                        visitor.visitEntityStart(emptyList(), entityClass)
-                        Triple(emptyList(), entityClass, i)
+                            visitor.visitEntityStart(attributes, entityClass)
+                            Triple(attributes, entityClass, i + len - 1)
+                        } else {
+                            log.warn("${document.title}:${document.id}:[$i]:encountered entity $entityClass for which there is no known format, attributes will be empty")
+                            visitor.visitEntityStart(emptyList(), entityClass)
+                            Triple(emptyList(), entityClass, i)
+                        }
                     }
                 }
             }

@@ -76,7 +76,7 @@ internal class Mg4jDocumentFactoryTest {
             var i = 0
             while (i < result.size) {
                 val (type, count) = result[i]
-                if (count != 0) {
+                if (count != 0 && count != -1) {
                     for (j in i + 1 until count) {
                         if (type != result[j].first) {
                             val sublist = result.subList(max(0, j - 5), min(j + 5, result.size))

@@ -141,7 +141,7 @@ internal fun processLine(line: String, fields: List<StringBuilder>, lineIndex: I
             if (i != cellCount - 1) {
                 stringBuilder.append(replicationInfo!!.elems[i - firstEntityCell])
             } else {
-                stringBuilder.append('0')
+                stringBuilder.append("-1") // signal that this entity is there only for indexing purpuses for proximity queries to work
                 replicationInfo!!.lineCount--
                 if (replicationInfo!!.lineCount == 0) {
                     replicationInfo = null
