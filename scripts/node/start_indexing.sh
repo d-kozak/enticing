@@ -1,5 +1,10 @@
 #!/bin/bash
-[[ -d "$ENTICING_HOME" ]] || { echo "ENTICING_HOME not defined, trying to configure it" >&2; export ENTICING_HOME=realpath "$BASH_SOURCE/../.."; echo "ENTICING_HOME set to $ENTICING_HOME"; }
+[[ -d "$ENTICING_HOME" ]] || { echo "ENTICING_HOME not defined, trying to configure it" >&2; export ENTICING_HOME=$(realpath $(dirname "$BASH_SOURCE")/../..); echo "ENTICING_HOME set to $ENTICING_HOME"; }
+[[ -d "$1" ]] || { echo "EXPECTING a directory with collections to process" >&2 ; exit 1; }
+COL_DIR="$1"
 MEM=$("$ENTICING_HOME"/scripts/helpers/print_mem.sh)
 echo "I've got $MEM mb of free ram"
-echo "REMOTE HOME IS $REMOTE_HOME"
+cd "$COL_DIR" || { echo "Could not go to the indexes directory" >&2 ; exit 1; }
+COLS=$(ls | grep "collPart*")
+echo "Collections to process:"
+echo "$COLS"
