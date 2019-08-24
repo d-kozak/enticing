@@ -8,3 +8,4 @@ cd "$COL_DIR" || { echo "Could not go to the indexes directory" >&2 ; exit 1; }
 COLS=$(ls | grep "collPart*")
 echo "Collections to process:"
 echo "$COLS"
+screen -d -m sleep 60
