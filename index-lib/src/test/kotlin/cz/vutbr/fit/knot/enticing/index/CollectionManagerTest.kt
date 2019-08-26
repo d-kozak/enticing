@@ -238,6 +238,64 @@ class CollectionManagerTest {
                     assertThat(it.content).doesNotContain(shouldNotContain)
                 }
             }
+
+            @Test
+            fun stringWithMetadata() {
+                val query = templateQuery.copy(textFormat = TextFormat.STRING_WITH_METADATA, metadata = metadata)
+                check(query, ResultFormat.Snippet.StringWithMetadata::class.java) {
+                    for ((_, annotation) in it.content.annotations) {
+                        when (val nertag = annotation.content["nertag"]) {
+                            null -> assertThat(annotation.content.keys).contains("lemma", "position", "parlemma")
+                                    .hasSize(3)
+                            "person" -> assertThat(annotation.content.keys).contains("name", "profession", "nationality")
+                                    .hasSize(4)
+                            "date" -> assertThat(annotation.content.keys).contains("year", "day")
+                                    .hasSize(3)
+                            else -> throw AssertionError("Entity of type $nertag should not be included")
+                        }
+                    }
+                }
+            }
+
+            @Test
+            fun textUnitList() {
+                fun checkWord(word: TextUnit.Word) {
+                    assertThat(word.indexes).hasSize(4)
+                }
+
+                fun checkEntity(entity: TextUnit.Entity) {
+                    entity.words.forEach(::checkWord)
+                    when (entity.entityClass) {
+                        "person" -> assertThat(entity.attributes).hasSize(3)
+                        "date" -> assertThat(entity.attributes).hasSize(2)
+                        else -> throw AssertionError("Entity of type ${entity.entityClass} should not be included")
+                    }
+                }
+
+                fun checkQueryMatch(match: TextUnit.QueryMatch) {
+                    for (unit in match.content) {
+                        when (unit) {
+                            is TextUnit.Word -> checkWord(unit)
+                            is TextUnit.Entity -> checkEntity(unit)
+                            else -> throw AssertionError("only words and entities expected here")
+                        }
+                    }
+                }
+
+                val query = templateQuery.copy(textFormat = TextFormat.TEXT_UNIT_LIST, metadata = metadata)
+                check(query, ResultFormat.Snippet.TextUnitList::class.java) {
+                    for (unit in it.content.content) {
+                        when (unit) {
+                            is TextUnit.Word -> checkWord(unit)
+                            is TextUnit.Entity -> checkEntity(unit)
+                            is TextUnit.QueryMatch -> checkQueryMatch(unit)
+                        }
+                    }
+                }
+            }
+
+
+
         }
 
 
