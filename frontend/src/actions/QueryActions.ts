@@ -18,7 +18,7 @@ import {SearchSettings} from "../entities/SearchSettings";
 import {openSnackbar} from "../reducers/SnackBarReducer";
 import {newSearchResults} from "../reducers/SearchResultReducer";
 import {User} from "../entities/User";
-import {CorpusFormat} from "../entities/CorpusFormat";
+import {CorpusFormat, EntityInfo, IndexInfo, String2StringObjectMap} from "../entities/CorpusFormat";
 import {SelectedMetadata} from "../entities/SelectedMetadata";
 
 
@@ -28,6 +28,7 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
         return
     }
     const metadata = createMetadataRequest(searchSettings.corpusFormat, user.selectedMetadata[searchSettings.id]);
+    const filteredCorpusFormat = filterCorpusFormat(searchSettings.corpusFormat, user.selectedMetadata[searchSettings.id]);
     const searchQuery: SearchQuery = {
         query,
         metadata,
@@ -57,7 +58,7 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
             }
         }
 
-        dispatch(newSearchResults({snippets: response.data.searchResults, corpusFormat: searchSettings.corpusFormat!}));
+        dispatch(newSearchResults({snippets: response.data.searchResults, corpusFormat: filteredCorpusFormat}));
         dispatch(hideProgressbar());
         if (history) {
             history.push(`/search?query=${encodeURI(query)}`);
@@ -68,6 +69,49 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
         dispatch(hideProgressbar());
     })
 };
+
+
+function filterCorpusFormat(corpusFormat: CorpusFormat, selectedMetadata: SelectedMetadata | undefined): CorpusFormat {
+    // @Warning should we clone the object where or are we sure that no one dares to modify it?
+    if (!selectedMetadata) return corpusFormat;
+    const indexes: IndexInfo = {};
+    const entities: { [clazz: string]: EntityInfo } = {};
+
+    for (let index of selectedMetadata.indexes) {
+        if (!corpusFormat.indexes[index]) {
+            console.warn(`index ${index} is not part of selected corpus format`);
+            continue;
+        }
+        indexes[index] = corpusFormat.indexes[index];
+    }
+
+    for (let entityName of Object.keys(selectedMetadata.entities)) {
+        const entity = selectedMetadata.entities[entityName];
+        const entityInfo = corpusFormat.entities[entityName];
+        if (!entityInfo) {
+            console.warn(`entity ${entityName} is not part of selected corpus format`);
+            continue;
+        }
+        const wantedAttributes: String2StringObjectMap = {};
+        for (let attribute of entity.attributes) {
+            if (entityInfo.attributes[attribute]) {
+                wantedAttributes[attribute] = entityInfo.attributes[attribute];
+            } else {
+                console.warn(`attribute ${attribute} is not part of selected entity ${entityName}`);
+            }
+        }
+        entities[entityName] = {
+            description: entityInfo.description,
+            attributes: wantedAttributes
+        };
+    }
+
+    return {
+        corpusName: corpusFormat.corpusName,
+        indexes,
+        entities
+    };
+}
 
 
 function createMetadataRequest(corpusFormat: CorpusFormat, selectedMetadata: SelectedMetadata | undefined): TextMetadata {

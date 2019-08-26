@@ -3,7 +3,7 @@ import {mapValues} from "lodash";
 import {validateOrNull} from "./validationUtils";
 
 
-type String2StringObjectMap = { [key: string]: string }
+export type String2StringObjectMap = { [key: string]: string }
 
 export type IndexInfo = String2StringObjectMap
 
