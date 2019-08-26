@@ -94,7 +94,7 @@ function filterCorpusFormat(corpusFormat: CorpusFormat, selectedMetadata: Select
         }
         const wantedAttributes: String2StringObjectMap = {};
         for (let attribute of entity.attributes) {
-            if (entityInfo.attributes[attribute]) {
+            if (entityInfo.attributes[attribute] !== undefined) {
                 wantedAttributes[attribute] = entityInfo.attributes[attribute];
             } else {
                 console.warn(`attribute ${attribute} is not part of selected entity ${entityName}`);
@@ -136,7 +136,7 @@ function createMetadataRequest(corpusFormat: CorpusFormat, selectedMetadata: Sel
         }
         const wantedAttributes = [] as Array<string>;
         for (let attribute of entity.attributes) {
-            if (entityInfo.attributes[attribute]) {
+            if (entityInfo.attributes[attribute] !== undefined) {
                 wantedAttributes.push(attribute);
             } else {
                 console.warn(`attribute ${attribute} is not part of selected entity ${entityName}`);
