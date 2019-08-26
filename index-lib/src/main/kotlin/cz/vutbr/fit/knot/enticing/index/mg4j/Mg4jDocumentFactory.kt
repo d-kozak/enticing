@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
-import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
+import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.annotation.Speed
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.Index
@@ -83,25 +83,25 @@ val whitespaceRegex = """\s""".toRegex()
 var replicationInfo: EntityReplicationInfo? = null
 
 @Speed("rewrite using MutableStrings and whitespace readers?")
-internal fun processLine(line: String, fields: List<StringBuilder>, lineIndex: Int, corpusConfiguration: CorpusConfiguration) {
+@Cleanup("Should be refactored, it is smelly")
+internal fun processLine(line: String, fields: List<StringBuilder>, lineIndex: Int, corpusConfiguration: CorpusConfiguration): Boolean {
     val cells = line.split(whitespaceRegex)
-    @Incomplete("this should be loaded from the config")
-    val cellCount = 27
-    val nerlenIndex = 26
-    val firstEntityCell = 13
+    val indexCount = corpusConfiguration.indexes.size
+    val entityLenIndex = corpusConfiguration.entityLengthIndex
+    val firstAttributeIndex = corpusConfiguration.firstAttributeIndex
 
     val tokenIndex = corpusConfiguration.indexes.getValue("token").columnIndex
 
-    if (cells.size != cellCount) {
-        log.warn("$lineIndex: $line does not have correct format, skipping")
-        log.warn("It has size ${cells.size}, but it should be 27")
-        log.warn("was split into $cells")
-        return
+    if (cells.size != indexCount) {
+        log.debug("$lineIndex: $line does not have correct format, skipping")
+        log.debug("It has size ${cells.size}, but it should be 27")
+        log.debug("was split into $cells")
+        return false 
     }
 
     if (cells[tokenIndex].isBlank() || cells[tokenIndex] == glueSymbol) {
-        log.warn("$lineIndex: token is blank, skipping... at line '$line'")
-        return
+        log.debug("$lineIndex: token is blank, skipping... at line '$line'")
+        return false
     }
 
     for ((i, cell) in cells.withIndex()) {
@@ -130,16 +130,16 @@ internal fun processLine(line: String, fields: List<StringBuilder>, lineIndex: I
 
         val elem = if (cell.isGlued()) cell.removeGlue() else cell
 
-        if (i < firstEntityCell) {
+        if (firstAttributeIndex == null || i < firstAttributeIndex) {
             if (elem.isBlank()) {
-                log.warn("$lineIndex:$i is blank, at line '$line'")
+                log.debug("$lineIndex:$i is blank, at line '$line'")
                 stringBuilder.append(NULL)
             } else {
                 stringBuilder.append(elem)
             }
         } else if (replicationInfo != null) {
-            if (i != cellCount - 1) {
-                stringBuilder.append(replicationInfo!!.elems[i - firstEntityCell])
+            if (i != indexCount - 1) {
+                stringBuilder.append(replicationInfo!!.elems[i - firstAttributeIndex])
             } else {
                 stringBuilder.append("-1") // signal that this entity is there only for indexing purpuses for proximity queries to work
                 replicationInfo!!.lineCount--
@@ -147,16 +147,17 @@ internal fun processLine(line: String, fields: List<StringBuilder>, lineIndex: I
                     replicationInfo = null
                 }
             }
-        } else if (i == nerlenIndex) {
+        } else if (i == entityLenIndex) {
             val nerlen = elem.toIntOrNull() ?: 0
             if (nerlen != 0) {
-                replicationInfo = EntityReplicationInfo(cells.subList(firstEntityCell, cellCount), nerlen)
+                replicationInfo = EntityReplicationInfo(cells.subList(firstAttributeIndex, indexCount), nerlen)
             }
             stringBuilder.append(elem)
         } else {
             stringBuilder.append(elem)
         }
     }
+    return true
 }
 
 fun ByteArray.growBy(length: Int): ByteArray = ByteArrays.grow(this, this.size + length)

@@ -23,6 +23,18 @@ data class CorpusConfiguration(
             return field
         }
 
+    /**
+     * First index representing entity attribute
+     * should always be greater or equal to 0
+     * -1 means not initialized
+     * null means that there is no entity with attributes in the config
+     */
+    var firstAttributeIndex: Int? = -1
+        get() {
+            if (field == -1) throw IllegalStateException("first entity index was not initialized")
+            return field
+        }
+
     fun indexes(block: IndexConfigDsl.() -> Unit = {}) = indexesDslInternal(block)
             .also { this.indexes = it }
 
@@ -180,6 +192,15 @@ fun CorpusConfiguration.validate(errors: MutableList<String>) {
         }
     }
 
+    this.firstAttributeIndex = null
+    if (entities.isNotEmpty()) {
+        for ((_, entity) in entities) {
+            if (entity.attributes.isNotEmpty()) {
+                this.firstAttributeIndex = entity.attributes.values.map { it.columnIndex }.min()!!
+                break
+            }
+        }
+    }
 }
 
 private fun checkName(key: String, name: String, errors: MutableList<String>) {
