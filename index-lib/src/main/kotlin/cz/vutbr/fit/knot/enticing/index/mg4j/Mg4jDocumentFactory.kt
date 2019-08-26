@@ -37,6 +37,8 @@ class Mg4jDocumentFactory(private val corpusConfiguration: CorpusConfiguration) 
         // + 1 for hidden glue index
         val fields = List(indexes.size + 1) { StringBuilder() }
 
+        val invalidLines = mutableSetOf<Int>()
+
         stream.readLine() // skip doc line
         stream.readLine() // skip page line
         var line = stream.readLine()
@@ -54,13 +56,15 @@ class Mg4jDocumentFactory(private val corpusConfiguration: CorpusConfiguration) 
                     lineIndex++
                 }
                 !line.isMetaInfo() -> {
-                    processLine(line, fields, lineIndex, corpusConfiguration)
+                    if (!processLine(line, fields, lineIndex, corpusConfiguration)) invalidLines.add(lineIndex)
                     lineIndex++
                 }
                 else -> log.error("Unnown meta line $line")
             }
             line = stream.readLine()
         }
+        if (invalidLines.isNotEmpty())
+            log.warn("Document ${metadata[DocumentMetadata.ID]}:${metadata[DocumentMetadata.TITLE]} has invalid lines: $invalidLines, they were skipped")
         metadata[DocumentMetadata.SIZE] = lineIndex
         return Mg4jDocument(corpusConfiguration, metadata, fields.map { it.toString() })
     }
@@ -92,16 +96,8 @@ internal fun processLine(line: String, fields: List<StringBuilder>, lineIndex: I
 
     val tokenIndex = corpusConfiguration.indexes.getValue("token").columnIndex
 
-    if (cells.size != indexCount) {
-        log.debug("$lineIndex: $line does not have correct format, skipping")
-        log.debug("It has size ${cells.size}, but it should be 27")
-        log.debug("was split into $cells")
+    if (cells.size != indexCount || cells[tokenIndex].isBlank() || cells[tokenIndex] == glueSymbol) {
         return false 
-    }
-
-    if (cells[tokenIndex].isBlank() || cells[tokenIndex] == glueSymbol) {
-        log.debug("$lineIndex: token is blank, skipping... at line '$line'")
-        return false
     }
 
     for ((i, cell) in cells.withIndex()) {
