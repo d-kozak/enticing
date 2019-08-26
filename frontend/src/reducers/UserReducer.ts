@@ -18,7 +18,6 @@ import {
 } from "./dialog/ChangePasswordDialogReducer";
 import {SelectedMetadata} from "../entities/SelectedMetadata";
 
-
 const {reducer, actions} = createSlice({
     slice: 'user',
     initialState: {
@@ -70,6 +69,7 @@ export const loadSelectedMetadataRequest = (searchSettingsId: string): ThunkResu
 export const saveSelectedMetadataRequest = (metadata: SelectedMetadata, settingsId: string): ThunkResult<void> => async dispatch => {
     try {
         await axios.post(`${API_BASE_PATH}/user/text-metadata/${settingsId}`, metadata, {withCredentials: true});
+        dispatch(loadSelectedMetadata({metadata, settingsId}));
         dispatch(openSnackbar(`metadata saved`));
     } catch (e) {
         dispatch(openSnackbar(`Failed save selected metadata`));
@@ -81,7 +81,7 @@ export const logoutRequest = (): ThunkResult<void> => dispatch => {
     axios.get(`${API_BASE_PATH}/logout`)
         .then(() => {
             dispatch(openSnackbar('Logged out'));
-            dispatch(loadSearchSettingsRequest(null));
+            dispatch(loadSearchSettingsRequest(null, false));
             dispatch(userLogout());
             dispatch(hideProgressbar());
         })
@@ -100,7 +100,9 @@ export const selectSearchSettingsRequest = (settings: SearchSettings, previousSe
             })
             .then(response => {
                 if (isCorpusFormat(response.data)) {
-                    dispatch(loadCorpusFormat({id: Number(settings.id), format: response.data}))
+                    dispatch(loadCorpusFormat({id: Number(settings.id), format: response.data}));
+                    if (isLoggedIn)
+                        dispatch(loadSelectedMetadataRequest(settings.id));
                 } else {
                     throw "cannot parse";
                 }
@@ -139,7 +141,7 @@ export const loginRequest = (login: string, password: string, onError: (errors: 
             dispatch(userLogin(user));
 
             dispatch(openSnackbar('Logged in'));
-            dispatch(loadSearchSettingsRequest(user.selectedSettings));
+            dispatch(loadSearchSettingsRequest(user.selectedSettings, true));
         })
         .catch(error => {
             if (error.response.data.status === 401) {
@@ -176,12 +178,11 @@ export const attemptLoginRequest = (): ThunkResult<void> => (dispatch) => {
         .then(response => {
             const user = response.data;
             dispatch(userLogin(user));
-            // @ts-ignore
-            dispatch(loadSearchSettingsAction(user.roles.indexOf("ADMIN") != -1));
+            dispatch(loadSearchSettingsRequest(user.selectedSettings, true));
         })
         .catch(() => {
             // load search settings even when not logged in
-            dispatch(loadSearchSettingsRequest(null));
+            dispatch(loadSearchSettingsRequest(null, false));
         });
 };
 

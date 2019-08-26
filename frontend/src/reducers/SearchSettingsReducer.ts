@@ -9,6 +9,7 @@ import {openSnackbar} from "./SnackBarReducer";
 import {parseValidationErrors} from "../actions/errors";
 import {uploadFile} from "../utils/file";
 import {hideProgressbar, showProgressbar} from "./ProgressBarReducer";
+import {loadSelectedMetadataRequest} from "./UserReducer";
 
 
 const {reducer, actions} = createSlice({
@@ -84,7 +85,7 @@ export const loadCorpusFormatRequest = (searchSettings: SearchSettings): ThunkRe
     })
 };
 
-export const loadSearchSettingsRequest = (selectedSettingsId: string | null): ThunkResult<void> => (dispatch) => {
+export const loadSearchSettingsRequest = (selectedSettingsId: string | null, isLoggedIn: boolean): ThunkResult<void> => (dispatch) => {
     axios.get<Array<SearchSettings>>(`${API_BASE_PATH}/search-settings`, {withCredentials: true})
         .then(response => {
             const searchSettings = response.data;
@@ -94,7 +95,9 @@ export const loadSearchSettingsRequest = (selectedSettingsId: string | null): Th
             }
             const selectedSettings = findSelectedSettings(selectedSettingsId, searchSettings);
             if (selectedSettings !== null) {
-                dispatch(loadCorpusFormatRequest(selectedSettings))
+                dispatch(loadCorpusFormatRequest(selectedSettings));
+                if (isLoggedIn)
+                    dispatch(loadSelectedMetadataRequest(selectedSettings.id));
             } else {
                 console.warn("No selected search settings found, could not pre-load corpus format...")
             }
