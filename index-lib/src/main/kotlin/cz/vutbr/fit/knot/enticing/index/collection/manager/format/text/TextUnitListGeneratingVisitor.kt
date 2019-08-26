@@ -21,6 +21,8 @@ class TextUnitListGeneratingVisitor(config: CorpusConfiguration, defaultIndexNam
     private var currentQueryInterval: Interval? = null
     private var unitsForQueryMatch: MutableList<TextUnit>? = null
 
+    private val selectedIndexes: Set<Int> = config.indexes.values.map { it.columnIndex }.toSet()
+
     override fun visitMatchStart(queryInterval: Interval) {
         if (currentQueryInterval != null || unitsForQueryMatch != null) {
             log.warn("matchStart called while some match interval metadata are still present inside the listener, they will be overwritten")
@@ -33,13 +35,15 @@ class TextUnitListGeneratingVisitor(config: CorpusConfiguration, defaultIndexNam
         if (this.attributes != null || this.entityClass != null || this.wordsForEntity?.isNotEmpty() == true) {
             log.warn("entityStart called while some entity metadata are still present inside the listener, they will be overwritten")
         }
-        this.attributes = attributes
-        this.entityClass = entityClass
-        this.wordsForEntity = mutableListOf()
+        if (entityClass in config.entities) {
+            this.attributes = config.entities.getValue(entityClass).attributes.values.map { attributes[it.attributeIndex] }
+            this.entityClass = entityClass
+            this.wordsForEntity = mutableListOf()
+        }
     }
 
     override fun visitWord(indexes: List<String>) {
-        val word = TextUnit.Word(indexes)
+        val word = TextUnit.Word(indexes.filterIndexed { i, _ -> i in selectedIndexes })
         when {
             wordsForEntity != null -> wordsForEntity!!.add(word)
             unitsForQueryMatch != null -> unitsForQueryMatch!!.add(word)

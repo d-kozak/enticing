@@ -33,7 +33,7 @@ internal class ResultFormatCreatorTest {
         indexes {
             index("token")
         }
-    }
+    }.also { it.validate() }
 
     private val noMetadataDocument = testDocument(3, "one two three")
 
@@ -43,7 +43,7 @@ internal class ResultFormatCreatorTest {
             index("lemma")
             index("url")
         }
-    }
+    }.also { it.validate() }
 
     private val simpleStructureDocument = testDocument(3, "one two three", "1 2 3", "google.com yahoo.com localhost")
 

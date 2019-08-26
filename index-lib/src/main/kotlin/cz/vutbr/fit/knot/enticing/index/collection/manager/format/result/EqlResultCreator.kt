@@ -44,7 +44,7 @@ class EqlResultCreator(private val corpusConfiguration: CorpusConfiguration) : R
             TextFormat.STRING_WITH_METADATA -> StringWithAnnotationsGeneratingVisitor(filteredConfig, formatInfo.defaultIndex, interval, document)
             TextFormat.TEXT_UNIT_LIST -> TextUnitListGeneratingVisitor(filteredConfig, formatInfo.defaultIndex, interval, document)
         }
-        val iterator = StructuredDocumentIterator(filteredConfig)
+        val iterator = StructuredDocumentIterator(corpusConfiguration)
         iterator.iterateDocument(document, matchStart, matchEnd, visitor, interval)
         return visitor.build()
     }

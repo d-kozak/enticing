@@ -151,40 +151,123 @@ class CollectionManagerTest {
         val result = queryEngine.query(query)
     }
 
+
+    private fun <T : ResultFormat> check(query: SearchQuery, resultFormatClass: Class<T>, check: (T) -> Unit) {
+        val queryEngine = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
+        val updatedQuery = if (query.query.isEmpty()) query.copy(query = "nertag:person (killed|visited)") else query
+        updatedQuery.eqlAst = EqlCompiler().parseOrFail(updatedQuery.query)
+        for (result in queryEngine.query(updatedQuery).searchResults) {
+            assertThat(result.payload).isInstanceOf(resultFormatClass)
+            check(result.payload as T)
+        }
+    }
+
+    @Nested
+    inner class SelectedTextMetadata {
+
+
+        @Nested
+        inner class OnlyThreeIndexes {
+
+            private val metadata = TextMetadata.ExactDefinition(Entities.ExactDefinition(emptyMap()), Indexes.ExactDefinition(listOf("token", "lemma", "position")))
+
+            @Test
+            fun html() {
+                val shouldNotContain = listOf("parpos", "function", "parword", "parlemma", "paroffset", "link", "length").map { """$it=""" } + "eql-entity "
+                val query = templateQuery.copy(textFormat = TextFormat.HTML, metadata = metadata)
+                check(query, ResultFormat.Snippet.Html::class.java) {
+                    assertThat(it.content).doesNotContain(shouldNotContain)
+                }
+            }
+
+
+            @Test
+            fun stringWithMetadata() {
+                val query = templateQuery.copy(textFormat = TextFormat.STRING_WITH_METADATA, metadata = metadata)
+                check(query, ResultFormat.Snippet.StringWithMetadata::class.java) {
+                    for ((_, annotation) in it.content.annotations) {
+                        assertThat(annotation.content.keys).contains("lemma", "position")
+                                .hasSize(2)
+                    }
+                }
+            }
+
+            @Test
+            fun textUnitList() {
+                fun checkWord(word: TextUnit.Word) {
+                    assertThat(word.indexes).hasSize(3)
+                }
+
+                fun checkQueryMatch(match: TextUnit.QueryMatch) {
+                    for (unit in match.content) {
+                        when (unit) {
+                            is TextUnit.Word -> checkWord(unit)
+                            is TextUnit.Entity -> throw AssertionError("no entities wanted")
+                            else -> throw AssertionError("only words expected here")
+                        }
+                    }
+                }
+
+                val query = templateQuery.copy(textFormat = TextFormat.TEXT_UNIT_LIST, metadata = metadata)
+                check(query, ResultFormat.Snippet.TextUnitList::class.java) {
+                    for (unit in it.content.content) {
+                        when (unit) {
+                            is TextUnit.Word -> checkWord(unit)
+                            is TextUnit.Entity -> throw AssertionError("no entities wanted")
+                            is TextUnit.QueryMatch -> checkQueryMatch(unit)
+                        }
+                    }
+                }
+            }
+        }
+
+        @Nested
+        inner class SomeIndexesTwoEntities {
+
+            private val metadata = TextMetadata.ExactDefinition(Entities.ExactDefinition(mapOf(
+                    "person" to Indexes.ExactDefinition(listOf("name", "profession", "nationality")),
+                    "date" to Indexes.ExactDefinition(listOf("year", "day"))
+            )), Indexes.ExactDefinition(listOf("token", "lemma", "position", "parlemma")))
+
+            @Test
+            @Incomplete("This does not really test whether only given entities are there, but how to test it? parse the html and expect the structure?")
+            fun html() {
+                val shouldNotContain = listOf("parpos", "function", "parword", "paroffset", "link", "length").map { """$it=""" }
+                val query = templateQuery.copy(textFormat = TextFormat.HTML, metadata = metadata)
+                check(query, ResultFormat.Snippet.Html::class.java) {
+                    assertThat(it.content).doesNotContain(shouldNotContain)
+                }
+            }
+        }
+
+
+    }
+
     @Nested
     @Disabled
     @WhatIf("We might actually want these to be included, because they will allow clients to format the text accordingly")
     inner class ParagraphsAndSentenceMarksShouldBeRemoved {
 
-
-        private fun <T : ResultFormat> check(textFormat: TextFormat, resultFormatClass: Class<T>, check: (T) -> Unit) {
-            val queryEngine = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
-            val input = "nertag:person (killed|visited)"
-            val query = templateQuery.copy(query = input, textFormat = textFormat)
-            query.eqlAst = EqlCompiler().parseOrFail(input)
-            for (result in queryEngine.query(query).searchResults) {
-                assertThat(result.payload).isInstanceOf(resultFormatClass)
-                check(result.payload as T)
-            }
-        }
-
         @Test
         fun plainText() {
-            check(TextFormat.PLAIN_TEXT, ResultFormat.Snippet.PlainText::class.java) {
+            val query = templateQuery.copy(textFormat = TextFormat.PLAIN_TEXT)
+            check(query, ResultFormat.Snippet.PlainText::class.java) {
                 assertThat(it.content).doesNotContain("§", "¶")
             }
         }
 
         @Test
         fun html() {
-            check(TextFormat.HTML, ResultFormat.Snippet.Html::class.java) {
+            val query = templateQuery.copy(textFormat = TextFormat.HTML)
+            check(query, ResultFormat.Snippet.Html::class.java) {
                 assertThat(it.content).doesNotContain("§", "¶")
             }
         }
 
         @Test
         fun stringWithMetadata() {
-            check(TextFormat.STRING_WITH_METADATA, ResultFormat.Snippet.StringWithMetadata::class.java) {
+            val query = templateQuery.copy(textFormat = TextFormat.STRING_WITH_METADATA)
+            check(query, ResultFormat.Snippet.StringWithMetadata::class.java) {
                 assertThat(it.content.text).doesNotContain("§", "¶")
             }
         }
@@ -209,7 +292,8 @@ class CollectionManagerTest {
                 }
             }
 
-            check(TextFormat.TEXT_UNIT_LIST, ResultFormat.Snippet.TextUnitList::class.java) {
+            val query = templateQuery.copy(textFormat = TextFormat.TEXT_UNIT_LIST)
+            check(query, ResultFormat.Snippet.TextUnitList::class.java) {
                 for (unit in it.content.content) {
                     when (unit) {
                         is TextUnit.Word -> checkWord(unit)

@@ -158,6 +158,22 @@ class DslTest {
         inner class EntityFilteringTest {
 
             @Test
+            fun `properties computed during filtering are propagated`() {
+                val requirement = TextMetadata.ExactDefinition(Entities.ExactDefinition(mapOf(
+                        "person" to Indexes.ExactDefinition(listOf("name", "profession", "nationality")),
+                        "date" to Indexes.ExactDefinition(listOf("year", "day"))
+                )), Indexes.ExactDefinition(listOf("token", "lemma", "position", "parlemma")))
+                val defaultIndex = "token"
+                val filtered = fullValidCorpusConfig.filterBy(requirement, defaultIndex)
+                assertThat(filtered.entityIndex)
+                        .isEqualTo(fullValidCorpusConfig.entityIndex)
+                assertThat(filtered.entityLengthIndex)
+                        .isEqualTo(fullValidCorpusConfig.entityLengthIndex)
+                assertThat(filtered.firstAttributeIndex)
+                        .isEqualTo(fullValidCorpusConfig.firstAttributeIndex)
+            }
+
+            @Test
             fun `toplevel predefined none`() {
                 val requirement = TextMetadata.Predefined("none")
                 val defaultIndex = "token"

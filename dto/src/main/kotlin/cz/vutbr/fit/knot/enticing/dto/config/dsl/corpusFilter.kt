@@ -5,9 +5,16 @@ import cz.vutbr.fit.knot.enticing.dto.EntityId
 import cz.vutbr.fit.knot.enticing.dto.Indexes
 import cz.vutbr.fit.knot.enticing.dto.TextMetadata
 
-fun CorpusConfiguration.filterBy(metadata: TextMetadata, defaultIndex: String): CorpusConfiguration = when (metadata) {
-    is TextMetadata.Predefined -> filterPredefined(metadata, defaultIndex)
-    is TextMetadata.ExactDefinition -> filterExact(metadata, defaultIndex)
+fun CorpusConfiguration.filterBy(metadata: TextMetadata, defaultIndex: String): CorpusConfiguration {
+    val filtered = when (metadata) {
+        is TextMetadata.Predefined -> filterPredefined(metadata, defaultIndex)
+        is TextMetadata.ExactDefinition -> filterExact(metadata, defaultIndex)
+    }
+    // copy computed metadata
+    filtered.entityIndex = this.entityIndex
+    filtered.entityLengthIndex = this.entityLengthIndex
+    filtered.firstAttributeIndex = this.firstAttributeIndex
+    return filtered
 }
 
 private fun CorpusConfiguration.filterPredefined(metadata: TextMetadata.Predefined, defaultIndex: String): CorpusConfiguration = when (metadata.value) {

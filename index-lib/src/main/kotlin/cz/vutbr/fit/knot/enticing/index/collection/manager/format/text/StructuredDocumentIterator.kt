@@ -55,6 +55,12 @@ class StructuredDocumentIterator(private val corpusConfiguration: CorpusConfigur
      * priority is in this order
      */
     fun iterateDocument(document: IndexedDocument, matchStarts: Map<Int, Interval>, matchEnds: Set<Int>, visitor: DocumentVisitor, interval: Interval? = null) {
+        if (corpusConfiguration.entities.isNotEmpty()) {
+            requireNotNull(corpusConfiguration.entityIndex) { "some entities are defined, entity index cannot be null" }
+            requireNotNull(corpusConfiguration.entityLengthIndex) { "some entities are defined, entity length index cannot be null" }
+        }
+
+
         val (from, to) = interval ?: Interval.valueOf(0, document.size)
         var startedEntity: Triple<List<String>, String, Int>? = null
 
@@ -70,14 +76,14 @@ class StructuredDocumentIterator(private val corpusConfiguration: CorpusConfigur
             }
 
             if (corpusConfiguration.entities.isNotEmpty()) {
-                val entityClass = word[corpusConfiguration.entityIndex]
+                val entityClass = word[corpusConfiguration.entityIndex!!]
                 if (entityClass != "0") {
                     if (startedEntity != null) {
                         log.warn("${document.title}:${document.id}:[$i]:new entity started before previous one ($startedEntity) finished, old will be finished now")
                         visitor.visitEntityEnd()
                     }
-                    val len = word[corpusConfiguration.entityLengthIndex].toIntOrNull() ?: {
-                        log.warn("${document.title}:${document.id}:[$i]:could not parse entity length index ${word[corpusConfiguration.entityLengthIndex]}")
+                    val len = word[corpusConfiguration.entityLengthIndex!!].toIntOrNull() ?: {
+                        log.warn("${document.title}:${document.id}:[$i]:could not parse entity length index ${word[corpusConfiguration.entityLengthIndex!!]}")
                         1
                     }()
                     // -1 signals replicated entity
