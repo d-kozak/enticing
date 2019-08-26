@@ -22,11 +22,8 @@ class QueryService(
 ) {
 
 
-
-    fun query(query: String, selectedSettings: Long): WebServer.ResultList {
+    fun query(query: SearchQuery, selectedSettings: Long): WebServer.ResultList {
         val currentUser = userService.currentUser
-        val searchQuery = SearchQuery(query, currentUser?.userSettings?.resultsPerPage
-                ?: Defaults.snippetCount)
 
         val searchSettings = searchSettingsRepository.findById(selectedSettings).orElseThrow { IllegalArgumentException("Unknown searchSettings id $selectedSettings") }
 
@@ -36,7 +33,7 @@ class QueryService(
 
         val requestData = searchSettings.servers.map { IndexServerRequestData(it) }
         log.info("Executing query $query with requestData $requestData")
-        return flatten(dispatcher.dispatchQuery(searchQuery, requestData))
+        return flatten(dispatcher.dispatchQuery(query, requestData))
     }
 
 

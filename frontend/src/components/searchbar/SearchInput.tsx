@@ -7,12 +7,12 @@ import {connect} from "react-redux";
 import {ApplicationState} from "../../ApplicationState";
 
 import CMInputWrapper from "./CMInputWrapper";
-import {SearchQuery} from "../../entities/SearchQuery";
 import {startSearchingAction} from "../../actions/QueryActions";
 import * as H from "history";
 import {getSelectedSearchSettings} from "../../reducers/selectors";
 import {SearchSettings} from "../../entities/SearchSettings";
 import {openSnackbar} from "../../reducers/SnackBarReducer";
+import {User} from "../../entities/User";
 
 const styles = createStyles({});
 
@@ -27,7 +27,7 @@ export type SearchInputProps =
 }
 
 const SearchInput = (props: SearchInputProps) => {
-    const {className = '', initialQuery = '', history, selectedSettings, startSearching: parentStartSearching, openSnackbar} = props;
+    const {className = '', initialQuery = '', user, history, selectedSettings, startSearching: parentStartSearching, openSnackbar} = props;
 
     const [query, setQuery] = useState<string>(initialQuery);
 
@@ -38,7 +38,7 @@ const SearchInput = (props: SearchInputProps) => {
             return
         }
         if (query.length > 0) {
-            parentStartSearching(query, selectedSettings, history);
+            parentStartSearching(query, user, selectedSettings, history);
         }
     };
 
@@ -49,11 +49,12 @@ const SearchInput = (props: SearchInputProps) => {
 };
 
 const mapStateToProps = (state: ApplicationState) => ({
+    user: state.userState.user,
     selectedSettings: getSelectedSearchSettings(state)
 });
 
 const mapDispatchToProps = {
-    startSearching: startSearchingAction as (query: SearchQuery, searchSettings: SearchSettings, history?: H.History) => void,
+    startSearching: startSearchingAction as (query: string, user: User, searchSettings: SearchSettings, history?: H.History) => void,
     openSnackbar
 };
 

@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.TextMetadata
 import cz.vutbr.fit.knot.enticing.dto.WebServer
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
@@ -452,9 +453,11 @@ internal class SecurityConfigTest(
 
         @Test
         fun `Query is always accessible`() {
-            val query = URLEncoder.encode("ahoj cau", "UTF-8")
+            val query = SearchQuery("ahoj cau", 33)
             val selectedSettings = 1
-            mockMvc.perform(get("$apiBasePath/query?query=$query&settings=$selectedSettings"))
+            mockMvc.perform(post("$apiBasePath/query?settings=$selectedSettings")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(query.toJson()))
                     .andExpect(status().isOk)
         }
 

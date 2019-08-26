@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.enticing.webserver.controller
 
 
 import cz.vutbr.fit.knot.enticing.dto.CorpusFormat
+import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.TextMetadata
 import cz.vutbr.fit.knot.enticing.dto.WebServer
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
@@ -26,7 +27,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
-import java.net.URLEncoder
 
 @WebMvcTest
 @ExtendWith(SpringExtension::class)
@@ -53,16 +53,18 @@ internal class QueryControllerTest(
 
     @Test
     fun query() {
-        val query = URLEncoder.encode("ahoj cau", "UTF-8")
+        val query = SearchQuery("ahoj cau")
         val selectedSettings = 1
 
         val dummyResult = WebServer.ResultList(listOf(firstResult))
-        Mockito.`when`(queryService.query("ahoj cau", 1)).thenReturn(dummyResult)
+        Mockito.`when`(queryService.query(query, 1)).thenReturn(dummyResult)
 
-        mockMvc.perform(MockMvcRequestBuilders.get("$apiBasePath/query?query=$query&settings=$selectedSettings"))
+        mockMvc.perform(MockMvcRequestBuilders.post("$apiBasePath/query?settings=$selectedSettings")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(query.toJson()))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(content().string(dummyResult.toJson()))
-        Mockito.verify(queryService).query("ahoj cau", 1)
+        Mockito.verify(queryService).query(query, 1)
         Mockito.clearInvocations(queryService)
     }
 

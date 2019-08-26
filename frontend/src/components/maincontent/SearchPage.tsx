@@ -9,13 +9,13 @@ import {ApplicationState} from "../../ApplicationState";
 
 import {connect} from "react-redux";
 import {startSearchingAction} from "../../actions/QueryActions";
-import {SearchQuery} from "../../entities/SearchQuery";
 import SearchInput from "../searchbar/SearchInput";
 
 import * as H from 'history';
 import {getSelectedSearchSettings} from "../../reducers/selectors";
 import {SearchSettings} from "../../entities/SearchSettings";
 import {openSnackbar} from "../../reducers/SnackBarReducer";
+import {User} from "../../entities/User";
 
 const styles = createStyles({
     searchInput: {
@@ -34,14 +34,14 @@ export type SearchPageProps =
 }
 
 const SearchPage = (props: SearchPageProps) => {
-    const {snippets, startSearching, classes, selectedSettings, history, location, openSnackbar, corpusFormat} = props;
+    const {snippets, user, startSearching, classes, selectedSettings, history, location, openSnackbar, corpusFormat} = props;
     const params = new URLSearchParams(location.search);
     const query = params.get('query') || '';
 
     useEffect(() => {
         if (snippets === null) {
             if (selectedSettings !== null) {
-                startSearching(query, selectedSettings);
+                startSearching(query, user, selectedSettings);
             } else {
                 openSnackbar("no search settings selected, could not execute search");
             }
@@ -58,15 +58,15 @@ const SearchPage = (props: SearchPageProps) => {
 };
 
 const mapStateToProps = (state: ApplicationState) => ({
+    user: state.userState.user,
     snippets: state.searchResult.snippets,
     corpusFormat: state.searchResult.corpusFormat,
     selectedSettings: getSelectedSearchSettings(state)
 });
 
 const mapDispatchToProps = {
-    startSearching: startSearchingAction as (query: SearchQuery, searchSettings: SearchSettings, history?: H.History) => void,
+    startSearching: startSearchingAction as (query: string, user: User, searchSettings: SearchSettings, history?: H.History) => void,
     openSnackbar
-
 };
 
 export default withStyles(styles, {

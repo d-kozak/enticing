@@ -59,7 +59,7 @@ class Mg4jDocumentFactory(private val corpusConfiguration: CorpusConfiguration) 
                     if (!processLine(line, fields, lineIndex, corpusConfiguration)) invalidLines.add(lineIndex)
                     lineIndex++
                 }
-                else -> log.error("Unnown meta line $line")
+                else -> log.error("Unknown meta line $line")
             }
             line = stream.readLine()
         }

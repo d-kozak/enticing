@@ -47,7 +47,7 @@ internal class QueryServiceTest {
 
             val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector)
 
-            val result = queryService.query("nertag:person", 42)
+            val result = queryService.query(SearchQuery("nertag:person", 33), 42)
             assertThat(result)
                     .isEqualTo(expected)
 
@@ -72,7 +72,7 @@ internal class QueryServiceTest {
 
             val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector)
 
-            val result = queryService.query("nertag:person", 42)
+            val result = queryService.query(SearchQuery("nertag:person", 33), 42)
             assertThat(result)
                     .isEqualTo(expected)
 
@@ -93,7 +93,7 @@ internal class QueryServiceTest {
             val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector)
 
             assertThrows<IllegalArgumentException> {
-                queryService.query("foo", 42)
+                queryService.query(SearchQuery("nertag:person", 33), 42)
             }
         }
 
@@ -108,7 +108,7 @@ internal class QueryServiceTest {
             val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector)
 
             assertThrows<IllegalArgumentException> {
-                queryService.query("foo", 42)
+                queryService.query(SearchQuery("nertag:person", 33), 42)
             }
         }
 
@@ -119,7 +119,7 @@ internal class QueryServiceTest {
 
             val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector)
 
-            assertThrows<IllegalArgumentException> { queryService.query("nertag:person", 42) }
+            assertThrows<IllegalArgumentException> { queryService.query(SearchQuery("nertag:person", 33), 42) }
         }
 
         @AfterEach
