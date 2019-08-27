@@ -1,5 +1,6 @@
 import glob
 import os
+import subprocess
 import sys
 import threading
 import time
@@ -23,24 +24,51 @@ def execute_local_indexing(ouput_dir):
         os.makedirs(ouput_dir)
 
 
-def split_files(input_files, servers):
-    extra = len(input_files) % len(servers)
-    per_server = len(input_files) // len(servers)
+def split_files(input_files, nodes):
+    extra = len(input_files) % len(nodes)
+    per_server = len(input_files) // len(nodes)
     batches = {}
     start = 0
-    for i, server in enumerate(servers):
+    for i, server in enumerate(nodes):
         count = per_server + 1 if i < extra else per_server
-        batches[server] = input_files[start:start + count]
+        batch = input_files[start:start + count]
+        if not batch:
+            break
+        batches[server] = batch
         start += count
     return batches
 
 
-def send_files(server, batch):
-    total_size = sum(map(lambda file: os.path.getsize(file) / 1_000_000, batch))
-    print(f"{server} : {total_size} MB : {batch} ")
+def create_remote_dir(server, directory):
+    print(f'creating remote dir {directory}')
+    cmd = f'ssh xkozak15@{server} mkdir -p {directory}'
+    proc = execute_command(cmd)
+    print(proc.stdout)
+    print(proc.stderr)
+    proc.check_returncode()
 
-    time.sleep(1)
-    pass
+
+def execute_command(command):
+    return subprocess.run(
+        command.split(),
+        stdout=subprocess.PIPE,
+        check=True)
+
+
+def count_size(files):
+    return sum(map(lambda file: os.path.getsize(file) / 1_000_000, files))
+
+
+def send_files(server, server_batch, output_dir):
+    create_remote_dir(server, output_dir)
+    print(f"{server} : {count_size(server_batch)} MB : {server_batch} ")
+    collections = [f"{server}-{x}" for x in range(8)]
+    collection_batches = split_files(server_batch, collections)
+
+    for collection, collection_batch in collection_batches.items():
+        print(f"\t{collection} : {count_size(collection_batch)} MB : {collection_batch}")
+        cmd = f"scp {' '.join(collection_batch)} xkozak15@{server}:{output_dir}"
+        print(f"\t\texecuting command '{cmd}'")
 
 
 def measure(block):
@@ -50,18 +78,17 @@ def measure(block):
     return duration, res
 
 
-def distribute_files(server_batches):
+def distribute_files(server_batches, output_dir):
     threads = []
     try:
         for server, batch in server_batches.items():
-            t = threading.Thread(target=send_files, args=(server, batch))
+            t = threading.Thread(target=send_files, args=(server, batch, output_dir))
             t.start()
             threads.append(t)
     finally:
         for thread in threads:
             thread.join()
         print("all threads finished")
-    pass
 
 
 def main():
@@ -71,7 +98,7 @@ def main():
     print(f"distributing {len(input_files)} files over {len(servers)} servers({servers})")
     server_batches = split_files(input_files, servers)
 
-    duration, _ = measure(lambda: distribute_files(server_batches))
+    duration, _ = measure(lambda: distribute_files(server_batches, output_dir))
 
     print(f"distribution took {duration} seconds")
 
