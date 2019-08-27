@@ -53,7 +53,7 @@ class CollectionManager internal constructor(
                 val nextOffset = when {
                     hasMore -> Offset(document.id, resultOffset + results.size)
                     i != resultList.size - 1 -> Offset(resultList[i + 1].documentId, 0)
-                    else -> Offset(processed + 1, 0)
+                    else -> Offset(resultList.last().documentId + 1, 0)
                 }
                 return IndexServer.CollectionResultList(matched, nextOffset)
             }

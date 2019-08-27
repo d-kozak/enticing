@@ -29,7 +29,8 @@ export interface AdminState {
 
 export interface SearchResultsState {
     snippets: Array<SearchResult> | null,
-    corpusFormat: CorpusFormat | null
+    corpusFormat: CorpusFormat | null,
+    moreResultsAvailable: boolean
 }
 
 export interface SnackbarState {

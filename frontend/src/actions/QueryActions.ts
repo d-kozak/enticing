@@ -58,7 +58,12 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
             }
         }
 
-        dispatch(newSearchResults({snippets: response.data.searchResults, corpusFormat: filteredCorpusFormat}));
+        dispatch(newSearchResults({
+            snippets: response.data.searchResults,
+            corpusFormat: filteredCorpusFormat,
+            moreResultsAvailable: response.data.searchResults.length > 0
+        }));
+
         dispatch(hideProgressbar());
         if (history) {
             history.push(`/search?query=${encodeURI(query)}`);

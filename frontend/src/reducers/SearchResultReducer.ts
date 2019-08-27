@@ -1,19 +1,25 @@
 import {SearchResultsState} from "../ApplicationState";
 import {createSlice, PayloadAction} from "redux-starter-kit";
 import {SearchResult} from "../entities/SearchResult";
-import {CorpusFormat} from "../entities/CorpusFormat";
 
 
 const {reducer, actions} = createSlice({
     slice: 'searchResults',
     initialState: {
-        snippets: null as Array<SearchResult> | null,
-        corpusFormat: null as CorpusFormat | null
+        snippets: null,
+        corpusFormat: null,
+        moreResultsAvailable: false
     } as SearchResultsState,
     reducers: {
         newSearchResults: (state: SearchResultsState, {payload}: PayloadAction<SearchResultsState>) => {
             state.corpusFormat = payload.corpusFormat;
             state.snippets = payload.snippets;
+            state.moreResultsAvailable = payload.moreResultsAvailable;
+        },
+        appendMoreSearchResults: (state: SearchResultsState, {payload}: PayloadAction<{ searchResults: Array<SearchResult>, hasMore: boolean }>) => {
+            if (state.snippets == null) throw Error("Cannot append results, original array is null");
+            state.snippets.push(...payload.searchResults);
+            state.moreResultsAvailable = payload.hasMore;
         },
         updateSearchResult: (state: SearchResultsState, {payload}: PayloadAction<SearchResult>) => {
             if (!state.snippets) {
@@ -25,9 +31,12 @@ const {reducer, actions} = createSlice({
             } else {
                 throw new Error("could not find corresponding snippet");
             }
+        },
+        setMoreResultsAvailable: (state: SearchResultsState, {payload}: PayloadAction<boolean>) => {
+            state.moreResultsAvailable = payload;
         }
     }
 });
 
-export const {newSearchResults, updateSearchResult} = actions;
+export const {newSearchResults, updateSearchResult, setMoreResultsAvailable, appendMoreSearchResults} = actions;
 export default reducer;

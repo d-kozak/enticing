@@ -14,6 +14,7 @@ import {connect} from "react-redux";
 import {openDocumentDialogRequest} from "../../reducers/dialog/DocumentDialogReducer";
 import {SearchResult} from "../../entities/SearchResult";
 import {CorpusFormat} from "../../entities/CorpusFormat";
+import {getMoreResults} from "../../actions/PaginationActions";
 
 const styles = createStyles({
     root: {
@@ -40,19 +41,24 @@ export type SnippetListProps =
 }
 
 const SnippetList = (props: SnippetListProps) => {
-    const {snippet, corpusFormat, openDocumentDialog, classes} = props;
+    const {snippet, corpusFormat, openDocumentDialog, classes, resultsPerPage, hasMore, getMoreResults} = props;
 
     const [currentPage, setCurrentPage] = useState(0);
 
-
-    let pageCount = Math.floor(snippet.length / 20);
-    if (snippet.length % 20 != 0) {
+    let pageCount = Math.floor(snippet.length / resultsPerPage);
+    if (snippet.length % resultsPerPage != 0) {
         pageCount += 1
     }
 
+    const setPageAndAskForMoreIfNecessary = (i: number) => {
+        if (i >= pageCount - 1 && hasMore)
+            getMoreResults(snippet.length);
+        setCurrentPage(i % pageCount);
+    };
+
     return <Paper className={classes.root}>
         {snippet
-            .slice(currentPage * 20, currentPage * 20 + 20)
+            .slice(currentPage * resultsPerPage, currentPage * resultsPerPage + resultsPerPage)
             .map(
                 (searchResult, index) => <React.Fragment key={index}>
                     {index > 0 && <Divider/>}
@@ -62,15 +68,20 @@ const SnippetList = (props: SnippetListProps) => {
         }
         <Typography
             variant="body1">{snippet.length > 0 ? `Total number of snippets is ${snippet.length}` : 'No snippets found'}</Typography>
-        <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} pageCount={pageCount}/>
+        <Pagination currentPage={currentPage} setCurrentPage={setPageAndAskForMoreIfNecessary} pageCount={pageCount}
+                    hasMore={hasMore}/>
 
         <DocumentDialog/>
     </Paper>
 };
 
-const mapStateToProps = (state: ApplicationState) => ({});
+const mapStateToProps = (state: ApplicationState) => ({
+    resultsPerPage: state.userState.user.userSettings.resultsPerPage,
+    hasMore: state.searchResult.moreResultsAvailable
+});
 
 const mapDispatchToProps = {
+    getMoreResults: getMoreResults as (currentResultSize: number) => void,
     openDocumentDialog: openDocumentDialogRequest as (searchResult: SearchResult, corpusFormat: CorpusFormat) => void
 };
 

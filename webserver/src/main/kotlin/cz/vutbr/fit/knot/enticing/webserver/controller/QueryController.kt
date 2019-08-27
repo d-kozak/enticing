@@ -15,8 +15,8 @@ class QueryController(private val queryService: QueryService) {
     @PostMapping
     fun query(@RequestBody query: SearchQuery, @RequestParam settings: Long, session: HttpSession): WebServer.ResultList = queryService.query(query, settings, session)
 
-    @GetMapping("/next")
-    fun getMore(@RequestParam settings: Long, session: HttpSession) = queryService.getMore(settings, session)
+    @GetMapping("/get_more")
+    fun getMore(session: HttpSession) = queryService.getMore(session)
 
     @PostMapping("/context")
     fun context(@RequestBody query: WebServer.ContextExtensionQuery): SnippetExtension = queryService.context(query)

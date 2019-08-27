@@ -19,11 +19,12 @@ const styles = createStyles({
 export interface PaginationProps extends WithStyles<typeof styles> {
     currentPage: number,
     setCurrentPage: (pageNumber: number) => void,
-    pageCount: number
+    pageCount: number,
+    hasMore: boolean
 }
 
 const Pagination = (props: PaginationProps) => {
-    const {classes, pageCount, setCurrentPage, currentPage} = props;
+    const {classes, pageCount, setCurrentPage, currentPage, hasMore} = props;
     const indexes = Array.from({length: pageCount}, (x, i) => i);
     return <ul className={classes.root}>
         {currentPage != 0 && <li>
@@ -36,6 +37,9 @@ const Pagination = (props: PaginationProps) => {
             </li>
         )}
         {currentPage != pageCount - 1 && <li>
+            <PaginationItem onClick={() => setCurrentPage(currentPage + 1)} text={'>'}/>
+        </li>}
+        {currentPage == pageCount - 1 && hasMore && <li>
             <PaginationItem onClick={() => setCurrentPage(currentPage + 1)} text={'>'}/>
         </li>}
     </ul>
