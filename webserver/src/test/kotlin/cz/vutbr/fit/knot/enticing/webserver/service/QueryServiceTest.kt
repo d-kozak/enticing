@@ -17,6 +17,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.springframework.mock.web.MockHttpSession
 import java.util.*
 
 
@@ -29,6 +30,7 @@ internal class QueryServiceTest {
         private val searchSettingsRepository: SearchSettingsRepository = mockk()
         private val userService: EnticingUserService = mockk()
         private val indexServerConnector: IndexServerConnector = mockk()
+        private val mockSession = MockHttpSession()
 
         @Test
         fun `valid request`() {
@@ -47,7 +49,7 @@ internal class QueryServiceTest {
 
             val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector)
 
-            val result = queryService.query(SearchQuery("nertag:person", 33), 42)
+            val result = queryService.query(SearchQuery("nertag:person", 33), 42, mockSession)
             assertThat(result)
                     .isEqualTo(expected)
 
@@ -72,7 +74,7 @@ internal class QueryServiceTest {
 
             val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector)
 
-            val result = queryService.query(SearchQuery("nertag:person", 33), 42)
+            val result = queryService.query(SearchQuery("nertag:person", 33), 42, mockSession)
             assertThat(result)
                     .isEqualTo(expected)
 
@@ -93,7 +95,7 @@ internal class QueryServiceTest {
             val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector)
 
             assertThrows<IllegalArgumentException> {
-                queryService.query(SearchQuery("nertag:person", 33), 42)
+                queryService.query(SearchQuery("nertag:person", 33), 42, mockSession)
             }
         }
 
@@ -108,7 +110,7 @@ internal class QueryServiceTest {
             val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector)
 
             assertThrows<IllegalArgumentException> {
-                queryService.query(SearchQuery("nertag:person", 33), 42)
+                queryService.query(SearchQuery("nertag:person", 33), 42, mockSession)
             }
         }
 
@@ -119,7 +121,7 @@ internal class QueryServiceTest {
 
             val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector)
 
-            assertThrows<IllegalArgumentException> { queryService.query(SearchQuery("nertag:person", 33), 42) }
+            assertThrows<IllegalArgumentException> { queryService.query(SearchQuery("nertag:person", 33), 42, mockSession) }
         }
 
         @AfterEach

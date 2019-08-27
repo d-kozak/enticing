@@ -6,13 +6,17 @@ import cz.vutbr.fit.knot.enticing.dto.SnippetExtension
 import cz.vutbr.fit.knot.enticing.dto.WebServer
 import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
 import org.springframework.web.bind.annotation.*
+import javax.servlet.http.HttpSession
 
 @RestController
 @RequestMapping("\${api.base.path}/query")
 class QueryController(private val queryService: QueryService) {
 
     @PostMapping
-    fun query(@RequestBody query: SearchQuery, @RequestParam settings: Long): WebServer.ResultList = queryService.query(query, settings)
+    fun query(@RequestBody query: SearchQuery, @RequestParam settings: Long, session: HttpSession): WebServer.ResultList = queryService.query(query, settings, session)
+
+    @GetMapping("/next")
+    fun getMore(@RequestParam settings: Long, session: HttpSession) = queryService.getMore(settings, session)
 
     @PostMapping("/context")
     fun context(@RequestBody query: WebServer.ContextExtensionQuery): SnippetExtension = queryService.context(query)

@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
+import org.springframework.mock.web.MockHttpSession
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
@@ -51,20 +52,22 @@ internal class QueryControllerTest(
     @MockBean
     lateinit var queryService: QueryService
 
+    private val mockSession = MockHttpSession()
+
     @Test
     fun query() {
         val query = SearchQuery("ahoj cau")
         val selectedSettings = 1
 
         val dummyResult = WebServer.ResultList(listOf(firstResult))
-        Mockito.`when`(queryService.query(query, 1)).thenReturn(dummyResult)
+        Mockito.`when`(queryService.query(query, 1, mockSession)).thenReturn(dummyResult)
 
         mockMvc.perform(MockMvcRequestBuilders.post("$apiBasePath/query?settings=$selectedSettings")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(query.toJson()))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(content().string(dummyResult.toJson()))
-        Mockito.verify(queryService).query(query, 1)
+        Mockito.verify(queryService).query(query, 1, mockSession)
         Mockito.clearInvocations(queryService)
     }
 
