@@ -1,7 +1,6 @@
 import logging as log
 import os
 import subprocess
-import sys
 import time
 
 
@@ -18,27 +17,30 @@ def count_size(files):
     return sum(map(lambda file: os.path.getsize(file) / 1_000_000, files))
 
 
-def create_remote_dir(server, directory, username):
+def create_remote_dir(server, username, directory):
     log.debug(f'creating remote dir {directory}')
-    cmd = f'ssh {username}@{server} mkdir -p {directory}'
-    execute_command(cmd)
+    cmd = f'mkdir -p {directory}'
+    return execute_via_ssh(server, username, cmd)
 
 
-def execute_command(command, print_command=True, print_stdout=True, print_stderr=True, check_ret_val=True):
-    if print_command:
-        log.debug(f"Executing '{command}'")
+def execute_via_ssh(server, username, cmd):
+    cmd = f'ssh {username}@{server} {cmd}'
+    return execute_command(cmd)
+
+
+def execute_command(command, print_stdout=True, print_stderr=True, check_ret_val=True):
+    log.debug(f"Executing '{command}'")
     proc = subprocess.run(
         command.split(),
         stdout=subprocess.PIPE,
+        universal_newlines=True,
         check=True)
     if print_stdout and proc.stdout:
-        log.info("process stdout:")
-        for line in proc.stdout.split("\n"):
-            print(line)
+        log.debug("process stdout:")
+        log.debug(proc.stdout)
     if print_stderr and proc.stderr:
         log.error("process stderr:")
-        for line in proc.stderr.split("\n"):
-            print(line, file=sys.stderr)
+        log.error(proc.stderr)
     if check_ret_val:
         proc.check_returncode()
     return proc
