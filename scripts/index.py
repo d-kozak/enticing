@@ -1,69 +1,79 @@
 import glob
 import os
 import sys
+import threading
+import time
 
 
 def handle_args(args):
-    if len(args) > 2 or len(args) == 0:
-        raise ValueError("server list and input directory expected")
+    if len(args) != 3:
+        raise ValueError("format: input_dir server_file output_dir(on the servers)")
 
     input_dir = args[0]
     if not os.path.isdir(input_dir):
-        raise ValueError("input_dir is not a directory")
-
-    if len(args) == 2:
-        with open(args[1]) as file:
-            servers = file.read().split("\n")
-            return input_dir, servers
-    else:
-        return input_dir, False
+        raise ValueError(f"{input_dir} is not a directory")
+    input_files = glob.glob(input_dir + "/*.mg4j")
+    with open(args[1]) as file:
+        servers = file.read().split("\n")
+        return input_files, servers, args[2]
 
 
-def split_between_servers(input_files, servers):
+def execute_local_indexing(ouput_dir):
+    if not os.path.exists(ouput_dir):
+        os.makedirs(ouput_dir)
+
+
+def split_files(input_files, servers):
+    extra = len(input_files) % len(servers)
     per_server = len(input_files) // len(servers)
-
-    res = {}
-    for i in range(len(servers)):
-        res[servers[i]] = input_files[i * per_server: (i + 1) * per_server]
-
-    leftovers = len(input_files) % len(servers)
-    if leftovers > 0:
-        extra_per_server = leftovers // len(servers)
-
-        i = len(servers) * per_server
-        for server in servers:
-            res[server] = res[server] + input_files[i:i + extra_per_server]
-            i += extra_per_server
-            if i < len(input_files):
-                res[server].append(input_files[i])
-                i += 1
-            else:
-                break
-
-    return res
+    batches = {}
+    start = 0
+    for i, server in enumerate(servers):
+        count = per_server + 1 if i < extra else per_server
+        batches[server] = input_files[start:start + count]
+        start += count
+    return batches
 
 
-def execute_locally(input_files):
-    print(input_files)
-    raise ValueError("Not implemented yet")
+def send_files(server, batch):
+    total_size = sum(map(lambda file: os.path.getsize(file) / 1_000_000, batch))
+    print(f"{server} : {total_size} MB : {batch} ")
+
+    time.sleep(1)
+    pass
 
 
-def execute_distributed(servers):
-    print(servers)
-    raise ValueError("Not implemented yet")
+def measure(block):
+    start_time = time.time()
+    res = block()
+    duration = time.time() - start_time
+    return duration, res
+
+
+def distribute_files(server_batches):
+    threads = []
+    try:
+        for server, batch in server_batches.items():
+            t = threading.Thread(target=send_files, args=(server, batch))
+            t.start()
+            threads.append(t)
+    finally:
+        for thread in threads:
+            thread.join()
+        print("all threads finished")
+    pass
 
 
 def main():
-    input_dir, servers = handle_args(sys.argv[1:])
-    input_files = glob.glob(input_dir + "/*.mg4j")
+    input_files, servers, output_dir = handle_args(sys.argv[1:])
     if not input_files:
-        raise ValueError("No mg4j files found in " + input_dir)
+        raise ValueError("No mg4j files found")
+    print(f"distributing {len(input_files)} files over {len(servers)} servers({servers})")
+    server_batches = split_files(input_files, servers)
 
-    if servers:
-        distributed = split_between_servers(input_files, servers)
-        execute_distributed(distributed)
-    else:
-        execute_locally(input_files)
+    duration, _ = measure(lambda: distribute_files(server_batches))
+
+    print(f"distribution took {duration} seconds")
 
 
 if __name__ == "__main__":
