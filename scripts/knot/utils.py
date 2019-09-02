@@ -1,7 +1,22 @@
 import logging as log
 import os
 import subprocess
+import sys
 import time
+
+
+def get_enticing_home():
+    if "ENTICING_HOME" in os.environ:
+        home = os.environ["ENTICING_HOME"]
+        if not os.path.isfile(home):
+            raise ValueError(f"ENTICING HOME does not point to a directory, value : {home}")
+        return home
+    script_dir = get_script_path()
+    return os.path.dirname(script_dir)
+
+
+def get_script_path():
+    return os.path.dirname(os.path.realpath(sys.argv[0]))
 
 
 def measure(block, print_duration=False, name=""):
