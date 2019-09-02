@@ -6,6 +6,7 @@ fun indexBuilder(block: IndexBuilderConfig.() -> Unit): IndexBuilderConfig = Ind
 
 class IndexBuilderConfig {
 
+    lateinit var collectionName: String
     lateinit var input: List<File>
     lateinit var output: File
     lateinit var corpusConfiguration: CorpusConfiguration
@@ -49,6 +50,10 @@ class IndexBuilderConfig {
     fun validate(): List<String> {
         val errors = errors.toMutableList()
 
+        if (!::collectionName.isInitialized) {
+            errors.add("No name was specified")
+        }
+
         checkMg4jFiles(input, errors)
         checkDirectory(this.output, errors, createIfNecessary = true)
         corpusConfiguration.validate(errors)
@@ -76,6 +81,7 @@ class IndexBuilderConfig {
 
     override fun toString(): String = buildString {
         append("Indexer config {\n")
+        append("\tname: $collectionName\n")
         append("\tinput: $input\n")
         append("\toutput: $output\n")
         append("\tcorpus: ${corpusConfiguration.corpusName}\n")

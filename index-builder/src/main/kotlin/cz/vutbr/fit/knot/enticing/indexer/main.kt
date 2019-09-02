@@ -6,18 +6,19 @@ import cz.vutbr.fit.knot.enticing.index.startIndexing
 import java.io.File
 
 fun handleArguments(vararg args: String, loadConfig: (path: String) -> IndexBuilderConfig = ::executeScript): IndexBuilderConfig {
-    args.size < 3 && throw IllegalArgumentException("At least three arguments necessary: config_file input_dir output_dir")
+    args.size < 4 && throw IllegalArgumentException("format: /path/to/config.kts [collectionId] [input1 ... inputN] [output]")
     val config = loadConfig(args[0])
-    if (args.size == 3) {
-        val input = File(args[1])
+    val collectionName = args[1]
+    if (args.size == 4) {
+        val input = File(args[2])
         if (input.isDirectory) {
-            config.inputDirectory(args[1])
+            config.inputDirectory(args[2])
         } else {
-            config.inputFiles(args[1])
+            config.inputFiles(args[2])
         }
-        config.outputDirectory(args[2])
+        config.outputDirectory(args[3])
     } else {
-        config.inputFiles(args.toList().subList(1, args.size - 1))
+        config.inputFiles(args.toList().subList(2, args.size - 1))
         config.outputDirectory(args.last())
     }
 
