@@ -77,7 +77,7 @@ val DUMMY_LOAD_CONFIGURATION: (path: String) -> IndexBuilderConfig = {
 class HandleArgumentsTest {
 
     @Test
-    fun `At least three arguments necessary`() {
+    fun `At least four arguments necessary`() {
         assertThrows<IllegalArgumentException> {
             handleArguments(loadConfig = DUMMY_LOAD_CONFIGURATION)
         }
@@ -86,6 +86,9 @@ class HandleArgumentsTest {
         }
         assertThrows<IllegalArgumentException> {
             handleArguments("foo/config.kts", "../data/mg4j", loadConfig = DUMMY_LOAD_CONFIGURATION)
+        }
+        assertThrows<IllegalArgumentException> {
+            handleArguments("foo/config.kts", "../data/mg4j", "../data/indexed", loadConfig = DUMMY_LOAD_CONFIGURATION)
         }
     }
 
@@ -97,7 +100,7 @@ class HandleArgumentsTest {
             calledWith = path
             DUMMY_LOAD_CONFIGURATION(path)
         }
-        handleArguments("foo/bar/baz/config.kts", "../data/mg4j", "../data/indexed", loadConfig = load)
+        handleArguments("foo/bar/baz/config.kts", "col1", "../data/mg4j", "../data/indexed", loadConfig = load)
 
         assertThat(calledWith)
                 .isNotNull()
@@ -106,7 +109,7 @@ class HandleArgumentsTest {
 
     @Test
     fun `Exactly specified input mgj4 files`() {
-        val config = handleArguments("foo/bar/baz/config.kts", "../data/mg4j/cc1.mg4j", "../data/mg4j/cc2.mg4j", "../data/indexed", loadConfig = DUMMY_LOAD_CONFIGURATION)
+        val config = handleArguments("foo/bar/baz/config.kts", "col1", "../data/mg4j/cc1.mg4j", "../data/mg4j/cc2.mg4j", "../data/indexed", loadConfig = DUMMY_LOAD_CONFIGURATION)
         assertThat(config.input.toSet())
                 .isEqualTo(setOf(File("../data/mg4j/cc1.mg4j"), File("../data/mg4j/cc2.mg4j")))
         assertThat(config.output)
@@ -115,7 +118,7 @@ class HandleArgumentsTest {
 
     @Test
     fun `Input specified as directory`() {
-        val config = handleArguments("foo/bar/baz/config.kts", "../data/mg4j", "../data/indexed", loadConfig = DUMMY_LOAD_CONFIGURATION)
+        val config = handleArguments("foo/bar/baz/config.kts", "col1", "../data/mg4j", "../data/indexed", loadConfig = DUMMY_LOAD_CONFIGURATION)
         assertThat(config.input.toSet())
                 .isEqualTo(setOf(File("../data/mg4j/cc1.mg4j"), File("../data/mg4j/cc2.mg4j"), File("../data/mg4j/cc3.mg4j"), File("../data/mg4j/small.mg4j")))
         assertThat(config.output)

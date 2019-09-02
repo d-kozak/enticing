@@ -28,7 +28,7 @@ task downloadDeps(type:Exec) {
     if(!file(enticingHome).isDirectory()){
         throw new GradleException("downloadDeps:'${enticingHome}' is not a valid directory")
     }
-    def getDepsScripts = "${enticingHome}/scripts/get_deps.sh"
+    def getDepsScripts = "${enticingHome}/scripts/utils/get_deps.sh"
     if(!file(getDepsScripts).exists()){
         throw new GradleException("downloadDeps:'${getDepsScripts}' does not exist")
     }

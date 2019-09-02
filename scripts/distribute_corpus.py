@@ -4,7 +4,7 @@ import os
 import sys
 import threading
 
-from knot.utils import count_size, execute_command, create_remote_dir, measure, execute_via_ssh
+from utils.utils import count_size, execute_command, create_remote_dir, measure, execute_via_ssh
 
 # global configuration
 # do NOT change outside of the main method

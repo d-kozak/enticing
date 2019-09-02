@@ -1,7 +1,7 @@
 import os
 import sys
 
-from knot.utils import get_enticing_home, execute_command
+from utils.utils import get_enticing_home, execute_command
 
 
 def handle_args(args):

@@ -11,15 +11,12 @@ class IndexBuilderConfig {
     lateinit var output: File
     lateinit var corpusConfiguration: CorpusConfiguration
 
-    /**
-     * for errors that were discovered during creation, but their test cannot be postponed so easily
-     *
-     * e.g. mg4j directory
-     */
-    private val errors = mutableListOf<String>()
-
     val indexes
         get() = corpusConfiguration.indexes.values.toList()
+
+    fun collection(name: String) {
+        this.collectionName = name
+    }
 
     fun inputFiles(vararg files: String) {
         inputFiles(files.toList())
@@ -31,11 +28,14 @@ class IndexBuilderConfig {
 
     fun inputDirectory(path: String) {
         val directory = File(path)
+        val errors = mutableListOf<String>()
         checkDirectory(directory, errors)
         if (errors.isEmpty())
             this.input = directory.listFiles { _, name -> name.endsWith(".mg4j") }?.toList() ?: emptyList()
-        else
+        else {
+            System.err.println(errors)
             this.input = emptyList()
+        }
     }
 
     fun outputDirectory(path: String) {
@@ -48,7 +48,7 @@ class IndexBuilderConfig {
 
 
     fun validate(): List<String> {
-        val errors = errors.toMutableList()
+        val errors = mutableListOf<String>()
 
         if (!::collectionName.isInitialized) {
             errors.add("No name was specified")

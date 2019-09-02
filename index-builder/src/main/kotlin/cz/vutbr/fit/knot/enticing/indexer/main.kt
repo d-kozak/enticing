@@ -8,7 +8,7 @@ import java.io.File
 fun handleArguments(vararg args: String, loadConfig: (path: String) -> IndexBuilderConfig = ::executeScript): IndexBuilderConfig {
     args.size < 4 && throw IllegalArgumentException("format: /path/to/config.kts [collectionId] [input1 ... inputN] [output]")
     val config = loadConfig(args[0])
-    val collectionName = args[1]
+    config.collection(args[1])
     if (args.size == 4) {
         val input = File(args[2])
         if (input.isDirectory) {

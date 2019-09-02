@@ -1,5 +1,9 @@
 #!/bin/bash
-[[ -d "$ENTICING_HOME" ]] || { echo "ENTICING_HOME not defined" >&2; exit 1; }
+ENTICING_HOME=$("$(dirname "$BASH_SOURCE")"/get_enticing_home.sh)
+retval=$?
+if [[ "$retval" -ne "0" ]] ; then
+  exit $retval
+fi
 cd "${ENTICING_HOME}"/lib || exit 1
 rm -rf mg4j-bin deps.tar.gz mg4j.tar.gz tmp
 mkdir -p mg4j-bin tmp
