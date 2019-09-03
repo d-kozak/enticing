@@ -2,7 +2,6 @@ import configparser
 import logging as log
 import os
 import subprocess
-import sys
 import time
 
 
@@ -23,7 +22,7 @@ def read_default_config():
 
 
 def get_script_path():
-    return os.path.dirname(os.path.realpath(sys.argv[0]))
+    return os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
 
 def measure(block, print_duration=False, name=""):
