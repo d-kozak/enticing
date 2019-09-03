@@ -92,7 +92,8 @@ fun flatten(result: Map<String, List<MResult<IndexServer.IndexResultList>>>): Pa
                 snippets.addAll(
                         serverResult.value.searchResults.map { it.withHost(serverId) }
                 )
-                offset[serverId] = serverResult.value.offset
+                if (serverResult.value.offset.isNotEmpty())
+                    offset[serverId] = serverResult.value.offset
                 if (serverResult.value.errors.isNotEmpty()) {
                     val msg = serverResult.value.errors.toString()
                     errors[serverId] = msg
@@ -102,6 +103,7 @@ fun flatten(result: Map<String, List<MResult<IndexServer.IndexResultList>>>): Pa
                 val exception = serverResult.exception
                 errors[serverId] = "${exception::class.simpleName}:${exception.message}"
 
+                offset.remove(serverId)
                 @Temporary("should be delegated to error logging service...when there is one...")
                 exception.printStackTrace()
             }

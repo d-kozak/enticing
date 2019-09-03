@@ -219,6 +219,7 @@ internal class QueryServiceTest {
             assertThat(actual)
                     .isEqualTo(
                             WebServer.ResultList(listOf(firstResult, secondResult, thirdResult))
+                                    to emptyMap<String, Map<String, Offset>>()
                     )
         }
 
@@ -233,6 +234,7 @@ internal class QueryServiceTest {
             assertThat(actual)
                     .isEqualTo(
                             WebServer.ResultList(listOf(firstResult, secondResult), mapOf("server3" to "IllegalStateException:my secret reason to fail"))
+                                    to emptyMap<String, Map<String, Offset>>()
                     )
         }
 
@@ -249,7 +251,7 @@ internal class QueryServiceTest {
                             WebServer.ResultList(listOf(firstResult, secondResult),
                                     mapOf("server1" to "NullPointerException:oh no...again? :(",
                                             "server3" to "IllegalStateException:my secret reason to fail")
-                            )
+                            ) to emptyMap<String, Map<String, Offset>>()
                     )
         }
     }
