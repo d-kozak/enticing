@@ -16,8 +16,8 @@ def handle_args(args):
 
 
 def main():
-    log.basicConfig(level=log.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-    server_file, remote_home, config, collection_dir = handle_args(sys.argv[1:])
+    log.basicConfig(level=int(config["debug"]["level"]), format='%(asctime)s - %(levelname)s - %(message)s')
+    server_file, remote_home, kts_config, collection_dir = handle_args(sys.argv[1:])
     cmd = f'parallel-ssh -l xkozak15 -h {server_file} -i {remote_home}/scripts/node/start_indexing.sh {collection_dir}'
     execute_command(cmd)
 

@@ -56,11 +56,9 @@ def execute_command(command, print_stdout=True, print_stderr=True, check_ret_val
         stdout=subprocess.PIPE,
         universal_newlines=True)
     if print_stdout and proc.stdout:
-        log.debug("process stdout:")
-        log.debug(proc.stdout)
+        log.debug(f"process stdout: \n{proc.stdout}")
     if print_stderr and proc.stderr:
-        log.error("process stderr:")
-        log.error(proc.stderr)
+        log.error(f"process stderr: \n{proc.stderr}")
     if check_ret_val:
         proc.check_returncode()
     return proc
