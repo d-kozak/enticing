@@ -1,3 +1,4 @@
+import configparser
 import logging as log
 import os
 import subprocess
@@ -13,6 +14,12 @@ def get_enticing_home():
         return home
     script_dir = get_script_path()
     return os.path.dirname(script_dir)
+
+
+def read_default_config():
+    config = configparser.ConfigParser()
+    config.read(get_script_path() + '/config.ini')
+    return config
 
 
 def get_script_path():
