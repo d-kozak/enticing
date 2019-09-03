@@ -8,7 +8,6 @@ from utils.utils import count_size, execute_command, create_remote_dir, measure,
 
 config = read_default_config()
 
-
 def handle_args(args):
     if len(args) != 3:
         raise ValueError("format: input_dir server_file output_dir(on the servers)")

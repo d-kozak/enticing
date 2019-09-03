@@ -54,8 +54,7 @@ def execute_command(command, print_stdout=True, print_stderr=True, check_ret_val
     proc = subprocess.run(
         command.split(),
         stdout=subprocess.PIPE,
-        universal_newlines=True,
-        check=True)
+        universal_newlines=True)
     if print_stdout and proc.stdout:
         log.debug("process stdout:")
         log.debug(proc.stdout)

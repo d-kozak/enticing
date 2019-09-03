@@ -5,7 +5,7 @@ COL_DIR="$1"
 MEM=$("$ENTICING_HOME"/scripts/utils/print_mem.sh)
 echo "I've got $MEM mb of free ram"
 cd "$COL_DIR" || { echo "Could not go to the indexes directory" >&2 ; exit 1; }
-COLS=$(ls | grep "collPart*")
+COLS=$(ls)
 echo "Collections to process:"
 echo "$COLS"
 screen -d -m sleep 60
