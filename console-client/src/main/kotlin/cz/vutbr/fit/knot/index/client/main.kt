@@ -1,13 +1,49 @@
 package cz.vutbr.fit.knot.index.client
 
+import cz.vutbr.fit.knot.enticing.dto.ResultFormat
+import cz.vutbr.fit.knot.enticing.dto.TextFormat
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.ConsoleClientConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.ConsoleClientType
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
+import java.io.File
 
 fun handleArguments(args: Array<String>): ConsoleClientConfig {
-    args.size == 1 || throw IllegalArgumentException("Exactly one argument expected, the config file")
-    val config = executeScript<ConsoleClientConfig>(args[0])
+    var resultFormat: ResultFormat? = null
+    var textFormat: TextFormat? = null
+    var outputFile: File? = null
+
+    var i = 0
+    while (i < args.size && args[i].startsWith("-")) {
+        check(i != args.size - 1) { "Option ${args[i]} should be followed by a value" }
+        when (args[i]) {
+            "-f" -> outputFile = File(args[i + 1])
+            "-r" -> resultFormat = ResultFormat.valueOf(args[i + 1])
+            "-t" -> textFormat = TextFormat.valueOf(args[i + 1])
+        }
+        i += 2
+    }
+    check(i < args.size) { "Config file path expected" }
+    val config = executeScript<ConsoleClientConfig>(args[i++])
+
+    if (i < args.size) {
+        config.searchConfig.query = args[i++]
+    }
+
+    check(i == args.size) { "No more args expected" }
+
+    if (resultFormat != null) {
+        config.searchConfig.resultFormat = resultFormat
+    }
+
+    if (textFormat != null) {
+        config.searchConfig.textFormat = textFormat
+    }
+
+    if (outputFile != null) {
+        config.searchConfig.outputFile = outputFile
+    }
+
     val errors = config.validate()
     if (errors.isNotEmpty()) {
         throw IllegalArgumentException("$errors")

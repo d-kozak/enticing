@@ -4,6 +4,7 @@ import cz.vutbr.fit.knot.enticing.dto.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.TextFormat
 import cz.vutbr.fit.knot.enticing.dto.TextMetadata
+import java.io.File
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Positive
 
@@ -17,7 +18,9 @@ data class SearchConfig(
         var resultFormat: ResultFormat = ResultFormat.SNIPPET,
         var textFormat: TextFormat = TextFormat.STRING_WITH_METADATA,
         @field:NotEmpty
-        var defaultIndex: String = "token"
+        var defaultIndex: String = "token",
+        var outputFile: File? = null,
+        var query: String? = null
 ) {
 
     fun toTemplateQuery(): SearchQuery = SearchQuery(
