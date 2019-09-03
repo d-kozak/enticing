@@ -82,6 +82,16 @@ def print_final_stats(servers, output_dir):
             log.info(f'\t\t{files}')
 
 
+def confirm_server_batches(server_batches):
+    for server, files in server_batches.items():
+        print(f"server: {server}: {files}")
+    print("Is is ok? y/n")
+    answer = input()
+    if answer.lower() != "y":
+        print("Answer was not yes, exiting...")
+        exit(0)
+
+
 def main():
     log.basicConfig(level=int(config["debug"]["level"]), format='%(asctime)s - %(levelname)s - %(message)s')
     input_files, servers, output_dir = handle_args(sys.argv[1:])
@@ -90,6 +100,7 @@ def main():
         exit(1)
     log.info(f"distributing {len(input_files)} files over {len(servers)} servers({servers})")
     server_batches = split_files(input_files, servers)
+    confirm_server_batches(server_batches)
     measure(lambda: distribute_files(server_batches, output_dir), name="Distributing", print_duration=True)
     print_final_stats(servers, output_dir)
 
