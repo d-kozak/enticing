@@ -27,6 +27,6 @@ for collection in $COLS
 do
   echo "processing collection $collection"
   mkdir -p "$collection"_out
-  echo screen -L -d -m "$ENTICING_HOME"/bin/index-builder "$CONFIG_FILE" "$collection" "$collection" "$collection"_out
+  screen -L -d -m "$ENTICING_HOME"/bin/index-builder "$CONFIG_FILE" "$collection" "$collection" "$collection"_out
 done
 
