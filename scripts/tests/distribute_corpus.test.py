@@ -30,6 +30,15 @@ class SplitFilesTest(unittest.TestCase):
             'foo': ['three']
         })
 
+    def test_three_servers_six_files(self):
+        res = split_files(['one', 'two', 'three', 'four', 'five', 'six'], ['main', 'sec', 'foo'])
+
+        self.assertDictEqual(res, {
+            'main': ['one', 'two'],
+            'sec': ['three', 'four'],
+            'foo': ['five', 'six']
+        })
+
 
 if __name__ == '__main__':
     unittest.main()
