@@ -5,10 +5,15 @@
   echo "ENTICING_HOME set to $ENTICING_HOME"
 }
 [[ -d "$1" ]] || {
-  echo "EXPECTING a directory with collections to process, '$d' is not a local direcotory" >&2
+  echo "EXPECTING a directory with collections to process, '$1' is not a local direcotory" >&2
+  exit 1
+}
+[[ -f "$2" ]] || {
+  echo "EXPECTING kts script file, '$2' is not a local direcotory" >&2
   exit 1
 }
 COL_DIR="$1"
+CONFIG_FILE="$2"
 MEM=$("$ENTICING_HOME"/scripts/utils/print_mem.sh)
 echo "I've got $MEM mb of free ram"
 cd "$COL_DIR" || {
@@ -18,4 +23,10 @@ cd "$COL_DIR" || {
 COLS=$(ls)
 echo "Collections to process:"
 echo "$COLS"
-screen -d -m sleep 60
+for collection in $COLS
+do
+  echo "processing collection $collection"
+  mkdir -p "$collection"_out
+  echo screen -L -d -m "$ENTICING_HOME"/bin/index-builder "$CONFIG_FILE" "$collection" "$collection" "$collection"_out
+done
+

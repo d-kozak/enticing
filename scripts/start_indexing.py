@@ -1,8 +1,7 @@
-import logging as log
 import os
 import sys
 
-from utils.utils import execute_command, read_default_config
+from utils.utils import execute_command, read_default_config, init_logging
 
 config = read_default_config()
 
@@ -15,10 +14,11 @@ def handle_args(args):
 
 
 def main():
-    log.basicConfig(level=int(config["debug"]["level"]), format='%(asctime)s - %(levelname)s - %(message)s')
+    init_logging(int(config['debug']['level']))
     server_file, remote_home, kts_config, collection_dir = handle_args(sys.argv[1:])
-    cmd = f'parallel-ssh -l xkozak15 -h {server_file} -i {remote_home}/scripts/node/start_indexing.sh {collection_dir}'
-    execute_command(cmd)
+    cmd = f'parallel-ssh -l xkozak15 -h {server_file} -i {remote_home}/scripts/node/start_indexing.sh {collection_dir} {kts_config}'
+    proc = execute_command(cmd)
+    print(proc.stdout)
 
 if __name__ == "__main__":
     main()
