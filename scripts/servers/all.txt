@@ -9,7 +9,6 @@ athena14.fit.vutbr.cz
 athena15.fit.vutbr.cz
 athena16.fit.vutbr.cz
 athena17.fit.vutbr.cz
-athena18.fit.vutbr.cz
 athena2.fit.vutbr.cz
 athena3.fit.vutbr.cz
 athena4.fit.vutbr.cz
