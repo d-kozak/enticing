@@ -5,7 +5,6 @@ import sys
 from utils.utils import execute_command, read_default_config
 
 config = read_default_config()
-config["debug"]["level"] = str(log.DEBUG)
 
 def handle_args(args):
     if len(args) != 4:

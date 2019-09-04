@@ -5,6 +5,10 @@ import subprocess
 import time
 
 
+def init_logging(level=log.INFO):
+    log.basicConfig(level=level, format='%(asctime)s - %(levelname)s - %(message)s')
+
+
 def get_enticing_home():
     if "ENTICING_HOME" in os.environ:
         home = os.environ["ENTICING_HOME"]
@@ -42,6 +46,11 @@ def create_remote_dir(server, username, directory):
     log.debug(f'creating remote dir {directory}')
     cmd = f'mkdir -p {directory}'
     return execute_via_ssh(server, username, cmd)
+
+
+def execute_parallel_ssh(server_file, username, cmd):
+    cmd = f'parallel-ssh -l {username} -h {server_file} -i {cmd}'
+    return execute_command(cmd)
 
 
 def execute_via_ssh(server, username, cmd):
