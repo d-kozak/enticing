@@ -85,7 +85,7 @@ def print_final_stats(servers, output_dir):
 def confirm_server_batches(server_batches):
     for server, files in server_batches.items():
         print(f"server: {server}: {files}")
-    print("Is is ok? y/n")
+    print("Is is ok? [y/n]")
     answer = input()
     if answer.lower() != "y":
         print("Answer was not yes, exiting...")
