@@ -34,7 +34,8 @@ def inspect_collection_dir(collection_dir):
     for mg4j_dir in mg4j_dirs:
         output_dir = os.path.join(os.path.join(collection_dir, "indexed"), mg4j_dir)
         if not os.path.isdir(output_dir):
-            raise ValueError(f"Could not find dir {output_dir} for collection {mg4j_dir}")
+            log.error(f"Could not find dir {output_dir} for collection {mg4j_dir}, skipping")
+            continue
         collection_config[mg4j_dir] = [os.path.join(collection_dir, mg4j_dir), output_dir]
     return collection_config
 
