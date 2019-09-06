@@ -1,0 +1,51 @@
+import json
+import logging as log
+import os
+import sys
+
+from utils.utils import start_screen, read_default_config, init_logging, get_enticing_home
+
+config = read_default_config()
+
+
+def handle_args(args):
+    if len(args) != 2:
+        raise ValueError("format: collection_dir kts_config")
+    collection_dir = args[0]
+    if not os.path.isdir(collection_dir):
+        raise ValueError(f"{collection_dir} is not a directory")
+    kts_config = args[1]
+    if not os.path.isfile(kts_config):
+        raise ValueError(f"{kts_config} is not a real file")
+    return collection_dir, kts_config
+
+
+def inspect_collection_dir(collection_dir):
+    content = os.listdir(collection_dir)
+    if "indexed" not in content:
+        log.error("indexed directory(for mg4j metadata) not found")
+        sys.exit(1)
+    mg4j_dirs = [file for file in content if os.path.isdir(os.path.join(collection_dir, file)) and file != "indexed"]
+    config = {}
+    for mg4j_dir in mg4j_dirs:
+        output_dir = os.path.join(os.path.join(collection_dir, "indexed"), mg4j_dir)
+        if not os.path.isdir(output_dir):
+            raise ValueError(f"Could not find dir {output_dir} for collection {mg4j_dir}")
+        config[mg4j_dir] = [os.path.join(collection_dir, mg4j_dir), output_dir]
+    return config
+
+
+def serialize_config(config):
+    return json.dumps(config)
+
+
+def main():
+    init_logging(log.DEBUG)
+    collection_dir, kts_config = handle_args(sys.argv[1:])
+    enticing_home = get_enticing_home()
+    config = inspect_collection_dir(collection_dir)
+    start_screen(f'{enticing_home}/bin/index-server {kts_config} {serialize_config(config)}', "index-server")
+
+
+if __name__ == "__main__":
+    main()

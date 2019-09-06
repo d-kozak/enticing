@@ -58,6 +58,12 @@ def execute_via_ssh(server, username, cmd):
     return execute_command(cmd)
 
 
+def start_screen(cmd, name=None):
+    cmd = "screen " + (f"-Logfile {name}" if name else '') + " -d -m " + cmd
+    print(cmd)
+    # return execute_command(cmd)
+
+
 def execute_command(command, print_stdout=True, print_stderr=True, check_ret_val=True):
     log.debug(f"Executing '{command}'")
     proc = subprocess.run(
