@@ -20,13 +20,14 @@ cd "$COL_DIR" || {
   echo "Could not go to the indexes directory" >&2
   exit 1
 }
-COLS=$(ls)
+
+COLS=$(ls -d *cz*/ | sed 's:/*$::')
 echo "Collections to process:"
 echo "$COLS"
 for collection in $COLS
 do
   echo "processing collection $collection"
-  mkdir -p "$collection"_out
-  screen -L -d -m "$ENTICING_HOME"/bin/index-builder "$CONFIG_FILE" "$collection" "$collection" "$collection"_out
+  mkdir -p ./indexed/$collection
+  screen -L -d -m "$ENTICING_HOME"/bin/index-builder "$CONFIG_FILE" "$collection" "$collection" ./indexed/$collection
 done
 

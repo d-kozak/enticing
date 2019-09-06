@@ -13,8 +13,9 @@ cd "$COL_DIR" || {
   echo "Could not go to the indexes directory" >&2
   exit 1
 }
-COLS=$(ls)
-for collection in $COLS
+COLS=$(ls -d *_indexed)
+for junk in $COLS
 do
-  echo "processing collection $collection"
+  echo "deleting junk dir $junk"
+  rm -rf "$junk"
 done
