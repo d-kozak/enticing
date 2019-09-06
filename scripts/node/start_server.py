@@ -1,7 +1,10 @@
-import json
-import logging as log
 import os
 import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
+import json
+import logging as log
 
 from utils.utils import start_screen, read_default_config, init_logging, get_enticing_home
 
