@@ -28,9 +28,11 @@ bootJar {
 }
 
 dependencies {
-    compile(project(":dto"))
+    implementation(project(":dto"))
     implementation(project(":index-lib"))
     implementation(project(":query-dispatcher"))
+
+    runtime("org.jetbrains.kotlin:kotlin-scripting-jsr223-embeddable")
 
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-security")

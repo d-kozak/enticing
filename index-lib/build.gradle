@@ -21,7 +21,7 @@ jar {
 }
 
 dependencies {
-    compile(project(":eql-compiler"))
+    implementation(project(":eql-compiler"))
 
     implementation(project(":dto"))
     implementation(project(":query-dispatcher"))
