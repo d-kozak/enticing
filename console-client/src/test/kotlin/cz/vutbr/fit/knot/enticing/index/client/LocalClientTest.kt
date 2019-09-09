@@ -1,4 +1,4 @@
-package cz.vutbr.fit.knot.index.client
+package cz.vutbr.fit.knot.enticing.index.client
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.ConsoleClientConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.ConsoleClientType

@@ -1,4 +1,4 @@
-package cz.vutbr.fit.knot.index.client
+package cz.vutbr.fit.knot.enticing.index.client
 
 import cz.vutbr.fit.knot.enticing.dto.IndexServer
 import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup

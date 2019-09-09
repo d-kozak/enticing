@@ -1,4 +1,4 @@
-package cz.vutbr.fit.knot.index.client
+package cz.vutbr.fit.knot.enticing.index.client
 
 import cz.vutbr.fit.knot.enticing.dto.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.TextFormat

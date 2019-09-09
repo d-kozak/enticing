@@ -34,5 +34,5 @@ java -cp build/libs/index-builder-0.0.1-SNAPSHOT.jar:../index-common/build/libs/
 
 Start console client (with local config). Assumes you are in the lib directory.
 ```
-java -cp "*:mg4j-bin/*" cz.vutbr.fit.knot.index.client.MainKt ../console-client/src/test/resources/client.config.local.kts
+java -cp "*:mg4j-bin/*" cz.vutbr.fit.knot.enticing.index.client.MainKt ../console-client/src/test/resources/client.config.local.kts
 ```
