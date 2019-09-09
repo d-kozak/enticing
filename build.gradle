@@ -1,4 +1,4 @@
-plugins{
+plugins {
     id("org.jetbrains.kotlin.jvm") version "1.3.50" apply false
 }
 
@@ -6,34 +6,27 @@ plugins{
  * Task executed by Heroku for building the app
  */
 task stage {
-    dependsOn "frontend:packageApp" 
-    dependsOn "webserver:bootJar"
+    dependsOn "frontend:packageApp", "webserver:bootJar"
 }
 
 task buildAll {
-    subprojects.each{
-        if(it.name == "frontend"){
-            dependsOn "frontend:packageApp"
-        } else {
-            dependsOn "${it.name}:jar"
-        }
-    }
-    dependsOn "webserver:bootJar"
-    dependsOn "index-server:bootJar"
+    dependsOn "webserver:bootJar", "index-server:bootJar", "index-builder:jar", "console-client:jar"
 }
 
-task downloadDeps(type:Exec) {
-    def enticingHome = System.env.ENTICING_HOME
-    if(!enticingHome){
-        System.err.println("downloadDeps: ENTICING_HOME is not set, assuming it is the current directory");
-        enticingHome = "."
+task downloadDeps(type: Exec) {
+    doLast {
+        def enticingHome = System.env.ENTICING_HOME
+        if (!enticingHome) {
+            System.err.println("downloadDeps: ENTICING_HOME is not set, assuming it is the current directory");
+            enticingHome = "."
+        }
+        if (!file(enticingHome).isDirectory()) {
+            throw new GradleException("downloadDeps:'${enticingHome}' is not a valid directory")
+        }
+        def getDepsScripts = "${enticingHome}/scripts/utils/get_deps.sh"
+        if (!file(getDepsScripts).exists()) {
+            throw new GradleException("downloadDeps:'${getDepsScripts}' does not exist")
+        }
+        commandLine getDepsScripts
     }
-    if(!file(enticingHome).isDirectory()){
-        throw new GradleException("downloadDeps:'${enticingHome}' is not a valid directory")
-    }
-    def getDepsScripts = "${enticingHome}/scripts/utils/get_deps.sh"
-    if(!file(getDepsScripts).exists()){
-        throw new GradleException("downloadDeps:'${getDepsScripts}' does not exist")
-    }
-    commandLine getDepsScripts
 }

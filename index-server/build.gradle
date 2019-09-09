@@ -22,8 +22,7 @@ repositories {
 }
 
 bootJar {
-    requiresUnpack '**/*dto-*.jar'
-    requiresUnpack("**/*kotlin-compiler*.jar")
+    requiresUnpack "**/*kotlin-compiler*.jar"
 //    launchScript()
 }
 
@@ -31,6 +30,7 @@ dependencies {
     implementation(project(":dto"))
     implementation(project(":index-lib"))
     implementation(project(":query-dispatcher"))
+    implementation(project(":eql-compiler"))
 
     runtime("org.jetbrains.kotlin:kotlin-scripting-jsr223-embeddable")
 
