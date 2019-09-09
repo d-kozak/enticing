@@ -7,7 +7,6 @@ import cz.vutbr.fit.knot.enticing.dto.SnippetExtension
 import cz.vutbr.fit.knot.enticing.dto.WebServer
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
-import cz.vutbr.fit.knot.enticing.query.processor.exchange
 import org.slf4j.LoggerFactory
 import org.springframework.http.*
 import org.springframework.web.client.RestTemplate
@@ -46,3 +45,5 @@ class IndexServerConnector(private val template: RestTemplate = RestTemplate(), 
         }
     }
 }
+
+inline fun <reified T> RestTemplate.exchange(url: String, method: HttpMethod, requestEntity: HttpEntity<*>) = this.exchange(url, method, requestEntity, T::class.java)
