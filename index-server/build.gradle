@@ -3,11 +3,12 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("org.jetbrains.kotlin.plugin.jpa") version "1.3.50"
     id("org.springframework.boot") version "2.1.4.RELEASE"
-    id("org.jetbrains.kotlin.jvm") version "1.3.50"
+    id("org.jetbrains.kotlin.jvm")
     id("org.jetbrains.kotlin.plugin.spring") version "1.3.50"
 }
 
 apply plugin: "io.spring.dependency-management"
+
 
 
 group = "cz.vutbr.knot.enticing"
@@ -21,17 +22,15 @@ repositories {
 }
 
 bootJar {
-    requiresUnpack '**/dto-*.jar'
-    requiresUnpack '**/kotlin-*.jar'
-    launchScript()
+    requiresUnpack '**/*dto-*.jar'
+    requiresUnpack("**/*kotlin-compiler*.jar")
+//    launchScript()
 }
 
 dependencies {
-    implementation(project(":dto"))
+    compile(project(":dto"))
     implementation(project(":index-lib"))
     implementation(project(":query-dispatcher"))
-
-    compile("org.jetbrains.kotlin:kotlin-compiler-embeddable:1.3.50")
 
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-security")
