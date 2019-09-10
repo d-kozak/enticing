@@ -55,6 +55,8 @@ internal fun IndexClientConfig.update(serializedConfig: String) {
     val config = serializedConfig.toDto<Map<String, List<String>>>()
     require(config.isNotEmpty()) { "at least one collection is necessary" }
 
+    // get rid of the original config
+    this.collections.clear()
     collections {
         for ((name, files) in config) {
             collection(name) {

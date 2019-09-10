@@ -44,24 +44,23 @@ dependencies {
 
 
     /**
+     * Mg4j - the indexing lib, needed, but NOT included in the jar
+     */
+    implementation("it.unimi.di:mg4j-big:5.4.3") {
+        // exclude some transitive mg4j dependencies that are messing up the classpath (java.servlet.* was there multiple times)
+        exclude group: "org.mortbay.jetty", module: "jetty"
+        exclude group: "javax.servlet", module: "servlet-api"
+    }
+    implementation("it.unimi.dsi:dsiutils:2.3.0")
+    implementation("it.unimi.dsi:sux4j:4.0.0")
+    
+    /**
      * Testing and mocking
      */
     testImplementation("io.mockk:mockk:1.9")
     testCompile("org.assertj:assertj-core:3.11.1")
     testCompile("org.junit.jupiter:junit-jupiter-api:5.3.2")
     testRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.2")
-
-    /**
-     * Mg4j - the indexing lib - tests need them
-     */
-    testImplementation("it.unimi.di:mg4j-big:5.4.3") {
-        // exclude some transitive mg4j dependencies that are messing up the classpath (java.servlet.* was there multiple times)
-        exclude group: "org.mortbay.jetty", module: "jetty"
-        exclude group: "javax.servlet", module: "servlet-api"
-    }
-    testImplementation("it.unimi.dsi:dsiutils:2.3.0")
-    testImplementation("it.unimi.dsi:sux4j:4.0.0")
-
 }
 
 test {

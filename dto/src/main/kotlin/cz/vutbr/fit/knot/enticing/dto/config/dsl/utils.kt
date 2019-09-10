@@ -17,8 +17,7 @@ internal fun checkDirectory(directory: File, errors: MutableList<String>, create
     } else {
         if (!directory.isDirectory) {
             errors.add("$directory is not a directory")
-        }
-        if (!directory.exists()) {
+        } else if (!directory.exists()) {
             errors.add("$directory does not exist")
         }
     }
