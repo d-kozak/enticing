@@ -27,5 +27,5 @@ echo "$COLS"
 for collection in $COLS; do
   echo "processing collection $collection"
   mkdir -p ./indexed/"$collection"
-  screen -Logfile ./"$collection".log -d -m "$ENTICING_HOME"/bin/index-builder "$CONFIG_FILE" "$collection" "$collection" ./indexed/$collection
+  screen -L -d -m "$ENTICING_HOME"/bin/index-builder "$CONFIG_FILE" "$collection" "$collection" ./indexed/$collection
 done
