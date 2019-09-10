@@ -1,4 +1,4 @@
-package cz.vutbr.fit.knot.enticing.webserver.entity.ipaddress
+package cz.vutbr.fit.knot.enticing.webserver.entity.validation
 
 import javax.validation.Constraint
 import javax.validation.Payload

@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.dto
 
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
-import cz.vutbr.fit.knot.enticing.webserver.entity.ipaddress.IpAddressCollection
+import cz.vutbr.fit.knot.enticing.webserver.entity.validation.UrlCollection
 import javax.validation.constraints.NotEmpty
 
 data class ImportedSearchSettings(
@@ -12,7 +12,7 @@ data class ImportedSearchSettings(
         @field:NotEmpty
         val annotationServer: String,
         @field:NotEmpty
-        @field:IpAddressCollection
+        @field:UrlCollection
         val servers: Set<String>
 )
 

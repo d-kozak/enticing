@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.entity
 
 import cz.vutbr.fit.knot.enticing.dto.utils.regex.urlRegexStr
-import cz.vutbr.fit.knot.enticing.webserver.entity.ipaddress.IpAddressCollection
+import cz.vutbr.fit.knot.enticing.webserver.entity.validation.UrlCollection
 import javax.persistence.*
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Pattern
@@ -27,7 +27,7 @@ class SearchSettings(
         var annotationServer: String = "",
         @field:ElementCollection(fetch = FetchType.EAGER)
         @field:NotEmpty
-        @field:IpAddressCollection
+        @field:UrlCollection
         var servers: Set<String> = setOf()
 ) {
 
