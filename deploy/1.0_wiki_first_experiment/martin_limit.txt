@@ -51,4 +51,3 @@ knot34.fit.vutbr.cz
 knot35.fit.vutbr.cz
 knot36.fit.vutbr.cz
 knot37.fit.vutbr.cz
-knot38.fit.vutbr.cz
