@@ -41,7 +41,7 @@ def inspect_collection_dir(collection_dir):
 
 
 def serialize_config(config):
-    return json.dumps(config)
+    return json.dumps(config).replace(' ', '')
 
 
 def main():

@@ -12,7 +12,7 @@ def init_logging(level=log.INFO):
 def get_enticing_home():
     if "ENTICING_HOME" in os.environ:
         home = os.environ["ENTICING_HOME"]
-        if not os.path.isfile(home):
+        if not os.path.isdir(home):
             raise ValueError(f"ENTICING HOME does not point to a directory, value : {home}")
         return home
     script_dir = get_script_path()
@@ -58,8 +58,8 @@ def execute_via_ssh(server, username, cmd):
     return execute_command(cmd)
 
 
-def start_screen(cmd, name=None):
-    cmd = "screen " + (f"-Logfile {name}" if name else '') + " -d -m " + cmd
+def start_screen(cmd, start_logging=True):
+    cmd = "screen " + ("-L" if start_logging else '') + " -d -m " + cmd
     return execute_command(cmd)
 
 
