@@ -10,14 +10,6 @@ repositories {
     mavenCentral()
 }
 
-jar {
-    from {
-        configurations.compile.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }
-}
-
 dependencies {
     /**
      * Kotlin lang deps
@@ -33,6 +25,11 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8")
     implementation("com.fasterxml.jackson.core:jackson-annotations:2.9.8")
 
+
+    /**
+     * Kotlin scripting
+     */
+    implementation("org.jetbrains.kotlin:kotlin-scripting-jsr223-embeddable")
 
     /**
      * Testing & mocking
