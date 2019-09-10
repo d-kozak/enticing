@@ -24,11 +24,24 @@ jar {
 
 
 dependencies {
-    implementation(project(":index-lib"))
-    implementation(project(":dto"))
+    compile(project(":index-lib")){
+        // exclude mg4j, it makes the output jar too big, needs to be added externally
+        exclude group: "it.unimi.di"
+        exclude group: "it.unimi.dsi"
+    }
+    compile(project(":dto"))
 
+    /**
+     * Kotlin lang deps
+     */
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0-M1")
 
+
+    /**
+     * Testing & mocking
+     */
     testImplementation("io.mockk:mockk:1.9")
     testCompile("org.assertj:assertj-core:3.11.1")
     testCompile("org.junit.jupiter:junit-jupiter-api:5.3.2")

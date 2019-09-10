@@ -4,3 +4,4 @@ retval=$?
 if [[ "$retval" -ne "0" ]]; then
   exit $retval
 fi
+java -cp "${ENTICING_HOME}/lib/console-client-0.0.1-SNAPSHOT.jar:${ENTICING_HOME}/lib/mg4j-bin/*" cz.vutbr.fit.knot.enticing.index.client.MainKt "$@"

@@ -4,4 +4,4 @@ retval=$?
 if [[ "$retval" -ne "0" ]] ; then
   exit $retval
 fi
-cd "${ENTICING_HOME}"/frontend && npm run start
+"${ENTICING_HOME}"/bin/console-client "${ENTICING_HOME}"/console-client/src/test/resources/client.config.local.kts
