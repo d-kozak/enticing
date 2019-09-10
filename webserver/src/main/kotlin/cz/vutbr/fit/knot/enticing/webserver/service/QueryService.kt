@@ -60,9 +60,15 @@ class QueryService(
         return runBlocking {
             val formats = searchSettings.servers.map { server ->
                 async {
-                    indexServerConnector.getFormat(server)
+                    try {
+                        indexServerConnector.getFormat(server)
+                    } catch (ex: Exception) {
+                        log.warn("Could not contact server $server")
+                        ex.printStackTrace()
+                        null
+                    }
                 }
-            }.awaitAll()
+            }.awaitAll().filterNotNull()
 
             mergeCorpusFormats(formats)
         }

@@ -7,6 +7,7 @@ import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
+import kotlin.math.max
 
 
 /**
@@ -79,7 +80,7 @@ internal fun <QueryType : Query<QueryType>> splitSnippetCount(i: Int, serverCoun
     if (modulo != 0 && i < modulo) {
         newSnippetCount++
     }
-    return query.updateSnippetCount(newSnippetCount)
+    return query.updateSnippetCount(max(3, newSnippetCount))
 }
 
 

@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.http.*
 import org.springframework.web.client.RestTemplate
 
-class IndexServerConnector(private val template: RestTemplate = RestTemplate(), private val apiBathPath: String) {
+class IndexServerConnector(private val template: RestTemplate = RestTemplate(), private val apiBathPath: String, private val port: Int = 5627) {
 
     private val log = LoggerFactory.getLogger(IndexServerConnector::class.java)
 
@@ -20,7 +20,7 @@ class IndexServerConnector(private val template: RestTemplate = RestTemplate(), 
     fun contextExtension(query: WebServer.ContextExtensionQuery): SnippetExtension = resultOrThrow(query.host, query.toIndexFormat(), "context")
 
     fun getFormat(server: String): CorpusFormat {
-        val url = "http://$server$apiBathPath/format"
+        val url = "http://$server:$port$apiBathPath/format"
         try {
             val response = template.getForEntity(url, CorpusFormat::class.java)
             return response.body
@@ -36,11 +36,12 @@ class IndexServerConnector(private val template: RestTemplate = RestTemplate(), 
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
         val entity = HttpEntity(input, headers)
-        val response = template.exchange<T>("http://$host$apiBathPath/$endpoint", HttpMethod.POST, entity)
+        val response = template.exchange<T>("http://$host:$port$apiBathPath/$endpoint", HttpMethod.POST, entity)
         return if (response.statusCode == HttpStatus.OK) {
             response.body!!
         } else {
             @Incomplete("somehow rethrow the real exception?")
+            log.warn("Could not contact $host")
             throw RuntimeException(response.body?.toString() ?: "message lost")
         }
     }
