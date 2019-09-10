@@ -49,7 +49,9 @@ def main():
     collection_dir, kts_config = handle_args(sys.argv[1:])
     enticing_home = get_enticing_home()
     collection_config = inspect_collection_dir(collection_dir)
-    start_screen(f'{enticing_home}/bin/index-server {kts_config} {serialize_config(collection_config)}', "index-server")
+    start_screen(
+        f'{enticing_home}/bin/index-server {kts_config} {serialize_config(collection_config)} --server.port=5627',
+        "index-server")
 
 
 if __name__ == "__main__":
