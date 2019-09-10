@@ -1,4 +1,5 @@
 data/indexed/**
+data/dummy_start_server_data/indexed/**
 lib/**
 
 HELP.md
