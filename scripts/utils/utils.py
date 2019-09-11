@@ -58,8 +58,10 @@ def execute_via_ssh(server, username, cmd):
     return execute_command(cmd)
 
 
-def start_screen(cmd, start_logging=True):
-    cmd = "screen " + ("-L" if start_logging else '') + " -d -m " + cmd
+def start_screen(cmd, name=None, logfile=None):
+    cmd = "screen " + (f"-S {name} " if name else '') + " -d -m " + cmd
+    if name and logfile:
+        cmd += f" && screen -S {name} -X logfile {logfile} && screen -S {name} -X log"
     return execute_command(cmd)
 
 
