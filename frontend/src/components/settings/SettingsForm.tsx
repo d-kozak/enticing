@@ -88,7 +88,7 @@ const SettingsSchema = Yup.object().shape({
         .matches(urlRegex, urlRegexFail)
         .required('URL is required'),
     'servers': Yup.array(Yup.string()
-        .matches(ipAddressRegex, ipAddressFail))
+        .matches(urlRegex, urlRegexFail))
         .min(1)
 });
 const SettingsForm = (props: SettingsFormProps) => {
