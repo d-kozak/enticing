@@ -134,7 +134,6 @@ export const loginRequest = (login: string, password: string, onError: (errors: 
     const formData = new FormData();
     formData.set("username", login);
     formData.set("password", password);
-
     axios.post(`${API_BASE_PATH}/login`, formData, {withCredentials: true})
         .then(response => {
             const user = response.data;
@@ -142,10 +141,9 @@ export const loginRequest = (login: string, password: string, onError: (errors: 
 
             dispatch(openSnackbar('Logged in'));
             dispatch(loadSearchSettingsRequest(user.selectedSettings, true));
-        })
-        .catch(error => {
+        }).catch(error => {
             if (error.response.data.status === 401) {
-                onError({userLogin: 'Invalid login or password'});
+                onError({login: 'Invalid login or password'});
             } else {
                 dispatch(openSnackbar('Could not log in'));
                 onError({});
@@ -160,6 +158,7 @@ export const signUpRequest = (login: string, password: string, onError: (error: 
     }).then(() => {
             dispatch(loginRequest(login, password, () => {
                 dispatch(openSnackbar('Signup was successful, but subsequent login failed, please try to log in manually'))
+                onError({});
             }))
         }
     ).catch(error => {
