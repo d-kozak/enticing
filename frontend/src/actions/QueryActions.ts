@@ -1,14 +1,6 @@
 import {ThunkResult} from "./RootActions";
 import * as H from "history";
-import {
-    ExactEntityDefinition,
-    ExactFormatDefinition,
-    ExactIndexDefinition,
-    IndexDefinition,
-    Predefined,
-    SearchQuery,
-    TextMetadata
-} from "../entities/SearchQuery";
+import {SearchQuery} from "../entities/SearchQuery";
 import {API_BASE_PATH} from "../globals";
 import axios from "axios";
 import {hideProgressbar, showProgressbar} from "../reducers/ProgressBarReducer";
@@ -18,8 +10,7 @@ import {SearchSettings} from "../entities/SearchSettings";
 import {openSnackbar} from "../reducers/SnackBarReducer";
 import {newSearchResults} from "../reducers/SearchResultReducer";
 import {User} from "../entities/User";
-import {CorpusFormat, EntityInfo, IndexInfo, String2StringObjectMap} from "../entities/CorpusFormat";
-import {SelectedMetadata} from "../entities/SelectedMetadata";
+import {createMetadataRequest, filterCorpusFormat} from "./metadataFiltering";
 
 
 export const startSearchingAction = (query: string, user: User, searchSettings: SearchSettings, history?: H.History): ThunkResult<void> => (dispatch) => {
@@ -76,78 +67,3 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
 };
 
 
-function filterCorpusFormat(corpusFormat: CorpusFormat, selectedMetadata: SelectedMetadata | undefined): CorpusFormat {
-    // @Warning should we clone the object where or are we sure that no one dares to modify it?
-    if (!selectedMetadata) return corpusFormat;
-    const indexes: IndexInfo = {};
-    const entities: { [clazz: string]: EntityInfo } = {};
-
-    for (let index of selectedMetadata.indexes) {
-        if (!corpusFormat.indexes[index]) {
-            console.warn(`index ${index} is not part of selected corpus format`);
-            continue;
-        }
-        indexes[index] = corpusFormat.indexes[index];
-    }
-
-    for (let entityName of Object.keys(selectedMetadata.entities)) {
-        const entity = selectedMetadata.entities[entityName];
-        const entityInfo = corpusFormat.entities[entityName];
-        if (!entityInfo) {
-            console.warn(`entity ${entityName} is not part of selected corpus format`);
-            continue;
-        }
-        const wantedAttributes: String2StringObjectMap = {};
-        for (let attribute of entity.attributes) {
-            if (entityInfo.attributes[attribute] !== undefined) {
-                wantedAttributes[attribute] = entityInfo.attributes[attribute];
-            } else {
-                console.warn(`attribute ${attribute} is not part of selected entity ${entityName}`);
-            }
-        }
-        entities[entityName] = {
-            description: entityInfo.description,
-            attributes: wantedAttributes
-        };
-    }
-
-    return {
-        corpusName: corpusFormat.corpusName,
-        indexes,
-        entities
-    };
-}
-
-
-function createMetadataRequest(corpusFormat: CorpusFormat, selectedMetadata: SelectedMetadata | undefined): TextMetadata {
-    if (!selectedMetadata) return new Predefined("all");
-    const wantedIndexes = [] as Array<string>;
-    for (let index of selectedMetadata.indexes) {
-        if (corpusFormat.indexes[index]) {
-            wantedIndexes.push(index);
-        } else {
-            console.warn(`index ${index} is not part of selected corpus format`)
-        }
-    }
-    const indexDef: IndexDefinition = wantedIndexes.length == Object.keys(corpusFormat.indexes).length ? new Predefined("all") : new ExactIndexDefinition(wantedIndexes);
-
-    const wantedEntities: { [key: string]: IndexDefinition } = {};
-    for (let entityName of Object.keys(selectedMetadata.entities)) {
-        const entity = selectedMetadata.entities[entityName];
-        const entityInfo = corpusFormat.entities[entityName];
-        if (!entityInfo) {
-            console.warn(`entity ${entityName} is not part of selected corpus format`);
-            continue;
-        }
-        const wantedAttributes = [] as Array<string>;
-        for (let attribute of entity.attributes) {
-            if (entityInfo.attributes[attribute] !== undefined) {
-                wantedAttributes.push(attribute);
-            } else {
-                console.warn(`attribute ${attribute} is not part of selected entity ${entityName}`);
-            }
-        }
-        wantedEntities[entityName] = wantedAttributes.length == Object.keys(entityInfo.attributes).length ? new Predefined("all") : new ExactIndexDefinition(wantedAttributes);
-    }
-    return new ExactFormatDefinition(indexDef, new ExactEntityDefinition(wantedEntities));
-}

@@ -10,7 +10,7 @@ import {parseNewAnnotatedText} from "../../components/annotations/TextUnitList";
 import {openSnackbar} from "../SnackBarReducer";
 import {hideProgressbar, showProgressbar} from "../ProgressBarReducer";
 import axios from "axios";
-
+import {createFullMetadataRequest} from "../../actions/metadataFiltering";
 
 const {reducer, actions} = createSlice({
     slice: 'documentDialog',
@@ -39,7 +39,9 @@ export const openDocumentDialogRequest = (searchResult: SearchResult, corpusForm
         host: searchResult.host,
         collection: searchResult.collection,
         documentId: searchResult.documentId,
+        metadata: createFullMetadataRequest(corpusFormat),
         defaultIndex: "token",
+        textFormat: "TEXT_UNIT_LIST"
     };
     axios.post(`${API_BASE_PATH}/query/document`, documentQuery, {
         withCredentials: true
@@ -52,7 +54,10 @@ export const openDocumentDialogRequest = (searchResult: SearchResult, corpusForm
             throw "could not parse";
         response.data.payload.content = parsed;
         dispatch(hideProgressbar());
-        dispatch(actions.openDocumentDialog({document: response.data, corpusFormat}));
+        dispatch(actions.openDocumentDialog({
+            document: response.data,
+            corpusFormat
+        }));
     }).catch(() => {
         dispatch(openSnackbar('Could not load document'));
         dispatch(hideProgressbar());

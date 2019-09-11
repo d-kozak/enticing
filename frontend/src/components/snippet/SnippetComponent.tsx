@@ -27,11 +27,11 @@ export type  SnippetComponentProps = WithStyles<typeof styles> & typeof mapDispa
     & ReturnType<typeof mapStateToProps> & {
     snippet: SearchResult,
     corpusFormat: CorpusFormat,
-    openDocument: (searchResult: SearchResult, corpusFormat: CorpusFormat) => void
+    openDocumentRequest: () => void
 }
 
 const SnippetComponent = (props: SnippetComponentProps) => {
-    const {snippet, corpusFormat, requestContextExtension, openDocument, classes} = props;
+    const {snippet, corpusFormat, requestContextExtension, openDocumentRequest, classes} = props;
 
     return <Grid container justify="center" direction="column" className={classes.root}>
         <Grid item>
@@ -39,7 +39,7 @@ const SnippetComponent = (props: SnippetComponentProps) => {
                 <Grid item>
                     <EditContextButton searchResult={snippet} requestContextExtension={requestContextExtension}/>
                     <EditAnnotationsButton/>
-                    <ShowDocumentButton searchResult={snippet} openDocument={openDocument} corpusFormat={corpusFormat}/>
+                    <ShowDocumentButton openDocumentRequest={openDocumentRequest}/>
                     <GotoSourceButton searchResult={snippet}/>
                 </Grid>
                 <Grid item>

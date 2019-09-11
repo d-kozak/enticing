@@ -23,7 +23,7 @@ export const getSelectedSearchSettings = createSelector(getSearchSettings, getUs
     console.warn("Unknown settings");
     console.warn(JSON.stringify(searchSettings, null, 2));
     console.warn(JSON.stringify(selectedSettings, null, 2));
-    return null
+    return null;
 });
 
 

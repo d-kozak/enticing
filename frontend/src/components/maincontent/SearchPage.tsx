@@ -3,7 +3,7 @@ import {WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React, {useEffect} from 'react';
-import SearchResultList from "../snippet/SnippetList";
+import SnippetList from "../snippet/SnippetList";
 import NoResultsFound from "../snippet/NoResultsFound";
 import {ApplicationState} from "../../ApplicationState";
 
@@ -52,7 +52,7 @@ const SearchPage = (props: SearchPageProps) => {
     return <div>
         <SearchInput className={classes.searchInput} history={history} initialQuery={query}/>
         {snippets !== null && snippets.length > 0 ?
-            <SearchResultList snippet={snippets} corpusFormat={corpusFormat!}/> :
+            <SnippetList allSnippets={snippets} corpusFormat={corpusFormat!}/> :
             <NoResultsFound/>}
     </div>
 };
