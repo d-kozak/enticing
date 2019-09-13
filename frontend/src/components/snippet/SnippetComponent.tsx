@@ -14,6 +14,7 @@ import {SearchResult} from "../../entities/SearchResult";
 import NewAnnotatedTextComponent from "../annotations/TextUnitListComponent";
 import {CorpusFormat} from "../../entities/CorpusFormat";
 import Grid from "@material-ui/core/es/Grid";
+import {parseSearchResultRequest} from "../../reducers/SearchResultReducer";
 
 
 const styles = createStyles({
@@ -31,7 +32,12 @@ export type  SnippetComponentProps = WithStyles<typeof styles> & typeof mapDispa
 }
 
 const SnippetComponent = (props: SnippetComponentProps) => {
-    const {snippet, corpusFormat, requestContextExtension, openDocumentRequest, classes} = props;
+    const {snippet, corpusFormat, parseSearchResult, requestContextExtension, openDocumentRequest, classes} = props;
+
+    if (!snippet.payload.parsedContent) {
+        parseSearchResult(snippet);
+        return <p>...parsing data...</p>
+    }
 
     return <Grid container justify="center" direction="column" className={classes.root}>
         <Grid item>
@@ -49,7 +55,7 @@ const SnippetComponent = (props: SnippetComponentProps) => {
             </Grid>
         </Grid>
         <Grid item>
-            <NewAnnotatedTextComponent text={snippet.payload.content} corpusFormat={corpusFormat}/>
+            <NewAnnotatedTextComponent text={snippet.payload.parsedContent} corpusFormat={corpusFormat}/>
         </Grid>
     </Grid>
 };
@@ -58,7 +64,8 @@ const SnippetComponent = (props: SnippetComponentProps) => {
 const mapStateToProps = (state: ApplicationState) => ({});
 
 const mapDispatchToProps = {
-    requestContextExtension: contextExtensionRequestAction as (searchResult: SearchResult) => void
+    requestContextExtension: contextExtensionRequestAction as (searchResult: SearchResult) => void,
+    parseSearchResult: parseSearchResultRequest as (searchResult: SearchResult) => void
 }
 
 

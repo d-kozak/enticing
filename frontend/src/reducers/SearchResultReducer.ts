@@ -1,6 +1,9 @@
 import {SearchResultsState} from "../ApplicationState";
 import {createSlice, PayloadAction} from "redux-starter-kit";
 import {SearchResult} from "../entities/SearchResult";
+import {ThunkResult} from "../actions/RootActions";
+import {emptyTextUnitList, parseNewAnnotatedText} from "../components/annotations/TextUnitList";
+import {PerfTimer} from "../utils/perf";
 
 
 const {reducer, actions} = createSlice({
@@ -40,3 +43,28 @@ const {reducer, actions} = createSlice({
 
 export const {newSearchResults, updateSearchResult, setMoreResultsAvailable, appendMoreSearchResults} = actions;
 export default reducer;
+
+let counter = 1;
+
+export const parseSearchResultRequest = (searchResult: SearchResult): ThunkResult<void> => (dispatch) => {
+    console.log(`parsing called ${counter++} times`);
+    if (searchResult.payload.parsedContent) {
+        console.error(`${searchResult.id} is already parsed, nothing to do`);
+        return;
+    }
+    const timer = new PerfTimer('ParseSearchResult');
+    timer.sample('starting...');
+    const parsed = parseNewAnnotatedText(searchResult.payload.content);
+    timer.finish();
+    if (parsed != null) {
+        const copy: SearchResult = {
+            ...searchResult,
+            payload: {
+                ...searchResult.payload,
+                parsedContent: parsed,
+                content: emptyTextUnitList
+            }
+        };
+        dispatch(updateSearchResult(copy));
+    }
+};

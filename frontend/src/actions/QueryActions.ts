@@ -5,7 +5,6 @@ import {API_BASE_PATH} from "../globals";
 import axios from "axios";
 import {hideProgressbar, showProgressbar} from "../reducers/ProgressBarReducer";
 import {isResultList} from "../entities/ResultList";
-import {parseNewAnnotatedText} from "../components/annotations/TextUnitList";
 import {SearchSettings} from "../entities/SearchSettings";
 import {openSnackbar} from "../reducers/SnackBarReducer";
 import {newSearchResults} from "../reducers/SearchResultReducer";
@@ -46,12 +45,6 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
         for (let i in response.data.searchResults) {
             const snippet = response.data.searchResults[i];
             snippet.id = `${snippet.host}:${snippet.collection}:${snippet.documentId}:${i}`;
-            const parsed = parseNewAnnotatedText(snippet.payload.content);
-            if (parsed !== null) {
-                snippet.payload.content = parsed
-            } else {
-                console.error("could not parse snippet " + JSON.stringify(snippet))
-            }
         }
         timer.sample('reponse processed, dispatching results to redux');
         dispatch(newSearchResults({

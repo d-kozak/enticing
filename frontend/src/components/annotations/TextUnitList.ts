@@ -2,7 +2,6 @@ import {EnticingObject} from "./EnticingObject";
 import * as  yup from "yup";
 import {validateOrNull} from "../../entities/validationUtils";
 
-
 export interface TextUnit {
     size(): number
 }
@@ -136,4 +135,4 @@ function parseElement(elem: TextUnit): TextUnit | null {
     }
 }
 
-export const dummyText = new TextUnitList([new Word(["ERROR"])])
+export const emptyTextUnitList = new TextUnitList([]);

@@ -6,7 +6,7 @@ import {hideProgressbar, showProgressbar} from "../reducers/ProgressBarReducer";
 import {SearchResult} from "../entities/SearchResult";
 import {isSnippetExtension, SnippetExtension} from "../entities/SnippetExtension";
 import {ContextExtensionQuery} from "../entities/ContextExtensionQuery";
-import {parseNewAnnotatedText, TextUnitList} from "../components/annotations/TextUnitList";
+import {emptyTextUnitList, parseNewAnnotatedText, TextUnitList} from "../components/annotations/TextUnitList";
 import {openSnackbar} from "../reducers/SnackBarReducer";
 
 import {updateSearchResult} from "../reducers/SearchResultReducer";
@@ -16,15 +16,16 @@ function mergeSnippet(searchResult: SearchResult, data: SnippetExtension): Searc
     const newLocation = data.prefix.location;
     const newSize = data.prefix.size + searchResult.payload.size + data.suffix.size;
     const newText = new TextUnitList([
-        ...data.prefix.content.content,
-        ...searchResult.payload.content.content,
-        ...data.suffix.content.content
+        ...data.prefix.parsedContent!.content,
+        ...searchResult.payload.parsedContent!.content,
+        ...data.suffix.parsedContent!.content
     ]);
 
     return {
         ...searchResult,
         payload: {
-            content: newText,
+            content: emptyTextUnitList,
+            parsedContent: newText,
             location: newLocation,
             size: newSize,
             canExtend: data.canExtend
@@ -33,6 +34,10 @@ function mergeSnippet(searchResult: SearchResult, data: SnippetExtension): Searc
 }
 
 export const contextExtensionRequestAction = (searchResult: SearchResult): ThunkResult<void> => dispatch => {
+    if (!searchResult.payload.parsedContent) {
+        console.error('could not extend search result which has not been parsed yet');
+        return;
+    }
     dispatch(showProgressbar());
     const query: ContextExtensionQuery = {
         host: searchResult.host,
@@ -59,8 +64,8 @@ export const contextExtensionRequestAction = (searchResult: SearchResult): Thunk
         if (parsedPrefix === null || parsedSuffix === null) {
             throw "could not parse"
         }
-        response.data.prefix.content = parsedPrefix;
-        response.data.suffix.content = parsedSuffix;
+        response.data.prefix.parsedContent = parsedPrefix;
+        response.data.suffix.parsedContent = parsedSuffix;
 
         timer.sample('parsing done');
         const merged: SearchResult = mergeSnippet(searchResult, response.data);

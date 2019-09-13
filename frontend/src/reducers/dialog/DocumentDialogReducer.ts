@@ -6,7 +6,7 @@ import {ThunkResult} from "../../actions/RootActions";
 import {DocumentQuery} from "../../entities/DocumentQuery";
 import {API_BASE_PATH} from "../../globals";
 import {isDocument} from "../../entities/FullDocument";
-import {parseNewAnnotatedText} from "../../components/annotations/TextUnitList";
+import {emptyTextUnitList, parseNewAnnotatedText} from "../../components/annotations/TextUnitList";
 import {openSnackbar} from "../SnackBarReducer";
 import {hideProgressbar, showProgressbar} from "../ProgressBarReducer";
 import axios from "axios";
@@ -57,7 +57,8 @@ export const openDocumentDialogRequest = (searchResult: SearchResult, corpusForm
         const parsed = parseNewAnnotatedText(response.data.payload.content);
         if (parsed == null)
             throw "could not parse";
-        response.data.payload.content = parsed;
+        response.data.payload.content = emptyTextUnitList;
+        response.data.payload.parsedContent = parsed;
         timer.sample('dispatching result');
         dispatch(hideProgressbar());
         dispatch(actions.openDocumentDialog({

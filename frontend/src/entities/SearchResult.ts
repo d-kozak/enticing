@@ -4,7 +4,8 @@ import * as yup from "yup";
 import {TextUnitList, textUnitListSchema} from "../components/annotations/TextUnitList";
 
 export interface Payload {
-    content: TextUnitList
+    content: TextUnitList,
+    parsedContent?: TextUnitList
     location: number
     size: number
     canExtend: boolean
