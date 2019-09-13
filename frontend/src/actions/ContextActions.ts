@@ -10,6 +10,7 @@ import {parseNewAnnotatedText, TextUnitList} from "../components/annotations/Tex
 import {openSnackbar} from "../reducers/SnackBarReducer";
 
 import {updateSearchResult} from "../reducers/SearchResultReducer";
+import {PerfTimer} from "../utils/perf";
 
 function mergeSnippet(searchResult: SearchResult, data: SnippetExtension): SearchResult {
     const newLocation = data.prefix.location;
@@ -42,23 +43,28 @@ export const contextExtensionRequestAction = (searchResult: SearchResult): Thunk
         size: searchResult.payload.size,
         extension: 20,
     };
+    const timer = new PerfTimer('ContextExtensionRequest');
+    timer.sample('before request');
+    const startTime = performance.now();
     axios.post(`${API_BASE_PATH}/query/context`, query, {
         withCredentials: true
     }).then((response) => {
+        timer.sample('response received');
         if (!isSnippetExtension(response.data)) {
             throw `Invalid document ${JSON.stringify(response.data, null, 2)}`;
         }
 
-        const parsedPrefix = parseNewAnnotatedText(response.data.prefix.content)
-        const parsedSuffix = parseNewAnnotatedText(response.data.suffix.content)
+        const parsedPrefix = parseNewAnnotatedText(response.data.prefix.content);
+        const parsedSuffix = parseNewAnnotatedText(response.data.suffix.content);
         if (parsedPrefix === null || parsedSuffix === null) {
             throw "could not parse"
         }
-        response.data.prefix.content = parsedPrefix
-        response.data.suffix.content = parsedSuffix
+        response.data.prefix.content = parsedPrefix;
+        response.data.suffix.content = parsedSuffix;
 
-
+        timer.sample('parsing done');
         const merged: SearchResult = mergeSnippet(searchResult, response.data);
+        timer.sample('merging done, dispatching result');
         dispatch(updateSearchResult(merged));
         dispatch(hideProgressbar());
     }).catch((error) => {

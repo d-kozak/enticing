@@ -11,6 +11,7 @@ import {openSnackbar} from "../reducers/SnackBarReducer";
 import {newSearchResults} from "../reducers/SearchResultReducer";
 import {User} from "../entities/User";
 import {createMetadataRequest, filterCorpusFormat} from "./metadataFiltering";
+import {PerfTimer} from "../utils/perf";
 
 
 export const startSearchingAction = (query: string, user: User, searchSettings: SearchSettings, history?: H.History): ThunkResult<void> => (dispatch) => {
@@ -29,9 +30,13 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
         snippetCount: user.userSettings.resultsPerPage
     };
     dispatch(showProgressbar());
+    const timer = new PerfTimer('SearchQuery');
+    timer.sample('before request');
+    const startTime = performance.now();
     axios.post(`${API_BASE_PATH}/query?settings=${searchSettings.id}`, searchQuery, {
         withCredentials: true
     }).then(response => {
+        timer.sample('response received');
         if (!isResultList(response.data)) {
             throw `Invalid search result ${JSON.stringify(response.data, null, 2)}`;
         }
@@ -48,7 +53,7 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
                 console.error("could not parse snippet " + JSON.stringify(snippet))
             }
         }
-
+        timer.sample('reponse processed, dispatching results to redux');
         dispatch(newSearchResults({
             snippets: response.data.searchResults,
             corpusFormat: filteredCorpusFormat,
@@ -59,6 +64,7 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
         if (history) {
             history.push(`/search?query=${encodeURI(query)}`);
         }
+        timer.finish();
     }).catch((error) => {
         console.error(error);
         dispatch(openSnackbar(`Could not load search results`));

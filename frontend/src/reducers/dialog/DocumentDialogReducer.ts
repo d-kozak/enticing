@@ -11,6 +11,7 @@ import {openSnackbar} from "../SnackBarReducer";
 import {hideProgressbar, showProgressbar} from "../ProgressBarReducer";
 import axios from "axios";
 import {createFullMetadataRequest} from "../../actions/metadataFiltering";
+import {PerfTimer} from "../../utils/perf";
 
 const {reducer, actions} = createSlice({
     slice: 'documentDialog',
@@ -43,9 +44,13 @@ export const openDocumentDialogRequest = (searchResult: SearchResult, corpusForm
         defaultIndex: "token",
         textFormat: "TEXT_UNIT_LIST"
     };
+    const timer = new PerfTimer('DocumentRequest');
+    timer.sample('before request');
+    const startTime = performance.now();
     axios.post(`${API_BASE_PATH}/query/document`, documentQuery, {
         withCredentials: true
     }).then(response => {
+        timer.sample('received response');
         if (!isDocument(response.data)) {
             throw `Invalid document ${JSON.stringify(response.data, null, 2)}`;
         }
@@ -53,11 +58,13 @@ export const openDocumentDialogRequest = (searchResult: SearchResult, corpusForm
         if (parsed == null)
             throw "could not parse";
         response.data.payload.content = parsed;
+        timer.sample('dispatching result');
         dispatch(hideProgressbar());
         dispatch(actions.openDocumentDialog({
             document: response.data,
             corpusFormat
         }));
+        timer.finish();
     }).catch(() => {
         dispatch(openSnackbar('Could not load document'));
         dispatch(hideProgressbar());
