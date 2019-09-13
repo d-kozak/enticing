@@ -28,7 +28,8 @@ export interface AdminState {
 }
 
 export interface SearchResultsState {
-    snippets: Array<SearchResult> | null,
+    snippetIds: Array<string>,
+    snippetsById: { [id: string]: SearchResult }
     corpusFormat: CorpusFormat | null,
     moreResultsAvailable: boolean
 }

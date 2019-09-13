@@ -17,7 +17,7 @@ export const createAnonymousUser: () => User = () => ({
     login: "",
     roles: [],
     userSettings: {
-        resultsPerPage: 20
+        resultsPerPage: 5
     },
     selectedSettings: null,
     selectedMetadata: {}

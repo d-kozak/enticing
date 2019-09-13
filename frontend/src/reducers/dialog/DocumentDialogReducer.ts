@@ -1,6 +1,5 @@
 import {DocumentDialogState} from "../../ApplicationState";
 import {createSlice, PayloadAction} from "redux-starter-kit";
-import {SearchResult} from "../../entities/SearchResult";
 import {CorpusFormat} from "../../entities/CorpusFormat";
 import {ThunkResult} from "../../actions/RootActions";
 import {DocumentQuery} from "../../entities/DocumentQuery";
@@ -34,7 +33,12 @@ const {reducer, actions} = createSlice({
 export const {closeDocumentDialog,} = actions;
 export default reducer;
 
-export const openDocumentDialogRequest = (searchResult: SearchResult, corpusFormat: CorpusFormat): ThunkResult<void> => dispatch => {
+export const openDocumentDialogRequest = (searchResultId: string, corpusFormat: CorpusFormat): ThunkResult<void> => (dispatch, getState) => {
+    const searchResult = getState().searchResult.snippetsById[searchResultId];
+    if (!searchResult) {
+        console.error(`could not find search result with id ${searchResultId}`);
+        return;
+    }
     dispatch(showProgressbar());
     const documentQuery: DocumentQuery = {
         host: searchResult.host,

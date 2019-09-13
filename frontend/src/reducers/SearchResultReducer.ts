@@ -4,36 +4,41 @@ import {SearchResult} from "../entities/SearchResult";
 import {ThunkResult} from "../actions/RootActions";
 import {emptyTextUnitList, parseNewAnnotatedText} from "../components/annotations/TextUnitList";
 import {PerfTimer} from "../utils/perf";
+import {CorpusFormat} from "../entities/CorpusFormat";
 
+export interface SearchResultBatch {
+    searchResults: Array<SearchResult>,
+    corpusFormat: CorpusFormat,
+    moreResultsAvailable: boolean
+}
 
 const {reducer, actions} = createSlice({
     slice: 'searchResults',
     initialState: {
-        snippets: null,
+        snippetIds: [],
+        snippetsById: {},
         corpusFormat: null,
         moreResultsAvailable: false
     } as SearchResultsState,
     reducers: {
-        newSearchResults: (state: SearchResultsState, {payload}: PayloadAction<SearchResultsState>) => {
+        newSearchResults: (state: SearchResultsState, {payload}: PayloadAction<SearchResultBatch>) => {
             state.corpusFormat = payload.corpusFormat;
-            state.snippets = payload.snippets;
             state.moreResultsAvailable = payload.moreResultsAvailable;
+
+            for (let snippet of payload.searchResults) {
+                state.snippetsById[snippet.id] = snippet;
+                state.snippetIds.push(snippet.id);
+            }
         },
         appendMoreSearchResults: (state: SearchResultsState, {payload}: PayloadAction<{ searchResults: Array<SearchResult>, hasMore: boolean }>) => {
-            if (state.snippets == null) throw Error("Cannot append results, original array is null");
-            state.snippets.push(...payload.searchResults);
             state.moreResultsAvailable = payload.hasMore;
+            for (let snippet of payload.searchResults) {
+                state.snippetsById[snippet.id] = snippet;
+                state.snippetIds.push(snippet.id);
+            }
         },
         updateSearchResult: (state: SearchResultsState, {payload}: PayloadAction<SearchResult>) => {
-            if (!state.snippets) {
-                throw new Error("Invalid state, cannot update a single result when no results are in the state");
-            }
-            const index = state.snippets.findIndex(snippet => snippet.id == payload.id);
-            if (index !== -1) {
-                state.snippets[index] = payload;
-            } else {
-                throw new Error("could not find corresponding snippet");
-            }
+            state.snippetsById[payload.id] = payload;
         },
         setMoreResultsAvailable: (state: SearchResultsState, {payload}: PayloadAction<boolean>) => {
             state.moreResultsAvailable = payload;

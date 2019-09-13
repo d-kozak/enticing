@@ -48,7 +48,7 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
         }
         timer.sample('reponse processed, dispatching results to redux');
         dispatch(newSearchResults({
-            snippets: response.data.searchResults,
+            searchResults: response.data.searchResults,
             corpusFormat: filteredCorpusFormat,
             moreResultsAvailable: response.data.searchResults.length > 0
         }));

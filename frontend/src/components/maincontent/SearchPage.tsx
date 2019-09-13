@@ -2,7 +2,7 @@ import createStyles from "@material-ui/core/es/styles/createStyles";
 import {WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
-import React, {useEffect} from 'react';
+import React from 'react';
 import SnippetList from "../snippet/SnippetList";
 import NoResultsFound from "../snippet/NoResultsFound";
 import {ApplicationState} from "../../ApplicationState";
@@ -12,7 +12,6 @@ import {startSearchingAction} from "../../actions/QueryActions";
 import SearchInput from "../searchbar/SearchInput";
 
 import * as H from 'history';
-import {getSelectedSearchSettings} from "../../reducers/selectors";
 import {SearchSettings} from "../../entities/SearchSettings";
 import {openSnackbar} from "../../reducers/SnackBarReducer";
 import {User} from "../../entities/User";
@@ -34,34 +33,20 @@ export type SearchPageProps =
 }
 
 const SearchPage = (props: SearchPageProps) => {
-    const {snippets, user, startSearching, classes, selectedSettings, history, location, openSnackbar, corpusFormat} = props;
+    const {classes, hasSnippets, history, location} = props;
     const params = new URLSearchParams(location.search);
     const query = params.get('query') || '';
 
-    useEffect(() => {
-        if (snippets === null) {
-            if (selectedSettings !== null) {
-                startSearching(query, user, selectedSettings);
-            } else {
-                openSnackbar("no search settings selected, could not execute search");
-            }
-        }
-    }, [snippets])
-
+    // todo start search when this page is loaded somehow from an action
 
     return <div>
         <SearchInput className={classes.searchInput} history={history} initialQuery={query}/>
-        {snippets !== null && snippets.length > 0 ?
-            <SnippetList allSnippets={snippets} corpusFormat={corpusFormat!}/> :
-            <NoResultsFound/>}
+        {hasSnippets ? <SnippetList/> : <NoResultsFound/>}
     </div>
 };
 
 const mapStateToProps = (state: ApplicationState) => ({
-    user: state.userState.user,
-    snippets: state.searchResult.snippets,
-    corpusFormat: state.searchResult.corpusFormat,
-    selectedSettings: getSelectedSearchSettings(state)
+    hasSnippets: state.searchResult.snippetIds.length > 0
 });
 
 const mapDispatchToProps = {

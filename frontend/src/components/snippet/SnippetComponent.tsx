@@ -23,17 +23,20 @@ const styles = createStyles({
     }
 });
 
-
-export type  SnippetComponentProps = WithStyles<typeof styles> & typeof mapDispatchToProps
-    & ReturnType<typeof mapStateToProps> & {
-    snippet: SearchResult,
+export interface SnippetComponentProps {
+    snippetId: string,
     corpusFormat: CorpusFormat,
     openDocumentRequest: () => void
 }
 
-const SnippetComponent = (props: SnippetComponentProps) => {
-    const {snippet, corpusFormat, parseSearchResult, requestContextExtension, openDocumentRequest, classes} = props;
+export type  SnippetComponentEnhancedProps = WithStyles<typeof styles> & typeof mapDispatchToProps
+    & ReturnType<typeof mapStateToProps> & SnippetComponentProps
 
+const SnippetComponent = (props: SnippetComponentEnhancedProps) => {
+    const {snippet, snippetId, corpusFormat, parseSearchResult, requestContextExtension, openDocumentRequest, classes} = props;
+    if (!snippet) {
+        return <p>snippet with id {snippetId} not found</p>
+    }
     if (!snippet.payload.parsedContent) {
         parseSearchResult(snippet);
         return <p>...parsing data...</p>
@@ -61,12 +64,14 @@ const SnippetComponent = (props: SnippetComponentProps) => {
 };
 
 
-const mapStateToProps = (state: ApplicationState) => ({});
+const mapStateToProps = (state: ApplicationState, props: SnippetComponentProps) => ({
+    snippet: state.searchResult.snippetsById[props.snippetId]
+});
 
 const mapDispatchToProps = {
     requestContextExtension: contextExtensionRequestAction as (searchResult: SearchResult) => void,
     parseSearchResult: parseSearchResultRequest as (searchResult: SearchResult) => void
-}
+};
 
 
 export default withStyles(styles, {

@@ -12,7 +12,6 @@ import DocumentDialog from "./documentdialog/DocumentDialog";
 import {ApplicationState} from "../../ApplicationState";
 import {connect} from "react-redux";
 import {openDocumentDialogRequest} from "../../reducers/dialog/DocumentDialogReducer";
-import {SearchResult} from "../../entities/SearchResult";
 import {CorpusFormat} from "../../entities/CorpusFormat";
 import {getMoreResults} from "../../actions/PaginationActions";
 
@@ -35,41 +34,42 @@ export type SnippetListProps =
     WithStyles<typeof styles>
     & typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
-    & {
-    allSnippets: Array<SearchResult>,
-    corpusFormat: CorpusFormat
-}
+    & {}
 
 const SnippetList = (props: SnippetListProps) => {
-    const {allSnippets, corpusFormat, openDocumentDialog, classes, resultsPerPage, hasMore, getMoreResults} = props;
+    const {snippetIds, corpusFormat, openDocumentDialog, classes, resultsPerPage, hasMore, getMoreResults} = props;
+
+    if (!corpusFormat) {
+        return <p>Corpus format not set</p>
+    }
 
     const [currentPage, setCurrentPage] = useState(0);
 
-    let pageCount = Math.floor(allSnippets.length / resultsPerPage);
-    if (allSnippets.length % resultsPerPage != 0) {
+    let pageCount = Math.floor(snippetIds.length / resultsPerPage);
+    if (snippetIds.length % resultsPerPage != 0) {
         pageCount += 1
     }
 
     const setPageAndAskForMoreIfNecessary = (i: number) => {
         if (i >= pageCount - 1 && hasMore)
-            getMoreResults(allSnippets.length);
+            getMoreResults(snippetIds.length);
         setCurrentPage(i % pageCount);
     };
 
-    const snippetSlice = allSnippets
+    const snippetSlice = snippetIds
         .slice(currentPage * resultsPerPage, currentPage * resultsPerPage + resultsPerPage);
 
     return <Paper className={classes.root}>
         {snippetSlice
             .map(
-                (searchResult, index) => <React.Fragment key={index}>
+                (snippetId, index) => <React.Fragment key={index}>
                     {index > 0 && <Divider/>}
-                    <SearchResultItem openDocumentRequest={() => openDocumentDialog(searchResult, corpusFormat)}
-                                      snippet={searchResult} corpusFormat={corpusFormat}/>
+                    <SearchResultItem openDocumentRequest={() => openDocumentDialog(snippetId, corpusFormat)}
+                                      snippetId={snippetId} corpusFormat={corpusFormat}/>
                 </React.Fragment>)
         }
         <Typography
-            variant="body1">{allSnippets.length > 0 ? `Total number of snippets is ${allSnippets.length}` : 'No snippets found'}</Typography>
+            variant="body1">{snippetIds.length > 0 ? `Total number of snippets is ${snippetIds.length}` : 'No snippets found'}</Typography>
         <Pagination currentPage={currentPage} setCurrentPage={setPageAndAskForMoreIfNecessary} pageCount={pageCount}
                     hasMore={hasMore}/>
 
@@ -78,13 +78,15 @@ const SnippetList = (props: SnippetListProps) => {
 };
 
 const mapStateToProps = (state: ApplicationState) => ({
+    corpusFormat: state.searchResult.corpusFormat,
+    snippetIds: state.searchResult.snippetIds,
     resultsPerPage: state.userState.user.userSettings.resultsPerPage,
     hasMore: state.searchResult.moreResultsAvailable
 });
 
 const mapDispatchToProps = {
     getMoreResults: getMoreResults as (currentResultSize: number) => void,
-    openDocumentDialog: openDocumentDialogRequest as (searchResult: SearchResult, corpusFormat: CorpusFormat) => void
+    openDocumentDialog: openDocumentDialogRequest as (searchResultId: string, corpusFormat: CorpusFormat) => void
 };
 
 export default withStyles(styles, {
