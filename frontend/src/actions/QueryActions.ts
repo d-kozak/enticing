@@ -11,9 +11,11 @@ import {newSearchResults} from "../reducers/SearchResultReducer";
 import {User} from "../entities/User";
 import {createMetadataRequest, filterCorpusFormat} from "./metadataFiltering";
 import {PerfTimer} from "../utils/perf";
+import {emptyTextUnitList, parseNewAnnotatedText} from "../components/annotations/TextUnitList";
 
 
-export const startSearchingAction = (query: string, user: User, searchSettings: SearchSettings, history?: H.History): ThunkResult<void> => (dispatch) => {
+export const startSearchingAction = (query: string, user: User, searchSettings: SearchSettings, history?: H.History): ThunkResult<void> => (dispatch, getState) => {
+    const resultsPerPage = getState().userState.user.userSettings.resultsPerPage;
     if (!searchSettings.corpusFormat) {
         console.log('No corpus format is loaded, cannot perform search');
         return
@@ -45,6 +47,13 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
         for (let i in response.data.searchResults) {
             const snippet = response.data.searchResults[i];
             snippet.id = `${snippet.host}:${snippet.collection}:${snippet.documentId}:${i}`;
+            if (Number(i) < resultsPerPage) {
+                const parsed = parseNewAnnotatedText(snippet.payload.content);
+                if (parsed != null) {
+                    snippet.payload.parsedContent = parsed;
+                    snippet.payload.content = emptyTextUnitList
+                }
+            }
         }
         timer.sample('reponse processed, dispatching results to redux');
         dispatch(newSearchResults({
