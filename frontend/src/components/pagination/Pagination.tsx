@@ -4,6 +4,7 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React from 'react';
 import PaginationItem from "./PaginationItem";
+import {asList, findInterval} from "../utils/findInterval";
 
 const styles = createStyles({
     root: {
@@ -25,7 +26,7 @@ export interface PaginationProps extends WithStyles<typeof styles> {
 
 const Pagination = (props: PaginationProps) => {
     const {classes, pageCount, setCurrentPage, currentPage, hasMore} = props;
-    const indexes = Array.from({length: pageCount}, (x, i) => i);
+    const indexes = asList(findInterval(currentPage, 0, pageCount, 10));
     return <ul className={classes.root}>
         {currentPage != 0 && <li>
             <PaginationItem onClick={() => setCurrentPage(currentPage - 1)} text={'<'}/>

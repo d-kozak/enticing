@@ -1,4 +1,4 @@
-import {findInterval} from "../findInterval";
+import {asList, findInterval} from "../findInterval";
 
 describe('find interval', () => {
     it('no limits on 10', () => {
@@ -16,4 +16,14 @@ describe('find interval', () => {
         expect(findInterval(20, 1, 20, 10))
             .toStrictEqual([11, 20]);
     });
+
+    it('limits from both sides', () => {
+        expect(findInterval(10, 7, 12, 10))
+            .toStrictEqual([7, 12]);
+    });
+});
+
+it("as list", () => {
+    expect(asList([1, 6]))
+        .toStrictEqual([1, 2, 3, 4, 5, 6])
 });

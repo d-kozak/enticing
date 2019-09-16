@@ -1,15 +1,32 @@
-export function findInterval(midddle: number, left: number, right: number, size: number): [number, number] {
-    let len = Math.floor(size / 2);
+export function findInterval(middle: number, left: number, right: number, size: number): [number, number] {
+    const extra = Math.floor(size / 2) - (size % 2 == 0 ? 1 : 0);
 
-    let leftBoundary = Math.max(midddle - len, left);
-    let rightBoundary = Math.min(midddle + len, right);
+    const setLeft = (x: number) => Math.max(x, left);
+    const setRight = (x: number) => Math.min(x, right);
 
-    if (rightBoundary - leftBoundary + 1 > size) rightBoundary--;
+    let leftBoundary = setLeft(middle - extra);
+    let rightBoundary = setRight(middle + extra);
 
-    const remFromLeft = len - (midddle - leftBoundary);
-    if (remFromLeft > 0) {
-        rightBoundary = Math.min(right, rightBoundary + remFromLeft)
-    }
+    const currentSize = () => rightBoundary - leftBoundary + 1;
+
+    const toAddLeft = size - currentSize();
+    if (toAddLeft > 0)
+        leftBoundary = setLeft(leftBoundary - toAddLeft);
+    const toAddRight = size - currentSize();
+    if (toAddRight > 0)
+        rightBoundary = setRight(rightBoundary + toAddRight);
+
 
     return [leftBoundary, rightBoundary];
+}
+
+export function asList(interval: [number, number]): Array<number> {
+    const [start, end] = interval;
+    const res: Array<number> = [];
+
+    for (let i = start; i <= end; i++) {
+        res.push(i);
+    }
+
+    return res;
 }
