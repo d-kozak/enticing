@@ -11,6 +11,8 @@ import {openSnackbar} from "../reducers/SnackBarReducer";
 
 import {updateSearchResult} from "../reducers/SearchResultReducer";
 import {PerfTimer} from "../utils/perf";
+import {createMetadataRequest} from "./metadataFiltering";
+import {getSelectedSearchSettings} from "../reducers/selectors";
 
 function mergeSnippet(searchResult: SearchResult, data: SnippetExtension): SearchResult {
     const newLocation = data.prefix.location;
@@ -33,17 +35,31 @@ function mergeSnippet(searchResult: SearchResult, data: SnippetExtension): Searc
     };
 }
 
-export const contextExtensionRequestAction = (searchResult: SearchResult): ThunkResult<void> => dispatch => {
+export const contextExtensionRequestAction = (searchResult: SearchResult): ThunkResult<void> => (dispatch, getState) => {
+    const appState = getState();
+    const corpusFormat = appState.searchResult.corpusFormat;
+    if (corpusFormat == null) {
+        console.error('could not extend search result, no corpus format in the state');
+        return;
+    }
+    const selectedSearchSettings = getSelectedSearchSettings(appState);
+    if (selectedSearchSettings == null) {
+        console.error('could not extend search result, no selected search settings');
+        return;
+    }
     if (!searchResult.payload.parsedContent) {
         console.error('could not extend search result which has not been parsed yet');
         return;
     }
+    const user = appState.userState.user;
     dispatch(showProgressbar());
+    const metadata = createMetadataRequest(corpusFormat, user.selectedMetadata[selectedSearchSettings.id]);
     const query: ContextExtensionQuery = {
         host: searchResult.host,
         collection: searchResult.collection,
         documentId: searchResult.documentId,
         defaultIndex: "token",
+        metadata: metadata,
         location: searchResult.payload.location,
         size: searchResult.payload.size,
         extension: 20,
