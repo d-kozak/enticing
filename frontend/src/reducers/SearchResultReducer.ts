@@ -24,7 +24,8 @@ const {reducer, actions} = createSlice({
         newSearchResults: (state: SearchResultsState, {payload}: PayloadAction<SearchResultBatch>) => {
             state.corpusFormat = payload.corpusFormat;
             state.moreResultsAvailable = payload.moreResultsAvailable;
-
+            state.snippetIds = [];
+            state.snippetsById = {};
             for (let snippet of payload.searchResults) {
                 state.snippetsById[snippet.id] = snippet;
                 state.snippetIds.push(snippet.id);
