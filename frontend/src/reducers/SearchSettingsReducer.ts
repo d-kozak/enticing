@@ -20,6 +20,7 @@ const {reducer, actions} = createSlice({
             state.settings = {};
             for (let settings of payload) {
                 state.settings[settings.id] = settings;
+                settings.servers.sort();
             }
         },
         addSearchSettings: (state: SearchSettingsState, {payload}: PayloadAction<SearchSettings>) => {
