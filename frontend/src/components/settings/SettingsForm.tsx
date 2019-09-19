@@ -30,6 +30,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import {ExpandLess, ExpandMore} from "@material-ui/icons";
 import CorpusFormatConfig from "../corpusformat/CorpusFormatConfig";
+import ConfirmationDialog from "../dialog/ConfirmationDialog";
 
 const styles = (theme: Theme) => createStyles({
     formContent: {
@@ -103,6 +104,8 @@ const SettingsForm = (props: SettingsFormProps) => {
     const [serversOpen, setServersOpen] = useState(false);
     const [metadataOpen, setMetadataOpen] = useState(false);
 
+    const [deleteSettingsDialogOpen, setDeleteSettingDialogOpen] = useState(false);
+
     return <Formik
         initialValues={settings}
         validationSchema={SettingsSchema}
@@ -120,6 +123,12 @@ const SettingsForm = (props: SettingsFormProps) => {
         }}>
         {({isSubmitting, values, errors}) =>
             <Form className={classes.formContent}>
+                <ConfirmationDialog open={deleteSettingsDialogOpen} title="Delete search settings?" onConfirm={() => {
+                    setDeleteSettingDialogOpen(false);
+                    setShowProgress(true);
+                    removeSettings(settings, () => {
+                    }, () => setShowProgress(false));
+                }} onClose={() => setDeleteSettingDialogOpen(false)}/>
                 {showProgress && <LinearProgress className={classes.progress}/>}
                 <Grid container justify="flex-end" alignItems="center">
                     {settings.isTransient &&
@@ -136,9 +145,7 @@ const SettingsForm = (props: SettingsFormProps) => {
                     {!settings.isTransient && <Grid item>
                         <Button
                             onClick={() => {
-                                setShowProgress(true);
-                                removeSettings(settings, () => {
-                                }, () => setShowProgress(false));
+                                setDeleteSettingDialogOpen(true);
                             }} className={classes.formButton} variant="contained" color="secondary">
                             <DeleteIcon className={classes.iconSmall}/>
                             Delete
