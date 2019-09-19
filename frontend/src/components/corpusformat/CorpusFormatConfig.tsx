@@ -1,4 +1,4 @@
-import {createStyles, WithStyles, withStyles} from "@material-ui/core";
+import {CircularProgress, createStyles, WithStyles, withStyles} from "@material-ui/core";
 import {ApplicationState} from "../../ApplicationState";
 import {connect} from "react-redux";
 import * as React from "react";
@@ -45,11 +45,13 @@ const CorpusFormatConfig = (props: CorpusFormatSelectorProps) => {
     if (!searchSettings.corpusFormat) {
         return <div>
             <Typography variant="body1">Loading corpus format...</Typography>
+            <CircularProgress/>
             <Button onClick={() => loadCorpusFormat(searchSettings)}>Try again</Button>
         </div>
     } else if (isLoggedIn && !user.selectedMetadata[searchSettings.id]) {
         return <div>
             <Typography variant="body1">Loading selected metadata...</Typography>
+            <CircularProgress/>
             <Button onClick={() => loadSelectedMetadata(searchSettings.id)}>Try again</Button>
         </div>
     } else {
