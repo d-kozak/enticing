@@ -22,7 +22,8 @@ export const intervalSchema = yup.object({
 })
 
 export function isInterval(obj: Object): obj is Interval {
-    return validateOrNull(intervalSchema, obj) !== null;
+    const maybeInterval = obj as Interval;
+    return typeof maybeInterval.from === "number" && typeof maybeInterval.to === "number";
 }
 
 export class TextUnitList extends EnticingObject {
@@ -58,8 +59,16 @@ export const wordSchema = yup.object({
     indexes: yup.array(yup.string().required()).required()
 })
 
+export function isStringArray(obj: any): obj is Array<string> {
+    if (!Array.isArray(obj)) return false;
+    for (let elem of obj) {
+        if (typeof elem !== 'string') return false;
+    }
+    return true;
+}
+
 export function isWord(obj: Object): obj is Word {
-    return validateOrNull(wordSchema, obj) !== null;
+    return isStringArray((obj as Word).indexes);
 }
 
 export class Entity extends EnticingObject implements TextUnit {
@@ -79,7 +88,11 @@ export const entitySchema = yup.object({
 });
 
 export function isEntity(obj: Object): obj is Entity {
-    return validateOrNull(entitySchema, obj) !== null;
+    const maybeEntity = obj as Entity;
+    if (!isStringArray(maybeEntity.attributes)) return false;
+    if (typeof maybeEntity.entityClass !== "string") return false;
+    if (!Array.isArray(maybeEntity.words)) return false;
+    return true;
 }
 
 export class QueryMatch extends EnticingObject implements TextUnit {
@@ -98,17 +111,18 @@ export const queryMatchSchema = yup.object({
 })
 
 export function isQueryMatch(obj: Object): obj is QueryMatch {
-    return validateOrNull(queryMatchSchema, obj) !== null;
+    const maybeMatch = obj as QueryMatch;
+    return Array.isArray(maybeMatch.content) && isInterval(maybeMatch.queryMatch);
 }
 
 export function parseNewAnnotatedText(input: object): TextUnitList | null {
-    const elements: Array<TextUnit> = []
+    const elements: Array<TextUnit> = [];
     if (!isTextUnitList(input)) {
-        console.error("could not parse " + JSON.stringify(input))
+        console.error("could not parse " + JSON.stringify(input));
         return null
     }
     for (let elem of input.content) {
-        const parsed = parseElement(elem)
+        const parsed = parseElement(elem);
         if (parsed != null)
             elements.push(parsed)
     }
