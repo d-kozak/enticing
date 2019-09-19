@@ -217,17 +217,19 @@ const SettingsForm = (props: SettingsFormProps) => {
                     </Collapse>
                 </div>
 
-                <Divider/>
-                <div className={classes.settingsSection}>
-                    <ListItem button onClick={() => setMetadataOpen(!metadataOpen)}>
-                        <ListItemText>Metadata</ListItemText>
-                        {metadataOpen ? <ExpandLess/> : <ExpandMore/>}
-                    </ListItem>
-                    <Collapse in={metadataOpen} timeout="auto" unmountOnExit>
-                        <CorpusFormatConfig searchSettings={settings}/>
-                        <Divider/>
-                    </Collapse>
-                </div>
+                {!settings.isTransient && <div>
+                    <Divider/>
+                    <div className={classes.settingsSection}>
+                        <ListItem button onClick={() => setMetadataOpen(!metadataOpen)}>
+                            <ListItemText>Metadata</ListItemText>
+                            {metadataOpen ? <ExpandLess/> : <ExpandMore/>}
+                        </ListItem>
+                        <Collapse in={metadataOpen} timeout="auto" unmountOnExit>
+                            <CorpusFormatConfig searchSettings={settings}/>
+                            <Divider/>
+                        </Collapse>
+                    </div>
+                </div>}
             </Form>
         }
     </Formik>

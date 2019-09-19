@@ -31,8 +31,7 @@ const {reducer, actions} = createSlice({
                 payload.isTransient = false;
             for (let settings of Object.values(state.settings)) {
                 if (settings.isTransient) {
-                    // @ts-ignore
-                    state.settings[settings.id] = undefined
+                    delete state.settings[settings.id];
                 }
             }
 
@@ -193,8 +192,9 @@ export const saveNewSearchSettingsRequest = (searchSettings: SearchSettings, onD
             response.data.isTransient = true; // reducer has to recognize this as a newly added search settings
             dispatch(updateSearchSettings(response.data));
         })
-        .catch((response) => {
-            const errors = response.data.status === 400 ? parseValidationErrors(response) : {}
+        .catch((error) => {
+            console.error(JSON.stringify(error, null, 2));
+            const errors = error.response.status === 400 ? parseValidationErrors(error) : {};
             onError(errors);
             dispatch(openSnackbar(`Adding search settings ${searchSettings.name} failed`));
         })

@@ -8,15 +8,15 @@ const getUserSearchSettings = (state: ApplicationState) => state.userState.user.
 
 export const getSelectedSearchSettings = createSelector(getSearchSettings, getUserSearchSettings, (searchSettings, selectedSettings) => {
     if (selectedSettings == null) {
-        for (let i in searchSettings) {
-            if (searchSettings[i].default) {
-                return searchSettings[i];
+        for (let settings of Object.values(searchSettings)) {
+            if (settings.default) {
+                return settings;
             }
         }
     } else {
-        for (let i in searchSettings) {
-            if (searchSettings[i].id == selectedSettings) {
-                return searchSettings[i];
+        for (let settings of Object.values(searchSettings)) {
+            if (settings.id == selectedSettings) {
+                return settings;
             }
         }
     }
