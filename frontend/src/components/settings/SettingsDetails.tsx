@@ -1,5 +1,5 @@
 import createStyles from "@material-ui/core/es/styles/createStyles";
-import {Theme, WithStyles} from "@material-ui/core";
+import {Divider, Theme, WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
 import {ApplicationState} from "../../ApplicationState";
 import {connect} from "react-redux";
@@ -50,6 +50,7 @@ const SettingsDetails = (props: SettingsDetailsProps) => {
         </ListItem>
         <Collapse in={metadataOpen} timeout="auto" unmountOnExit>
             <CorpusFormatConfig searchSettings={settings}/>
+            <Divider/>
         </Collapse>
     </List>
 };

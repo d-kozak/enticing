@@ -121,6 +121,48 @@ const SettingsForm = (props: SettingsFormProps) => {
         {({isSubmitting, values, errors}) =>
             <Form className={classes.formContent}>
                 {showProgress && <LinearProgress className={classes.progress}/>}
+                <Grid container justify="flex-end" alignItems="center">
+                    {settings.isTransient &&
+                    <Button onClick={cancelAdding} className={classes.formButton} disabled={isSubmitting}>
+                        Cancel
+                    </Button>}
+                    <Grid item>
+                        <Button className={classes.formButton} variant="contained" color="primary" type="submit"
+                                disabled={isSubmitting}>
+                            Save
+                        </Button>
+                    </Grid>
+
+                    {!settings.isTransient && <Grid item>
+                        <Button
+                            onClick={() => {
+                                setShowProgress(true);
+                                removeSettings(settings, () => {
+                                }, () => setShowProgress(false));
+                            }} className={classes.formButton} variant="contained" color="secondary">
+                            <DeleteIcon className={classes.iconSmall}/>
+                            Delete
+                        </Button>
+                    </Grid>}
+                    {!settings.default && !settings.isTransient && <Grid item>
+                        <Button
+                            onClick={() => {
+                                setShowProgress(true);
+                                makeDefault(settings, () => setShowProgress(false), () => setShowProgress(false));
+                            }}
+                            className={classes.formButton} color="primary">
+                            Make default
+                        </Button>
+                    </Grid>}
+                    {!settings.isTransient && <Grid item>
+                        <Button
+                            onClick={() => downloadFile(`${settings.name.replace(/\s+/, '_')}.search.settings.json`, JSON.stringify(settings, ["name", "annotationDataServer", "annotationServer", "servers"], 4))}
+                            className={classes.formButton} color="primary">
+                            <SaveIcon className={classes.iconSmall}/>
+                            Download
+                        </Button>
+                    </Grid>}
+                </Grid>
                 <div className={classes.settingsSection}>
                     <Typography variant="h5" className={classes.sectionTitle}>Common</Typography>
                     <Field variant="outlined" label="Name" name="name"
@@ -176,51 +218,9 @@ const SettingsForm = (props: SettingsFormProps) => {
                     </ListItem>
                     <Collapse in={metadataOpen} timeout="auto" unmountOnExit>
                         <CorpusFormatConfig searchSettings={settings}/>
+                        <Divider/>
                     </Collapse>
                 </div>
-
-                <Grid container justify="flex-end" alignItems="center">
-                    {settings.isTransient &&
-                    <Button onClick={cancelAdding} className={classes.formButton} disabled={isSubmitting}>
-                        Cancel
-                    </Button>}
-                    <Grid item>
-                        <Button className={classes.formButton} variant="contained" color="primary" type="submit"
-                                disabled={isSubmitting}>
-                            Save
-                        </Button>
-                    </Grid>
-
-                    {!settings.isTransient && <Grid item>
-                        <Button
-                            onClick={() => {
-                                setShowProgress(true);
-                                removeSettings(settings, () => {
-                                }, () => setShowProgress(false));
-                            }} className={classes.formButton} variant="contained" color="secondary">
-                            <DeleteIcon className={classes.iconSmall}/>
-                            Delete
-                        </Button>
-                    </Grid>}
-                    {!settings.default && !settings.isTransient && <Grid item>
-                        <Button
-                            onClick={() => {
-                                setShowProgress(true);
-                                makeDefault(settings, () => setShowProgress(false), () => setShowProgress(false));
-                            }}
-                            className={classes.formButton} color="primary">
-                            Make default
-                        </Button>
-                    </Grid>}
-                    {!settings.isTransient && <Grid item>
-                        <Button
-                            onClick={() => downloadFile(`${settings.name.replace(/\s+/, '_')}.search.settings.json`, JSON.stringify(settings, ["name", "annotationDataServer", "annotationServer", "servers"], 4))}
-                            className={classes.formButton} color="primary">
-                            <SaveIcon className={classes.iconSmall}/>
-                            Download
-                        </Button>
-                    </Grid>}
-                </Grid>
             </Form>
         }
     </Formik>

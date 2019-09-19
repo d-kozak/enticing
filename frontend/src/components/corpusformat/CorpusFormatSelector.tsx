@@ -89,8 +89,11 @@ const CorpusFormatSelector = (props: CorpusFormatSelectorProps) => {
                                      setSelectedElements={setSelectedAttributes}/>
             </Grid>
         </Grid>
-        <Button
-            onClick={() => saveCorpusFormat(createMetadata(selectedIndexes, selectedAttributes), searchSettings.id)}>Save</Button>
+        <Grid container justify="flex-end">
+            <Button
+                onClick={() => saveCorpusFormat(createMetadata(selectedIndexes, selectedAttributes), searchSettings.id)}>Save
+                selected metadata</Button>
+        </Grid>
     </div>
 };
 
