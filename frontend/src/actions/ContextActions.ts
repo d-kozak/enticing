@@ -37,11 +37,6 @@ function mergeSnippet(searchResult: SearchResult, data: SnippetExtension): Searc
 
 export const contextExtensionRequestAction = (searchResult: SearchResult): ThunkResult<void> => (dispatch, getState) => {
     const appState = getState();
-    const corpusFormat = appState.searchResult.corpusFormat;
-    if (corpusFormat == null) {
-        console.error('could not extend search result, no corpus format in the state');
-        return;
-    }
     const selectedSearchSettings = getSelectedSearchSettings(appState);
     if (selectedSearchSettings == null) {
         console.error('could not extend search result, no selected search settings');
@@ -51,9 +46,13 @@ export const contextExtensionRequestAction = (searchResult: SearchResult): Thunk
         console.error('could not extend search result which has not been parsed yet');
         return;
     }
+    if (selectedSearchSettings.corpusFormat == null) {
+        console.error('could not extend search result, no corpus format for selected search settings');
+        return;
+    }
     const user = appState.userState.user;
     dispatch(showProgressbar());
-    const metadata = createMetadataRequest(corpusFormat, user.selectedMetadata[selectedSearchSettings.id]);
+    const metadata = createMetadataRequest(selectedSearchSettings.corpusFormat, user.selectedMetadata[selectedSearchSettings.id]);
     const query: ContextExtensionQuery = {
         host: searchResult.host,
         collection: searchResult.collection,
