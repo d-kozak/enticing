@@ -54,15 +54,14 @@ const CorpusFormatSelector = (props: CorpusFormatSelectorProps) => {
             }))
         } as Node));
     return <div>
-        <Typography variant="h5">Select wanted metadata</Typography>
         <Grid container justify="flex-start">
             <Grid item>
-                <Typography variant="h5">Indexes</Typography>
+                <Typography variant="h6">Indexes</Typography>
                 <TreeElementSelector allElements={indexNodes} selectedElements={selectedIndexes}
                                      setSelectedElements={setSelectedIndexes}/>
             </Grid>
             <Grid item>
-                <Typography variant="h5">Entities</Typography>
+                <Typography variant="h6">Entities</Typography>
                 <TreeElementSelector allElements={entityNodes} selectedElements={selectedAttributes}
                                      setSelectedElements={setSelectedAttributes}/>
             </Grid>

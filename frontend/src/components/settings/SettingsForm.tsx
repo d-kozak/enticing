@@ -29,6 +29,7 @@ import Collapse from "@material-ui/core/Collapse";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import {ExpandLess, ExpandMore} from "@material-ui/icons";
+import CorpusFormatConfig from "../corpusformat/CorpusFormatConfig";
 
 const styles = (theme: Theme) => createStyles({
     formContent: {
@@ -100,6 +101,7 @@ const SettingsForm = (props: SettingsFormProps) => {
 
     const [showProgress, setShowProgress] = useState(false);
     const [serversOpen, setServersOpen] = useState(false);
+    const [metadataOpen, setMetadataOpen] = useState(false);
 
     return <Formik
         initialValues={settings}
@@ -163,6 +165,17 @@ const SettingsForm = (props: SettingsFormProps) => {
                                         onClick={() => push('')}>Add server</Button>
                             </div>
                         }/>
+                    </Collapse>
+                </div>
+
+                <Divider/>
+                <div className={classes.settingsSection}>
+                    <ListItem button onClick={() => setMetadataOpen(!metadataOpen)}>
+                        <ListItemText>Metadata</ListItemText>
+                        {metadataOpen ? <ExpandLess/> : <ExpandMore/>}
+                    </ListItem>
+                    <Collapse in={metadataOpen} timeout="auto" unmountOnExit>
+                        <CorpusFormatConfig searchSettings={settings}/>
                     </Collapse>
                 </div>
 

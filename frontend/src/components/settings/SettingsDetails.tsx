@@ -10,6 +10,7 @@ import ListItem from "@material-ui/core/ListItem";
 import Collapse from "@material-ui/core/Collapse";
 import {ExpandLess, ExpandMore} from "@material-ui/icons";
 import {SearchSettings} from "../../entities/SearchSettings";
+import CorpusFormatConfig from "../corpusformat/CorpusFormatConfig";
 
 
 const styles = (theme: Theme) => createStyles({});
@@ -26,6 +27,7 @@ const SettingsDetails = (props: SettingsDetailsProps) => {
     const {settings} = props;
 
     const [serversOpen, setServersOpen] = useState(false);
+    const [metadataOpen, setMetadataOpen] = useState(false);
 
     return <List
         component="nav">
@@ -42,9 +44,15 @@ const SettingsDetails = (props: SettingsDetailsProps) => {
                 </ListItem>)}
             </List>
         </Collapse>
+        <ListItem button onClick={() => setMetadataOpen(!metadataOpen)}>
+            <ListItemText>Metadata</ListItemText>
+            {metadataOpen ? <ExpandLess/> : <ExpandMore/>}
+        </ListItem>
+        <Collapse in={metadataOpen} timeout="auto" unmountOnExit>
+            <CorpusFormatConfig searchSettings={settings}/>
+        </Collapse>
     </List>
 };
-
 
 const mapStateToProps = (state: ApplicationState) => ({});
 const mapDispatchToProps = {};
