@@ -28,7 +28,7 @@ export class PerfTimer {
 }
 
 
-export function measureAverage<T>(block: () => T, iterations: Number = 10): [number, number] {
+export function measureAverage(block: () => void, iterations: Number = 10): [number, number] {
     const timers: Array<number> = [];
 
     for (let i = 0; i < iterations; i++) {
