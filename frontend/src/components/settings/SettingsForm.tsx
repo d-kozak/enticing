@@ -101,7 +101,7 @@ const SettingsForm = (props: SettingsFormProps) => {
     const {saveSettings, updateSettings, makeDefault, settings, classes, removeSettings, cancelAdding} = props;
 
     const [showProgress, setShowProgress] = useState(false);
-    const [serversOpen, setServersOpen] = useState(false);
+    const [serversOpen, setServersOpen] = useState(settings.isTransient);
     const [metadataOpen, setMetadataOpen] = useState(false);
 
     const [deleteSettingsDialogOpen, setDeleteSettingDialogOpen] = useState(false);
