@@ -25,6 +25,10 @@ import {
     updateSearchSettingsRequest
 } from '../../reducers/SearchSettingsReducer'
 import {downloadFile} from '../../utils/file';
+import Collapse from "@material-ui/core/Collapse";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import {ExpandLess, ExpandMore} from "@material-ui/icons";
 
 const styles = (theme: Theme) => createStyles({
     formContent: {
@@ -95,6 +99,7 @@ const SettingsForm = (props: SettingsFormProps) => {
     const {saveSettings, updateSettings, makeDefault, settings, classes, removeSettings, cancelAdding} = props;
 
     const [showProgress, setShowProgress] = useState(false);
+    const [serversOpen, setServersOpen] = useState(false);
 
     return <Formik
         initialValues={settings}
@@ -138,22 +143,27 @@ const SettingsForm = (props: SettingsFormProps) => {
 
                 <Divider/>
                 <div className={classes.settingsSection}>
-                    <Typography variant="h5" className={classes.sectionTitle}>Index servers</Typography>
-                    {errors.servers && !Array.isArray(errors.servers) &&
-                    <Typography className={classes.noServerSetErrorMessage} variant="body1">At least one server
-                        required</Typography>}
-                    <FieldArray name="servers" render={({push, remove}) =>
-                        <div>
-                            {values.servers.map((server, index) => <div key={index}>
-                                <Field name={`servers.${index}`} component={TextField}
-                                       className={classes.textField}/>
-                                <Button color="secondary" onClick={() => remove(index)}>X</Button>
-                            </div>)}
+                    <ListItem button onClick={() => setServersOpen(!serversOpen)}>
+                        <ListItemText>Index servers</ListItemText>
+                        {serversOpen ? <ExpandLess/> : <ExpandMore/>}
+                    </ListItem>
+                    <Collapse in={serversOpen} timeout="auto" unmountOnExit>
+                        {errors.servers && !Array.isArray(errors.servers) &&
+                        <Typography className={classes.noServerSetErrorMessage} variant="body1">At least one server
+                            required</Typography>}
+                        <FieldArray name="servers" render={({push, remove}) =>
+                            <div>
+                                {values.servers.map((server, index) => <div key={index}>
+                                    <Field name={`servers.${index}`} component={TextField}
+                                           className={classes.textField}/>
+                                    <Button color="secondary" onClick={() => remove(index)}>X</Button>
+                                </div>)}
 
-                            <Button className={classes.addIndexServerButton} color="primary" variant="outlined"
-                                    onClick={() => push('')}>Add server</Button>
-                        </div>
-                    }/>
+                                <Button className={classes.addIndexServerButton} color="primary" variant="outlined"
+                                        onClick={() => push('')}>Add server</Button>
+                            </div>
+                        }/>
+                    </Collapse>
                 </div>
 
                 <Grid container justify="flex-end" alignItems="center">
