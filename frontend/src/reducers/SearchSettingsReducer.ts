@@ -34,13 +34,10 @@ const {reducer, actions} = createSlice({
                     delete state.settings[settings.id];
                 }
             }
-
             state.settings[payload.id] = payload;
         },
         removeSearchSettings: (state: SearchSettingsState, {payload}: PayloadAction<SearchSettings>) => {
-
-            // @ts-ignore
-            state.settings[payload.id] = undefined;
+            delete state.settings[payload.id];
         },
         setNewDefaultSettings: (state: SearchSettingsState, {payload}: PayloadAction<SearchSettings>) => {
             for (let settings of Object.values(state.settings)) {
@@ -50,8 +47,7 @@ const {reducer, actions} = createSlice({
         removeTransientSettings: (state: SearchSettingsState) => {
             for (let settings of Object.values(state.settings)) {
                 if (settings.isTransient) {
-                    // @ts-ignore
-                    state.settings[settings.id] = undefined
+                    delete state.settings[settings.id];
                 }
             }
         },

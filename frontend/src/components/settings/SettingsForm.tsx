@@ -132,7 +132,7 @@ const SettingsForm = (props: SettingsFormProps) => {
                 {showProgress && <LinearProgress className={classes.progress}/>}
                 <Grid container justify="flex-end" alignItems="center">
                     {settings.isTransient &&
-                    <Button onClick={cancelAdding} className={classes.formButton} disabled={isSubmitting}>
+                    <Button onClick={() => cancelAdding()} className={classes.formButton} disabled={isSubmitting}>
                         Cancel
                     </Button>}
                     <Grid item>
