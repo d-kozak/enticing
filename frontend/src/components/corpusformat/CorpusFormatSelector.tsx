@@ -41,16 +41,18 @@ const CorpusFormatSelector = (props: CorpusFormatSelectorProps) => {
     const indexNodes = Object.keys(corpusFormat.indexes)
         .map(name => ({
             value: name,
-            label: <span>{name} : {corpusFormat.indexes[name]}</span>
+            label: <span>{corpusFormat.indexes[name] && `${name} : ${corpusFormat.indexes[name]}` || name}</span>
         } as Node));
 
     const entityNodes = Object.keys(corpusFormat.entities)
         .map(entityName => ({
             value: entityName,
-            label: <span>{entityName} : {corpusFormat.entities[entityName].description}</span>,
+            label:
+                <span>{corpusFormat.entities[entityName].description && `${entityName} : ${corpusFormat.entities[entityName].description}` || entityName}</span>,
             children: Object.keys(corpusFormat.entities[entityName].attributes).map(attributeName => ({
                 value: `${entityName}/${attributeName}`,
-                label: <span>{attributeName} : {corpusFormat.entities[entityName].attributes[attributeName]}</span>
+                label:
+                    <span>{corpusFormat.entities[entityName].attributes[attributeName] && `${attributeName} : ${corpusFormat.entities[entityName].attributes[attributeName]}` || attributeName}</span>
             }))
         } as Node));
     return <div>
