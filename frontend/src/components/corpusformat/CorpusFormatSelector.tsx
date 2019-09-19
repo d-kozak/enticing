@@ -28,7 +28,6 @@ type CorpusFormatSelectorProps =
 }
 
 
-
 const CorpusFormatSelector = (props: CorpusFormatSelectorProps) => {
     const {searchSettings, corpusFormat, saveCorpusFormat, selectedMetadata} = props;
 
@@ -37,6 +36,24 @@ const CorpusFormatSelector = (props: CorpusFormatSelectorProps) => {
     const [selectedIndexes, setSelectedIndexes] = useState(indexes);
     const [selectedAttributes, setSelectedAttributes] = useState(attributes);
 
+    const toggleSelectedIndexes = () => {
+        if (selectedIndexes.length == 0) {
+            setSelectedIndexes(Object.keys(corpusFormat.indexes))
+        } else {
+            setSelectedIndexes([])
+        }
+    };
+
+    const toggleSelectedAttributes = () => {
+        if (selectedAttributes.length == 0) {
+            const allAttributes = Object.keys(corpusFormat.entities)
+                .map(entityName => [entityName, ...Object.keys(corpusFormat.entities[entityName].attributes).map(attribute => entityName + '/' + attribute)])
+                .flat();
+            setSelectedAttributes(allAttributes);
+        } else {
+            setSelectedAttributes([])
+        }
+    };
 
     const indexNodes = Object.keys(corpusFormat.indexes)
         .map(name => ({
@@ -59,11 +76,15 @@ const CorpusFormatSelector = (props: CorpusFormatSelectorProps) => {
         <Grid container justify="flex-start">
             <Grid item>
                 <Typography variant="h6">Indexes</Typography>
+                <Button
+                    onClick={toggleSelectedIndexes}>{selectedIndexes.length === 0 ? "Select all" : "Clear all"}</Button>
                 <TreeElementSelector allElements={indexNodes} selectedElements={selectedIndexes}
                                      setSelectedElements={setSelectedIndexes}/>
             </Grid>
             <Grid item>
                 <Typography variant="h6">Entities</Typography>
+                <Button
+                    onClick={toggleSelectedAttributes}>{selectedAttributes.length === 0 ? "Select all" : "Clear all"}</Button>
                 <TreeElementSelector allElements={entityNodes} selectedElements={selectedAttributes}
                                      setSelectedElements={setSelectedAttributes}/>
             </Grid>
