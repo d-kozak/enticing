@@ -25,7 +25,7 @@ type SettingsDetailsProps =
 const SettingsDetails = (props: SettingsDetailsProps) => {
     const {settings} = props;
 
-    const [serversOpen, setServersOpen] = useState(true);
+    const [serversOpen, setServersOpen] = useState(false);
 
     return <List
         component="nav">
