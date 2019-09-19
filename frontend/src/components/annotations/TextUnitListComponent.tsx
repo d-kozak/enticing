@@ -42,14 +42,14 @@ export const renderElement = (text: TextUnit, corpusFormat: CorpusFormat, tokenI
     if (text instanceof Word) {
         if (tokenIndex != -1) {
             if (text.indexes[tokenIndex] == "¶")
-                return <span/>
+                return <span/>;
             if (text.indexes[tokenIndex] == "§")
                 return <span>
                     <br/>
                     <br/>
                 </span>
         }
-        if (text.indexes.length === 1) return <span>{text.indexes[0] + text.indexes[text.indexes.length - 1] != 'N' ? ' ' : ''}</span>
+        if (text.indexes.length === 1) return text.indexes[0] + (text.indexes[text.indexes.length - 1] != 'N' ? ' ' : '');
         return <AnnotatedWord word={text} corpusFormat={corpusFormat}/>
     } else if (text instanceof Entity) {
         const color = colors[Math.floor(Math.random() * colors.length)];
