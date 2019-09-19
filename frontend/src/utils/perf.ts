@@ -28,6 +28,20 @@ export class PerfTimer {
 }
 
 
+export function measureAverage<T>(block: () => T, iterations: Number = 10): [number, number] {
+    const timers: Array<number> = [];
+
+    for (let i = 0; i < iterations; i++) {
+        const start = performance.now();
+        block();
+        timers.push(performance.now() - start)
+    }
+    const avg = timers.reduce((left, right) => left + right) / timers.length;
+    const deviation = Math.sqrt(timers.map(val => Math.pow(val - avg, 2))
+        .reduce((left, right) => left + right))
+    return [avg, deviation]
+}
+
 /**
  * Logs a message with current timestamp, optionally a durations since specific event if additional arguments are provided
  * @param msg message to log
