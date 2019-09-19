@@ -66,11 +66,14 @@ export const loadSelectedMetadataRequest = (searchSettingsId: string): ThunkResu
     }
 };
 
-export const saveSelectedMetadataRequest = (metadata: SelectedMetadata, settingsId: string): ThunkResult<void> => async dispatch => {
+export const saveSelectedMetadataRequest = (metadata: SelectedMetadata, settingsId: string): ThunkResult<void> => async (dispatch, getState) => {
+    const isLoggedIn = getState().userState.isLoggedIn;
     try {
-        await axios.post(`${API_BASE_PATH}/user/text-metadata/${settingsId}`, metadata, {withCredentials: true});
+        if (isLoggedIn) {
+            await axios.post(`${API_BASE_PATH}/user/text-metadata/${settingsId}`, metadata, {withCredentials: true});
+        }
         dispatch(loadSelectedMetadata({metadata, settingsId}));
-        dispatch(openSnackbar(`metadata saved`));
+        dispatch(openSnackbar(`Metadata selected`));
     } catch (e) {
         dispatch(openSnackbar(`Failed save selected metadata`));
     }
@@ -142,13 +145,13 @@ export const loginRequest = (login: string, password: string, onError: (errors: 
             dispatch(openSnackbar('Logged in'));
             dispatch(loadSearchSettingsRequest(user.selectedSettings, true));
         }).catch(error => {
-            if (error.response.data.status === 401) {
-                onError({login: 'Invalid login or password'});
-            } else {
-                dispatch(openSnackbar('Could not log in'));
-                onError({});
-            }
-        });
+        if (error.response.data.status === 401) {
+            onError({login: 'Invalid login or password'});
+        } else {
+            dispatch(openSnackbar('Could not log in'));
+            onError({});
+        }
+    });
 };
 
 
