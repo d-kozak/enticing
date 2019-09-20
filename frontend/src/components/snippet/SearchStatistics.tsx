@@ -23,7 +23,7 @@ const SearchStatistics = (props: SearchStatisticsProps) => {
     const {snippetCount, statistics, classes} = props;
     let text = snippetCount > 0 ? `${snippetCount} of snippets returned. ` : 'No snippets found. ';
     if (statistics) {
-        text += `Backend took ${statistics.backendTime / 1000} seconds, frontend took ${statistics.frontendTime} seconds.`
+        text += `Backend took ${(statistics.backendTime / 1000).toFixed(2)} seconds, frontend took ${(statistics.frontendTime / 1000).toFixed(2)} seconds.`
     }
     return <div className={classes.root}>
         <Typography variant="body1">{text}</Typography>
