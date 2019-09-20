@@ -4,7 +4,6 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React, {useState} from 'react';
 import SearchResultItem from "./SnippetComponent";
-import Typography from "@material-ui/core/es/Typography";
 import Paper from "@material-ui/core/es/Paper";
 import Pagination from "../pagination/Pagination";
 import Divider from "@material-ui/core/es/Divider";
@@ -14,6 +13,7 @@ import {connect} from "react-redux";
 import {openDocumentDialogRequest} from "../../reducers/dialog/DocumentDialogReducer";
 import {CorpusFormat} from "../../entities/CorpusFormat";
 import {getMoreResults} from "../../actions/PaginationActions";
+import SearchStatistics from "./SearchStatistics";
 
 const styles = createStyles({
     root: {
@@ -68,11 +68,9 @@ const SnippetList = (props: SnippetListProps) => {
                                       snippetId={snippetId} corpusFormat={corpusFormat}/>
                 </React.Fragment>)
         }
-        <Typography
-            variant="body1">{snippetIds.length > 0 ? `Total number of snippets is ${snippetIds.length}` : 'No snippets found'}</Typography>
         <Pagination currentPage={currentPage} setCurrentPage={setPageAndAskForMoreIfNecessary} pageCount={pageCount}
                     hasMore={hasMore}/>
-
+        <SearchStatistics/>
         <DocumentDialog/>
     </Paper>
 };

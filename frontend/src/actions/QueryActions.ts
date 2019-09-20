@@ -37,7 +37,7 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
     axios.post(`${API_BASE_PATH}/query?settings=${searchSettings.id}`, searchQuery, {
         withCredentials: true
     }).then(response => {
-        timer.sample('response received');
+        const backendTime = timer.sample('response received');
         if (!isResultList(response.data)) {
             throw `Invalid search result ${JSON.stringify(response.data, null, 2)}`;
         }
@@ -55,11 +55,15 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
                 }
             }
         }
-        timer.sample('reponse processed, dispatching results to redux');
+        const frontendTime = timer.sample('response processed, dispatching results to redux');
         dispatch(newSearchResults({
             searchResults: response.data.searchResults,
             corpusFormat: filteredCorpusFormat,
-            moreResultsAvailable: response.data.searchResults.length > 0
+            moreResultsAvailable: response.data.searchResults.length > 0,
+            statistics: {
+                backendTime,
+                frontendTime
+            }
         }));
 
         dispatch(hideProgressbar());

@@ -1,4 +1,4 @@
-import {SearchResultsState} from "../ApplicationState";
+import {SearchResultsState, SearchStatistics} from "../ApplicationState";
 import {createSlice, PayloadAction} from "redux-starter-kit";
 import {SearchResult} from "../entities/SearchResult";
 import {ThunkResult} from "../actions/RootActions";
@@ -9,7 +9,8 @@ import {CorpusFormat} from "../entities/CorpusFormat";
 export interface SearchResultBatch {
     searchResults: Array<SearchResult>,
     corpusFormat: CorpusFormat,
-    moreResultsAvailable: boolean
+    moreResultsAvailable: boolean,
+    statistics: SearchStatistics
 }
 
 const {reducer, actions} = createSlice({
@@ -18,7 +19,7 @@ const {reducer, actions} = createSlice({
         snippetIds: [],
         snippetsById: {},
         corpusFormat: null,
-        moreResultsAvailable: false
+        moreResultsAvailable: false,
     } as SearchResultsState,
     reducers: {
         newSearchResults: (state: SearchResultsState, {payload}: PayloadAction<SearchResultBatch>) => {
@@ -26,13 +27,15 @@ const {reducer, actions} = createSlice({
             state.moreResultsAvailable = payload.moreResultsAvailable;
             state.snippetIds = [];
             state.snippetsById = {};
+            state.statistics = payload.statistics;
             for (let snippet of payload.searchResults) {
                 state.snippetsById[snippet.id] = snippet;
                 state.snippetIds.push(snippet.id);
             }
         },
-        appendMoreSearchResults: (state: SearchResultsState, {payload}: PayloadAction<{ searchResults: Array<SearchResult>, hasMore: boolean }>) => {
+        appendMoreSearchResults: (state: SearchResultsState, {payload}: PayloadAction<{ searchResults: Array<SearchResult>, hasMore: boolean, statistics: SearchStatistics }>) => {
             state.moreResultsAvailable = payload.hasMore;
+            state.statistics = payload.statistics;
             for (let snippet of payload.searchResults) {
                 state.snippetsById[snippet.id] = snippet;
                 state.snippetIds.push(snippet.id);

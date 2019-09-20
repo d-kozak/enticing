@@ -3,11 +3,16 @@ export class PerfTimer {
 
     private messages: Array<String> = [];
 
+    private last = performance.now();
+
     constructor(public taskName: string) {
     }
 
-    sample(msg: string) {
-        this.log(`${createTimestamp()} ${this.taskName}::${msg}, running for ${(this.sampleTime())} ms`);
+    sample(msg: string): number {
+        const lastTaskDuration = performance.now() - this.last;
+        this.log(`${createTimestamp()} ${this.taskName}::${msg} took ${lastTaskDuration} ms, whole job running for ${(this.sampleTime())} ms`);
+        this.last = performance.now();
+        return lastTaskDuration;
     }
 
     finish() {

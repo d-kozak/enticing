@@ -31,7 +31,13 @@ export interface SearchResultsState {
     snippetIds: Array<string>,
     snippetsById: { [id: string]: SearchResult }
     corpusFormat: CorpusFormat | null,
-    moreResultsAvailable: boolean
+    moreResultsAvailable: boolean,
+    statistics?: SearchStatistics
+}
+
+export interface SearchStatistics {
+    backendTime: number,
+    frontendTime: number
 }
 
 export interface SnackbarState {
