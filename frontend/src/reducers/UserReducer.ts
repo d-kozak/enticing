@@ -59,7 +59,6 @@ export default reducer;
 export const loadSelectedMetadataRequest = (searchSettingsId: string): ThunkResult<void> => async (dispatch) => {
     try {
         const {data} = await axios.get(`${API_BASE_PATH}/user/text-metadata/${searchSettingsId}`);
-        console.log(JSON.stringify(data, null, 2));
         dispatch(loadSelectedMetadata({settingsId: searchSettingsId, metadata: data}))
     } catch (e) {
         dispatch(openSnackbar(`Could not load selected metadata for settings ${searchSettingsId}`));

@@ -17,7 +17,7 @@ export function filterCorpusFormat(corpusFormat: CorpusFormat, selectedMetadata:
     const entities: { [clazz: string]: EntityInfo } = {};
 
     for (let index of selectedMetadata.indexes) {
-        if (!corpusFormat.indexes[index]) {
+        if (corpusFormat.indexes[index] === undefined) {
             console.warn(`index ${index} is not part of selected corpus format`);
             continue;
         }
@@ -27,7 +27,7 @@ export function filterCorpusFormat(corpusFormat: CorpusFormat, selectedMetadata:
     for (let entityName of Object.keys(selectedMetadata.entities)) {
         const entity = selectedMetadata.entities[entityName];
         const entityInfo = corpusFormat.entities[entityName];
-        if (!entityInfo) {
+        if (entityInfo === undefined) {
             console.warn(`entity ${entityName} is not part of selected corpus format`);
             continue;
         }
@@ -57,7 +57,7 @@ export function createMetadataRequest(corpusFormat: CorpusFormat, selectedMetada
     if (!selectedMetadata) return new Predefined("all");
     const wantedIndexes = [] as Array<string>;
     for (let index of selectedMetadata.indexes) {
-        if (corpusFormat.indexes[index]) {
+        if (corpusFormat.indexes[index] !== undefined) {
             wantedIndexes.push(index);
         } else {
             console.warn(`index ${index} is not part of selected corpus format`)
@@ -69,7 +69,7 @@ export function createMetadataRequest(corpusFormat: CorpusFormat, selectedMetada
     for (let entityName of Object.keys(selectedMetadata.entities)) {
         const entity = selectedMetadata.entities[entityName];
         const entityInfo = corpusFormat.entities[entityName];
-        if (!entityInfo) {
+        if (entityInfo === undefined) {
             console.warn(`entity ${entityName} is not part of selected corpus format`);
             continue;
         }

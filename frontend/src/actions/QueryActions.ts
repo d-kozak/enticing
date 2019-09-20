@@ -17,6 +17,7 @@ import {emptyTextUnitList, parseNewAnnotatedText} from "../components/annotation
 export const startSearchingAction = (query: string, user: User, searchSettings: SearchSettings, history?: H.History): ThunkResult<void> => (dispatch, getState) => {
     const resultsPerPage = getState().userState.user.userSettings.resultsPerPage;
     if (!searchSettings.corpusFormat) {
+        dispatch(openSnackbar('No corpus format is loaded, cannot perform search'));
         console.log('No corpus format is loaded, cannot perform search');
         return
     }
