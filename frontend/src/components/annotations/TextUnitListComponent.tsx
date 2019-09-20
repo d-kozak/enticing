@@ -16,16 +16,17 @@ const styles = (theme: Theme) => createStyles({
 
 type AnnotatedTextComponentProps = WithStyles<typeof styles> & {
     text: TextUnitList,
-    corpusFormat: CorpusFormat
+    corpusFormat: CorpusFormat,
+    showParagraphs: boolean
 }
 
 const TextUnitListComponent = (props: AnnotatedTextComponentProps) => {
-    const {text, corpusFormat, classes} = props;
+    const {text, corpusFormat, classes, showParagraphs} = props;
     let tokenIndex = Object.keys(corpusFormat.indexes).indexOf("token");
     try {
         return <div className={classes.root}>
             {text.content.map((elem, index) => <React.Fragment key={index}>
-                {renderElement(elem, corpusFormat, tokenIndex)}
+                {renderElement(elem, corpusFormat, tokenIndex, showParagraphs)}
             </React.Fragment>)}
         </div>
     } catch (e) {
@@ -38,15 +39,15 @@ export default withStyles(styles, {withTheme: true})(TextUnitListComponent);
 
 const colors = ["red", "green", "blue"];
 
-export const renderElement = (text: TextUnit, corpusFormat: CorpusFormat, tokenIndex: number): React.ReactNode => {
+export const renderElement = (text: TextUnit, corpusFormat: CorpusFormat, tokenIndex: number, showParagraphs: boolean): React.ReactNode => {
     if (text instanceof Word) {
         if (tokenIndex != -1) {
-            if (text.indexes[tokenIndex] == "¶")
+            if (text.indexes[tokenIndex] === "¶")
                 return <span/>;
-            if (text.indexes[tokenIndex] == "§")
+            if (text.indexes[tokenIndex] === "§")
                 return <span>
-                    <br/>
-                    <br/>
+                    {showParagraphs && <br/>}
+                    {showParagraphs && <br/>}
                 </span>
         }
         if (text.indexes.length === 1) return text.indexes[0] + (text.indexes[text.indexes.length - 1] != 'N' ? ' ' : '');
@@ -60,7 +61,7 @@ export const renderElement = (text: TextUnit, corpusFormat: CorpusFormat, tokenI
     } else if (text instanceof QueryMatch) {
         const content = <React.Fragment>
             {text.content.map((elem, index) => <React.Fragment key={index}>
-                {renderElement(elem, corpusFormat, tokenIndex)}
+                {renderElement(elem, corpusFormat, tokenIndex, showParagraphs)}
                 </React.Fragment>
             )}
         </React.Fragment>

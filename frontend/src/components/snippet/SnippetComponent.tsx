@@ -58,7 +58,8 @@ const SnippetComponent = (props: SnippetComponentEnhancedProps) => {
             </Grid>
         </Grid>
         <Grid item>
-            <NewAnnotatedTextComponent text={snippet.payload.parsedContent} corpusFormat={corpusFormat}/>
+            <NewAnnotatedTextComponent text={snippet.payload.parsedContent} corpusFormat={corpusFormat}
+                                       showParagraphs={false}/>
         </Grid>
     </Grid>
 };

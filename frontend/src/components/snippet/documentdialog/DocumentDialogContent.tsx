@@ -26,7 +26,8 @@ const DocumentDialogContent = (props: DialogContentProps) => {
     return <div>
         <Typography className={classes.titleUrl} variant="headline"><a
             href={document.url}>{document.url}</a></Typography>
-        <NewAnnotatedTextComponent text={document.payload.parsedContent!} corpusFormat={corpusFormat}/>
+        <NewAnnotatedTextComponent text={document.payload.parsedContent!} corpusFormat={corpusFormat}
+                                   showParagraphs={true}/>
     </div>
 };
 
