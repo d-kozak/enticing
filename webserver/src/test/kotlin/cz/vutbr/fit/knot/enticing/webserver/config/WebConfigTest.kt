@@ -1,10 +1,9 @@
 package cz.vutbr.fit.knot.enticing.webserver.config
 
-import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
-import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
 import cz.vutbr.fit.knot.enticing.webserver.service.EqlCompilerService
 import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
+import cz.vutbr.fit.knot.enticing.webserver.service.SearchSettingsService
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -27,10 +26,7 @@ internal class WebConfigTest(@Autowired val mockMvc: MockMvc) {
     lateinit var userService: EnticingUserService
 
     @MockBean
-    lateinit var searchSettingsRepository: SearchSettingsRepository
-
-    @MockBean
-    lateinit var userRepository: UserRepository
+    lateinit var searchSettingsService: SearchSettingsService
 
     @MockBean
     lateinit var queryService: QueryService

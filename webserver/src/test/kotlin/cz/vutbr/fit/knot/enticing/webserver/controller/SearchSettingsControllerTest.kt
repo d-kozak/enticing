@@ -1,19 +1,18 @@
 package cz.vutbr.fit.knot.enticing.webserver.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.anyOrNull
+import com.nhaarman.mockitokotlin2.whenever
 import cz.vutbr.fit.knot.enticing.webserver.dto.ImportedSearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.dto.toEntity
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
-import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
-import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
 import cz.vutbr.fit.knot.enticing.webserver.service.EqlCompilerService
 import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
-import org.assertj.core.api.Assertions.assertThat
+import cz.vutbr.fit.knot.enticing.webserver.service.SearchSettingsService
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.ArgumentCaptor
-import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -25,7 +24,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import java.util.*
 
 
 @WebMvcTest(secure = false)
@@ -39,10 +37,7 @@ internal class SearchSettingsControllerTest(
     lateinit var compilerService: EqlCompilerService
 
     @MockBean
-    lateinit var searchSettingsRepository: SearchSettingsRepository
-
-    @MockBean
-    lateinit var userRepository: UserRepository
+    lateinit var searchSettingsService: SearchSettingsService
 
     @MockBean
     lateinit var userService: EnticingUserService
@@ -53,64 +48,45 @@ internal class SearchSettingsControllerTest(
     @Test
     fun create() {
         val searchSettings = SearchSettings(1, "foo", annotationServer = "foo.baz", annotationDataServer = "baz.paz", servers = setOf("127.0.0.1"))
-        Mockito.`when`(searchSettingsRepository.save(searchSettings)).thenReturn(searchSettings)
-        Mockito.`when`(searchSettingsRepository.existsByName("foo")).thenReturn(false)
+        Mockito.`when`(searchSettingsService.create(searchSettings)).thenReturn(searchSettings)
         mockMvc.perform(post("$apiBasePath/search-settings").content(ObjectMapper().writeValueAsString(searchSettings))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk)
-        Mockito.verify(searchSettingsRepository).save(searchSettings)
-        Mockito.verify(searchSettingsRepository).existsByName("foo")
-        Mockito.clearInvocations(searchSettingsRepository)
+        Mockito.verify(searchSettingsService).create(searchSettings)
+        Mockito.clearInvocations(searchSettingsService)
     }
 
-    @Test
-    fun `create should fail name not unique`() {
-        val searchSettings = SearchSettings(1, "foo", annotationServer = "foo.baz", annotationDataServer = "baz.paz", servers = setOf("127.0.0.1"))
-        Mockito.`when`(searchSettingsRepository.save(searchSettings)).thenReturn(searchSettings)
-        Mockito.`when`(searchSettingsRepository.existsByName("foo")).thenReturn(true)
-        mockMvc.perform(post("$apiBasePath/search-settings").content(ObjectMapper().writeValueAsString(searchSettings))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().`is`(400))
-        Mockito.verify(searchSettingsRepository).existsByName("foo")
-        Mockito.clearInvocations(searchSettingsRepository)
-    }
 
 
     @Test
     fun `read all`() {
         val searchSettings = listOf(SearchSettings(1, "foo"), SearchSettings(2, "bar"), SearchSettings(3, "baz"))
-        Mockito.`when`(searchSettingsRepository.findByPrivateIsFalse()).thenReturn(searchSettings)
+        whenever(searchSettingsService.getAll(anyOrNull())).thenReturn(searchSettings)
         mockMvc.perform(get("$apiBasePath/search-settings"))
                 .andExpect(status().isOk)
                 .andExpect(content().json(ObjectMapper().writeValueAsString(searchSettings)))
-        Mockito.verify(searchSettingsRepository).findByPrivateIsFalse()
-        Mockito.clearInvocations(searchSettingsRepository)
+        Mockito.verify(searchSettingsService).getAll(anyOrNull())
+        Mockito.clearInvocations(searchSettingsService)
     }
 
     @Test
     fun update() {
         val searchSettings = SearchSettings(1, "foo", annotationServer = "foo.baz", annotationDataServer = "baz.paz", servers = setOf("127.0.0.1"))
-        Mockito.`when`(searchSettingsRepository.save(searchSettings)).thenReturn(searchSettings)
+        Mockito.`when`(searchSettingsService.update(searchSettings)).thenReturn(searchSettings)
         mockMvc.perform(put("$apiBasePath/search-settings")
                 .content(ObjectMapper().writeValueAsString(searchSettings))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk)
-        Mockito.verify(searchSettingsRepository).save(searchSettings)
-        Mockito.clearInvocations(searchSettingsRepository)
+        Mockito.verify(searchSettingsService).update(searchSettings)
+        Mockito.clearInvocations(searchSettingsService)
     }
 
     @Test
     fun delete() {
-        val searchSettings = SearchSettings(1, "foo", annotationServer = "foo.baz", annotationDataServer = "baz.paz", servers = setOf("127.0.0.1"))
-        Mockito.`when`(searchSettingsRepository.findById(1)).thenReturn(Optional.of(searchSettings))
-
         mockMvc.perform(delete("$apiBasePath/search-settings/1"))
                 .andExpect(status().isOk)
-
-        Mockito.verify(searchSettingsRepository).findById(1)
-        Mockito.verify(userRepository).detachSettingsFromAllUsers(searchSettings)
-        Mockito.verify(searchSettingsRepository).deleteById(1)
-        Mockito.clearInvocations(searchSettingsRepository)
+        Mockito.verify(searchSettingsService).delete(1)
+        Mockito.clearInvocations(searchSettingsService)
     }
 
     @Test
@@ -124,7 +100,7 @@ internal class SearchSettingsControllerTest(
         val invalidServers = SearchSettings(name = "foo", annotationDataServer = "foo.com", annotationServer = "baz.com", servers = setOf("10.10."))
         val invalid = listOf(name, annotationDataServer, annotationServer, servers, invalidAnnotationDataServer, invalidAnnotationServer, invalidServers)
 
-        Mockito.`when`(searchSettingsRepository.save<SearchSettings>(any())).thenThrow(UnsupportedOperationException())
+        whenever(searchSettingsService.create(any())).thenThrow(UnsupportedOperationException())
 
         for (settings in invalid) {
             println("Testing with $settings")
@@ -133,16 +109,16 @@ internal class SearchSettingsControllerTest(
                     .content(ObjectMapper().writeValueAsString(settings))
                     .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().`is`(400))
-            Mockito.verifyZeroInteractions(searchSettingsRepository)
+            Mockito.verifyZeroInteractions(searchSettingsService)
             println("PUT")
             mockMvc.perform(put("$apiBasePath/search-settings")
                     .content(ObjectMapper().writeValueAsString(settings))
                     .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().`is`(400))
-            Mockito.verifyZeroInteractions(searchSettingsRepository)
+            Mockito.verifyZeroInteractions(searchSettingsService)
             println("=====")
         }
-        Mockito.clearInvocations(searchSettingsRepository)
+        Mockito.clearInvocations(searchSettingsService)
 
     }
 
@@ -156,14 +132,14 @@ internal class SearchSettingsControllerTest(
     @Test
     fun `Import settings test`() {
         val importedSettings = ImportedSearchSettings("import", "foo.com", "baz.com", setOf("127.0.0.1:20"))
-        Mockito.`when`(searchSettingsRepository.save(importedSettings.toEntity())).thenReturn(importedSettings.toEntity())
+        Mockito.`when`(searchSettingsService.import(importedSettings)).thenReturn(importedSettings.toEntity())
 
         mockMvc.perform(post("$apiBasePath/search-settings/import")
                 .content(ObjectMapper().writeValueAsString(importedSettings))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk)
-        Mockito.verify(searchSettingsRepository).save(importedSettings.toEntity())
-        Mockito.clearInvocations(searchSettingsRepository)
+        Mockito.verify(searchSettingsService).import(importedSettings)
+        Mockito.clearInvocations(searchSettingsService)
     }
 
     @Test
@@ -179,77 +155,8 @@ internal class SearchSettingsControllerTest(
                     .content(ObjectMapper().writeValueAsString(settings))
                     .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().`is`(400))
-            Mockito.verifyZeroInteractions(searchSettingsRepository)
+            Mockito.verifyZeroInteractions(searchSettingsService)
         }
-        Mockito.clearInvocations(searchSettingsRepository)
-    }
-
-    @Test
-    fun `Change default no previous default`() {
-        val searchSettings = SearchSettings(id = 1, name = "foo")
-        val capture = ArgumentCaptor.forClass(SearchSettings::class.java)
-        Mockito.`when`(searchSettingsRepository.findByDefaultIsTrue())
-                .thenReturn(null)
-        Mockito.`when`(searchSettingsRepository.findById(1))
-                .thenReturn(Optional.of(searchSettings))
-        Mockito.`when`(searchSettingsRepository.save(capture.capture()))
-                .thenReturn(searchSettings)
-
-        mockMvc.perform(put("$apiBasePath/search-settings/default/1"))
-                .andExpect(status().`is`(200))
-
-        Mockito.verify(searchSettingsRepository).findByDefaultIsTrue()
-        Mockito.verify(searchSettingsRepository).findById(1)
-        Mockito.verify(searchSettingsRepository).save(searchSettings)
-
-        assertThat(searchSettings.default)
-                .isTrue()
-        assertThat(capture)
-                .extracting { it.value.default }
-                .isEqualTo(true)
-        assertThat(capture)
-                .extracting { it.value.name }
-                .isEqualTo("foo")
-
-        Mockito.clearInvocations(searchSettingsRepository)
-    }
-
-    @Test
-    fun `Change default with previous`() {
-        val previousDefault = SearchSettings(id = 3, name = "prevDefault", default = true)
-        val searchSettings = SearchSettings(id = 1, name = "foo")
-        val capture = ArgumentCaptor.forClass(SearchSettings::class.java)
-        Mockito.`when`(searchSettingsRepository.findByDefaultIsTrue())
-                .thenReturn(previousDefault)
-        Mockito.`when`(searchSettingsRepository.findById(1))
-                .thenReturn(Optional.of(searchSettings))
-        Mockito.`when`(searchSettingsRepository.save(capture.capture()))
-                .thenReturn(searchSettings)
-
-        mockMvc.perform(put("$apiBasePath/search-settings/default/1"))
-                .andExpect(status().`is`(200))
-
-        Mockito.verify(searchSettingsRepository).findByDefaultIsTrue()
-        Mockito.verify(searchSettingsRepository).findById(1)
-        Mockito.verify(searchSettingsRepository).save(previousDefault)
-        Mockito.verify(searchSettingsRepository).save(searchSettings)
-
-        assertThat(searchSettings.default)
-                .isTrue()
-        assertThat(capture.allValues)
-                .hasSize(2)
-        val old = capture.allValues[0]
-        assertThat(old.default)
-                .isFalse()
-        assertThat(old.name)
-                .isEqualTo("prevDefault")
-
-        val new = capture.allValues[1]
-        assertThat(new.default)
-                .isTrue()
-        assertThat(new.name)
-                .isEqualTo("foo")
-
-        Mockito.clearInvocations(searchSettingsRepository)
+        Mockito.clearInvocations(searchSettingsService)
     }
 }

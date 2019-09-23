@@ -2,12 +2,10 @@ package cz.vutbr.fit.knot.enticing.webserver.controller
 
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.DummyRoot
 import cz.vutbr.fit.knot.enticing.eql.compiler.dto.ParsedQuery
-import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
-import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
 import cz.vutbr.fit.knot.enticing.webserver.service.EqlCompilerService
 import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
-
+import cz.vutbr.fit.knot.enticing.webserver.service.SearchSettingsService
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
@@ -36,14 +34,10 @@ internal class EqlCompilerControllerTest(
     lateinit var userService: EnticingUserService
 
     @MockBean
-    lateinit var userRepository: UserRepository
-
-    @MockBean
-    lateinit var searchSettingsRepository: SearchSettingsRepository
+    lateinit var searchSettingsService: SearchSettingsService
 
     @MockBean
     lateinit var queryService: QueryService
-
 
     @Test
     fun `get calls compiler service`() {

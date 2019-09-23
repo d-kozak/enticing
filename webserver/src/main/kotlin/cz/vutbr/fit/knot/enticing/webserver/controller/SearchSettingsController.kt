@@ -1,20 +1,16 @@
 package cz.vutbr.fit.knot.enticing.webserver.controller
 
 import cz.vutbr.fit.knot.enticing.webserver.dto.ImportedSearchSettings
-import cz.vutbr.fit.knot.enticing.webserver.dto.toEntity
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
-import cz.vutbr.fit.knot.enticing.webserver.exception.ValueNotUniqueException
-import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
-import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
+import cz.vutbr.fit.knot.enticing.webserver.service.SearchSettingsService
 import org.springframework.security.core.Authentication
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
 @RestController
 @RequestMapping("\${api.base.path}/search-settings")
-class SearchSettingsController(private val searchSettingsRepository: SearchSettingsRepository, private val userService: EnticingUserService, private val userRepository: UserRepository) {
+class SearchSettingsController(private val searchSettingsService: SearchSettingsService, private val userService: EnticingUserService) {
 
     @GetMapping("/select/{id}")
     fun select(@PathVariable id: Long) {
@@ -22,41 +18,22 @@ class SearchSettingsController(private val searchSettingsRepository: SearchSetti
     }
 
     @PutMapping("/default/{id}")
-    fun selectDefault(@PathVariable id: Long) {
-        val previousDefault = searchSettingsRepository.findByDefaultIsTrue()
-        if (previousDefault != null) {
-            previousDefault.default = false
-            searchSettingsRepository.save(previousDefault)
-        }
-        val newDefault = searchSettingsRepository.findById(id).orElseThrow { IllegalArgumentException("Unknown id $id") }
-        newDefault.default = true
-        searchSettingsRepository.save(newDefault)
-    }
+    fun selectDefault(@PathVariable id: Long) = searchSettingsService.setDefault(id)
 
     @GetMapping
-    fun getAll(authentication: Authentication?) = if (authentication?.authorities?.contains(SimpleGrantedAuthority("ROLE_ADMIN")) == true)
-        searchSettingsRepository.findAll()
-    else searchSettingsRepository.findByPrivateIsFalse()
-
+    fun getAll(authentication: Authentication?) = searchSettingsService.getAll(authentication)
 
     @PostMapping("/import")
-    fun import(@RequestBody @Valid searchSettings: ImportedSearchSettings) = searchSettingsRepository.save(searchSettings.toEntity())
+    fun import(@RequestBody @Valid searchSettings: ImportedSearchSettings) = searchSettingsService.import(searchSettings)
 
     @PostMapping
-    fun create(@RequestBody @Valid searchSettings: SearchSettings): SearchSettings {
-        if (searchSettingsRepository.existsByName(searchSettings.name))
-            throw ValueNotUniqueException("name", "Name ${searchSettings.name} is already taken")
-        return searchSettingsRepository.save(searchSettings)
-    }
+    fun create(@RequestBody @Valid searchSettings: SearchSettings): SearchSettings = searchSettingsService.create(searchSettings)
 
     @PutMapping
-    fun update(@RequestBody @Valid searchSettings: SearchSettings) = searchSettingsRepository.save(searchSettings)
+    fun update(@RequestBody @Valid searchSettings: SearchSettings) = searchSettingsService.update(searchSettings)
 
     @DeleteMapping("/{id}")
     fun delete(@PathVariable id: Long) {
-        val searchSettings = searchSettingsRepository.findById(id).orElseThrow { java.lang.IllegalArgumentException("No settings with id $id found") }
-        userRepository.detachSettingsFromAllUsers(searchSettings)
-        searchSettingsRepository.deleteById(id)
-
+        searchSettingsService.delete(id)
     }
 }

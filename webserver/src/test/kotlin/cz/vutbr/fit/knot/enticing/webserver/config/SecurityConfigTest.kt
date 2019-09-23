@@ -12,11 +12,10 @@ import cz.vutbr.fit.knot.enticing.webserver.entity.AttributeList
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.entity.SelectedMetadata
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
-import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
-import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
 import cz.vutbr.fit.knot.enticing.webserver.service.EqlCompilerService
 import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
+import cz.vutbr.fit.knot.enticing.webserver.service.SearchSettingsService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -36,7 +35,6 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.net.URLEncoder
-import java.util.*
 
 @WebMvcTest
 @Import(PasswordEncoderConfiguration::class)
@@ -54,10 +52,7 @@ internal class SecurityConfigTest(
     lateinit var userService: EnticingUserService
 
     @MockBean
-    lateinit var userRepository: UserRepository
-
-    @MockBean
-    lateinit var searchSettingsRepository: SearchSettingsRepository
+    lateinit var searchSettingsService: SearchSettingsService
 
     @MockBean
     lateinit var queryService: QueryService
@@ -302,7 +297,7 @@ internal class SecurityConfigTest(
             fun `Get is accessible`() {
                 mockMvc.perform(get("$apiBasePath/search-settings"))
                         .andExpect(status().isOk)
-                Mockito.clearInvocations(searchSettingsRepository)
+                Mockito.clearInvocations(searchSettingsService)
             }
 
             @Test
@@ -337,13 +332,13 @@ internal class SecurityConfigTest(
             fun `Importing is accessible for admin`() {
                 val importedSettings = ImportedSearchSettings("import", "foo.com", "baz.com", setOf("127.0.0.1:20"))
                 val searchSettings = importedSettings.toEntity()
-                Mockito.`when`(searchSettingsRepository.save(searchSettings)).thenReturn(searchSettings)
+                Mockito.`when`(searchSettingsService.import(importedSettings)).thenReturn(searchSettings)
                 mockMvc.perform(post("$apiBasePath/search-settings/import")
                         .content(ObjectMapper().writeValueAsString(importedSettings))
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk)
 
-                Mockito.clearInvocations(searchSettingsRepository)
+                Mockito.clearInvocations(searchSettingsService)
             }
 
             @Test
@@ -355,8 +350,8 @@ internal class SecurityConfigTest(
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().`is`(401))
 
-                Mockito.verifyZeroInteractions(searchSettingsRepository)
-                Mockito.clearInvocations(searchSettingsRepository)
+                Mockito.verifyZeroInteractions(searchSettingsService)
+                Mockito.clearInvocations(searchSettingsService)
             }
 
 
@@ -370,16 +365,17 @@ internal class SecurityConfigTest(
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().`is`(403))
 
-                Mockito.verifyZeroInteractions(searchSettingsRepository)
-                Mockito.clearInvocations(searchSettingsRepository)
+                Mockito.verifyZeroInteractions(searchSettingsService)
+                Mockito.clearInvocations(searchSettingsService)
             }
 
             @WithMockUser(roles = ["ADMIN"])
             @Test
             fun `Post put delete require admin role success`() {
                 val searchSettings = SearchSettings(1, "foo", annotationServer = "foo.baz", annotationDataServer = "baz.paz", servers = setOf("127.0.0.1"))
-                Mockito.`when`(searchSettingsRepository.save(searchSettings)).thenReturn(searchSettings)
-                Mockito.`when`(searchSettingsRepository.findById(1)).thenReturn(Optional.of(searchSettings))
+                Mockito.`when`(searchSettingsService.create(searchSettings)).thenReturn(searchSettings)
+                Mockito.`when`(searchSettingsService.update(searchSettings)).thenReturn(searchSettings)
+
 
                 mockMvc.perform(post("$apiBasePath/search-settings")
                         .content(ObjectMapper().writeValueAsString(searchSettings))
@@ -393,7 +389,11 @@ internal class SecurityConfigTest(
 
                 mockMvc.perform(delete("$apiBasePath/search-settings/1"))
                         .andExpect(status().`is`(200))
-                Mockito.clearInvocations(searchSettingsRepository)
+
+                Mockito.verify(searchSettingsService).create(searchSettings)
+                Mockito.verify(searchSettingsService).update(searchSettings)
+                Mockito.verify(searchSettingsService).delete(1)
+                Mockito.clearInvocations(searchSettingsService)
             }
 
             @Test
@@ -412,14 +412,10 @@ internal class SecurityConfigTest(
             @Test
             @WithMockUser(roles = ["ADMIN"])
             fun `Make default accessible for admin`() {
-                val dummy = SearchSettings(0, "foo", annotationServer = "foo.baz", annotationDataServer = "baz.paz", servers = setOf("127.0.0.1"), default = true)
-                Mockito.`when`(searchSettingsRepository.findById(1))
-                        .thenReturn(Optional.of(dummy))
-
                 mockMvc.perform(put("$apiBasePath/search-settings/default/1"))
                         .andExpect(status().`is`(200))
-
-                Mockito.clearInvocations(searchSettingsRepository)
+                Mockito.verify(searchSettingsService).setDefault(1)
+                Mockito.clearInvocations(searchSettingsService)
             }
 
             @Test
@@ -429,7 +425,7 @@ internal class SecurityConfigTest(
                 mockMvc.perform(get(url))
                         .andExpect(status().isOk)
 
-                Mockito.clearInvocations(searchSettingsRepository)
+                Mockito.clearInvocations(searchSettingsService)
             }
         }
 
