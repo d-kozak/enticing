@@ -57,18 +57,20 @@ const DocumentDialog = (props: DocumentDialogProps) => {
         fullWidth={true}
         maxWidth="md"
     >
+        {document !== null && corpusFormat !== null &&
         <div className={classes.root}>
             <MuiDialogTitle disableTypography className={classes.title}>
-                <Typography variant="h6">Document</Typography>
+                <Typography variant="h4">{document.title}</Typography>
                 <IconButton aria-label="Close" className={classes.closeButton} onClick={dialogClosed}>
                     <CloseIcon/>
                 </IconButton>
             </MuiDialogTitle>
-            {document !== null && corpusFormat !== null &&
+
             <DialogContent>
                 <DocumentDialogContent document={document} corpusFormat={corpusFormat}/>
-            </DialogContent>}
+            </DialogContent>
         </div>
+        }
     </Dialog>
 };
 

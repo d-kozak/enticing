@@ -1,5 +1,5 @@
 import createStyles from "@material-ui/core/es/styles/createStyles";
-import {WithStyles} from "@material-ui/core";
+import {Divider, List, ListItem, WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React from 'react';
@@ -9,8 +9,11 @@ import NewAnnotatedTextComponent from "../../annotations/TextUnitListComponent";
 import {CorpusFormat} from "../../../entities/CorpusFormat";
 
 const styles = createStyles({
-    titleUrl: {
-        margin: "10px 0px"
+    sectionTitle: {
+        margin: '10px 0px'
+    },
+    divider: {
+        margin: '10px 0px'
     }
 });
 
@@ -24,8 +27,20 @@ const DocumentDialogContent = (props: DialogContentProps) => {
     const {document, corpusFormat, classes} = props;
 
     return <div>
-        <Typography className={classes.titleUrl} variant="headline"><a
-            href={document.url}>{document.url}</a></Typography>
+        <Typography variant="h6">Document Info</Typography>
+        <List>
+            <ListItem>
+                <Typography variant="body1">Original source - <a href={document.url}>{document.url}</a></Typography>
+            </ListItem>
+            <ListItem>
+                <Typography variant="body1">Server - {document.host}</Typography>
+            </ListItem>
+            <ListItem>
+                <Typography variant="body1">Collection - {document.collection}</Typography>
+            </ListItem>
+        </List>
+        <Divider className={classes.divider}/>
+        <Typography className={classes.sectionTitle} variant="h6">Content</Typography>
         <NewAnnotatedTextComponent text={document.payload.parsedContent!} corpusFormat={corpusFormat}
                                    showParagraphs={true}/>
     </div>
