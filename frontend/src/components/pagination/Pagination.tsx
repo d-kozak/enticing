@@ -33,7 +33,7 @@ const Pagination = (props: PaginationProps) => {
         </li>}
         {indexes.map(index =>
             <li key={index} onClick={() => setCurrentPage(index - 1)}>
-                <PaginationItem isActive={index == currentPage} onClick={() => setCurrentPage(index - 1)}
+                <PaginationItem isActive={index - 1 == currentPage} onClick={() => setCurrentPage(index - 1)}
                                 text={`${index}`}/>
             </li>
         )}
