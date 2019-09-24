@@ -26,15 +26,15 @@ export interface PaginationProps extends WithStyles<typeof styles> {
 
 const Pagination = (props: PaginationProps) => {
     const {classes, pageCount, setCurrentPage, currentPage, hasMore} = props;
-    const indexes = asList(findInterval(currentPage, 0, pageCount, 10));
+    const indexes = asList(findInterval(currentPage, 1, pageCount, 10));
     return <ul className={classes.root}>
         {currentPage != 0 && <li>
             <PaginationItem onClick={() => setCurrentPage(currentPage - 1)} text={'<'}/>
         </li>}
         {indexes.map(index =>
-            <li key={index} onClick={() => setCurrentPage(index)}>
-                <PaginationItem isActive={index == currentPage} onClick={() => setCurrentPage(index)}
-                                text={`${index + 1}`}/>
+            <li key={index} onClick={() => setCurrentPage(index - 1)}>
+                <PaginationItem isActive={index == currentPage} onClick={() => setCurrentPage(index - 1)}
+                                text={`${index}`}/>
             </li>
         )}
         {currentPage != pageCount - 1 && <li>
