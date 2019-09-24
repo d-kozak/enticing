@@ -21,8 +21,14 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
         console.log('No corpus format is loaded, cannot perform search');
         return
     }
-    const metadata = createMetadataRequest(searchSettings.corpusFormat, user.selectedMetadata[searchSettings.id]);
-    const filteredCorpusFormat = filterCorpusFormat(searchSettings.corpusFormat, user.selectedMetadata[searchSettings.id]);
+    const selectedMetadata = user.selectedMetadata[searchSettings.id];
+    if (selectedMetadata && selectedMetadata.indexes.indexOf("token") < 0) {
+        dispatch(openSnackbar('Cannot perform search without token index being selected'));
+        console.log('Cannot perform search without token index being selected');
+        return;
+    }
+    const metadata = createMetadataRequest(searchSettings.corpusFormat, selectedMetadata);
+    const filteredCorpusFormat = filterCorpusFormat(searchSettings.corpusFormat, selectedMetadata);
     const searchQuery: SearchQuery = {
         query,
         metadata,

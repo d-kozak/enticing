@@ -66,6 +66,10 @@ export const loadSelectedMetadataRequest = (searchSettingsId: string): ThunkResu
 };
 
 export const saveSelectedMetadataRequest = (metadata: SelectedMetadata, settingsId: string): ThunkResult<void> => async (dispatch, getState) => {
+    if (metadata.indexes.indexOf("token") < 0) {
+        dispatch(openSnackbar("Search without token index not supported yet"));
+        return;
+    }
     const isLoggedIn = getState().userState.isLoggedIn;
     try {
         if (isLoggedIn) {
