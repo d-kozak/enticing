@@ -180,4 +180,4 @@ influencer:=nertag:artist < lemma:influence < influencee:=nertag:artist && influ
 ```
 
 ## Grammar
-Formal grammar written in [Antlr4](https://www.antlr.org/) format can be found at this [link](Eql.g4).
+Formal grammar written in [Antlr4](https://www.antlr.org/) format can be found at this [link](../eql-compiler/src/main/antlr/cz/vutbr/fit/knot/enticing/eql/compiler/parser/Eql.g4).

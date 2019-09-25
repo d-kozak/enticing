@@ -11,7 +11,7 @@ query: queryElem+ context? ;
 queryElem:
     NOT queryElem #not
     | IDENTIFIER COLON EQ queryElem #assign
-    |(IDENTIFIER | ANY_TEXT) #simpleText
+    |(IDENTIFIER | ANY_TEXT | interval) (EXPONENT queryElem)? #simpleText
     | IDENTIFIER COLON queryElem #index
     | IDENTIFIER DOT IDENTIFIER COLON queryElem #attribute
     | PAREN_OPEN query PAREN_CLOSE (proximity | context)? #paren
@@ -20,6 +20,7 @@ queryElem:
     | QUOTATION queryElem QUOTATION #sequence
     ;
 
+interval: BRACKET_OPEN (ANY_TEXT|IDENTIFIER) DOUBLE_DOT (ANY_TEXT|IDENTIFIER) BRACKET_CLOSE; // don't forget that it actually has to be a number or date!
 
 proximity: SIMILARITY IDENTIFIER ; // don't forget that it actually has to be a number!
 
@@ -45,6 +46,7 @@ comparisonOperator: EQ | NE | GT |  GE | LT | LE ;
 CONSTRAINT_SEPARATOR: '&&';
 
 COLON:':';
+DOUBLE_DOT:'..';
 DOT: '.';
 EQ: '=';
 NE: '!=';
@@ -61,12 +63,14 @@ AND: '&';
 OR: '|';
 PAREN_OPEN : '(';
 PAREN_CLOSE : ')';
+BRACKET_OPEN: '[';
+BRACKET_CLOSE: ']';
 MINUS:'-';
 QUOTATION: '"';
 
 
 IDENTIFIER: [a-zA-Z0-9][a-zA-Z0-9_]*;
-ANY_TEXT: ~[ \t\r&|=<>:.()*]+[*]?;
+ANY_TEXT: ~[ \u005B\u005D\t\r&|=<>:.()*^-]+[*]?;
 
 /** ignore whitespace */
 WS : [ \t\r] -> skip;
