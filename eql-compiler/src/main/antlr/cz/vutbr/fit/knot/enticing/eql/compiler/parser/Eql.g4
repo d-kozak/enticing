@@ -1,19 +1,31 @@
-grammar New;
+grammar Eql;
 
-root: query (CONSTRAINT_SEPARATOR constraint)? EOF;
+@header {
+    package cz.vutbr.fit.knot.enticing.eql.compiler.parser;
+}
 
-query: queryElem+ ;
+root: query (CONSTRAINT_SEPARATOR globalConstraint)? EOF;
+
+query: queryElem+ context? ;
 
 queryElem:
-    (IDENTIFIER | ANY_TEXT) #simpleText
+    NOT queryElem #not
+    | IDENTIFIER COLON EQ queryElem #assign
+    |(IDENTIFIER | ANY_TEXT) #simpleText
     | IDENTIFIER COLON queryElem #index
     | IDENTIFIER DOT IDENTIFIER COLON queryElem #attribute
-    | PAREN_OPEN query PAREN_CLOSE #paren
+    | PAREN_OPEN query PAREN_CLOSE (proximity | context)? #paren
     | queryElem booleanOperator queryElem #boolean
+    | queryElem LT queryElem #order
     | QUOTATION queryElem QUOTATION #sequence
     ;
 
-constraint: booleanExpression;
+
+proximity: SIMILARITY IDENTIFIER ; // don't forget that it actually has to be a number!
+
+context: MINUS (queryElem | PAR | SENT);
+
+globalConstraint: booleanExpression;
 
 booleanExpression:
     NOT? comparison
@@ -40,13 +52,16 @@ GT: '>';
 GE: '>=';
 LT: '<';
 LE: '<=';
-
+EXPONENT: '^';
+SIMILARITY:'~';
+SENT: '_SENT_';
+PAR: '_PAR_';
 NOT: '!';
 AND: '&';
 OR: '|';
 PAREN_OPEN : '(';
 PAREN_CLOSE : ')';
-
+MINUS:'-';
 QUOTATION: '"';
 
 

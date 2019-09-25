@@ -1,7 +1,24 @@
 # Valid EQL queries that should be parsed without problems
+
+## Simple queries
 hello
 howdy
 nertag:person
 your mum
 New York
 Donald Trump
+nertag:person (visited:entered)
+person.name:John
+location.address:Palackeho "ahoj cau jak se mas"
+person & name
+person name !(age|birthdate)
+
+## the following is invalid (in sequence, all elems should be on the same index, but syntactically correct
+"ahoj lemma:cau"
+
+## Assignments and global constraints
+john:=person.name:John
+john:=person.name:John rupert:=person.name:Rupert && john.age != rupert.age
+1:=person.name:John 2:=person.name:Rupert && 1 != 2
+1:=person.name:John 2:=person.name:Rupert && 1.id != 2.id
+nertag:person ^ person.name:John

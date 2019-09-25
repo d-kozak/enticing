@@ -93,9 +93,9 @@ class AntlrGrammarTest {
         }
 
         @Test
-        @DisplayName("""A B ~ 5""")
+        @DisplayName("""(A B) ~ 5""")
         fun `Query 14`() {
-            assertParseWithoutErrors("""A B ~ 5""")
+            assertParseWithoutErrors("""(A B) ~ 5""")
         }
 
         @Test
@@ -152,24 +152,34 @@ class AntlrGrammarTest {
     @DisplayName("Queries from files")
     inner class QueriesFromFiles {
 
+        val compiler = EqlCompiler()
+
         @Test
         fun `valid queries`() {
-            forEachQuery("valid.eql") { assertParseWithoutErrors(it) }
+            forEachQuery("valid.eql") { compiler.parse(it).errors.isEmpty() }
         }
 
         @Test
         fun `syntactic errors`() {
-            forEachQuery("syntactic_errors.eql") { assertParseWithErrors(it) }
+            forEachQuery("syntactic_errors.eql") { compiler.parse(it).errors.isNotEmpty() }
         }
 
         private fun loadFile(fileName: String): File = File(javaClass.classLoader.getResource(fileName)?.file
                 ?: throw IllegalArgumentException("File with name $fileName not found in the resources folder"))
 
-        private fun forEachQuery(fileName: String, block: (String) -> Unit) {
+        private fun forEachQuery(fileName: String, block: (String) -> Boolean) {
+            val failed = mutableSetOf<String>()
             for (query in loadFile(fileName).readLines()) {
-                if (query.startsWith("#")) continue
+                if (query.isEmpty() || query.startsWith("#")) continue
                 println("Processing query '$query'")
-                block(query)
+                if (!block(query)) {
+                    failed.add(query)
+                }
+            }
+            if (failed.isNotEmpty()) {
+                System.err.println("Following queries were not handled as expected")
+                failed.forEach(System.err::println)
+                throw AssertionError(failed.toString())
             }
         }
     }
