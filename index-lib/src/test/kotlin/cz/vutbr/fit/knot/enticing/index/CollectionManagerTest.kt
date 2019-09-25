@@ -10,10 +10,10 @@ import cz.vutbr.fit.knot.enticing.dto.format.text.StringWithMetadata
 import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnit
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.dto.utils.toDto
+import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompilerException
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.EqlCompiler
 import cz.vutbr.fit.knot.enticing.index.collection.manager.computeExtensionIntervals
 import cz.vutbr.fit.knot.enticing.index.mg4j.initMg4jCollectionManager
-import it.unimi.di.big.mg4j.query.parser.QueryParserException
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.*
 
@@ -376,11 +376,10 @@ class CollectionManagerTest {
     @Test
     fun `syntax error should be caught`() {
         val queryEngine = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
-        val input = "lemma:work{{lemma->"
+        val input = "lemma:(work|)"
         val query = templateQuery.copy(query = input)
-        query.eqlAst = EqlCompiler().parseOrFail(input)
-        assertThrows<QueryParserException> {
-            val result = queryEngine.query(query)
+        assertThrows<EqlCompilerException> {
+            query.eqlAst = EqlCompiler().parseOrFail(input)
         }
     }
 
