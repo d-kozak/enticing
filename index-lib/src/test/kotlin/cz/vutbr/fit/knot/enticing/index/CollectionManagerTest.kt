@@ -130,8 +130,8 @@ class CollectionManagerTest {
             for (input in listOf(
                     "hello",
                     "john",
-                    "lemma:work{{lemma->token}}",
-                    "nertag:person{{nertag->token}}",
+                    "lemma:work",
+                    "nertag:person",
                     "job work"
             )) {
                 val query = templateQuery.copy(query = input, textFormat = textFormat)
