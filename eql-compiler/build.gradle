@@ -28,6 +28,8 @@ generateGrammarSource {
                   "-long-messages"]
 }
 
+compileKotlin.dependsOn "generateGrammarSource"
+
 dependencies {
     implementation(project(":dto"))
 
