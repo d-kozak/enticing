@@ -2,15 +2,16 @@ grammar New;
 
 root: query (CONSTRAINT_SEPARATOR constraint)? EOF;
 
-query: queryElem+  ;
+query: queryElem+ ;
 
 queryElem:
-    (IDENTIFIER | ANY_TEXT)
-    | IDENTIFIER COLON queryElem
-    | IDENTIFIER DOT IDENTIFIER COLON queryElem
-    | PAREN_OPEN query PAREN_CLOSE
-    | queryElem booleanOperator queryElem
-    | QUOTATION queryElem QUOTATION;
+    (IDENTIFIER | ANY_TEXT) #simpleText
+    | IDENTIFIER COLON queryElem #index
+    | IDENTIFIER DOT IDENTIFIER COLON queryElem #attribute
+    | PAREN_OPEN query PAREN_CLOSE #paren
+    | queryElem booleanOperator queryElem #boolean
+    | QUOTATION queryElem QUOTATION #sequence
+    ;
 
 constraint: booleanExpression;
 
@@ -50,10 +51,9 @@ QUOTATION: '"';
 
 
 IDENTIFIER: [a-zA-Z0-9][a-zA-Z0-9_]*;
-// todo handle special chars e.g. those from Czech alphabet
-ANY_TEXT: [\p{Symbol}]+;
+ANY_TEXT: ~[ \t\r&|=<>:.()*]+[*]?;
 
 /** ignore whitespace */
-WS : [ \t] -> skip;
+WS : [ \t\r] -> skip;
 
 

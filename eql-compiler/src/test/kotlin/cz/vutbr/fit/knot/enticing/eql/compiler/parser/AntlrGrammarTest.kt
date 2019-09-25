@@ -1,14 +1,11 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.parser
 
 
-import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import java.io.File
 
-@Disabled
-@Incomplete("no need to test this until the grammar is ready")
 class AntlrGrammarTest {
 
     @Nested
@@ -152,80 +149,28 @@ class AntlrGrammarTest {
     }
 
     @Nested
-    @DisplayName("Meaningful queries testing certain parts of the grammar")
-    inner class MeaningfulQueries {
+    @DisplayName("Queries from files")
+    inner class QueriesFromFiles {
 
         @Test
-        @DisplayName("nertag:(person|artist) < lemma:(influced|impact) | (lemma:paid < lemma:tribute)")
-        fun `Query 1`() {
-            assertParseWithoutErrors("""nertag:(person|artist) < lemma:(influced|impact) | (lemma:paid < lemma:tribute)""")
-
+        fun `valid queries`() {
+            forEachQuery("valid.eql") { assertParseWithoutErrors(it) }
         }
 
         @Test
-        @DisplayName("nertag:person ^ person.birthdate:[1/1/1936..]")
-        fun `Query 2`() {
-            assertParseWithoutErrors("""nertag:person ^ person.birthdate:[1/1/1936..]""")
+        fun `syntactic errors`() {
+            forEachQuery("syntactic_errors.eql") { assertParseWithErrors(it) }
         }
 
-        @Test
-        @DisplayName("nertag:person ^ person.birthdate:[..1/1/1936]")
-        fun `Query 3`() {
-            assertParseWithoutErrors("nertag:person ^ person.birthdate:[..1/1/1936]")
-        }
+        private fun loadFile(fileName: String): File = File(javaClass.classLoader.getResource(fileName)?.file
+                ?: throw IllegalArgumentException("File with name $fileName not found in the resources folder"))
 
-        @Test
-        @DisplayName("""work ^ pos:noun""")
-        fun `Query 4`() {
-            assertParseWithoutErrors("""work ^ pos:noun""")
-        }
-
-        @Test
-        @DisplayName("""john ^ pos:noun ^ nertag:person""")
-        fun `Query 5`() {
-            assertParseWithoutErrors("""john ^ pos:noun ^ nertag:person""")
+        private fun forEachQuery(fileName: String, block: (String) -> Unit) {
+            for (query in loadFile(fileName).readLines()) {
+                if (query.startsWith("#")) continue
+                println("Processing query '$query'")
+                block(query)
+            }
         }
     }
-
-
-    @Nested
-    @DisplayName("Invalid queries")
-    inner class SyntacticErrors {
-        @Test
-        fun `Missing bracket`() {
-            assertParseWithErrors("nertag:person (visited|killed", 1)
-        }
-
-        @Test
-        fun `Double colon`() {
-            assertParseWithErrors("nertag::person (visited|killed)", 1)
-        }
-    }
-
-
-    @Nested
-    @DisplayName("Complex, but meaningless, queries that should be parsed without errors")
-    inner class StressTest {
-        @Test
-        fun `big query 1`() {
-            assertParseWithoutErrors("""(id:ahoj cau) ~ 5 foocko:=foo:bar^(bar.baz:10)^(bar.baz2:al) & (nertag:person (foo baz)) < aaaa ("baz baz bar") - _PAR_ && foocko.name != foo.foo & id.name = bar.bar""")
-        }
-
-        @Test
-        fun `big query 2`() {
-            assertParseWithoutErrors("""nertag:person^(person.name:Jogn) (visited|entered)ahoj && ahoj.cau = cau.ahoj & foo.baz != baz.gaz | !foo.foo != foo.foo""")
-        }
-
-        @Test
-        fun `big query 3`() {
-            assertParseWithoutErrors("""pepa:=(nertag:person | nertag:artist) < (lemma:influence | lemma:impact) < honza:=(nertag:person | nertag:artist) - _SENT_ && pepa.nerid != honza.nerid""")
-        }
-
-        @Test
-        fun `big query 4`() {
-            assertParseWithoutErrors("""(pepa := nertag:person^(birthplace:john)) | "john:=john ferda" &&  pepa.name != john.name""")
-        }
-    }
-
-
 }

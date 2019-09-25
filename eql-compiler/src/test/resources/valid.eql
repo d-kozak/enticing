@@ -1,0 +1,7 @@
+# Valid EQL queries that should be parsed without problems
+hello
+howdy
+nertag:person
+your mum
+New York
+Donald Trump

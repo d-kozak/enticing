@@ -1,0 +1,3 @@
+# Invalid queries that should produce syntactic errors
+nertag:person (visited|killed
+nertag::person (visited|killed)

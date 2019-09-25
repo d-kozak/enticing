@@ -42,7 +42,7 @@ Bonaparte ( visits | explores ) Jaffa - _SENT_
 ```
 Now we are saying that we are looking for documents containing words Bonaparte, Jaffa and either visited or explored, or both. Note that the parenthesis are not necessary in the case. 
 The query ```Bonaparte visites | explores Jaffa ~ _SENT_``` has the same meaning, but the first version might be more explicit. Without the parenthesis it might look like both words on 
-each side are part of the **or**, which is not the case. If we actually wanted that, we can use parenthesis ```(Bonaparte visites) | (explores Jaffa) ~ _SENT_```, but the meaning is different of course.
+each side are part of the **or**, which is not the case. If we actually wanted that, we can use parenthesis ```(Bonaparte visites) | (explores Jaffa) - _SENT_```, but the meaning is different of course.
 
 Let's keep focusing on the verbs a bit longer. There might be documents out there talking about Bonaparte visiting Jaffa, but the form of the word visit might be different. 
 Maybe the documents are written in the past tense. To be able to match documents like that, we can use the **index** operator. So far our query used only the default index, which is _token_. 
