@@ -15,9 +15,7 @@ class EqlCompiler {
                 .also {
                     it.removeErrorListeners()
                     it.addErrorListener(errorListener)
-                }.let {
-                    it.root()
-                }
+                }.root()
         val root = DummyRoot()
         return ParsedQuery(root, errorListener.errors)
     }
