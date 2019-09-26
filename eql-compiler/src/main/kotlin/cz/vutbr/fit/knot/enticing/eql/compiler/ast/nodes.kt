@@ -20,7 +20,7 @@ interface EqlVisitor<T> {
     fun visitBooleanNode(booleanNode: QueryElemNode.BooleanNode): T
     fun visitOrderNode(orderNode: QueryElemNode.OrderNode): T
     fun visitSequenceNode(sequenceNode: QueryElemNode.SequenceNode): T
-    fun visitProximityNode(proximityNote: ProximityNote): T
+    fun visitProximityNode(proximityNode: ProximityNode): T
     fun visitContextNode(contextNode: ContextNode): T
     fun visitGlobalContraintNode(globalConstraintNode: GlobalConstraintNode): T
     fun visitConstraintBooleanExpressionNotNode(notNode: GlobalConstraintNode.BooleanExpressionNode.NotNode): T
@@ -48,7 +48,7 @@ sealed class QueryElemNode : EqlAstNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemAssignNode(this)
     }
 
-    data class SimpleQueryNode(val content: String, val type: SimpleQueryType, override val location: Interval) : QueryElemNode() {
+    data class SimpleQueryNode(val content: String, val type: SimpleQueryType, override val location: Interval, val queryElem: QueryElemNode?) : QueryElemNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitSimpleQueryNode(this)
     }
 
@@ -60,15 +60,15 @@ sealed class QueryElemNode : EqlAstNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitAttributeNode(this)
     }
 
-    data class ParenNode(val query: QueryNode, val proximity: ProximityNote?, val context: ContextNode?, override val location: Interval) : QueryElemNode() {
+    data class ParenNode(val query: QueryNode, val proximity: ProximityNode?, val context: ContextNode?, override val location: Interval) : QueryElemNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitParenNode(this)
     }
 
-    data class BooleanNode(val left: QueryNode, val operator: BooleanOperator, val right: QueryNode, override val location: Interval) : QueryElemNode() {
+    data class BooleanNode(val left: QueryElemNode, val operator: BooleanOperator, val right: QueryElemNode, override val location: Interval) : QueryElemNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitBooleanNode(this)
     }
 
-    data class OrderNode(val left: QueryNode, val right: QueryNode, override val location: Interval) : QueryElemNode() {
+    data class OrderNode(val left: QueryElemNode, val right: QueryElemNode, override val location: Interval) : QueryElemNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitOrderNode(this)
     }
 
@@ -84,10 +84,10 @@ data class ContextNode(val restriction: ContextRestrictionType, override val loc
 sealed class ContextRestrictionType {
     object Paragraph : ContextRestrictionType()
     object Sentence : ContextRestrictionType()
-    data class Query(val query: QueryElemNode)
+    data class Query(val query: QueryElemNode) : ContextRestrictionType()
 }
 
-data class ProximityNote(val distance: Int, override val location: Interval) : EqlAstNode() {
+data class ProximityNode(val distance: String, override val location: Interval) : EqlAstNode() {
     override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitProximityNode(this)
 }
 
@@ -108,7 +108,7 @@ data class GlobalConstraintNode(val expression: BooleanExpressionNode, override 
             override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitConstraintBooleanExpressionOperatorNode(this)
         }
 
-        data class ComparisonNode(val left: ReferenceNode, val right: ReferenceNode, override val location: Interval) : BooleanExpressionNode() {
+        data class ComparisonNode(val left: ReferenceNode, val operator: RelationalOperator, val right: ReferenceNode, override val location: Interval) : BooleanExpressionNode() {
             override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitContraintBooleanExpressionComparisonNode(this)
         }
     }
@@ -131,7 +131,7 @@ enum class SimpleQueryType {
 }
 
 enum class RelationalOperator {
-    EQ, NEQ, LT, LE, GT, GE;
+    EQ, NE, LT, LE, GT, GE;
 }
 
 enum class BooleanOperator {

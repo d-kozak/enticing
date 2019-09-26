@@ -1,23 +1,18 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.parser
 
 import cz.vutbr.fit.knot.enticing.dto.AstNode
-import cz.vutbr.fit.knot.enticing.dto.PureMgj4Node
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompilerException
 import cz.vutbr.fit.knot.enticing.eql.compiler.dto.ParsedQuery
-import org.antlr.v4.runtime.*
+import org.antlr.v4.runtime.BaseErrorListener
+import org.antlr.v4.runtime.RecognitionException
+import org.antlr.v4.runtime.Recognizer
+import org.antlr.v4.runtime.Token
 import kotlin.math.min
 
 class EqlCompiler {
 
     fun parse(input: String): ParsedQuery {
-        val errorListener = ErrorListener()
-        val parseTree = EqlParser(CommonTokenStream(EqlLexer(CharStreams.fromString(input))))
-                .also {
-                    it.removeErrorListeners()
-                    it.addErrorListener(errorListener)
-                }.root()
-        val root = PureMgj4Node(input)
-        return ParsedQuery(root, errorListener.errors)
+        return parseToEqlAst(input)
     }
 
     fun parseOrFail(input: String): AstNode {
