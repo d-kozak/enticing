@@ -22,3 +22,5 @@ john:=person.name:John rupert:=person.name:Rupert && john.age != rupert.age
 1:=person.name:John 2:=person.name:Rupert && 1 != 2
 1:=person.name:John 2:=person.name:Rupert && 1.id != 2.id
 nertag:person ^ person.name:John
+
+1:=person.name:John 2:=person.name:Rupert 3:=location.name:Barcelona && (1.id != 2.id) | !(3.name = 1.name)

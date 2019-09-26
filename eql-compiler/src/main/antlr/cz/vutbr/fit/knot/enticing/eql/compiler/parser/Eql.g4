@@ -9,15 +9,15 @@ root: query (CONSTRAINT_SEPARATOR globalConstraint)? EOF;
 query: queryElem+ context? ;
 
 queryElem:
-    NOT queryElem #not
+    NOT queryElem #notQuery
     | IDENTIFIER COLON EQ queryElem #assign
     |(IDENTIFIER | ANY_TEXT | interval) (EXPONENT queryElem)? #simpleQuery
     | IDENTIFIER COLON queryElem #index
     | IDENTIFIER DOT IDENTIFIER COLON queryElem #attribute
-    | PAREN_OPEN query PAREN_CLOSE (proximity | context)? #paren
-    | queryElem booleanOperator queryElem #boolean
+    | PAREN_OPEN query PAREN_CLOSE (proximity | context)? #parenQuery
+    | queryElem booleanOperator queryElem #booleanQuery
     | queryElem LT queryElem #order
-    | QUOTATION queryElem QUOTATION #sequence // fixme missing '+' iteration?
+    | QUOTATION queryElem+ QUOTATION #sequence
     ;
 
 interval: BRACKET_OPEN (ANY_TEXT|IDENTIFIER) DOUBLE_DOT (ANY_TEXT|IDENTIFIER) BRACKET_CLOSE; // don't forget that it actually has to be a number or date!
@@ -29,9 +29,11 @@ context: MINUS (queryElem | PAR | SENT);
 globalConstraint: booleanExpression;
 
 booleanExpression:
-    NOT? comparison // fixme should be boolean expression? fixme what about rule for just single comparison?
-    | PAREN_OPEN booleanExpression PAREN_CLOSE
-    | comparison booleanOperator comparison; //fixme should be boolean expression again?
+    comparison #simpleComparison
+    | NOT booleanExpression #notExpression
+    | PAREN_OPEN booleanExpression PAREN_CLOSE #parenExpression
+    | booleanExpression booleanOperator booleanExpression #binaryExpression
+    ;
 
 comparison: reference comparisonOperator reference;
 
@@ -70,7 +72,7 @@ QUOTATION: '"';
 
 
 IDENTIFIER: [a-zA-Z0-9][a-zA-Z0-9_]*;
-ANY_TEXT: ~[ \u005B\u005D\t\r&|=<>:.()*^-]+[*]?;
+ANY_TEXT: ~[ "\u005B\u005D\t\r&|=<>:.()*^-]+[*]?;
 
 /** ignore whitespace */
 WS : [ \t\r] -> skip;
