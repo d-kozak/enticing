@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver.controller
 
-import cz.vutbr.fit.knot.enticing.eql.compiler.ast.DummyRoot
+import cz.vutbr.fit.knot.enticing.dto.PureMgj4Node
 import cz.vutbr.fit.knot.enticing.eql.compiler.dto.ParsedQuery
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
 import cz.vutbr.fit.knot.enticing.webserver.service.EqlCompilerService
@@ -42,7 +42,7 @@ internal class EqlCompilerControllerTest(
     @Test
     fun `get calls compiler service`() {
 
-        val dummyDto = ParsedQuery(DummyRoot())
+        val dummyDto = ParsedQuery(PureMgj4Node(" "))
         Mockito.`when`(compilerService.parseQuery("nertag:person (killed|visited)"))
                 .thenReturn(dummyDto)
 

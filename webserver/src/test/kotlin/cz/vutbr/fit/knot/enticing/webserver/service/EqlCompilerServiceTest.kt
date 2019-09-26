@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.service
 
 
-import cz.vutbr.fit.knot.enticing.eql.compiler.ast.DummyRoot
+import cz.vutbr.fit.knot.enticing.dto.PureMgj4Node
 import cz.vutbr.fit.knot.enticing.eql.compiler.dto.ParsedQuery
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.EqlCompiler
 import io.mockk.every
@@ -17,7 +17,7 @@ class EqlCompilerServiceTest {
     @Test
     fun `parseQuery calls eql parser`() {
         val service = EqlCompilerService(parseMock)
-        every { parseMock.parse("foo") } returns ParsedQuery(DummyRoot())
+        every { parseMock.parse("foo") } returns ParsedQuery(PureMgj4Node("foo"))
 
         service.parseQuery("foo")
 

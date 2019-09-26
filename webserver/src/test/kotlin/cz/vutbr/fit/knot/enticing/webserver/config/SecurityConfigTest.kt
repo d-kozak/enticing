@@ -1,11 +1,11 @@
 package cz.vutbr.fit.knot.enticing.webserver.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import cz.vutbr.fit.knot.enticing.dto.PureMgj4Node
 import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.TextMetadata
 import cz.vutbr.fit.knot.enticing.dto.WebServer
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
-import cz.vutbr.fit.knot.enticing.eql.compiler.ast.DummyRoot
 import cz.vutbr.fit.knot.enticing.eql.compiler.dto.ParsedQuery
 import cz.vutbr.fit.knot.enticing.webserver.dto.*
 import cz.vutbr.fit.knot.enticing.webserver.entity.AttributeList
@@ -482,7 +482,7 @@ internal class SecurityConfigTest(
         fun `Parser endpoint is always accessible`() {
             val query = "nertag:person (killed|visited)"
             val encodedQuery = URLEncoder.encode(query, "UTF-8")
-            Mockito.`when`(compilerService.parseQuery(query)).thenReturn(ParsedQuery(DummyRoot()))
+            Mockito.`when`(compilerService.parseQuery(query)).thenReturn(ParsedQuery(PureMgj4Node(query)))
 
             mockMvc.perform(get("$apiBasePath/compiler?query=$encodedQuery"))
                     .andExpect(status().isOk)

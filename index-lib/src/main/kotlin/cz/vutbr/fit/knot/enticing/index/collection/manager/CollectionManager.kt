@@ -28,9 +28,8 @@ class CollectionManager internal constructor(
 
     private val log = LoggerFactory.getLogger(CollectionManager::class.java)
 
-    fun query(_query: SearchQuery, offset: Offset = Offset(0, 0)): IndexServer.CollectionResultList {
-        log.info("Executing query $_query")
-        val query = _query.copyWithAst() // make a local copy because the postprocessing modifies the AST
+    fun query(query: SearchQuery, offset: Offset = Offset(0, 0)): IndexServer.CollectionResultList {
+        log.info("Executing query $query")
         val (documentOffset, resultOffset) = offset
 
         val (resultList, processed) = searchEngine.search(query.query, query.snippetCount, documentOffset - 1)

@@ -1,8 +1,8 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.parser
 
 import cz.vutbr.fit.knot.enticing.dto.AstNode
+import cz.vutbr.fit.knot.enticing.dto.PureMgj4Node
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompilerException
-import cz.vutbr.fit.knot.enticing.eql.compiler.ast.DummyRoot
 import cz.vutbr.fit.knot.enticing.eql.compiler.dto.ParsedQuery
 import org.antlr.v4.runtime.*
 import kotlin.math.min
@@ -16,7 +16,7 @@ class EqlCompiler {
                     it.removeErrorListeners()
                     it.addErrorListener(errorListener)
                 }.root()
-        val root = DummyRoot()
+        val root = PureMgj4Node(input)
         return ParsedQuery(root, errorListener.errors)
     }
 
