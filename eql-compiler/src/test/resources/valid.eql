@@ -13,8 +13,7 @@ location.address:Palackeho "ahoj cau jak se mas"
 person & name
 person name !(age|birthdate)
 
-## the following is invalid (in sequence, all elems should be on the same index, but syntactically correct
-"ahoj lemma:cau"
+
 
 ## Assignments and global constraints
 john:=person.name:John
@@ -28,11 +27,6 @@ john:=person.name:John rupert:=person.name:Rupert && john.age != rupert.age
 one ^ two < three ^ four
 (one ^ two) < (three ^ four)
 
-# this one should be meaningless, right?
-# because how len(two < three) > 1, so how can you align it on one index
-# mg4j does not even parse it, ends up as a syntax error
-one ^ (two < three) ^ four
-
 ## entities and align
 person.name:John ^ lemma:ahoj
 nertag:person ^ person.name:John
@@ -41,3 +35,21 @@ nertag:person ^ person.name:John ^ lemma:ahoj
 pepa:=nertag:person ^ person.name:pepa
 
 1:=person.name:John 2:=person.name:Rupert 3:=location.name:Barcelona && (1.id != 2.id) | !(3.name = 1.name)
+
+(happy < cow - milk) | meat
+(happy < animal.type:cow - milk) | meat
+
+(letter ink) ~ 3
+letter ink
+not_related letter ink ~ 3
+
+## semantic errors
+## the following is invalid (in sequence, all elems should be on the same index, but syntactically correct
+"ahoj lemma:cau"
+
+one two three ~ 5 ~ 5
+
+# how len(two < three) > 1, so how can you align it on one index
+# mg4j does not even parse it, ends up as a syntax error
+one ^ (two < three) ^ four
+

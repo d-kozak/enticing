@@ -22,5 +22,6 @@ internal fun parseWithAntlr(input: String): Pair<EqlParser.RootContext, List<Syn
 internal fun parseToEqlAst(input: String): ParsedQuery {
     val (parseTree, errors) = parseWithAntlr(input)
     val ast = if (errors.isEmpty()) parseTree.accept(EqlAstGeneratingVisitor()) else PureMgj4Node(input)
+
     return ParsedQuery(ast, errors)
 }

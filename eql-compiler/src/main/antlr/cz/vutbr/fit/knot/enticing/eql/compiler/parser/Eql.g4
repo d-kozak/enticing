@@ -6,7 +6,7 @@ grammar Eql;
 
 root: query (CONSTRAINT_SEPARATOR globalConstraint)? EOF;
 
-query: queryElem+ context?;
+query: queryElem+ restrictionType?;
 
 queryElem:
     NOT queryElem #notQuery
@@ -14,18 +14,20 @@ queryElem:
     | IDENTIFIER COLON queryElem #index
     | IDENTIFIER DOT IDENTIFIER COLON queryElem #attribute
     | queryElem EXPONENT queryElem #align
-    | PAREN_OPEN query PAREN_CLOSE (proximity | context)? #parenQuery
+    | PAREN_OPEN query PAREN_CLOSE restrictionType? #parenQuery
     | queryElem booleanOperator queryElem #booleanQuery
     | queryElem LT queryElem #order
     | QUOTATION queryElem+ QUOTATION #sequence
     | IDENTIFIER COLON EQ queryElem #assign
+    | queryElem queryElem restrictionType #restriction
+    ;
+
+restrictionType
+    : SIMILARITY IDENTIFIER #proximity // don't forget that it actually has to be a number!
+    | MINUS (queryElem | PAR | SENT) #context
     ;
 
 interval: BRACKET_OPEN (ANY_TEXT|IDENTIFIER) DOUBLE_DOT (ANY_TEXT|IDENTIFIER) BRACKET_CLOSE; // don't forget that it actually has to be a number or date!
-
-proximity: SIMILARITY IDENTIFIER ; // don't forget that it actually has to be a number!
-
-context: MINUS (queryElem | PAR | SENT);
 
 globalConstraint: booleanExpression;
 

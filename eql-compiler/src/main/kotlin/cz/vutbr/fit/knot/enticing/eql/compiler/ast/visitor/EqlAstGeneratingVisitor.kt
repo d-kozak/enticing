@@ -26,8 +26,15 @@ class EqlAstGeneratingVisitor : EqlVisitor<AstNode> {
         return QueryElemNode.AlignNode(left, right, ctx.location)
     }
 
+    override fun visitRestriction(ctx: EqlParser.RestrictionContext): AstNode {
+        val left = ctx.queryElem(0).accept(this) as QueryElemNode
+        val right = ctx.queryElem(1).accept(this) as QueryElemNode
+        val type = ctx.restrictionType().accept(this) as RestrictionTypeNode
+        return QueryElemNode.RestrictionNode(left, right, type, ctx.location)
+    }
+
     override fun visitProximity(ctx: EqlParser.ProximityContext): AstNode {
-        return ProximityNode(ctx.IDENTIFIER().symbol.text, ctx.location)
+        return RestrictionTypeNode.ProximityNode(ctx.IDENTIFIER().symbol.text, ctx.location)
     }
 
     override fun visitRoot(ctx: EqlParser.RootContext): AstNode {
@@ -38,8 +45,8 @@ class EqlAstGeneratingVisitor : EqlVisitor<AstNode> {
 
     override fun visitQuery(ctx: EqlParser.QueryContext): AstNode {
         val nodes = ctx.queryElem().map { it.accept(this) as QueryElemNode }
-        val context = ctx.context()?.accept(this) as? ContextNode
-        return QueryNode(nodes, context, ctx.location)
+        val type = ctx.restrictionType()?.accept(this) as? RestrictionTypeNode
+        return QueryNode(nodes, type, ctx.location)
     }
 
     override fun visitSequence(ctx: EqlParser.SequenceContext): AstNode {
@@ -49,9 +56,8 @@ class EqlAstGeneratingVisitor : EqlVisitor<AstNode> {
 
     override fun visitParenQuery(ctx: EqlParser.ParenQueryContext): AstNode {
         val query = ctx.query().accept(this) as QueryNode
-        val proximity = ctx.proximity()?.accept(this) as? ProximityNode
-        val context = ctx.context()?.accept(this) as? ContextNode
-        return QueryElemNode.ParenNode(query, proximity, context, ctx.location)
+        val type = ctx.restrictionType()?.accept(this) as? RestrictionTypeNode
+        return QueryElemNode.ParenNode(query, type, ctx.location)
     }
 
     override fun visitNotQuery(ctx: EqlParser.NotQueryContext): AstNode {
@@ -99,12 +105,12 @@ class EqlAstGeneratingVisitor : EqlVisitor<AstNode> {
 
     override fun visitSimpleQuery(ctx: EqlParser.SimpleQueryContext): AstNode {
         return when {
-            ctx.IDENTIFIER() != null -> QueryElemNode.SimpleQueryNode(ctx.IDENTIFIER().text, SimpleQueryType.STRING, ctx.location)
-            ctx.ANY_TEXT() != null -> QueryElemNode.SimpleQueryNode(ctx.ANY_TEXT().text, SimpleQueryType.STRING, ctx.location)
+            ctx.IDENTIFIER() != null -> QueryElemNode.SimpleNode(ctx.IDENTIFIER().text, SimpleQueryType.STRING, ctx.location)
+            ctx.ANY_TEXT() != null -> QueryElemNode.SimpleNode(ctx.ANY_TEXT().text, SimpleQueryType.STRING, ctx.location)
             ctx.interval() != null -> {
                 val data = ctx.interval().text
                 val intervalType = if (intIntervalRegex.matches(data)) SimpleQueryType.INT_INTERVAL else SimpleQueryType.DATE_INTERVAL
-                QueryElemNode.SimpleQueryNode(data, intervalType, ctx.location)
+                QueryElemNode.SimpleNode(data, intervalType, ctx.location)
             }
             else -> fail("should never be called")
         }
@@ -124,7 +130,7 @@ class EqlAstGeneratingVisitor : EqlVisitor<AstNode> {
             ctx.SENT() != null -> ContextRestrictionType.Sentence
             else -> fail("should never be called")
         }
-        return ContextNode(restrictionType, ctx.location)
+        return RestrictionTypeNode.ContextNode(restrictionType, ctx.location)
     }
 
     override fun visitGlobalConstraint(ctx: EqlParser.GlobalConstraintContext): AstNode {
