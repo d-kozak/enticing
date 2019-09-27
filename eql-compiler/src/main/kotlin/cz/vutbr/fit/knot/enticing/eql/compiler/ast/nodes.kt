@@ -9,28 +9,28 @@ abstract class EqlAstNode : AstNode {
 }
 
 interface EqlVisitor<T> {
-    fun visitRootNode(rootNode: RootNode): T
-    fun visitQueryElemNotNode(notNode: QueryElemNode.NotNode): T
-    fun visitQueryElemAssignNode(assignNode: QueryElemNode.AssignNode): T
-    fun visitQueryElemRestrinctionNode(restrictionNode: QueryElemNode.RestrictionNode): T
-    fun visitQueryElemSimpleNode(simpleNode: QueryElemNode.SimpleNode): T
-    fun visitQueryElemIndexNode(indexNode: QueryElemNode.IndexNode): T
-    fun visitQueryElemAttributeNode(attributeNode: QueryElemNode.AttributeNode): T
-    fun visitQueryNode(queryNode: QueryNode): T
-    fun visitQueryElemParenNode(parenNode: QueryElemNode.ParenNode): T
-    fun visitQueryElemBooleanNode(booleanNode: QueryElemNode.BooleanNode): T
-    fun visitQueryElemOrderNode(orderNode: QueryElemNode.OrderNode): T
-    fun visitQueryElemSequenceNode(sequenceNode: QueryElemNode.SequenceNode): T
-    fun visitGlobalContraintNode(globalConstraintNode: GlobalConstraintNode): T
-    fun visitConstraintBooleanExpressionNotNode(notNode: GlobalConstraintNode.BooleanExpressionNode.NotNode): T
-    fun visitConstraintBooleanExpressionParenNode(parenNode: GlobalConstraintNode.BooleanExpressionNode.ParenNode): T
-    fun visitConstraintBooleanExpressionOperatorNode(operatorNode: GlobalConstraintNode.BooleanExpressionNode.OperatorNode): T
-    fun visitConstraintBooleanExpressionComparisonNode(comparisonNode: GlobalConstraintNode.BooleanExpressionNode.ComparisonNode): T
-    fun visitSimpleReferenceNode(simpleReference: ReferenceNode.SimpleReferenceNode): T
-    fun visitNestedReferenceNode(nestedReference: ReferenceNode.NestedReferenceNode): T
-    fun visitQueryElemAlignNode(alignNode: QueryElemNode.AlignNode): T
-    fun visitRestrictionProximityNode(proximityNode: RestrictionTypeNode.ProximityNode): T
-    fun visitRestrictionContextNode(contextNode: RestrictionTypeNode.ContextNode): T
+    fun visitRootNode(node: RootNode): T
+    fun visitQueryElemNotNode(node: QueryElemNode.NotNode): T
+    fun visitQueryElemAssignNode(node: QueryElemNode.AssignNode): T
+    fun visitQueryElemRestrinctionNode(node: QueryElemNode.RestrictionNode): T
+    fun visitQueryElemSimpleNode(node: QueryElemNode.SimpleNode): T
+    fun visitQueryElemIndexNode(node: QueryElemNode.IndexNode): T
+    fun visitQueryElemAttributeNode(node: QueryElemNode.AttributeNode): T
+    fun visitQueryNode(node: QueryNode): T
+    fun visitQueryElemParenNode(node: QueryElemNode.ParenNode): T
+    fun visitQueryElemBooleanNode(node: QueryElemNode.BooleanNode): T
+    fun visitQueryElemOrderNode(node: QueryElemNode.OrderNode): T
+    fun visitQueryElemSequenceNode(node: QueryElemNode.SequenceNode): T
+    fun visitGlobalContraintNode(node: GlobalConstraintNode): T
+    fun visitConstraintBooleanExpressionNotNode(node: GlobalConstraintNode.BooleanExpressionNode.NotNode): T
+    fun visitConstraintBooleanExpressionParenNode(node: GlobalConstraintNode.BooleanExpressionNode.ParenNode): T
+    fun visitConstraintBooleanExpressionOperatorNode(node: GlobalConstraintNode.BooleanExpressionNode.OperatorNode): T
+    fun visitConstraintBooleanExpressionComparisonNode(node: GlobalConstraintNode.BooleanExpressionNode.ComparisonNode): T
+    fun visitSimpleReferenceNode(node: ReferenceNode.SimpleReferenceNode): T
+    fun visitNestedReferenceNode(node: ReferenceNode.NestedReferenceNode): T
+    fun visitQueryElemAlignNode(node: QueryElemNode.AlignNode): T
+    fun visitRestrictionProximityNode(node: RestrictionTypeNode.ProximityNode): T
+    fun visitRestrictionContextNode(node: RestrictionTypeNode.ContextNode): T
 
 }
 

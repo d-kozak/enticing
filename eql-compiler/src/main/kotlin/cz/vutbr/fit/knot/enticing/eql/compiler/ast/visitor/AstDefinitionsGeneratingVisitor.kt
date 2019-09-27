@@ -13,123 +13,123 @@ fun EqlAstNode.toKotlinDef() = this.accept(AstDefinitionsGeneratingVisitor())
 
 class AstDefinitionsGeneratingVisitor : EqlVisitor<String> {
 
-    override fun visitRootNode(rootNode: RootNode): String {
-        val query = rootNode.query.accept(this)
-        val constraint = rootNode.constraint?.accept(this) ?: "null"
-        return "RootNode($query,$constraint,${rootNode.location.toKotlinDef()})"
+    override fun visitRootNode(node: RootNode): String {
+        val query = node.query.accept(this)
+        val constraint = node.constraint?.accept(this) ?: "null"
+        return "RootNode($query,$constraint,${node.location.toKotlinDef()})"
     }
 
-    override fun visitQueryElemNotNode(notNode: QueryElemNode.NotNode): String {
-        val elem = notNode.elem.accept(this)
-        return "QueryElemNode.NotNode($elem,${notNode.location.toKotlinDef()})"
+    override fun visitQueryElemNotNode(node: QueryElemNode.NotNode): String {
+        val elem = node.elem.accept(this)
+        return "QueryElemNode.NotNode($elem,${node.location.toKotlinDef()})"
     }
 
-    override fun visitQueryElemAssignNode(assignNode: QueryElemNode.AssignNode): String {
-        val elem = assignNode.elem.accept(this)
-        return """"QueryElemNode.AssignNode("${assignNode.identifier}",$elem,${assignNode.location.toKotlinDef()})"""
+    override fun visitQueryElemAssignNode(node: QueryElemNode.AssignNode): String {
+        val elem = node.elem.accept(this)
+        return """"QueryElemNode.AssignNode("${node.identifier}",$elem,${node.location.toKotlinDef()})"""
     }
 
-    override fun visitQueryElemAlignNode(alignNode: QueryElemNode.AlignNode): String {
-        val left = alignNode.left.accept(this)
-        val right = alignNode.right.accept(this)
-        return """QueryElemNode.AlignNode($left,$right,${alignNode.location.toKotlinDef()})"""
+    override fun visitQueryElemAlignNode(node: QueryElemNode.AlignNode): String {
+        val left = node.left.accept(this)
+        val right = node.right.accept(this)
+        return """QueryElemNode.AlignNode($left,$right,${node.location.toKotlinDef()})"""
     }
 
-    override fun visitQueryElemSimpleNode(simpleNode: QueryElemNode.SimpleNode): String {
-        return """QueryElemNode.SimpleNode("${simpleNode.content}",SimpleQueryType.${simpleNode.type},${simpleNode.location.toKotlinDef()})"""
+    override fun visitQueryElemSimpleNode(node: QueryElemNode.SimpleNode): String {
+        return """QueryElemNode.SimpleNode("${node.content}",SimpleQueryType.${node.type},${node.location.toKotlinDef()})"""
     }
 
-    override fun visitQueryElemIndexNode(indexNode: QueryElemNode.IndexNode): String {
-        val elem = indexNode.elem.accept(this)
-        return """QueryElemNode.IndexNode("${indexNode.index}",$elem,${indexNode.location.toKotlinDef()})"""
+    override fun visitQueryElemIndexNode(node: QueryElemNode.IndexNode): String {
+        val elem = node.elem.accept(this)
+        return """QueryElemNode.IndexNode("${node.index}",$elem,${node.location.toKotlinDef()})"""
     }
 
-    override fun visitQueryElemAttributeNode(attributeNode: QueryElemNode.AttributeNode): String {
-        val elem = attributeNode.elem.accept(this)
-        return """QueryElemNode.AttributeNode("${attributeNode.entity}","${attributeNode.attribute}",$elem,${attributeNode.location.toKotlinDef()})"""
+    override fun visitQueryElemAttributeNode(node: QueryElemNode.AttributeNode): String {
+        val elem = node.elem.accept(this)
+        return """QueryElemNode.AttributeNode("${node.entity}","${node.attribute}",$elem,${node.location.toKotlinDef()})"""
     }
 
-    override fun visitQueryNode(queryNode: QueryNode): String {
-        val query = queryNode.query.joinToString(",") { it.accept(this) }
-        val context = queryNode.restriction?.accept(this) ?: "null"
-        return """QueryNode(listOf($query),$context,${queryNode.location.toKotlinDef()})"""
+    override fun visitQueryNode(node: QueryNode): String {
+        val query = node.query.joinToString(",") { it.accept(this) }
+        val context = node.restriction?.accept(this) ?: "null"
+        return """QueryNode(listOf($query),$context,${node.location.toKotlinDef()})"""
     }
 
-    override fun visitQueryElemParenNode(parenNode: QueryElemNode.ParenNode): String {
-        val query = parenNode.query.accept(this)
-        val restriction = parenNode.restriction?.accept(this) ?: "null"
-        return """QueryElemNode.ParenNode($query,$restriction,${parenNode.location.toKotlinDef()})"""
+    override fun visitQueryElemParenNode(node: QueryElemNode.ParenNode): String {
+        val query = node.query.accept(this)
+        val restriction = node.restriction?.accept(this) ?: "null"
+        return """QueryElemNode.ParenNode($query,$restriction,${node.location.toKotlinDef()})"""
     }
 
-    override fun visitQueryElemBooleanNode(booleanNode: QueryElemNode.BooleanNode): String {
-        val left = booleanNode.left.accept(this)
-        val right = booleanNode.right.accept(this)
-        return """QueryElemNode.BooleanNode($left,BooleanOperator.${booleanNode.operator},$right,${booleanNode.location.toKotlinDef()})"""
+    override fun visitQueryElemBooleanNode(node: QueryElemNode.BooleanNode): String {
+        val left = node.left.accept(this)
+        val right = node.right.accept(this)
+        return """QueryElemNode.BooleanNode($left,BooleanOperator.${node.operator},$right,${node.location.toKotlinDef()})"""
     }
 
-    override fun visitQueryElemOrderNode(orderNode: QueryElemNode.OrderNode): String {
-        val left = orderNode.left.accept(this)
-        val right = orderNode.right.accept(this)
-        return "QueryElemNode.OrderNode($left,$right,${orderNode.location.toKotlinDef()})"
+    override fun visitQueryElemOrderNode(node: QueryElemNode.OrderNode): String {
+        val left = node.left.accept(this)
+        val right = node.right.accept(this)
+        return "QueryElemNode.OrderNode($left,$right,${node.location.toKotlinDef()})"
     }
 
-    override fun visitQueryElemSequenceNode(sequenceNode: QueryElemNode.SequenceNode): String {
-        val elems = sequenceNode.elems.joinToString(",") { it.accept(this) }
-        return "QueryElemNode.SequenceNode(listOf($elems),${sequenceNode.location.toKotlinDef()})"
+    override fun visitQueryElemSequenceNode(node: QueryElemNode.SequenceNode): String {
+        val elems = node.elems.joinToString(",") { it.accept(this) }
+        return "QueryElemNode.SequenceNode(listOf($elems),${node.location.toKotlinDef()})"
     }
 
-    override fun visitRestrictionProximityNode(proximityNode: RestrictionTypeNode.ProximityNode): String {
-        return """RestrictionTypeNode.ProximityNode("${proximityNode.distance}",${proximityNode.location.toKotlinDef()})"""
+    override fun visitRestrictionProximityNode(node: RestrictionTypeNode.ProximityNode): String {
+        return """RestrictionTypeNode.ProximityNode("${node.distance}",${node.location.toKotlinDef()})"""
     }
 
-    override fun visitRestrictionContextNode(contextNode: RestrictionTypeNode.ContextNode): String {
-        val restriction = when (contextNode.restriction) {
+    override fun visitRestrictionContextNode(node: RestrictionTypeNode.ContextNode): String {
+        val restriction = when (node.restriction) {
             is ContextRestrictionType.Paragraph -> "ContextRestrictionType.Paragraph"
             is ContextRestrictionType.Sentence -> "ContextRestrictionType.Sentence"
-            is ContextRestrictionType.Query -> "ContextRestrictionType.Query(${contextNode.restriction.query.accept(this)})"
+            is ContextRestrictionType.Query -> "ContextRestrictionType.Query(${node.restriction.query.accept(this)})"
         }
-        return "RestrictionTypeNode.ContextNode($restriction,${contextNode.location.toKotlinDef()})"
+        return "RestrictionTypeNode.ContextNode($restriction,${node.location.toKotlinDef()})"
     }
 
-    override fun visitQueryElemRestrinctionNode(restrictionNode: QueryElemNode.RestrictionNode): String {
-        val left = restrictionNode.left.accept(this)
-        val right = restrictionNode.right.accept(this)
-        val type = restrictionNode.type.accept(this)
-        return """QueryElemNode.RestrictionNode($left,$right,$type,${restrictionNode.location.toKotlinDef()})"""
+    override fun visitQueryElemRestrinctionNode(node: QueryElemNode.RestrictionNode): String {
+        val left = node.left.accept(this)
+        val right = node.right.accept(this)
+        val type = node.type.accept(this)
+        return """QueryElemNode.RestrictionNode($left,$right,$type,${node.location.toKotlinDef()})"""
     }
 
-    override fun visitGlobalContraintNode(globalConstraintNode: GlobalConstraintNode): String {
-        val expression = globalConstraintNode.expression.accept(this)
-        return """GlobalConstraintNode($expression,${globalConstraintNode.location.toKotlinDef()})"""
+    override fun visitGlobalContraintNode(node: GlobalConstraintNode): String {
+        val expression = node.expression.accept(this)
+        return """GlobalConstraintNode($expression,${node.location.toKotlinDef()})"""
     }
 
-    override fun visitConstraintBooleanExpressionNotNode(notNode: GlobalConstraintNode.BooleanExpressionNode.NotNode): String {
-        val elem = notNode.elem.accept(this)
-        return """GlobalConstraintNode.BooleanExpressionNode.NotNode($elem,${notNode.location.toKotlinDef()})"""
+    override fun visitConstraintBooleanExpressionNotNode(node: GlobalConstraintNode.BooleanExpressionNode.NotNode): String {
+        val elem = node.elem.accept(this)
+        return """GlobalConstraintNode.BooleanExpressionNode.NotNode($elem,${node.location.toKotlinDef()})"""
     }
 
-    override fun visitConstraintBooleanExpressionParenNode(parenNode: GlobalConstraintNode.BooleanExpressionNode.ParenNode): String {
-        val elem = parenNode.expression.accept(this)
-        return """GlobalConstraintNode.BooleanExpressionNode.ParenNode($elem,${parenNode.location.toKotlinDef()})"""
+    override fun visitConstraintBooleanExpressionParenNode(node: GlobalConstraintNode.BooleanExpressionNode.ParenNode): String {
+        val elem = node.expression.accept(this)
+        return """GlobalConstraintNode.BooleanExpressionNode.ParenNode($elem,${node.location.toKotlinDef()})"""
     }
 
-    override fun visitConstraintBooleanExpressionOperatorNode(operatorNode: GlobalConstraintNode.BooleanExpressionNode.OperatorNode): String {
-        val left = operatorNode.left.accept(this)
-        val right = operatorNode.right.accept(this)
-        return """GlobalConstraintNode.BooleanExpressionNode.OperatorNode($left,BooleanOperator.${operatorNode.operator},$right,${operatorNode.location.toKotlinDef()})"""
+    override fun visitConstraintBooleanExpressionOperatorNode(node: GlobalConstraintNode.BooleanExpressionNode.OperatorNode): String {
+        val left = node.left.accept(this)
+        val right = node.right.accept(this)
+        return """GlobalConstraintNode.BooleanExpressionNode.OperatorNode($left,BooleanOperator.${node.operator},$right,${node.location.toKotlinDef()})"""
     }
 
-    override fun visitConstraintBooleanExpressionComparisonNode(comparisonNode: GlobalConstraintNode.BooleanExpressionNode.ComparisonNode): String {
-        val left = comparisonNode.left.accept(this)
-        val right = comparisonNode.right.accept(this)
-        return """GlobalConstraintNode.BooleanExpressionNode.ComparisonNode($left,RelationalOperator.${comparisonNode.operator},$right,${comparisonNode.location.toKotlinDef()})"""
+    override fun visitConstraintBooleanExpressionComparisonNode(node: GlobalConstraintNode.BooleanExpressionNode.ComparisonNode): String {
+        val left = node.left.accept(this)
+        val right = node.right.accept(this)
+        return """GlobalConstraintNode.BooleanExpressionNode.ComparisonNode($left,RelationalOperator.${node.operator},$right,${node.location.toKotlinDef()})"""
     }
 
-    override fun visitSimpleReferenceNode(simpleReference: ReferenceNode.SimpleReferenceNode): String {
-        return """ReferenceNode.SimpleReferenceNode("${simpleReference.identifier}",${simpleReference.location.toKotlinDef()})"""
+    override fun visitSimpleReferenceNode(node: ReferenceNode.SimpleReferenceNode): String {
+        return """ReferenceNode.SimpleReferenceNode("${node.identifier}",${node.location.toKotlinDef()})"""
     }
 
-    override fun visitNestedReferenceNode(nestedReference: ReferenceNode.NestedReferenceNode): String {
-        return """ReferenceNode.NestedReferenceNode("${nestedReference.identifier}","${nestedReference.attribute}",${nestedReference.location.toKotlinDef()})"""
+    override fun visitNestedReferenceNode(node: ReferenceNode.NestedReferenceNode): String {
+        return """ReferenceNode.NestedReferenceNode("${node.identifier}","${node.attribute}",${node.location.toKotlinDef()})"""
     }
 }
