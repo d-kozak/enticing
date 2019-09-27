@@ -26,9 +26,10 @@ interface EqlVisitor<T> {
     fun visitConstraintBooleanExpressionNotNode(notNode: GlobalConstraintNode.BooleanExpressionNode.NotNode): T
     fun visitConstraintBooleanExpressionParenNode(parenNode: GlobalConstraintNode.BooleanExpressionNode.ParenNode): T
     fun visitConstraintBooleanExpressionOperatorNode(operatorNode: GlobalConstraintNode.BooleanExpressionNode.OperatorNode): T
-    fun visitContraintBooleanExpressionComparisonNode(comparisonNode: GlobalConstraintNode.BooleanExpressionNode.ComparisonNode): T
+    fun visitConstraintBooleanExpressionComparisonNode(comparisonNode: GlobalConstraintNode.BooleanExpressionNode.ComparisonNode): T
     fun visitSimpleReferenceNode(simpleReference: ReferenceNode.SimpleReferenceNode): T
     fun visitNestedReferenceNode(nestedReference: ReferenceNode.NestedReferenceNode): T
+    fun visitQueryElemAlignNode(alignNode: QueryElemNode.AlignNode): T
 }
 
 data class RootNode(val query: QueryNode, val constraint: GlobalConstraintNode?, override val location: Interval) : EqlAstNode() {
@@ -44,11 +45,15 @@ sealed class QueryElemNode : EqlAstNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemNotNode(this)
     }
 
+    data class AlignNode(val left: QueryElemNode, val right: QueryElemNode, override val location: Interval) : QueryElemNode() {
+        override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemAlignNode(this)
+    }
+
     data class AssignNode(val identifier: String, val elem: QueryElemNode, override val location: Interval) : QueryElemNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemAssignNode(this)
     }
 
-    data class SimpleQueryNode(val content: String, val type: SimpleQueryType, override val location: Interval, val queryElem: QueryElemNode?) : QueryElemNode() {
+    data class SimpleQueryNode(val content: String, val type: SimpleQueryType, override val location: Interval) : QueryElemNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitSimpleQueryNode(this)
     }
 
@@ -109,7 +114,7 @@ data class GlobalConstraintNode(val expression: BooleanExpressionNode, override 
         }
 
         data class ComparisonNode(val left: ReferenceNode, val operator: RelationalOperator, val right: ReferenceNode, override val location: Interval) : BooleanExpressionNode() {
-            override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitContraintBooleanExpressionComparisonNode(this)
+            override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitConstraintBooleanExpressionComparisonNode(this)
         }
     }
 }

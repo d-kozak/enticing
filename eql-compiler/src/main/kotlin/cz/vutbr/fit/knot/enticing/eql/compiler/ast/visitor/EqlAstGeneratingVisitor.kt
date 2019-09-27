@@ -20,6 +20,12 @@ class EqlAstGeneratingVisitor : EqlVisitor<AstNode> {
 
     override fun visit(tree: ParseTree): AstNode = tree.accept(this)
 
+    override fun visitAlign(ctx: EqlParser.AlignContext): AstNode {
+        val left = ctx.queryElem(0).accept(this) as QueryElemNode
+        val right = ctx.queryElem(1).accept(this) as QueryElemNode
+        return QueryElemNode.AlignNode(left, right, ctx.location)
+    }
+
     override fun visitProximity(ctx: EqlParser.ProximityContext): AstNode {
         return ProximityNode(ctx.IDENTIFIER().symbol.text, ctx.location)
     }
@@ -92,18 +98,18 @@ class EqlAstGeneratingVisitor : EqlVisitor<AstNode> {
     private val intIntervalRegex = """\[\s*\d+\s*\.\.\s*\d+\s*]""".toRegex()
 
     override fun visitSimpleQuery(ctx: EqlParser.SimpleQueryContext): AstNode {
-        val queryElem = ctx.queryElem()?.accept(this) as? QueryElemNode
         return when {
-            ctx.IDENTIFIER() != null -> QueryElemNode.SimpleQueryNode(ctx.IDENTIFIER().text, SimpleQueryType.STRING, ctx.location, queryElem)
-            ctx.ANY_TEXT() != null -> QueryElemNode.SimpleQueryNode(ctx.ANY_TEXT().text, SimpleQueryType.STRING, ctx.location, queryElem)
+            ctx.IDENTIFIER() != null -> QueryElemNode.SimpleQueryNode(ctx.IDENTIFIER().text, SimpleQueryType.STRING, ctx.location)
+            ctx.ANY_TEXT() != null -> QueryElemNode.SimpleQueryNode(ctx.ANY_TEXT().text, SimpleQueryType.STRING, ctx.location)
             ctx.interval() != null -> {
                 val data = ctx.interval().text
                 val intervalType = if (intIntervalRegex.matches(data)) SimpleQueryType.INT_INTERVAL else SimpleQueryType.DATE_INTERVAL
-                QueryElemNode.SimpleQueryNode(data, intervalType, ctx.location, queryElem)
+                QueryElemNode.SimpleQueryNode(data, intervalType, ctx.location)
             }
             else -> fail("should never be called")
         }
     }
+
 
     override fun visitOrder(ctx: EqlParser.OrderContext): AstNode {
         val left = ctx.queryElem(0).accept(this) as QueryElemNode

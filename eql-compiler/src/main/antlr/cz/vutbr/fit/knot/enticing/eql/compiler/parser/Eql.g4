@@ -6,18 +6,19 @@ grammar Eql;
 
 root: query (CONSTRAINT_SEPARATOR globalConstraint)? EOF;
 
-query: queryElem+ context? ;
+query: queryElem+ context?;
 
 queryElem:
     NOT queryElem #notQuery
-    | IDENTIFIER COLON EQ queryElem #assign
-    |(IDENTIFIER | ANY_TEXT | interval) (EXPONENT queryElem)? #simpleQuery
+    |(IDENTIFIER | ANY_TEXT | interval) #simpleQuery
     | IDENTIFIER COLON queryElem #index
     | IDENTIFIER DOT IDENTIFIER COLON queryElem #attribute
+    | queryElem EXPONENT queryElem #align
     | PAREN_OPEN query PAREN_CLOSE (proximity | context)? #parenQuery
     | queryElem booleanOperator queryElem #booleanQuery
     | queryElem LT queryElem #order
     | QUOTATION queryElem+ QUOTATION #sequence
+    | IDENTIFIER COLON EQ queryElem #assign
     ;
 
 interval: BRACKET_OPEN (ANY_TEXT|IDENTIFIER) DOUBLE_DOT (ANY_TEXT|IDENTIFIER) BRACKET_CLOSE; // don't forget that it actually has to be a number or date!
@@ -38,9 +39,6 @@ booleanExpression:
 comparison: reference comparisonOperator reference;
 
 reference: IDENTIFIER (DOT IDENTIFIER)?;
-
-
-
 
 booleanOperator: AND | OR ;
 comparisonOperator: EQ | NE | GT |  GE | LT | LE ;
