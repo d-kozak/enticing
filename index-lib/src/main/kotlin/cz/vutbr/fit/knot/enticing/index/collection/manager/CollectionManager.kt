@@ -7,7 +7,7 @@ import cz.vutbr.fit.knot.enticing.dto.SnippetExtension
 import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.format.result.emptySnippet
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
-import cz.vutbr.fit.knot.enticing.eql.compiler.parser.EqlCompiler
+import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.index.boundary.MatchInfo
 import cz.vutbr.fit.knot.enticing.index.boundary.PostProcessor
 import cz.vutbr.fit.knot.enticing.index.boundary.ResultCreator

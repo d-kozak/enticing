@@ -2,7 +2,7 @@ package cz.vutbr.fit.knot.enticing.index.mg4j
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CollectionConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
-import cz.vutbr.fit.knot.enticing.eql.compiler.parser.EqlCompiler
+import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.index.collection.manager.CollectionManager
 import cz.vutbr.fit.knot.enticing.index.collection.manager.format.result.EqlResultCreator
 import cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess.EqlPostProcessor
@@ -22,7 +22,7 @@ fun initMg4jCollectionManager(corpusConfiguration: CorpusConfiguration, collecti
     val engine = initMg4jQueryEngine(collectionConfig, corpusConfiguration)
 
     val mg4jSearchEngine = Mg4jSearchEngine(collection, engine)
-    return CollectionManager(collectionConfig.name, mg4jSearchEngine, EqlPostProcessor(), EqlResultCreator(corpusConfiguration), EqlCompiler())
+    return CollectionManager(collectionConfig.name, mg4jSearchEngine, EqlPostProcessor(), EqlResultCreator(corpusConfiguration), EqlCompiler(corpusConfiguration))
 }
 
 private fun initMg4jQueryEngine(collectionConfig: CollectionConfiguration, corpusConfiguration: CorpusConfiguration): QueryEngine {

@@ -3,7 +3,7 @@ package cz.vutbr.fit.knot.enticing.webserver.service
 
 import cz.vutbr.fit.knot.enticing.dto.PureMgj4Node
 import cz.vutbr.fit.knot.enticing.eql.compiler.dto.ParsedQuery
-import cz.vutbr.fit.knot.enticing.eql.compiler.parser.EqlCompiler
+import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

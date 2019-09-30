@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver.service
 
-import cz.vutbr.fit.knot.enticing.eql.compiler.parser.EqlCompiler
+import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import org.springframework.stereotype.Service
 
 @Service

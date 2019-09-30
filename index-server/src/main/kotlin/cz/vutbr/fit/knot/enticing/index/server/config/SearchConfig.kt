@@ -5,6 +5,7 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexClientConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.collection
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
 import cz.vutbr.fit.knot.enticing.dto.utils.toDto
+import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.index.collection.manager.CollectionManager
 import cz.vutbr.fit.knot.enticing.index.mg4j.initMg4jCollectionManager
 import org.slf4j.Logger
@@ -26,7 +27,6 @@ class SearchConfig(
     private val log: Logger = LoggerFactory.getLogger(SearchConfig::class.java)
 
     @Bean
-    @Incomplete("add support for tweaking the configuration via commandline arguments")
     fun indexClientConfig(): IndexClientConfig {
         log.info("Loading configuration from $configFile")
         val config = executeScript<IndexClientConfig>(configFile)
@@ -39,6 +39,9 @@ class SearchConfig(
         }
         return config
     }
+
+    @Bean
+    fun compiler(config: IndexClientConfig) = EqlCompiler(config.corpusConfiguration)
 
     /**
      * Creates SearchExecutors for all collections in the config

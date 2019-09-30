@@ -64,6 +64,9 @@ sealed class QueryElemNode : EqlAstNode() {
     }
 
     data class AttributeNode(val entity: String, val attribute: String, val elem: QueryElemNode, override val location: Interval) : QueryElemNode() {
+
+        lateinit var correspondingIndex:String
+
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemAttributeNode(this)
     }
 
