@@ -32,7 +32,7 @@ class CollectionManager internal constructor(
         log.info("Executing query $query")
         val (documentOffset, resultOffset) = offset
 
-        val (resultList, processed) = searchEngine.search(query.query, query.snippetCount, documentOffset - 1)
+        val (resultList, processed) = searchEngine.search(query.eqlAst.toMgj4Query(), query.snippetCount, documentOffset - 1)
 
         val matched = mutableListOf<IndexServer.SearchResult>()
         for ((i, result) in resultList.withIndex()) {

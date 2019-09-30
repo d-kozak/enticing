@@ -26,8 +26,11 @@ class EqlCompiler(corpusConfiguration: CorpusConfiguration) {
     }
 
     fun parseOrFail(input: String): AstNode {
-        val (ast, errors) = parse(input)
+        val (parseTree, errors) = parseWithAntlr(input)
         if (errors.isNotEmpty()) throw EqlCompilerException(errors.toString())
+        val ast = parseTree.accept(EqlAstGeneratingVisitor())
+        val semanticErrors = analyzer.performAnalysis(ast as EqlAstNode)
+        if (semanticErrors.isNotEmpty()) throw EqlCompilerException(errors.toString())
         return ast
     }
 
