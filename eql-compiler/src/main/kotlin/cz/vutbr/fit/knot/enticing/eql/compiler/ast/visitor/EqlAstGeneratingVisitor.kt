@@ -14,7 +14,7 @@ import org.antlr.v4.runtime.tree.TerminalNode
 val ParserRuleContext.location: Interval
     get() = Interval.valueOf(this.start.startIndex, this.stop.stopIndex)
 
-private fun fail(message: String): Nothing = throw IllegalStateException(message)
+internal fun fail(message: String = "Should never be called"): Nothing = throw IllegalStateException(message)
 
 class EqlAstGeneratingVisitor : EqlVisitor<AstNode> {
 

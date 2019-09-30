@@ -10,7 +10,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-private val config = corpusConfig("CC") {
+internal val config = corpusConfig("CC") {
     indexes {
         "position" whichIs "Position of the word in the document"
         "token" whichIs "Original word in the document"

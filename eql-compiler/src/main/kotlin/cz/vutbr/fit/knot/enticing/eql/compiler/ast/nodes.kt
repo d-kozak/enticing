@@ -2,10 +2,12 @@ package cz.vutbr.fit.knot.enticing.eql.compiler.ast
 
 import cz.vutbr.fit.knot.enticing.dto.AstNode
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor.Mgj4QueryGeneratingVisitor
 
 abstract class EqlAstNode : AstNode {
     abstract val location: Interval
     abstract fun <T> accept(visitor: EqlVisitor<T>): T
+    override fun toMgj4Query(): String = this.accept(Mgj4QueryGeneratingVisitor())
 }
 
 interface EqlVisitor<T> {
@@ -65,7 +67,7 @@ sealed class QueryElemNode : EqlAstNode() {
 
     data class AttributeNode(val entity: String, val attribute: String, val elem: QueryElemNode, override val location: Interval) : QueryElemNode() {
 
-        lateinit var correspondingIndex:String
+        lateinit var correspondingIndex: String
 
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemAttributeNode(this)
     }
@@ -150,8 +152,8 @@ enum class RelationalOperator {
     EQ, NE, LT, LE, GT, GE;
 }
 
-enum class BooleanOperator {
-    AND, OR;
+enum class BooleanOperator(val mg4jValue: String) {
+    AND("&"), OR("|")
 }
 
 
