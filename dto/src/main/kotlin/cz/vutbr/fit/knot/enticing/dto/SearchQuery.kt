@@ -55,7 +55,8 @@ data class SearchQuery(
         override val defaultIndex: String = Defaults.defaultIndex
 ) : GeneralFormatInfo, Query<SearchQuery> {
     override fun updateSnippetCount(newSnippetCount: Int): SearchQuery = copy(snippetCount = newSnippetCount).also {
-        it.eqlAst = this.eqlAst
+        if (this::eqlAst.isInitialized)
+            it.eqlAst = this.eqlAst
     }
 
     @JsonIgnore
