@@ -19,6 +19,10 @@ import {parseSearchResultRequest} from "../../reducers/SearchResultReducer";
 const styles = createStyles({
     root: {
         margin: '0px'
+    },
+    text: {
+        flex: '1',
+        margin: '5px 0px'
     }
 });
 
@@ -43,23 +47,12 @@ const MinimizedSnippetView = (props: MinimizedSnippetViewEnhancedProps) => {
         return <p>Corpus format not loaded</p>;
     }
 
-    return <Grid container justify="center" direction="column" className={classes.root}>
-        <Grid item>
-            <Grid container direction="row" justify="space-between" alignItems="center" className={classes.root}>
-                <Grid item>
-                    <p>minimal :) </p>
-                    <EditContextButton searchResult={snippet} requestContextExtension={requestContextExtension}/>
-                    <EditAnnotationsButton/>
-                    <ShowDocumentButton openDocumentRequest={openDocumentRequest}/>
-                    <GotoSourceButton searchResult={snippet}/>
-                </Grid>
-                <Grid item>
-                    <b>{snippet.documentTitle}</b>
-                    <span> from '{snippet.host}'</span>
-                </Grid>
-            </Grid>
-        </Grid>
-        <Grid item>
+    return <Grid container direction="row" justify="flex-start" alignItems="center" className={classes.root}>
+        <EditContextButton searchResult={snippet} requestContextExtension={requestContextExtension}/>
+        <EditAnnotationsButton/>
+        <ShowDocumentButton openDocumentRequest={openDocumentRequest}/>
+        <GotoSourceButton searchResult={snippet}/>
+        <Grid className={classes.text}>
             <NewAnnotatedTextComponent text={snippet.payload.parsedContent} corpusFormat={corpusFormat}
                                        showParagraphs={false}/>
         </Grid>
