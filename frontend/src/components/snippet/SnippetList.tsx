@@ -3,7 +3,6 @@ import {WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import React, {useState} from 'react';
-import SearchResultItem from "./SnippetComponent";
 import Paper from "@material-ui/core/es/Paper";
 import Pagination from "../pagination/Pagination";
 import Divider from "@material-ui/core/es/Divider";
@@ -14,6 +13,7 @@ import {openDocumentDialogRequest} from "../../reducers/dialog/DocumentDialogRed
 import {CorpusFormat} from "../../entities/CorpusFormat";
 import {getMoreResults} from "../../actions/PaginationActions";
 import SearchStatistics from "./SearchStatistics";
+import SnippetViewSwitch from "./SnippetViewSwitch";
 
 const styles = createStyles({
     root: {
@@ -64,8 +64,8 @@ const SnippetList = (props: SnippetListProps) => {
             .map(
                 (snippetId, index) => <React.Fragment key={index}>
                     {index > 0 && <Divider/>}
-                    <SearchResultItem openDocumentRequest={() => openDocumentDialog(snippetId, corpusFormat)}
-                                      snippetId={snippetId} corpusFormat={corpusFormat}/>
+                    <SnippetViewSwitch openDocumentRequest={() => openDocumentDialog(snippetId, corpusFormat)}
+                                       snippetId={snippetId}/>
                 </React.Fragment>)
         }
         <Pagination currentPage={currentPage} setCurrentPage={setPageAndAskForMoreIfNecessary} pageCount={pageCount}

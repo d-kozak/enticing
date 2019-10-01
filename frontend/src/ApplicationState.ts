@@ -32,7 +32,10 @@ export interface SearchResultsState {
     snippetsById: { [id: string]: SearchResult }
     corpusFormat: CorpusFormat | null,
     moreResultsAvailable: boolean,
-    statistics?: SearchStatistics
+    statistics?: SearchStatistics,
+    snippetConfig: {
+        viewFormat: "COMPLEX" | "MINIMIZED"
+    }
 }
 
 export interface SearchStatistics {

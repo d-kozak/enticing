@@ -20,6 +20,9 @@ const {reducer, actions} = createSlice({
         snippetsById: {},
         corpusFormat: null,
         moreResultsAvailable: false,
+        snippetConfig: {
+            viewFormat: "MINIMIZED"
+        }
     } as SearchResultsState,
     reducers: {
         newSearchResults: (state: SearchResultsState, {payload}: PayloadAction<SearchResultBatch>) => {

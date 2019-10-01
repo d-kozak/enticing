@@ -12,7 +12,6 @@ import {EditContextButton} from "./snippetbuttons/EditContextButton";
 import {EditAnnotationsButton} from "./snippetbuttons/EditAnnotationsButton";
 import {SearchResult} from "../../entities/SearchResult";
 import NewAnnotatedTextComponent from "../annotations/TextUnitListComponent";
-import {CorpusFormat} from "../../entities/CorpusFormat";
 import Grid from "@material-ui/core/es/Grid";
 import {parseSearchResultRequest} from "../../reducers/SearchResultReducer";
 
@@ -23,16 +22,15 @@ const styles = createStyles({
     }
 });
 
-export interface SnippetComponentProps {
+export interface ComplexSnippetViewProps {
     snippetId: string,
-    corpusFormat: CorpusFormat,
     openDocumentRequest: () => void
 }
 
-export type  SnippetComponentEnhancedProps = WithStyles<typeof styles> & typeof mapDispatchToProps
-    & ReturnType<typeof mapStateToProps> & SnippetComponentProps
+export type  ComplexSnippetViewEnhanedProps = WithStyles<typeof styles> & typeof mapDispatchToProps
+    & ReturnType<typeof mapStateToProps> & ComplexSnippetViewProps
 
-const SnippetComponent = (props: SnippetComponentEnhancedProps) => {
+const ComplexSnippetView = (props: ComplexSnippetViewEnhanedProps) => {
     const {snippet, snippetId, corpusFormat, parseSearchResult, requestContextExtension, openDocumentRequest, classes} = props;
     if (!snippet) {
         return <p>snippet with id {snippetId} not found</p>
@@ -40,6 +38,9 @@ const SnippetComponent = (props: SnippetComponentEnhancedProps) => {
     if (!snippet.payload.parsedContent) {
         parseSearchResult(snippet);
         return <p>...parsing data...</p>
+    }
+    if (!corpusFormat) {
+        return <p>Corpus format not loaded</p>;
     }
 
     return <Grid container justify="center" direction="column" className={classes.root}>
@@ -65,8 +66,9 @@ const SnippetComponent = (props: SnippetComponentEnhancedProps) => {
 };
 
 
-const mapStateToProps = (state: ApplicationState, props: SnippetComponentProps) => ({
-    snippet: state.searchResult.snippetsById[props.snippetId]
+const mapStateToProps = (state: ApplicationState, props: ComplexSnippetViewProps) => ({
+    snippet: state.searchResult.snippetsById[props.snippetId],
+    corpusFormat: state.searchResult.corpusFormat
 });
 
 const mapDispatchToProps = {
@@ -77,4 +79,4 @@ const mapDispatchToProps = {
 
 export default withStyles(styles, {
     withTheme: true
-})(connect(mapStateToProps, mapDispatchToProps)(SnippetComponent))
+})(connect(mapStateToProps, mapDispatchToProps)(ComplexSnippetView))
