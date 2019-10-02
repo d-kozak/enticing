@@ -17,6 +17,7 @@ private val log = LoggerFactory.getLogger(Mg4jDocumentFactory::class.java)
 
 class Mg4jDocumentFactory(private val corpusConfiguration: CorpusConfiguration) : AbstractDocumentFactory() {
 
+    internal data class EntityReplicationInfo(val elems: List<String>, val entityType: String, val lineCount: Int)
 
     private val indexes: List<Index>
         get() = corpusConfiguration.indexes.values.toList()
@@ -57,7 +58,19 @@ class Mg4jDocumentFactory(private val corpusConfiguration: CorpusConfiguration) 
                     lineIndex++
                 }
                 !line.isMetaInfo() -> {
-                    if (!processLine(line, fields, lineIndex, corpusConfiguration)) invalidLines.add(lineIndex)
+                    val (parseSuccess, replicationInfo) = processLine(line, fields, lineIndex, corpusConfiguration)
+                    if (!parseSuccess) invalidLines.add(lineIndex)
+                    if (parseSuccess && replicationInfo != null) {
+                        val lastParsedLineIndex = fields[0].size - 1
+                        for (i in lastParsedLineIndex - replicationInfo.lineCount - 1 until lastParsedLineIndex) {
+                            for ((j, elem) in replicationInfo.elems.withIndex()) {
+                                fields[corpusConfiguration.firstAttributeIndex!! + j][i] = elem
+                            }
+                            fields[corpusConfiguration.entityLengthIndex!!][i] = "-1"  // hardwired constant to signal that this entity is replicated
+                        }
+                        fields[corpusConfiguration.entityLengthIndex!!][lastParsedLineIndex - replicationInfo.lineCount - 1] = replicationInfo.lineCount.toString()
+                        fields[corpusConfiguration.entityIndex!!][lastParsedLineIndex - replicationInfo.lineCount - 1] = replicationInfo.entityType
+                    }
                     lineIndex++
                 }
                 else -> log.error("Unknown meta line $line")
@@ -79,26 +92,24 @@ class Mg4jDocumentFactory(private val corpusConfiguration: CorpusConfiguration) 
     }
 }
 
-data class EntityReplicationInfo(val elems: List<String>, var lineCount: Int)
-
-val NULL = "null"
-val whitespaceRegex = """\s""".toRegex()
-
-var replicationInfo: EntityReplicationInfo? = null
+private val NULL = "null"
+private val whitespaceRegex = """\s""".toRegex()
 
 @Speed("rewrite using MutableStrings and whitespace readers?")
 @Cleanup("Should be refactored, it is smelly")
-internal fun processLine(line: String, fields: List<MutableList<String>>, lineIndex: Int, corpusConfiguration: CorpusConfiguration): Boolean {
+internal fun processLine(line: String, fields: List<MutableList<String>>, lineIndex: Int, corpusConfiguration: CorpusConfiguration): Pair<Boolean, Mg4jDocumentFactory.EntityReplicationInfo?> {
     val cells = line.split(whitespaceRegex)
     val indexCount = corpusConfiguration.indexes.size
     val entityLenIndex = corpusConfiguration.entityLengthIndex
-    val firstAttributeIndex = corpusConfiguration.firstAttributeIndex
-
     val tokenIndex = corpusConfiguration.indexes.getValue("token").columnIndex
+    val firstEntityIndex = corpusConfiguration.firstAttributeIndex
+    val nertagIndex = corpusConfiguration.entityIndex
 
     if (cells.size != indexCount || cells[tokenIndex].isBlank() || cells[tokenIndex] == glueSymbol) {
-        return false 
+        return false to null
     }
+
+    var replicationInfo: Mg4jDocumentFactory.EntityReplicationInfo? = null
 
     for ((i, cell) in cells.withIndex()) {
         val currentIndexWords = fields[i]
@@ -118,36 +129,28 @@ internal fun processLine(line: String, fields: List<MutableList<String>>, lineIn
             }
         }
 
-        val elem = if (cell.isGlued()) cell.removeGlue() else cell
+        var elem = if (cell.isGlued()) cell.removeGlue() else cell
+        if (elem.isBlank()) {
+            log.debug("$lineIndex:$i is blank, at line '$line'")
+            elem = NULL
+        }
 
-        if (firstAttributeIndex == null || i < firstAttributeIndex) {
-            if (elem.isBlank()) {
-                log.debug("$lineIndex:$i is blank, at line '$line'")
-                currentIndexWords.add(NULL)
+        if (i == entityLenIndex && firstEntityIndex != null && nertagIndex != null) {
+            val nerlen = elem.toIntOrNull() ?: 0
+            if (nerlen != 0) {
+                replicationInfo = Mg4jDocumentFactory.EntityReplicationInfo(cells.subList(firstEntityIndex, indexCount), cells[nertagIndex], nerlen)
+                if (nertagIndex < i) {
+                    fields[nertagIndex][fields[nertagIndex].size - 1] = "0" // the nertag should live only on the first word
+                }
+                currentIndexWords.add("-1")
             } else {
                 currentIndexWords.add(elem)
             }
-        } else if (replicationInfo != null) {
-            if (i != indexCount - 1) {
-                currentIndexWords.add(replicationInfo!!.elems[i - firstAttributeIndex])
-            } else {
-                currentIndexWords.add("-1") // signal that this entity is there only for indexing purpuses for proximity queries to work
-                replicationInfo!!.lineCount--
-                if (replicationInfo!!.lineCount == 0) {
-                    replicationInfo = null
-                }
-            }
-        } else if (i == entityLenIndex) {
-            val nerlen = elem.toIntOrNull() ?: 0
-            if (nerlen != 0) {
-                replicationInfo = EntityReplicationInfo(cells.subList(firstAttributeIndex, indexCount), nerlen)
-            }
-            currentIndexWords.add(elem)
         } else {
             currentIndexWords.add(elem)
         }
     }
-    return true
+    return true to replicationInfo
 }
 
 fun ByteArray.growBy(length: Int): ByteArray = ByteArrays.grow(this, this.size + length)
