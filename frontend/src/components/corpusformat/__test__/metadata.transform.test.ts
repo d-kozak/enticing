@@ -7,7 +7,7 @@ it("create metadata test", () => {
     const indexes = ["lemma", "token", "nertag"];
     const entities = ["person", "person/name", "person/age", "location", "date/month", "date/day"];
 
-    const metadata = createMetadata(indexes, entities);
+    const metadata = createMetadata(indexes, entities, "token");
     expect(metadata)
         .toEqual({
             indexes: ["lemma", "token", "nertag"],
@@ -21,6 +21,7 @@ it("create metadata test", () => {
                 "date": {
                     attributes: ["month", "day"]
                 }
-            }
+            },
+            defaultIndex: "token"
         } as SelectedMetadata);
 });

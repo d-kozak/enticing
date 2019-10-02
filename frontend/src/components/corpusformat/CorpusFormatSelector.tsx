@@ -1,5 +1,5 @@
 import createStyles from "@material-ui/core/es/styles/createStyles";
-import {Grid, Theme, WithStyles} from "@material-ui/core";
+import {FormControl, Grid, MenuItem, Select, Theme, WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
 import {connect} from "react-redux";
 import React, {useState} from 'react';
@@ -35,6 +35,8 @@ const CorpusFormatSelector = (props: CorpusFormatSelectorProps) => {
 
     const [selectedIndexes, setSelectedIndexes] = useState(indexes);
     const [selectedAttributes, setSelectedAttributes] = useState(attributes);
+
+    const [selectedDefaultIndex, setSelectedDefaultIndex] = useState(selectedMetadata && selectedMetadata.defaultIndex || "token");
 
     const toggleSelectedIndexes = () => {
         if (selectedIndexes.length == 0) {
@@ -88,10 +90,26 @@ const CorpusFormatSelector = (props: CorpusFormatSelectorProps) => {
                 <TreeElementSelector allElements={entityNodes} selectedElements={selectedAttributes}
                                      setSelectedElements={setSelectedAttributes}/>
             </Grid>
+            <Grid item>
+                <Typography variant="h6">Default index</Typography>
+                <FormControl>
+                    <Select
+                        value={selectedDefaultIndex}
+                        onChange={(event) => setSelectedDefaultIndex(event.target.value)}
+                        inputProps={{
+                            name: 'index',
+                            id: 'default-index',
+                        }}
+                    >
+                        {Object.keys(corpusFormat.indexes).map(index => <MenuItem key={index}
+                                                                                  value={index}>{index}</MenuItem>)}
+                    </Select>
+                </FormControl>
+            </Grid>
         </Grid>
         <Grid container justify="flex-end">
             <Button
-                onClick={() => saveCorpusFormat(createMetadata(selectedIndexes, selectedAttributes), searchSettings.id)}>Save
+                onClick={() => saveCorpusFormat(createMetadata(selectedIndexes, selectedAttributes, selectedDefaultIndex), searchSettings.id)}>Save
                 selected metadata</Button>
         </Grid>
     </div>

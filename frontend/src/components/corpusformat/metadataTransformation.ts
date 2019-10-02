@@ -16,7 +16,7 @@ export const splitMetadata = (metadata: SelectedMetadata | undefined): [Array<st
 };
 
 
-export const createMetadata = (indexes: Array<string>, attributes: Array<string>): SelectedMetadata => {
+export const createMetadata = (indexes: Array<string>, attributes: Array<string>, defaultIndex: string): SelectedMetadata => {
     const entities: { [key: string]: { attributes: Array<string> } } = {};
     for (let item of attributes) {
         const [entity, attribute] = item.split("/");
@@ -32,6 +32,7 @@ export const createMetadata = (indexes: Array<string>, attributes: Array<string>
     }
     return {
         indexes,
-        entities
+        entities,
+        defaultIndex
     }
 };
