@@ -24,7 +24,8 @@ export interface UserState {
 }
 
 export interface AdminState {
-    users: Array<User>
+    users: Array<User>,
+    debugMode: boolean
 }
 
 export interface SearchResultsState {

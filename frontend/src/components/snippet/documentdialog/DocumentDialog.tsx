@@ -60,12 +60,11 @@ const DocumentDialog = (props: DocumentDialogProps) => {
         {document !== null && corpusFormat !== null &&
         <div className={classes.root}>
             <MuiDialogTitle disableTypography className={classes.title}>
-                <Typography variant="h4">{document.title}</Typography>
+                <Typography variant="h4"><a href={document.url}>{document.title}</a></Typography>
                 <IconButton aria-label="Close" className={classes.closeButton} onClick={dialogClosed}>
                     <CloseIcon/>
                 </IconButton>
             </MuiDialogTitle>
-
             <DialogContent>
                 <DocumentDialogContent document={document} corpusFormat={corpusFormat}/>
             </DialogContent>

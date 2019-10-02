@@ -7,6 +7,8 @@ import Typography from "@material-ui/core/es/Typography";
 import {FullDocument} from "../../../entities/FullDocument";
 import NewAnnotatedTextComponent from "../../annotations/TextUnitListComponent";
 import {CorpusFormat} from "../../../entities/CorpusFormat";
+import {ApplicationState} from "../../../ApplicationState";
+import {connect} from "react-redux";
 
 const styles = createStyles({
     sectionTitle: {
@@ -17,35 +19,41 @@ const styles = createStyles({
     }
 });
 
-
-export interface DialogContentProps extends WithStyles<typeof styles> {
+export type  DialogContentProps = WithStyles<typeof styles> & typeof mapDispatchToProps
+    & ReturnType<typeof mapStateToProps> & {
     document: FullDocument
     corpusFormat: CorpusFormat
 }
 
 const DocumentDialogContent = (props: DialogContentProps) => {
-    const {document, corpusFormat, classes} = props;
+    const {document, corpusFormat, debug, classes} = props;
 
     return <div>
-        <Typography variant="h6">Document Info</Typography>
         <List>
-            <ListItem>
-                <Typography variant="body1">Original source - <a href={document.url}>{document.url}</a></Typography>
-            </ListItem>
-            <ListItem>
-                <Typography variant="body1">Server - {document.host}</Typography>
-            </ListItem>
-            <ListItem>
-                <Typography variant="body1">Collection - {document.collection}</Typography>
-            </ListItem>
+            {debug && <div>
+                <Typography variant="h6">Document Info</Typography>
+                <ListItem>
+                    <Typography variant="body1">Server - {document.host}</Typography>
+                </ListItem>
+                <ListItem>
+                    <Typography variant="body1">Collection - {document.collection}</Typography>
+                </ListItem>
+                <Divider className={classes.divider}/>
+                <Typography className={classes.sectionTitle} variant="h6">Content</Typography>
+            </div>}
         </List>
-        <Divider className={classes.divider}/>
-        <Typography className={classes.sectionTitle} variant="h6">Content</Typography>
         <NewAnnotatedTextComponent text={document.payload.parsedContent!} corpusFormat={corpusFormat}
                                    showParagraphs={true}/>
     </div>
 };
 
+const mapStateToProps = (state: ApplicationState) => ({
+    debug: state.adminState.debugMode
+});
+
+const mapDispatchToProps = {};
+
+
 export default withStyles(styles, {
     withTheme: true
-})(DocumentDialogContent)
+})(connect(mapStateToProps, mapDispatchToProps)(DocumentDialogContent))

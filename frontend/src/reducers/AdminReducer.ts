@@ -21,7 +21,7 @@ import {parseValidationErrors} from "../actions/errors";
 
 const {reducer, actions, selectors} = createSlice({
     slice: 'admin',
-    initialState: {users: []} as AdminState,
+    initialState: {users: [], debugMode: false} as AdminState,
     reducers: {
         adminLoadUsers: (state: AdminState, {payload}: PayloadAction<Array<User>>) => {
             state.users = payload
