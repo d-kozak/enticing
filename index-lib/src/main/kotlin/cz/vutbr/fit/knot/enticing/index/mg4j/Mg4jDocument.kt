@@ -80,7 +80,7 @@ class Mg4jDocument(
      * @param left left limit, inclusive
      * @param right right limit, inclusive
      */
-    @Speed("Could be rewritten using a set of mutable strings and advancing over them")
+    @Speed("Could be rewritten using a set of mutable strings and advancing over them... but the speed is actually not bad right now :)")
     fun loadStructuredContent(left: Int = 0, _right: Int = -1, filteredConfig: CorpusConfiguration): StructuredDocumentContent {
         val right = if (_right == -1) size() else _right
         val indexContent = indexes.asSequence()

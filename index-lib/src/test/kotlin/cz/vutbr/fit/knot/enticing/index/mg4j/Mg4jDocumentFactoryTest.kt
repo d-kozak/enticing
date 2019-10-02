@@ -117,9 +117,9 @@ internal class Mg4jDocumentFactoryTest {
     fun `if token is missing line should be skipped`() {
         val input = """43		CC	0	1	NMOD	In	in	-42	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0"""
 
-        val output = indexes.map { StringBuilder() }
+        val output = indexes.map { mutableListOf<String>() }
         processLine(input, output, 0, corpusConfig)
-        val allEmpty = output.map { it.isEmpty() }.all { it }
+        val allEmpty = output.all { it.isEmpty() }
         println(allEmpty)
         assertThat(allEmpty).isTrue()
 

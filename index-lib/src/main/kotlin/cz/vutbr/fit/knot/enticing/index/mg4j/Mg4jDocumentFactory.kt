@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
 import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
+import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.annotation.Speed
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.Index
@@ -35,7 +36,7 @@ class Mg4jDocumentFactory(private val corpusConfiguration: CorpusConfiguration) 
         val stream = (rawContent as FastBufferedInputStream).bufferedReader()
 
         // + 1 for hidden glue index
-        val fields = List(indexes.size + 1) { StringBuilder() }
+        val fields = List(indexes.size + 1) { mutableListOf<String>() }
 
         val invalidLines = mutableSetOf<Int>()
 
@@ -66,15 +67,14 @@ class Mg4jDocumentFactory(private val corpusConfiguration: CorpusConfiguration) 
         if (invalidLines.isNotEmpty())
             log.warn("Document ${metadata[DocumentMetadata.ID]}:${metadata[DocumentMetadata.TITLE]} has invalid lines: $invalidLines, they were skipped")
         metadata[DocumentMetadata.SIZE] = lineIndex
-        return Mg4jDocument(corpusConfiguration, metadata, fields.map { it.toString() })
+        return Mg4jDocument(corpusConfiguration, metadata, fields.map { it.joinToString(" ") })
     }
 
-    private fun addSpecialToken(tokenValue: String, fields: List<StringBuilder>, lineIndex: Int) {
+    @Incomplete("'token' is hardwired here")
+    private fun addSpecialToken(tokenValue: String, fields: List<MutableList<String>>, lineIndex: Int) {
         val tokenIndex = corpusConfiguration.indexes.getValue("token").columnIndex
-        for ((i, builder) in fields.withIndex()) {
-            if (builder.isNotBlank())
-                builder.append(' ')
-            builder.append(if (i == tokenIndex) tokenValue else '0')
+        for ((i, list) in fields.withIndex()) {
+            list.add(if (i == tokenIndex) tokenValue else "0")
         }
     }
 }
@@ -88,7 +88,7 @@ var replicationInfo: EntityReplicationInfo? = null
 
 @Speed("rewrite using MutableStrings and whitespace readers?")
 @Cleanup("Should be refactored, it is smelly")
-internal fun processLine(line: String, fields: List<StringBuilder>, lineIndex: Int, corpusConfiguration: CorpusConfiguration): Boolean {
+internal fun processLine(line: String, fields: List<MutableList<String>>, lineIndex: Int, corpusConfiguration: CorpusConfiguration): Boolean {
     val cells = line.split(whitespaceRegex)
     val indexCount = corpusConfiguration.indexes.size
     val entityLenIndex = corpusConfiguration.entityLengthIndex
@@ -101,25 +101,19 @@ internal fun processLine(line: String, fields: List<StringBuilder>, lineIndex: I
     }
 
     for ((i, cell) in cells.withIndex()) {
-        val stringBuilder = fields[i]
-        if (stringBuilder.isNotBlank())
-            stringBuilder.append(' ')
-
+        val currentIndexWords = fields[i]
         if (i == tokenIndex) {
             if (cell.isGlued()) {
                 fields.last().run {
-                    if (isNotBlank()) {
-                        setLength(length - 1) // remove last char
-                        append('N')
-                        append(' ')
+                    if (isNotEmpty()) {
+                        removeAt(size - 1)
+                        add("N")
                     }
-                    append('P')
+                    add("P")
                 }
             } else {
                 fields.last().run {
-                    if (isNotBlank())
-                        append(' ')
-                    append('0')
+                    add("0")
                 }
             }
         }
@@ -129,15 +123,15 @@ internal fun processLine(line: String, fields: List<StringBuilder>, lineIndex: I
         if (firstAttributeIndex == null || i < firstAttributeIndex) {
             if (elem.isBlank()) {
                 log.debug("$lineIndex:$i is blank, at line '$line'")
-                stringBuilder.append(NULL)
+                currentIndexWords.add(NULL)
             } else {
-                stringBuilder.append(elem)
+                currentIndexWords.add(elem)
             }
         } else if (replicationInfo != null) {
             if (i != indexCount - 1) {
-                stringBuilder.append(replicationInfo!!.elems[i - firstAttributeIndex])
+                currentIndexWords.add(replicationInfo!!.elems[i - firstAttributeIndex])
             } else {
-                stringBuilder.append("-1") // signal that this entity is there only for indexing purpuses for proximity queries to work
+                currentIndexWords.add("-1") // signal that this entity is there only for indexing purpuses for proximity queries to work
                 replicationInfo!!.lineCount--
                 if (replicationInfo!!.lineCount == 0) {
                     replicationInfo = null
@@ -148,9 +142,9 @@ internal fun processLine(line: String, fields: List<StringBuilder>, lineIndex: I
             if (nerlen != 0) {
                 replicationInfo = EntityReplicationInfo(cells.subList(firstAttributeIndex, indexCount), nerlen)
             }
-            stringBuilder.append(elem)
+            currentIndexWords.add(elem)
         } else {
-            stringBuilder.append(elem)
+            currentIndexWords.add(elem)
         }
     }
     return true
