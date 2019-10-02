@@ -43,7 +43,7 @@ const App = ({loginAttempt, showSnackBarMessage, isAdmin, progressBarVisible}: A
                        render={({history, location}) => <SearchPage history={history} location={location}/>}/>
                 <Route path="/login" render={({}) => <Login/>}/>
                 <Route path="/signup" render={() => <SignUp/>}/>
-                <Route path="/search-settings" render={() => <SelectSearchSettingsPage/>}/>
+                <Route path="/search-settings" render={({history}) => <SelectSearchSettingsPage history={history}/>}/>
                 <UserRoute path="/settings" render={({history}) => <UserSettings history={history}/>}/>
                 <AdminRoute path="/users" isAdmin={isAdmin} showSnackBarMessage={showSnackBarMessage}
                             render={() => <UserManagement/>}/>

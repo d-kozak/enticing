@@ -8,6 +8,7 @@ import Typography from "@material-ui/core/es/Typography";
 import ExpansionPanelDetails from "@material-ui/core/es/ExpansionPanelDetails";
 import ExpansionPanelSummary from "@material-ui/core/es/ExpansionPanelSummary";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import Grid from "@material-ui/core/es/Grid";
 import Button from "@material-ui/core/es/Button";
 import Paper from "@material-ui/core/es/Paper";
@@ -25,6 +26,8 @@ import {addTransientSearchSettings, loadSettingsFromFileRequest} from "../../red
 import NewSearchSettingsDialog from "../settings/NewSettingsDialog";
 import FolderOpenIcon from "@material-ui/icons/FolderOpen";
 import {FilePicker} from 'react-file-picker';
+import * as H from "history";
+import IconButton from "@material-ui/core/es/IconButton";
 
 const styles = (theme: Theme) => createStyles({
     rootElement: {
@@ -42,7 +45,8 @@ const styles = (theme: Theme) => createStyles({
     },
     settingsTitle: {
         margin: '15px',
-        textAlign: 'center'
+        textAlign: 'center',
+        flex: '1'
     },
     chip: {
         margin: '0px 5px',
@@ -63,14 +67,26 @@ export type SearchSettingsPageProps =
     WithStyles<typeof styles>
     & ReturnType<typeof mapStateToProps>
     & typeof mapDispatchToProps
-    & {}
+    & {
+    history: H.History
+}
 
 const SearchSettingsPage = (props: SearchSettingsPageProps) => {
-    const {classes, isLoggedIn, searchSettings, loadFile, selectSearchSettings, selectedSearchSettings, addSearchSettings, isAdmin} = props;
+    const {classes, isLoggedIn, searchSettings, loadFile, selectSearchSettings, selectedSearchSettings, addSearchSettings, history, isAdmin} = props;
     const selectedSearchSettingsId = selectedSearchSettings !== null ? selectedSearchSettings.id : "-1";
 
     return <Paper className={classes.rootElement}>
-        <Typography variant="h2" className={classes.settingsTitle}>Search Settings</Typography>
+        <Grid container direction="row">
+            <IconButton
+                key="back"
+                aria-label="back"
+                color="inherit"
+                onClick={() => history.goBack()}
+            >
+                <KeyboardBackspaceIcon/>
+            </IconButton>
+            <Typography variant="h2" className={classes.settingsTitle}>Search Settings</Typography>
+        </Grid>
         {Object.values(searchSettings)
             .filter(settings => !settings.isTransient)
             .map((settings, index) => <ExpansionPanel key={`${index}-${settings.id}-${settings.name}`}>
