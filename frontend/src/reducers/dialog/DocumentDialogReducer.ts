@@ -44,8 +44,8 @@ export const openDocumentDialogRequest = (searchResultId: string, corpusFormat: 
         host: searchResult.host,
         collection: searchResult.collection,
         documentId: searchResult.documentId,
-        metadata: createFullMetadataRequest(corpusFormat),
-        defaultIndex: "token",
+        metadata: createFullMetadataRequest(corpusFormat), // full request, because the corpus format we are getting is already limited
+        defaultIndex: corpusFormat.defaultIndex || "token",
         textFormat: "TEXT_UNIT_LIST"
     };
     const timer = new PerfTimer('DocumentRequest');

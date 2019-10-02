@@ -50,10 +50,10 @@ const EntityComponent = ({data, entityInfo, classes}: { data: Entity, entityInfo
     </div>
 }
 
-export const WordComponent = ({word, indexNames, classes}: { word: Word, indexNames: Array<string>, classes: any }) => {
+export const WordComponent = ({word, indexNames, classes, defaultIndex}: { word: Word, indexNames: Array<string>, defaultIndex: string, classes: any }) => {
     const indexes: Array<[string, string]> = word.indexes
         .map((value, i) => ([value, indexNames[i]]) as [string, string])
-        .filter(([, name]) => name !== "token");
+        .filter(([, name]) => name !== defaultIndex);
     const split: Array<Array<[string, string]>> = indexes.length < 6 ? [indexes] : [indexes.slice(0, indexes.length / 2), indexes.slice(indexes.length / 2, indexes.length)]
     return <React.Fragment>
         <Typography variant="h6">Word info</Typography>
@@ -74,16 +74,18 @@ export const WordComponent = ({word, indexNames, classes}: { word: Word, indexNa
 
 const AnnotationContent = (props: AnnotationContentProps) => {
     const {classes, word, enclosingEntity: entityData, corpusFormat} = props;
-    const entityInfo = entityData && corpusFormat.entities[entityData.entityClass]
+    const entityInfo = entityData && corpusFormat.entities[entityData.entityClass];
     if (entityData && !entityInfo) {
         console.warn("no entity info found for entity " + entityData.entityClass + ", skipping it's content")
     }
     const indexNames = Object.keys(corpusFormat.indexes);
+    const defaultIndex = corpusFormat.defaultIndex || "token";
 
     return <Grid direction="row" container>
         {entityInfo &&
         <Grid item> <EntityComponent data={entityData!} entityInfo={entityInfo} classes={classes}/> </Grid>}
-        <Grid item> <WordComponent word={word} indexNames={indexNames} classes={classes}/> </Grid>
+        <Grid item> <WordComponent word={word} indexNames={indexNames} defaultIndex={defaultIndex} classes={classes}/>
+        </Grid>
     </Grid>
 };
 

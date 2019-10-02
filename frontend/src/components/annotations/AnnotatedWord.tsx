@@ -31,7 +31,7 @@ const AnnotatedWord = (props: AnnotatedWordProps) => {
 
     // custom open-close handling was implemented so that it works on mobile phones as well,
     // hover does not work there by itself, clicks are necessary
-    const [isOpen, setOpen] = useState(false)
+    const [isOpen, setOpen] = useState(false);
     let shouldClose = true;
 
     const handleMouseLeave = () => {
@@ -44,11 +44,11 @@ const AnnotatedWord = (props: AnnotatedWordProps) => {
         }
     };
 
-    const tokenIndex = Object.keys(corpusFormat.indexes).indexOf("token")
+    const defaultIndex = Object.keys(corpusFormat.indexes).indexOf(corpusFormat.defaultIndex || "token");
 
     // last index contains glue info, N means next (there should be no space between this and next character)
     const followSpace = (word.indexes[word.indexes.length - 1] != 'N') ? " " : "";
-    const text = tokenIndex != -1 ? word.indexes[tokenIndex] + followSpace : " !NULL! "
+    const text = defaultIndex != -1 ? word.indexes[defaultIndex] + followSpace : " !NULL! ";
 
     return <React.Fragment>
         <ClickAwayListener onClickAway={() => setOpen(false)}>

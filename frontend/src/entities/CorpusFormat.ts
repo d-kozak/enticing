@@ -15,7 +15,8 @@ export type EntityInfo = {
 export interface CorpusFormat {
     corpusName: string,
     indexes: IndexInfo,
-    entities: { [clazz: string]: EntityInfo }
+    entities: { [clazz: string]: EntityInfo },
+    defaultIndex?: string
 }
 
 const string2stringObjectMapSchema = yup.lazy(obj => yup.object(

@@ -17,13 +17,9 @@ class SelectedMetadata(
         @field:ElementCollection(fetch = FetchType.EAGER)
         var indexes: List<String> = emptyList(),
         @field:ElementCollection(fetch = FetchType.EAGER)
-        var entities: Map<String, AttributeList> = emptyMap()
+        var entities: Map<String, AttributeList> = emptyMap(),
+        var defaultIndex: String = "token"
 ) {
-
-
-    override fun toString(): String {
-        return "SelectedMetadata(id=$id, indexes=$indexes, entities=$entities)"
-    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -31,6 +27,7 @@ class SelectedMetadata(
 
         if (indexes != other.indexes) return false
         if (entities != other.entities) return false
+        if (defaultIndex != other.defaultIndex) return false
 
         return true
     }
@@ -38,10 +35,13 @@ class SelectedMetadata(
     override fun hashCode(): Int {
         var result = indexes.hashCode()
         result = 31 * result + entities.hashCode()
+        result = 31 * result + defaultIndex.hashCode()
         return result
     }
 
-
+    override fun toString(): String {
+        return "SelectedMetadata(id=$id, indexes=$indexes, entities=$entities, defaultIndex='$defaultIndex')"
+    }
 }
 
 @Entity

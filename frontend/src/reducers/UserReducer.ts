@@ -66,9 +66,13 @@ export const loadSelectedMetadataRequest = (searchSettingsId: string): ThunkResu
 };
 
 export const saveSelectedMetadataRequest = (metadata: SelectedMetadata, settingsId: string): ThunkResult<void> => async (dispatch, getState) => {
-    if (metadata.indexes.indexOf("token") < 0) {
-        dispatch(openSnackbar("Search without token index not supported yet"));
-        return;
+    if (metadata.indexes.indexOf(metadata.defaultIndex) < 0) {
+        // todo do we have to preserve the order of indexes according the the corpus format???
+        metadata = {
+            ...metadata,
+            indexes: [...metadata.indexes, metadata.defaultIndex]
+        };
+        dispatch(openSnackbar(`Default index '${metadata.defaultIndex}' was added automatically`));
     }
     const isLoggedIn = getState().userState.isLoggedIn;
     try {

@@ -32,7 +32,7 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
     const searchQuery: SearchQuery = {
         query,
         metadata,
-        defaultIndex: "token",
+        defaultIndex: selectedMetadata && selectedMetadata.defaultIndex || "token",
         resultFormat: "SNIPPET",
         textFormat: "TEXT_UNIT_LIST",
         snippetCount: user.userSettings.resultsPerPage

@@ -48,7 +48,8 @@ export function filterCorpusFormat(corpusFormat: CorpusFormat, selectedMetadata:
     return {
         corpusName: corpusFormat.corpusName,
         indexes,
-        entities
+        entities,
+        defaultIndex: selectedMetadata.defaultIndex
     };
 }
 

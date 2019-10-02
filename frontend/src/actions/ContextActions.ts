@@ -52,13 +52,14 @@ export const contextExtensionRequestAction = (searchResult: SearchResult): Thunk
     }
     const user = appState.userState.user;
     dispatch(showProgressbar());
-    const metadata = createMetadataRequest(selectedSearchSettings.corpusFormat, user.selectedMetadata[selectedSearchSettings.id]);
+    const selectedMetadata = user.selectedMetadata[selectedSearchSettings.id];
+    const metadataRequest = createMetadataRequest(selectedSearchSettings.corpusFormat, selectedMetadata);
     const query: ContextExtensionQuery = {
         host: searchResult.host,
         collection: searchResult.collection,
         documentId: searchResult.documentId,
-        defaultIndex: "token",
-        metadata: metadata,
+        defaultIndex: selectedMetadata && selectedMetadata.defaultIndex || "token",
+        metadata: metadataRequest,
         location: searchResult.payload.location,
         size: searchResult.payload.size,
         extension: 20,
