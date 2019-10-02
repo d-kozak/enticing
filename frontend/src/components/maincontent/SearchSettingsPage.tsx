@@ -60,6 +60,9 @@ const styles = (theme: Theme) => createStyles({
     iconSmall: {
         margin: '0px 5px 0px 0px',
         fontSize: 20,
+    },
+    backButton: {
+        marginLeft: '5px'
     }
 });
 
@@ -78,6 +81,7 @@ const SearchSettingsPage = (props: SearchSettingsPageProps) => {
     return <Paper className={classes.rootElement}>
         <Grid container direction="row">
             <IconButton
+                className={classes.backButton}
                 key="back"
                 aria-label="back"
                 color="inherit"
