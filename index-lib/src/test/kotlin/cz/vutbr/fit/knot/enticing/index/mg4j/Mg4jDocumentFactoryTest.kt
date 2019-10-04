@@ -1,7 +1,14 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
 
+import cz.vutbr.fit.knot.enticing.dto.interval.Interval
+import cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.StructuredDocumentIterator
+import cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.TextUnitListGeneratingVisitor
+import cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess.DocumentElement
+import it.unimi.dsi.fastutil.io.FastBufferedInputStream
+import it.unimi.dsi.fastutil.objects.Reference2ObjectArrayMap
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.io.File
 import java.io.StringReader
@@ -65,7 +72,7 @@ internal class Mg4jDocumentFactoryTest {
         val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), factory)
 
         for (docId in 0L..10L) {
-            val document = collection.document(docId) as Mg4jDocument
+            val document = collection.document(docId)
 
             val content = document.loadStructuredContent(filteredConfig = corpusConfig)
             val nertag = content["nertag"]
@@ -111,6 +118,71 @@ internal class Mg4jDocumentFactoryTest {
                 throw AssertionError("All indexes should have equal size, in this case(document ${document.title()} at $i) the result is $sizePerIndex")
             }
         }
+    }
+
+    @Nested
+    inner class NerlenWorksBackwards {
+
+        @Test
+        fun `use only lowlevel factory-getdocument method`() {
+            val document = initMockDocument()
+            val nertagReader = (document.content(corpusConfig.entityIndex!!) as StringReader)
+            assertThat(nertagReader.readText()).isEqualTo("0 0 0 person person 0 0 0")
+            val nerlenReader = (document.content(corpusConfig.entityLengthIndex!!) as StringReader)
+            assertThat(nerlenReader.readText()).isEqualTo("0 0 0 2 -1 0 0 0")
+            for (i in corpusConfig.entityIndex!! + 1 until corpusConfig.entityLengthIndex!!) {
+                val reader = (document.content(i) as StringReader)
+                assertThat(reader.readText()).isEqualTo("0 0 0 X X 0 0 0")
+            }
+        }
+
+        @Test
+        fun `use  structured text`() {
+            val document = initMockDocument()
+            val elements = document.loadStructuredContent(0, document.size(), corpusConfig).elements
+            assertThat(elements)
+                    .hasSize(7)
+            val harry = elements[3]
+            assertThat(harry)
+                    .isInstanceOf(DocumentElement.Entity::class.java)
+            assertThat((harry as DocumentElement.Entity).words)
+                    .hasSize(2)
+
+            val words = document.iterator().asSequence().toList()
+            println(words)
+        }
+
+        @Test
+        fun `with eql result creator`() {
+            val document = initMockDocument()
+            val iterator = StructuredDocumentIterator(corpusConfig)
+            val visitor = TextUnitListGeneratingVisitor(corpusConfig, "token", Interval.valueOf(0, document.size()), document)
+            iterator.iterateDocument(document, emptyMap(), emptySet(), visitor)
+            val result = visitor.build()
+            println(result)
+        }
+
+        private fun initMockDocument(): Mg4jDocument {
+            val factory = Mg4jDocumentFactory(corpusConfig)
+            val inputStream = FastBufferedInputStream("""
+                    %%#DOC	2c25c27f-60b1-541b-a5fc-287c7c4318c5
+                    %%#PAGE Disclaimer - Automated Exemption System	http://aes.faa.gov/AES/Help
+                    %%#PAR 1 wx1
+                    %%#SEN 1 wx1
+                    1	Hello	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+                    2	Harry	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+                    3	Potter	0	0	0	0	0	0	0	0	0	0	0	0	person	X	X	X	X	X	X	X	X	X	X	X	2
+                    4	How	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+                    5	are	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+                    6	you	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+                """.trimIndent().byteInputStream())
+            val metadata = Reference2ObjectArrayMap<Enum<*>, Any>()
+            metadata[DocumentMetadata.ID] = 42
+            metadata[DocumentMetadata.TITLE] = "title"
+            metadata[DocumentMetadata.URI] = "uri"
+            return factory.getDocument(inputStream, metadata)
+        }
+
     }
 
     @Test

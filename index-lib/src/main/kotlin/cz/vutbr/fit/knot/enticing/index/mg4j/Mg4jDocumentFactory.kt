@@ -62,14 +62,15 @@ class Mg4jDocumentFactory(private val corpusConfiguration: CorpusConfiguration) 
                     if (!parseSuccess) invalidLines.add(lineIndex)
                     if (parseSuccess && replicationInfo != null) {
                         val lastParsedLineIndex = fields[0].size - 1
-                        for (i in lastParsedLineIndex - replicationInfo.lineCount - 1 until lastParsedLineIndex) {
+                        for (i in lastParsedLineIndex - (replicationInfo.lineCount - 1) until lastParsedLineIndex) {
                             for ((j, elem) in replicationInfo.elems.withIndex()) {
                                 fields[corpusConfiguration.firstAttributeIndex!! + j][i] = elem
                             }
+                            fields[corpusConfiguration.entityIndex!!][i] = replicationInfo.entityType
                             fields[corpusConfiguration.entityLengthIndex!!][i] = "-1"  // hardwired constant to signal that this entity is replicated
                         }
-                        fields[corpusConfiguration.entityLengthIndex!!][lastParsedLineIndex - replicationInfo.lineCount - 1] = replicationInfo.lineCount.toString()
-                        fields[corpusConfiguration.entityIndex!!][lastParsedLineIndex - replicationInfo.lineCount - 1] = replicationInfo.entityType
+                        fields[corpusConfiguration.entityLengthIndex!!][lastParsedLineIndex - (replicationInfo.lineCount - 1)] = replicationInfo.lineCount.toString()
+                        fields[corpusConfiguration.entityIndex!!][lastParsedLineIndex - (replicationInfo.lineCount - 1)] = replicationInfo.entityType
                     }
                     lineIndex++
                 }
@@ -139,9 +140,9 @@ internal fun processLine(line: String, fields: List<MutableList<String>>, lineIn
             val nerlen = elem.toIntOrNull() ?: 0
             if (nerlen != 0) {
                 replicationInfo = Mg4jDocumentFactory.EntityReplicationInfo(cells.subList(firstEntityIndex, indexCount), cells[nertagIndex], nerlen)
-                if (nertagIndex < i) {
-                    fields[nertagIndex][fields[nertagIndex].size - 1] = "0" // the nertag should live only on the first word
-                }
+//                if (nertagIndex < i) {
+//                    fields[nertagIndex][fields[nertagIndex].size - 1] = "0" // the nertag should live only on the first word
+//                }
                 currentIndexWords.add("-1")
             } else {
                 currentIndexWords.add(elem)
