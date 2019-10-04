@@ -24,6 +24,18 @@ internal class Mgj4QueryGeneratingVisitorTest {
     }
 
     @Nested
+    inner class EscapingQueries {
+
+
+        @Test
+        fun url() {
+            val (ast, errors) = compiler.parseAndAnalyzeQuery("person.url:'https://en.wikipedia.org/wiki/Bertrand_de_Turre'")
+            assertThat(errors).isEmpty()
+            assertThat(ast.toMgj4Query()).isEqualTo("""nertag:person ^ param0:(https\://en.wikipedia.org/wiki/Bertrand_de_Turre)""")
+        }
+    }
+
+    @Nested
     @DisplayName("Examples from the Language Specification")
     inner class ExamplesFromLanguageSpec {
 

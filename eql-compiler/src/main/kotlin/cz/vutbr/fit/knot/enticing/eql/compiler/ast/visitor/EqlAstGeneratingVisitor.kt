@@ -18,7 +18,7 @@ val ParserRuleContext.location: Interval
 internal fun fail(message: String = "Should never be called"): Nothing = throw IllegalStateException(message)
 
 @Incomplete("escape all the necessary chars")
-internal fun espaceMg4jQuery(input: String) = input
+internal fun espaceMg4jQuery(input: String) = input.replace(":", """\:""")
 
 class EqlAstGeneratingVisitor : EqlVisitor<AstNode> {
 
@@ -116,7 +116,7 @@ class EqlAstGeneratingVisitor : EqlVisitor<AstNode> {
                 val intervalType = if (intIntervalRegex.matches(data)) SimpleQueryType.INT_INTERVAL else SimpleQueryType.DATE_INTERVAL
                 QueryElemNode.SimpleNode(data, intervalType, ctx.location)
             }
-            ctx.RAW() != null -> QueryElemNode.SimpleNode(espaceMg4jQuery(ctx.RAW().text), SimpleQueryType.STRING, ctx.location)
+            ctx.RAW() != null -> QueryElemNode.SimpleNode(espaceMg4jQuery(ctx.RAW().text.substring(1, ctx.RAW().text.length - 1)), SimpleQueryType.STRING, ctx.location)
             else -> fail("should never be called")
         }
     }

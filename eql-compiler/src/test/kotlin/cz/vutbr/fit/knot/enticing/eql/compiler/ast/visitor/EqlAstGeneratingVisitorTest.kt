@@ -38,6 +38,16 @@ internal class EqlAstGeneratingVisitorTest {
     }
 
     @Nested
+    inner class EscapingMg4j {
+
+        @Test
+        fun escapeUrl() {
+            assertThat(espaceMg4jQuery("https://cs.wikipedia.org/wiki/Harry_Potter"))
+                    .isEqualTo("""https\://cs.wikipedia.org/wiki/Harry_Potter""")
+        }
+    }
+
+    @Nested
     @DisplayName("Examples from the Language Specification")
     inner class ExamplesFromLanguageSpec {
 

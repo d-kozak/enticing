@@ -6,6 +6,7 @@ export const EQL = 'eql';
 
 // example input :()&and|or!not-_PAR__SENT_not^.~"dafs"sadfsad &&
 const tokens: Array<Token> = [
+    {match: /'.*'/, token: 'raw'},
     {match: '&&', token: 'contraints'},
     {match: ':', token: 'colon'},
     {match: ')', token: 'mbracket'},
