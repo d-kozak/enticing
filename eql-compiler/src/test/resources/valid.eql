@@ -53,3 +53,5 @@ one two three ~ 5 ~ 5
 # mg4j does not even parse it, ends up as a syntax error
 one ^ (two < three) ^ four
 
+# using raw strings
+person.url:'https://cs.wikipedia.org/wiki/Harry_Potter'

@@ -10,7 +10,7 @@ query: queryElem+ restrictionType?;
 
 queryElem:
     NOT queryElem #notQuery
-    |(IDENTIFIER | ANY_TEXT | interval) #simpleQuery
+    |(RAW |IDENTIFIER | ANY_TEXT | interval) #simpleQuery
     | IDENTIFIER COLON queryElem #index
     | IDENTIFIER DOT IDENTIFIER COLON queryElem #attribute
     | queryElem EXPONENT queryElem #align
@@ -45,6 +45,8 @@ reference: IDENTIFIER (DOT IDENTIFIER)?;
 booleanOperator: AND | OR ;
 comparisonOperator: EQ | NE | GT |  GE | LT | LE ;
 
+RAW: [']~[']+['];
+
 CONSTRAINT_SEPARATOR: '&&';
 
 COLON:':';
@@ -71,8 +73,10 @@ MINUS:'-';
 QUOTATION: '"';
 
 
+
 IDENTIFIER: [a-zA-Z0-9][a-zA-Z0-9_]*;
-ANY_TEXT: ~[ "\u005B\u005D\t\r&|=<>:.()*^-]+[*]?;
+ANY_TEXT: ~[ "'\u005B\u005D\t\r&|=<>:.()*^-]+[*]? ;
+
 
 /** ignore whitespace */
 WS : [ \t\r] -> skip;

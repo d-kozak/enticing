@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor
 
 import cz.vutbr.fit.knot.enticing.dto.AstNode
+import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.*
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.EqlParser
@@ -15,6 +16,9 @@ val ParserRuleContext.location: Interval
     get() = Interval.valueOf(this.start.startIndex, this.stop.stopIndex)
 
 internal fun fail(message: String = "Should never be called"): Nothing = throw IllegalStateException(message)
+
+@Incomplete("escape all the necessary chars")
+internal fun espaceMg4jQuery(input: String) = input
 
 class EqlAstGeneratingVisitor : EqlVisitor<AstNode> {
 
@@ -112,6 +116,7 @@ class EqlAstGeneratingVisitor : EqlVisitor<AstNode> {
                 val intervalType = if (intIntervalRegex.matches(data)) SimpleQueryType.INT_INTERVAL else SimpleQueryType.DATE_INTERVAL
                 QueryElemNode.SimpleNode(data, intervalType, ctx.location)
             }
+            ctx.RAW() != null -> QueryElemNode.SimpleNode(espaceMg4jQuery(ctx.RAW().text), SimpleQueryType.STRING, ctx.location)
             else -> fail("should never be called")
         }
     }
