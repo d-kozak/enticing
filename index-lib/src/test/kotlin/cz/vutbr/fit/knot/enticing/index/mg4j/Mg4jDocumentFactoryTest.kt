@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
 
+import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnit
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.StructuredDocumentIterator
 import cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.TextUnitListGeneratingVisitor
@@ -149,7 +150,7 @@ internal class Mg4jDocumentFactoryTest {
                     .hasSize(2)
 
             val words = document.iterator().asSequence().toList()
-            println(words)
+            assertThat(words).hasSize(8)
         }
 
         @Test
@@ -158,8 +159,12 @@ internal class Mg4jDocumentFactoryTest {
             val iterator = StructuredDocumentIterator(corpusConfig)
             val visitor = TextUnitListGeneratingVisitor(corpusConfig, "token", Interval.valueOf(0, document.size()), document)
             iterator.iterateDocument(document, emptyMap(), emptySet(), visitor)
-            val result = visitor.build()
-            println(result)
+            val result = visitor.build() as cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat.Snippet.TextUnitList
+            val elems = result.content.content
+            assertThat(elems).hasSize(7)
+            val harry = elems[3]
+            assertThat(harry).isInstanceOf(TextUnit.Entity::class.java)
+
         }
 
         private fun initMockDocument(): Mg4jDocument {

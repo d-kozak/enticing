@@ -78,16 +78,12 @@ class StructuredDocumentIterator(private val corpusConfiguration: CorpusConfigur
             if (corpusConfiguration.entities.isNotEmpty()) {
                 val entityClass = word[corpusConfiguration.entityIndex!!]
                 if (entityClass != "0") {
-                    if (startedEntity != null) {
-                        log.warn("${document.title}:${document.id}:[$i]:new entity started before previous one ($startedEntity) finished, old will be finished now")
-                        visitor.visitEntityEnd()
-                    }
                     val len = word[corpusConfiguration.entityLengthIndex!!].toIntOrNull() ?: {
                         log.warn("${document.title}:${document.id}:[$i]:could not parse entity length index ${word[corpusConfiguration.entityLengthIndex!!]}")
                         1
                     }()
-                    // -1 signals replicated entity
-                    if (len != -1) {
+                    val isReplicated = len == -1
+                    if (!isReplicated) {
                         val attributeInfo = corpusConfiguration.entities[entityClass]
                         startedEntity = if (attributeInfo != null) {
                             val attributes = attributeInfo.attributes.values.map { it.columnIndex }.map { word[it] }
