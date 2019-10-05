@@ -51,7 +51,8 @@ class AttributeList(
         @field:GeneratedValue
         var id: Long = 0,
         @field:ElementCollection(fetch = FetchType.EAGER)
-        var attributes: List<String>
+        var attributes: List<String>,
+        var color: String = "blue"
 ) {
     constructor(vararg attributes: String) : this(attributes = attributes.toList())
 
