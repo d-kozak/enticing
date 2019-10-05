@@ -9,6 +9,7 @@ import NewAnnotatedTextComponent from "../../annotations/TextUnitListComponent";
 import {CorpusFormat} from "../../../entities/CorpusFormat";
 import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
+import {getSelectedMetadataForCurrentSettings} from "../../../reducers/selectors";
 
 const styles = createStyles({
     sectionTitle: {
@@ -26,7 +27,7 @@ export type  DialogContentProps = WithStyles<typeof styles> & typeof mapDispatch
 }
 
 const DocumentDialogContent = (props: DialogContentProps) => {
-    const {document, corpusFormat, debug, classes} = props;
+    const {document, corpusFormat, metadata, debug, classes} = props;
 
     return <div>
         <List>
@@ -43,12 +44,14 @@ const DocumentDialogContent = (props: DialogContentProps) => {
             </div>}
         </List>
         <NewAnnotatedTextComponent text={document.payload.parsedContent!} corpusFormat={corpusFormat}
+                                   metadata={metadata}
                                    showParagraphs={true}/>
     </div>
 };
 
 const mapStateToProps = (state: ApplicationState) => ({
-    debug: state.adminState.debugMode
+    debug: state.adminState.debugMode,
+    metadata: getSelectedMetadataForCurrentSettings(state)
 });
 
 const mapDispatchToProps = {};

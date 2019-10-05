@@ -16,14 +16,14 @@ export const splitMetadata = (metadata: SelectedMetadata | undefined): [Array<st
 };
 
 
-export const createMetadata = (indexes: Array<string>, attributes: Array<string>, defaultIndex: string): SelectedMetadata => {
-    const entities: { [key: string]: { attributes: Array<string> } } = {};
+export const createMetadata = (indexes: Array<string>, attributes: Array<string>, colors: { [entity: string]: string }, defaultIndex: string): SelectedMetadata => {
+    const entities: { [key: string]: { attributes: Array<string>, color: string } } = {};
     for (let item of attributes) {
         const [entity, attribute] = item.split("/");
         if (entities[entity]) {
             entities[entity].attributes.push(attribute);
         } else {
-            const newEntity = {attributes: [] as Array<string>};
+            const newEntity = {attributes: [] as Array<string>, color: colors[entity] || 'purple'};
             if (attribute) {
                 newEntity.attributes.push(attribute);
             }

@@ -13,7 +13,8 @@ import {SelectedMetadata} from "../../entities/SelectedMetadata";
 import {ApplicationState} from "../../ApplicationState";
 import {createMetadata, splitMetadata} from "./metadataTransformation";
 import {saveSelectedMetadataRequest} from "../../reducers/UserReducer";
-
+import {mapValues} from 'lodash';
+import EntityColorPicker, {EntityColorConfig} from "./EntityColorPicker";
 
 const styles = (theme: Theme) => createStyles({});
 
@@ -28,6 +29,18 @@ type CorpusFormatSelectorProps =
 }
 
 
+function getInitialColors(corpusFormat: CorpusFormat, metadata?: SelectedMetadata): EntityColorConfig {
+    if (!metadata) return mapValues(corpusFormat.entities, (entity) => "9900EF");
+    const config: EntityColorConfig = {};
+
+    for (let entity of Object.keys(corpusFormat.entities)) {
+        const entityInfo = metadata.entities[entity];
+        config[entity] = entityInfo && entityInfo.color || "9900EF";
+    }
+
+    return config;
+}
+
 const CorpusFormatSelector = (props: CorpusFormatSelectorProps) => {
     const {searchSettings, corpusFormat, saveCorpusFormat, selectedMetadata} = props;
 
@@ -37,6 +50,7 @@ const CorpusFormatSelector = (props: CorpusFormatSelectorProps) => {
     const [selectedAttributes, setSelectedAttributes] = useState(attributes);
 
     const [selectedDefaultIndex, setSelectedDefaultIndex] = useState(selectedMetadata && selectedMetadata.defaultIndex || "token");
+    const [selectedColors, setSelectedColors] = useState(getInitialColors(corpusFormat, selectedMetadata));
 
     const toggleSelectedIndexes = () => {
         if (selectedIndexes.length == 0) {
@@ -77,21 +91,24 @@ const CorpusFormatSelector = (props: CorpusFormatSelectorProps) => {
     return <div>
         <Grid container justify="flex-start">
             <Grid item>
-                <Typography variant="h6">Indexes</Typography>
+                <Typography variant="h5">Indexes</Typography>
                 <Button
                     onClick={toggleSelectedIndexes}>{selectedIndexes.length === 0 ? "Select all" : "Clear all"}</Button>
                 <TreeElementSelector allElements={indexNodes} selectedElements={selectedIndexes}
                                      setSelectedElements={setSelectedIndexes}/>
             </Grid>
             <Grid item>
-                <Typography variant="h6">Entities</Typography>
+                <Typography variant="h5">Entities</Typography>
+                <Typography variant="h6">Attributes</Typography>
                 <Button
                     onClick={toggleSelectedAttributes}>{selectedAttributes.length === 0 ? "Select all" : "Clear all"}</Button>
                 <TreeElementSelector allElements={entityNodes} selectedElements={selectedAttributes}
                                      setSelectedElements={setSelectedAttributes}/>
+                <Typography variant="h6">Colors</Typography>
+                <EntityColorPicker selectedColors={selectedColors} setSelectedColors={setSelectedColors}/>
             </Grid>
             <Grid item>
-                <Typography variant="h6">Default index</Typography>
+                <Typography variant="h5">Default index</Typography>
                 <FormControl>
                     <Select
                         value={selectedDefaultIndex}
@@ -109,7 +126,7 @@ const CorpusFormatSelector = (props: CorpusFormatSelectorProps) => {
         </Grid>
         <Grid container justify="flex-end">
             <Button
-                onClick={() => saveCorpusFormat(createMetadata(selectedIndexes, selectedAttributes, selectedDefaultIndex), searchSettings.id)}>Save
+                onClick={() => saveCorpusFormat(createMetadata(selectedIndexes, selectedAttributes, selectedColors, selectedDefaultIndex), searchSettings.id)}>Save
                 selected metadata</Button>
         </Grid>
     </div>

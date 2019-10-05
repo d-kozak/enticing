@@ -16,7 +16,8 @@ import {
     hideChangePasswordDialogProgress,
     showChangePasswordDialogProgress
 } from "./dialog/ChangePasswordDialogReducer";
-import {SelectedMetadata} from "../entities/SelectedMetadata";
+import {isSelectedMetadata, SelectedMetadata} from "../entities/SelectedMetadata";
+import {consoleDump} from "../components/utils/dump";
 
 const {reducer, actions} = createSlice({
     slice: 'user',
@@ -58,7 +59,12 @@ export default reducer;
 
 export const loadSelectedMetadataRequest = (searchSettingsId: string): ThunkResult<void> => async (dispatch) => {
     try {
-        const {data} = await axios.get(`${API_BASE_PATH}/user/text-metadata/${searchSettingsId}`);
+        const {data} = await axios.get<SelectedMetadata>(`${API_BASE_PATH}/user/text-metadata/${searchSettingsId}`);
+        if (!isSelectedMetadata(data)) {
+            dispatch(openSnackbar(`Could not load selected metadata for settings ${searchSettingsId}`));
+            console.error("invalid format of selected metadata");
+            consoleDump(data);
+        }
         dispatch(loadSelectedMetadata({settingsId: searchSettingsId, metadata: data}))
     } catch (e) {
         dispatch(openSnackbar(`Could not load selected metadata for settings ${searchSettingsId}`));

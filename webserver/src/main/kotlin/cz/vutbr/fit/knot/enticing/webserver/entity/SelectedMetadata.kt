@@ -52,7 +52,7 @@ class AttributeList(
         var id: Long = 0,
         @field:ElementCollection(fetch = FetchType.EAGER)
         var attributes: List<String>,
-        var color: String = "blue"
+        var color: String = "9900EF"
 ) {
     constructor(vararg attributes: String) : this(attributes = attributes.toList())
 

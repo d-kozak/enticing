@@ -14,6 +14,7 @@ import {SearchResult} from "../../entities/SearchResult";
 import NewAnnotatedTextComponent from "../annotations/TextUnitListComponent";
 import Grid from "@material-ui/core/es/Grid";
 import {parseSearchResultRequest} from "../../reducers/SearchResultReducer";
+import {getSelectedMetadataForCurrentSettings} from "../../reducers/selectors";
 
 
 const styles = createStyles({
@@ -35,7 +36,7 @@ export type  MinimizedSnippetViewEnhancedProps = WithStyles<typeof styles> & typ
     & ReturnType<typeof mapStateToProps> & MinimizedSnippetViewProps
 
 const MinimizedSnippetView = (props: MinimizedSnippetViewEnhancedProps) => {
-    const {snippet, snippetId, corpusFormat, parseSearchResult, requestContextExtension, openDocumentRequest, classes} = props;
+    const {snippet, snippetId, corpusFormat, metadata, parseSearchResult, requestContextExtension, openDocumentRequest, classes} = props;
     if (!snippet) {
         return <p>snippet with id {snippetId} not found</p>
     }
@@ -54,6 +55,7 @@ const MinimizedSnippetView = (props: MinimizedSnippetViewEnhancedProps) => {
         <GotoSourceButton searchResult={snippet}/>
         <Grid className={classes.text}>
             <NewAnnotatedTextComponent text={snippet.payload.parsedContent} corpusFormat={corpusFormat}
+                                       metadata={metadata}
                                        showParagraphs={false}/>
         </Grid>
     </Grid>
@@ -61,6 +63,7 @@ const MinimizedSnippetView = (props: MinimizedSnippetViewEnhancedProps) => {
 
 
 const mapStateToProps = (state: ApplicationState, props: MinimizedSnippetViewProps) => ({
+    metadata: getSelectedMetadataForCurrentSettings(state),
     snippet: state.searchResult.snippetsById[props.snippetId],
     corpusFormat: state.searchResult.corpusFormat
 });
