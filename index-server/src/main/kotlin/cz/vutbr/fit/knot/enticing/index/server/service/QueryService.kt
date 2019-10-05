@@ -33,10 +33,10 @@ class QueryService(
     }
 
     fun extendContext(query: IndexServer.ContextExtensionQuery) = collectionManagers[query.collection]?.extendSnippet(query)
-            ?: throw IllegalArgumentException("Unknown collection ${query.collection}")
+            ?: throw IllegalArgumentException("Unknown collection ${query.collection}, known collections are ${collectionManagers.keys}")
 
     fun getDocument(query: IndexServer.DocumentQuery) = collectionManagers[query.collection]?.getDocument(query)
-            ?: throw IllegalArgumentException("Unknown collection ${query.collection}")
+            ?: throw IllegalArgumentException("Unknown collection ${query.collection}, known collections are ${collectionManagers.keys}")
 
     fun loadCorpusFormat(): CorpusFormat = indexClientConfig.corpusConfiguration.toCorpusFormat()
 }

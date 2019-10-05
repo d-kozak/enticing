@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Query</title>
+</head>
+<body>
+
+<script>
+    window.onload = function () {
+        var form = document.getElementById('queryForm');
+        if (form.attachEvent) {
+            form.attachEvent("submit", search);
+        } else {
+            form.addEventListener("submit", search);
+        }
+    };
+
+    function search(e) {
+        e.preventDefault();
+        var query = document.getElementById('query').value;
+        if (!query) {
+            alert('could not get query to execute');
+            return;
+        }
+        fetch('/api/v1/query', {
+            method: 'POST',
+            body: JSON.stringify({
+                query: query,
+                textFormat: 'PLAIN_TEXT'
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(function (response) {
+            return response.json()
+        }).then(function (response) {
+            var message = JSON.stringify(response, null, 2);
+            console.log(message);
+            document.body.innerHTML = "<pre>" + message + "<pre/>";
+        }).catch(function (reason) {
+            var message = JSON.stringify(reason, null, 2);
+            console.error(message);
+            document.body.innerHTML = "<pre>" + message + "<pre/>";
+        })
+    }
+</script>
+<form id="queryForm">
+    <label for="query">Query</label>
+    <input id="query" type="text"/>
+    <button type="submit">Search</button>
+</form>
+</body>
+</html>
