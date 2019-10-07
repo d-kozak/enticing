@@ -12,7 +12,7 @@ import {CorpusFormat} from "../../entities/CorpusFormat";
 import {SelectedMetadata} from "../../entities/SelectedMetadata";
 import {ApplicationState} from "../../ApplicationState";
 import {createMetadata, splitMetadata} from "./metadataTransformation";
-import {saveSelectedMetadataRequest} from "../../reducers/UserReducer";
+import {isUserAdmin, saveSelectedMetadataRequest} from "../../reducers/UserReducer";
 import {mapValues} from 'lodash';
 import EntityColorPicker, {EntityColorConfig} from "./EntityColorPicker";
 
@@ -42,7 +42,7 @@ function getInitialColors(corpusFormat: CorpusFormat, metadata?: SelectedMetadat
 }
 
 const CorpusFormatSelector = (props: CorpusFormatSelectorProps) => {
-    const {searchSettings, corpusFormat, saveCorpusFormat, selectedMetadata} = props;
+    const {searchSettings, corpusFormat, isAdmin, saveCorpusFormat, selectedMetadata} = props;
 
     const [indexes, attributes] = splitMetadata(selectedMetadata);
 
@@ -125,6 +125,9 @@ const CorpusFormatSelector = (props: CorpusFormatSelectorProps) => {
             </Grid>
         </Grid>
         <Grid container justify="flex-end">
+            <Button onClick={() => alert('here')}>
+                Set as default
+            </Button>
             <Button
                 onClick={() => saveCorpusFormat(createMetadata(selectedIndexes, selectedAttributes, selectedColors, selectedDefaultIndex), searchSettings.id)}>Save
                 selected metadata</Button>
@@ -132,7 +135,9 @@ const CorpusFormatSelector = (props: CorpusFormatSelectorProps) => {
     </div>
 };
 
-const mapStateToProps = (state: ApplicationState) => ({});
+const mapStateToProps = (state: ApplicationState) => ({
+    isAdmin: isUserAdmin(state)
+});
 const mapDispatchToProps = {
     saveCorpusFormat: saveSelectedMetadataRequest as (metadata: SelectedMetadata, settingsId: string) => void
 };

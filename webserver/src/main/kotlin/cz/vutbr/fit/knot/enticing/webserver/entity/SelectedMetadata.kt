@@ -17,7 +17,7 @@ class SelectedMetadata(
         @field:ElementCollection(fetch = FetchType.EAGER)
         var indexes: List<String> = emptyList(),
         @field:ElementCollection(fetch = FetchType.EAGER)
-        var entities: Map<String, AttributeList> = emptyMap(),
+        var entities: Map<String, EntityMetadata> = emptyMap(),
         var defaultIndex: String = "token"
 ) {
 
@@ -45,7 +45,7 @@ class SelectedMetadata(
 }
 
 @Entity
-class AttributeList(
+class EntityMetadata(
         @field:JsonIgnore
         @field:Id
         @field:GeneratedValue
@@ -63,7 +63,7 @@ class AttributeList(
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is AttributeList) return false
+        if (other !is EntityMetadata) return false
 
         if (attributes != other.attributes) return false
 

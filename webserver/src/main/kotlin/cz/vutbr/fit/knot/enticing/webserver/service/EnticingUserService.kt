@@ -90,9 +90,15 @@ class EnticingUserService(private val userRepository: UserRepository, private va
 
 
     fun loadSelectedMetadata(searchSettingsId: SearchSettingsId): SelectedMetadata {
-        return currentUser?.let { userRepository.findByLogin(it.login) }
-                ?.let { it.selectedMetadata[searchSettingsId] }
-                ?: defaultSelectedMetadata
+        val searchSettings = searchSettingsRepository.findById(searchSettingsId).orElseThrow { IllegalArgumentException("Cannot find searchSettings with id $searchSettingsId") }
+        val user = currentUser
+        if (user != null) {
+            val userEntity = userRepository.findByLogin(user.login)
+                    ?: throw IllegalStateException("User $user is in the SecurityContextHolder, but does not have corresponding entity in the db")
+            val selectedMetadata = userEntity.selectedMetadata[searchSettingsId]
+            if (selectedMetadata != null) return selectedMetadata
+        }
+        return searchSettings.defaultMetadata ?: defaultSelectedMetadata
     }
 
     fun saveSelectedMetadata(metadata: SelectedMetadata, searchSettingsId: SearchSettingsId) {
@@ -105,15 +111,22 @@ class EnticingUserService(private val userRepository: UserRepository, private va
 
     private fun canEditUser(targetUser: User): Boolean = currentUser != null && (currentUser!!.isAdmin || currentUser!!.id == targetUser.id)
 
+    fun setDefaultMetadata(id: SearchSettingsId, metadata: SelectedMetadata) {
+        val user = currentUser
+        if (user == null || !user.isAdmin) throw throw InsufficientRoleException("User $currentUser cannot set default settings")
+        val searchSettings = searchSettingsRepository.findById(id).orElseThrow { IllegalArgumentException("Cannot find searchSettings with id $id") }
+        metadata.entities.forEach { (_, attributeList) -> entityManager.persist(attributeList) }
+        entityManager.persist(metadata)
+        searchSettings.defaultMetadata = metadata
+        searchSettingsRepository.save(searchSettings)
+    }
+
     val currentUser: User?
         get() {
-            val principal = SecurityContextHolder.getContext().authentication?.principal
-            return if (principal != null) {
-                if (principal is UserEntity) principal.toUser() else {
-                    logger.warn("Stored principal $principal in not of type UserEntity")
-                    null
-                }
-            } else null
+            val principal = SecurityContextHolder.getContext().authentication?.principal ?: return null
+            return if (principal is UserEntity) principal.toUser() else {
+                logger.warn("Stored principal $principal in not of type UserEntity")
+                null
+            }
         }
-
 }

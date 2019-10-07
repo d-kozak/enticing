@@ -3,6 +3,7 @@ package cz.vutbr.fit.knot.enticing.webserver.entity
 import cz.vutbr.fit.knot.enticing.dto.utils.regex.urlRegexStr
 import cz.vutbr.fit.knot.enticing.webserver.entity.validation.UrlCollection
 import javax.persistence.*
+import javax.validation.Valid
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Pattern
 
@@ -28,7 +29,10 @@ class SearchSettings(
         @field:ElementCollection(fetch = FetchType.EAGER)
         @field:NotEmpty
         @field:UrlCollection
-        var servers: Set<String> = setOf()
+        var servers: Set<String> = setOf(),
+        @field:Valid
+        @field:OneToOne
+        var defaultMetadata: SelectedMetadata? = null
 ) {
 
     override fun equals(other: Any?): Boolean {
