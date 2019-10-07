@@ -27,7 +27,7 @@ export type CorpusFormatSelectorProps =
 
 
 const CorpusFormatConfig = (props: CorpusFormatSelectorProps) => {
-    const {searchSettings, isLoggedIn, user, loadCorpusFormat, loadSelectedMetadata} = props;
+    const {searchSettings, user, loadCorpusFormat, loadSelectedMetadata} = props;
 
     useEffect(() => {
         if (!searchSettings.corpusFormat) {
@@ -37,7 +37,7 @@ const CorpusFormatConfig = (props: CorpusFormatSelectorProps) => {
 
 
     useEffect(() => {
-        if (isLoggedIn && !user.selectedMetadata[searchSettings.id]) {
+        if (!user.selectedMetadata[searchSettings.id]) {
             loadSelectedMetadata(searchSettings.id);
         }
     }, [user]);
@@ -48,7 +48,7 @@ const CorpusFormatConfig = (props: CorpusFormatSelectorProps) => {
             <CircularProgress/>
             <Button onClick={() => loadCorpusFormat(searchSettings)}>Try again</Button>
         </div>
-    } else if (isLoggedIn && !user.selectedMetadata[searchSettings.id]) {
+    } else if (!user.selectedMetadata[searchSettings.id]) {
         return <div>
             <Typography variant="body1">Loading selected metadata...</Typography>
             <CircularProgress/>

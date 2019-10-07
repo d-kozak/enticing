@@ -57,9 +57,28 @@ export const getUser = (state: ApplicationState) => state.userState.user;
 const {userLogin, userLogout, updateUserSettings, selectSearchSettings, loadSelectedMetadata} = actions;
 export default reducer;
 
-export const loadSelectedMetadataRequest = (searchSettingsId: string): ThunkResult<void> => async (dispatch) => {
+export const saveDefaultMetadataRequest = (metadata: SelectedMetadata, settingsId: string): ThunkResult<void> => async (dispatch) => {
+    if (metadata.indexes.indexOf(metadata.defaultIndex) < 0) {
+        // todo do we have to preserve the order of indexes according the the corpus format???
+        metadata = {
+            ...metadata,
+            indexes: [...metadata.indexes, metadata.defaultIndex]
+        };
+        dispatch(openSnackbar(`Default index '${metadata.defaultIndex}' was added automatically`));
+    }
     try {
-        const {data} = await axios.get<SelectedMetadata>(`${API_BASE_PATH}/user/text-metadata/${searchSettingsId}`);
+        const response = await axios.post(`${API_BASE_PATH}/user/default-metadata/${settingsId}`, metadata, {withCredentials: true});
+        dispatch(openSnackbar(`Default metadata saved successfully`));
+    } catch (e) {
+        consoleDump(e);
+        dispatch(openSnackbar(`Failed to save default metadata`));
+    }
+};
+
+export const loadSelectedMetadataRequest = (searchSettingsId: string): ThunkResult<void> => async (dispatch, getState) => {
+    const path = isLoggedIn(getState()) ? `${API_BASE_PATH}/user/text-metadata/${searchSettingsId}` : `${API_BASE_PATH}/user/default-metadata/${searchSettingsId}`;
+    try {
+        const {data} = await axios.get<SelectedMetadata>(path);
         if (!isSelectedMetadata(data)) {
             dispatch(openSnackbar(`Could not load selected metadata for settings ${searchSettingsId}`));
             console.error("invalid format of selected metadata");

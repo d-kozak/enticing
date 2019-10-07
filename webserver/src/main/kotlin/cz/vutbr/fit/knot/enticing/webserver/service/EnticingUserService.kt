@@ -101,6 +101,10 @@ class EnticingUserService(private val userRepository: UserRepository, private va
         return searchSettings.defaultMetadata ?: defaultSelectedMetadata
     }
 
+    fun loadDefaultMetadata(searchSettingsId: SearchSettingsId): SelectedMetadata =
+            searchSettingsRepository.findById(searchSettingsId).orElseThrow { IllegalArgumentException("Cannot find searchSettings with id $searchSettingsId") }
+                    .defaultMetadata ?: defaultSelectedMetadata
+
     fun saveSelectedMetadata(metadata: SelectedMetadata, searchSettingsId: SearchSettingsId) {
         metadata.entities.forEach { (_, attributeList) -> entityManager.persist(attributeList) }
         entityManager.persist(metadata)
@@ -111,15 +115,16 @@ class EnticingUserService(private val userRepository: UserRepository, private va
 
     private fun canEditUser(targetUser: User): Boolean = currentUser != null && (currentUser!!.isAdmin || currentUser!!.id == targetUser.id)
 
-    fun setDefaultMetadata(id: SearchSettingsId, metadata: SelectedMetadata) {
+    fun saveDefaultMetadata(id: SearchSettingsId, metadata: SelectedMetadata) {
+        logger.info("saving default metadata for $id: $metadata")
         val user = currentUser
         if (user == null || !user.isAdmin) throw throw InsufficientRoleException("User $currentUser cannot set default settings")
         val searchSettings = searchSettingsRepository.findById(id).orElseThrow { IllegalArgumentException("Cannot find searchSettings with id $id") }
         metadata.entities.forEach { (_, attributeList) -> entityManager.persist(attributeList) }
         entityManager.persist(metadata)
         searchSettings.defaultMetadata = metadata
-        searchSettingsRepository.save(searchSettings)
     }
+
 
     val currentUser: User?
         get() {

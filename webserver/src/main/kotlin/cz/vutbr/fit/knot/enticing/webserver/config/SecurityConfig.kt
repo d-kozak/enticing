@@ -47,6 +47,7 @@ class SecurityConfig(
                         "$apiBasePath/search-settings",
                         "$apiBasePath/query",
                         "$apiBasePath/query/**",
+                        "$apiBasePath/user/default-metadata/*",
                         "$apiBasePath/compiler")
                 .permitAll()
                 .anyRequest()

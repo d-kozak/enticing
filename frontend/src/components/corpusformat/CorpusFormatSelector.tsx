@@ -12,7 +12,7 @@ import {CorpusFormat} from "../../entities/CorpusFormat";
 import {SelectedMetadata} from "../../entities/SelectedMetadata";
 import {ApplicationState} from "../../ApplicationState";
 import {createMetadata, splitMetadata} from "./metadataTransformation";
-import {isUserAdmin, saveSelectedMetadataRequest} from "../../reducers/UserReducer";
+import {isUserAdmin, saveDefaultMetadataRequest, saveSelectedMetadataRequest} from "../../reducers/UserReducer";
 import {mapValues} from 'lodash';
 import EntityColorPicker, {EntityColorConfig} from "./EntityColorPicker";
 
@@ -42,7 +42,7 @@ function getInitialColors(corpusFormat: CorpusFormat, metadata?: SelectedMetadat
 }
 
 const CorpusFormatSelector = (props: CorpusFormatSelectorProps) => {
-    const {searchSettings, corpusFormat, isAdmin, saveCorpusFormat, selectedMetadata} = props;
+    const {searchSettings, corpusFormat, isAdmin, saveCorpusFormat, saveDefaultMetadata, selectedMetadata} = props;
 
     const [indexes, attributes] = splitMetadata(selectedMetadata);
 
@@ -125,7 +125,8 @@ const CorpusFormatSelector = (props: CorpusFormatSelectorProps) => {
             </Grid>
         </Grid>
         <Grid container justify="flex-end">
-            <Button onClick={() => alert('here')}>
+            <Button
+                onClick={() => saveDefaultMetadata(createMetadata(selectedIndexes, selectedAttributes, selectedColors, selectedDefaultIndex), searchSettings.id)}>
                 Set as default
             </Button>
             <Button
@@ -139,7 +140,8 @@ const mapStateToProps = (state: ApplicationState) => ({
     isAdmin: isUserAdmin(state)
 });
 const mapDispatchToProps = {
-    saveCorpusFormat: saveSelectedMetadataRequest as (metadata: SelectedMetadata, settingsId: string) => void
+    saveCorpusFormat: saveSelectedMetadataRequest as (metadata: SelectedMetadata, settingsId: string) => void,
+    saveDefaultMetadata: saveDefaultMetadataRequest as (metadata: SelectedMetadata, settingsId: string) => void
 };
 
 export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(CorpusFormatSelector));

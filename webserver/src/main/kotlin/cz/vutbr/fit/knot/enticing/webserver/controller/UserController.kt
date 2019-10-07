@@ -30,8 +30,11 @@ class UserController(private val userService: EnticingUserService) {
         userService.saveUser(user)
     }
 
+    @GetMapping("/default-metadata/{id}")
+    fun loadDefaultMetadata(@PathVariable id: SearchSettingsId) = userService.loadDefaultMetadata(id)
+
     @PostMapping("/default-metadata/{id}")
-    fun setDefaultMetadata(@PathVariable id: SearchSettingsId, @RequestBody metadata: SelectedMetadata) = userService.setDefaultMetadata(id, metadata)
+    fun setDefaultMetadata(@PathVariable id: SearchSettingsId, @RequestBody metadata: SelectedMetadata) = userService.saveDefaultMetadata(id, metadata)
 
     @GetMapping("/text-metadata/{id}")
     fun loadSelectedMetadata(@PathVariable id: SearchSettingsId): SelectedMetadata = userService.loadSelectedMetadata(id).also {
