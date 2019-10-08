@@ -15,7 +15,7 @@ import NewAnnotatedTextComponent from "../annotations/TextUnitListComponent";
 import Grid from "@material-ui/core/es/Grid";
 import {parseSearchResultRequest} from "../../reducers/SearchResultReducer";
 import {getSelectedMetadataForCurrentSettings, isDebugMode} from "../../reducers/selectors";
-import {ShowRawDocumentButton} from "./snippetbuttons/ShowRawDocumentButton";
+import ShowRawDocumentButton from "./snippetbuttons/ShowRawDocumentButton";
 
 
 const styles = createStyles({

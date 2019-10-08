@@ -15,6 +15,7 @@ export interface ApplicationState {
         documentDialog: DocumentDialogState,
         deleteUserDialog: DeleteUserDialogState,
         changePasswordDialog: ChangePasswordDialogState,
+        rawDocumentDialog: RawDocumentDialogState
     }
 }
 
@@ -34,9 +35,6 @@ export interface SearchResultsState {
     corpusFormat: CorpusFormat | null,
     moreResultsAvailable: boolean,
     statistics?: SearchStatistics,
-    snippetConfig: {
-        viewFormat: "COMPLEX" | "MINIMIZED"
-    }
 }
 
 export interface SearchStatistics {
@@ -55,6 +53,14 @@ export interface ProgressBarState {
 
 export interface SearchSettingsState {
     settings: { [key: string]: SearchSettings }
+}
+
+export interface RawDocumentDialogState {
+    info: {
+        document: string,
+        title: string,
+        url: string
+    } | null
 }
 
 export interface DocumentDialogState {

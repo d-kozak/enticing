@@ -6,7 +6,8 @@ import {connect} from "react-redux";
 import React from 'react';
 import {ApplicationState} from "../../ApplicationState";
 import ComplexSnippetView from "./ComplexSnippetView";
-import MinimizedSnippetView from "./MimimizedSnippetView";
+import MinimizedSnippetView from "./MinimizedSnippetView";
+import {isDebugMode} from "../../reducers/selectors";
 
 
 const styles = (theme: Theme) => createStyles({});
@@ -21,21 +22,17 @@ type SnippetViewSwitchEnhancedProps =
 }
 
 const SnippetViewSwitch = (props: SnippetViewSwitchEnhancedProps) => {
-    const {viewFormat, openDocumentRequest, snippetId} = props;
-    switch (viewFormat) {
-        case "COMPLEX":
-            return <ComplexSnippetView snippetId={snippetId} openDocumentRequest={openDocumentRequest}/>;
-        case "MINIMIZED":
-            return <MinimizedSnippetView snippetId={snippetId} openDocumentRequest={openDocumentRequest}/>;
+    const {debugMode, openDocumentRequest, snippetId} = props;
+    if (debugMode) {
+        return <ComplexSnippetView snippetId={snippetId} openDocumentRequest={openDocumentRequest}/>;
+    } else {
+        return <MinimizedSnippetView snippetId={snippetId} openDocumentRequest={openDocumentRequest}/>;
     }
-    return <div>
-        ERR - switch not exhaustive
-    </div>
 };
 
 
 const mapStateToProps = (state: ApplicationState) => ({
-    viewFormat: state.searchResult.snippetConfig.viewFormat
+    debugMode: isDebugMode(state)
 });
 const mapDispatchToProps = {};
 

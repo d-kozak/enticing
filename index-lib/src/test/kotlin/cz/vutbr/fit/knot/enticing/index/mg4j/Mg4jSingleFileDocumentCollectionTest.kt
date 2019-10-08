@@ -36,7 +36,8 @@ internal class Mg4jSingleFileDocumentCollectionTest {
         fun `whole document`() {
             assertThat(collection.getRawDocument(2))
                     .startsWith("""
-                    %%#DOC	4f6ae197-717f-5e02-b1b7-18f5265b534f%%#PAGE Toy Soldiers Studio: II/20c Ptolemaic	http://15mm25mm.blogspot.com/2014/07/ii20c-ptolemaic.html
+                    %%#DOC	4f6ae197-717f-5e02-b1b7-18f5265b534f
+                    %%#PAGE Toy Soldiers Studio: II/20c Ptolemaic	http://15mm25mm.blogspot.com/2014/07/ii20c-ptolemaic.html
                     %%#PAR 1 wx1
                     %%#SEN 1 wx1
                     1	II/20c	NN	II/20c	0	ROOT	0	0	0	0	0	0	ii/20c	0	0	0	0	0	0	0	0	0	0	0	0	0	0
@@ -48,15 +49,15 @@ internal class Mg4jSingleFileDocumentCollectionTest {
 
         @Test
         fun `first line`() {
-            assertThat(collection.getRawDocument(2, from = 0, to = 1)).isEqualTo("""%%#DOC	4f6ae197-717f-5e02-b1b7-18f5265b534f%%#PAGE Toy Soldiers Studio: II/20c Ptolemaic	http://15mm25mm.blogspot.com/2014/07/ii20c-ptolemaic.html""")
+            assertThat(collection.getRawDocument(2, from = 0, to = 1)).isEqualTo("%%#DOC\t4f6ae197-717f-5e02-b1b7-18f5265b534f\n")
         }
 
         @Test
         fun `inside the document`() {
             assertThat(collection.getRawDocument(2, from = 3, to = 6)).isEqualTo("""
+                    %%#SEN 1 wx1
                     1	II/20c	NN	II/20c	0	ROOT	0	0	0	0	0	0	ii/20c	0	0	0	0	0	0	0	0	0	0	0	0	0	0
                     2	Ptolemaic	JJ	Ptolemaic	0	ROOT	0	0	0	0	0	0	ptolemaic	0	0	0	0	0	0	0	0	0	0	0	0	0	0
-                    %%#PAR 2 wx2
                     
                     """.trimIndent())
         }

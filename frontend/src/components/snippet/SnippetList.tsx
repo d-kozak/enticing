@@ -14,6 +14,7 @@ import {CorpusFormat} from "../../entities/CorpusFormat";
 import {getMoreResults} from "../../actions/PaginationActions";
 import SearchStatistics from "./SearchStatistics";
 import SnippetViewSwitch from "./SnippetViewSwitch";
+import RawDocumentDialog from "./rawdocumentdialog/RawDocumentDialog";
 
 const styles = createStyles({
     root: {
@@ -72,6 +73,7 @@ const SnippetList = (props: SnippetListProps) => {
                     hasMore={hasMore}/>
         <SearchStatistics/>
         <DocumentDialog/>
+        <RawDocumentDialog/>
     </Paper>
 };
 

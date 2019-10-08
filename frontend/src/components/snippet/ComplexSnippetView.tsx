@@ -14,7 +14,8 @@ import {SearchResult} from "../../entities/SearchResult";
 import NewAnnotatedTextComponent from "../annotations/TextUnitListComponent";
 import Grid from "@material-ui/core/es/Grid";
 import {parseSearchResultRequest} from "../../reducers/SearchResultReducer";
-import {getSelectedMetadataForCurrentSettings} from "../../reducers/selectors";
+import {getSelectedMetadataForCurrentSettings, isDebugMode} from "../../reducers/selectors";
+import ShowRawDocumentButton from "./snippetbuttons/ShowRawDocumentButton";
 
 
 const styles = createStyles({
@@ -32,7 +33,7 @@ export type  ComplexSnippetViewEnhanedProps = WithStyles<typeof styles> & typeof
     & ReturnType<typeof mapStateToProps> & ComplexSnippetViewProps
 
 const ComplexSnippetView = (props: ComplexSnippetViewEnhanedProps) => {
-    const {snippet, snippetId, corpusFormat, metadata, parseSearchResult, requestContextExtension, openDocumentRequest, classes} = props;
+    const {snippet, snippetId, corpusFormat, debugMode, metadata, parseSearchResult, requestContextExtension, openDocumentRequest, classes} = props;
     if (!snippet) {
         return <p>snippet with id {snippetId} not found</p>
     }
@@ -48,6 +49,7 @@ const ComplexSnippetView = (props: ComplexSnippetViewEnhanedProps) => {
         <Grid item>
             <Grid container direction="row" justify="space-between" alignItems="center" className={classes.root}>
                 <Grid item>
+                    {debugMode && <ShowRawDocumentButton searchResult={snippet}/>}
                     <EditContextButton searchResult={snippet} requestContextExtension={requestContextExtension}/>
                     <EditAnnotationsButton/>
                     <ShowDocumentButton openDocumentRequest={openDocumentRequest}/>
@@ -69,6 +71,7 @@ const ComplexSnippetView = (props: ComplexSnippetViewEnhanedProps) => {
 
 
 const mapStateToProps = (state: ApplicationState, props: ComplexSnippetViewProps) => ({
+    debugMode: isDebugMode(state),
     metadata: getSelectedMetadataForCurrentSettings(state),
     snippet: state.searchResult.snippetsById[props.snippetId],
     corpusFormat: state.searchResult.corpusFormat
