@@ -84,6 +84,9 @@ class QueryService(
         }
         return searchSettings
     }
+
+    fun getRawDocument(request: WebServer.RawDocumentRequest): String = indexServerConnector.getRawDocument(request)
+
 }
 
 fun flatten(result: Map<String, List<MResult<IndexServer.IndexResultList>>>): Pair<WebServer.ResultList, MutableMap<String, Map<String, Offset>>> {

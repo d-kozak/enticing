@@ -45,6 +45,20 @@ class IndexServerConnector(private val template: RestTemplate = RestTemplate(), 
             throw RuntimeException(response.body?.toString() ?: "message lost")
         }
     }
+
+    fun getRawDocument(request: WebServer.RawDocumentRequest): String {
+        var url = "http://${request.server}:$port$apiBathPath/raw-document/${request.collection}/${request.documentId}?"
+        if (request.from != null) url += "&from=${request.from}"
+        if (request.to != null) url += "&to=${request.to}"
+        try {
+            val response = template.getForEntity(url, String::class.java)
+            return response.body
+                    ?: throw IllegalStateException("Request $request failed")
+        } catch (ex: Exception) {
+            log.warn("Could not get corpus format from $url")
+            throw ex
+        }
+    }
 }
 
 inline fun <reified T> RestTemplate.exchange(url: String, method: HttpMethod, requestEntity: HttpEntity<*>) = this.exchange(url, method, requestEntity, T::class.java)

@@ -9,7 +9,7 @@ import NewAnnotatedTextComponent from "../../annotations/TextUnitListComponent";
 import {CorpusFormat} from "../../../entities/CorpusFormat";
 import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
-import {getSelectedMetadataForCurrentSettings} from "../../../reducers/selectors";
+import {getSelectedMetadataForCurrentSettings, isDebugMode} from "../../../reducers/selectors";
 
 const styles = createStyles({
     sectionTitle: {
@@ -50,7 +50,7 @@ const DocumentDialogContent = (props: DialogContentProps) => {
 };
 
 const mapStateToProps = (state: ApplicationState) => ({
-    debug: state.adminState.debugMode,
+    debug: isDebugMode(state),
     metadata: getSelectedMetadataForCurrentSettings(state)
 });
 

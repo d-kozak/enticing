@@ -1,5 +1,7 @@
 import {createSelector} from "reselect";
 import {ApplicationState} from "../ApplicationState";
+import App from "../components/App";
+import {isUserAdmin} from "./UserReducer";
 
 
 const getSearchSettings = (state: ApplicationState) => state.searchSettings.settings;
@@ -29,6 +31,8 @@ export const getSelectedSearchSettings = createSelector(getSearchSettings, getUs
     return Object.values(searchSettings)[0];
 });
 
+
+export const isDebugMode = (state: ApplicationState) => isUserAdmin(state);
 
 export const getNewSearchSettings = createSelector(getSearchSettings,
     (searchSettings) => Object.values(searchSettings).find(item => item.isTransient == true));

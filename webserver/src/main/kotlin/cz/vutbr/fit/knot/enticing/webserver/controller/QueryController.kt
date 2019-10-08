@@ -7,22 +7,27 @@ import cz.vutbr.fit.knot.enticing.dto.WebServer
 import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpSession
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("\${api.base.path}/query")
 class QueryController(private val queryService: QueryService) {
 
     @PostMapping
-    fun query(@RequestBody query: SearchQuery, @RequestParam settings: Long, session: HttpSession): WebServer.ResultList = queryService.query(query, settings, session)
+    fun query(@RequestBody @Valid query: SearchQuery, @RequestParam settings: Long, session: HttpSession): WebServer.ResultList = queryService.query(query, settings, session)
 
     @GetMapping("/get_more")
     fun getMore(session: HttpSession) = queryService.getMore(session)
 
     @PostMapping("/context")
-    fun context(@RequestBody query: WebServer.ContextExtensionQuery): SnippetExtension = queryService.context(query)
+    fun context(@RequestBody @Valid query: WebServer.ContextExtensionQuery): SnippetExtension = queryService.context(query)
 
     @PostMapping("/document")
-    fun document(@RequestBody query: WebServer.DocumentQuery): WebServer.FullDocument = queryService.document(query)
+    fun document(@RequestBody @Valid query: WebServer.DocumentQuery): WebServer.FullDocument = queryService.document(query)
+
+    @PostMapping("/raw-document")
+    fun rawDocument(@RequestBody @Valid request: WebServer.RawDocumentRequest) = queryService.getRawDocument(request)
+
 
     @GetMapping("/format/{settingsId}")
     fun format(@PathVariable settingsId: Long): CorpusFormat = queryService.format(settingsId)

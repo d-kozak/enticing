@@ -142,6 +142,27 @@ object WebServer {
     }
 
 
+    data class RawDocumentRequest(
+            /**
+             * Url of the index server
+             */
+            @field:NotBlank
+            @field:Pattern(regexp = urlRegexStr)
+            val server: String,
+            /**
+             * Collection on the server
+             */
+            @field:NotEmpty
+            val collection: String,
+            /**
+             * Id of the document in the collection
+             */
+            @field:PositiveOrZero
+            val documentId: Int,
+            val from: Int? = null,
+            val to: Int? = null
+    )
+
     /**
      * Full document content returned from an IndexServer
      */
