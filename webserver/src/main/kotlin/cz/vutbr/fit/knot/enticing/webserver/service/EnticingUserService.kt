@@ -104,9 +104,14 @@ class EnticingUserService(private val userRepository: UserRepository, private va
         return searchSettings.defaultMetadata ?: defaultSelectedMetadata
     }
 
-    fun loadDefaultMetadata(searchSettingsId: SearchSettingsId): SelectedMetadata =
-            searchSettingsRepository.findById(searchSettingsId).orElseThrow { IllegalArgumentException("Cannot find searchSettings with id $searchSettingsId") }
-                    .defaultMetadata ?: defaultSelectedMetadata
+    fun loadDefaultMetadata(searchSettingsId: SearchSettingsId): SelectedMetadata {
+        val defaultMetadata = searchSettingsRepository.findById(searchSettingsId).orElseThrow { IllegalArgumentException("Cannot find searchSettings with id $searchSettingsId") }
+                .defaultMetadata
+        return if (defaultMetadata != null) {
+            logger.info("loaded default metadata for $searchSettingsId: $defaultMetadata")
+            return defaultMetadata
+        } else defaultSelectedMetadata
+    }
 
     private fun saveMetadata(metadata: SelectedMetadata): SelectedMetadata {
         metadata.entities = metadata.entities.mapValues { (_, entity) -> selectedEntityMetadataRepository.save(entity) }

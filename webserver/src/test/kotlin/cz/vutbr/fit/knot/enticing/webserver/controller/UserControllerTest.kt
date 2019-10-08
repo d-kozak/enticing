@@ -279,7 +279,7 @@ internal class UserControllerTest(
 
     @Test
     fun `load selected metadata test`() {
-        val metadata = SelectedMetadata(10, listOf("foo"))
+        val metadata = SelectedMetadata(10, setOf("foo"))
         Mockito.`when`(userService.loadSelectedMetadata(42))
                 .thenReturn(metadata)
         mockMvc.perform(get("$apiBasePath/user/text-metadata/42"))
@@ -290,7 +290,7 @@ internal class UserControllerTest(
 
     @Test
     fun `save selected metadata test`() {
-        val metadata = SelectedMetadata(10, listOf("word", "lemma"), mapOf("person" to SelectedEntityMetadata("name", "age")))
+        val metadata = SelectedMetadata(10, setOf("word", "lemma"), mapOf("person" to SelectedEntityMetadata("name", "age")))
         Mockito.`when`(userService.loadSelectedMetadata(42))
                 .thenReturn(metadata)
         mockMvc.perform(post("$apiBasePath/user/text-metadata/42")

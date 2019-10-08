@@ -3,7 +3,7 @@ package cz.vutbr.fit.knot.enticing.webserver.entity
 import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.*
 
-val defaultSelectedMetadata = SelectedMetadata(indexes = listOf("token"))
+val defaultSelectedMetadata = SelectedMetadata(indexes = setOf("token"))
 
 /**
  * Describes the subset of all corpusFormat metadata that should be returned from index servers
@@ -15,8 +15,8 @@ class SelectedMetadata(
         @field:GeneratedValue
         var id: Long = 0,
         @field:ElementCollection(fetch = FetchType.EAGER)
-        var indexes: List<String> = emptyList(),
-        @field:ElementCollection(fetch = FetchType.EAGER)
+        var indexes: Set<String> = emptySet(),
+        @field:OneToMany(fetch = FetchType.EAGER)
         var entities: Map<String, SelectedEntityMetadata> = emptyMap(),
         var defaultIndex: String = "token"
 ) {
@@ -51,10 +51,14 @@ class SelectedEntityMetadata(
         @field:GeneratedValue
         var id: Long = 0,
         @field:ElementCollection(fetch = FetchType.EAGER)
-        var attributes: List<String>,
+        var attributes: Set<String>,
         var color: String = "9900EF"
 ) {
-    constructor(vararg attributes: String) : this(attributes = attributes.toList())
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    lateinit var metadata: SelectedMetadata
+
+    constructor(vararg attributes: String) : this(attributes = attributes.toSet())
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

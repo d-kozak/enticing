@@ -21,7 +21,7 @@ internal class SelectedMetadataJpaTest(
                 .extracting { it.id }
                 .isNotEqualTo(0)
 
-        val metadata = SelectedMetadata(indexes = listOf("token", "lemma", "parword"), entities = mapOf(
+        val metadata = SelectedMetadata(indexes = setOf("token", "lemma", "parword"), entities = mapOf(
                 "person" to attributeList
         ))
 

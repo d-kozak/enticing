@@ -226,7 +226,7 @@ internal class SecurityConfigTest(
             @Test
             @WithMockUser
             fun `save wanted metadata is accessible when looged in`() {
-                val metadata = SelectedMetadata(10, listOf("word", "lemma"), mapOf("person" to SelectedEntityMetadata("name", "age")))
+                val metadata = SelectedMetadata(10, setOf("word", "lemma"), mapOf("person" to SelectedEntityMetadata("name", "age")))
                 Mockito.`when`(userService.loadSelectedMetadata(42))
                         .thenReturn(metadata)
                 mockMvc.perform(post("$apiBasePath/user/text-metadata/42")

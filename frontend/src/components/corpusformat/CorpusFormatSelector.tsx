@@ -125,10 +125,10 @@ const CorpusFormatSelector = (props: CorpusFormatSelectorProps) => {
             </Grid>
         </Grid>
         <Grid container justify="flex-end">
-            <Button
+            {isAdmin && <Button
                 onClick={() => saveDefaultMetadata(createMetadata(selectedIndexes, selectedAttributes, selectedColors, selectedDefaultIndex), searchSettings.id)}>
                 Set as default
-            </Button>
+            </Button>}
             <Button
                 onClick={() => saveCorpusFormat(createMetadata(selectedIndexes, selectedAttributes, selectedColors, selectedDefaultIndex), searchSettings.id)}>Save
                 selected metadata</Button>

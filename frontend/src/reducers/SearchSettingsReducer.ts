@@ -92,8 +92,7 @@ export const loadSearchSettingsRequest = (selectedSettingsId: string | null, isL
             const selectedSettings = findSelectedSettings(selectedSettingsId, searchSettings);
             if (selectedSettings !== null) {
                 dispatch(loadCorpusFormatRequest(selectedSettings));
-                if (isLoggedIn)
-                    dispatch(loadSelectedMetadataRequest(selectedSettings.id));
+                dispatch(loadSelectedMetadataRequest(selectedSettings.id));
             } else {
                 console.warn("No selected search settings found, could not pre-load corpus format...")
             }
