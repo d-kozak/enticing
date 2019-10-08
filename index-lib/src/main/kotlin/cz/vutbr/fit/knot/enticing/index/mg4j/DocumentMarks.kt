@@ -22,10 +22,11 @@ fun String.isMetaInfo() = this.startsWith(DocumentMarks.META.mark)
 /**
  * Signals that there should be no space between current token and the previous one
  */
-internal const val glueSymbol = "|G__"
+internal const val glueSymbol1 = "|G__"
+internal const val glueSymbol2 = "|GGG"
 
-fun String.isGlued() = this.endsWith(glueSymbol)
-fun String.removeGlue(): String = this.substring(0, this.length - glueSymbol.length)
+fun String.isGlued() = this.endsWith(glueSymbol1) || endsWith(glueSymbol2)
+fun String.removeGlue(): String = this.substring(0, this.lastIndexOf("|"))
 
 fun ByteArray.isDoc() = this.startsWith(DocumentMarks.DOC.bytes)
 fun ByteArray.isPage() = this.startsWith(DocumentMarks.PAGE.bytes)

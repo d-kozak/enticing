@@ -14,9 +14,9 @@ class Mgj4QueryGeneratingVisitor : EqlVisitor<String> {
 
     override fun visitQueryElemSimpleNode(node: QueryElemNode.SimpleNode): String = node.content
 
-    override fun visitQueryElemIndexNode(node: QueryElemNode.IndexNode): String = "${node.index}:(${node.elem.accept(this)})"
+    override fun visitQueryElemIndexNode(node: QueryElemNode.IndexNode): String = "(${node.index}:(${node.elem.accept(this)}){{${node.index}->token}})"
 
-    override fun visitQueryElemAttributeNode(node: QueryElemNode.AttributeNode): String = "nertag:${node.entity} ^ ${node.correspondingIndex}:(${node.elem.accept(this)})"
+    override fun visitQueryElemAttributeNode(node: QueryElemNode.AttributeNode): String = "((nertag:${node.entity}{{nertag->token}}) ^ (${node.correspondingIndex}:(${node.elem.accept(this)}){{${node.correspondingIndex}->token}}))"
 
     override fun visitQueryNode(node: QueryNode): String {
         val query = node.query.joinToString(" ") { it.accept(this) }
@@ -38,7 +38,7 @@ class Mgj4QueryGeneratingVisitor : EqlVisitor<String> {
     override fun visitRestrictionContextNode(node: RestrictionTypeNode.ContextNode): String = when (node.restriction) {
         is ContextRestrictionType.Paragraph -> " - §"
         is ContextRestrictionType.Sentence -> " - ¶"
-        is ContextRestrictionType.Query -> " - ${node.restriction.query.accept(this)}}"
+        is ContextRestrictionType.Query -> " - ${node.restriction.query.accept(this)}"
     }
 
     override fun visitGlobalContraintNode(node: GlobalConstraintNode): String = fail()

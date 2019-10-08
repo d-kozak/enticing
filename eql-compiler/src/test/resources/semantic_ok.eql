@@ -70,3 +70,5 @@ one two three ~ 5 ~ 5
 # mg4j does not even parse it, ends up as a syntax error
 one ^ (two < three) ^ four
 
+## Queries that caused problems in practise
+person.name:And* lemma:go

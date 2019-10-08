@@ -106,7 +106,7 @@ internal fun processLine(line: String, fields: List<MutableList<String>>, lineIn
     val firstEntityIndex = corpusConfiguration.firstAttributeIndex
     val nertagIndex = corpusConfiguration.entityIndex
 
-    if (cells.size != indexCount || cells[tokenIndex].isBlank() || cells[tokenIndex] == glueSymbol) {
+    if (cells.size != indexCount || cells[tokenIndex].isBlank() || cells[tokenIndex] == glueSymbol1 || cells[tokenIndex] == glueSymbol2) {
         return false to null
     }
 
@@ -140,9 +140,6 @@ internal fun processLine(line: String, fields: List<MutableList<String>>, lineIn
             val nerlen = elem.toIntOrNull() ?: 0
             if (nerlen != 0) {
                 replicationInfo = Mg4jDocumentFactory.EntityReplicationInfo(cells.subList(firstEntityIndex, indexCount), cells[nertagIndex], nerlen)
-//                if (nertagIndex < i) {
-//                    fields[nertagIndex][fields[nertagIndex].size - 1] = "0" // the nertag should live only on the first word
-//                }
                 currentIndexWords.add("-1")
             } else {
                 currentIndexWords.add(elem)
