@@ -16,7 +16,7 @@ internal class SelectedMetadataJpaTest(
 
     @Test
     fun `test persists`() {
-        val attributeList = EntityMetadata("name", "age")
+        val attributeList = SelectedEntityMetadata("name", "age")
         assertThat(entityManager.persistFlushFind(attributeList))
                 .extracting { it.id }
                 .isNotEqualTo(0)

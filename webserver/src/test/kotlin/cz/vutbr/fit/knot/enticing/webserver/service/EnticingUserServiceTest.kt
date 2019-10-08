@@ -8,6 +8,8 @@ import cz.vutbr.fit.knot.enticing.webserver.exception.InsufficientRoleException
 import cz.vutbr.fit.knot.enticing.webserver.exception.InvalidPasswordException
 import cz.vutbr.fit.knot.enticing.webserver.exception.ValueNotUniqueException
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
+import cz.vutbr.fit.knot.enticing.webserver.repository.SelectedEntityMetadataRepository
+import cz.vutbr.fit.knot.enticing.webserver.repository.SelectedMetadataRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import cz.vutbr.fit.knot.enticing.webserver.utils.withAuthentication
 import io.mockk.every
@@ -23,7 +25,6 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import java.util.*
-import javax.persistence.EntityManager
 
 
 internal class EnticingUserServiceTest {
@@ -31,8 +32,9 @@ internal class EnticingUserServiceTest {
     private val searchSettingsRepositoryMock = mockk<SearchSettingsRepository>()
     private val userRepositoryMock = mockk<UserRepository>()
     private val encoder = BCryptPasswordEncoder(11)
-    private val entityManagerMock = mockk<EntityManager>()
-    private val userService = EnticingUserService(userRepositoryMock, entityManagerMock, encoder, searchSettingsRepositoryMock)
+    private val selectedMetadataRepositoryMock = mockk<SelectedMetadataRepository>()
+    private val selectedEntityMetadataRepositoryMock = mockk<SelectedEntityMetadataRepository>()
+    private val userService = EnticingUserService(userRepositoryMock, selectedMetadataRepositoryMock, selectedEntityMetadataRepositoryMock, encoder, searchSettingsRepositoryMock)
 
     @Test
     fun `loadUserByUsername Test`() {

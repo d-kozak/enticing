@@ -17,7 +17,7 @@ class SelectedMetadata(
         @field:ElementCollection(fetch = FetchType.EAGER)
         var indexes: List<String> = emptyList(),
         @field:ElementCollection(fetch = FetchType.EAGER)
-        var entities: Map<String, EntityMetadata> = emptyMap(),
+        var entities: Map<String, SelectedEntityMetadata> = emptyMap(),
         var defaultIndex: String = "token"
 ) {
 
@@ -45,7 +45,7 @@ class SelectedMetadata(
 }
 
 @Entity
-class EntityMetadata(
+class SelectedEntityMetadata(
         @field:JsonIgnore
         @field:Id
         @field:GeneratedValue
@@ -56,22 +56,21 @@ class EntityMetadata(
 ) {
     constructor(vararg attributes: String) : this(attributes = attributes.toList())
 
-
-    override fun toString(): String {
-        return "AttributeList(id=$id, attributes=$attributes)"
-    }
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is EntityMetadata) return false
+        if (other !is SelectedEntityMetadata) return false
 
-        if (attributes != other.attributes) return false
+        if (id != other.id) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        return attributes.hashCode()
+        return id.hashCode()
+    }
+
+    override fun toString(): String {
+        return "SelectedEntityMetadata(id=$id, attributes=$attributes, color='$color')"
     }
 
 

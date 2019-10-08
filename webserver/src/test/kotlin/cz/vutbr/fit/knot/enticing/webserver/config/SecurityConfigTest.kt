@@ -8,8 +8,8 @@ import cz.vutbr.fit.knot.enticing.dto.WebServer
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import cz.vutbr.fit.knot.enticing.eql.compiler.dto.ParsedQuery
 import cz.vutbr.fit.knot.enticing.webserver.dto.*
-import cz.vutbr.fit.knot.enticing.webserver.entity.EntityMetadata
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
+import cz.vutbr.fit.knot.enticing.webserver.entity.SelectedEntityMetadata
 import cz.vutbr.fit.knot.enticing.webserver.entity.SelectedMetadata
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
@@ -226,7 +226,7 @@ internal class SecurityConfigTest(
             @Test
             @WithMockUser
             fun `save wanted metadata is accessible when looged in`() {
-                val metadata = SelectedMetadata(10, listOf("word", "lemma"), mapOf("person" to EntityMetadata("name", "age")))
+                val metadata = SelectedMetadata(10, listOf("word", "lemma"), mapOf("person" to SelectedEntityMetadata("name", "age")))
                 Mockito.`when`(userService.loadSelectedMetadata(42))
                         .thenReturn(metadata)
                 mockMvc.perform(post("$apiBasePath/user/text-metadata/42")

@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver.service
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.webserver.dto.*
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettingsId
 import cz.vutbr.fit.knot.enticing.webserver.entity.SelectedMetadata
@@ -9,6 +10,8 @@ import cz.vutbr.fit.knot.enticing.webserver.exception.InsufficientRoleException
 import cz.vutbr.fit.knot.enticing.webserver.exception.InvalidPasswordException
 import cz.vutbr.fit.knot.enticing.webserver.exception.ValueNotUniqueException
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
+import cz.vutbr.fit.knot.enticing.webserver.repository.SelectedEntityMetadataRepository
+import cz.vutbr.fit.knot.enticing.webserver.repository.SelectedMetadataRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.context.SecurityContextHolder
@@ -17,12 +20,12 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import javax.persistence.EntityManager
 import javax.transaction.Transactional
 
 @Service
 @Transactional
-class EnticingUserService(private val userRepository: UserRepository, private val entityManager: EntityManager, private val encoder: PasswordEncoder, private val searchSettingsRepository: SearchSettingsRepository) : UserDetailsService {
+@Incomplete("selected metadata from user and search settings is probably not deleted properly")
+class EnticingUserService(private val userRepository: UserRepository, private val selectedMetadataRepository: SelectedMetadataRepository, private val selectedEntityMetadataRepository: SelectedEntityMetadataRepository, private val encoder: PasswordEncoder, private val searchSettingsRepository: SearchSettingsRepository) : UserDetailsService {
 
     private val logger = LoggerFactory.getLogger(EnticingUserService::class.java)
 
@@ -105,12 +108,15 @@ class EnticingUserService(private val userRepository: UserRepository, private va
             searchSettingsRepository.findById(searchSettingsId).orElseThrow { IllegalArgumentException("Cannot find searchSettings with id $searchSettingsId") }
                     .defaultMetadata ?: defaultSelectedMetadata
 
+    private fun saveMetadata(metadata: SelectedMetadata): SelectedMetadata {
+        metadata.entities = metadata.entities.mapValues { (_, entity) -> selectedEntityMetadataRepository.save(entity) }
+        return selectedMetadataRepository.save(metadata)
+    }
+
     fun saveSelectedMetadata(metadata: SelectedMetadata, searchSettingsId: SearchSettingsId) {
-        metadata.entities.forEach { (_, attributeList) -> entityManager.persist(attributeList) }
-        entityManager.persist(metadata)
         val userEntity = currentUser?.let { userRepository.findByLogin(it.login) }
                 ?: throw IllegalArgumentException("could not find necessary user information")
-        userEntity.selectedMetadata[searchSettingsId] = metadata
+        userEntity.selectedMetadata[searchSettingsId] = saveMetadata(metadata)
     }
 
     private fun canEditUser(targetUser: User): Boolean = currentUser != null && (currentUser!!.isAdmin || currentUser!!.id == targetUser.id)
@@ -120,9 +126,7 @@ class EnticingUserService(private val userRepository: UserRepository, private va
         val user = currentUser
         if (user == null || !user.isAdmin) throw throw InsufficientRoleException("User $currentUser cannot set default settings")
         val searchSettings = searchSettingsRepository.findById(id).orElseThrow { IllegalArgumentException("Cannot find searchSettings with id $id") }
-        metadata.entities.forEach { (_, attributeList) -> entityManager.persist(attributeList) }
-        entityManager.persist(metadata)
-        searchSettings.defaultMetadata = metadata
+        searchSettings.defaultMetadata = saveMetadata(metadata)
     }
 
 
