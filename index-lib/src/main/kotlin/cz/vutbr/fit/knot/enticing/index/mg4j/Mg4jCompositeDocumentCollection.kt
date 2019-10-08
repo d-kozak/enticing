@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
+import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import it.unimi.di.big.mg4j.document.AbstractDocumentCollection
 import it.unimi.di.big.mg4j.document.DocumentCollection
 import it.unimi.di.big.mg4j.document.DocumentFactory
@@ -38,6 +39,11 @@ class Mg4jCompositeDocumentCollection(
     override fun metadata(index: Long): Reference2ObjectMap<Enum<*>, Any> {
         val (collection, localIndex) = findCollection(index)
         return collection.metadata(localIndex)
+    }
+
+    fun getRawDocument(index: Long, from: Int = 0, to: Int = Int.MAX_VALUE): String {
+        val (collection, localIndex) = findCollection(index)
+        return collection.getRawDocument(localIndex, from, to)
     }
 
     override fun stream(index: Long): InputStream {

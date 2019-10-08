@@ -45,5 +45,7 @@ interface SearchEngine {
     @Incomplete("how to properly signal 'nothing more?'")
     fun search(query: String, documentCount: Int, offset: Int): QueryResult
 
+    fun getRawDocument(id: DocumentId, from: Int, to: Int): String
+
     fun loadDocument(id: DocumentId): IndexedDocument
 }

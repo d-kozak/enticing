@@ -25,7 +25,7 @@ class QueryService(
     fun processQuery(query: SearchQuery): IndexServer.IndexResultList {
         query.eqlAst = eqlCompiler.parseOrFail(query.query)
 
-        val requestData = if(query.offset != null) query.offset!!.map { (collection, offset) -> CollectionRequestData(collection, offset) }
+        val requestData = if (query.offset != null) query.offset!!.map { (collection, offset) -> CollectionRequestData(collection, offset) }
         else collectionManagers.keys.map { CollectionRequestData(it, Offset(0, 0)) }
 
         log.info("Executing query $query with requestData $requestData")
@@ -39,6 +39,10 @@ class QueryService(
             ?: throw IllegalArgumentException("Unknown collection ${query.collection}, known collections are ${collectionManagers.keys}")
 
     fun loadCorpusFormat(): CorpusFormat = indexClientConfig.corpusConfiguration.toCorpusFormat()
+
+    fun getRawDocument(collection: String, documentId: Int, from: Int, to: Int): String = collectionManagers[collection]?.getRawDocument(documentId, from, to)
+            ?: throw IllegalArgumentException("Unknown collection $collection, known collections are ${collectionManagers.keys}")
+
 }
 
 internal fun flatten(resultList: Map<String, List<MResult<IndexServer.CollectionResultList>>>): IndexServer.IndexResultList {
@@ -46,8 +50,8 @@ internal fun flatten(resultList: Map<String, List<MResult<IndexServer.Collection
     val errors = mutableMapOf<CollectionName, ErrorMessage>()
 
     for ((collectionName, collectionResults) in resultList) {
-        for(collectionResult in collectionResults){
-            if(collectionResult.isSuccess){
+        for (collectionResult in collectionResults) {
+            if (collectionResult.isSuccess) {
                 matched.addAll(collectionResult.value.searchResults)
             } else {
                 errors[collectionName] = "${collectionResult.exception::class.simpleName}:${collectionResult.exception.message}"

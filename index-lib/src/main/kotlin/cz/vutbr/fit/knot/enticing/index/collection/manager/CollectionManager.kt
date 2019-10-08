@@ -93,6 +93,8 @@ class CollectionManager internal constructor(
                 payload
         )
     }
+
+    fun getRawDocument(documentId: Int, from: Int, to: Int): String = searchEngine.getRawDocument(documentId, from, to)
 }
 
 

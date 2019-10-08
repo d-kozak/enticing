@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.enticing.index.mg4j
 
 import it.unimi.dsi.fastutil.io.FastBufferedInputStream
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.io.File
 
@@ -25,6 +26,44 @@ internal class Mg4jSingleFileDocumentCollectionTest {
                     .isEqualTo(count)
         }
     }
+
+    @Nested
+    inner class ReadRawDocument {
+
+        private val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), testDocumentFactory)
+
+        @Test
+        fun `whole document`() {
+            assertThat(collection.getRawDocument(2))
+                    .startsWith("""
+                    %%#DOC	4f6ae197-717f-5e02-b1b7-18f5265b534f%%#PAGE Toy Soldiers Studio: II/20c Ptolemaic	http://15mm25mm.blogspot.com/2014/07/ii20c-ptolemaic.html
+                    %%#PAR 1 wx1
+                    %%#SEN 1 wx1
+                    1	II/20c	NN	II/20c	0	ROOT	0	0	0	0	0	0	ii/20c	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+                    2	Ptolemaic	JJ	Ptolemaic	0	ROOT	0	0	0	0	0	0	ptolemaic	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+                    %%#PAR 2 wx2
+                    %%#SEN 2 wx2
+                """.trimIndent())
+        }
+
+        @Test
+        fun `first line`() {
+            assertThat(collection.getRawDocument(2, from = 0, to = 1)).isEqualTo("""%%#DOC	4f6ae197-717f-5e02-b1b7-18f5265b534f%%#PAGE Toy Soldiers Studio: II/20c Ptolemaic	http://15mm25mm.blogspot.com/2014/07/ii20c-ptolemaic.html""")
+        }
+
+        @Test
+        fun `inside the document`() {
+            assertThat(collection.getRawDocument(2, from = 3, to = 6)).isEqualTo("""
+                    1	II/20c	NN	II/20c	0	ROOT	0	0	0	0	0	0	ii/20c	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+                    2	Ptolemaic	JJ	Ptolemaic	0	ROOT	0	0	0	0	0	0	ptolemaic	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+                    %%#PAR 2 wx2
+                    
+                    """.trimIndent())
+        }
+
+    }
+
+
 
     @Test
     fun `Check input stream`() {

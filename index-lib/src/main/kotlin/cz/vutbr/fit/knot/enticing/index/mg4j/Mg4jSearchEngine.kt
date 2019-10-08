@@ -25,6 +25,8 @@ class Mg4jSearchEngine(
 
     private val log = LoggerFactory.getLogger(Mg4jSearchEngine::class.java)
 
+    override fun getRawDocument(id: DocumentId, from: Int, to: Int): String = collection.getRawDocument(id.toLong(), from, to)
+
     override fun search(query: String, documentCount: Int, offset: Int): QueryResult {
         log.info("Executing query $query")
         val resultList = ObjectArrayList<Mg4jSearchResult>()

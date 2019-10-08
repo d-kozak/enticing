@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
+import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import it.unimi.di.big.mg4j.document.AbstractDocumentCollection
 import it.unimi.di.big.mg4j.document.DocumentCollection
 import it.unimi.di.big.mg4j.document.DocumentFactory
@@ -42,6 +43,27 @@ class Mg4jSingleFileDocumentCollection(
             it.position(documentIndexes.getLong(index))
         }
         return last!!
+    }
+
+    fun getRawDocument(index: Long, from: Int = 0, to: Int = Int.MAX_VALUE): String {
+        require(from >= 0) { "from >= 0" }
+        require(from <= to) { "from <= to" }
+        require(to > 0) { "to > 0" }
+        val stream = stream(index).bufferedReader()
+        return buildString {
+            var lineIndex = 0
+            if (from == 0) append(stream.readLine()) else stream.readLine()
+            if (to == 0) return@buildString
+            var line = stream.readLine()
+            while (lineIndex < to && line != null && !line.isDoc()) {
+                if (lineIndex >= from) {
+                    append(line)
+                    append('\n')
+                }
+                line = stream.readLine()
+                lineIndex++
+            }
+        }
     }
 
     private fun metadataAndStream(index: Long): Pair<FastBufferedInputStream, Reference2ObjectArrayMap<Enum<*>, Any>> {

@@ -23,6 +23,9 @@ class QueryController(
     @GetMapping("/document")
     fun getDocument(@RequestParam id: Int, @RequestParam collection: String) = queryService.getDocument(IndexServer.DocumentQuery(collection, id, textFormat = TextFormat.PLAIN_TEXT))
 
+    @GetMapping("/raw-document/{collection}/{id}")
+    fun rawDocument(@PathVariable collection: String, @PathVariable id: Int, @RequestParam(required = false, defaultValue = "0") from: Int, @RequestParam(required = false, defaultValue = Int.MAX_VALUE.toString()) to: Int) = queryService.getRawDocument(collection, id, from, to)
+
     @PostMapping("/document")
     fun document(@RequestBody @Valid query: IndexServer.DocumentQuery): IndexServer.FullDocument = queryService.getDocument(query)
 
