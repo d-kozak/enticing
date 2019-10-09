@@ -36,8 +36,7 @@ class Mg4jDocumentFactory(private val corpusConfiguration: CorpusConfiguration) 
     override fun getDocument(rawContent: InputStream, metadata: Reference2ObjectMap<Enum<*>, Any>): Mg4jDocument {
         val stream = (rawContent as FastBufferedInputStream).bufferedReader()
 
-        // + 1 for hidden glue index
-        val fields = List(indexes.size + 1) { mutableListOf<String>() }
+        val fields = List(indexes.size) { mutableListOf<String>() }
 
         val invalidLines = mutableSetOf<Int>()
 
@@ -106,7 +105,10 @@ internal fun processLine(line: String, fields: List<MutableList<String>>, lineIn
     val firstEntityIndex = corpusConfiguration.firstAttributeIndex
     val nertagIndex = corpusConfiguration.entityIndex
 
-    if (cells.size != indexCount || cells[tokenIndex].isBlank() || cells[tokenIndex] == glueSymbol1 || cells[tokenIndex] == glueSymbol2) {
+    val glueIndex = corpusConfiguration.glueIndex
+
+    //             + 1 because the glue index is hidden inside the token index
+    if (cells.size + 1 != indexCount || cells[tokenIndex].isBlank() || cells[tokenIndex] == glueSymbol1 || cells[tokenIndex] == glueSymbol2) {
         return false to null
     }
 
@@ -114,9 +116,9 @@ internal fun processLine(line: String, fields: List<MutableList<String>>, lineIn
 
     for ((i, cell) in cells.withIndex()) {
         val currentIndexWords = fields[i]
-        if (i == tokenIndex) {
+        if (i == tokenIndex && glueIndex != -1) {
             if (cell.isGlued()) {
-                fields.last().run {
+                fields[glueIndex].run {
                     if (isNotEmpty()) {
                         removeAt(size - 1)
                         add("N")
@@ -124,7 +126,7 @@ internal fun processLine(line: String, fields: List<MutableList<String>>, lineIn
                     add("P")
                 }
             } else {
-                fields.last().run {
+                fields[glueIndex].run {
                     add("0")
                 }
             }
@@ -139,7 +141,7 @@ internal fun processLine(line: String, fields: List<MutableList<String>>, lineIn
         if (i == entityLenIndex && firstEntityIndex != null && nertagIndex != null) {
             val nerlen = elem.toIntOrNull() ?: 0
             if (nerlen != 0) {
-                replicationInfo = Mg4jDocumentFactory.EntityReplicationInfo(cells.subList(firstEntityIndex, indexCount), cells[nertagIndex], nerlen)
+                replicationInfo = Mg4jDocumentFactory.EntityReplicationInfo(cells.subList(firstEntityIndex, indexCount - 1), cells[nertagIndex], nerlen)
                 currentIndexWords.add("-1")
             } else {
                 currentIndexWords.add(elem)

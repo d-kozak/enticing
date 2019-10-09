@@ -52,9 +52,7 @@ class Mg4jDocument(
     override val size: Int
         get() = metadata[DocumentMetadata.SIZE] as Int
 
-    private val indexes: List<Index> = corpusConfiguration.indexes.values.toMutableList().also {
-        it.add(Index("_glue", "secret glue index", columnIndex = corpusConfiguration.indexes.size))
-    }
+    private val indexes: List<Index> = corpusConfiguration.indexes.values.toList()
 
     override fun title(): CharSequence = title
 
