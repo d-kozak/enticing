@@ -54,7 +54,7 @@ internal class Mg4jDocumentFactoryTest {
                 .isEqualTo("http://119.doorblog.jp/archives/51981348.html")
 
 
-        assertStreamStartsWith(document.content(corpusConfig.indexes.size), "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 N P 0 0 0 0 0 0 0 0 0 0 N P 0 0 N P 0 0 0 N P 0 N P 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 N P 0 0 0 0 0 0 0 N P 0 0 0 0 0 0 0 0 0 0 0 0 0 N P")
+        assertStreamStartsWith(document.content(corpusConfig.indexOf("_glue")), "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 N P 0 0 0 0 0 0 0 0 0 0 N P 0 0 N P 0 0 0 N P 0 N P 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 N P 0 0 0 0 0 0 0 N P 0 0 0 0 0 0 0 0 0 0 0 0 0 N P")
     }
 
 
