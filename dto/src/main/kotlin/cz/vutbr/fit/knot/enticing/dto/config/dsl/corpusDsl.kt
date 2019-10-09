@@ -35,6 +35,11 @@ data class CorpusConfiguration(
             return field
         }
 
+    /**
+     * That should contains information whether words in the token index should be separated by space or not
+     */
+    var glueIndex: Int = -1
+
     fun indexes(block: IndexConfigDsl.() -> Unit = {}) = indexesDslInternal(block)
             .also { this.indexes = it }
 
@@ -131,6 +136,8 @@ fun CorpusConfiguration.validate(errors: MutableList<String>) {
         checkName(key, index.name, errors)
     }
     val indexList = indexes.values.toList()
+
+    glueIndex = indexList.find { it.name == "_glue" }?.columnIndex ?: -1
 
     if (entities.isEmpty()) {
         this.entityIndex = null

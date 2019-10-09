@@ -34,6 +34,7 @@ private fun initMg4jQueryEngine(collectionConfig: CollectionConfiguration, corpu
     val termProcessors = Object2ObjectOpenHashMap<String, TermProcessor>()
     val index2weight = Reference2DoubleOpenHashMap<Index>()
     for (index in corpusConfiguration.indexes.values.toList()) {
+        if (index.isSynthetic) continue
         val mg4jIndex = Index.getInstance(indexDir.resolve("${corpusConfiguration.corpusName}-${index.name}").path)
         requireNotNull(mg4jIndex.field)
         indexMap[mg4jIndex.field] = mg4jIndex

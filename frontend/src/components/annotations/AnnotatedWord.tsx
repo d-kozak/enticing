@@ -44,10 +44,12 @@ const AnnotatedWord = (props: AnnotatedWordProps) => {
         }
     };
 
-    const defaultIndex = Object.keys(corpusFormat.indexes).indexOf(corpusFormat.defaultIndex || "token");
+    const indexes = Object.keys(corpusFormat.indexes);
+    const defaultIndex = indexes.indexOf(corpusFormat.defaultIndex || "token");
+    const glueIndex = indexes.indexOf("_glue");
 
     // last index contains glue info, N means next (there should be no space between this and next character)
-    const followSpace = (word.indexes[word.indexes.length - 1] != 'N') ? " " : "";
+    const followSpace = (glueIndex == -1 || word.indexes[glueIndex] != 'N') ? " " : "";
     const text = defaultIndex != -1 ? word.indexes[defaultIndex] + followSpace : " !NULL! ";
 
     return <React.Fragment>
