@@ -8,7 +8,7 @@ import axios from "axios";
 import {API_BASE_PATH} from "../globals";
 import {openSnackbar} from "./SnackBarReducer";
 import {SearchSettings} from "../entities/SearchSettings";
-import {isCorpusFormat} from "../entities/CorpusFormat";
+import {CorpusFormat, isCorpusFormat} from "../entities/CorpusFormat";
 import {loadCorpusFormat, loadSearchSettingsRequest} from "./SearchSettingsReducer";
 import {parseValidationErrors} from "../actions/errors";
 import {
@@ -75,7 +75,51 @@ export const saveDefaultMetadataRequest = (metadata: SelectedMetadata, settingsI
     }
 };
 
+/**
+ * Ensures that the ordering of elements in SelectedData is consistent with CorpusFormat.
+ * Otherwise received data can be misinterpreted ( the order of columns could be wrong)
+ * @param data
+ * @param corpusFormat
+ */
+function orderMetadata(data: SelectedMetadata, corpusFormat: CorpusFormat): SelectedMetadata {
+    const indexes: Array<string> = [];
+    const entities: { [key: string]: { attributes: Array<string>, color: string } } = {};
+
+    for (let index of Object.keys(corpusFormat.indexes)) {
+        if (data.indexes.indexOf(index) > 0) indexes.push(index);
+    }
+    for (let entityName of Object.keys(corpusFormat.entities)) {
+        const wantedEntityInfo = data.entities[entityName];
+        if (typeof wantedEntityInfo !== undefined) {
+            const fullEntity = corpusFormat.entities[entityName];
+            const attributes: Array<string> = [];
+            for (let attribute of Object.keys(fullEntity.attributes)) {
+                if (wantedEntityInfo.attributes.indexOf(attribute) > 0) attributes.push(attribute);
+            }
+            entities[entityName] = {
+                attributes,
+                color: wantedEntityInfo.color
+            };
+        }
+    }
+
+    return {
+        indexes,
+        entities,
+        defaultIndex: data.defaultIndex
+    }
+}
+
 export const loadSelectedMetadataRequest = (searchSettingsId: string): ThunkResult<void> => async (dispatch, getState) => {
+    const searchSettings = getState().searchSettings.settings[searchSettingsId];
+    if (!searchSettings) {
+        dispatch(openSnackbar(`Cannot load metadata for search settings ${searchSettingsId}, which is  unknown`));
+        return;
+    }
+    if (!searchSettings.corpusFormat) {
+        dispatch(openSnackbar(`No corpus format is loaded for search settings ${searchSettingsId}`));
+        return;
+    }
     const path = isLoggedIn(getState()) ? `${API_BASE_PATH}/user/text-metadata/${searchSettingsId}` : `${API_BASE_PATH}/user/default-metadata/${searchSettingsId}`;
     try {
         const {data} = await axios.get<SelectedMetadata>(path);
@@ -84,7 +128,10 @@ export const loadSelectedMetadataRequest = (searchSettingsId: string): ThunkResu
             console.error("invalid format of selected metadata");
             consoleDump(data);
         }
-        dispatch(loadSelectedMetadata({settingsId: searchSettingsId, metadata: data}))
+        dispatch(loadSelectedMetadata({
+            settingsId: searchSettingsId,
+            metadata: orderMetadata(data, searchSettings.corpusFormat)
+        }))
     } catch (e) {
         dispatch(openSnackbar(`Could not load selected metadata for settings ${searchSettingsId}`));
     }
