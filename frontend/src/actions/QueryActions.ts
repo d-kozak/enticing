@@ -12,6 +12,7 @@ import {User} from "../entities/User";
 import {createMetadataRequest, filterCorpusFormat} from "./metadataFiltering";
 import {PerfTimer} from "../utils/perf";
 import {emptyTextUnitList, parseNewAnnotatedText} from "../components/annotations/TextUnitList";
+import {consoleDump} from "../components/utils/dump";
 
 
 export const startSearchingAction = (query: string, user: User, searchSettings: SearchSettings, history?: H.History): ThunkResult<void> => (dispatch, getState) => {
@@ -49,7 +50,8 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
             throw `Invalid search result ${JSON.stringify(response.data, null, 2)}`;
         }
         for (let error in response.data.errors) {
-            dispatch(openSnackbar(`Error from ${error}: ${response.data.errors[error]}`))
+            dispatch(openSnackbar(`Error from ${error}: ${response.data.errors[error]}`));
+            consoleDump(response.data.errors[error]);
         }
         for (let i in response.data.searchResults) {
             const snippet = response.data.searchResults[i];

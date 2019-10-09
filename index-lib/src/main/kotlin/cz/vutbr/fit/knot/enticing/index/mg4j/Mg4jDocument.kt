@@ -33,7 +33,7 @@ enum class DocumentMetadata {
  */
 class Mg4jDocument(
         private val corpusConfiguration: CorpusConfiguration,
-        private val metadata: Reference2ObjectMap<Enum<*>, Any>,
+        internal val metadata: Reference2ObjectMap<Enum<*>, Any>,
         override val content: List<String>
 ) : AbstractDocument(), IndexedDocument {
 

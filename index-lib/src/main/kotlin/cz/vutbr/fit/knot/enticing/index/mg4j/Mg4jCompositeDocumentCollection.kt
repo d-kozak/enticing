@@ -1,7 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
-import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import it.unimi.di.big.mg4j.document.AbstractDocumentCollection
 import it.unimi.di.big.mg4j.document.DocumentCollection
 import it.unimi.di.big.mg4j.document.DocumentFactory
@@ -53,7 +52,9 @@ class Mg4jCompositeDocumentCollection(
 
     override fun document(index: Long): Mg4jDocument {
         val (collection, localIndex) = findCollection(index)
-        return collection.document(localIndex)
+        val document = collection.document(localIndex)
+        document.metadata[DocumentMetadata.ID] = index.toInt() // the single file collections set incorrect local id, has to be updated to the global one
+        return document
     }
 
     /**

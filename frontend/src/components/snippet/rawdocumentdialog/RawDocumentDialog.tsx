@@ -10,6 +10,8 @@ import Typography from "@material-ui/core/es/Typography";
 import IconButton from "@material-ui/core/es/IconButton";
 import CloseIcon from '@material-ui/icons/Close';
 import {closeRawDocumentDialog} from "../../../reducers/dialog/RawDocumentDialogReducer";
+import DocumentDebugInfo from "../DocumentDebugInfoComponent";
+import {isDebugMode} from "../../../reducers/selectors";
 
 const styles = (theme: Theme) => createStyles({
     title: {
@@ -34,7 +36,7 @@ type RawDocumentDialogProps =
     & {}
 
 const RawDocumentDialog = (props: RawDocumentDialogProps) => {
-    const {info, closeDialog, classes} = props;
+    const {info, debug, closeDialog, classes} = props;
     return <Dialog
         open={info != null}
         onClose={closeDialog}
@@ -49,7 +51,8 @@ const RawDocumentDialog = (props: RawDocumentDialogProps) => {
                 </IconButton>
             </MuiDialogTitle>
             <DialogContent>
-                <pre>{info.document}</pre>
+                {debug && <DocumentDebugInfo document={info}/>}
+                <pre>{info.content}</pre>
             </DialogContent>
         </div>
         }
@@ -58,6 +61,7 @@ const RawDocumentDialog = (props: RawDocumentDialogProps) => {
 
 
 const mapStateToProps = (state: ApplicationState) => ({
+    debug: isDebugMode(state),
     info: state.dialog.rawDocumentDialog.info
 });
 const mapDispatchToProps = {

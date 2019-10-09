@@ -37,6 +37,7 @@ class CollectionManager internal constructor(
         val matched = mutableListOf<IndexServer.SearchResult>()
         for ((i, result) in resultList.withIndex()) {
             val document = searchEngine.loadDocument(result.documentId)
+            check(document.id == result.documentId) { "Invalid document id set in the search engine: ${result.documentId} vs ${document.id}" }
             val matchInfo = postProcessor.process(query.eqlAst, document, result.intervals) ?: continue
             val (results, hasMore) = resultCreator.multipleResults(document, matchInfo, query, if (document.id == documentOffset) resultOffset else 0, query.snippetCount, query.resultFormat)
             val searchResults = results.map {

@@ -2,7 +2,7 @@ import {User} from "./entities/User";
 import {SearchResult} from "./entities/SearchResult";
 import {CorpusFormat} from "./entities/CorpusFormat";
 import {SearchSettings} from "./entities/SearchSettings";
-import {FullDocument} from "./entities/FullDocument";
+import {DocumentDebugInfo, FullDocument} from "./entities/FullDocument";
 
 export interface ApplicationState {
     userState: UserState,
@@ -56,11 +56,7 @@ export interface SearchSettingsState {
 }
 
 export interface RawDocumentDialogState {
-    info: {
-        document: string,
-        title: string,
-        url: string
-    } | null
+    info: DocumentDebugInfo & { content: string } | null
 }
 
 export interface DocumentDialogState {

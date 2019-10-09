@@ -37,9 +37,12 @@ export const loadRawDocumentRequest = (searchResult: SearchResult): ThunkResult<
         const response = await axios.post(`${API_BASE_PATH}/query/raw-document/`, request, {withCredentials: true});
         dispatch(openRawDocumentDialog({
             info: {
+                host: searchResult.host,
+                collection: searchResult.collection,
+                documentId: searchResult.id,
                 title: searchResult.documentTitle,
                 url: searchResult.url,
-                document: response.data
+                content: response.data
             }
         }));
     } catch (e) {

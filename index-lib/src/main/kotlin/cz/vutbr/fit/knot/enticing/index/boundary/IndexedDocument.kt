@@ -8,7 +8,7 @@ typealias Word = List<String>
  * Retrieved document from the indexed data
  */
 interface IndexedDocument : Iterable<Word> {
-    val id: Int
+    val id: DocumentId
     val uuid: String
     val title: String
     val uri: String
