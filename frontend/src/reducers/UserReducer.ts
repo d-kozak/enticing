@@ -59,7 +59,6 @@ export default reducer;
 
 export const saveDefaultMetadataRequest = (metadata: SelectedMetadata, settingsId: string): ThunkResult<void> => async (dispatch) => {
     if (metadata.indexes.indexOf(metadata.defaultIndex) < 0) {
-        // todo do we have to preserve the order of indexes according the the corpus format???
         metadata = {
             ...metadata,
             indexes: [...metadata.indexes, metadata.defaultIndex]
