@@ -58,7 +58,7 @@ class CollectionManager internal constructor(
                 return IndexServer.CollectionResultList(matched, nextOffset)
             }
         }
-        return IndexServer.CollectionResultList(matched, if (resultList.isNotEmpty()) Offset(processed + 1, 0) else null)
+        return IndexServer.CollectionResultList(matched, if (resultList.isNotEmpty()) Offset(resultList.last().documentId, 0) else null)
     }
 
     fun extendSnippet(query: IndexServer.ContextExtensionQuery): SnippetExtension {

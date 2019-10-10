@@ -38,7 +38,9 @@ class QueryService(
     fun getMore(session: HttpSession): WebServer.ResultList? {
         val (query, selectedSettings, offset) = session.getAttribute("lastQuery") as? LastQuery ?: return null
         val searchSettings = checkUserCanAccessSettings(selectedSettings)
-        val requestData = searchSettings.servers.map { IndexServerRequestData(it, offset[it]) }
+        val requestData = searchSettings.servers
+                .filter { it in offset && offset.getValue(it).isNotEmpty() }
+                .map { IndexServerRequestData(it, offset[it]) }
         log.info("Executing query $offset with requestData $requestData")
         val (result, newOffset) = flatten(dispatcher.dispatchQuery(query, requestData))
         session.setAttribute("lastQuery", LastQuery(query, selectedSettings, newOffset))
