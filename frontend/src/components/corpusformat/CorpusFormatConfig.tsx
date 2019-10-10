@@ -10,8 +10,8 @@ import Button from '@material-ui/core/Button';
 
 import 'react-checkbox-tree/lib/react-checkbox-tree.css';
 import Typography from "@material-ui/core/es/Typography";
-import {loadCorpusFormatRequest} from "../../reducers/SearchSettingsReducer";
-import {getUser, isLoggedIn, loadSelectedMetadataRequest} from "../../reducers/UserReducer";
+import {loadCorpusFormatWithMetadataRequest} from "../../reducers/SearchSettingsReducer";
+import {getUser, isLoggedIn} from "../../reducers/UserReducer";
 import CorpusFormatSelector from "./CorpusFormatSelector";
 
 const styles = createStyles({});
@@ -27,32 +27,25 @@ export type CorpusFormatSelectorProps =
 
 
 const CorpusFormatConfig = (props: CorpusFormatSelectorProps) => {
-    const {searchSettings, user, loadCorpusFormat, loadSelectedMetadata} = props;
+    const {searchSettings, user, loadCorpusFormatWithMetadata} = props;
 
     useEffect(() => {
-        if (!searchSettings.corpusFormat) {
-            loadCorpusFormat(searchSettings);
+        if (!searchSettings.corpusFormat || !user.selectedMetadata[searchSettings.id]) {
+            loadCorpusFormatWithMetadata(searchSettings.id, true);
         }
-    }, [searchSettings]);
-
-
-    useEffect(() => {
-        if (!user.selectedMetadata[searchSettings.id]) {
-            loadSelectedMetadata(searchSettings.id);
-        }
-    }, [user]);
+    }, []);
 
     if (!searchSettings.corpusFormat) {
         return <div>
             <Typography variant="body1">Loading corpus format...</Typography>
             <CircularProgress/>
-            <Button onClick={() => loadCorpusFormat(searchSettings)}>Try again</Button>
+            <Button onClick={() => loadCorpusFormatWithMetadata(searchSettings.id, true)}>Try again</Button>
         </div>
     } else if (!user.selectedMetadata[searchSettings.id]) {
         return <div>
             <Typography variant="body1">Loading selected metadata...</Typography>
             <CircularProgress/>
-            <Button onClick={() => loadSelectedMetadata(searchSettings.id)}>Try again</Button>
+            <Button onClick={() => loadCorpusFormatWithMetadata(searchSettings.id, true)}>Try again</Button>
         </div>
     } else {
         return <CorpusFormatSelector searchSettings={searchSettings} corpusFormat={searchSettings.corpusFormat}
@@ -67,8 +60,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 });
 
 const mapDispatchToProps = {
-    loadCorpusFormat: loadCorpusFormatRequest as (settings: SearchSettings) => void,
-    loadSelectedMetadata: loadSelectedMetadataRequest as (settingsId: string) => void
+    loadCorpusFormatWithMetadata: loadCorpusFormatWithMetadataRequest as (searchSettingsId: string, useCached?: boolean) => void,
 };
 
 export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(CorpusFormatConfig))

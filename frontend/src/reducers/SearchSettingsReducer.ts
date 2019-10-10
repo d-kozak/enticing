@@ -9,7 +9,14 @@ import {openSnackbar} from "./SnackBarReducer";
 import {parseValidationErrors} from "../actions/errors";
 import {uploadFile} from "../utils/file";
 import {hideProgressbar, showProgressbar} from "./ProgressBarReducer";
-import {loadSelectedMetadataRequest} from "./UserReducer";
+import {
+    doLoadSelectedMetadata,
+    isLoggedIn,
+    loadSelectedMetadata,
+    loadSelectedMetadataRequest,
+    orderMetadata
+} from "./UserReducer";
+import {consoleDump} from "../components/utils/dump";
 
 
 const {reducer, actions} = createSlice({
@@ -67,39 +74,71 @@ export const {removeTransientSettings, loadCorpusFormat} = actions;
 export default reducer;
 
 
-export const loadCorpusFormatRequest = (searchSettings: SearchSettings): ThunkResult<void> => (dispatch) => {
-    axios.get(`${API_BASE_PATH}/query/format/${searchSettings.id}`, {withCredentials: true})
-        .then(response => {
-            if (isCorpusFormat(response.data)) {
-                dispatch(loadCorpusFormat({id: Number(searchSettings.id), format: response.data}))
-            } else {
-                throw "could not parse";
-            }
-        }).catch(error => {
-        console.error(error);
-        dispatch(openSnackbar(`Could load format for selected configuration ${searchSettings.name}`));
-    })
+export const doCorpusFormatRequest = async (searchSettings: SearchSettings): Promise<CorpusFormat> => {
+    const response = await axios.get(`${API_BASE_PATH}/query/format/${searchSettings.id}`, {withCredentials: true});
+    if (isCorpusFormat(response.data)) {
+        return response.data;
+    } else {
+        throw "could not parse";
+    }
 };
 
-export const loadSearchSettingsRequest = (selectedSettingsId: string | null, isLoggedIn: boolean): ThunkResult<void> => (dispatch) => {
-    axios.get<Array<SearchSettings>>(`${API_BASE_PATH}/search-settings`, {withCredentials: true})
-        .then(response => {
-            const searchSettings = response.data;
-            dispatch(loadSearchSettings(searchSettings));
-            if (searchSettings.length == 0) {
-                dispatch(openSnackbar('No search settings loaded'));
-            }
-            const selectedSettings = findSelectedSettings(selectedSettingsId, searchSettings);
-            if (selectedSettings !== null) {
-                dispatch(loadCorpusFormatRequest(selectedSettings));
-                dispatch(loadSelectedMetadataRequest(selectedSettings.id));
-            } else {
-                console.warn("No selected search settings found, could not pre-load corpus format...")
-            }
-        })
-        .catch(() => {
-            dispatch(openSnackbar('Could not load configurations'));
-        });
+export const loadCorpusFormatRequest = (searchSettings: SearchSettings): ThunkResult<void> => async (dispatch) => {
+    try {
+        const corpusFormat = await doCorpusFormatRequest(searchSettings);
+        dispatch(loadCorpusFormat({id: Number(searchSettings.id), format: corpusFormat}))
+    } catch (e) {
+        consoleDump(e);
+        dispatch(openSnackbar(`Could load format for selected configuration ${searchSettings.name}`));
+    }
+};
+
+export const loadCorpusFormatWithMetadataRequest = (searchSettingsId: string, useCached: boolean = true): ThunkResult<void> => async (dispatch, getState) => {
+    const state = getState();
+    const settings = state.searchSettings.settings[searchSettingsId];
+    if (!settings) {
+        console.error(`No search settings with id found ${searchSettingsId}`);
+        dispatch(openSnackbar("Could not corpus format with metadata"));
+        return;
+    }
+    try {
+        let corpusFormat = settings.corpusFormat;
+        if (!useCached || !settings.corpusFormat) {
+            corpusFormat = await doCorpusFormatRequest(settings);
+            dispatch(loadCorpusFormat({id: Number(searchSettingsId), format: corpusFormat}));
+        }
+        if (!useCached || !state.userState.user.selectedMetadata[searchSettingsId]) {
+            const metadata = await doLoadSelectedMetadata(settings, isLoggedIn(state));
+            dispatch(loadSelectedMetadata({
+                settingsId: searchSettingsId,
+                metadata: orderMetadata(metadata, corpusFormat!)
+            }))
+        }
+    } catch (e) {
+        consoleDump(e);
+        dispatch(openSnackbar("Could not load corpus format with metadata"));
+    }
+};
+
+export const loadSearchSettingsRequest = (selectedSettingsId: string | null, isLoggedIn: boolean): ThunkResult<void> => async (dispatch) => {
+    try {
+        const response = await axios.get<Array<SearchSettings>>(`${API_BASE_PATH}/search-settings`, {withCredentials: true});
+        const searchSettings = response.data;
+        dispatch(loadSearchSettings(searchSettings));
+        if (searchSettings.length == 0) {
+            dispatch(openSnackbar('No search settings loaded'));
+        }
+        const selectedSettings = findSelectedSettings(selectedSettingsId, searchSettings);
+        if (selectedSettings !== null) {
+            dispatch(loadCorpusFormatRequest(selectedSettings));
+            dispatch(loadSelectedMetadataRequest(selectedSettings.id));
+        } else {
+            console.warn("No selected search settings found, could not pre-load corpus format...")
+        }
+
+    } catch (e) {
+        dispatch(openSnackbar('Could not load configurations'));
+    }
 };
 
 const findSelectedSettings = (selectedSettings: string | null, searchSettings: Array<SearchSettings>): SearchSettings | null => {
@@ -116,6 +155,7 @@ const findSelectedSettings = (selectedSettings: string | null, searchSettings: A
             }
         }
     }
+    if (searchSettings.length > 0) return searchSettings[0];
     return null
 };
 

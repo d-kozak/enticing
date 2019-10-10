@@ -9,7 +9,7 @@ import {API_BASE_PATH} from "../globals";
 import {openSnackbar} from "./SnackBarReducer";
 import {SearchSettings} from "../entities/SearchSettings";
 import {CorpusFormat, isCorpusFormat} from "../entities/CorpusFormat";
-import {loadCorpusFormat, loadSearchSettingsRequest} from "./SearchSettingsReducer";
+import {doCorpusFormatRequest, loadCorpusFormat, loadSearchSettingsRequest} from "./SearchSettingsReducer";
 import {parseValidationErrors} from "../actions/errors";
 import {
     closeChangePasswordDialog,
@@ -54,7 +54,7 @@ export const isUserAdmin = (state: ApplicationState) => state.userState.user.rol
 export const isLoggedIn = (state: ApplicationState) => state.userState.isLoggedIn;
 export const getUser = (state: ApplicationState) => state.userState.user;
 
-const {userLogin, userLogout, updateUserSettings, selectSearchSettings, loadSelectedMetadata} = actions;
+export const {userLogin, userLogout, updateUserSettings, selectSearchSettings, loadSelectedMetadata} = actions;
 export default reducer;
 
 export const saveDefaultMetadataRequest = (metadata: SelectedMetadata, settingsId: string): ThunkResult<void> => async (dispatch) => {
@@ -81,20 +81,21 @@ export const saveDefaultMetadataRequest = (metadata: SelectedMetadata, settingsI
  * @param data
  * @param corpusFormat
  */
-function orderMetadata(data: SelectedMetadata, corpusFormat: CorpusFormat): SelectedMetadata {
+export function orderMetadata(data: SelectedMetadata, corpusFormat: CorpusFormat): SelectedMetadata {
     const indexes: Array<string> = [];
     const entities: { [key: string]: { attributes: Array<string>, color: string } } = {};
 
     for (let index of Object.keys(corpusFormat.indexes)) {
-        if (data.indexes.indexOf(index) > 0) indexes.push(index);
+        if (data.indexes.indexOf(index) >= 0) indexes.push(index);
     }
+
     for (let entityName of Object.keys(corpusFormat.entities)) {
         const wantedEntityInfo = data.entities[entityName];
-        if (typeof wantedEntityInfo !== undefined) {
+        if (wantedEntityInfo) {
             const fullEntity = corpusFormat.entities[entityName];
             const attributes: Array<string> = [];
             for (let attribute of Object.keys(fullEntity.attributes)) {
-                if (wantedEntityInfo.attributes.indexOf(attribute) > 0) attributes.push(attribute);
+                if (wantedEntityInfo.attributes.indexOf(attribute) >= 0) attributes.push(attribute);
             }
             entities[entityName] = {
                 attributes,
@@ -110,29 +111,35 @@ function orderMetadata(data: SelectedMetadata, corpusFormat: CorpusFormat): Sele
     }
 }
 
+export const doLoadSelectedMetadata = async (searchSettings: SearchSettings, isLoggedIn: boolean): Promise<SelectedMetadata> => {
+    const path = isLoggedIn ? `${API_BASE_PATH}/user/text-metadata/${searchSettings.id}` : `${API_BASE_PATH}/user/default-metadata/${searchSettings.id}`;
+    const {data} = await axios.get<SelectedMetadata>(path);
+    if (!isSelectedMetadata(data)) {
+        console.error("invalid format of selected metadata");
+        consoleDump(data);
+    }
+    return data;
+};
+
 export const loadSelectedMetadataRequest = (searchSettingsId: string): ThunkResult<void> => async (dispatch, getState) => {
     const searchSettings = getState().searchSettings.settings[searchSettingsId];
     if (!searchSettings) {
         dispatch(openSnackbar(`Cannot load metadata for search settings ${searchSettingsId}, which is  unknown`));
         return;
     }
-    if (!searchSettings.corpusFormat) {
-        dispatch(openSnackbar(`No corpus format is loaded for search settings ${searchSettingsId}`));
-        return;
+    let corpusFormat = searchSettings.corpusFormat;
+    if (!corpusFormat) {
+        console.warn(`No corpus format is loaded for search settings ${searchSettingsId}, loading it now`);
+        corpusFormat = await doCorpusFormatRequest(searchSettings);
     }
-    const path = isLoggedIn(getState()) ? `${API_BASE_PATH}/user/text-metadata/${searchSettingsId}` : `${API_BASE_PATH}/user/default-metadata/${searchSettingsId}`;
     try {
-        const {data} = await axios.get<SelectedMetadata>(path);
-        if (!isSelectedMetadata(data)) {
-            dispatch(openSnackbar(`Could not load selected metadata for settings ${searchSettingsId}`));
-            console.error("invalid format of selected metadata");
-            consoleDump(data);
-        }
+        const data = await doLoadSelectedMetadata(searchSettings, isLoggedIn(getState()));
         dispatch(loadSelectedMetadata({
             settingsId: searchSettingsId,
-            metadata: orderMetadata(data, searchSettings.corpusFormat)
+            metadata: orderMetadata(data, corpusFormat!)
         }))
     } catch (e) {
+        consoleDump(e);
         dispatch(openSnackbar(`Could not load selected metadata for settings ${searchSettingsId}`));
     }
 };
