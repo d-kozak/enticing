@@ -5,6 +5,7 @@ import cz.vutbr.fit.knot.enticing.dto.Offset
 import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.SnippetExtension
 import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.format.result.emptySnippet
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
@@ -23,7 +24,8 @@ class CollectionManager internal constructor(
         private val searchEngine: SearchEngine,
         private val postProcessor: PostProcessor,
         private val resultCreator: ResultCreator,
-        private val eqlCompiler: EqlCompiler
+        private val eqlCompiler: EqlCompiler,
+        private val corpusConfiguration: CorpusConfiguration
 ) {
 
     private val log = LoggerFactory.getLogger(CollectionManager::class.java)
@@ -67,7 +69,7 @@ class CollectionManager internal constructor(
         if (prefix.isEmpty() && suffix.isEmpty()) return SnippetExtension(emptySnippet(query.textFormat), emptySnippet(query.textFormat), false)
 
         val (prefixInfo, suffixInfo) = if (query.query != null) {
-            val ast = eqlCompiler.parseOrFail(query.query!!)
+            val ast = eqlCompiler.parseOrFail(query.query!!, corpusConfiguration)
             val prefixMatch = postProcessor.process(ast, document, prefix) ?: MatchInfo.empty()
             val suffixMatch = postProcessor.process(ast, document, suffix) ?: MatchInfo.empty()
             prefixMatch to suffixMatch
@@ -83,7 +85,7 @@ class CollectionManager internal constructor(
     fun getDocument(query: IndexServer.DocumentQuery): IndexServer.FullDocument {
         val document = searchEngine.loadDocument(query.documentId)
         val matchInfo = if (query.query != null) {
-            val ast = eqlCompiler.parseOrFail(query.query!!)
+            val ast = eqlCompiler.parseOrFail(query.query!!, corpusConfiguration)
             postProcessor.process(ast, document) ?: MatchInfo.empty()
         } else MatchInfo.empty()
 

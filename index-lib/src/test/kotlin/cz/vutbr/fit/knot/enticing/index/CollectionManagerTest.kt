@@ -135,7 +135,7 @@ class CollectionManagerTest {
                     "job work"
             )) {
                 val query = templateQuery.copy(query = input, textFormat = textFormat)
-                query.eqlAst = EqlCompiler(clientConfig.corpusConfiguration).parseOrFail(input)
+                query.eqlAst = EqlCompiler().parseOrFail(input, clientConfig.corpusConfiguration)
                 val result = queryEngine.query(query)
             }
         }
@@ -147,7 +147,7 @@ class CollectionManagerTest {
         val queryEngine = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
         val input = "nertag:person (killed|visited)"
         val query = templateQuery.copy(query = input, textFormat = TextFormat.TEXT_UNIT_LIST)
-        query.eqlAst = EqlCompiler(clientConfig.corpusConfiguration).parseOrFail(input)
+        query.eqlAst = EqlCompiler().parseOrFail(input, clientConfig.corpusConfiguration)
         val result = queryEngine.query(query)
     }
 
@@ -155,7 +155,7 @@ class CollectionManagerTest {
     private fun <T : ResultFormat> check(query: SearchQuery, resultFormatClass: Class<T>, check: (T) -> Unit) {
         val queryEngine = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
         val updatedQuery = if (query.query.isEmpty()) query.copy(query = "nertag:person (killed|visited)") else query
-        updatedQuery.eqlAst = EqlCompiler(clientConfig.corpusConfiguration).parseOrFail(updatedQuery.query)
+        updatedQuery.eqlAst = EqlCompiler().parseOrFail(updatedQuery.query, clientConfig.corpusConfiguration)
         for (result in queryEngine.query(updatedQuery).searchResults) {
             assertThat(result.payload).isInstanceOf(resultFormatClass)
             check(result.payload as T)
@@ -368,7 +368,7 @@ class CollectionManagerTest {
         val input = "job work"
         val query = SearchQuery(query = input, snippetCount = 33, offset = mapOf("one" to Offset(document = 0, snippet = 0)), metadata = TextMetadata.Predefined(value = "all"), resultFormat = cz.vutbr.fit.knot.enticing.dto.ResultFormat.SNIPPET, textFormat = TextFormat.TEXT_UNIT_LIST, defaultIndex = "token")
         val queryEngine = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
-        query.eqlAst = EqlCompiler(clientConfig.corpusConfiguration).parseOrFail(input)
+        query.eqlAst = EqlCompiler().parseOrFail(input, clientConfig.corpusConfiguration)
         val result = queryEngine.query(query)
     }
 
@@ -378,7 +378,7 @@ class CollectionManagerTest {
         val input = "lemma:(work|)"
         val query = templateQuery.copy(query = input)
         assertThrows<EqlCompilerException> {
-            query.eqlAst = EqlCompiler(clientConfig.corpusConfiguration).parseOrFail(input)
+            query.eqlAst = EqlCompiler().parseOrFail(input, clientConfig.corpusConfiguration)
         }
     }
 

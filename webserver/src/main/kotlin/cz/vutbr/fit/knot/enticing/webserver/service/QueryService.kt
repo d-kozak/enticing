@@ -76,7 +76,7 @@ class QueryService(
         }
     }
 
-    private fun checkUserCanAccessSettings(selectedSettings: Long): SearchSettings {
+    fun checkUserCanAccessSettings(selectedSettings: Long): SearchSettings {
         val currentUser = userService.currentUser
 
         val searchSettings = searchSettingsRepository.findById(selectedSettings).orElseThrow { IllegalArgumentException("Unknown searchSettings id $selectedSettings") }

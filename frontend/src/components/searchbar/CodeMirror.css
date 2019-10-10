@@ -15,8 +15,7 @@
 
 .semanticError {
     padding-bottom: 2px;
-    text-underline: aqua;
-    /*background: url("https://try.kotlinlang.org/static/images/wavyline-red.gif") repeat-x 100% 100%;*/
+    background: url("https://try.kotlinlang.org/static/images/wavyline-red.gif") repeat-x 100% 100%;
 }
 
 @media (min-width: 500px) {

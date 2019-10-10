@@ -14,5 +14,5 @@ class EqlCompilerController(
 ) {
 
     @GetMapping
-    fun get(@RequestParam query: String) = compilerService.parseQuery(URLDecoder.decode(query, "UTF-8")).errors
+    fun get(@RequestParam query: String, @RequestParam settings: Long) = compilerService.parseQuery(URLDecoder.decode(query, "UTF-8"), settings).errors
 }

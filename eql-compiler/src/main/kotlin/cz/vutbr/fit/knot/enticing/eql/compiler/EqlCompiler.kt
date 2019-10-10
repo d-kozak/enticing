@@ -17,15 +17,14 @@ import org.antlr.v4.runtime.Recognizer
 import org.antlr.v4.runtime.Token
 import kotlin.math.min
 
-class EqlCompiler(corpusConfiguration: CorpusConfiguration) {
-
-    private val analyzer = SemanticAnalyzer(corpusConfiguration)
+class EqlCompiler {
 
     fun parse(input: String): ParsedQuery {
         return parseToEqlAst(input)
     }
 
-    fun parseOrFail(input: String): AstNode {
+    fun parseOrFail(input: String, corpusConfiguration: CorpusConfiguration): AstNode {
+        val analyzer = SemanticAnalyzer(corpusConfiguration)
         val (parseTree, errors) = parseWithAntlr(input)
         if (errors.isNotEmpty()) throw EqlCompilerException(errors.toString())
         val ast = parseTree.accept(EqlAstGeneratingVisitor())
@@ -34,7 +33,8 @@ class EqlCompiler(corpusConfiguration: CorpusConfiguration) {
         return ast
     }
 
-    internal fun parseAndAnalyzeQuery(input: String): ParsedQuery {
+    fun parseAndAnalyzeQuery(input: String, corpusConfiguration: CorpusConfiguration): ParsedQuery {
+        val analyzer = SemanticAnalyzer(corpusConfiguration)
         val (parseTree, errors) = parseWithAntlr(input)
         return if (errors.isEmpty()) {
             val ast = parseTree.accept(EqlAstGeneratingVisitor())

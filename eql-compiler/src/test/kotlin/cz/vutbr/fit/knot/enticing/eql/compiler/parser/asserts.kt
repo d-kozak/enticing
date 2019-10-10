@@ -10,7 +10,7 @@ fun assertParseWithAntlrWithoutErrors(input: String) {
 }
 
 fun assertParseWithAntlrWithErrors(input: String, errorCount: Int? = null) {
-    val (_, errors) = EqlCompiler(corpusConfig("dummy")).parse(input)
+    val (_, errors) = EqlCompiler().parse(input)
     println(errors)
     if (errorCount != null)
         assertThat(errors).hasSize(errorCount)

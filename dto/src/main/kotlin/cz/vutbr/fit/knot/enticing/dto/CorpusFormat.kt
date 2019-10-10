@@ -1,6 +1,8 @@
 package cz.vutbr.fit.knot.enticing.dto
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.Entity
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.Index
 import javax.validation.constraints.NotBlank
 
 
@@ -31,6 +33,17 @@ data class CorpusFormat(
     internal constructor(name: String, indexes: List<String>, entities: Map<String, List<String>>)
             : this(name, indexes.map { it to "" }.toMap(), entities.mapValues { EntityFormat("", it.value.map { it to "" }.toMap()) })
 }
+
+fun CorpusFormat.toCorpusConfig() = CorpusConfiguration(
+        corpusName,
+        indexes.mapValues { (key, _) -> Index(key, "") },
+        entities.mapValues { (entityName, entityFormat) ->
+            Entity(
+                    entityName,
+                    attributes = entityFormat.attributes.mapValues { (attributeName, _) -> cz.vutbr.fit.knot.enticing.dto.config.dsl.Attribute(attributeName) }.toMutableMap()
+            )
+        }
+)
 
 /**
  * Format of one attribute

@@ -87,12 +87,12 @@ fun assertHasError(errors: List<CompilerError>, id: String, count: Int = 1) {
 
 class AllChecksTest {
 
-    val compiler = EqlCompiler(config)
+    val compiler = EqlCompiler()
 
     @Test
     fun `queries from file`() {
         forEachQuery("semantic_ok.eql") {
-            val (_, errors) = compiler.parseAndAnalyzeQuery(it)
+            val (_, errors) = compiler.parseAndAnalyzeQuery(it, config)
             if (errors.isNotEmpty()) {
                 System.err.println(errors)
                 false
@@ -102,7 +102,7 @@ class AllChecksTest {
 
     @Test
     fun `invalid proximity`() {
-        val (tree, errors) = compiler.parseAndAnalyzeQuery("one two ~ three")
+        val (tree, errors) = compiler.parseAndAnalyzeQuery("one two ~ three", config)
         assertHasError(errors, "PROX-1")
         assertThat(errors).hasSize(1)
         val check = errors[0]
@@ -119,19 +119,19 @@ class AllChecksTest {
 
         @Test
         fun `simple query`() {
-            val (_, errors) = compiler.parseAndAnalyzeQuery("lenna:word") // should be lemma
+            val (_, errors) = compiler.parseAndAnalyzeQuery("lenna:word", config) // should be lemma
             assertHasError(errors, "IND-1")
         }
 
         @Test
         fun `with or`() {
-            val (_, errors) = compiler.parseAndAnalyzeQuery("index:(A|B|C)") // should be lemma
+            val (_, errors) = compiler.parseAndAnalyzeQuery("index:(A|B|C)", config) // should be lemma
             assertHasError(errors, "IND-1")
         }
 
         @Test
         fun `index inside or`() {
-            val (_, errors) = compiler.parseAndAnalyzeQuery("index:A | index:B  | index:C") // should be lemma
+            val (_, errors) = compiler.parseAndAnalyzeQuery("index:A | index:B  | index:C", config) // should be lemma
             assertHasError(errors, "IND-1", 3)
         }
     }
@@ -141,13 +141,13 @@ class AllChecksTest {
 
         @Test
         fun `simple query`() {
-            val (_, errors) = compiler.parseAndAnalyzeQuery("personek.name:honza") // should be person
+            val (_, errors) = compiler.parseAndAnalyzeQuery("personek.name:honza", config) // should be person
             assertHasError(errors, "ENT-1")
         }
 
         @Test
         fun `more complex query`() {
-            val (_, errors) = compiler.parseAndAnalyzeQuery("nertag:person^(person1.name:Picasso) lemma:(visit|explore) Paris - _SENT_")
+            val (_, errors) = compiler.parseAndAnalyzeQuery("nertag:person^(person1.name:Picasso) lemma:(visit|explore) Paris - _SENT_", config)
             assertHasError(errors, "ENT-1")
         }
     }

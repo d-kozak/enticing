@@ -10,6 +10,5 @@ import org.springframework.context.annotation.Configuration
 class EqlCompilerConfig {
 
     @Bean
-    @Incomplete("pass in the current selected config... but how?")
-    fun parser() = EqlCompiler(corpusConfig("dummy"))
+    fun parser() = EqlCompiler()
 }

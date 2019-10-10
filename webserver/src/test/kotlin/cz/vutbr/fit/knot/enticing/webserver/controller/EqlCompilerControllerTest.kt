@@ -43,14 +43,14 @@ internal class EqlCompilerControllerTest(
     fun `get calls compiler service`() {
 
         val dummyDto = ParsedQuery(PureMgj4Node(" "))
-        Mockito.`when`(compilerService.parseQuery("nertag:person (killed|visited)"))
+        Mockito.`when`(compilerService.parseQuery("nertag:person (killed|visited)", 5))
                 .thenReturn(dummyDto)
 
         val query = URLEncoder.encode("nertag:person (killed|visited)", "UTF-8")
-        mockMvc.perform(MockMvcRequestBuilders.get("$apiBasePath/compiler?query=$query"))
+        mockMvc.perform(MockMvcRequestBuilders.get("$apiBasePath/compiler?query=$query&settings=5"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
 
-        Mockito.verify(compilerService).parseQuery("nertag:person (killed|visited)")
+        Mockito.verify(compilerService).parseQuery("nertag:person (killed|visited)", 5)
         Mockito.clearInvocations(compilerService)
     }
 }

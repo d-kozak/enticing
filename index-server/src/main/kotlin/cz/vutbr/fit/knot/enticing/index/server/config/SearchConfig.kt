@@ -41,7 +41,7 @@ class SearchConfig(
     }
 
     @Bean
-    fun compiler(config: IndexClientConfig) = EqlCompiler(config.corpusConfiguration)
+    fun compiler(config: IndexClientConfig) = EqlCompiler()
 
     /**
      * Creates SearchExecutors for all collections in the config

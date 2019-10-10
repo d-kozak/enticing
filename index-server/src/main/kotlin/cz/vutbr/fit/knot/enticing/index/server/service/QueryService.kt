@@ -23,7 +23,7 @@ class QueryService(
     val queryDispatcher = QueryDispatcher(CollectionQueryExecutor(collectionManagers))
 
     fun processQuery(query: SearchQuery): IndexServer.IndexResultList {
-        query.eqlAst = eqlCompiler.parseOrFail(query.query)
+        query.eqlAst = eqlCompiler.parseOrFail(query.query, indexClientConfig.corpusConfiguration)
 
         val requestData = if (query.offset != null) query.offset!!.map { (collection, offset) -> CollectionRequestData(collection, offset) }
         else collectionManagers.keys.map { CollectionRequestData(it, Offset(0, 0)) }

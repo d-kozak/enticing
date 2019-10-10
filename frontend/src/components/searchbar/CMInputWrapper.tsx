@@ -18,6 +18,10 @@ import {EQL} from "../../codemirror/eqlmode";
 import debounce from "debounce";
 import {API_BASE_PATH} from "../../globals";
 import {consoleDump} from "../utils/dump";
+import {ApplicationState} from "../../ApplicationState";
+import {connect} from "react-redux";
+import {getSelectedSearchSettings} from "../../reducers/selectors";
+import {SearchSettings} from "../../entities/SearchSettings";
 
 const styles = (theme: Theme) => createStyles({
     reactCodeMirror: {
@@ -25,7 +29,8 @@ const styles = (theme: Theme) => createStyles({
     }
 });
 
-interface CMInputWrapperProps extends WithStyles<typeof styles> {
+type CMInputWrapperProps = & typeof mapDispatchToProps
+    & ReturnType<typeof mapStateToProps> & WithStyles<typeof styles> & {
     query: string;
     setQuery: (query: string) => void;
     startSearching: (query: string) => void;
@@ -33,9 +38,9 @@ interface CMInputWrapperProps extends WithStyles<typeof styles> {
 }
 
 
-const analyzeQuery = debounce(async (query: string, doc: CodeMirror.Doc) => {
+const analyzeQuery = debounce(async (query: string, settings: SearchSettings, doc: CodeMirror.Doc) => {
     try {
-        const result = await axios.get<Array<{ location: { from: number, to: number }, type: string, message: string }>>(`${API_BASE_PATH}/compiler?query=${encodeURI(query)}`);
+        const result = await axios.get<Array<{ location: { from: number, to: number }, type: string, message: string }>>(`${API_BASE_PATH}/compiler?settings=${settings.id}&query=${encodeURI(query)}`);
         const errors = result.data;
 
         for (let mark of doc.getAllMarks()) {
@@ -63,7 +68,7 @@ const analyzeQuery = debounce(async (query: string, doc: CodeMirror.Doc) => {
 }, 400);
 
 const CMInputWrapper = (props: CMInputWrapperProps) => {
-    const {className = '', startSearching, classes, query, setQuery} = props;
+    const {className = '', startSearching, settings, classes, query, setQuery} = props;
 
     const codeMirrorRef = useRef<ReactCodeMirror.ReactCodeMirror>(null);
 
@@ -79,9 +84,13 @@ const CMInputWrapper = (props: CMInputWrapperProps) => {
 
     const queryChanged = (query: string) => {
         setQuery(query);
+        if (!settings) {
+            console.error("cannot analyze query, no settings selected");
+            return;
+        }
         if (codeMirrorRef.current) {
             const doc = codeMirrorRef.current.getCodeMirror().getDoc();
-            analyzeQuery(query, doc);
+            analyzeQuery(query, settings, doc);
         }
     };
 
@@ -107,4 +116,10 @@ const CMInputWrapper = (props: CMInputWrapperProps) => {
     </div>
 };
 
-export default withStyles(styles, {withTheme: true})(CMInputWrapper);
+const mapStateToProps = (state: ApplicationState) => ({
+    settings: getSelectedSearchSettings(state)
+});
+
+const mapDispatchToProps = {};
+
+export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(CMInputWrapper));
