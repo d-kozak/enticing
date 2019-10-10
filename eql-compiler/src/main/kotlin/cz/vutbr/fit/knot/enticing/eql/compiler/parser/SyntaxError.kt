@@ -9,5 +9,5 @@ enum class Severity {
 }
 
 sealed class CompilerError
-data class SyntaxError(val message: String, val location: Interval) : CompilerError()
-data class SemanticError(val message: String, val location: Interval, val severity: Severity,val analysisId: String) : CompilerError()
+data class SyntaxError(val message: String, val location: Interval, val type: String = "syntaxError") : CompilerError()
+data class SemanticError(val message: String, val location: Interval, val type: String = "semanticError", val severity: Severity, val analysisId: String) : CompilerError()

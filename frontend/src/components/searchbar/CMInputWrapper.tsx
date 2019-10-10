@@ -17,6 +17,7 @@ import {EQL} from "../../codemirror/eqlmode";
 
 import debounce from "debounce";
 import {API_BASE_PATH} from "../../globals";
+import {consoleDump} from "../utils/dump";
 
 const styles = (theme: Theme) => createStyles({
     reactCodeMirror: {
@@ -32,30 +33,33 @@ interface CMInputWrapperProps extends WithStyles<typeof styles> {
 }
 
 
-const analyzeQuery = debounce((query: string, doc: CodeMirror.Doc) => {
-    axios.get<Array<{ from: number, to: number, message: string }>>(`${API_BASE_PATH}/compiler?query=${encodeURI(query)}`)
-        .then(result => {
-            const errors = result.data;
+const analyzeQuery = debounce(async (query: string, doc: CodeMirror.Doc) => {
+    try {
+        const result = await axios.get<Array<{ location: { from: number, to: number }, type: string, message: string }>>(`${API_BASE_PATH}/compiler?query=${encodeURI(query)}`);
+        const errors = result.data;
 
-            for (let mark of doc.getAllMarks()) {
-                mark.clear();
-            }
+        for (let mark of doc.getAllMarks()) {
+            mark.clear();
+        }
 
-            for (let error of errors) {
-                const from = {
-                    line: 0,
-                    ch: error.from
-                };
-                const to = {
-                    line: 0,
-                    ch: error.to + 1
-                };
-                doc.markText(from, to, {
-                    className: 'syntaxError',
-                    title: error.message
-                });
-            }
-        });
+        for (let error of errors) {
+            const from = {
+                line: 0,
+                ch: error.location.from
+            };
+            const to = {
+                line: 0,
+                ch: error.location.to + 1
+            };
+            doc.markText(from, to, {
+                className: error.type,
+                title: error.message
+            });
+        }
+    } catch (e) {
+        console.error("could not parse error messages");
+        consoleDump(e);
+    }
 }, 400);
 
 const CMInputWrapper = (props: CMInputWrapperProps) => {
@@ -73,14 +77,13 @@ const CMInputWrapper = (props: CMInputWrapperProps) => {
     }, []);
 
 
-
     const queryChanged = (query: string) => {
         setQuery(query);
         if (codeMirrorRef.current) {
             const doc = codeMirrorRef.current.getCodeMirror().getDoc();
             analyzeQuery(query, doc);
         }
-    }
+    };
 
     const options: EditorConfiguration = {
         extraKeys: {
