@@ -163,4 +163,14 @@ class AllChecksTest {
         }
     }
 
+    @Nested
+    inner class AssignErrors {
+
+        @Test
+        fun `duplicate ids`() {
+            val (_, errors) = compiler.parseAndAnalyzeQuery("one:= ahoj two:= cau one:=nazdar", config)
+            assertHasError(errors, "ASGN-1", location = Interval.valueOf(21, 23))
+        }
+    }
+
 }
