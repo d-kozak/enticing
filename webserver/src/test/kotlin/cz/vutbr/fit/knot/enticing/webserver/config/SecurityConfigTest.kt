@@ -482,12 +482,12 @@ internal class SecurityConfigTest(
         fun `Parser endpoint is always accessible`() {
             val query = "nertag:person (killed|visited)"
             val encodedQuery = URLEncoder.encode(query, "UTF-8")
-            Mockito.`when`(compilerService.parseQuery(query, 10)).thenReturn(ParsedQuery(PureMgj4Node(query)))
+            Mockito.`when`(queryService.validateQuery(query, 10)).thenReturn(emptyList())
 
             mockMvc.perform(get("$apiBasePath/compiler?query=$encodedQuery&settings=10"))
                     .andExpect(status().isOk)
 
-            Mockito.clearInvocations(compilerService)
+            Mockito.clearInvocations(queryService)
         }
     }
 }

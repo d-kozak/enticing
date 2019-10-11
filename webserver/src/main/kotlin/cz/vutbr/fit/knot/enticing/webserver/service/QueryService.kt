@@ -22,8 +22,12 @@ class QueryService(
         private val dispatcher: QueryDispatcher<SearchQuery, Map<CollectionName, Offset>, IndexServer.IndexResultList>,
         private val searchSettingsRepository: SearchSettingsRepository,
         private val userService: EnticingUserService,
-        private val indexServerConnector: IndexServerConnector
+        private val indexServerConnector: IndexServerConnector,
+        private val compilerService: EqlCompilerService
 ) {
+
+
+    fun validateQuery(query: String, settings: Long) = compilerService.validateQuery(query, format(settings).toCorpusConfig())
 
     fun query(query: SearchQuery, selectedSettings: Long, session: HttpSession): WebServer.ResultList {
         val searchSettings = checkUserCanAccessSettings(selectedSettings)

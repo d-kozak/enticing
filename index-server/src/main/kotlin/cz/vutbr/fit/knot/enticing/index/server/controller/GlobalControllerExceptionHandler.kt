@@ -11,6 +11,6 @@ class GlobalControllerExceptionHandler {
 
     @ExceptionHandler(EqlCompilerException::class)
     fun eqlCompilerException(exception: EqlCompilerException, response: HttpServletResponse) {
-        response.sendError(HttpStatus.BAD_REQUEST.value(), "foooo")
+        response.sendError(HttpStatus.BAD_REQUEST.value(), exception.message)
     }
 }
