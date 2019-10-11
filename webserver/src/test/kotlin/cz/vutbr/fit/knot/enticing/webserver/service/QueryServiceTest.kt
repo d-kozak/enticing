@@ -39,6 +39,8 @@ internal class QueryServiceTest {
 
             val mockUser = User(login = "foo", userSettings = UserSettings(33))
             every { userService.currentUser } returns mockUser
+            every { indexServerConnector.getFormat(any()) } returns CorpusFormat("dummy", emptyMap(), emptyMap())
+            every { compilerService.validateQuery("nertag:person", any()) } returns emptyList()
 
             val dummyServers = setOf("google", "amazon", "twitter")
             val mockSearchSettings = SearchSettings(42, private = false, servers = dummyServers)
@@ -55,8 +57,8 @@ internal class QueryServiceTest {
             assertThat(result)
                     .isEqualTo(expected)
 
-            verify(exactly = 1) { userService.currentUser }
-            verify(exactly = 1) { searchSettingsRepository.findById(42) }
+            verify(exactly = 2) { userService.currentUser }
+            verify(exactly = 2) { searchSettingsRepository.findById(42) }
             verify(exactly = 1) { dispatcher.dispatchQuery(dummyQuery, dummyServers.map { IndexServerRequestData(it) }) }
         }
 
@@ -64,6 +66,8 @@ internal class QueryServiceTest {
         fun `private search settings user is admin so legal`() {
             val mockUser = User(roles = setOf("ADMIN"), login = "foo", userSettings = UserSettings(33))
             every { userService.currentUser } returns mockUser
+            every { indexServerConnector.getFormat(any()) } returns CorpusFormat("dummy", emptyMap(), emptyMap())
+            every { compilerService.validateQuery("nertag:person", any()) } returns emptyList()
 
             val dummyServers = setOf("google", "amazon", "twitter")
             val mockSearchSettings = SearchSettings(42, private = true, servers = dummyServers)
@@ -80,8 +84,8 @@ internal class QueryServiceTest {
             assertThat(result)
                     .isEqualTo(expected)
 
-            verify(exactly = 1) { userService.currentUser }
-            verify(exactly = 1) { searchSettingsRepository.findById(42) }
+            verify(exactly = 2) { userService.currentUser }
+            verify(exactly = 2) { searchSettingsRepository.findById(42) }
             verify(exactly = 1) { dispatcher.dispatchQuery(dummyQuery, dummyServers.map { IndexServerRequestData(it) }) }
         }
 
