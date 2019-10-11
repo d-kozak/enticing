@@ -77,12 +77,13 @@ internal val config = corpusConfig("CC") {
     assertThat(errors).isEmpty()
 }
 
-fun assertHasError(errors: List<CompilerError>, id: String, count: Int = 1) {
+fun assertHasError(errors: List<CompilerError>, id: String, count: Int = 1, location: Interval? = null) {
     assertThat(errors).hasSize(count)
     val error = errors[0]
     error as SemanticError
     assertThat(error.analysisId).isEqualTo(id)
     println("Encountered expected error $error")
+    if (location != null) assertThat(error.location).isEqualTo(location)
 }
 
 class AllChecksTest {
@@ -120,13 +121,13 @@ class AllChecksTest {
         @Test
         fun `simple query`() {
             val (_, errors) = compiler.parseAndAnalyzeQuery("lenna:word", config) // should be lemma
-            assertHasError(errors, "IND-1")
+            assertHasError(errors, "IND-1", location = Interval.valueOf(0, 4))
         }
 
         @Test
         fun `with or`() {
             val (_, errors) = compiler.parseAndAnalyzeQuery("index:(A|B|C)", config) // should be lemma
-            assertHasError(errors, "IND-1")
+            assertHasError(errors, "IND-1", location = Interval.valueOf(0, 4))
         }
 
         @Test
@@ -142,13 +143,23 @@ class AllChecksTest {
         @Test
         fun `simple query`() {
             val (_, errors) = compiler.parseAndAnalyzeQuery("personek.name:honza", config) // should be person
-            assertHasError(errors, "ENT-1")
+            assertHasError(errors, "ENT-1", location = Interval.valueOf(0, 7))
         }
 
         @Test
         fun `more complex query`() {
             val (_, errors) = compiler.parseAndAnalyzeQuery("nertag:person^(person1.name:Picasso) lemma:(visit|explore) Paris - _SENT_", config)
-            assertHasError(errors, "ENT-1")
+            assertHasError(errors, "ENT-1", location = Interval.valueOf(15, 21))
+        }
+    }
+
+    @Nested
+    inner class InvalidAttribute {
+
+        @Test
+        fun `person does not have age`() {
+            val (_, errors) = compiler.parseAndAnalyzeQuery("nertag:person^(person.name:Picasso) lemma:(visit|explore) person.age:10 Paris - _SENT_", config)
+            assertHasError(errors, "ENT-2", location = Interval.valueOf(65, 67))
         }
     }
 
