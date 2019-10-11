@@ -12,7 +12,6 @@ import {User} from "../entities/User";
 import {createMetadataRequest, filterCorpusFormat} from "./metadataFiltering";
 import {PerfTimer} from "../utils/perf";
 import {emptyTextUnitList, parseNewAnnotatedText} from "../components/annotations/TextUnitList";
-import {consoleDump} from "../components/utils/dump";
 
 
 export const startSearchingAction = (query: string, user: User, searchSettings: SearchSettings, history?: H.History): ThunkResult<void> => (dispatch, getState) => {
@@ -49,10 +48,14 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
         if (!isResultList(response.data)) {
             throw `Invalid search result ${JSON.stringify(response.data, null, 2)}`;
         }
-        for (let error in response.data.errors) {
-            dispatch(openSnackbar(`Error from ${error}: ${response.data.errors[error]}`));
-            consoleDump(response.data.errors[error]);
+
+        const failedServers = Object.keys(response.data.errors);
+        if (failedServers.length > 0) {
+            const message = failedServers.map(server => `Error from ${server}: ${response.data.errors[server]}`).join('\n');
+            dispatch(openSnackbar(`${failedServers.length}/${searchSettings.servers.length} servers failed on this request`));
+            console.error(message);
         }
+
         for (let i in response.data.searchResults) {
             const snippet = response.data.searchResults[i];
             snippet.id = `${snippet.host}:${snippet.collection}:${snippet.documentId}:${i}`;

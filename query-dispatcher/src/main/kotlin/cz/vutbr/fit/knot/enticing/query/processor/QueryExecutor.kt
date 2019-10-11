@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.query.processor
 
+import com.github.kittinunf.fuel.core.FuelError
 import com.github.kittinunf.fuel.httpPost
 import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
@@ -23,8 +24,12 @@ class FuelQueryExecutor(private val path: String = "/api/v1/query", private val 
 
     override suspend fun invoke(searchQuery: SearchQuery, requestData: RequestData<Map<CollectionName, Offset>>): MResult<IndexServer.IndexResultList> = MResult.runCatching {
         val url = "http://${requestData.address}:$port$path"
-        url.httpPost()
-                .jsonBody(searchQuery.copy(offset = requestData.offset))
-                .awaitDto<IndexServer.IndexResultList>()
+        try {
+            url.httpPost()
+                    .jsonBody(searchQuery.copy(offset = requestData.offset))
+                    .awaitDto<IndexServer.IndexResultList>()
+        } catch (error: FuelError) {
+            throw (QueryDispatcherException(String(error.response.data)))
+        }
     }
 }

@@ -4,6 +4,7 @@ import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.annotation.Temporary
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
+import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcherException
 import cz.vutbr.fit.knot.enticing.webserver.dto.LastQuery
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
@@ -111,7 +112,7 @@ fun flatten(result: Map<String, List<MResult<IndexServer.IndexResultList>>>): Pa
                     log.warn("Server $serverId responded with $msg")
                 }
             } else {
-                val exception = serverResult.exception
+                val exception = serverResult.exception as QueryDispatcherException
                 errors[serverId] = "${exception::class.simpleName}:${exception.message}"
 
                 offset.remove(serverId)

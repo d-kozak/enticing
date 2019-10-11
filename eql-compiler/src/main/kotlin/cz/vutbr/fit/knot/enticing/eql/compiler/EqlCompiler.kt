@@ -29,7 +29,7 @@ class EqlCompiler {
         if (errors.isNotEmpty()) throw EqlCompilerException(errors.toString())
         val ast = parseTree.accept(EqlAstGeneratingVisitor())
         val semanticErrors = analyzer.performAnalysis(ast as EqlAstNode)
-        if (semanticErrors.isNotEmpty()) throw EqlCompilerException(errors.toString())
+        if (semanticErrors.isNotEmpty()) throw EqlCompilerException(semanticErrors.toString())
         return ast
     }
 
