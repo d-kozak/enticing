@@ -12,6 +12,7 @@ import {User} from "../entities/User";
 import {createMetadataRequest, filterCorpusFormat} from "./metadataFiltering";
 import {PerfTimer} from "../utils/perf";
 import {emptyTextUnitList, parseNewAnnotatedText} from "../components/annotations/TextUnitList";
+import {consoleDump} from "../components/utils/dump";
 
 
 export const startSearchingAction = (query: string, user: User, searchSettings: SearchSettings, history?: H.History): ThunkResult<void> => (dispatch, getState) => {
@@ -85,7 +86,11 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
         timer.finish();
     }).catch((error) => {
         console.error(error);
-        dispatch(openSnackbar(`Could not load search results`));
+        if (error.response.data.status == 400) {
+            dispatch(openSnackbar(`Canno search, given query is not valid`));
+        } else {
+            dispatch(openSnackbar(`Could not load search results`));
+        }
         dispatch(hideProgressbar());
     })
 };

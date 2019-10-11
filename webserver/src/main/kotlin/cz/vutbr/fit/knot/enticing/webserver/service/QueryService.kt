@@ -3,6 +3,7 @@ package cz.vutbr.fit.knot.enticing.webserver.service
 import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.annotation.Temporary
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
+import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompilerException
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcherException
 import cz.vutbr.fit.knot.enticing.webserver.dto.LastQuery
@@ -30,6 +31,8 @@ class QueryService(
     fun validateQuery(query: String, settings: Long) = compilerService.validateQuery(query, format(settings).toCorpusConfig())
 
     fun query(query: SearchQuery, selectedSettings: Long, session: HttpSession): WebServer.ResultList {
+        val errors = validateQuery(query.query, selectedSettings)
+        if (errors.isNotEmpty()) throw EqlCompilerException(errors.toString())
         val searchSettings = checkUserCanAccessSettings(selectedSettings)
         val requestData = searchSettings.servers.map { IndexServerRequestData(it) }
         log.info("Executing query $query with requestData $requestData")

@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.enticing.webserver.controller
 
 
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
+import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompilerException
 import cz.vutbr.fit.knot.enticing.webserver.exception.InvalidPasswordException
 import cz.vutbr.fit.knot.enticing.webserver.exception.ValueNotUniqueException
 import org.springframework.dao.DataIntegrityViolationException
@@ -18,6 +19,11 @@ class GlobalControllerExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException::class)
     fun handleConstrainViolation(e: Exception) {
 
+    }
+
+    @ExceptionHandler(EqlCompilerException::class)
+    fun eqlCompilerException(exception: EqlCompilerException, response: HttpServletResponse) {
+        response.sendError(HttpStatus.BAD_REQUEST.value(), exception.message)
     }
 
     @ExceptionHandler(InvalidPasswordException::class)
