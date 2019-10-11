@@ -56,7 +56,7 @@ export interface SearchSettingsState {
 }
 
 export interface RawDocumentDialogState {
-    info: DocumentDebugInfo & { content: string } | null
+    info: DocumentDebugInfo & { content: string, location: number, size: number } | null
 }
 
 export interface DocumentDialogState {

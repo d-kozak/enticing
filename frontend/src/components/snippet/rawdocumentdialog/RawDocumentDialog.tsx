@@ -52,11 +52,43 @@ const RawDocumentDialog = (props: RawDocumentDialogProps) => {
             </MuiDialogTitle>
             <DialogContent>
                 {debug && <DocumentDebugInfo document={info}/>}
-                <pre>{info.content}</pre>
+                <RawDocumentContent content={info.content} location={info.location} size={info.size}/>
             </DialogContent>
         </div>
         }
     </Dialog>
+};
+
+const RawDocumentContent = (props: { content: string, location: number, size: number }) => {
+    const {content, location, size} = props;
+    const lines = content.split('\n');
+
+    const prefix = lines.slice(0, location).join('\n');
+    const middle = lines.slice(location, location + size).join('\n');
+    const suffix = lines.splice(location + size).join('\n');
+
+    return <div>
+        <pre>
+            {prefix}
+        </pre>
+        <pre style={{color: 'red', textAlign: 'center'}}>
+
+            MATCH START
+
+        </pre>
+
+        <pre>
+            {middle}
+        </pre>
+        <pre style={{color: 'red', textAlign: 'center'}}>
+
+            MATCH END
+
+        </pre>
+        <pre>
+            {suffix}
+        </pre>
+    </div>
 };
 
 

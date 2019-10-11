@@ -42,7 +42,9 @@ export const loadRawDocumentRequest = (searchResult: SearchResult): ThunkResult<
                 documentId: searchResult.id,
                 title: searchResult.documentTitle,
                 url: searchResult.url,
-                content: response.data
+                content: response.data,
+                location: searchResult.payload.location,
+                size: searchResult.payload.size
             }
         }));
     } catch (e) {
