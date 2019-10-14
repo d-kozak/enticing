@@ -16,23 +16,15 @@ class IndexCheck(id: String) : EqlAstCheck<QueryElemNode.IndexNode>(id, QueryEle
             reporter.error("Index '${node.index}' is not available", indexLocation, id)
         } else if (node.index == corpusConfiguration.entityMapping.entityIndex) {
             val entityIndexRestriction = "Entity index node only allows OR enumerations"
-            var elem = node.elem
-            while (elem is QueryElemNode.ParenNode) {
-                if (elem.query.query.size != 1) {
-                    reporter.error(entityIndexRestriction, elem.location, id)
-                    return
-                }
-                elem = elem.query.query[0]
-            }
             val nodes = mutableListOf<QueryElemNode.SimpleNode>()
-            if (elem.collectAllSimpleNodesInOr(nodes)) {
+            if (node.elem.collectAllSimpleNodesInOr(nodes)) {
                 for (simpleNode in nodes) {
                     if (simpleNode.content !in corpusConfiguration.entities) {
                         reporter.error("Entity ${simpleNode.content} is not available", simpleNode.location, id)
                     }
                 }
             } else {
-                reporter.error(entityIndexRestriction, elem.location, id)
+                reporter.error(entityIndexRestriction, node.elem.location, id)
             }
         }
     }
