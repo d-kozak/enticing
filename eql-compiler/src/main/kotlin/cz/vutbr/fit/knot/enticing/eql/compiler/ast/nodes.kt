@@ -33,7 +33,6 @@ interface EqlVisitor<T> {
     fun visitQueryElemAlignNode(node: QueryElemNode.AlignNode): T
     fun visitRestrictionProximityNode(node: RestrictionTypeNode.ProximityNode): T
     fun visitRestrictionContextNode(node: RestrictionTypeNode.ContextNode): T
-
 }
 
 data class RootNode(val query: QueryNode, val constraint: GlobalConstraintNode?, override val location: Interval) : EqlAstNode() {

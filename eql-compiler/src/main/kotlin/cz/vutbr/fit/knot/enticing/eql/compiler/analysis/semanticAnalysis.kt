@@ -2,6 +2,8 @@ package cz.vutbr.fit.knot.enticing.eql.compiler.analysis
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.eql.compiler.analysis.check.*
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.AgregatingListener
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.AstWalker
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.EqlAstNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.emptySymbolTable
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.CompilerError
@@ -16,14 +18,21 @@ val DEFAULT_CHECKS: List<EqlAstCheck<*>> = listOf(
         NestedRefCheck("REF-2")
 )
 
+
 class SemanticAnalyzer(private val config: CorpusConfiguration, private val checks: List<EqlAstCheck<*>> = DEFAULT_CHECKS) {
+
+    private val checksByType = checks.groupBy { it.clazz }
+
     fun performAnalysis(node: EqlAstNode): List<CompilerError> {
         val symbolTable = emptySymbolTable()
-        val analyzer = AnalysisVisitor(checks, symbolTable, config)
-        node.accept(analyzer)
-        return analyzer.reports
+        val reporter = SimpleAgregatingReporter()
+        val walker = AstWalker(AgregatingListener({ currentNode ->
+            val checks = checksByType[currentNode::class]
+            checks?.forEach { it.doAnalyze(currentNode, symbolTable, reporter, config) }
+        }))
+        node.accept(walker)
+        return reporter.reports
     }
-
 
 }
 

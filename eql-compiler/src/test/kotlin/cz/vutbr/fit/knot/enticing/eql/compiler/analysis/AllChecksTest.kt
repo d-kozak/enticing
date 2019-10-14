@@ -143,6 +143,18 @@ class AllChecksTest {
         }
 
         @Test
+        fun `nertag should allow order`() {
+            val (_, errors) = compiler.parseAndAnalyzeQuery("nertag:(person < artist)", config) // should be lemma
+            assertThat(errors).isEmpty()
+        }
+
+        @Test
+        fun `nertag should not allow sequence`() {
+            val (_, errors) = compiler.parseAndAnalyzeQuery("""nertag:"person artist"""", config) // should be lemma
+            assertHasError(errors, "IND-1")
+        }
+
+        @Test
         fun `nertag should only include entities correct example`() {
             val (_, errors) = compiler.parseAndAnalyzeQuery("nertag:(person|artist|!(location))", config) // should be lemma
             assertThat(errors).isEmpty()

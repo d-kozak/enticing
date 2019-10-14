@@ -15,9 +15,9 @@ class IndexCheck(id: String) : EqlAstCheck<QueryElemNode.IndexNode>(id, QueryEle
             val indexLocation = Interval.valueOf(node.location.from, node.location.from + node.index.length - 1)
             reporter.error("Index '${node.index}' is not available", indexLocation, id)
         } else if (node.index == corpusConfiguration.entityMapping.entityIndex) {
-            val entityIndexRestriction = "Entity index node only allows OR enumerations"
+            val entityIndexRestriction = "Entity index node only allows boolean, not, parens and simple nodes"
             val nodes = mutableListOf<QueryElemNode.SimpleNode>()
-            if (node.elem.collectAllSimpleNodesInOr(nodes)) {
+            if (node.elem.collectAllSimpleNodesInExpression(nodes)) {
                 for (simpleNode in nodes) {
                     if (simpleNode.content !in corpusConfiguration.entities) {
                         reporter.error("Entity ${simpleNode.content} is not available", simpleNode.location, id)
@@ -30,13 +30,14 @@ class IndexCheck(id: String) : EqlAstCheck<QueryElemNode.IndexNode>(id, QueryEle
     }
 }
 
-private fun QueryElemNode.collectAllSimpleNodesInOr(output: MutableList<QueryElemNode.SimpleNode>): Boolean = when (this) {
+private fun QueryElemNode.collectAllSimpleNodesInExpression(output: MutableList<QueryElemNode.SimpleNode>): Boolean = when (this) {
     is QueryElemNode.SimpleNode -> {
         output.add(this)
         true
     }
-    is QueryElemNode.NotNode -> this.elem.collectAllSimpleNodesInOr(output)
-    is QueryElemNode.BooleanNode -> this.operator == BooleanOperator.OR && this.left.collectAllSimpleNodesInOr(output) && this.right.collectAllSimpleNodesInOr(output)
-    is QueryElemNode.ParenNode -> this.query.query.size == 1 && this.query.query[0].collectAllSimpleNodesInOr(output)
+    is QueryElemNode.OrderNode -> this.left.collectAllSimpleNodesInExpression(output) && this.right.collectAllSimpleNodesInExpression(output)
+    is QueryElemNode.NotNode -> this.elem.collectAllSimpleNodesInExpression(output)
+    is QueryElemNode.BooleanNode -> this.left.collectAllSimpleNodesInExpression(output) && this.right.collectAllSimpleNodesInExpression(output)
+    is QueryElemNode.ParenNode -> this.query.query.size == 1 && this.query.query[0].collectAllSimpleNodesInExpression(output)
     else -> false
 }
