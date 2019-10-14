@@ -135,6 +135,24 @@ class AllChecksTest {
             val (_, errors) = compiler.parseAndAnalyzeQuery("index:A | index:B  | index:C", config) // should be lemma
             assertHasError(errors, "IND-1", 3)
         }
+
+        @Test
+        fun `nertag index with invalid entity`() {
+            val (_, errors) = compiler.parseAndAnalyzeQuery("nertag:pepson", config) // should be lemma
+            assertHasError(errors, "IND-1", location = Interval.valueOf(7, 12))
+        }
+
+        @Test
+        fun `nertag should only include entities correct example`() {
+            val (_, errors) = compiler.parseAndAnalyzeQuery("nertag:(person|artist|!(location))", config) // should be lemma
+            assertThat(errors).isEmpty()
+        }
+
+        @Test
+        fun `nertag should only include entities with invalid entity`() {
+            val (_, errors) = compiler.parseAndAnalyzeQuery("nertag:(person|artist|!(location1))", config) // should be lemma
+            assertHasError(errors, "IND-1")
+        }
     }
 
     @Nested
@@ -171,6 +189,35 @@ class AllChecksTest {
             val (_, errors) = compiler.parseAndAnalyzeQuery("one:= ahoj two:= cau one:=nazdar", config)
             assertHasError(errors, "ASGN-1", location = Interval.valueOf(21, 23))
         }
+    }
+
+    @Nested
+    inner class GlobalConstraints {
+
+        @Test
+        fun `simple reference is not found`() {
+            val (_, errors) = compiler.parseAndAnalyzeQuery("pepa:=nertag:person lemma:visit honza:=nertag:person && pepa != honza1", config)
+            assertHasError(errors, "REF-1", location = Interval.valueOf(64, 69))
+        }
+
+        @Test
+        fun `nested reference id not found`() {
+            val (_, errors) = compiler.parseAndAnalyzeQuery("pepa:=nertag:person lemma:visit honza:=nertag:person && pepa1.name != honza.name", config)
+            assertHasError(errors, "REF-2", location = Interval.valueOf(56, 60))
+        }
+
+        @Test
+        fun `nested reference nertag index attribute not found`() {
+            val (_, errors) = compiler.parseAndAnalyzeQuery("pepa:=nertag:person lemma:visit honza:=nertag:person && pepa.name1 != honza.name", config)
+            assertHasError(errors, "REF-2", location = Interval.valueOf(61, 65))
+        }
+
+        @Test
+        fun `nested reference attribute index attribute not found`() {
+            val (_, errors) = compiler.parseAndAnalyzeQuery("pepa:=person.name:pepa lemma:visit honza:=nertag:person && pepa.name1 != honza.name", config)
+            assertHasError(errors, "REF-2", location = Interval.valueOf(64, 68))
+        }
+
     }
 
 }

@@ -35,9 +35,9 @@ person name !(age|birthdate)
 
 ## Assignments and global constraints
 john:=person.name:John
-john:=person.name:John rupert:=person.name:Rupert && john.age != rupert.age
+john:=person.name:John rupert:=person.name:Rupert && john.birthdate != rupert.birthdate
 1:=person.name:John 2:=person.name:Rupert && 1 != 2
-1:=person.name:John 2:=person.name:Rupert && 1.id != 2.id
+1:=person.name:John 2:=person.name:Rupert && 1.url != 2.url
 
 ## Align
 (one ^ two ) | (three ^ four)
@@ -52,7 +52,7 @@ nertag:person ^ person.name:John ^ lemma and more
 nertag:person ^ person.name:John ^ lemma:ahoj
 pepa:=nertag:person ^ person.name:pepa
 
-1:=person.name:John 2:=person.name:Rupert 3:=location.name:Barcelona && (1.id != 2.id) | !(3.name = 1.name)
+1:=person.name:John 2:=person.name:Rupert 3:=location.name:Barcelona && (1.url != 2.url) | !(3.name = 1.name)
 
 (happy < cow - milk) | meat
 

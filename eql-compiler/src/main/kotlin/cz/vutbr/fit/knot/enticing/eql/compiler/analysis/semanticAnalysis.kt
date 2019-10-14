@@ -1,6 +1,5 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.analysis
 
-import com.ibm.icu.text.SymbolTable
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.eql.compiler.analysis.check.*
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.EqlAstNode
@@ -12,7 +11,9 @@ val DEFAULT_CHECKS: List<EqlAstCheck<*>> = listOf(
         IndexCheck("IND-1"),
         EntityCheck("ENT-1"),
         AttributeCheck("ENT-2"),
-        AssignCheck("ASGN-1")
+        AssignCheck("ASGN-1"),
+        SimpleRefCheck("REF-1"),
+        NestedRefCheck("REF-2")
 )
 
 class SemanticAnalyzer(private val config: CorpusConfiguration, private val checks: List<EqlAstCheck<*>> = DEFAULT_CHECKS) {
