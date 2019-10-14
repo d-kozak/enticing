@@ -43,4 +43,12 @@ class ComplexTests {
     }
 
 
+    @Test
+    @DisplayName("person.name:Pablo_Picasso | person.name:Benjamin_Franklin")
+    fun five() {
+        val (ast, errors) = compiler.parseAndAnalyzeQuery("person.name:Pablo_Picasso | person.name:Benjamin_Franklin", config)
+        assertThat(errors).isEmpty()
+        assertThat(ast.toMgj4Query()).isEqualTo("(((nertag:person{{nertag->token}}) ^ (param2:(Pablo_Picasso){{param2->token}})) | ((nertag:person{{nertag->token}}) ^ (param2:(Benjamin_Franklin){{param2->token}})))")
+    }
+
 }
