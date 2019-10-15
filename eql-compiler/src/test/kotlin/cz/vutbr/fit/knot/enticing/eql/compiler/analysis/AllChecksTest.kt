@@ -126,45 +126,64 @@ class AllChecksTest {
 
         @Test
         fun `with or`() {
-            val (_, errors) = compiler.parseAndAnalyzeQuery("index:(A|B|C)", config) // should be lemma
+            val (_, errors) = compiler.parseAndAnalyzeQuery("index:(A|B|C)", config)
             assertHasError(errors, "IND-1", location = Interval.valueOf(0, 4))
         }
 
         @Test
         fun `index inside or`() {
-            val (_, errors) = compiler.parseAndAnalyzeQuery("index:A | index:B  | index:C", config) // should be lemma
+            val (_, errors) = compiler.parseAndAnalyzeQuery("index:A | index:B  | index:C", config)
             assertHasError(errors, "IND-1", 3)
         }
 
         @Test
         fun `nertag index with invalid entity`() {
-            val (_, errors) = compiler.parseAndAnalyzeQuery("nertag:pepson", config) // should be lemma
+            val (_, errors) = compiler.parseAndAnalyzeQuery("nertag:pepson", config)
             assertHasError(errors, "IND-1", location = Interval.valueOf(7, 12))
         }
 
         @Test
         fun `nertag should allow order`() {
-            val (_, errors) = compiler.parseAndAnalyzeQuery("nertag:(person < artist)", config) // should be lemma
+            val (_, errors) = compiler.parseAndAnalyzeQuery("nertag:(person < artist)", config)
             assertThat(errors).isEmpty()
         }
 
         @Test
         fun `nertag should not allow sequence`() {
-            val (_, errors) = compiler.parseAndAnalyzeQuery("""nertag:"person artist"""", config) // should be lemma
+            val (_, errors) = compiler.parseAndAnalyzeQuery("""nertag:"person artist"""", config)
             assertHasError(errors, "IND-1")
         }
 
         @Test
         fun `nertag should only include entities correct example`() {
-            val (_, errors) = compiler.parseAndAnalyzeQuery("nertag:(person|artist|!(location))", config) // should be lemma
+            val (_, errors) = compiler.parseAndAnalyzeQuery("nertag:(person|artist|!(location))", config)
             assertThat(errors).isEmpty()
         }
 
         @Test
         fun `nertag should only include entities with invalid entity`() {
-            val (_, errors) = compiler.parseAndAnalyzeQuery("nertag:(person|artist|!(location1))", config) // should be lemma
+            val (_, errors) = compiler.parseAndAnalyzeQuery("nertag:(person|artist|!(location1))", config)
             assertHasError(errors, "IND-1")
         }
+
+        @Test
+        fun `nested index operators are not allowed`() {
+            val (_, errors) = compiler.parseAndAnalyzeQuery("lemma:(token:word)", config)
+            assertHasError(errors, "IND-2")
+        }
+
+        @Test
+        fun `nested index operators are not allowed more complex example`() {
+            val (_, errors) = compiler.parseAndAnalyzeQuery("lemma:(ahoj (token:((word))))", config)
+            assertHasError(errors, "IND-2")
+        }
+
+        @Test
+        fun ` triply nested index operators are not allowed`() {
+            val (_, errors) = compiler.parseAndAnalyzeQuery("lemma:(ahoj (token:((position:1))))", config)
+            assertHasError(errors, "IND-2", count = 2)
+        }
+
     }
 
     @Nested

@@ -9,7 +9,8 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.parser.CompilerError
 
 val DEFAULT_CHECKS: List<EqlAstCheck<*>> = listOf(
         ProximityNumberCheck("PROX-1"),
-        IndexCheck("IND-1"),
+        BasicIndexCheck("IND-1"),
+        NestedIndexCheck("IND-2"),
         EntityCheck("ENT-1"),
         AttributeCheck("ENT-2"),
         AssignCheck("ASGN-1"),
