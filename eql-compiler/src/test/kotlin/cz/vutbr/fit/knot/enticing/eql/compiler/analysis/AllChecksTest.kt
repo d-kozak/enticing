@@ -255,6 +255,23 @@ class AllChecksTest {
             assertHasError(errors, "REF-2", location = Interval.valueOf(64, 68))
         }
 
+        @Test
+        fun `nested reference for union of entities using nertag`() {
+            val (_, errors) = compiler.parseAndAnalyzeQuery("smth:=nertag:(person|location) lemma:visit honza:=nertag:person && smth.name != honza.name", config)
+            assertThat(errors).isEmpty()
+        }
+
+        @Test
+        fun `nested reference for union of entities using nertag deathplace should not be available`() {
+            val (_, errors) = compiler.parseAndAnalyzeQuery("smth:=nertag:(person|location) lemma:visit honza:=nertag:person && smth.deathplace != honza.name", config)
+            assertHasError(errors, "REF-2", location = Interval.valueOf(72, 81))
+        }
+
+        @Test
+        fun `correct complex query`() {
+            val (_, errors) = compiler.parseAndAnalyzeQuery("influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) - _PAR_ && influencer.url != influencee.url", config)
+            assertThat(errors).isEmpty()
+        }
     }
 
 }

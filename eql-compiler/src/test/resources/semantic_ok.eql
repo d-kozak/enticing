@@ -9,7 +9,7 @@ Picasso lemma:(visit|explore) Paris - _SENT_
 nertag:person^(person.name:Picasso) lemma:(visit|explore) Paris - _SENT_
 nertag:person^(person.name:Picasso) lemma:(visit|explore)  nertag:location^(location.name:Paris) - _SENT_
 nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < nertag:(person|artist) - _PAR_
-influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) - _PAR_ && influencer.nerid != influencee.nerid
+influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) - _PAR_ && influencer.url != influencee.url
 a:=nertag:(person|artist) < lemma:visit < b:=nertag:(person|artist) nertag:location^location.name:Barcelona nertag:event^event.startdate:[1/1/1960..12/12/2012] - _PAR_ && a.nerid != b.nerid
 (A B) ~ 5
 (A | B) & C
