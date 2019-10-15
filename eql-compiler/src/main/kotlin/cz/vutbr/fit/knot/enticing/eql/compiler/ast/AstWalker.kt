@@ -29,7 +29,7 @@ class AstWalker(protected val listener: EqlListener) : EqlVisitor<Unit> {
         }
     }
 
-    override fun visitQueryElemRestrinctionNode(node: QueryElemNode.RestrictionNode) {
+    override fun visitQueryElemRestrictionNode(node: QueryElemNode.RestrictionNode) {
         listener.enterQueryElemRestrinctionNode(node)
         if (shouldContinue(node)) {
             node.left.accept(this)

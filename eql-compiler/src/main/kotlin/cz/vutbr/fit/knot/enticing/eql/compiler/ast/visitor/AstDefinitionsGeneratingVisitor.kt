@@ -91,7 +91,7 @@ class AstDefinitionsGeneratingVisitor : EqlVisitor<String> {
         return "RestrictionTypeNode.ContextNode($restriction,${node.location.toKotlinDef()})"
     }
 
-    override fun visitQueryElemRestrinctionNode(node: QueryElemNode.RestrictionNode): String {
+    override fun visitQueryElemRestrictionNode(node: QueryElemNode.RestrictionNode): String {
         val left = node.left.accept(this)
         val right = node.right.accept(this)
         val type = node.type.accept(this)

@@ -9,7 +9,7 @@ class Mgj4QueryGeneratingVisitor : EqlVisitor<String> {
 
     override fun visitQueryElemAssignNode(node: QueryElemNode.AssignNode): String = node.elem.accept(this)
 
-    override fun visitQueryElemRestrinctionNode(node: QueryElemNode.RestrictionNode): String =
+    override fun visitQueryElemRestrictionNode(node: QueryElemNode.RestrictionNode): String =
             "((${node.left.accept(this)} ${node.right.accept(this)}) ${node.type.accept(this)})"
 
     override fun visitQueryElemSimpleNode(node: QueryElemNode.SimpleNode): String = node.content

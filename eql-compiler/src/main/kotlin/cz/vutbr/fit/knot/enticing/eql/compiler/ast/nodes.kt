@@ -7,7 +7,7 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor.Mgj4QueryGeneratingVi
 abstract class EqlAstNode : AstNode {
     abstract val location: Interval
     abstract fun <T> accept(visitor: EqlVisitor<T>): T
-    fun walk(listener: EqlListener) = this.accept(AstWalker(listener))
+    fun walk(listener: EqlListener, walker: AstWalker = AstWalker(listener)) = this.accept(walker)
     override fun toMgj4Query(): String = this.accept(Mgj4QueryGeneratingVisitor())
 }
 
@@ -15,7 +15,7 @@ interface EqlVisitor<T> {
     fun visitRootNode(node: RootNode): T
     fun visitQueryElemNotNode(node: QueryElemNode.NotNode): T
     fun visitQueryElemAssignNode(node: QueryElemNode.AssignNode): T
-    fun visitQueryElemRestrinctionNode(node: QueryElemNode.RestrictionNode): T
+    fun visitQueryElemRestrictionNode(node: QueryElemNode.RestrictionNode): T
     fun visitQueryElemSimpleNode(node: QueryElemNode.SimpleNode): T
     fun visitQueryElemIndexNode(node: QueryElemNode.IndexNode): T
     fun visitQueryElemAttributeNode(node: QueryElemNode.AttributeNode): T
@@ -89,7 +89,7 @@ sealed class QueryElemNode : EqlAstNode() {
     }
 
     data class RestrictionNode(val left: QueryElemNode, val right: QueryElemNode, val type: RestrictionTypeNode, override val location: Interval) : QueryElemNode() {
-        override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemRestrinctionNode(this)
+        override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemRestrictionNode(this)
     }
 }
 
