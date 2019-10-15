@@ -9,7 +9,8 @@ root: query (CONSTRAINT_SEPARATOR globalConstraint)? EOF;
 query: queryElem+ restrictionType?;
 
 queryElem:
-    NOT queryElem #notQuery
+    IDENTIFIER COLON EQ queryElem #assign
+    | NOT queryElem #notQuery
     |(RAW |IDENTIFIER | ANY_TEXT | interval) #simpleQuery
     | IDENTIFIER COLON queryElem #index
     | IDENTIFIER DOT IDENTIFIER COLON queryElem #attribute
@@ -18,7 +19,6 @@ queryElem:
     | queryElem booleanOperator queryElem #booleanQuery
     | queryElem LT queryElem #order
     | QUOTATION queryElem+ QUOTATION #sequence
-    | IDENTIFIER COLON EQ queryElem #assign
     | queryElem queryElem restrictionType #restriction
     ;
 
