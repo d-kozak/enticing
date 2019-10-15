@@ -226,6 +226,12 @@ class AllChecksTest {
     inner class GlobalConstraints {
 
         @Test
+        fun `pepa not found`() {
+            val (_, errors) = compiler.parseAndAnalyzeQuery("house house house && pepa = 100", config)
+            assertHasError(errors, "REF-1", count = 2)
+        }
+
+        @Test
         fun `simple reference is not found`() {
             val (_, errors) = compiler.parseAndAnalyzeQuery("pepa:=nertag:person lemma:visit honza:=nertag:person && pepa != honza1", config)
             assertHasError(errors, "REF-1", location = Interval.valueOf(64, 69))

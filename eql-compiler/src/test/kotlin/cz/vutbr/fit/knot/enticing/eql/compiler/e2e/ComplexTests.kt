@@ -51,4 +51,21 @@ class ComplexTests {
         assertThat(ast.toMgj4Query()).isEqualTo("(((nertag:person{{nertag->token}}) ^ (param2:(Pablo_Picasso){{param2->token}})) | ((nertag:person{{nertag->token}}) ^ (param2:(Benjamin_Franklin){{param2->token}})))")
     }
 
+
+    @Test
+    @DisplayName("person.name:(pepa | honza)")
+    fun six() {
+        val (ast, errors) = compiler.parseAndAnalyzeQuery("person.name:(pepa | honza)", config)
+        assertThat(errors).isEmpty()
+        assertThat(ast.toMgj4Query()).isEqualTo("((nertag:person{{nertag->token}}) ^ (param2:((pepa | honza)){{param2->token}}))")
+    }
+
+    @Test
+    @DisplayName("person.name:pepa | location.name:new_york")
+    fun seven() {
+        val (ast, errors) = compiler.parseAndAnalyzeQuery("person.name:pepa | location.name:new_york", config)
+        assertThat(errors).isEmpty()
+        assertThat(ast.toMgj4Query()).isEqualTo("(((nertag:person{{nertag->token}}) ^ (param2:(pepa){{param2->token}})) | ((nertag:location{{nertag->token}}) ^ (param2:(new_york){{param2->token}})))")
+    }
+
 }
