@@ -4,6 +4,7 @@ import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcherException
+import cz.vutbr.fit.knot.enticing.webserver.dto.QueryValidationReply
 import cz.vutbr.fit.knot.enticing.webserver.dto.User
 import cz.vutbr.fit.knot.enticing.webserver.dto.UserSettings
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
@@ -40,7 +41,7 @@ internal class QueryServiceTest {
             val mockUser = User(login = "foo", userSettings = UserSettings(33))
             every { userService.currentUser } returns mockUser
             every { indexServerConnector.getFormat(any()) } returns CorpusFormat("dummy", emptyMap(), emptyMap())
-            every { compilerService.validateQuery("nertag:person", any()) } returns emptyList()
+            every { compilerService.validateQuery("nertag:person", any()) } returns QueryValidationReply("foo", emptyList())
 
             val dummyServers = setOf("google", "amazon", "twitter")
             val mockSearchSettings = SearchSettings(42, private = false, servers = dummyServers)
@@ -67,7 +68,7 @@ internal class QueryServiceTest {
             val mockUser = User(roles = setOf("ADMIN"), login = "foo", userSettings = UserSettings(33))
             every { userService.currentUser } returns mockUser
             every { indexServerConnector.getFormat(any()) } returns CorpusFormat("dummy", emptyMap(), emptyMap())
-            every { compilerService.validateQuery("nertag:person", any()) } returns emptyList()
+            every { compilerService.validateQuery("nertag:person", any()) } returns QueryValidationReply("foo", emptyList())
 
             val dummyServers = setOf("google", "amazon", "twitter")
             val mockSearchSettings = SearchSettings(42, private = true, servers = dummyServers)

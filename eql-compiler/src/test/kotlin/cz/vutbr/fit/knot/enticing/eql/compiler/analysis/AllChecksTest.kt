@@ -284,6 +284,12 @@ class AllChecksTest {
             val (_, errors) = compiler.parseAndAnalyzeQuery("influencer:=nertag:(person|artist) < middle:=( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) - _PAR_ && influencer.url != middle", config)
             assertHasError(errors, "COP-1", location = Interval.valueOf(168, 169))
         }
+
+        @Test
+        fun `multiple errors`() {
+            val (_, errors) = compiler.parseAndAnalyzeQuery("a:=nertag:(person|location) b:=dog && a.name1 != b", config)
+            assertThat(errors).isNotEmpty()
+        }
     }
 
 }

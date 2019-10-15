@@ -200,7 +200,7 @@ export const loadSettingsFromFileRequest = (file: File): ThunkResult<void> => (d
                         dispatch(hideProgressbar());
                     })
                     .catch((response) => {
-                        if (response.response.data.status == 400) {
+                        if (response.response.status == 400) {
                             dispatch(openSnackbar(`Could not import settings  - they are not valid`));
                             console.error(parseValidationErrors(response));
                         } else {

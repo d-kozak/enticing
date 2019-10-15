@@ -86,7 +86,7 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
         timer.finish();
     }).catch((error) => {
         console.error(error);
-        if (error.response.data.status == 400) {
+        if (error.response.status == 400) {
             dispatch(openSnackbar(`Canno search, given query is not valid`));
         } else {
             dispatch(openSnackbar(`Could not load search results`));

@@ -124,7 +124,7 @@ export const adminCreateNewUserRequest = (login: string, password: string, roles
             onDone();
         })
         .catch((response) => {
-            const errors = response.response.data.status === 400 ? parseValidationErrors(response) : {};
+            const errors = response.response.status === 400 ? parseValidationErrors(response) : {};
             onError(errors);
             dispatch(openSnackbar(`Failed to create user ${login}`));
         })

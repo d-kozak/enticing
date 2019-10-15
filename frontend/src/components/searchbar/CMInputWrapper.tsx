@@ -1,7 +1,7 @@
 import createStyles from "@material-ui/core/es/styles/createStyles";
 import {WithStyles} from "@material-ui/core";
 import * as React from "react";
-import {useEffect, useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
 import 'codemirror/lib/codemirror.css';
@@ -20,13 +20,16 @@ import {API_BASE_PATH} from "../../globals";
 import {consoleDump} from "../utils/dump";
 import {ApplicationState} from "../../ApplicationState";
 import {connect} from "react-redux";
-import {getSelectedSearchSettings} from "../../reducers/selectors";
+import {getSelectedSearchSettings, isDebugMode} from "../../reducers/selectors";
 import {SearchSettings} from "../../entities/SearchSettings";
+import TextField from '@material-ui/core/TextField';
+
 
 const styles = (theme: Theme) => createStyles({
     reactCodeMirror: {
         width: '100%'
-    }
+    },
+    mg4jOutput: {}
 });
 
 type CMInputWrapperProps = & typeof mapDispatchToProps
@@ -37,11 +40,30 @@ type CMInputWrapperProps = & typeof mapDispatchToProps
     className?: string;
 }
 
+interface QueryValidationRequest {
+    query: string,
+    settingsId: number
+}
 
-const analyzeQuery = debounce(async (query: string, settings: SearchSettings, doc: CodeMirror.Doc) => {
+interface QueryValidationReply {
+    errors: Array<{ location: { from: number, to: number }, type: string, message: string }>,
+    mg4jQuery: string
+}
+
+
+const analyzeQuery = debounce(async (query: string, settings: SearchSettings, setMg4jQuery: (query: string) => void, doc: CodeMirror.Doc) => {
+    const request: QueryValidationRequest = {
+        query,
+        settingsId: Number(settings.id)
+    };
     try {
-        const result = await axios.get<Array<{ location: { from: number, to: number }, type: string, message: string }>>(`${API_BASE_PATH}/compiler?settings=${settings.id}&query=${encodeURI(query)}`);
-        const errors = result.data;
+        const result = await axios.post<QueryValidationReply>(`${API_BASE_PATH}/compiler`, request, {withCredentials: true});
+
+        if (result.data.mg4jQuery) {
+            setMg4jQuery(result.data.mg4jQuery);
+        }
+
+        const errors = result.data.errors;
 
         for (let mark of doc.getAllMarks()) {
             mark.clear();
@@ -68,7 +90,9 @@ const analyzeQuery = debounce(async (query: string, settings: SearchSettings, do
 }, 400);
 
 const CMInputWrapper = (props: CMInputWrapperProps) => {
-    const {className = '', startSearching, settings, classes, query, setQuery} = props;
+    const {className = '', isDebug, startSearching, settings, classes, query, setQuery} = props;
+
+    const [mg4jQuery, setMg4jQuery] = useState('');
 
     const codeMirrorRef = useRef<ReactCodeMirror.ReactCodeMirror>(null);
 
@@ -90,7 +114,7 @@ const CMInputWrapper = (props: CMInputWrapperProps) => {
         }
         if (codeMirrorRef.current) {
             const doc = codeMirrorRef.current.getCodeMirror().getDoc();
-            analyzeQuery(query, settings, doc);
+            analyzeQuery(query, settings, setMg4jQuery, doc);
         }
     };
 
@@ -113,10 +137,22 @@ const CMInputWrapper = (props: CMInputWrapperProps) => {
             autoFocus={true}
             options={options}
         />
+        {isDebug &&
+        <TextField
+            fullWidth
+            disabled
+            id="standard-disabled"
+            label="Mg4j query"
+            value={mg4jQuery}
+            className={classes.mg4jOutput}
+            margin="normal"
+        />
+        }
     </div>
 };
 
 const mapStateToProps = (state: ApplicationState) => ({
+    isDebug: isDebugMode(state),
     settings: getSelectedSearchSettings(state)
 });
 

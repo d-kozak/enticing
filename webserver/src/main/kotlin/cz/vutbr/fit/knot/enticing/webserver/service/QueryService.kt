@@ -31,7 +31,7 @@ class QueryService(
     fun validateQuery(query: String, settings: Long) = compilerService.validateQuery(query, format(settings).toCorpusConfig())
 
     fun query(query: SearchQuery, selectedSettings: Long, session: HttpSession): WebServer.ResultList {
-        val errors = validateQuery(query.query, selectedSettings)
+        val errors = validateQuery(query.query, selectedSettings).errors
         if (errors.isNotEmpty()) throw EqlCompilerException(errors.toString())
         val searchSettings = checkUserCanAccessSettings(selectedSettings)
         val requestData = searchSettings.servers.map { IndexServerRequestData(it) }

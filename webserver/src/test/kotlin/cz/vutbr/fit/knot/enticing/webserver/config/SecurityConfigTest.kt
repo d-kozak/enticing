@@ -1,12 +1,10 @@
 package cz.vutbr.fit.knot.enticing.webserver.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import cz.vutbr.fit.knot.enticing.dto.PureMgj4Node
 import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.TextMetadata
 import cz.vutbr.fit.knot.enticing.dto.WebServer
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
-import cz.vutbr.fit.knot.enticing.eql.compiler.dto.ParsedQuery
 import cz.vutbr.fit.knot.enticing.webserver.dto.*
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.entity.SelectedEntityMetadata
@@ -34,7 +32,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import java.net.URLEncoder
 
 @WebMvcTest
 @Import(PasswordEncoderConfiguration::class)
@@ -480,11 +477,12 @@ internal class SecurityConfigTest(
     inner class Eql {
         @Test
         fun `Parser endpoint is always accessible`() {
-            val query = "nertag:person (killed|visited)"
-            val encodedQuery = URLEncoder.encode(query, "UTF-8")
-            Mockito.`when`(queryService.validateQuery(query, 10)).thenReturn(emptyList())
+            val query = QueryValidationRequest("nertag:person (killed|visited)", 10)
+            Mockito.`when`(queryService.validateQuery(query.query, query.settingsId)).thenReturn(QueryValidationReply("foo", emptyList()))
 
-            mockMvc.perform(get("$apiBasePath/compiler?query=$encodedQuery&settings=10"))
+            mockMvc.perform(post("$apiBasePath/compiler")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(query.toJson()))
                     .andExpect(status().isOk)
 
             Mockito.clearInvocations(queryService)

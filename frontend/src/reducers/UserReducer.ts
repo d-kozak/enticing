@@ -230,7 +230,8 @@ export const loginRequest = (login: string, password: string, onError: (errors: 
             dispatch(openSnackbar('Logged in'));
             dispatch(loadSearchSettingsRequest(user.selectedSettings, true));
         }).catch(error => {
-        if (error.response.data.status === 401) {
+        consoleDump(error);
+        if (error.response && error.response.status === 401) {
             onError({login: 'Invalid login or password'});
         } else {
             dispatch(openSnackbar('Could not log in'));
@@ -250,7 +251,7 @@ export const signUpRequest = (login: string, password: string, onError: (error: 
             }))
         }
     ).catch(error => {
-            if (error.response.data.status === 400) {
+        if (error.response.status === 400) {
                 onError(parseValidationErrors(error));
             } else {
                 dispatch(openSnackbar('Could not log in'));
@@ -300,7 +301,7 @@ export const changePasswordRequest = (user: User, oldPassword: String, newPasswo
             dispatch(closeChangePasswordDialog());
         })
         .catch(error => {
-            if (error.response.data.status === 400) {
+            if (error.response.status === 400) {
                 onError(parseValidationErrors(error));
             }
             dispatch(openSnackbar(`Could  not change password`));

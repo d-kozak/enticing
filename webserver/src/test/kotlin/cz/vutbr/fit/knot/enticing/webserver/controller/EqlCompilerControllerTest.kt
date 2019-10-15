@@ -1,7 +1,10 @@
 package cz.vutbr.fit.knot.enticing.webserver.controller
 
 import cz.vutbr.fit.knot.enticing.dto.PureMgj4Node
+import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import cz.vutbr.fit.knot.enticing.eql.compiler.dto.ParsedQuery
+import cz.vutbr.fit.knot.enticing.webserver.dto.QueryValidationReply
+import cz.vutbr.fit.knot.enticing.webserver.dto.QueryValidationRequest
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
 import cz.vutbr.fit.knot.enticing.webserver.service.EqlCompilerService
 import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
@@ -13,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
@@ -41,13 +45,13 @@ internal class EqlCompilerControllerTest(
 
     @Test
     fun `get calls compiler service`() {
-
-        val dummyDto = ParsedQuery(PureMgj4Node(" "))
         Mockito.`when`(queryService.validateQuery("nertag:person (killed|visited)", 5))
-                .thenReturn(emptyList())
+                .thenReturn(QueryValidationReply("foo", emptyList()))
 
-        val query = URLEncoder.encode("nertag:person (killed|visited)", "UTF-8")
-        mockMvc.perform(MockMvcRequestBuilders.get("$apiBasePath/compiler?query=$query&settings=5"))
+        val query = QueryValidationRequest("nertag:person (killed|visited)", 5)
+        mockMvc.perform(MockMvcRequestBuilders.post("$apiBasePath/compiler")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(query.toJson()))
                 .andExpect(MockMvcResultMatchers.status().isOk)
 
         Mockito.verify(queryService).validateQuery("nertag:person (killed|visited)", 5)
