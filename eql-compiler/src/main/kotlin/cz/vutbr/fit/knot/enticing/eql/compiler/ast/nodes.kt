@@ -7,6 +7,7 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor.Mgj4QueryGeneratingVi
 abstract class EqlAstNode : AstNode {
     abstract val location: Interval
     abstract fun <T> accept(visitor: EqlVisitor<T>): T
+    fun walk(listener: EqlListener) = this.accept(AstWalker(listener))
     override fun toMgj4Query(): String = this.accept(Mgj4QueryGeneratingVisitor())
 }
 
