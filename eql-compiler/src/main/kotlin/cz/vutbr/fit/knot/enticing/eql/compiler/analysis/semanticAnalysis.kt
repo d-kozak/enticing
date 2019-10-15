@@ -15,7 +15,8 @@ val DEFAULT_CHECKS: List<EqlAstCheck<*>> = listOf(
         AttributeCheck("ENT-2"),
         AssignCheck("ASGN-1"),
         SimpleRefCheck("REF-1"),
-        NestedRefCheck("REF-2")
+        NestedRefCheck("REF-2"),
+        ComparisonCheck("COP-1")
 )
 
 

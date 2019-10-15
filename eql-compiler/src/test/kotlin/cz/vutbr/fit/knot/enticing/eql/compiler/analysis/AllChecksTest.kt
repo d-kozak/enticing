@@ -268,9 +268,21 @@ class AllChecksTest {
         }
 
         @Test
-        fun `correct complex query`() {
+        fun `comparison between two simple refs is allowed`() {
+            val (_, errors) = compiler.parseAndAnalyzeQuery("a:=(ahoj < cau < sbohem) kocka pes b:=plot && a != b", config)
+            assertThat(errors).isEmpty()
+        }
+
+        @Test
+        fun `comparison between two nested refs is allowed`() {
             val (_, errors) = compiler.parseAndAnalyzeQuery("influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) - _PAR_ && influencer.url != influencee.url", config)
             assertThat(errors).isEmpty()
+        }
+
+        @Test
+        fun `comparison between simple and nested ref is not allowed`() {
+            val (_, errors) = compiler.parseAndAnalyzeQuery("influencer:=nertag:(person|artist) < middle:=( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) - _PAR_ && influencer.url != middle", config)
+            assertHasError(errors, "COP-1", location = Interval.valueOf(168, 169))
         }
     }
 
