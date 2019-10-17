@@ -7,6 +7,7 @@ import {PerfTimer} from "../utils/perf";
 import {CorpusFormat} from "../entities/CorpusFormat";
 
 export interface SearchResultBatch {
+    query: string,
     searchResults: Array<SearchResult>,
     corpusFormat: CorpusFormat,
     moreResultsAvailable: boolean,
@@ -16,6 +17,7 @@ export interface SearchResultBatch {
 const {reducer, actions} = createSlice({
     slice: 'searchResults',
     initialState: {
+        query: "",
         snippetIds: [],
         snippetsById: {},
         corpusFormat: null,
@@ -30,6 +32,7 @@ const {reducer, actions} = createSlice({
             state.moreResultsAvailable = payload.moreResultsAvailable;
             state.snippetIds = [];
             state.snippetsById = {};
+            state.query = payload.query;
             state.statistics = payload.statistics;
             for (let snippet of payload.searchResults) {
                 state.snippetsById[snippet.id] = snippet;

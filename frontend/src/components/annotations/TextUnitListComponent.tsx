@@ -18,18 +18,19 @@ const styles = (theme: Theme) => createStyles({
 
 type AnnotatedTextComponentProps = WithStyles<typeof styles> & {
     text: TextUnitList,
+    query: string
     corpusFormat: CorpusFormat,
     metadata: SelectedMetadata | null
     showParagraphs: boolean
 }
 
 const TextUnitListComponent = (props: AnnotatedTextComponentProps) => {
-    const {text, corpusFormat, metadata, classes, showParagraphs} = props;
+    const {text, query, corpusFormat, metadata, classes, showParagraphs} = props;
     let tokenIndex = Object.keys(corpusFormat.indexes).indexOf("token");
     try {
         return <div className={classes.root}>
             {text.content.map((elem, index) => <React.Fragment key={index}>
-                {renderElement(elem, corpusFormat, metadata, tokenIndex, showParagraphs)}
+                {renderElement(elem, query, corpusFormat, metadata, tokenIndex, showParagraphs)}
             </React.Fragment>)}
         </div>
     } catch (e) {
@@ -50,7 +51,7 @@ function chooseColor(entity: Entity, metadata: SelectedMetadata | null): string 
     return "red";
 }
 
-export const renderElement = (text: TextUnit, corpusFormat: CorpusFormat, metadata: SelectedMetadata | null, tokenIndex: number, showParagraphs: boolean): React.ReactNode => {
+export const renderElement = (text: TextUnit, query: string, corpusFormat: CorpusFormat, metadata: SelectedMetadata | null, tokenIndex: number, showParagraphs: boolean): React.ReactNode => {
     if (text instanceof Word) {
         if (tokenIndex != -1) {
             if (text.indexes[tokenIndex] === "¶")
@@ -72,13 +73,17 @@ export const renderElement = (text: TextUnit, corpusFormat: CorpusFormat, metada
     } else if (text instanceof QueryMatch) {
         const content = <React.Fragment>
             {text.content.map((elem, index) => <React.Fragment key={index}>
-                {renderElement(elem, corpusFormat, metadata, tokenIndex, showParagraphs)}
+                {renderElement(elem, query, corpusFormat, metadata, tokenIndex, showParagraphs)}
                 </React.Fragment>
             )}
         </React.Fragment>
-        return <QueryMappingTooltip content={content} decoration="nertag:person"/>
+        let decoration = "unknown";
+        if (text.queryMatch.from >= 0 && text.queryMatch.from <= text.queryMatch.to && text.queryMatch.to < query.length - 1) {
+            decoration = query.substring(text.queryMatch.from, text.queryMatch.to + 1)
+        }
+        return <QueryMappingTooltip content={content} decoration={decoration}/>
     } else {
-        console.error(`unknown text unit type ${text}`)
+        console.error(`unknown text unit type ${text}`);
         return <span>err</span>
     }
 };

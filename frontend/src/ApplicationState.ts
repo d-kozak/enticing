@@ -30,6 +30,7 @@ export interface AdminState {
 }
 
 export interface SearchResultsState {
+    query: string,
     snippetIds: Array<string>,
     snippetsById: { [id: string]: SearchResult }
     corpusFormat: CorpusFormat | null,

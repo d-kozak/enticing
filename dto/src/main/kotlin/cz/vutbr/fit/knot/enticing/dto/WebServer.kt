@@ -89,7 +89,7 @@ object WebServer {
             @Incomplete("can be used only when postprocessing is ready")
             val query: String? = null
     ) {
-        fun toIndexFormat() = IndexServer.ContextExtensionQuery(collection, documentId, location, size, extension, metadata, defaultIndex, textFormat)
+        fun toIndexFormat() = IndexServer.ContextExtensionQuery(collection, documentId, location, size, extension, metadata, defaultIndex, textFormat, query)
     }
 
 
@@ -138,7 +138,7 @@ object WebServer {
              */
             val query: String? = null
     ) {
-        fun toIndexFormat() = IndexServer.DocumentQuery(collection, documentId, metadata, defaultIndex, textFormat)
+        fun toIndexFormat() = IndexServer.DocumentQuery(collection, documentId, metadata, defaultIndex, textFormat, query)
     }
 
 

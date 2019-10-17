@@ -55,6 +55,7 @@ export const contextExtensionRequestAction = (searchResult: SearchResult): Thunk
     const selectedMetadata = user.selectedMetadata[selectedSearchSettings.id];
     const metadataRequest = createMetadataRequest(selectedSearchSettings.corpusFormat, selectedMetadata);
     const query: ContextExtensionQuery = {
+        query: appState.searchResult.query,
         host: searchResult.host,
         collection: searchResult.collection,
         documentId: searchResult.documentId,

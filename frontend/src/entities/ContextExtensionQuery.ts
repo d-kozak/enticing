@@ -9,4 +9,5 @@ export interface ContextExtensionQuery {
     size: number
     extension: number
     defaultIndex: string
+    query: string
 }

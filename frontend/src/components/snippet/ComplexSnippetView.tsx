@@ -33,7 +33,7 @@ export type  ComplexSnippetViewEnhanedProps = WithStyles<typeof styles> & typeof
     & ReturnType<typeof mapStateToProps> & ComplexSnippetViewProps
 
 const ComplexSnippetView = (props: ComplexSnippetViewEnhanedProps) => {
-    const {snippet, snippetId, corpusFormat, debugMode, metadata, parseSearchResult, requestContextExtension, openDocumentRequest, classes} = props;
+    const {snippet, snippetId, corpusFormat, query, debugMode, metadata, parseSearchResult, requestContextExtension, openDocumentRequest, classes} = props;
     if (!snippet) {
         return <p>snippet with id {snippetId} not found</p>
     }
@@ -64,6 +64,7 @@ const ComplexSnippetView = (props: ComplexSnippetViewEnhanedProps) => {
         <Grid item>
             <NewAnnotatedTextComponent text={snippet.payload.parsedContent} corpusFormat={corpusFormat}
                                        metadata={metadata}
+                                       query={query}
                                        showParagraphs={false}/>
         </Grid>
     </Grid>
@@ -74,6 +75,7 @@ const mapStateToProps = (state: ApplicationState, props: ComplexSnippetViewProps
     debugMode: isDebugMode(state),
     metadata: getSelectedMetadataForCurrentSettings(state),
     snippet: state.searchResult.snippetsById[props.snippetId],
+    query: state.searchResult.query,
     corpusFormat: state.searchResult.corpusFormat
 });
 

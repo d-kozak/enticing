@@ -34,13 +34,15 @@ export const {closeDocumentDialog,} = actions;
 export default reducer;
 
 export const openDocumentDialogRequest = (searchResultId: string, corpusFormat: CorpusFormat): ThunkResult<void> => (dispatch, getState) => {
-    const searchResult = getState().searchResult.snippetsById[searchResultId];
+    const state = getState();
+    const searchResult = state.searchResult.snippetsById[searchResultId];
     if (!searchResult) {
         console.error(`could not find search result with id ${searchResultId}`);
         return;
     }
     dispatch(showProgressbar());
     const documentQuery: DocumentQuery = {
+        query: state.searchResult.query,
         host: searchResult.host,
         collection: searchResult.collection,
         documentId: searchResult.documentId,

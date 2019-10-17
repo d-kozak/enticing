@@ -37,7 +37,7 @@ export type  MinimizedSnippetViewEnhancedProps = WithStyles<typeof styles> & typ
     & ReturnType<typeof mapStateToProps> & MinimizedSnippetViewProps
 
 const MinimizedSnippetView = (props: MinimizedSnippetViewEnhancedProps) => {
-    const {snippet, snippetId, corpusFormat, metadata, debugMode, parseSearchResult, requestContextExtension, openDocumentRequest, classes} = props;
+    const {snippet, query, snippetId, corpusFormat, metadata, debugMode, parseSearchResult, requestContextExtension, openDocumentRequest, classes} = props;
     if (!snippet) {
         return <p>snippet with id {snippetId} not found</p>
     }
@@ -58,6 +58,7 @@ const MinimizedSnippetView = (props: MinimizedSnippetViewEnhancedProps) => {
         <Grid className={classes.text}>
             <NewAnnotatedTextComponent text={snippet.payload.parsedContent} corpusFormat={corpusFormat}
                                        metadata={metadata}
+                                       query={query}
                                        showParagraphs={false}/>
         </Grid>
     </Grid>
@@ -68,6 +69,7 @@ const mapStateToProps = (state: ApplicationState, props: MinimizedSnippetViewPro
     debugMode: isDebugMode(state),
     metadata: getSelectedMetadataForCurrentSettings(state),
     snippet: state.searchResult.snippetsById[props.snippetId],
+    query: state.searchResult.query,
     corpusFormat: state.searchResult.corpusFormat
 });
 

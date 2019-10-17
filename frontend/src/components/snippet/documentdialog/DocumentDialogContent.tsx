@@ -11,6 +11,7 @@ import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import {getSelectedMetadataForCurrentSettings, isDebugMode} from "../../../reducers/selectors";
 import DocumentDebugInfo from "../DocumentDebugInfoComponent";
+import {searchResultSchema} from "../../../entities/SearchResult";
 
 const styles = createStyles({
 });
@@ -22,18 +23,20 @@ export type  DialogContentProps = WithStyles<typeof styles> & typeof mapDispatch
 }
 
 const DocumentDialogContent = (props: DialogContentProps) => {
-    const {document, corpusFormat, metadata, debug, classes} = props;
+    const {document, corpusFormat, query, metadata, debug, classes} = props;
 
     return <div>
         {debug && <DocumentDebugInfo document={document}/>}
         <NewAnnotatedTextComponent text={document.payload.parsedContent!} corpusFormat={corpusFormat}
                                    metadata={metadata}
+                                   query={query}
                                    showParagraphs={true}/>
     </div>
 };
 
 const mapStateToProps = (state: ApplicationState) => ({
     debug: isDebugMode(state),
+    query: state.searchResult.query,
     metadata: getSelectedMetadataForCurrentSettings(state)
 });
 

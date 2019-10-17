@@ -70,6 +70,7 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
         }
         const frontendTime = timer.sample('response processed, dispatching results to redux');
         dispatch(newSearchResults({
+            query,
             searchResults: response.data.searchResults,
             corpusFormat: filteredCorpusFormat,
             moreResultsAvailable: response.data.searchResults.length > 0,

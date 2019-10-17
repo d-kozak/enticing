@@ -6,5 +6,6 @@ export interface DocumentQuery {
     documentId: number
     defaultIndex: string,
     metadata: TextMetadata,
-    textFormat: "TEXT_UNIT_LIST"
+    textFormat: "TEXT_UNIT_LIST",
+    query: string
 }
