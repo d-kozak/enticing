@@ -27,7 +27,7 @@ fun initMg4jCollectionManager(corpusConfiguration: CorpusConfiguration, collecti
 }
 
 @WhatIf("default index is hardwired to token internally, is it enough or should we provide a way to tweak this? maybe as an AST operation in EQL-compiler (to avoid expensive reinitialization of mg4j internals)?")
-private fun initMg4jQueryEngine(collectionConfig: CollectionConfiguration, corpusConfiguration: CorpusConfiguration): QueryEngine {
+internal fun initMg4jQueryEngine(collectionConfig: CollectionConfiguration, corpusConfiguration: CorpusConfiguration): QueryEngine {
     val indexDir = collectionConfig.indexDirectory
 
     val indexMap = Object2ReferenceLinkedOpenHashMap<String, Index>()

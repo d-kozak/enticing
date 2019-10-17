@@ -2,7 +2,7 @@ package cz.vutbr.fit.knot.enticing.eql.compiler.analysis
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.eql.compiler.analysis.check.*
-import cz.vutbr.fit.knot.enticing.eql.compiler.ast.AgregatingListener
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.AgregatingListener
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.EqlAstNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.emptySymbolTable
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.CompilerError

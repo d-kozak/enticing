@@ -4,7 +4,7 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.eql.compiler.SymbolTable
 import cz.vutbr.fit.knot.enticing.eql.compiler.analysis.EqlAstCheck
 import cz.vutbr.fit.knot.enticing.eql.compiler.analysis.Reporter
-import cz.vutbr.fit.knot.enticing.eql.compiler.ast.AgregatingListener
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.AgregatingListener
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.QueryElemNode
 
 class NestedIndexCheck(id: String) : EqlAstCheck<QueryElemNode.IndexNode>(id, QueryElemNode.IndexNode::class) {

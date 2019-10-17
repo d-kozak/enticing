@@ -1,5 +1,7 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.ast
 
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.EqlListener
+
 /**
  * Encapsulates the core ast walking logic that can be reused by multiple more specific walkers
  */

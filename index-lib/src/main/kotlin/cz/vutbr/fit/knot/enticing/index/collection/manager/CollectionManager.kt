@@ -40,7 +40,8 @@ class CollectionManager internal constructor(
         for ((i, result) in resultList.withIndex()) {
             val document = searchEngine.loadDocument(result.documentId)
             check(document.id == result.documentId) { "Invalid document id set in the search engine: ${result.documentId} vs ${document.id}" }
-            val matchInfo = postProcessor.process(query.eqlAst, document, result.intervals) ?: continue
+            val matchInfo = postProcessor.process(query.eqlAst, document, query.defaultIndex, corpusConfiguration, result.intervals)
+                    ?: continue
             val (results, hasMore) = resultCreator.multipleResults(document, matchInfo, query, if (document.id == documentOffset) resultOffset else 0, query.snippetCount, query.resultFormat)
             val searchResults = results.map {
                 IndexServer.SearchResult(
@@ -70,8 +71,10 @@ class CollectionManager internal constructor(
 
         val (prefixInfo, suffixInfo) = if (query.query != null) {
             val ast = eqlCompiler.parseOrFail(query.query!!, corpusConfiguration)
-            val prefixMatch = postProcessor.process(ast, document, prefix) ?: MatchInfo.empty()
-            val suffixMatch = postProcessor.process(ast, document, suffix) ?: MatchInfo.empty()
+            val prefixMatch = postProcessor.process(ast, document, query.defaultIndex, corpusConfiguration, prefix)
+                    ?: MatchInfo.empty()
+            val suffixMatch = postProcessor.process(ast, document, query.defaultIndex, corpusConfiguration, suffix)
+                    ?: MatchInfo.empty()
             prefixMatch to suffixMatch
         } else MatchInfo.empty() to MatchInfo.empty()
 
@@ -86,7 +89,7 @@ class CollectionManager internal constructor(
         val document = searchEngine.loadDocument(query.documentId)
         val matchInfo = if (query.query != null) {
             val ast = eqlCompiler.parseOrFail(query.query!!, corpusConfiguration)
-            postProcessor.process(ast, document) ?: MatchInfo.empty()
+            postProcessor.process(ast, document, query.defaultIndex, corpusConfiguration) ?: MatchInfo.empty()
         } else MatchInfo.empty()
 
         val payload = resultCreator.singleResult(document, matchInfo, query)

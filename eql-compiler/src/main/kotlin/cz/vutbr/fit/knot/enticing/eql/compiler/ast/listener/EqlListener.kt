@@ -1,4 +1,6 @@
-package cz.vutbr.fit.knot.enticing.eql.compiler.ast
+package cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener
+
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.*
 
 interface EqlListener {
     fun <T : EqlAstNode> shouldContinue(node: T): Boolean = true

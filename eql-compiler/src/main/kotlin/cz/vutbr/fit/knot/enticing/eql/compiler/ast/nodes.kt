@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.enticing.eql.compiler.ast
 
 import cz.vutbr.fit.knot.enticing.dto.AstNode
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.EqlListener
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor.Mgj4QueryGeneratingVisitor
 
 abstract class EqlAstNode : AstNode {
