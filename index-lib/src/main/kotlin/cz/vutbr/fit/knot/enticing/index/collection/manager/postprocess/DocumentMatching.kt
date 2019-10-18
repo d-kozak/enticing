@@ -27,7 +27,7 @@ fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: Stri
         for ((j, cell) in word.withIndex()) {
             val index = indexNameByIndex.getValue(j)
             for (node in nodesByIndex.getValue(index)) {
-                if (node.content.toLowerCase() == cell.toLowerCase()) {
+                if (elementaryCompare(node.content, cell)) {
                     val match = leafMatch.getValue(node)
                     match.add(i)
                     leafMatch[node] = match
@@ -39,13 +39,19 @@ fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: Stri
     return leafMatch.map { (node, matchList) -> EqlMatch.IndexMatch(node.location, matchList) }
 }
 
+internal fun elementaryCompare(queryValue: String, cellValue: String): Boolean {
+    val queryLower = queryValue.toLowerCase()
+    val cellLower = cellValue.toLowerCase()
+    return if (queryLower.endsWith("*")) cellLower.startsWith(queryLower.substring(0, queryLower.length - 1))
+    else queryLower == cellLower
+}
 
 internal class LeafNodesWithoutNotAboveListener(val root: EqlAstNode) : EqlListener {
 
     val nodes = mutableListOf<QueryElemNode.SimpleNode>()
 
     override fun <T : EqlAstNode> shouldContinue(node: T): Boolean {
-        return root === node || (node !is QueryElemNode.NotNode && node !is QueryElemNode.IndexNode)
+        return root === node || (node !is QueryElemNode.NotNode && node !is QueryElemNode.IndexNode && node !is QueryElemNode.AttributeNode)
     }
 
     override fun enterQueryElemSimpleNode(node: QueryElemNode.SimpleNode) {
@@ -58,7 +64,7 @@ internal class IndexSeparatingListener(val defaultIndex: String) : EqlListener {
             .withDefault { mutableListOf() }
 
     override fun <T : EqlAstNode> shouldContinue(node: T): Boolean {
-        return node !is QueryElemNode.NotNode && node !is QueryElemNode.IndexNode
+        return node !is QueryElemNode.NotNode && node !is QueryElemNode.IndexNode && node !is QueryElemNode.AttributeNode
     }
 
     override fun enterRootNode(node: RootNode) {
@@ -67,6 +73,15 @@ internal class IndexSeparatingListener(val defaultIndex: String) : EqlListener {
         val nodes = nodesByIndex.getValue(defaultIndex)
         nodes.addAll(listener.nodes)
         nodesByIndex[defaultIndex] = nodes
+    }
+
+    override fun enterQueryElemAttributeNode(node: QueryElemNode.AttributeNode) {
+        require(node.correspondingIndex.isNotEmpty()) { "corresponding index has to be set at this point, node: $node" }
+        val listener = LeafNodesWithoutNotAboveListener(node)
+        node.elem.walk(listener)
+        val nodes = nodesByIndex.getValue(node.correspondingIndex)
+        nodes.addAll(listener.nodes)
+        nodesByIndex[node.correspondingIndex] = nodes
     }
 
     override fun enterQueryElemIndexNode(node: QueryElemNode.IndexNode) {

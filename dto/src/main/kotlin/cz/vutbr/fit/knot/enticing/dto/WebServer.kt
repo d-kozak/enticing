@@ -86,7 +86,6 @@ object WebServer {
              * if provided, QueryMapping informing about the mapping between the query and the document will
              * be included in the response
              */
-            @Incomplete("can be used only when postprocessing is ready")
             val query: String? = null
     ) {
         fun toIndexFormat() = IndexServer.ContextExtensionQuery(collection, documentId, location, size, extension, metadata, defaultIndex, textFormat, query)

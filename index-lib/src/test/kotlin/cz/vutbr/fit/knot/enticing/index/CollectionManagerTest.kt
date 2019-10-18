@@ -16,6 +16,7 @@ import cz.vutbr.fit.knot.enticing.index.collection.manager.computeExtensionInter
 import cz.vutbr.fit.knot.enticing.index.mg4j.initMg4jCollectionManager
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.*
+import java.io.File
 
 val corpusConfig = corpusConfig("CC") {
     indexes {
@@ -141,6 +142,34 @@ class CollectionManagerTest {
             }
         }
     }
+
+    @Test
+    fun allQueries() {
+        val queryEngine = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
+        val compiler = EqlCompiler()
+        val badQueries = mutableListOf<String>()
+        for (line in File("../eql-compiler/src/test/resources/semantic_ok.eql").readLines()) {
+            if (line.isEmpty() || line.startsWith("#")) continue
+            println("query: $line")
+            try {
+                val query = templateQuery.copy(line)
+                val (ast, errors) = compiler.parseAndAnalyzeQuery(line, clientConfig.corpusConfiguration)
+                assertThat(errors).isEmpty()
+                query.eqlAst = ast
+                val result = queryEngine.query(query)
+            } catch (e: Throwable) {
+                e.printStackTrace()
+                badQueries.add(line)
+            }
+        }
+
+        if (badQueries.isNotEmpty()) {
+            println("Following queries failed:")
+            badQueries.forEach(::println)
+            fail { badQueries.toString() }
+        }
+    }
+
 
 
     @Test

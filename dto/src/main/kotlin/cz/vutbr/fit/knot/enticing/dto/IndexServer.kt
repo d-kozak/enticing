@@ -61,7 +61,6 @@ object IndexServer {
              * if provided, QueryMapping informing about the mapping between the query and the document will
              * be included in the response
              */
-            @Incomplete("can be used only when postprocessing is ready")
             val query: String? = null
     ) : GeneralFormatInfo
 
@@ -103,7 +102,6 @@ object IndexServer {
              * if provided, QueryMapping informing about the mapping between the query and the document will
              * be included in the response
              */
-            @Incomplete("can be used only when postprocessing is ready")
             val query: String? = null
     ) : GeneralFormatInfo
 

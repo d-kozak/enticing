@@ -83,4 +83,32 @@ internal class DocumentMatchingTest {
                         )
                 )
     }
+
+    @Test
+    @DisplayName("th*")
+    fun withStar() {
+        val doc = searchEngine.loadDocument(3)
+        val query = "th*"
+        val (ast, errors) = compiler.parseAndAnalyzeQuery(query, clientConfig.corpusConfiguration)
+        assertThat(errors).isEmpty()
+        val match = matchDocument(ast as EqlAstNode, doc, "token", clientConfig.corpusConfiguration, Interval.valueOf(0, doc.size() - 1))
+        assertThat(match)
+                .isEqualTo(
+                        listOf(EqlMatch.IndexMatch(Interval.valueOf(0, 2), listOf(4, 16, 42, 46, 56, 73, 76, 78, 92, 96, 108, 121, 146, 155)))
+                )
+    }
+
+    @Test
+    @DisplayName("person.name:Mic*")
+    fun person() {
+        val doc = searchEngine.loadDocument(0)
+        val query = "person.name:Mic*"
+        val (ast, errors) = compiler.parseAndAnalyzeQuery(query, clientConfig.corpusConfiguration)
+        assertThat(errors).isEmpty()
+        val match = matchDocument(ast as EqlAstNode, doc, "token", clientConfig.corpusConfiguration, Interval.valueOf(0, doc.size() - 1))
+        assertThat(match)
+                .isEqualTo(
+                        listOf(EqlMatch.IndexMatch(Interval.valueOf(12, 15), listOf(31, 880, 903, 1654, 1748)))
+                )
+    }
 }
