@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.e2e
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.eql.compiler.analysis.config
 import org.assertj.core.api.Assertions.assertThat
@@ -67,5 +68,17 @@ class ComplexTests {
         assertThat(errors).isEmpty()
         assertThat(ast.toMgj4Query()).isEqualTo("(((nertag:person{{nertag->token}}) ^ (param2:(pepa){{param2->token}})) | ((nertag:location{{nertag->token}}) ^ (param2:(new_york){{param2->token}})))")
     }
+
+    @Test
+    @WhatIf("this might not be correct :X better check it out")
+    @DisplayName("(a:=(horse !bread))|(b:=(house !wall))")
+    fun eight() {
+        val (ast, errors) = compiler.parseAndAnalyzeQuery("(a:=(horse !bread))|(b:=(house !wall))", config)
+        assertThat(errors).isEmpty()
+        assertThat(ast.toMgj4Query()).isEqualTo("(horse !bread | house !wall)")
+    }
+
+
+
 
 }

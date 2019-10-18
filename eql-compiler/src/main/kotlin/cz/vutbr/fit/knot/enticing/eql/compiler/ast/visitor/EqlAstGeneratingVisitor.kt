@@ -88,7 +88,9 @@ class EqlAstGeneratingVisitor : EqlVisitor<AstNode> {
         val entityName = ctx.IDENTIFIER(0).text
         val attributeName = ctx.IDENTIFIER(1).text
         val queryElem = ctx.queryElem().accept(this) as QueryElemNode
-        return QueryElemNode.AttributeNode(entityName, attributeName, queryElem, ctx.location)
+        val entityLocation = Interval.valueOf(ctx.location.from, ctx.location.from + entityName.length - 1)
+        val entityNode = QueryElemNode.SimpleNode(entityName, SimpleQueryType.STRING, entityLocation)
+        return QueryElemNode.AttributeNode(entityNode, attributeName, queryElem, ctx.location)
     }
 
     override fun visitAssign(ctx: EqlParser.AssignContext): AstNode {

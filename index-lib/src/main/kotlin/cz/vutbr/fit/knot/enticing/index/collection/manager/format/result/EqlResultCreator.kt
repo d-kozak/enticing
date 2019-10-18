@@ -60,7 +60,7 @@ fun MatchInfo.limitBy(boundary: Interval): MatchInfo {
     for (match in this.leafIntervals) {
         when (match) {
             is EqlMatch.IdentifierMatch -> {
-                val documentIntervals = match.documentIntervals.filter { it.first in boundary }
+                val documentIntervals = match.documentIntervals.filter { it in boundary }
                 if (documentIntervals.isNotEmpty()) {
                     newLeafIntervals.add(match.copy(documentIntervals = documentIntervals))
                 }
@@ -92,9 +92,9 @@ fun List<EqlMatch>.split(): Pair<Map<Int, Interval>, Set<Int>> {
             }
 
             is EqlMatch.IdentifierMatch -> {
-                for ((interval, _) in match.documentIntervals) {
-                    matchStart[interval.from] = match.queryInterval
-                    matchEnd.add(interval.to)
+                for ((from, to) in match.documentIntervals) {
+                    matchStart[from] = match.queryInterval
+                    matchEnd.add(to)
                 }
             }
         }

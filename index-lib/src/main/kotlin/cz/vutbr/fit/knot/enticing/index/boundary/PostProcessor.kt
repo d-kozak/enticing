@@ -51,7 +51,7 @@ sealed class EqlMatch {
             /**
              * Intervals over the document where the identifier was matched
              */
-            val documentIntervals: List<Pair<Interval, List<IndexMatch>>>
+            val documentIntervals: List<Interval>
     ) : EqlMatch()
 }
 
