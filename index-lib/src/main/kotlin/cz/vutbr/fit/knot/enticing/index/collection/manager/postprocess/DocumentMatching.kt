@@ -48,7 +48,30 @@ fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: Stri
         }
     }
 
-    return leafMatch.map { (node, matchList) -> EqlMatch.IndexMatch(node.location, matchList) }
+    val matchVisitor = DocumentMatchingVisitor(leafMatch, sentenceMarks, paragraphMarks)
+    ast.accept(matchVisitor)
+
+    val matchList = mutableListOf<EqlMatch>()
+
+    val listener = object : EqlListener {
+        override fun <T : EqlAstNode> shouldContinue(node: T): Boolean = node === ast || node !is QueryElemNode.NotNode
+
+        override fun enterQueryElemSimpleNode(node: QueryElemNode.SimpleNode) {
+            val intervals = matchVisitor.intervalsPerNode[node.id]
+                    ?: throw IllegalArgumentException("Unknown location ${node.location}")
+            require(intervals.all { it.size == 1 }) { "only intervals of size 1 should exist at the leaf level" }
+            matchList.add(EqlMatch.IndexMatch(node.location, intervals.map { it.from }))
+        }
+
+        override fun enterQueryElemAssignNode(node: QueryElemNode.AssignNode) {
+            val intervals = matchVisitor.intervalsPerNode[node.id]
+                    ?: throw IllegalArgumentException("Unknown location ${node.location}")
+            matchList.add(EqlMatch.IdentifierMatch(node.location, intervals))
+        }
+    }
+    ast.walk(listener)
+
+    return matchList
 }
 
 
@@ -58,31 +81,31 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
 
     val matchList = mutableListOf<EqlMatch>()
 
-    val intervalsPerLocation = mutableMapOf<Interval, List<Interval>>()
+    val intervalsPerNode = mutableMapOf<Long, List<Interval>>()
 
-    fun addIntervalToLocation(location: Interval, intervals: List<Interval>) {
-        require(location !in intervalsPerLocation) { " slot of $location is already occupied" }
-        intervalsPerLocation[location] = intervals
+    fun addIntervalToLocation(node: EqlAstNode, intervals: List<Interval>) {
+        require(node.id !in intervalsPerNode) { " slot of $node is already occupied, content: $intervalsPerNode" }
+        intervalsPerNode[node.id] = intervals
     }
 
     override fun visitRootNode(node: RootNode): Pair<Boolean, List<Interval>> {
         val res = node.query.accept(this)
-        addIntervalToLocation(node.location, res.second)
+        addIntervalToLocation(node, res.second)
         return res
     }
 
 
     override fun visitQueryElemSimpleNode(node: QueryElemNode.SimpleNode): Pair<Boolean, List<Interval>> {
         val intervals = leafMatch[node]?.map { Interval.valueOf(it) }
-                ?: throw IllegalStateException("No entry for node $node")
-        addIntervalToLocation(node.location, intervals)
+                ?: emptyList()
+        addIntervalToLocation(node, intervals)
         return false to intervals
     }
 
 
     override fun visitQueryElemNotNode(node: QueryElemNode.NotNode): Pair<Boolean, List<Interval>> {
         val intervals = node.elem.accept(this)
-        addIntervalToLocation(node.location, intervals.second)
+        addIntervalToLocation(node, intervals.second)
         require(!intervals.first) { "two consecutive NOTs not allowed" }
         return true to emptyList()
     }
@@ -91,7 +114,7 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
         val res = node.elem.accept(this)
         require(!res.first) { "not not allowed here" }
         matchList.add(EqlMatch.IdentifierMatch(node.location, res.second))
-        addIntervalToLocation(node.location, res.second)
+        addIntervalToLocation(node, res.second)
         return res
     }
 
@@ -142,13 +165,13 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
                 }
             }
         }
-        addIntervalToLocation(node.location, intervals)
+        addIntervalToLocation(node, intervals)
         return false to intervals
     }
 
     override fun visitQueryElemIndexNode(node: QueryElemNode.IndexNode): Pair<Boolean, List<Interval>> {
         val res = node.elem.accept(this)
-        addIntervalToLocation(node.location, res.second)
+        addIntervalToLocation(node, res.second)
         return res
     }
 
@@ -163,7 +186,7 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
                 if (x == y) res.add(x)
             }
         }
-        addIntervalToLocation(node.location, res)
+        addIntervalToLocation(node, res)
         return false to res
     }
 
@@ -176,7 +199,7 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
                 .toMutableList()
         while (andLeaves.size >= 2) {
             val first = andLeaves.removeAt(0)
-            val second = andLeaves.removeAt(1)
+            val second = andLeaves.removeAt(0)
             val res = mutableListOf<Interval>()
             for (x in first) {
                 for (y in second) {
@@ -186,14 +209,14 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
             andLeaves.add(0, res)
         }
         require(andLeaves.size == 1) { "there should be exactly one interval list left" }
-        addIntervalToLocation(node.location, andLeaves[0])
+        addIntervalToLocation(node, andLeaves[0])
         return false to andLeaves[0]
     }
 
     @Incomplete("handle restriction")
     override fun visitQueryElemParenNode(node: QueryElemNode.ParenNode): Pair<Boolean, List<Interval>> {
         val res = node.query.accept(this)
-        addIntervalToLocation(node.location, res.second)
+        addIntervalToLocation(node, res.second)
         return false to res.second
     }
 
@@ -209,7 +232,7 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
                 BooleanOperator.OR -> handleOr(leftResult.second, rightResult.second)
             }
         }
-        addIntervalToLocation(node.location, res)
+        addIntervalToLocation(node, res)
         return false to res
     }
 
@@ -235,7 +258,7 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
                 if (x.to <= y.from) res.add(x.combineWith(y))
             }
         }
-        addIntervalToLocation(node.location, res)
+        addIntervalToLocation(node, res)
         return false to res
     }
 
@@ -243,9 +266,9 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
         val results = node.elems.map { it.accept(this) }
         require(results.none { it.first }) { "no not is allowed in sequence" }
         val allCols = results.map { it.second }.toMutableList()
-        while (allCols.size > 2) {
+        while (allCols.size >= 2) {
             val first = allCols.removeAt(0)
-            val second = allCols.removeAt(1)
+            val second = allCols.removeAt(0)
             val res = mutableListOf<Interval>()
             for (x in first) {
                 for (y in second) {
@@ -255,7 +278,7 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
             allCols.add(0, res)
         }
         check(allCols.size == 1) { "exactly one col expected here" }
-        addIntervalToLocation(node.location, allCols[0])
+        addIntervalToLocation(node, allCols[0])
         return false to allCols[0]
     }
 
@@ -271,7 +294,7 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
             }
         }
 
-        addIntervalToLocation(node.location, res)
+        addIntervalToLocation(node, res)
         return false to res
     }
 

@@ -111,4 +111,18 @@ internal class DocumentMatchingTest {
                         listOf(EqlMatch.IndexMatch(Interval.valueOf(12, 15), listOf(31, 880, 903, 1654, 1748)))
                 )
     }
+
+    @Test
+    @DisplayName("That < Motion")
+    fun next() {
+        val doc = searchEngine.loadDocument(3)
+        val query = "That < Motion"
+        val (ast, errors) = compiler.parseAndAnalyzeQuery(query, clientConfig.corpusConfiguration)
+        assertThat(errors).isEmpty()
+        val match = matchDocument(ast as EqlAstNode, doc, "token", clientConfig.corpusConfiguration, Interval.valueOf(0, doc.size() - 1))
+        assertThat(match)
+                .isEqualTo(
+                        listOf(EqlMatch.IndexMatch(Interval.valueOf(12, 15), listOf(31, 880, 903, 1654, 1748)))
+                )
+    }
 }

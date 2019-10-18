@@ -1,11 +1,19 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.ast
 
 import cz.vutbr.fit.knot.enticing.dto.AstNode
+import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.EqlListener
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor.Mgj4QueryGeneratingVisitor
 
+@WhatIf("""
+    this way creating ids prevents use from making the code parallel, but otherwise local ids shoudl be unique, 
+    because the ast should never have more than LONG.MAX_VALUE nodes at once, so overflow should not be a problem
+    """)
+var counter = 0L
+
 abstract class EqlAstNode : AstNode {
+    val id: Long = counter++
     abstract val location: Interval
     abstract fun <T> accept(visitor: EqlVisitor<T>): T
     fun walk(listener: EqlListener, walker: AstWalker = AstWalker(listener)) = this.accept(walker)
