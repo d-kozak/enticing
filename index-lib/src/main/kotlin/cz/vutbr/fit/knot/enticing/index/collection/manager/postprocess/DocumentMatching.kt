@@ -10,6 +10,12 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor.GlobalConstraintAgnos
 import cz.vutbr.fit.knot.enticing.index.boundary.EqlMatch
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 
+internal fun dumpMatch(ast: EqlAstNode, match: Map<Long, List<Interval>>) {
+    ast.forEachNode {
+        println("$it => ${match[it.id]}")
+    }
+}
+
 /**
  * This file contains all the logic which performs query to document matching, inspiration is taken from
  * http://vigna.di.unimi.it/ftp/papers/EfficientAlgorithmsMinimalIntervalSemantics.pdf
@@ -51,6 +57,7 @@ fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: Stri
     val matchVisitor = DocumentMatchingVisitor(leafMatch, sentenceMarks, paragraphMarks)
     ast.accept(matchVisitor)
 
+    dumpMatch(ast, matchVisitor.intervalsPerNode)
     val matchList = mutableListOf<EqlMatch>()
 
     val listener = object : EqlListener {
