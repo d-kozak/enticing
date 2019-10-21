@@ -24,6 +24,12 @@ abstract class EqlAstNode : AstNode {
     override fun deepCopy(): AstNode = this.accept(DeepCopyVisitor())
 
     /**
+     * Contains information how the query matched the document
+     * Each item consists of indexes of node's children intervals and interval created using these subintervals
+     */
+    var matchInfo: MutableList<Pair<List<Int>, Interval>>? = null
+
+    /**
      * Execute given piece of code for each node in the ast
      */
     fun forEachNode(fn: (EqlAstNode) -> Unit) {
