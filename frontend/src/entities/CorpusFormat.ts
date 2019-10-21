@@ -7,9 +7,10 @@ export type String2StringObjectMap = { [key: string]: string }
 
 export type IndexInfo = String2StringObjectMap
 
+export type AttributeInfo = { [key: string]: { description: string } };
 export type EntityInfo = {
     description: string
-    attributes: String2StringObjectMap
+    attributes: AttributeInfo
 }
 
 export interface CorpusFormat {
@@ -19,18 +20,12 @@ export interface CorpusFormat {
     defaultIndex?: string
 }
 
-const string2stringObjectMapSchema = yup.lazy(obj => yup.object(
-    mapValues(obj, () => yup.string().min(0))
-))
-
 export const corpusFormatSchema = yup.object({
     corpusName: yup.string(),
-    indexes: string2stringObjectMapSchema,
+    indexes: yup.object(),
     entities: yup.object({
             description: yup.string(),
-            attributes: yup.lazy(obj => yup.object(
-                mapValues(obj, () => string2stringObjectMapSchema)
-            ))
+        attributes: yup.object()
         }
     )
 });

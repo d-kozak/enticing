@@ -2,6 +2,8 @@ package cz.vutbr.fit.knot.enticing.eql.compiler.analysis
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.*
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
+import cz.vutbr.fit.knot.enticing.dto.toCorpusConfig
+import cz.vutbr.fit.knot.enticing.dto.toCorpusFormat
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.eql.compiler.forEachQuery
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.CompilerError
@@ -75,7 +77,8 @@ internal val config = corpusConfig("CC") {
     val errors = mutableListOf<String>()
     it.validate(errors)
     assertThat(errors).isEmpty()
-}
+}.toCorpusFormat() // "double transform it to ensure all important data is still there"
+        .toCorpusConfig()
 
 fun assertHasError(errors: List<CompilerError>, id: String, count: Int = 1, location: Interval? = null) {
     assertThat(errors).hasSize(count)

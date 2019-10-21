@@ -79,7 +79,7 @@ sealed class QueryElemNode : EqlAstNode() {
         val entity: String
             get() = entityNode.content
 
-        lateinit var correspondingIndex: String
+        var correspondingIndex: String = "<<<Unknown>>>"
 
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemAttributeNode(this)
     }

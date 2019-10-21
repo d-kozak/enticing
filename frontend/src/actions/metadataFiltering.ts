@@ -1,4 +1,4 @@
-import {CorpusFormat, EntityInfo, IndexInfo, String2StringObjectMap} from "../entities/CorpusFormat";
+import {AttributeInfo, CorpusFormat, EntityInfo, IndexInfo, String2StringObjectMap} from "../entities/CorpusFormat";
 import {SelectedMetadata} from "../entities/SelectedMetadata";
 import {
     ExactEntityDefinition,
@@ -31,7 +31,7 @@ export function filterCorpusFormat(corpusFormat: CorpusFormat, selectedMetadata:
             console.warn(`entity ${entityName} is not part of selected corpus format`);
             continue;
         }
-        const wantedAttributes: String2StringObjectMap = {};
+        const wantedAttributes: AttributeInfo = {};
         for (let attribute of entity.attributes) {
             if (entityInfo.attributes[attribute] !== undefined) {
                 wantedAttributes[attribute] = entityInfo.attributes[attribute];
