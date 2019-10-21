@@ -56,101 +56,84 @@ fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: Stri
 
     val matchVisitor = DocumentMatchingVisitor(leafMatch, sentenceMarks, paragraphMarks)
     ast.accept(matchVisitor)
-
-    dumpMatch(ast, matchVisitor.intervalsPerNode)
     val matchList = mutableListOf<EqlMatch>()
-
-    val listener = object : EqlListener {
-        override fun <T : EqlAstNode> shouldContinue(node: T): Boolean = node === ast || node !is QueryElemNode.NotNode
-
-        override fun enterQueryElemSimpleNode(node: QueryElemNode.SimpleNode) {
-            val intervals = matchVisitor.intervalsPerNode[node.id]
-                    ?: throw IllegalArgumentException("Unknown location ${node.location}")
-            require(intervals.all { it.size == 1 }) { "only intervals of size 1 should exist at the leaf level" }
-            matchList.add(EqlMatch.IndexMatch(node.location, intervals.map { it.from }))
-        }
-
-        override fun enterQueryElemAssignNode(node: QueryElemNode.AssignNode) {
-            val intervals = matchVisitor.intervalsPerNode[node.id]
-                    ?: throw IllegalArgumentException("Unknown location ${node.location}")
-            matchList.add(EqlMatch.IdentifierMatch(node.location, intervals))
-        }
-    }
-    ast.walk(listener)
 
     return matchList
 }
 
 
+typealias DocumentMatchResult = Pair<Boolean, MutableList<Pair<List<Int>, Interval>>>
+
+/**
+ * Nodes that do NOT generate their own matches:
+ *  root, not, assign, index, paren
+ */
 @Incomplete("add semantic checks limiting where NOT is usable")
 @Speed("this could and should be eventually rewritten using more effective algorithms")
-class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<Int>>, val sentenceMarks: Set<Int>, val paragraphMarks: Set<Int>) : GlobalConstraintAgnosticVisitor<Pair<Boolean, List<Interval>>>() {
+class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<Int>>, val sentenceMarks: Set<Int>, val paragraphMarks: Set<Int>) : GlobalConstraintAgnosticVisitor<DocumentMatchResult>() {
 
-    val matchList = mutableListOf<EqlMatch>()
+    val intervalsPerNode = mutableMapOf<Long, MutableList<Pair<List<Int>, Interval>>>()
 
-    val intervalsPerNode = mutableMapOf<Long, List<Interval>>()
-
-    fun addIntervalToLocation(node: EqlAstNode, intervals: List<Interval>) {
+    fun addIntervalToLocation(node: EqlAstNode, result: MutableList<Pair<List<Int>, Interval>>) {
         require(node.id !in intervalsPerNode) { " slot of $node is already occupied, content: $intervalsPerNode" }
-        intervalsPerNode[node.id] = intervals
+        intervalsPerNode[node.id] = result.toMutableList()
     }
 
-    override fun visitRootNode(node: RootNode): Pair<Boolean, List<Interval>> {
+    override fun visitRootNode(node: RootNode): DocumentMatchResult {
         val res = node.query.accept(this)
         addIntervalToLocation(node, res.second)
         return res
     }
 
 
-    override fun visitQueryElemSimpleNode(node: QueryElemNode.SimpleNode): Pair<Boolean, List<Interval>> {
-        val intervals = leafMatch[node]?.map { Interval.valueOf(it) }
-                ?: emptyList()
+    override fun visitQueryElemSimpleNode(node: QueryElemNode.SimpleNode): DocumentMatchResult {
+        val intervals = leafMatch[node]?.map { listOf(-1) to Interval.valueOf(it) }?.toMutableList()
+                ?: mutableListOf()
         addIntervalToLocation(node, intervals)
         return false to intervals
     }
 
 
-    override fun visitQueryElemNotNode(node: QueryElemNode.NotNode): Pair<Boolean, List<Interval>> {
+    override fun visitQueryElemNotNode(node: QueryElemNode.NotNode): DocumentMatchResult {
         val intervals = node.elem.accept(this)
         addIntervalToLocation(node, intervals.second)
         require(!intervals.first) { "two consecutive NOTs not allowed" }
-        return true to emptyList()
+        return true to intervals.second
     }
 
-    override fun visitQueryElemAssignNode(node: QueryElemNode.AssignNode): Pair<Boolean, List<Interval>> {
+    override fun visitQueryElemAssignNode(node: QueryElemNode.AssignNode): DocumentMatchResult {
         val res = node.elem.accept(this)
         require(!res.first) { "not not allowed here" }
-        matchList.add(EqlMatch.IdentifierMatch(node.location, res.second))
         addIntervalToLocation(node, res.second)
         return res
     }
 
 
-    override fun visitQueryElemRestrictionNode(node: QueryElemNode.RestrictionNode): Pair<Boolean, List<Interval>> {
+    override fun visitQueryElemRestrictionNode(node: QueryElemNode.RestrictionNode): DocumentMatchResult {
         val leftResult = node.left.accept(this)
         val rightResult = node.right.accept(this)
-        val mix: List<Interval> = when {
-            !leftResult.first && rightResult.first -> leftResult.second
-            leftResult.first && !rightResult.first -> rightResult.second
+        val mix: MutableList<Pair<List<Int>, Interval>> = when {
+            !leftResult.first && rightResult.first -> leftResult.second.mapIndexed { i, e -> listOf(i, -1) to e.second }.toMutableList()
+            leftResult.first && !rightResult.first -> rightResult.second.mapIndexed { i, e -> listOf(-1, i) to e.second }.toMutableList()
             !leftResult.first && !rightResult.first -> {
-                val res = mutableListOf<Interval>()
-                for (x in leftResult.second) {
-                    for (y in leftResult.second) {
-                        res.add(x.combineWith(y))
+                val res = mutableListOf<Pair<List<Int>, Interval>>()
+                for ((i, x) in leftResult.second.withIndex()) {
+                    for ((j, y) in rightResult.second.withIndex()) {
+                        res.add(listOf(i, j) to x.second.combineWith(y.second))
                     }
                 }
                 res
             }
             else -> throw IllegalStateException("two not clauses have no meaning, should be caught earlier")
         }
-        val intervals: List<Interval> = when (node.type) {
+        val intervals: MutableList<Pair<List<Int>, Interval>> = when (node.type) {
             is RestrictionTypeNode.ProximityNode -> {
                 val distance = (node.type as RestrictionTypeNode.ProximityNode).distance.toInt()
                 if (!leftResult.first && !rightResult.first) {
-                    val res = mutableListOf<Interval>()
-                    for (x in leftResult.second) {
-                        for (y in rightResult.second) {
-                            if (y.from - x.to <= distance) res.add(Interval.valueOf(x.from, y.to))
+                    val res = mutableListOf<Pair<List<Int>, Interval>>()
+                    for ((i, x) in leftResult.second.withIndex()) {
+                        for ((j, y) in rightResult.second.withIndex()) {
+                            if (y.second.from - x.second.to <= distance) res.add(listOf(i, j) to Interval.valueOf(x.second.from, y.second.to))
                         }
                     }
                     res
@@ -161,14 +144,14 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
             }
 
             is RestrictionTypeNode.ContextNode -> when ((node.type as RestrictionTypeNode.ContextNode).restriction) {
-                is ContextRestrictionType.Sentence -> mix.filter { interval -> sentenceMarks.none { it in interval } }
-                is ContextRestrictionType.Paragraph -> mix.filter { interval -> paragraphMarks.none { it in interval } }
+                is ContextRestrictionType.Sentence -> mix.filter { interval -> sentenceMarks.none { it in interval.second } }.toMutableList()
+                is ContextRestrictionType.Paragraph -> mix.filter { interval -> paragraphMarks.none { it in interval.second } }.toMutableList()
                 is ContextRestrictionType.Query -> {
                     val restriction = (((node.type as RestrictionTypeNode.ContextNode)).restriction as ContextRestrictionType.Query).query.accept(this)
                     if (restriction.first) {
                         throw IllegalStateException("Not not allowed here")
                     }
-                    mix.filter { interval -> restriction.second.none { it in interval } }
+                    mix.filter { interval -> restriction.second.none { it.second in interval.second } }.toMutableList()
                 }
             }
         }
@@ -176,21 +159,21 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
         return false to intervals
     }
 
-    override fun visitQueryElemIndexNode(node: QueryElemNode.IndexNode): Pair<Boolean, List<Interval>> {
+    override fun visitQueryElemIndexNode(node: QueryElemNode.IndexNode): DocumentMatchResult {
         val res = node.elem.accept(this)
         addIntervalToLocation(node, res.second)
         return res
     }
 
-    override fun visitQueryElemAttributeNode(node: QueryElemNode.AttributeNode): Pair<Boolean, List<Interval>> {
+    override fun visitQueryElemAttributeNode(node: QueryElemNode.AttributeNode): DocumentMatchResult {
         val entity = node.entityNode.accept(this)
         val attribute = node.elem.accept(this)
         require(!entity.first) { "cannot use not here" }
         require(!attribute.first) { "cannot use not here" }
-        val res = mutableListOf<Interval>()
-        for (x in entity.second) {
-            for (y in attribute.second) {
-                if (x == y) res.add(x)
+        val res = mutableListOf<Pair<List<Int>, Interval>>()
+        for ((i, x) in entity.second.withIndex()) {
+            for ((j, y) in attribute.second.withIndex()) {
+                if (x.second == y.second) res.add(listOf(i, j) to x.second)
             }
         }
         addIntervalToLocation(node, res)
@@ -198,19 +181,23 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
     }
 
     @Incomplete("handle restriction")
-    override fun visitQueryNode(node: QueryNode): Pair<Boolean, List<Interval>> {
+    override fun visitQueryNode(node: QueryNode): DocumentMatchResult {
         val andLeaves = node.query.asSequence()
                 .map { it.accept(this) }
                 .filter { !it.first }
                 .map { it.second }
                 .toMutableList()
+        // update the first matchlist so that the others can just append their indexes to it
+        if (andLeaves.isNotEmpty()) {
+            andLeaves[0] = andLeaves[0].mapIndexed { i, e -> listOf(i) to e.second }.toMutableList()
+        }
         while (andLeaves.size >= 2) {
             val first = andLeaves.removeAt(0)
             val second = andLeaves.removeAt(0)
-            val res = mutableListOf<Interval>()
+            val res = mutableListOf<Pair<List<Int>, Interval>>()
             for (x in first) {
-                for (y in second) {
-                    res.add(x.combineWith(y))
+                for ((j, y) in second.withIndex()) {
+                    res.add(x.first + j to x.second.combineWith(y.second))
                 }
             }
             andLeaves.add(0, res)
@@ -221,19 +208,19 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
     }
 
     @Incomplete("handle restriction")
-    override fun visitQueryElemParenNode(node: QueryElemNode.ParenNode): Pair<Boolean, List<Interval>> {
+    override fun visitQueryElemParenNode(node: QueryElemNode.ParenNode): DocumentMatchResult {
         val res = node.query.accept(this)
         addIntervalToLocation(node, res.second)
         return false to res.second
     }
 
-    override fun visitQueryElemBooleanNode(node: QueryElemNode.BooleanNode): Pair<Boolean, List<Interval>> {
+    override fun visitQueryElemBooleanNode(node: QueryElemNode.BooleanNode): DocumentMatchResult {
         val leftResult = node.left.accept(this)
         val rightResult = node.right.accept(this)
         check(!(leftResult.first && rightResult.first)) { "cannot handle two not's" }
-        val res: List<Interval> = when {
-            leftResult.first -> rightResult.second
-            rightResult.first -> leftResult.second
+        val res: MutableList<Pair<List<Int>, Interval>> = when {
+            leftResult.first -> rightResult.second.mapIndexed { i, e -> listOf(-1, i) to e.second }.toMutableList()
+            rightResult.first -> leftResult.second.mapIndexed { i, e -> listOf(i, -1) to e.second }.toMutableList()
             else -> when (node.operator) {
                 BooleanOperator.AND -> handleAnd(leftResult.second, rightResult.second)
                 BooleanOperator.OR -> handleOr(leftResult.second, rightResult.second)
@@ -243,43 +230,46 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
         return false to res
     }
 
-    private fun handleOr(left: List<Interval>, right: List<Interval>): List<Interval> = left + right
+    private fun handleOr(left: MutableList<Pair<List<Int>, Interval>>, right: MutableList<Pair<List<Int>, Interval>>): MutableList<Pair<List<Int>, Interval>> = (left.mapIndexed { i, e -> listOf(i, -1) to e.second }.toMutableList() + right.mapIndexed { i, e -> listOf(-1, i) to e.second }.toMutableList()).toMutableList()
 
-    private fun handleAnd(left: List<Interval>, right: List<Interval>): List<Interval> {
-        val res = mutableListOf<Interval>()
-        for (x in left) {
-            for (y in right) {
-                res.add(x.combineWith(y))
+    private fun handleAnd(left: MutableList<Pair<List<Int>, Interval>>, right: MutableList<Pair<List<Int>, Interval>>): MutableList<Pair<List<Int>, Interval>> {
+        val res = mutableListOf<Pair<List<Int>, Interval>>()
+        for ((i, x) in left.withIndex()) {
+            for ((j, y) in right.withIndex()) {
+                res.add(listOf(i, j) to x.second.combineWith(y.second))
             }
         }
         return res
     }
 
-    override fun visitQueryElemOrderNode(node: QueryElemNode.OrderNode): Pair<Boolean, List<Interval>> {
+    override fun visitQueryElemOrderNode(node: QueryElemNode.OrderNode): DocumentMatchResult {
         val leftResult = node.left.accept(this)
         val rightResult = node.right.accept(this)
         check(!(leftResult.first || rightResult.first)) { "not does not make sense here" }
-        val res = mutableListOf<Interval>()
-        for (x in leftResult.second) {
-            for (y in rightResult.second) {
-                if (x.to <= y.from) res.add(x.combineWith(y))
+        val res = mutableListOf<Pair<List<Int>, Interval>>()
+        for ((i, x) in leftResult.second.withIndex()) {
+            for ((j, y) in rightResult.second.withIndex()) {
+                if (x.second.to <= y.second.from) res.add(listOf(i, j) to x.second.combineWith(y.second))
             }
         }
         addIntervalToLocation(node, res)
         return false to res
     }
 
-    override fun visitQueryElemSequenceNode(node: QueryElemNode.SequenceNode): Pair<Boolean, List<Interval>> {
+    override fun visitQueryElemSequenceNode(node: QueryElemNode.SequenceNode): DocumentMatchResult {
         val results = node.elems.map { it.accept(this) }
         require(results.none { it.first }) { "no not is allowed in sequence" }
         val allCols = results.map { it.second }.toMutableList()
+        if (allCols.isNotEmpty()) {
+            allCols[0] = allCols[0].mapIndexed { i, e -> listOf(i) to e.second }.toMutableList()
+        }
         while (allCols.size >= 2) {
             val first = allCols.removeAt(0)
             val second = allCols.removeAt(0)
-            val res = mutableListOf<Interval>()
+            val res = mutableListOf<Pair<List<Int>, Interval>>()
             for (x in first) {
-                for (y in second) {
-                    if (x.to + 1 == y.from) res.add(x.combineWith(y))
+                for ((j, y) in second.withIndex()) {
+                    if (x.second.to + 1 == y.second.from) res.add(x.first + j to x.second.combineWith(y.second))
                 }
             }
             allCols.add(0, res)
@@ -289,15 +279,15 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
         return false to allCols[0]
     }
 
-    override fun visitQueryElemAlignNode(node: QueryElemNode.AlignNode): Pair<Boolean, List<Interval>> {
+    override fun visitQueryElemAlignNode(node: QueryElemNode.AlignNode): DocumentMatchResult {
         val left = node.accept(this)
         val right = node.accept(this)
         require(!(left.first || right.first)) { "not is not allowed here" }
 
-        val res = mutableListOf<Interval>()
-        for (x in left.second) {
-            for (y in right.second) {
-                if (x == y) res.add(x)
+        val res = mutableListOf<Pair<List<Int>, Interval>>()
+        for ((i, x) in left.second.withIndex()) {
+            for ((j, y) in right.second.withIndex()) {
+                if (x.second == y.second) res.add(listOf(i, j) to x.second)
             }
         }
 
@@ -305,11 +295,11 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
         return false to res
     }
 
-    override fun visitRestrictionProximityNode(node: RestrictionTypeNode.ProximityNode): Pair<Boolean, List<Interval>> {
+    override fun visitRestrictionProximityNode(node: RestrictionTypeNode.ProximityNode): DocumentMatchResult {
         throw IllegalStateException("should never be called here")
     }
 
-    override fun visitRestrictionContextNode(node: RestrictionTypeNode.ContextNode): Pair<Boolean, List<Interval>> {
+    override fun visitRestrictionContextNode(node: RestrictionTypeNode.ContextNode): DocumentMatchResult {
         throw IllegalStateException("should never be called here")
     }
 }
