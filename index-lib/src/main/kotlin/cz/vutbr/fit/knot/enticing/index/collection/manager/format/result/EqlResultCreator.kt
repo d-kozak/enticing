@@ -12,7 +12,6 @@ import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import cz.vutbr.fit.knot.enticing.index.boundary.MatchInfo
 import cz.vutbr.fit.knot.enticing.index.boundary.ResultCreator
 import cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.*
-import cz.vutbr.fit.knot.enticing.index.collection.manager.generateSnippetIntervals
 import java.lang.Math.min
 
 @Incomplete("not finished yet")
@@ -20,12 +19,12 @@ class EqlResultCreator(private val corpusConfiguration: CorpusConfiguration) : R
     override fun multipleResults(document: IndexedDocument, matchInfo: MatchInfo, formatInfo: GeneralFormatInfo, resultOffset: Int, resultCount: Int, resultFormat: cz.vutbr.fit.knot.enticing.dto.ResultFormat): Pair<List<ResultFormat>, Boolean> {
         return when (resultFormat) {
             cz.vutbr.fit.knot.enticing.dto.ResultFormat.SNIPPET -> {
-                var intervals = generateSnippetIntervals(matchInfo.rootIntervals, document.size)
+                var intervals = matchInfo.intervals.keys.toList()
                 if (intervals.size < resultOffset) return Pair(emptyList(), false)
                 intervals = intervals.subList(resultOffset, intervals.size)
                 val hasMore = intervals.size > resultCount
                 intervals = intervals.subList(0, min(resultCount, intervals.size))
-                val results = intervals.map { singleResult(document, matchInfo.limitBy(it), formatInfo, it) }
+                val results = intervals.map { singleResult(document, it, matchInfo.intervals.getValue(it), formatInfo) }
                 results to hasMore
             }
             cz.vutbr.fit.knot.enticing.dto.ResultFormat.IDENTIFIER_LIST -> {
@@ -34,9 +33,9 @@ class EqlResultCreator(private val corpusConfiguration: CorpusConfiguration) : R
         }
     }
 
-    override fun singleResult(document: IndexedDocument, matchInfo: MatchInfo, formatInfo: GeneralFormatInfo, interval: Interval): ResultFormat.Snippet {
+    override fun singleResult(document: IndexedDocument, interval: Interval, eqlMatch: List<EqlMatch>, formatInfo: GeneralFormatInfo): ResultFormat.Snippet {
         val filteredConfig = corpusConfiguration.filterBy(formatInfo.metadata, formatInfo.defaultIndex)
-        val (matchStart, matchEnd) = matchInfo.leafIntervals.split()
+        val (matchStart, matchEnd) = eqlMatch.split()
 
         val visitor = when (formatInfo.textFormat) {
             TextFormat.PLAIN_TEXT -> return generatePlainText(document, filteredConfig, formatInfo.defaultIndex, interval)
@@ -50,33 +49,6 @@ class EqlResultCreator(private val corpusConfiguration: CorpusConfiguration) : R
     }
 }
 
-/**
- * @return new MatchInfo containing only subinterval of the interval passed as param
- */
-fun MatchInfo.limitBy(boundary: Interval): MatchInfo {
-    val newRootIntervals = this.rootIntervals.map { it.filter { it in boundary } }
-    val newLeafIntervals = mutableListOf<EqlMatch>()
-
-    for (match in this.leafIntervals) {
-        when (match) {
-            is EqlMatch.IdentifierMatch -> {
-                val documentIntervals = match.documentIntervals.filter { it in boundary }
-                if (documentIntervals.isNotEmpty()) {
-                    newLeafIntervals.add(match.copy(documentIntervals = documentIntervals))
-                }
-
-            }
-            is EqlMatch.IndexMatch -> {
-                val indexes = match.documentIndexes.filter { it in boundary }
-                if (indexes.isNotEmpty()) {
-                    newLeafIntervals.add(match.copy(documentIndexes = indexes))
-                }
-            }
-        }
-    }
-
-    return MatchInfo(newRootIntervals, newLeafIntervals)
-}
 
 fun List<EqlMatch>.split(): Pair<Map<Int, Interval>, Set<Int>> {
     val matchStart = mutableMapOf<Int, Interval>()

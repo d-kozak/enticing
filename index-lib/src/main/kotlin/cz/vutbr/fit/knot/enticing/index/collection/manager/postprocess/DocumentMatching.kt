@@ -54,12 +54,10 @@ fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: Stri
         }
     }
 
+    @Speed("this is expensive, but good for debug purposes")
     ast.forEachNode {
-        require(it.matchInfo == null) {
-            "match info is already set! in node $it"
-        }
+        require(it.matchInfo == null) { "match info is already set in node $it" }
     }
-
 
     val matchVisitor = DocumentMatchingVisitor(leafMatch, sentenceMarks, paragraphMarks)
     ast.accept(matchVisitor)

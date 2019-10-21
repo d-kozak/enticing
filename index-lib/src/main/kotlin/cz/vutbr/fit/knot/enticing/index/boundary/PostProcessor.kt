@@ -9,16 +9,12 @@ import cz.vutbr.fit.knot.enticing.dto.interval.Interval
  */
 data class MatchInfo(
         /**
-         * Intervals that were matched by the root of the AST
+         * Consists of root intervals and their subintervals that should be highlighted (indexes and identifiers)
          */
-        val rootIntervals: List<List<Interval>>,
-        /**
-         * Intervals that should be highlighted, that is leaves and identifiers
-         */
-        val leafIntervals: List<EqlMatch>
+        val intervals: Map<Interval, List<EqlMatch>>
 ) {
     companion object {
-        fun empty() = MatchInfo(emptyList(), emptyList())
+        fun empty() = MatchInfo(emptyMap())
     }
 }
 
