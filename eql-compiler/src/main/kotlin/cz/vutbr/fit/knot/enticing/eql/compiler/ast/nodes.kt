@@ -5,6 +5,7 @@ import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.AgregatingListener
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.EqlListener
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor.DeepCopyVisitor
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor.Mgj4QueryGeneratingVisitor
 
 @WhatIf("""
@@ -19,6 +20,8 @@ abstract class EqlAstNode : AstNode {
     abstract fun <T> accept(visitor: EqlVisitor<T>): T
     fun walk(listener: EqlListener, walker: AstWalker = AstWalker(listener)) = this.accept(walker)
     override fun toMgj4Query(): String = this.accept(Mgj4QueryGeneratingVisitor())
+
+    override fun deepCopy(): AstNode = this.accept(DeepCopyVisitor())
 
     /**
      * Execute given piece of code for each node in the ast

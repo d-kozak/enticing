@@ -56,7 +56,7 @@ data class SearchQuery(
 ) : GeneralFormatInfo, Query<SearchQuery> {
     override fun updateSnippetCount(newSnippetCount: Int): SearchQuery = copy(snippetCount = newSnippetCount).also {
         if (this::eqlAst.isInitialized)
-            it.eqlAst = this.eqlAst
+            it.eqlAst = this.eqlAst.deepCopy()
     }
 
     @JsonIgnore
