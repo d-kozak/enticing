@@ -7,6 +7,7 @@ import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.*
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.EqlListener
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor.GlobalConstraintAgnosticVisitor
+import cz.vutbr.fit.knot.enticing.index.boundary.EqlMatch
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import cz.vutbr.fit.knot.enticing.index.boundary.MatchInfo
 
@@ -22,6 +23,7 @@ internal fun dumpMatch(ast: EqlAstNode, match: Map<Long, List<Interval>>) {
  */
 
 fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: String, corpusConfiguration: CorpusConfiguration, interval: Interval): MatchInfo {
+    ast as RootNode
     val nodesByIndex = getNodesByIndex(ast, defaultIndex)
     val leafMatch = mutableMapOf<QueryElemNode.SimpleNode, MutableList<Int>>()
             .withDefault { mutableListOf() }
@@ -60,16 +62,79 @@ fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: Stri
     }
 
     val matchVisitor = DocumentMatchingVisitor(leafMatch, sentenceMarks, paragraphMarks)
-    ast.accept(matchVisitor)
-    return MatchInfo.empty()
+    val info = ast.accept(matchVisitor).second.filter { it.first.isNotEmpty() }
+    check(info.all { it.first.size == 1 }) {
+        "top level match should have only one child index in $info for query $ast"
+    }
+
+    return MatchInfo(info.map { it.second to createMatchInfo(ast.query, it.first[0]) })
 }
+
+
+fun createMatchInfo(ast: QueryNode, i: Int): List<EqlMatch> {
+    @Speed("this is expensive, but good for debug purposes")
+    ast.forEachNode {
+        require(it.matchInfo != null) { "match info is not set in node $it" }
+    }
+
+    val result = mutableListOf<EqlMatch>()
+
+    fun traverse(node: EqlAstNode, i: Int) {
+        val (indexes, match) = node.matchInfo?.get(i) ?: return
+        when (node) {
+            is RootNode -> throw IllegalStateException("root node should never be encountered")
+            is QueryNode -> node.query.forEachIndexed { index, queryElemNode -> traverse(queryElemNode, indexes[index]) }
+            is QueryElemNode.NotNode -> traverse(node.elem, i)
+            is QueryElemNode.AssignNode -> {
+                result.add(EqlMatch(node.location, match))
+                traverse(node.elem, i)
+            }
+            is QueryElemNode.RestrictionNode -> {
+                if (indexes[0] >= 0)
+                    traverse(node.left, indexes[0])
+
+                if (indexes[1] >= 0)
+                    traverse(node.right, indexes[1])
+            }
+            is QueryElemNode.SimpleNode -> {
+                result.add(EqlMatch(node.location, match))
+            }
+            is QueryElemNode.IndexNode -> traverse(node.elem, i)
+            is QueryElemNode.ParenNode -> traverse(node.query, i)
+            is QueryElemNode.AttributeNode -> {
+                traverse(node.entityNode, indexes[0])
+                traverse(node.elem, indexes[1])
+            }
+            is QueryElemNode.OrderNode -> {
+                traverse(node.left, indexes[0])
+                traverse(node.right, indexes[1])
+            }
+            is QueryElemNode.SequenceNode -> {
+                node.elems.forEachIndexed { index, queryElemNode -> traverse(queryElemNode, indexes[index]) }
+            }
+            is QueryElemNode.AlignNode -> {
+                traverse(node.left, indexes[0])
+                traverse(node.right, indexes[1])
+            }
+            is QueryElemNode.BooleanNode -> {
+                if (indexes[0] >= 0) traverse(node.left, indexes[0])
+                if (indexes[1] >= 0) traverse(node.right, indexes[1])
+            }
+            else -> throw IllegalStateException("unknown node type $node")
+        }
+    }
+
+    traverse(ast, i)
+    return result
+}
+
 
 
 typealias DocumentMatchResult = Pair<Boolean, MutableList<Pair<List<Int>, Interval>>>
 
 /**
  * Nodes that do NOT generate their own matches:
- *  root, not, assign, index, paren
+ *  not, assign, index, paren
  */
 @Incomplete("add semantic checks limiting where NOT is usable")
 @Speed("this could and should be eventually rewritten using more effective algorithms")
@@ -77,17 +142,15 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
 
 
     private fun addMatchInfoToNode(node: EqlAstNode, result: MutableList<Pair<List<Int>, Interval>>) {
-        require(node.matchInfo == null) {
-            println("this is baaaaad.")
-            " $node already has it's matchInfo set"
-        }
+        require(node.matchInfo == null) { " $node already has it's matchInfo set" }
         node.matchInfo = result.toMutableList()
     }
 
     override fun visitRootNode(node: RootNode): DocumentMatchResult {
         val res = node.query.accept(this)
-        addMatchInfoToNode(node, res.second)
-        return res
+        val match = res.second.mapIndexed { index, pair -> listOf(index) to pair.second }.toMutableList()
+        addMatchInfoToNode(node, match)
+        return false to match
     }
 
 

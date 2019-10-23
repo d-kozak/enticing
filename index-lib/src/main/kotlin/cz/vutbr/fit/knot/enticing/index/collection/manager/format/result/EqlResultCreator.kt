@@ -55,21 +55,8 @@ fun List<EqlMatch>.split(): Pair<Map<Int, Interval>, Set<Int>> {
     val matchEnd = mutableSetOf<Int>()
 
     for (match in this) {
-        when (match) {
-            is EqlMatch.IndexMatch -> {
-                for (index in match.documentIndexes) {
-                    matchStart[index] = match.queryInterval
-                    matchEnd.add(index)
-                }
-            }
-
-            is EqlMatch.IdentifierMatch -> {
-                for ((from, to) in match.documentIntervals) {
-                    matchStart[from] = match.queryInterval
-                    matchEnd.add(to)
-                }
-            }
-        }
+        matchStart[match.match.from] = match.queryInterval
+        matchEnd.add(match.match.to)
     }
 
     return matchStart to matchEnd

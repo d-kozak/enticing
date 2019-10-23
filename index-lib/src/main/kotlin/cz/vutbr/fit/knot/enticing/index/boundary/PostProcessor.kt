@@ -21,35 +21,16 @@ data class MatchInfo(
 /**
  * One single match on the query
  */
-sealed class EqlMatch {
-    /**
-     * Represents a match of a simple one token query ( leaf in the ast )
-     */
-    data class IndexMatch(
-            /**
-             * Interval over the query
-             */
-            val queryInterval: Interval,
-            /**
-             * Indexes in the document where the simple query was matched
-             */
-            val documentIndexes: List<Int>
-    ) : EqlMatch()
-
-    /**
-     * Represents a match for some EQL identifier
-     */
-    data class IdentifierMatch(
-            /**
-             * Interval over the query
-             */
-            val queryInterval: Interval,
-            /**
-             * Intervals over the document where the identifier was matched
-             */
-            val documentIntervals: List<Interval>
-    ) : EqlMatch()
-}
+data class EqlMatch(
+        /**
+         * Interval over the query
+         */
+        val queryInterval: Interval,
+        /**
+         * Indexes in the document where the simple query was matched
+         */
+        val match: Interval
+)
 
 /**
  * Execute postprocessing
