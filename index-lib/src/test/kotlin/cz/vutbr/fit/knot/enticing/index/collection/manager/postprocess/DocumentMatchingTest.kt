@@ -3,7 +3,9 @@ package cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.EqlAstNode
+import cz.vutbr.fit.knot.enticing.index.boundary.MatchInfo
 import cz.vutbr.fit.knot.enticing.index.clientConfig
+import cz.vutbr.fit.knot.enticing.index.corpusConfig
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jCompositeDocumentCollection
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jSearchEngine
 import cz.vutbr.fit.knot.enticing.index.mg4j.initMg4jQueryEngine
@@ -11,7 +13,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.*
 
 
-@Disabled
 internal class DocumentMatchingTest {
 
     val searchEngine = Mg4jSearchEngine(
@@ -72,13 +73,8 @@ internal class DocumentMatchingTest {
         val (ast, errors) = compiler.parseAndAnalyzeQuery(query, clientConfig.corpusConfiguration)
         assertThat(errors).isEmpty()
         val match = matchDocument(ast as EqlAstNode, doc, "token", clientConfig.corpusConfiguration, Interval.valueOf(0, doc.size() - 1))
-//        assertThat(match)
-//                .isEqualTo(
-//                        listOf(
-//                                EqlMatch.IndexMatch(Interval.valueOf(0, 3), listOf(4, 42, 76, 121, 155)),
-//                                EqlMatch.IndexMatch(Interval.valueOf(5, 10), listOf(17))
-//                        )
-//                )
+        assertThat(match)
+                .isEqualTo(MatchInfo.empty())
     }
 
     @Test
@@ -89,10 +85,20 @@ internal class DocumentMatchingTest {
         val (ast, errors) = compiler.parseAndAnalyzeQuery(query, clientConfig.corpusConfiguration)
         assertThat(errors).isEmpty()
         val match = matchDocument(ast as EqlAstNode, doc, "token", clientConfig.corpusConfiguration, Interval.valueOf(0, doc.size() - 1))
-//        assertThat(match)
-//                .isEqualTo(
-//                        listOf(EqlMatch.IndexMatch(Interval.valueOf(0, 2), listOf(4, 16, 42, 46, 56, 73, 76, 78, 92, 96, 108, 121, 146, 155)))
-//                )
+        println(match)
+
+        var fail = false
+        val text = doc.content[corpusConfig.indexes.getValue("token").columnIndex]
+        for ((interval) in match.intervals) {
+            if (interval.size != 1) {
+                System.err.println("all single match intervals should have len 1")
+                fail = true
+            } else if (!text[interval.from].toLowerCase().startsWith("th")) {
+                System.err.println("'${text[interval.from]}' should start with 'th'")
+                fail = true
+            }
+        }
+        if (fail) fail { "" }
     }
 
     @Test
@@ -103,10 +109,24 @@ internal class DocumentMatchingTest {
         val (ast, errors) = compiler.parseAndAnalyzeQuery(query, clientConfig.corpusConfiguration)
         assertThat(errors).isEmpty()
         val match = matchDocument(ast as EqlAstNode, doc, "token", clientConfig.corpusConfiguration, Interval.valueOf(0, doc.size() - 1))
-//        assertThat(match)
-//                .isEqualTo(
-//                        listOf(EqlMatch.IndexMatch(Interval.valueOf(12, 15), listOf(31, 880, 903, 1654, 1748)))
-//                )
+
+        var fail = false
+        val nertag = doc.content[corpusConfig.indexes.getValue("nertag").columnIndex]
+        val name = doc.content[corpusConfig.entities.getValue("person").attributes.getValue("name").columnIndex]
+        for ((interval) in match.intervals) {
+            for (x in interval) {
+                if (nertag[x] != "person") {
+                    fail = true
+                    System.err.println("at index $x there should be entity of type person")
+                }
+                if (!name[x].toLowerCase().startsWith("mic")) {
+                    fail = true
+                    System.err.println("name of person at $x should start with 'mic', was '${name[x]}'")
+                }
+            }
+        }
+
+        if (fail) fail { "" }
     }
 
     @Test
@@ -117,9 +137,40 @@ internal class DocumentMatchingTest {
         val (ast, errors) = compiler.parseAndAnalyzeQuery(query, clientConfig.corpusConfiguration)
         assertThat(errors).isEmpty()
         val match = matchDocument(ast as EqlAstNode, doc, "token", clientConfig.corpusConfiguration, Interval.valueOf(0, doc.size() - 1))
-//        assertThat(match)
-//                .isEqualTo(
-//                        listOf(EqlMatch.IndexMatch(Interval.valueOf(12, 15), listOf(31, 880, 903, 1654, 1748)))
-//                )
+
+        val text = doc.content[corpusConfig.indexes.getValue("token").columnIndex]
+        val joined = text.joinToString(" ").toLowerCase()
+
+        var fail = false
+        for ((interval, leaves) in match) {
+            val (from, to) = interval
+            val that = joined.indexOf("that")
+            val motion = joined.indexOf("motion")
+            if (that < 0) {
+                System.err.println("'that' not found in '$joined'")
+                fail = true
+            }
+            if (motion < 0) {
+                System.err.println("'motion' not found in '$joined'")
+                fail = true
+            }
+            if (that + "that".length >= motion) {
+                System.err.println("'that' should be before 'motion' in $joined")
+                fail = true
+            }
+
+            for (leaf in leaves) {
+                if (leaf.match.size != 1) {
+                    System.err.println("leaves should have len 1")
+                    fail = true
+                }
+                if (text[leaf.match.from].toLowerCase() !in setOf("that", "motion")) {
+                    System.err.println("only leaves for 'that' and 'motion' expected, found:'${text[leaf.match.from].toLowerCase()}'")
+                    fail = true
+                }
+            }
+        }
+
+        if (fail) fail { "" }
     }
 }

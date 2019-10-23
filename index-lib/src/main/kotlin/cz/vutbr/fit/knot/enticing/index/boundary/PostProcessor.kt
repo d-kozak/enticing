@@ -4,6 +4,8 @@ import cz.vutbr.fit.knot.enticing.dto.AstNode
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 
+typealias DocumentMatch = Pair<Interval, List<EqlMatch>>
+
 /**
  * Represents how the document was matched by the query according to the PostProcessor
  */
@@ -11,11 +13,13 @@ data class MatchInfo(
         /**
          * Consists of root intervals and their subintervals that should be highlighted (indexes and identifiers)
          */
-        val intervals: List<Pair<Interval, List<EqlMatch>>>
-) {
+        val intervals: List<DocumentMatch>
+) : Iterable<DocumentMatch> {
     companion object {
         fun empty() = MatchInfo(emptyList())
     }
+
+    override fun iterator(): Iterator<DocumentMatch> = intervals.iterator()
 }
 
 /**
