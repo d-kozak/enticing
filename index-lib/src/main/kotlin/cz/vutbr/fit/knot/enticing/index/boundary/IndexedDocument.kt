@@ -14,24 +14,9 @@ interface IndexedDocument : Iterable<Word> {
     val uri: String
     val size: Int
     @Speed("If necessary, char[] or MutableStrings or some else more low level abstraction can be used here")
-    val content: List<String>
+    val content: List<List<String>>
 
-    override fun iterator() = object : Iterator<Word> {
-
-        private val wordReader = WordReader(content, ' ')
-
-        private var next: List<String>? = null
-
-        override fun hasNext(): Boolean {
-            next = wordReader.nextWord()
-            return next != null
-        }
-
-        override fun next(): Word {
-            requireNotNull(next)
-            return next!!
-        }
-    }
+    override fun iterator() = content.iterator()
 }
 
 

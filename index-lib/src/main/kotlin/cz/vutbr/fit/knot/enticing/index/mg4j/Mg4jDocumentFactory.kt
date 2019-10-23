@@ -80,7 +80,7 @@ class Mg4jDocumentFactory(private val corpusConfiguration: CorpusConfiguration) 
         if (invalidLines.isNotEmpty())
             log.warn("Document ${metadata[DocumentMetadata.ID]}:${metadata[DocumentMetadata.TITLE]} has invalid lines: $invalidLines, they were skipped")
         metadata[DocumentMetadata.SIZE] = lineIndex
-        return Mg4jDocument(corpusConfiguration, metadata, fields.map { it.joinToString(" ") })
+        return Mg4jDocument(corpusConfiguration, metadata, fields)
     }
 
     @Incomplete("'token' is hardwired here")

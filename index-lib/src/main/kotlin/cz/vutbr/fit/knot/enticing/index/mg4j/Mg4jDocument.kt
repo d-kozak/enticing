@@ -34,8 +34,13 @@ enum class DocumentMetadata {
 class Mg4jDocument(
         private val corpusConfiguration: CorpusConfiguration,
         internal val metadata: Reference2ObjectMap<Enum<*>, Any>,
-        override val content: List<String>
+        override val content: List<List<String>>
 ) : AbstractDocument(), IndexedDocument {
+
+    init {
+        val sizeSet = content.map { it.size }.toSet()
+        require(sizeSet.size == 1) { "broken invariant, all indexes should have the same len: $sizeSet" }
+    }
 
     override val id: Int
         get() = metadata[DocumentMetadata.ID] as Int
@@ -62,7 +67,9 @@ class Mg4jDocument(
 
     override fun wordReader(field: Int): WordReader = wordReader
 
-    override fun content(field: Int): Any = content[field].reader()
+    private val contentMemo = mutableMapOf<Int, Any>()
+
+    override fun content(field: Int): Any = contentMemo.computeIfAbsent(field) { content[field].joinToString(" ").reader() }
 
 
     /**
