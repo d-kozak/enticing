@@ -19,12 +19,12 @@ class EqlResultCreator(private val corpusConfiguration: CorpusConfiguration) : R
     override fun multipleResults(document: IndexedDocument, matchInfo: MatchInfo, formatInfo: GeneralFormatInfo, resultOffset: Int, resultCount: Int, resultFormat: cz.vutbr.fit.knot.enticing.dto.ResultFormat): Pair<List<ResultFormat>, Boolean> {
         return when (resultFormat) {
             cz.vutbr.fit.knot.enticing.dto.ResultFormat.SNIPPET -> {
-                var intervals = matchInfo.intervals.keys.toList()
+                var intervals = matchInfo.intervals
                 if (intervals.size < resultOffset) return Pair(emptyList(), false)
                 intervals = intervals.subList(resultOffset, intervals.size)
                 val hasMore = intervals.size > resultCount
                 intervals = intervals.subList(0, min(resultCount, intervals.size))
-                val results = intervals.map { singleResult(document, it, matchInfo.intervals.getValue(it), formatInfo) }
+                val results = intervals.map { (interval, matchInfo) -> singleResult(document, formatInfo, matchInfo, interval) }
                 results to hasMore
             }
             cz.vutbr.fit.knot.enticing.dto.ResultFormat.IDENTIFIER_LIST -> {
@@ -33,7 +33,7 @@ class EqlResultCreator(private val corpusConfiguration: CorpusConfiguration) : R
         }
     }
 
-    override fun singleResult(document: IndexedDocument, interval: Interval, eqlMatch: List<EqlMatch>, formatInfo: GeneralFormatInfo): ResultFormat.Snippet {
+    override fun singleResult(document: IndexedDocument, formatInfo: GeneralFormatInfo, eqlMatch: List<EqlMatch>, interval: Interval): ResultFormat.Snippet {
         val filteredConfig = corpusConfiguration.filterBy(formatInfo.metadata, formatInfo.defaultIndex)
         val (matchStart, matchEnd) = eqlMatch.split()
 

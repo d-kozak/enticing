@@ -69,7 +69,7 @@ class Mg4jDocument(
 
     private val contentMemo = mutableMapOf<Int, Any>()
 
-    override fun content(field: Int): Any = contentMemo.computeIfAbsent(field) { content[field].joinToString(" ").reader() }
+    override fun content(field: Int): Any = contentMemo.computeIfAbsent(field) { i -> content[i].joinToString(" ").reader() }
 
 
     /**

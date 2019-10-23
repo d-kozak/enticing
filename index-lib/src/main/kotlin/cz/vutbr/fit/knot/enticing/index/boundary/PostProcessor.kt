@@ -11,10 +11,10 @@ data class MatchInfo(
         /**
          * Consists of root intervals and their subintervals that should be highlighted (indexes and identifiers)
          */
-        val intervals: Map<Interval, List<EqlMatch>>
+        val intervals: List<Pair<Interval, List<EqlMatch>>>
 ) {
     companion object {
-        fun empty() = MatchInfo(emptyMap())
+        fun empty() = MatchInfo(emptyList())
     }
 }
 

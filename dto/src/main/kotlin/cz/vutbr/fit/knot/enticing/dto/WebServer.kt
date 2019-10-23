@@ -1,6 +1,5 @@
 package cz.vutbr.fit.knot.enticing.dto
 
-import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.utils.regex.urlRegexStr
 import javax.validation.Valid
@@ -135,9 +134,14 @@ object WebServer {
              * if provided, QueryMapping informing about the mapping between the query and the document will
              * be included in the response
              */
-            val query: String? = null
+            val query: String? = null,
+
+            /**
+             * Offset, specifies which of possibly multiple matches over this document should be highlighted
+             */
+            val offset: Int? = null
     ) {
-        fun toIndexFormat() = IndexServer.DocumentQuery(collection, documentId, metadata, defaultIndex, textFormat, query)
+        fun toIndexFormat() = IndexServer.DocumentQuery(collection, documentId, metadata, defaultIndex, textFormat, query, offset)
     }
 
 

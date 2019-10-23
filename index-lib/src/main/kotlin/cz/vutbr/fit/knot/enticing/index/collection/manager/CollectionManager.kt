@@ -64,23 +64,17 @@ class CollectionManager internal constructor(
         return IndexServer.CollectionResultList(matched, if (resultList.isNotEmpty()) Offset(resultList.last().documentId, 0) else null)
     }
 
+    /**
+     * Everything important is already in the snippet, so there is no need for postprocessing here
+     */
     fun extendSnippet(query: IndexServer.ContextExtensionQuery): SnippetExtension {
         val document = searchEngine.loadDocument(query.docId)
         val (prefix, suffix) = computeExtensionIntervals(left = query.location, right = query.location + query.size, extension = query.extension, documentSize = document.size)
         if (prefix.isEmpty() && suffix.isEmpty()) return SnippetExtension(emptySnippet(query.textFormat), emptySnippet(query.textFormat), false)
 
-        val (prefixInfo, suffixInfo) = if (query.query != null) {
-            val ast = eqlCompiler.parseOrFail(query.query!!, corpusConfiguration)
-            val prefixMatch = postProcessor.process(ast, document, query.defaultIndex, corpusConfiguration, prefix)
-                    ?: MatchInfo.empty()
-            val suffixMatch = postProcessor.process(ast, document, query.defaultIndex, corpusConfiguration, suffix)
-                    ?: MatchInfo.empty()
-            prefixMatch to suffixMatch
-        } else MatchInfo.empty() to MatchInfo.empty()
-
         return SnippetExtension(
-                prefix = resultCreator.singleResult(document, prefixInfo, query, prefix),
-                suffix = resultCreator.singleResult(document, suffixInfo, query, suffix),
+                prefix = resultCreator.singleResult(document, query, emptyList(), prefix),
+                suffix = resultCreator.singleResult(document, query, emptyList(), suffix),
                 canExtend = document.size > prefix.size + query.size + suffix.size
         )
     }
@@ -92,7 +86,14 @@ class CollectionManager internal constructor(
             postProcessor.process(ast, document, query.defaultIndex, corpusConfiguration) ?: MatchInfo.empty()
         } else MatchInfo.empty()
 
-        val payload = resultCreator.singleResult(document, matchInfo, query)
+        val offset = query.offset
+        val matchList = when {
+            offset != null && offset < matchInfo.intervals.size -> matchInfo.intervals[offset].second
+            offset == null && matchInfo.intervals.isNotEmpty() -> matchInfo.intervals[0].second
+            else -> emptyList()
+        }
+
+        val payload = resultCreator.singleResult(document, query, matchList, document.interval)
         return IndexServer.FullDocument(
                 document.title,
                 document.uri,

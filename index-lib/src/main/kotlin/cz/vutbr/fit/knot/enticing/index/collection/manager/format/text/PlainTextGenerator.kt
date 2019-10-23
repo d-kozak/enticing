@@ -9,7 +9,7 @@ import cz.vutbr.fit.knot.enticing.index.boundary.TokenReader
 fun generatePlainText(document: IndexedDocument, filteredConfig: CorpusConfiguration, defaultIndex: String, interval: Interval?): ResultFormat.Snippet.PlainText {
     val defaultColumnIndex = filteredConfig.indexes[defaultIndex]?.columnIndex
             ?: throw IllegalArgumentException("Default index $defaultIndex not found")
-    val defaultContent = document.content[defaultColumnIndex]
+    val defaultContent = document.content[defaultColumnIndex].joinToString(" ")
     return if (interval == null) {
         ResultFormat.Snippet.PlainText(defaultContent, 0, document.size, false)
     } else {

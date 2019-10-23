@@ -8,5 +8,5 @@ internal fun testDocument(size: Int, vararg content: String) = object : IndexedD
     override val title: String = "bar"
     override val uri: String = "baz"
     override val size: Int = size
-    override val content: List<String> = content.toList()
+    override val content: List<List<String>> = content.toList().map { it.split(" ") }
 }

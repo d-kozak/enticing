@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.dto
 
-import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
+import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.utils.regex.urlRegexStr
 import javax.validation.Valid
@@ -61,6 +61,7 @@ object IndexServer {
              * if provided, QueryMapping informing about the mapping between the query and the document will
              * be included in the response
              */
+            @Cleanup("there is no need for query here")
             val query: String? = null
     ) : GeneralFormatInfo
 
@@ -102,7 +103,11 @@ object IndexServer {
              * if provided, QueryMapping informing about the mapping between the query and the document will
              * be included in the response
              */
-            val query: String? = null
+            val query: String? = null,
+            /**
+             * Offset, specifies which of possibly multiple matches over this document should be highlighted
+             */
+            val offset: Int? = null
     ) : GeneralFormatInfo
 
     /**

@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.index.boundary
 
 import cz.vutbr.fit.knot.enticing.dto.annotation.Speed
+import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 
 typealias Word = List<String>
 
@@ -16,7 +17,19 @@ interface IndexedDocument : Iterable<Word> {
     @Speed("If necessary, char[] or MutableStrings or some else more low level abstraction can be used here")
     val content: List<List<String>>
 
-    override fun iterator() = content.iterator()
+    override fun iterator() = object : Iterator<Word> {
+        var i = 0
+
+        override fun hasNext(): Boolean = i < content[0].size
+
+        override fun next(): Word {
+            val current = i++
+            return content.map { it[current] }
+        }
+    }
+
+    val interval: Interval
+        get() = Interval.valueOf(0, size - 1)
 }
 
 

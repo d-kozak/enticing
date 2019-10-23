@@ -7,8 +7,8 @@ import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.*
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.EqlListener
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor.GlobalConstraintAgnosticVisitor
-import cz.vutbr.fit.knot.enticing.index.boundary.EqlMatch
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
+import cz.vutbr.fit.knot.enticing.index.boundary.MatchInfo
 
 internal fun dumpMatch(ast: EqlAstNode, match: Map<Long, List<Interval>>) {
     ast.forEachNode {
@@ -21,7 +21,7 @@ internal fun dumpMatch(ast: EqlAstNode, match: Map<Long, List<Interval>>) {
  * http://vigna.di.unimi.it/ftp/papers/EfficientAlgorithmsMinimalIntervalSemantics.pdf
  */
 
-fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: String, corpusConfiguration: CorpusConfiguration, interval: Interval): List<EqlMatch> {
+fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: String, corpusConfiguration: CorpusConfiguration, interval: Interval): MatchInfo {
     val nodesByIndex = getNodesByIndex(ast, defaultIndex)
     val leafMatch = mutableMapOf<QueryElemNode.SimpleNode, MutableList<Int>>()
             .withDefault { mutableListOf() }
@@ -61,9 +61,7 @@ fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: Stri
 
     val matchVisitor = DocumentMatchingVisitor(leafMatch, sentenceMarks, paragraphMarks)
     ast.accept(matchVisitor)
-    val matchList = mutableListOf<EqlMatch>()
-
-    return matchList
+    return MatchInfo.empty()
 }
 
 

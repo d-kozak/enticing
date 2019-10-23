@@ -14,16 +14,14 @@ import cz.vutbr.fit.knot.enticing.index.boundary.PostProcessor
 @Incomplete("finish when EQL is in place")
 class EqlPostProcessor : PostProcessor {
     override fun process(ast: AstNode, document: IndexedDocument, defaultIndex: String, corpusConfiguration: CorpusConfiguration, enclosingInterval: Interval?): MatchInfo? {
-        val match = matchDocument(ast as EqlAstNode, document, defaultIndex, corpusConfiguration, enclosingInterval
+        return matchDocument(ast as EqlAstNode, document, defaultIndex, corpusConfiguration, enclosingInterval
                 ?: Interval.valueOf(0, document.size - 1))
-        return MatchInfo(emptyList(), match)
     }
 
     override fun process(ast: AstNode, document: IndexedDocument, defaultIndex: String, corpusConfiguration: CorpusConfiguration, matchedIntervals: List<List<Interval>>): MatchInfo? {
         val flat = matchedIntervals.flatten()
         val min = flat.minBy { it.from }?.from ?: 0
         val max = flat.maxBy { it.to }?.to ?: document.size - 1
-        val match = matchDocument(ast as EqlAstNode, document, defaultIndex, corpusConfiguration, Interval.valueOf(min, max))
-        return MatchInfo(matchedIntervals, match)
+        return matchDocument(ast as EqlAstNode, document, defaultIndex, corpusConfiguration, Interval.valueOf(min, max))
     }
 }

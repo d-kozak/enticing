@@ -10,7 +10,6 @@ import cz.vutbr.fit.knot.enticing.dto.format.text.*
 import cz.vutbr.fit.knot.enticing.dto.format.text.Annotation
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.index.boundary.EqlMatch
-import cz.vutbr.fit.knot.enticing.index.boundary.MatchInfo
 import cz.vutbr.fit.knot.enticing.index.collection.manager.format.result.EqlResultCreator
 import cz.vutbr.fit.knot.enticing.index.utils.testDocument
 import org.assertj.core.api.Assertions.assertThat
@@ -77,13 +76,13 @@ internal class ResultFormatCreatorTest {
         fun `simple format no metadata`() {
             val resultCreator = EqlResultCreator(noMetadataConfig)
 
-            var payload = resultCreator.singleResult(noMetadataDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(0, 2))))), htmlQuery)
+            var payload = resultCreator.singleResult(noMetadataDocument, htmlQuery, listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(0, 2)))))
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.Html("<b><span eql-word>one</span><span eql-word>two</span><span eql-word>three</span></b>", 0, 3, false))
-            payload = resultCreator.singleResult(noMetadataDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(1, 2))))), htmlQuery)
+            payload = resultCreator.singleResult(noMetadataDocument, htmlQuery, listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(1, 2)))))
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.Html("<span eql-word>one</span><b><span eql-word>two</span><span eql-word>three</span></b>", 0, 3, false))
-            payload = resultCreator.singleResult(noMetadataDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(2))))), htmlQuery)
+            payload = resultCreator.singleResult(noMetadataDocument, htmlQuery, listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(2)))))
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.Html("<span eql-word>one</span><span eql-word>two</span><b><span eql-word>three</span></b>", 0, 3, false))
         }
@@ -92,7 +91,7 @@ internal class ResultFormatCreatorTest {
         fun `two other indexes`() {
             val resultCreator = EqlResultCreator(simpleStructureConfig)
 
-            val payload = resultCreator.singleResult(simpleStructureDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(1, 2))))), htmlQuery)
+            val payload = resultCreator.singleResult(simpleStructureDocument, htmlQuery, listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(1, 2)))))
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.Html("""<span eql-word eql-lemma="1" eql-url="google.com">one</span><b><span eql-word eql-lemma="2" eql-url="yahoo.com">two</span><span eql-word eql-lemma="3" eql-url="localhost">three</span></b>""", 0, 3, false))
         }
@@ -101,7 +100,7 @@ internal class ResultFormatCreatorTest {
         fun `with one entity`() {
             val resultCreator = EqlResultCreator(withEntitiesConfig)
 
-            val payload = resultCreator.singleResult(withEntitiesDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(1, 2))))), htmlQuery)
+            val payload = resultCreator.singleResult(withEntitiesDocument, htmlQuery, listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(1, 2)))))
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.Html("""<span eql-word eql-lemma="1" eql-url="google.com" eql-nertag="0" eql-param="0" eql-len="0">one</span><b><span eql-word eql-lemma="2" eql-url="yahoo.com" eql-nertag="0" eql-param="0" eql-len="0">two</span><span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="0" eql-param="0" eql-len="0">three</span></b><span eql-entity eql-name="harry"><span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="person" eql-param="harry" eql-len="2">harry</span><span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="0" eql-param="0" eql-len="0">potter</span></span>""", 0, 5, false))
         }
@@ -116,7 +115,7 @@ internal class ResultFormatCreatorTest {
         fun `simple format no metadata`() {
             val resultCreator = EqlResultCreator(noMetadataConfig)
 
-            var payload = resultCreator.singleResult(noMetadataDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(0, 2))))), jsonQuery)
+            var payload = resultCreator.singleResult(noMetadataDocument, jsonQuery, listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(0, 2)))))
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.StringWithMetadata(StringWithMetadata(
                             "one two three",
@@ -124,7 +123,7 @@ internal class ResultFormatCreatorTest {
                             emptySet(),
                             setOf(QueryMapping(0 to 12, 1 to 1))
                     ), 0, 3, false))
-            payload = resultCreator.singleResult(noMetadataDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1, 2), listOf(Interval.valueOf(1, 2))))), jsonQuery)
+            payload = resultCreator.singleResult(noMetadataDocument, jsonQuery, listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1, 2), listOf(Interval.valueOf(1, 2)))))
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.StringWithMetadata(StringWithMetadata(
                             "one two three",
@@ -132,7 +131,7 @@ internal class ResultFormatCreatorTest {
                             emptySet(),
                             setOf(QueryMapping(4 to 12, 1 to 2))
                     ), 0, 3, false))
-            payload = resultCreator.singleResult(noMetadataDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(2), listOf(Interval.valueOf(1))))), jsonQuery)
+            payload = resultCreator.singleResult(noMetadataDocument, jsonQuery, listOf(EqlMatch.IdentifierMatch(Interval.valueOf(2), listOf(Interval.valueOf(1)))))
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.StringWithMetadata(StringWithMetadata(
                             "one two three",
@@ -145,7 +144,7 @@ internal class ResultFormatCreatorTest {
         @Test
         fun `two other indexes`() {
             val resultCreator = EqlResultCreator(simpleStructureConfig)
-            val payload = resultCreator.singleResult(simpleStructureDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(1, 2))))), jsonQuery)
+            val payload = resultCreator.singleResult(simpleStructureDocument, jsonQuery, listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(1, 2)))))
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.StringWithMetadata(StringWithMetadata(
                             "one two three",
@@ -162,7 +161,7 @@ internal class ResultFormatCreatorTest {
         @Test
         fun `with one entity`() {
             val resultCreator = EqlResultCreator(withEntitiesConfig)
-            val payload = resultCreator.singleResult(withEntitiesDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(1, 2))))), jsonQuery)
+            val payload = resultCreator.singleResult(withEntitiesDocument, jsonQuery, listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(1, 2)))))
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.StringWithMetadata(StringWithMetadata(
                             "one two three harry potter",
@@ -190,7 +189,7 @@ internal class ResultFormatCreatorTest {
         @Test
         fun `simple format no metadata`() {
             val resultCreator = EqlResultCreator(noMetadataConfig)
-            var payload = resultCreator.singleResult(noMetadataDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(0, 2))))), textUnitListQuery)
+            var payload = resultCreator.singleResult(noMetadataDocument, textUnitListQuery, listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(0, 2)))))
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.TextUnitList(TextUnitList(
                             TextUnit.QueryMatch(Interval.valueOf(1),
@@ -199,7 +198,7 @@ internal class ResultFormatCreatorTest {
                                             TextUnit.Word("three")))
                     ), 0, 3, false))
 
-            payload = resultCreator.singleResult(noMetadataDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1, 2), listOf(Interval.valueOf(1, 2))))), textUnitListQuery)
+            payload = resultCreator.singleResult(noMetadataDocument, textUnitListQuery, listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1, 2), listOf(Interval.valueOf(1, 2)))))
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.TextUnitList(TextUnitList(
                             TextUnit.Word("one"),
@@ -208,7 +207,7 @@ internal class ResultFormatCreatorTest {
                                             TextUnit.Word("two"),
                                             TextUnit.Word("three")))
                     ), 0, 3, false))
-            payload = resultCreator.singleResult(noMetadataDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(3), listOf(Interval.valueOf(1))))), textUnitListQuery)
+            payload = resultCreator.singleResult(noMetadataDocument, textUnitListQuery, listOf(EqlMatch.IdentifierMatch(Interval.valueOf(3), listOf(Interval.valueOf(1)))))
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.TextUnitList(TextUnitList(
                             TextUnit.Word("one"),
@@ -221,7 +220,7 @@ internal class ResultFormatCreatorTest {
         @Test
         fun `two other indexes`() {
             val resultCreator = EqlResultCreator(simpleStructureConfig)
-            val payload = resultCreator.singleResult(simpleStructureDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(1, 2))))), textUnitListQuery)
+            val payload = resultCreator.singleResult(simpleStructureDocument, textUnitListQuery, listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(1, 2)))))
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.TextUnitList(TextUnitList(
                             TextUnit.Word("one", "1", "google.com"),
@@ -235,7 +234,7 @@ internal class ResultFormatCreatorTest {
         @Test
         fun `with one entity no intervals`() {
             val resultCreator = EqlResultCreator(withEntitiesConfig)
-            val payload = resultCreator.singleResult(withEntitiesDocument, MatchInfo.empty(), textUnitListQuery)
+            val payload = resultCreator.singleResult(withEntitiesDocument, textUnitListQuery, emptyList())
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.TextUnitList(TextUnitList(
                             TextUnit.Word("one", "1", "google.com", "0", "0", "0"),
@@ -249,7 +248,7 @@ internal class ResultFormatCreatorTest {
         @Test
         fun `with one entity that is broken by interval`() {
             val resultCreator = EqlResultCreator(withEntitiesConfig)
-            val payload = resultCreator.singleResult(withEntitiesDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(0), listOf(Interval.valueOf(2, 3))))), textUnitListQuery)
+            val payload = resultCreator.singleResult(withEntitiesDocument, textUnitListQuery, listOf(EqlMatch.IdentifierMatch(Interval.valueOf(0), listOf(Interval.valueOf(2, 3)))))
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.TextUnitList(TextUnitList(
                             TextUnit.Word("one", "1", "google.com", "0", "0", "0"),
@@ -268,7 +267,7 @@ internal class ResultFormatCreatorTest {
         @Test
         fun `with one entity that is broken by two intervals`() {
             val resultCreator = EqlResultCreator(withEntitiesConfig)
-            val payload = resultCreator.singleResult(withEntitiesDocument, MatchInfo(emptyList(), listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(2, 3), Interval.valueOf(4))))), textUnitListQuery)
+            val payload = resultCreator.singleResult(withEntitiesDocument, textUnitListQuery, listOf(EqlMatch.IdentifierMatch(Interval.valueOf(1), listOf(Interval.valueOf(2, 3), Interval.valueOf(4)))))
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.TextUnitList(TextUnitList(
                             TextUnit.Word("one", "1", "google.com", "0", "0", "0"),

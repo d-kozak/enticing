@@ -13,5 +13,5 @@ interface ResultCreator {
      */
     fun multipleResults(document: IndexedDocument, matchInfo: MatchInfo, formatInfo: GeneralFormatInfo, resultOffset: Int, resultCount: Int, resultFormat: cz.vutbr.fit.knot.enticing.dto.ResultFormat): Pair<List<ResultFormat>, Boolean>
 
-    fun singleResult(document: IndexedDocument, interval: Interval, eqlMatch: List<EqlMatch>, formatInfo: GeneralFormatInfo): ResultFormat.Snippet
+    fun singleResult(document: IndexedDocument, formatInfo: GeneralFormatInfo, eqlMatch: List<EqlMatch>, interval: Interval = document.interval): ResultFormat.Snippet
 }
