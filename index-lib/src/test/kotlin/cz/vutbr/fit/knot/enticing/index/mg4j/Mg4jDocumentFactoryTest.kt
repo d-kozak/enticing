@@ -5,7 +5,6 @@ import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnit
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.StructuredDocumentIterator
 import cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.TextUnitListGeneratingVisitor
-import cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess.DocumentElement
 import it.unimi.dsi.fastutil.io.FastBufferedInputStream
 import it.unimi.dsi.fastutil.objects.Reference2ObjectArrayMap
 import org.assertj.core.api.Assertions.assertThat
@@ -58,68 +57,8 @@ internal class Mg4jDocumentFactoryTest {
     }
 
 
-    @Test
-    fun `glue index is present in snippet parts fields`() {
-        val factory = Mg4jDocumentFactory(corpusConfig)
-        val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), factory)
 
-        val document = collection.document(0) as Mg4jDocument
-        val snippetPartsFields = document.loadStructuredContent(filteredConfig = corpusConfig)
-    }
 
-    @Test
-    fun `nerlength should be used to extend entities over multiple words`() {
-        val factory = Mg4jDocumentFactory(corpusConfig)
-        val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), factory)
-
-        for (docId in 0L..10L) {
-            val document = collection.document(docId)
-
-            val content = document.loadStructuredContent(filteredConfig = corpusConfig)
-            val nertag = content["nertag"]
-            val nerlength = content["nerlength"].map { it.toInt() }
-
-            val result = nertag.zip(nerlength)
-
-            var i = 0
-            while (i < result.size) {
-                val (type, count) = result[i]
-                if (count != 0 && count != -1) {
-                    for (j in i + 1 until count) {
-                        if (type != result[j].first) {
-                            val sublist = result.subList(max(0, j - 5), min(j + 5, result.size))
-                            System.err.println("... $sublist ...")
-                            throw AssertionError("Expected type $type at index $j")
-                        }
-                    }
-                    i += count
-                } else {
-                    i++
-                }
-            }
-        }
-    }
-
-    @Test
-    fun `all indexes should have the same length`() {
-        val factory = Mg4jDocumentFactory(corpusConfig)
-        val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), factory)
-
-        for (i in 0L..10L) {
-            val document = collection.document(i) as Mg4jDocument
-            val wholeContent = document.loadStructuredContent(filteredConfig = corpusConfig).toMap()
-
-            val sizePerIndex = wholeContent.values.map { it.size }
-            val sizeSet = sizePerIndex.toSet()
-            if (sizeSet.size != 1) {
-                for ((name, content) in wholeContent) {
-                    System.err.println("$name has size ${content.size}")
-                }
-
-                throw AssertionError("All indexes should have equal size, in this case(document ${document.title()} at $i) the result is $sizePerIndex")
-            }
-        }
-    }
 
     @Nested
     inner class NerlenWorksBackwards {
@@ -135,22 +74,6 @@ internal class Mg4jDocumentFactoryTest {
                 val reader = (document.content(i) as StringReader)
                 assertThat(reader.readText()).isEqualTo("0 0 0 X X 0 0 0")
             }
-        }
-
-        @Test
-        fun `use  structured text`() {
-            val document = initMockDocument()
-            val elements = document.loadStructuredContent(0, document.size(), corpusConfig).elements
-            assertThat(elements)
-                    .hasSize(7)
-            val harry = elements[3]
-            assertThat(harry)
-                    .isInstanceOf(DocumentElement.Entity::class.java)
-            assertThat((harry as DocumentElement.Entity).words)
-                    .hasSize(2)
-
-            val words = document.iterator().asSequence().toList()
-            assertThat(words).hasSize(8)
         }
 
         @Test
@@ -200,23 +123,6 @@ internal class Mg4jDocumentFactoryTest {
         println(allEmpty)
         assertThat(allEmpty).isTrue()
 
-    }
-
-    @Test
-    fun `content of each index loaded by low level content should be identic to loading it using higher level readContentAt`() {
-        val factory = Mg4jDocumentFactory(corpusConfig)
-        val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), factory)
-
-        for (i in 0L..10L) {
-            val document = collection.document(i) as Mg4jDocument
-            val wholeContent = document.loadStructuredContent(filteredConfig = corpusConfig)
-            for (index in indexes) {
-                val highLevel = wholeContent[index.name].joinToString(separator = " ")
-                val lowLevel = (document.content(index.columnIndex) as StringReader).readText()
-                assertThat(highLevel)
-                        .isEqualTo(lowLevel)
-            }
-        }
     }
 
     @Test

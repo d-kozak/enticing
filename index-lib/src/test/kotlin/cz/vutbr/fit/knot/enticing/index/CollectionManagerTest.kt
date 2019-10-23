@@ -144,6 +144,7 @@ class CollectionManagerTest {
     }
 
     @Test
+    @Disabled
     fun allQueries() {
         val queryEngine = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
         val compiler = EqlCompiler()
