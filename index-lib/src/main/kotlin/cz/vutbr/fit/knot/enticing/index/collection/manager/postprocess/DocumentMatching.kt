@@ -92,7 +92,7 @@ fun filterIntervals(info: List<Pair<List<Int>, Interval>>): List<Pair<Int, Inter
     log.debug("started working on interval list of size ${info.size}")
     val filtered = info.asSequence()
             .filter { it.first.isNotEmpty() }
-            .filter { it.second.size > 250 }
+            .filter { it.second.size < 250 }
             .sortedBy { it.second.size }
             .toList()
     log.debug("finished filtering and sorting, started filtering out overlaps")
