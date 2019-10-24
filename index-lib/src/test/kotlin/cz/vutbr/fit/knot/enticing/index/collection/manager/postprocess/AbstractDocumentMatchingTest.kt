@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess
 
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.EqlAstNode
@@ -10,34 +11,65 @@ import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jCompositeDocumentCollection
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jSearchEngine
 import cz.vutbr.fit.knot.enticing.index.mg4j.initMg4jQueryEngine
 import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.fail
 
-data class IntervalCheck private constructor(val name: String) {
-    lateinit var check: (IndexedDocument, Interval) -> Boolean
+abstract class Check(val name: String, val document: IndexedDocument, val corpusConfiguration: CorpusConfiguration) {
+    var success: Boolean = true
 
-    constructor(name: String, check: (IndexedDocument, Interval) -> Boolean) : this(name) {
-        this.check = check
+    fun checkFailed(reason: String): Boolean {
+        System.err.println(reason)
+        success = false
+        return false
+    }
+
+    fun verify(check: Boolean, msgFactory: () -> String): Boolean {
+        val res = check
+        if (!res) checkFailed(msgFactory())
+        return res
+    }
+
+    fun performCheck(): Boolean = doCheck() && success
+
+    protected abstract fun doCheck(): Boolean
+
+    fun textAt(index: String, interval: Interval? = null): String {
+        var content = document.content[corpusConfiguration.indexes.getValue(index).columnIndex]
+        content = if (interval != null) content.subList(interval.from, interval.to + 1) else content
+        return content.joinToString(" ") { it.toLowerCase() }
+    }
+
+
+    fun cellsAt(index: String, interval: Interval? = null): List<String> {
+        val content = document.content[corpusConfiguration.indexes.getValue(index).columnIndex]
+        return (if (interval != null) content.subList(interval.from, interval.to + 1) else content).map { it.toLowerCase() }
+    }
+
+    fun attributeCellsAt(entity: String, attribute: String, interval: Interval? = null): List<String> {
+        val content = document.content[corpusConfiguration.entities.getValue(entity).attributes.getValue(attribute).columnIndex]
+        return (if (interval != null) content.subList(interval.from, interval.to + 1) else content).map { it.toLowerCase() }
     }
 }
 
-data class LeafCheck private constructor(val name: String) {
-    lateinit var check: (IndexedDocument, EqlMatch) -> Boolean
-
-    constructor(name: String, check: (IndexedDocument, EqlMatch) -> Boolean) : this(name) {
-        this.check = check
-    }
+class IntervalCheck constructor(name: String, document: IndexedDocument, corpusConfiguration: CorpusConfiguration, val interval: Interval, val leafMatch: List<EqlMatch>, private val checkStrategy: IntervalCheck.() -> Boolean) : Check(name, document, corpusConfiguration) {
+    override fun doCheck(): Boolean = this.let(checkStrategy)
 }
+
+class LeafCheck constructor(name: String, document: IndexedDocument, corpusConfiguration: CorpusConfiguration, val leafMatch: EqlMatch, private val checkStrategy: LeafCheck.() -> Boolean) : Check(name, document, corpusConfiguration) {
+    override fun doCheck(): Boolean = this.let(checkStrategy)
+}
+
 
 class CheckDsl {
-    val intervalChecks = mutableListOf<IntervalCheck>()
-    val leafChecks = mutableListOf<LeafCheck>()
+    val intervalChecks = mutableListOf<Pair<String, IntervalCheck.() -> Boolean>>()
+    val leafChecks = mutableListOf<Pair<String, LeafCheck.() -> Boolean>>()
 
-    fun interval(name: String, check: (IndexedDocument, Interval) -> Boolean) {
-        intervalChecks.add(IntervalCheck(name, check))
+    fun forEachInterval(name: String, check: IntervalCheck.() -> Boolean) {
+        intervalChecks.add(name to check)
     }
 
-    fun leaf(name: String, check: (IndexedDocument, EqlMatch) -> Boolean) {
-        leafChecks.add(LeafCheck(name, check))
+    fun forEachLeaf(name: String, check: LeafCheck.() -> Boolean) {
+        leafChecks.add(name to check)
     }
 }
 
@@ -69,7 +101,7 @@ abstract class AbstractDocumentMatchingTest {
         forEachMatchInternal(query, checks.intervalChecks, checks.leafChecks)
     }
 
-    private fun forEachMatchInternal(query: String, intervalChecks: List<IntervalCheck>, leafChecks: List<LeafCheck>) {
+    private fun forEachMatchInternal(query: String, intervalChecks: List<Pair<String, IntervalCheck.() -> Boolean>>, leafChecks: List<Pair<String, LeafCheck.() -> Boolean>>) {
         val (ast, errors) = compiler.parseAndAnalyzeQuery(query, clientConfig.corpusConfiguration)
         Assertions.assertThat(errors).isEmpty()
 
@@ -81,17 +113,13 @@ abstract class AbstractDocumentMatchingTest {
             val match = matchDocument(ast.deepCopy() as EqlAstNode, doc, "token", clientConfig.corpusConfiguration, Interval.valueOf(0, doc.size() - 1))
 
             for ((interval, leafMatch) in match) {
-                for (check in intervalChecks) {
-                    if (!check.check(doc, interval)) {
-                        failedChecks.add("INT: ${check.name}")
-                    }
-                }
+                intervalChecks.map { (name, check) -> IntervalCheck(name, doc, clientConfig.corpusConfiguration, interval, leafMatch, check) }
+                        .filter { !it.performCheck() }
+                        .forEach { failedChecks.add("INT: ${it.name}") }
                 for (leaf in leafMatch) {
-                    for (check in leafChecks) {
-                        if (!check.check(doc, leaf)) {
-                            failedChecks.add("LEAF: ${check.name}")
-                        }
-                    }
+                    leafChecks.map { (name, check) -> LeafCheck(name, doc, clientConfig.corpusConfiguration, leaf, check) }
+                            .filter { !it.performCheck() }
+                            .forEach { failedChecks.add("LEAF: ${it.name}") }
                 }
             }
 
@@ -105,37 +133,4 @@ abstract class AbstractDocumentMatchingTest {
             fail { "Query '$query' failed on documents ${failedDocs.map { it.title }}" }
         }
     }
-
-    @DisplayName("get nodes by index")
-    @Nested
-    inner class NodeByIndex {
-
-        @DisplayName("That Motion three")
-        @Test
-        fun simpleQuery() {
-            val (ast, errors) = compiler.parseAndAnalyzeQuery("That Motion three", clientConfig.corpusConfiguration)
-            Assertions.assertThat(errors).isEmpty()
-            val nodes = getNodesByIndex(ast as EqlAstNode, "token")
-            Assertions.assertThat(nodes.mapValues { it.value.map { it.content } })
-                    .isEqualTo(mapOf(
-                            "token" to listOf("That", "Motion", "three")
-                    ))
-        }
-
-        @DisplayName("one two position:3 lemma:(job pony)")
-        @Test
-        fun multipleIndexes() {
-            val (ast, errors) = compiler.parseAndAnalyzeQuery("one two position:(3 < 1) lemma:(job|pony)", clientConfig.corpusConfiguration)
-            Assertions.assertThat(errors).isEmpty()
-            val nodes = getNodesByIndex(ast as EqlAstNode, "token")
-            Assertions.assertThat(nodes.mapValues { it.value.map { it.content } })
-                    .isEqualTo(mapOf(
-                            "token" to listOf("one", "two"),
-                            "position" to listOf("3", "1"),
-                            "lemma" to listOf("job", "pony")
-                    ))
-        }
-
-    }
-
 }
