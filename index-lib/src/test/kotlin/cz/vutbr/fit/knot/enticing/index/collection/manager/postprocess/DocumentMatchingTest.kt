@@ -133,4 +133,17 @@ internal class DocumentMatchingTest : AbstractDocumentMatchingTest() {
         }
     }
 
+
+    @DisplayName("(influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist)) - _PAR_ && influencer.url != influencee.url")
+    @Test
+    fun exampleQuery() = forEachMatch("(influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist)) - _PAR_ && influencer.url != influencee.url") {
+        forEachInterval("test") {
+            val nertag = textAt("nertag", interval)
+            verify("person" in nertag || "artist" in nertag) { "entities of type 'person' or 'artist'  should be found in '$nertag'" }
+            val lemma = textAt("lemma", interval)
+            verify("influence" in lemma || "impact" in lemma || ("paid" in lemma && "tribute" in lemma)) { "lemma requirement failed" }
+            val text = textAt("token", interval)
+            verify("§" !in text) { "there should be no paragraphs marks(§) with '$text'" }
+        }
+    }
 }

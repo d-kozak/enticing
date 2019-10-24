@@ -111,7 +111,8 @@ fun createMatchInfo(ast: QueryNode, i: Int): List<EqlMatch> {
     log.debug("matching using index $i")
     @Speed("this is expensive, but good for debug purposes")
     ast.forEachNode {
-        require(it.matchInfo != null) { "match info is not set in node $it" }
+        if (it !is RestrictionTypeNode.ContextNode) // context node does not need a match unless it is as query
+            require(it.matchInfo != null) { "match info is not set in node $it" }
     }
 
     val result = mutableListOf<EqlMatch>()
