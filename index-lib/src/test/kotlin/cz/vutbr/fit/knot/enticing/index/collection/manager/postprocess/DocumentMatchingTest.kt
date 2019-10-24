@@ -120,4 +120,17 @@ internal class DocumentMatchingTest : AbstractDocumentMatchingTest() {
         }
     }
 
+    @DisplayName("position:10 lemma:work is")
+    @Test
+    fun moreComplex() = forEachMatch("position:10 lemma:work is") {
+        forEachInterval("should contains all three conjucts") {
+            val pos = textAt("position", interval)
+            verify(pos.indexOf("10") >= 0) { "pos:'10' was not found in '$pos'" }
+            val lemma = textAt("lemma", interval)
+            verify(lemma.indexOf("work") >= 0) { "lemma:'work' was not found in '$lemma'" }
+            val text = textAt("token", interval)
+            verify(text.indexOf("is") >= 0) { "'is' was not found in '$text'" }
+        }
+    }
+
 }

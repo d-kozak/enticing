@@ -106,12 +106,15 @@ abstract class AbstractDocumentMatchingTest {
         Assertions.assertThat(errors).isEmpty()
 
         val failedDocs = mutableListOf<IndexedDocument>()
+        var matchCount = 0
         for (i in 0 until documentCount) {
             val failedChecks = mutableListOf<String>()
             val doc = searchEngine.loadDocument(i.toInt())
             println("testing on document [$i] '${doc.title}'")
             val match = matchDocument(ast.deepCopy() as EqlAstNode, doc, "token", clientConfig.corpusConfiguration, Interval.valueOf(0, doc.size() - 1))
-
+            if (match.intervals.isNotEmpty()) {
+                matchCount++
+            }
             for ((interval, leafMatch) in match) {
                 intervalChecks.map { (name, check) -> IntervalCheck(name, doc, clientConfig.corpusConfiguration, interval, leafMatch, check) }
                         .filter { !it.performCheck() }
@@ -128,7 +131,7 @@ abstract class AbstractDocumentMatchingTest {
                 failedDocs.add(doc)
             }
         }
-
+        println("Query '$query' was matched on $matchCount documents")
         if (failedDocs.isNotEmpty()) {
             fail { "Query '$query' failed on documents ${failedDocs.map { it.title }}" }
         }
