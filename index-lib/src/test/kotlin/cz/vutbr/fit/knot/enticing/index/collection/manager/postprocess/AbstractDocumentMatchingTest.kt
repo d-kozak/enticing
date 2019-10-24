@@ -124,7 +124,7 @@ abstract class AbstractDocumentMatchingTest {
             }
 
             if (failedChecks.isNotEmpty()) {
-                System.err.println("Checsks '$failedChecks' failed on document [$i] '${doc.title}'")
+                System.err.println("Checks '$failedChecks' failed on document [$i] '${doc.title}'")
                 failedDocs.add(doc)
             }
         }

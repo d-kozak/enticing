@@ -71,4 +71,53 @@ internal class DocumentMatchingTest : AbstractDocumentMatchingTest() {
 
     }
 
+
+    @DisplayName("(food horse)|(house money)")
+    @Test
+    fun withOrAndParens() = forEachMatch("(food horse)|(house money)") {
+        forEachInterval("one of the disjuncts should be there") {
+            val text = textAt("token", interval)
+            verify(("food" in text && "horse" in text) || ("house" in text && "money" in text)) { "('food' and 'horse') or ('house' and 'money') should be in '$text'" }
+        }
+
+        forEachLeaf("should be one of: food horse house money") {
+            val text = textAt("token", leafMatch.match)
+            val options = setOf("food", "horse", "house", "money")
+            verify(text in options) { "leaf should be one of 'food horse house money', was '$text'" }
+        }
+    }
+
+    @DisplayName("position:(1 < 5)")
+    @Test
+    fun positionIndex() = forEachMatch("position:(1 < 5)") {
+        forEachInterval("1 and 5 should be there in this order") {
+            val text = textAt("position", interval)
+            val one = text.indexOf("1")
+            val five = text.indexOf("5")
+            verify(one >= 0) { "'one' not found in '$text'" }
+            verify(five >= 0) { "'five' not found in '$text'" }
+            verify(one + "1".length < five) { "'1' should be located before '5' in '$text'" }
+        }
+
+        forEachLeaf("should be 1 or 5") {
+            val text = textAt("position", leafMatch.match)
+            verify(text == "1" || text == "5") { "should be 1 or 5" }
+        }
+    }
+
+    @DisplayName("lemma:((food horse)|(house money))")
+    @Test
+    fun indexWithOrAndParens() = forEachMatch("lemma:((food horse)|(house money))") {
+        forEachInterval("one of the disjuncts should be there") {
+            val text = textAt("lemma", interval)
+            verify(("food" in text && "horse" in text) || ("house" in text && "money" in text)) { "('food' and 'horse') or ('house' and 'money') should be in '$text'" }
+        }
+
+        forEachLeaf("should be one of: food horse house money") {
+            val text = textAt("lemma", leafMatch.match)
+            val options = setOf("food", "horse", "house", "money")
+            verify(text in options) { "leaf should be one of 'food horse house money', was '$text'" }
+        }
+    }
+
 }

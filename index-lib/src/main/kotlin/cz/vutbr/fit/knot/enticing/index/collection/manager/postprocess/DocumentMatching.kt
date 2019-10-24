@@ -10,6 +10,12 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor.GlobalConstraintAgnos
 import cz.vutbr.fit.knot.enticing.index.boundary.EqlMatch
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import cz.vutbr.fit.knot.enticing.index.boundary.MatchInfo
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
+class DocumentMatching
+
+private val log: Logger = LoggerFactory.getLogger(DocumentMatching::class.java)
 
 internal fun dumpMatch(ast: EqlAstNode, match: Map<Long, List<Interval>>) {
     ast.forEachNode {
@@ -23,6 +29,7 @@ internal fun dumpMatch(ast: EqlAstNode, match: Map<Long, List<Interval>>) {
  */
 
 fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: String, corpusConfiguration: CorpusConfiguration, interval: Interval): MatchInfo {
+    log.debug("Matching document $document using query $ast")
     ast as RootNode
     val nodesByIndex = getNodesByIndex(ast, defaultIndex)
     val leafMatch = mutableMapOf<QueryElemNode.SimpleNode, MutableList<Int>>()
@@ -62,16 +69,46 @@ fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: Stri
     }
 
     val matchVisitor = DocumentMatchingVisitor(leafMatch, sentenceMarks, paragraphMarks)
-    val info = ast.accept(matchVisitor).second.filter { it.first.isNotEmpty() }
+    val info = ast.accept(matchVisitor).second
+    if (info.isEmpty()) {
+        log.debug("no intervals discovered, returning empty match")
+        return MatchInfo.empty()
+    }
     check(info.all { it.first.size == 1 }) {
         "top level match should have only one child index in $info for query $ast"
     }
+    log.debug("found ${info.size} root matches")
 
-    return MatchInfo(info.map { it.second to createMatchInfo(ast.query, it.first[0]) })
+    val filtered = filterIntervals(info)
+    if (filtered.isEmpty()) {
+        log.debug("no intervals survived the filtering, returning empty match")
+        return MatchInfo.empty()
+    }
+    return MatchInfo(filtered.map { it.second to createMatchInfo(ast.query, it.first) })
 }
 
 
+fun filterIntervals(info: List<Pair<List<Int>, Interval>>): List<Pair<Int, Interval>> {
+    log.debug("started working on interval list of size ${info.size}")
+    val filtered = info.asSequence()
+            .filter { it.first.isNotEmpty() }
+            .sortedBy { it.second.size }
+            .toList()
+    log.debug("finished filtering and sorting, started filtering out overlaps")
+    val nonOverlap = mutableListOf<Pair<Int, Interval>>()
+
+    main@ for (x in filtered) {
+        for (y in nonOverlap) {
+            if (y.second.computeOverlap(x.second) > 0.5) continue@main
+        }
+        nonOverlap.add(x.first[0] to x.second)
+    }
+    log.debug("resulting interval list has size ${nonOverlap.size}, smaller than original by ${1 - info.size.toFloat() / nonOverlap.size.toFloat()}%")
+    return nonOverlap
+}
+
 fun createMatchInfo(ast: QueryNode, i: Int): List<EqlMatch> {
+    log.debug("matching using index $i")
     @Speed("this is expensive, but good for debug purposes")
     ast.forEachNode {
         require(it.matchInfo != null) { "match info is not set in node $it" }
