@@ -34,17 +34,18 @@ class EqlResultCreator(private val corpusConfiguration: CorpusConfiguration) : R
     }
 
     override fun singleResult(document: IndexedDocument, formatInfo: GeneralFormatInfo, eqlMatch: List<EqlMatch>, interval: Interval): ResultFormat.Snippet {
+        val expanded = if (interval.size < 50) interval.expand(50, 0, document.size - 1) else interval
         val filteredConfig = corpusConfiguration.filterBy(formatInfo.metadata, formatInfo.defaultIndex)
         val (matchStart, matchEnd) = eqlMatch.split()
 
         val visitor = when (formatInfo.textFormat) {
-            TextFormat.PLAIN_TEXT -> return generatePlainText(document, filteredConfig, formatInfo.defaultIndex, interval)
-            TextFormat.HTML -> HtmlGeneratingVisitor(filteredConfig, formatInfo.defaultIndex, interval, document)
-            TextFormat.STRING_WITH_METADATA -> StringWithAnnotationsGeneratingVisitor(filteredConfig, formatInfo.defaultIndex, interval, document)
-            TextFormat.TEXT_UNIT_LIST -> TextUnitListGeneratingVisitor(filteredConfig, formatInfo.defaultIndex, interval, document)
+            TextFormat.PLAIN_TEXT -> return generatePlainText(document, filteredConfig, formatInfo.defaultIndex, expanded)
+            TextFormat.HTML -> HtmlGeneratingVisitor(filteredConfig, formatInfo.defaultIndex, expanded, document)
+            TextFormat.STRING_WITH_METADATA -> StringWithAnnotationsGeneratingVisitor(filteredConfig, formatInfo.defaultIndex, expanded, document)
+            TextFormat.TEXT_UNIT_LIST -> TextUnitListGeneratingVisitor(filteredConfig, formatInfo.defaultIndex, expanded, document)
         }
         val iterator = StructuredDocumentIterator(corpusConfiguration)
-        iterator.iterateDocument(document, matchStart, matchEnd, visitor, interval)
+        iterator.iterateDocument(document, matchStart, matchEnd, visitor, expanded)
         return visitor.build()
     }
 }
