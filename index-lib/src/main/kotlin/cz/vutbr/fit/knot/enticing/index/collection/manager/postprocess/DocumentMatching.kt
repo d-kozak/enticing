@@ -126,7 +126,7 @@ fun createMatchInfo(ast: QueryNode, i: Int): List<EqlMatch> {
             is QueryNode -> node.query.forEachIndexed { index, queryElemNode -> traverse(queryElemNode, indexes[index]) }
             is QueryElemNode.NotNode -> traverse(node.elem, i)
             is QueryElemNode.AssignNode -> {
-                result.add(EqlMatch(node.location, match))
+                result.add(EqlMatch(Interval.valueOf(node.location.from, node.location.from + node.identifier.length - 1), match))
                 traverse(node.elem, i)
             }
             is QueryElemNode.RestrictionNode -> {
@@ -335,8 +335,8 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
             is RestrictionTypeNode.ContextNode -> handleContext(res.second, (node.restriction as RestrictionTypeNode.ContextNode).restriction)
             else -> res.second
         }
-        addMatchInfoToNode(node, res.second)
-        return false to res.second
+        addMatchInfoToNode(node, andLeaves)
+        return false to andLeaves
     }
 
     override fun visitQueryElemBooleanNode(node: QueryElemNode.BooleanNode): DocumentMatchResult {

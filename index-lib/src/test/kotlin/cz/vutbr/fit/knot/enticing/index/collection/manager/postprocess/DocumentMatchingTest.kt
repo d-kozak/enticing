@@ -172,5 +172,13 @@ internal class DocumentMatchingTest : AbstractDocumentMatchingTest() {
             val text = textAt("token", interval)
             verify("§" !in text) { "there should be no paragraphs marks(§) with '$text'" }
         }
+        forEachIdentifier("influencer") {
+            val nertag = cellsAt("nertag", leafMatch.match)
+            verify(nertag.all { it == "person" } || nertag.all { it == "artist" }) { "the whole region denoted by influencer should be either person or artist" }
+        }
+        forEachIdentifier("influencee") {
+            val nertag = cellsAt("nertag", leafMatch.match)
+            verify(nertag.all { it == "person" } || nertag.all { it == "artist" }) { "the whole region denoted by influencer should be either person or artist" }
+        }
     }
 }

@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
+import cz.vutbr.fit.knot.enticing.dto.interval.substring
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.EqlAstNode
 import cz.vutbr.fit.knot.enticing.index.boundary.EqlMatch
@@ -63,6 +64,7 @@ class LeafCheck constructor(name: String, document: IndexedDocument, corpusConfi
 class CheckDsl {
     val intervalChecks = mutableListOf<Pair<String, IntervalCheck.() -> Boolean>>()
     val leafChecks = mutableListOf<Pair<String, LeafCheck.() -> Boolean>>()
+    val identifierChecks = mutableListOf<Pair<String, LeafCheck.() -> Boolean>>()
 
     fun forEachInterval(name: String, check: IntervalCheck.() -> Boolean) {
         intervalChecks.add(name to check)
@@ -71,6 +73,14 @@ class CheckDsl {
     fun forEachLeaf(name: String, check: LeafCheck.() -> Boolean) {
         leafChecks.add(name to check)
     }
+
+    fun forEachIdentifier(name: String, check: LeafCheck.() -> Boolean) {
+        identifierChecks.add(name to check)
+    }
+
+    operator fun component1() = intervalChecks
+    operator fun component2() = leafChecks
+    operator fun component3() = identifierChecks
 }
 
 abstract class AbstractDocumentMatchingTest {
@@ -103,12 +113,15 @@ abstract class AbstractDocumentMatchingTest {
         }
         val checks = CheckDsl()
         checks.apply(init)
-        forEachMatchInternal(query, testRange, checks.intervalChecks, checks.leafChecks)
+        forEachMatchInternal(query, testRange, checks)
     }
 
-    private fun forEachMatchInternal(query: String, documentRange: LongRange, intervalChecks: List<Pair<String, IntervalCheck.() -> Boolean>>, leafChecks: List<Pair<String, LeafCheck.() -> Boolean>>) {
+    private fun forEachMatchInternal(query: String, documentRange: LongRange, checks: CheckDsl) {
         val (ast, errors) = compiler.parseAndAnalyzeQuery(query, clientConfig.corpusConfiguration)
         Assertions.assertThat(errors).isEmpty()
+
+        val (intervalChecks, leafChecks) = checks
+        val identifierChecks = checks.identifierChecks.associate { it }
 
         val failedDocs = mutableListOf<IndexedDocument>()
         var matchCount = 0
@@ -128,6 +141,13 @@ abstract class AbstractDocumentMatchingTest {
                     leafChecks.map { (name, check) -> LeafCheck(name, doc, clientConfig.corpusConfiguration, leaf, check) }
                             .filter { !it.performCheck() }
                             .forEach { failedChecks.add("LEAF: ${it.name}") }
+                    identifierChecks[query.substring(leaf.queryInterval)]?.let {
+                        val name = query.substring(leaf.queryInterval)
+                        val check = LeafCheck(name, doc, clientConfig.corpusConfiguration, leaf, it)
+                        if (!check.performCheck()) {
+                            failedChecks.add("ID: $name")
+                        }
+                    }
                 }
             }
 
