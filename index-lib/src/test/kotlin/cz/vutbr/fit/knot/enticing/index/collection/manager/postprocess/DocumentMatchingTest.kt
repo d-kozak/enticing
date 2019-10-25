@@ -1,11 +1,11 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess
 
+import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 
 internal class DocumentMatchingTest : AbstractDocumentMatchingTest() {
-
 
     @DisplayName("food")
     @Test
@@ -130,6 +130,33 @@ internal class DocumentMatchingTest : AbstractDocumentMatchingTest() {
             verify(lemma.indexOf("work") >= 0) { "lemma:'work' was not found in '$lemma'" }
             val text = textAt("token", interval)
             verify(text.indexOf("is") >= 0) { "'is' was not found in '$text'" }
+        }
+    }
+
+    @Test
+    @DisplayName("person house ~ 3")
+    fun prox() {
+        forEachMatch("person house ~ 3") {
+            forEachLeaf("person should be close to house") {
+                val text = textAt("token", leafMatch.match)
+                if (text != "person") return@forEachLeaf true
+                val extended = textAt("token", Interval.valueOf(leafMatch.match.to - 4, leafMatch.match.to + 4))
+                verify("house" in extended) { "house should be within '$extended'" }
+            }
+        }
+    }
+
+
+    @Test
+    @DisplayName("(person house ~ 3)")
+    fun proxInParens() {
+        forEachMatch("person house ~ 3") {
+            forEachLeaf("person should be close to house") {
+                val text = textAt("token", leafMatch.match)
+                if (text != "person") return@forEachLeaf true
+                val extended = textAt("token", Interval.valueOf(leafMatch.match.to - 4, leafMatch.match.to + 4))
+                verify("house" in extended) { "house should be within '$extended'" }
+            }
         }
     }
 

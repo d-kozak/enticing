@@ -108,11 +108,12 @@ fun filterIntervals(info: List<Pair<List<Int>, Interval>>): List<Pair<Int, Inter
     return nonOverlap
 }
 
+
 fun createMatchInfo(ast: QueryNode, i: Int): List<EqlMatch> {
     log.debug("matching using index $i")
     @Speed("this is expensive, but good for debug purposes")
     ast.forEachNode {
-        if (it !is RestrictionTypeNode.ContextNode) // context node does not need a match unless it is as query
+        if (it !is RestrictionTypeNode.ContextNode && it !is RestrictionTypeNode.ProximityNode) // context node does not need a match unless it is as query
             require(it.matchInfo != null) { "match info is not set in node $it" }
     }
 
@@ -168,6 +169,14 @@ fun createMatchInfo(ast: QueryNode, i: Int): List<EqlMatch> {
 }
 
 
+fun QueryNode.extractTwoQueryElems(): Pair<QueryElemNode, QueryElemNode> {
+    require(this.query.size in 1..2) { "size should be within 1..2 ${this.query}" }
+    if (this.query.size == 2) return this.query[0] to this.query[1]
+    val node = this.query[0]
+    return if (node is QueryElemNode.ParenNode) {
+        node.query.extractTwoQueryElems()
+    } else throw IllegalStateException("invalid node strcuture for extracting two query elems $this")
+}
 
 typealias DocumentMatchResult = Pair<Boolean, MutableList<Pair<List<Int>, Interval>>>
 
@@ -181,7 +190,7 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
 
 
     private fun addMatchInfoToNode(node: EqlAstNode, result: MutableList<Pair<List<Int>, Interval>>) {
-        require(node.matchInfo == null) { " $node already has it's matchInfo set" }
+        require(node.matchInfo == null) { "$node already has it's matchInfo set" }
         node.matchInfo = result.toMutableList()
     }
 
@@ -215,52 +224,43 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
         return res
     }
 
-
-    override fun visitQueryElemRestrictionNode(node: QueryElemNode.RestrictionNode): DocumentMatchResult {
-        val leftResult = node.left.accept(this)
-        val rightResult = node.right.accept(this)
-        val mix: MutableList<Pair<List<Int>, Interval>> = when {
-            !leftResult.first && rightResult.first -> leftResult.second.mapIndexed { i, e -> listOf(i, -1) to e.second }.toMutableList()
+    private fun handleProximity(left: QueryElemNode, right: QueryElemNode, distance: Int): MutableList<Pair<List<Int>, Interval>> {
+        val leftResult = left.accept(this)
+        val rightResult = right.accept(this)
+        return when {
+            leftResult.first && rightResult.first -> throw IllegalStateException("two not clauses have no meaning, should be caught earlier")
             leftResult.first && !rightResult.first -> rightResult.second.mapIndexed { i, e -> listOf(-1, i) to e.second }.toMutableList()
-            !leftResult.first && !rightResult.first -> {
+            !leftResult.first && rightResult.first -> leftResult.second.mapIndexed { i, e -> listOf(i, -1) to e.second }.toMutableList()
+            else -> {
                 val res = mutableListOf<Pair<List<Int>, Interval>>()
                 for ((i, x) in leftResult.second.withIndex()) {
                     for ((j, y) in rightResult.second.withIndex()) {
-                        res.add(listOf(i, j) to x.second.combineWith(y.second))
+                        if (y.second.from - x.second.to <= distance) res.add(listOf(i, j) to Interval.valueOf(x.second.from, y.second.to))
                     }
                 }
                 res
             }
-            else -> throw IllegalStateException("two not clauses have no meaning, should be caught earlier")
         }
-        val intervals: MutableList<Pair<List<Int>, Interval>> = when (node.type) {
-            is RestrictionTypeNode.ProximityNode -> {
-                val distance = (node.type as RestrictionTypeNode.ProximityNode).distance.toInt()
-                if (!leftResult.first && !rightResult.first) {
-                    val res = mutableListOf<Pair<List<Int>, Interval>>()
-                    for ((i, x) in leftResult.second.withIndex()) {
-                        for ((j, y) in rightResult.second.withIndex()) {
-                            if (y.second.from - x.second.to <= distance) res.add(listOf(i, j) to Interval.valueOf(x.second.from, y.second.to))
-                        }
-                    }
-                    res
-                } else {
-                    // cases where both is true and both is false are covered already, two more are left
-                    if (!leftResult.first) leftResult.second else rightResult.second
-                }
-            }
+    }
 
-            is RestrictionTypeNode.ContextNode -> when ((node.type as RestrictionTypeNode.ContextNode).restriction) {
-                is ContextRestrictionType.Sentence -> mix.filter { interval -> sentenceMarks.none { it in interval.second } }.toMutableList()
-                is ContextRestrictionType.Paragraph -> mix.filter { interval -> paragraphMarks.none { it in interval.second } }.toMutableList()
-                is ContextRestrictionType.Query -> {
-                    val restriction = (((node.type as RestrictionTypeNode.ContextNode)).restriction as ContextRestrictionType.Query).query.accept(this)
-                    if (restriction.first) {
-                        throw IllegalStateException("Not not allowed here")
-                    }
-                    mix.filter { interval -> restriction.second.none { it.second in interval.second } }.toMutableList()
+    private fun handleContext(intervals: List<Pair<List<Int>, Interval>>, restriction: ContextRestrictionType): MutableList<Pair<List<Int>, Interval>> {
+        return when (restriction) {
+            is ContextRestrictionType.Sentence -> intervals.filter { interval -> sentenceMarks.none { it in interval.second } }.toMutableList()
+            is ContextRestrictionType.Paragraph -> intervals.filter { interval -> paragraphMarks.none { it in interval.second } }.toMutableList()
+            is ContextRestrictionType.Query -> {
+                val restrictionMatch = restriction.query.accept(this)
+                if (restrictionMatch.first) {
+                    throw IllegalStateException("Not not allowed here")
                 }
+                intervals.filter { interval -> restrictionMatch.second.none { it.second in interval.second } }.toMutableList()
             }
+        }
+    }
+
+    override fun visitQueryElemRestrictionNode(node: QueryElemNode.RestrictionNode): DocumentMatchResult {
+        val intervals: MutableList<Pair<List<Int>, Interval>> = when (node.type) {
+            is RestrictionTypeNode.ProximityNode -> handleProximity(node.left, node.right, (node.type as RestrictionTypeNode.ProximityNode).distance.toInt())
+            is RestrictionTypeNode.ContextNode -> handleContext(handleAnd(listOf(node.left, node.right)), (node.type as RestrictionTypeNode.ContextNode).restriction)
         }
         addMatchInfoToNode(node, intervals)
         return false to intervals
@@ -287,9 +287,15 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
         return false to res
     }
 
-    @Incomplete("handle restriction")
     override fun visitQueryNode(node: QueryNode): DocumentMatchResult {
-        val andLeaves = handleAnd(node.query)
+        val andLeaves = when (node.restriction) {
+            is RestrictionTypeNode.ProximityNode -> {
+                val (left, right) = node.extractTwoQueryElems()
+                handleProximity(left, right, (node.restriction as RestrictionTypeNode.ProximityNode).distance.toInt())
+            }
+            is RestrictionTypeNode.ContextNode -> handleContext(handleAnd(node.query), (node.restriction as RestrictionTypeNode.ContextNode).restriction)
+            else -> handleAnd(node.query)
+        }
         addMatchInfoToNode(node, andLeaves)
         return false to andLeaves
     }
@@ -319,9 +325,18 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
         return andLeaves[0]
     }
 
-    @Incomplete("handle restriction")
     override fun visitQueryElemParenNode(node: QueryElemNode.ParenNode): DocumentMatchResult {
         val res = node.query.accept(this)
+        val andLeaves = when (node.restriction) {
+            is RestrictionTypeNode.ProximityNode -> {
+                val (left, right) = node.query.extractTwoQueryElems()
+                handleProximity(left, right, (node.restriction as RestrictionTypeNode.ProximityNode).distance.toInt())
+            }
+            is RestrictionTypeNode.ContextNode -> handleContext(res.second, (node.restriction as RestrictionTypeNode.ContextNode).restriction)
+            else -> res.second
+        }
+
+        node.query.extractTwoQueryElems()
         addMatchInfoToNode(node, res.second)
         return false to res.second
     }
