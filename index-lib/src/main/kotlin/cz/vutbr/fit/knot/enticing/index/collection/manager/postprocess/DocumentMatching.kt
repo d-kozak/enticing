@@ -289,7 +289,13 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
 
     @Incomplete("handle restriction")
     override fun visitQueryNode(node: QueryNode): DocumentMatchResult {
-        val andLeaves = node.query.asSequence()
+        val andLeaves = handleAnd(node.query)
+        addMatchInfoToNode(node, andLeaves)
+        return false to andLeaves
+    }
+
+    private fun handleAnd(query: List<QueryElemNode>): MutableList<Pair<List<Int>, Interval>> {
+        val andLeaves = query.asSequence()
                 .map { it.accept(this) }
                 .filter { !it.first }
                 .map { it.second }
@@ -310,8 +316,7 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
             andLeaves.add(0, res)
         }
         require(andLeaves.size == 1) { "there should be exactly one interval list left" }
-        addMatchInfoToNode(node, andLeaves[0])
-        return false to andLeaves[0]
+        return andLeaves[0]
     }
 
     @Incomplete("handle restriction")
@@ -322,6 +327,12 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
     }
 
     override fun visitQueryElemBooleanNode(node: QueryElemNode.BooleanNode): DocumentMatchResult {
+        if (node.operator == BooleanOperator.AND) {
+            val res = handleAnd(listOf(node.left, node.right))
+            addMatchInfoToNode(node, res)
+            return false to res
+        }
+
         val leftResult = node.left.accept(this)
         val rightResult = node.right.accept(this)
         check(!(leftResult.first && rightResult.first)) { "cannot handle two not's" }
