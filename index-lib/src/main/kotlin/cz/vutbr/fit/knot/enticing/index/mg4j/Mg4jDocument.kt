@@ -1,17 +1,11 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
-import cz.vutbr.fit.knot.enticing.dto.annotation.Speed
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.Index
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import it.unimi.di.big.mg4j.document.AbstractDocument
 import it.unimi.dsi.fastutil.objects.Reference2ObjectMap
 import it.unimi.dsi.io.WordReader
-import it.unimi.dsi.lang.MutableString
-import it.unimi.dsi.util.Interval
-import java.io.StringReader
-import kotlin.math.max
-import kotlin.math.min
 
 internal val wordReader = WhitespaceWordReader()
 
@@ -68,6 +62,8 @@ class Mg4jDocument(
     private val contentMemo = mutableMapOf<Int, Any>()
 
     override fun content(field: Int): Any = contentMemo.computeIfAbsent(field) { i -> content[i].joinToString(" ").reader() }
+
+    override fun toString(): String = "Mg4jDocument(id=$id,title=$title)"
 
 }
 

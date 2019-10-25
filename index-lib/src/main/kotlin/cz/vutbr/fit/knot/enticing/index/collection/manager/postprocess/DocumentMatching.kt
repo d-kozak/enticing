@@ -235,7 +235,7 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
                 val res = mutableListOf<Pair<List<Int>, Interval>>()
                 for ((i, x) in leftResult.second.withIndex()) {
                     for ((j, y) in rightResult.second.withIndex()) {
-                        if (y.second.from - x.second.to <= distance) res.add(listOf(i, j) to Interval.valueOf(x.second.from, y.second.to))
+                        if (x.second.combineWith(y.second).size - x.second.size - y.second.size <= distance) res.add(listOf(i, j) to Interval.valueOf(x.second.from, y.second.to))
                     }
                 }
                 res
@@ -335,8 +335,6 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
             is RestrictionTypeNode.ContextNode -> handleContext(res.second, (node.restriction as RestrictionTypeNode.ContextNode).restriction)
             else -> res.second
         }
-
-        node.query.extractTwoQueryElems()
         addMatchInfoToNode(node, res.second)
         return false to res.second
     }

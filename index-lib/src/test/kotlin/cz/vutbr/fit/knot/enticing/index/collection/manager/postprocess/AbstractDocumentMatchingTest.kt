@@ -95,19 +95,24 @@ abstract class AbstractDocumentMatchingTest {
 
     }
 
-    protected fun forEachMatch(query: String, init: CheckDsl.() -> Unit) {
+    protected fun forEachMatch(query: String, documentId: Long? = null, documentRange: LongRange? = null, init: CheckDsl.() -> Unit) {
+        val testRange = when {
+            documentRange != null -> documentRange
+            documentId != null -> documentId..documentId
+            else -> 0 until documentCount
+        }
         val checks = CheckDsl()
         checks.apply(init)
-        forEachMatchInternal(query, checks.intervalChecks, checks.leafChecks)
+        forEachMatchInternal(query, testRange, checks.intervalChecks, checks.leafChecks)
     }
 
-    private fun forEachMatchInternal(query: String, intervalChecks: List<Pair<String, IntervalCheck.() -> Boolean>>, leafChecks: List<Pair<String, LeafCheck.() -> Boolean>>) {
+    private fun forEachMatchInternal(query: String, documentRange: LongRange, intervalChecks: List<Pair<String, IntervalCheck.() -> Boolean>>, leafChecks: List<Pair<String, LeafCheck.() -> Boolean>>) {
         val (ast, errors) = compiler.parseAndAnalyzeQuery(query, clientConfig.corpusConfiguration)
         Assertions.assertThat(errors).isEmpty()
 
         val failedDocs = mutableListOf<IndexedDocument>()
         var matchCount = 0
-        for (i in 0 until documentCount) {
+        for (i in documentRange) {
             val failedChecks = mutableListOf<String>()
             val doc = searchEngine.loadDocument(i.toInt())
             println("testing on document [$i] '${doc.title}'")
@@ -133,7 +138,7 @@ abstract class AbstractDocumentMatchingTest {
         }
         println("Query '$query' was matched on $matchCount documents")
         if (failedDocs.isNotEmpty()) {
-            fail { "Query '$query' failed on documents ${failedDocs.map { it.title }}" }
+            fail { "Query '$query' failed on documents $failedDocs" }
         }
     }
 }
