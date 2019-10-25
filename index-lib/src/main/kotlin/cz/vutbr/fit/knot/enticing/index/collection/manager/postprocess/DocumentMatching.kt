@@ -127,7 +127,6 @@ fun createMatchInfo(ast: QueryNode, i: Int): List<EqlMatch> {
             is QueryElemNode.NotNode -> traverse(node.elem, i)
             is QueryElemNode.AssignNode -> {
                 result.add(EqlMatch(Interval.valueOf(node.location.from, node.location.from + node.identifier.length - 1), match))
-                traverse(node.elem, i)
             }
             is QueryElemNode.RestrictionNode -> {
                 if (indexes[0] >= 0)

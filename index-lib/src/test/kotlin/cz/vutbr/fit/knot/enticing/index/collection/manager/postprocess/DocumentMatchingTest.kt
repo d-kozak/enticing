@@ -12,6 +12,7 @@ internal class DocumentMatchingTest : AbstractDocumentMatchingTest() {
     fun one() = forEachMatch("food") {
         forEachInterval("should contain food") {
             verify(textAt("token", interval) == "food") { "'${textAt("token", interval)}' should be 'food'" }
+            verifyLeafCount(1)
         }
         forEachLeaf("should contain food") {
             verify(textAt("token", leafMatch.match) == "food") { "'${textAt("token", leafMatch.match)}' should be 'food'" }
@@ -27,6 +28,7 @@ internal class DocumentMatchingTest : AbstractDocumentMatchingTest() {
             verify("that" in text) { "'that' should be in '$text'" }
             verify("motion" in text) { "'motion' should be in '$text'" }
             verify("three" in text) { "'three' should be in '$text'" }
+            verifyLeafCount(3)
         }
     }
 
@@ -48,7 +50,7 @@ internal class DocumentMatchingTest : AbstractDocumentMatchingTest() {
                 verify(nertag[i] == "person") { "entity at index $i should be of type person, was '${nertag[i]}'" }
                 verify(name[i].startsWith("mic")) { "person's name at index $i should start was mic , was '${name[i]}'" }
             }
-            success
+            verifyLeafCount(1)
         }
     }
 
@@ -62,6 +64,7 @@ internal class DocumentMatchingTest : AbstractDocumentMatchingTest() {
             verify(that >= 0) { "'that' not found in '$text'" }
             verify(motion >= 0) { "'motion' not found in '$text'" }
             verify(that + "that".length < motion) { "'that' should be located before 'motion' in '$text'" }
+            verifyLeafCount(2)
         }
 
         forEachLeaf("leaves should be either that or motion") {
@@ -78,6 +81,7 @@ internal class DocumentMatchingTest : AbstractDocumentMatchingTest() {
         forEachInterval("one of the disjuncts should be there") {
             val text = textAt("token", interval)
             verify(("food" in text && "horse" in text) || ("house" in text && "money" in text)) { "('food' and 'horse') or ('house' and 'money') should be in '$text'" }
+            verifyLeafCount(2)
         }
 
         forEachLeaf("should be one of: food horse house money") {
@@ -97,6 +101,7 @@ internal class DocumentMatchingTest : AbstractDocumentMatchingTest() {
             verify(one >= 0) { "'one' not found in '$text'" }
             verify(five >= 0) { "'five' not found in '$text'" }
             verify(one + "1".length < five) { "'1' should be located before '5' in '$text'" }
+            verifyLeafCount(2)
         }
 
         forEachLeaf("should be 1 or 5") {
@@ -111,6 +116,7 @@ internal class DocumentMatchingTest : AbstractDocumentMatchingTest() {
         forEachInterval("one of the disjuncts should be there") {
             val text = textAt("lemma", interval)
             verify(("food" in text && "horse" in text) || ("house" in text && "money" in text)) { "('food' and 'horse') or ('house' and 'money') should be in '$text'" }
+            verifyLeafCount(2)
         }
 
         forEachLeaf("should be one of: food horse house money") {
@@ -130,6 +136,7 @@ internal class DocumentMatchingTest : AbstractDocumentMatchingTest() {
             verify(lemma.indexOf("work") >= 0) { "lemma:'work' was not found in '$lemma'" }
             val text = textAt("token", interval)
             verify(text.indexOf("is") >= 0) { "'is' was not found in '$text'" }
+            verifyLeafCount(3)
         }
     }
 
@@ -171,6 +178,7 @@ internal class DocumentMatchingTest : AbstractDocumentMatchingTest() {
             verify("influence" in lemma || "impact" in lemma || ("paid" in lemma && "tribute" in lemma)) { "lemma requirement failed" }
             val text = textAt("token", interval)
             verify("§" !in text) { "there should be no paragraphs marks(§) with '$text'" }
+            verifyLeafCount(3..4)
         }
         forEachIdentifier("influencer") {
             val nertag = cellsAt("nertag", leafMatch.match)

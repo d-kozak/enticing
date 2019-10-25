@@ -54,6 +54,11 @@ abstract class Check(val name: String, val document: IndexedDocument, val corpus
 
 class IntervalCheck constructor(name: String, document: IndexedDocument, corpusConfiguration: CorpusConfiguration, val interval: Interval, val leafMatch: List<EqlMatch>, private val checkStrategy: IntervalCheck.() -> Boolean) : Check(name, document, corpusConfiguration) {
     override fun doCheck(): Boolean = this.let(checkStrategy)
+
+    fun verifyLeafCount(n: Int, msgFactory: (() -> String)? = null): Boolean = if (msgFactory != null) verifyLeafCount(n..n, msgFactory) else verifyLeafCount(n..n)
+
+    fun verifyLeafCount(range: IntRange, msgFactory: () -> String = { "the number of leaves should be $range, was ${leafMatch.size}, leaves: $leafMatch" }): Boolean = verify(leafMatch.size in range, msgFactory)
+
 }
 
 class LeafCheck constructor(name: String, document: IndexedDocument, corpusConfiguration: CorpusConfiguration, val leafMatch: EqlMatch, private val checkStrategy: LeafCheck.() -> Boolean) : Check(name, document, corpusConfiguration) {
