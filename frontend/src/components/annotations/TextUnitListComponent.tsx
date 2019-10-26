@@ -78,7 +78,7 @@ export const renderElement = (text: TextUnit, query: string, corpusFormat: Corpu
             )}
         </React.Fragment>
         let decoration = "unknown";
-        if (text.queryMatch.from >= 0 && text.queryMatch.from <= text.queryMatch.to && text.queryMatch.to < query.length - 1) {
+        if (text.queryMatch.from >= 0 && text.queryMatch.from <= text.queryMatch.to && text.queryMatch.to < query.length) {
             decoration = query.substring(text.queryMatch.from, text.queryMatch.to + 1)
         }
         return <QueryMappingTooltip content={content} decoration={decoration}/>

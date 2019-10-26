@@ -28,7 +28,7 @@ const QueryMappingTooltip = (props: QueryMappingTooltipProps) => {
 
     const tooltip = classes.tooltip;
 
-    const tooltipContent = <Typography variant="h6">'{decoration}'</Typography>
+    const tooltipContent = <Typography variant="h6">{decoration}</Typography>
 
     return <Tooltip
         title={tooltipContent}
