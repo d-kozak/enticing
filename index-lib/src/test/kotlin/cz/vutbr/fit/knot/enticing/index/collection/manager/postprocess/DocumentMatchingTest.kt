@@ -189,4 +189,24 @@ internal class DocumentMatchingTest : AbstractDocumentMatchingTest() {
             verify(nertag.all { it == "person" } || nertag.all { it == "artist" }) { "the whole region denoted by influencer should be either person or artist" }
         }
     }
+
+
+    @Test
+    @DisplayName("ferda:=(nertag:person) height:=(is  < tall)")
+    fun twoIdsQuery() {
+        forEachMatch("ferda:=(nertag:person) height:=(is  < tall)") {
+            forEachIdentifier("ferda") {
+                val nertag = cellsAt("nertag", leafMatch.match)
+                verify(nertag.all { it == "person" }) { "the whole region denoted by ferda should be a person" }
+            }
+            forEachIdentifier("height") {
+                val text = textAt("token", leafMatch.match)
+                val fst = text.indexOf("is")
+                val snd = text.indexOf("tall")
+                verify(fst >= 0) { "'is' not found in '$text'" }
+                verify(snd >= 0) { "'tall' not found in '$text'" }
+                verify(fst + "is".length < snd) { "'is' should be located before 'tall' in '$text'" }
+            }
+        }
+    }
 }
