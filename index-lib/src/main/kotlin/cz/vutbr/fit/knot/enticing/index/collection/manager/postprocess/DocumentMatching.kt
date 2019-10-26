@@ -84,8 +84,10 @@ fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: Stri
         log.debug("no intervals survived the filtering, returning empty match")
         return MatchInfo.empty()
     }
-    return MatchInfo(filtered.map { it.second to createMatchInfo(ast.query, it.first) })
+    val evaluated = filtered.filter { evaluateGlobalConstraint(ast, it) }
+    return MatchInfo(evaluated.map { it.second to createMatchInfo(ast.query, it.first) })
 }
+
 
 
 fun filterIntervals(info: List<Pair<List<Int>, Interval>>): List<Pair<Int, Interval>> {
