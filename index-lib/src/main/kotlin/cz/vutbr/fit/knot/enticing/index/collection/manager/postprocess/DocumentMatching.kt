@@ -24,7 +24,7 @@ internal fun dumpMatch(ast: EqlAstNode, match: Map<Long, List<Interval>>) {
 }
 
 /**
- * This file contains all the logic which performs query to document matching, inspiration is taken from
+ * This file contains all the logic which performs query to document matching, inspiration should be taken from
  * http://vigna.di.unimi.it/ftp/papers/EfficientAlgorithmsMinimalIntervalSemantics.pdf
  */
 
@@ -141,8 +141,7 @@ fun createMatchInfo(ast: QueryNode, i: Int): List<EqlMatch> {
             is QueryElemNode.IndexNode -> traverse(node.elem, i)
             is QueryElemNode.ParenNode -> traverse(node.query, i)
             is QueryElemNode.AttributeNode -> {
-                traverse(node.entityNode, indexes[0])
-                traverse(node.elem, indexes[1])
+                result.add(EqlMatch(node.location, match))
             }
             is QueryElemNode.OrderNode -> {
                 traverse(node.left, indexes[0])
