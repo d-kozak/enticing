@@ -63,15 +63,44 @@ fun evaluateGlobalConstraint(ast: RootNode, it: Pair<Int, Interval>): Boolean {
         }
     }
 
-    val res = constraint.accept(GlobalConstraintEvaluatingVisitor())
+    val symbolTable = ast.symbolTable ?: fail("internal error, symbol table is not set")
+    val res = constraint.accept(GlobalConstraintEvaluatingVisitor(symbolTable))
     return res
 }
 
 
-class GlobalConstraintEvaluatingVisitor : QueryAgnosticVisitor<Boolean>() {
+fun fail(message: String): Nothing = throw IllegalStateException(message)
 
-    @Incomplete("not implemented")
+@Incomplete("not implemented")
+class GlobalConstraintEvaluatingVisitor(private val symbolTable: MutableMap<String, QueryElemNode.AssignNode>) : QueryAgnosticVisitor<Boolean>() {
+
     override fun visitConstraintBooleanExpressionComparisonNode(node: GlobalConstraintNode.BooleanExpressionNode.ComparisonNode): Boolean {
+        val left = symbolTable[node.left.identifier]
+                ?: fail("could not find corresponding node for identifier '${node.left.identifier}', should be caught earlier")
+        val right = symbolTable[node.right.identifier]
+                ?: fail("could not find corresponding node for identifier, '${node.right.identifier}',' should be caught earlier")
+        return when {
+            node.left is ReferenceNode.SimpleReferenceNode && node.right is ReferenceNode.SimpleReferenceNode ->
+                compareSimpleReferences(left, right, node.operator)
+            node.left is ReferenceNode.NestedReferenceNode && node.right is ReferenceNode.NestedReferenceNode ->
+                compareNestedReferences(left, right)
+            else -> fail("cannot compare simple and nested node, should be caught earlier")
+        }
+    }
+
+    private fun compareSimpleReferences(left: QueryElemNode.AssignNode, right: QueryElemNode.AssignNode, operator: RelationalOperator): Boolean {
+        val leftMatch = left.matchInfo?.get(left.matchInfoIndex)
+                ?: fail("internal error, could not find matchInfo  for node $left")
+        val rightMatch = right.matchInfo?.get(right.matchInfoIndex)
+                ?: fail("internal error, could not find matchInfo  for node $right")
+        return when (operator) {
+            RelationalOperator.EQ -> leftMatch.second == rightMatch.second
+            RelationalOperator.NE -> leftMatch.second != rightMatch.second
+            else -> fail("other operators not supported")
+        }
+    }
+
+    private fun compareNestedReferences(left: QueryElemNode.AssignNode, right: QueryElemNode.AssignNode): Boolean {
         return true
     }
 

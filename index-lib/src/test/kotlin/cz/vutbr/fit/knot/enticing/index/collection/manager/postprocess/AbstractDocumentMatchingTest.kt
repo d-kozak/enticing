@@ -65,11 +65,16 @@ class LeafCheck constructor(name: String, document: IndexedDocument, corpusConfi
     override fun doCheck(): Boolean = this.let(checkStrategy)
 }
 
+class GlobalConstraintCheck(name: String, document: IndexedDocument, corpusConfiguration: CorpusConfiguration, val identifiers: Map<String, EqlMatch>, private val checkStrategy: GlobalConstraintCheck.() -> Boolean) : Check(name, document, corpusConfiguration) {
+    override fun doCheck(): Boolean = this.let(checkStrategy)
+}
+
 
 class CheckDsl {
     val intervalChecks = mutableListOf<Pair<String, IntervalCheck.() -> Boolean>>()
     val leafChecks = mutableListOf<Pair<String, LeafCheck.() -> Boolean>>()
     val identifierChecks = mutableListOf<Pair<String, LeafCheck.() -> Boolean>>()
+    val globalConstraintChecks = mutableListOf<Pair<String, GlobalConstraintCheck.() -> Boolean>>()
 
     fun forEachInterval(name: String, check: IntervalCheck.() -> Boolean) {
         intervalChecks.add(name to check)
@@ -83,9 +88,14 @@ class CheckDsl {
         identifierChecks.add(name to check)
     }
 
+    fun verifyGlobalConstraint(name: String, check: GlobalConstraintCheck.() -> Boolean) {
+        globalConstraintChecks.add(name to check)
+    }
+
     operator fun component1() = intervalChecks
     operator fun component2() = leafChecks
     operator fun component3() = identifierChecks
+    operator fun component4() = globalConstraintChecks
 }
 
 abstract class AbstractDocumentMatchingTest {
@@ -125,7 +135,7 @@ abstract class AbstractDocumentMatchingTest {
         val (ast, errors) = compiler.parseAndAnalyzeQuery(query, clientConfig.corpusConfiguration)
         Assertions.assertThat(errors).isEmpty()
 
-        val (intervalChecks, leafChecks) = checks
+        val (intervalChecks, leafChecks, _, globalConstraintChecks) = checks
         val identifierChecks = checks.identifierChecks.associate { it }
 
         val failedDocs = mutableListOf<IndexedDocument>()
@@ -142,17 +152,28 @@ abstract class AbstractDocumentMatchingTest {
                 intervalChecks.map { (name, check) -> IntervalCheck(name, doc, clientConfig.corpusConfiguration, interval, leafMatch, check) }
                         .filter { !it.performCheck() }
                         .forEach { failedChecks.add("INT: ${it.name}") }
+                val encounteredIdentifiers = mutableMapOf<String, EqlMatch>()
                 for (leaf in leafMatch) {
                     leafChecks.map { (name, check) -> LeafCheck(name, doc, clientConfig.corpusConfiguration, leaf, check) }
                             .filter { !it.performCheck() }
                             .forEach { failedChecks.add("LEAF: ${it.name}") }
-                    identifierChecks[query.substring(leaf.queryInterval)]?.let {
-                        val name = query.substring(leaf.queryInterval)
+                    val maybeIdentifier = query.substring(leaf.queryInterval)
+                    identifierChecks[maybeIdentifier]?.let {
+                        val name = maybeIdentifier
+                        encounteredIdentifiers[name] = leaf
                         val check = LeafCheck(name, doc, clientConfig.corpusConfiguration, leaf, it)
                         if (!check.performCheck()) {
                             failedChecks.add("ID: $name")
                         }
                     }
+                }
+                if (encounteredIdentifiers.size == identifierChecks.size) {
+                    globalConstraintChecks.map { (name, check) -> GlobalConstraintCheck(name, doc, clientConfig.corpusConfiguration, encounteredIdentifiers, check) }
+                            .filter { !it.performCheck() }
+                            .forEach { failedChecks.add("GLOBAL: ${it.name}") }
+                } else {
+                    val missingIdentifiers = identifierChecks.keys - encounteredIdentifiers.keys
+                    failedChecks.add("ID-MISS: identifiers $missingIdentifiers were not matched")
                 }
             }
 

@@ -1,18 +1,26 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor
 
-import cz.vutbr.fit.knot.enticing.dto.AstNode
+import cz.vutbr.fit.knot.enticing.eql.compiler.SymbolTable
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.*
+import cz.vutbr.fit.knot.enticing.eql.compiler.emptySymbolTable
 
 class DeepCopyVisitor : EqlVisitor<EqlAstNode> {
+
+    private val newSymbolTable: SymbolTable = emptySymbolTable()
+
     override fun visitRootNode(node: RootNode): EqlAstNode = RootNode(
             node.query.accept(this) as QueryNode,
             node.constraint?.accept(this) as? GlobalConstraintNode,
             node.location
-    )
+    ).also { it.symbolTable = newSymbolTable }
+
 
     override fun visitQueryElemNotNode(node: QueryElemNode.NotNode): EqlAstNode = QueryElemNode.NotNode(node.elem.accept(this) as QueryElemNode, node.location)
 
     override fun visitQueryElemAssignNode(node: QueryElemNode.AssignNode): EqlAstNode = QueryElemNode.AssignNode(node.identifier, node.elem.accept(this) as QueryElemNode, node.location)
+            .also {
+                this.newSymbolTable[it.identifier] = it
+            }
 
     override fun visitQueryElemRestrictionNode(node: QueryElemNode.RestrictionNode): EqlAstNode =
             QueryElemNode.RestrictionNode(node.left.accept(this) as QueryElemNode, node.right.accept(this) as QueryElemNode, node.type.accept(this) as RestrictionTypeNode, node.location)

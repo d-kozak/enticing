@@ -2,8 +2,9 @@ package cz.vutbr.fit.knot.enticing.eql.compiler.analysis
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.eql.compiler.analysis.check.*
-import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.AgregatingListener
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.EqlAstNode
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.RootNode
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.AgregatingListener
 import cz.vutbr.fit.knot.enticing.eql.compiler.emptySymbolTable
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.CompilerError
 
@@ -31,6 +32,9 @@ class SemanticAnalyzer(private val config: CorpusConfiguration, checks: List<Eql
             val checks = checksByType[currentNode::class]
             checks?.forEach { it.doAnalyze(currentNode, symbolTable, reporter, config) }
         }))
+        if (node is RootNode) {
+            node.symbolTable = symbolTable
+        }
         return reporter.reports
     }
 

@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.ast
 
 import cz.vutbr.fit.knot.enticing.dto.AstNode
+import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.AgregatingListener
@@ -63,6 +64,8 @@ interface EqlVisitor<T> {
 }
 
 data class RootNode(val query: QueryNode, val constraint: GlobalConstraintNode?, override val location: Interval) : EqlAstNode() {
+    var symbolTable: MutableMap<String, QueryElemNode.AssignNode>? = null
+
     override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitRootNode(this)
 }
 
@@ -164,11 +167,14 @@ data class GlobalConstraintNode(val expression: BooleanExpressionNode, override 
 }
 
 sealed class ReferenceNode : EqlAstNode() {
-    data class SimpleReferenceNode(val identifier: String, override val location: Interval) : ReferenceNode() {
+
+    abstract val identifier: String
+
+    data class SimpleReferenceNode(override val identifier: String, override val location: Interval) : ReferenceNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitSimpleReferenceNode(this)
     }
 
-    data class NestedReferenceNode(val identifier: String, val attribute: String, override val location: Interval) : ReferenceNode() {
+    data class NestedReferenceNode(override val identifier: String, val attribute: String, override val location: Interval) : ReferenceNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitNestedReferenceNode(this)
     }
 }
@@ -179,6 +185,7 @@ enum class SimpleQueryType {
     DATE_INTERVAL
 }
 
+@Cleanup("actually only EQ and NE should be enough")
 enum class RelationalOperator {
     EQ, NE, LT, LE, GT, GE;
 }
