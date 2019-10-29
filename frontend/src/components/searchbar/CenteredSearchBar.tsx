@@ -28,7 +28,7 @@ export interface CenteredSearchBar extends WithStyles<typeof styles> {
 const CenteredSearchBar = (props: CenteredSearchBar) => {
     const {classes, history} = props;
 
-    const initialQuery = 'person.name:Pablo_Picasso (visited|entered) - _SENT_';
+    const initialQuery = 'influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) - _PAR_ && influencer.url != influencee.url';
 
     return <div className={classes.mainDiv}>
         <Typography className={classes.title} variant="h3">

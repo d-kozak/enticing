@@ -25,12 +25,14 @@ class NestedRefCheck(id: String) : EqlAstCheck<ReferenceNode.NestedReferenceNode
              */
             val entities = collectAllEntities(source.elem, corpusConfiguration)
             if (entities != null) {
-                val validEntities = entities.mapNotNull { corpusConfiguration.entities[it] }
+                val validEntities = entities.mapNotNull { corpusConfiguration.entities[it] }.toSet()
                 if (!validEntities.all { node.attribute in it.attributes }) {
                     val all = validEntities.map { it.name }
                     val missingIn = validEntities.filter { node.attribute !in it.attributes }
                             .map { it.name }
                     reporter.error("Attribute ${node.attribute} is not a common attribute of entities $all, it is missing in $missingIn", attrLocation, id)
+                } else {
+                    node.correspondingEntities = validEntities
                 }
             } else {
                 reporter.error("This identifier should correspond to an entity-like subquery", idLocation, id)

@@ -1,11 +1,13 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess
 
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.Entity
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.*
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor.QueryAgnosticVisitor
 
-fun evaluateGlobalConstraint(ast: RootNode, it: Pair<Int, Interval>): Boolean {
+fun evaluateGlobalConstraint(ast: RootNode, it: Pair<Int, Interval>, textAt: (String, Interval) -> List<String>, corpusConfiguration: CorpusConfiguration): Boolean {
     val constraint = ast.constraint ?: return true
 
     ast.forEachNode {
@@ -64,7 +66,7 @@ fun evaluateGlobalConstraint(ast: RootNode, it: Pair<Int, Interval>): Boolean {
     }
 
     val symbolTable = ast.symbolTable ?: fail("internal error, symbol table is not set")
-    val res = constraint.accept(GlobalConstraintEvaluatingVisitor(symbolTable))
+    val res = constraint.accept(GlobalConstraintEvaluatingVisitor(symbolTable, textAt, corpusConfiguration))
     return res
 }
 
@@ -72,7 +74,10 @@ fun evaluateGlobalConstraint(ast: RootNode, it: Pair<Int, Interval>): Boolean {
 fun fail(message: String): Nothing = throw IllegalStateException(message)
 
 @Incomplete("not implemented")
-class GlobalConstraintEvaluatingVisitor(private val symbolTable: MutableMap<String, QueryElemNode.AssignNode>) : QueryAgnosticVisitor<Boolean>() {
+class GlobalConstraintEvaluatingVisitor(
+        private val symbolTable: MutableMap<String, QueryElemNode.AssignNode>,
+        private val textAt: (String, Interval) -> List<String>,
+        private val corpusConfiguration: CorpusConfiguration) : QueryAgnosticVisitor<Boolean>() {
 
     override fun visitConstraintBooleanExpressionComparisonNode(node: GlobalConstraintNode.BooleanExpressionNode.ComparisonNode): Boolean {
         val left = symbolTable[node.left.identifier]
@@ -83,7 +88,7 @@ class GlobalConstraintEvaluatingVisitor(private val symbolTable: MutableMap<Stri
             node.left is ReferenceNode.SimpleReferenceNode && node.right is ReferenceNode.SimpleReferenceNode ->
                 compareSimpleReferences(left, right, node.operator)
             node.left is ReferenceNode.NestedReferenceNode && node.right is ReferenceNode.NestedReferenceNode ->
-                compareNestedReferences(left, right)
+                compareNestedReferences(left, right, node)
             else -> fail("cannot compare simple and nested node, should be caught earlier")
         }
     }
@@ -100,8 +105,40 @@ class GlobalConstraintEvaluatingVisitor(private val symbolTable: MutableMap<Stri
         }
     }
 
-    private fun compareNestedReferences(left: QueryElemNode.AssignNode, right: QueryElemNode.AssignNode): Boolean {
-        return true
+    private fun compareNestedReferences(leftAssign: QueryElemNode.AssignNode, rightAssign: QueryElemNode.AssignNode, comparisonNode: GlobalConstraintNode.BooleanExpressionNode.ComparisonNode): Boolean {
+        val leftReference = comparisonNode.left as ReferenceNode.NestedReferenceNode
+        val rightReference = comparisonNode.right as ReferenceNode.NestedReferenceNode
+        val (leftEntity, leftMatch) = determineEntity(leftAssign, leftReference)
+        val (rightEntity, rightMatch) = determineEntity(rightAssign, rightReference)
+        val leftIndex = leftEntity.attributes[leftReference.attribute]?.correspondingIndex
+                ?: fail("internal, could not find attribute ${leftReference.attribute} in entity $leftEntity")
+        val rightIndex = rightEntity.attributes[rightReference.attribute]?.correspondingIndex
+                ?: fail("internal, could not find attribute ${rightReference.attribute} in entity $rightEntity")
+        val leftContent = extractFullyDuplicated(textAt(leftIndex, leftMatch))
+        val rightContent = extractFullyDuplicated(textAt(rightIndex, rightMatch))
+        return when (comparisonNode.operator) {
+            RelationalOperator.EQ -> leftContent == rightContent
+            RelationalOperator.NE -> leftContent != rightContent
+            else -> fail("other operators not supported")
+        }
+    }
+
+    private fun extractFullyDuplicated(input: List<String>): String {
+        val asSet = input.toSet()
+        check(asSet.size == 1) { "there should be only one type of value in : $input" }
+        return asSet.first()
+    }
+
+
+    private fun determineEntity(assignNode: QueryElemNode.AssignNode, referenceNode: ReferenceNode.NestedReferenceNode): Pair<Entity, Interval> {
+        check(referenceNode.correspondingEntities.isNotEmpty()) { "reference $referenceNode has empty entity list, should be caught earlier" }
+        val (_, matchInterval) = assignNode.matchInfo?.get(assignNode.matchInfoIndex)
+                ?: fail("internal error, could not find match info for node $assignNode")
+        val content = textAt(corpusConfiguration.entityMapping.entityIndex, matchInterval)
+        val entity = extractFullyDuplicated(content)
+        val entityData = referenceNode.correspondingEntities.find { it.name == entity }
+                ?: fail("could not find entity $entity, it was not one of the options in ${referenceNode.correspondingEntities}")
+        return entityData to matchInterval
     }
 
     override fun visitGlobalContraintNode(node: GlobalConstraintNode): Boolean = node.expression.accept(this)

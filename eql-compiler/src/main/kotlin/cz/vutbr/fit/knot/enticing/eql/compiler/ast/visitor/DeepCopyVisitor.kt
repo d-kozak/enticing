@@ -62,7 +62,9 @@ class DeepCopyVisitor : EqlVisitor<EqlAstNode> {
 
     override fun visitSimpleReferenceNode(node: ReferenceNode.SimpleReferenceNode): EqlAstNode = ReferenceNode.SimpleReferenceNode(node.identifier, node.location)
 
-    override fun visitNestedReferenceNode(node: ReferenceNode.NestedReferenceNode): EqlAstNode = ReferenceNode.NestedReferenceNode(node.identifier, node.attribute, node.location)
+    override fun visitNestedReferenceNode(node: ReferenceNode.NestedReferenceNode): EqlAstNode = ReferenceNode.NestedReferenceNode(node.identifier, node.attribute, node.location).also {
+        it.correspondingEntities = node.correspondingEntities
+    }
 
     override fun visitQueryElemAlignNode(node: QueryElemNode.AlignNode): EqlAstNode = QueryElemNode.AlignNode(
             node.left.accept(this) as QueryElemNode, node.right.accept(this) as QueryElemNode, node.location

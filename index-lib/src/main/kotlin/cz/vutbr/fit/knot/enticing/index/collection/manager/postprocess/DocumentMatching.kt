@@ -84,10 +84,14 @@ fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: Stri
         log.debug("no intervals survived the filtering, returning empty match")
         return MatchInfo.empty()
     }
-    val evaluated = filtered.filter { evaluateGlobalConstraint(ast, it) }
+    val textAt: (String, Interval) -> List<String> = { indexName, (from, to) ->
+        val index = corpusConfiguration.indexes[indexName]?.columnIndex
+                ?: fail("could not load text for index $indexName")
+        document.content[index].subList(from, to + 1)
+    }
+    val evaluated = filtered.filter { evaluateGlobalConstraint(ast, it, textAt, corpusConfiguration) }
     return MatchInfo(evaluated.map { it.second to createMatchInfo(ast.query, it.first) })
 }
-
 
 
 fun filterIntervals(info: List<Pair<List<Int>, Interval>>): List<Pair<Int, Interval>> {
