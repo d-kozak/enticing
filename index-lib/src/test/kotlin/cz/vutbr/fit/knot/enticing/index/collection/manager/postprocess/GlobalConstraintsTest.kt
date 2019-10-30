@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -88,6 +89,58 @@ class GlobalConstraintsTest : AbstractDocumentMatchingTest() {
     }
 
 
+    @Incomplete("is not matched by anything :X")
+    @DisplayName("influencer:=person.name:Mic* < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) - _PAR_ && influencer.gender != influencee.gender")
+    @Test
+    fun oneIdentifierWithAttribute() = forEachMatch("influencer:=person.name:Mic* < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) - _PAR_ && influencer.gender != influencee.gender") {
+        forEachIdentifier("influencer") {
+            val nertagCells = cellsAt("nertag", leafMatch.match)
+            verify(nertagCells.all { it == "person" }) { "all cells should have a person in it" }
+            val nameCells = attributeCellsAt("person", "name", leafMatch.match)
+            verify(nameCells.all { it.startsWith("Jo") }) { "person's name should start with Jo" }
+        }
+        verifyGlobalConstraint("one should be different than two", "influencer", "influencee") {
+            val one = identifiers["influencer"]
+                    ?: return@verifyGlobalConstraint checkFailed("influencer was not matched")
+            val two = identifiers["influencee"]
+                    ?: return@verifyGlobalConstraint checkFailed("influencee was not matched")
 
+            val influencer = multipleEntityAttributeCellsAt(setOf("person", "artist"), "gender", one.match).toSet()
+            check(influencer.size == 1) { "inlfuencer, size should be one" }
+            val influencee = multipleEntityAttributeCellsAt(setOf("person", "artist"), "gender", two.match).toSet()
+            check(influencee.size == 1) { "influencee, size should be one" }
+            verify(influencer != influencee) { " influencer and influencee should have different genders, they had $influencer vs $influencee" }
+        }
+    }
 
+    @Incomplete("is not matched by anything :X")
+    @DisplayName("influencer:=person.name:Jo* < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=influencer:=person.name:Mi* - _PAR_ && influencer.gender != influencee.gender")
+    @Test
+    fun twoAttributes() = forEachMatch("influencer:=person.name:Jo* < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=person.name:Jo* - _PAR_ && influencer.gender != influencee.gender") {
+        forEachIdentifier("influencer") {
+            val nertagCells = cellsAt("nertag", leafMatch.match)
+            verify(nertagCells.all { it == "person" }) { "all cells should have a person in it" }
+            val nameCells = attributeCellsAt("person", "name", leafMatch.match)
+            verify(nameCells.all { it.startsWith("Jo") }) { "person's name should start with Jo" }
+        }
+
+        forEachIdentifier("influencee") {
+            val nertagCells = cellsAt("nertag", leafMatch.match)
+            verify(nertagCells.all { it == "artist" }) { "all cells should have an artist in it" }
+            val nameCells = attributeCellsAt("artist", "name", leafMatch.match)
+            verify(nameCells.all { it.startsWith("Jo") }) { "person's name should start with Jo" }
+        }
+        verifyGlobalConstraint("one should be different than two", "influencer", "influencee") {
+            val one = identifiers["influencer"]
+                    ?: return@verifyGlobalConstraint checkFailed("influencer was not matched")
+            val two = identifiers["influencee"]
+                    ?: return@verifyGlobalConstraint checkFailed("influencee was not matched")
+
+            val influencer = multipleEntityAttributeCellsAt(setOf("person", "artist"), "gender", one.match).toSet()
+            check(influencer.size == 1) { "inlfuencer, size should be one" }
+            val influencee = multipleEntityAttributeCellsAt(setOf("person", "artist"), "gender", two.match).toSet()
+            check(influencee.size == 1) { "influencee, size should be one" }
+            verify(influencer != influencee) { " influencer and influencee should have different genders, they had $influencer vs $influencee" }
+        }
+    }
 }
