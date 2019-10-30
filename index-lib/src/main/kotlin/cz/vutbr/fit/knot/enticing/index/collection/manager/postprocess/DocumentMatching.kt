@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess
 
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.annotation.Speed
+import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.*
@@ -106,6 +107,9 @@ fun filterIntervals(info: List<Pair<List<Int>, Interval>>): List<Pair<Int, Inter
 
     main@ for (x in filtered) {
         for (y in nonOverlap) {
+            @WhatIf(""""overlaps are actually OK as long as the leaves for these intervals are different, however there has to be some
+                 entity merging, otherwise multiword entities will be matched multiple times
+            """)
             if (y.second.computeOverlap(x.second) > 0.5) continue@main
         }
         nonOverlap.add(x.first[0] to x.second)
