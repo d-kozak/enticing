@@ -209,4 +209,23 @@ internal class DocumentMatchingTest : AbstractDocumentMatchingTest() {
             }
         }
     }
+
+    @Test
+    @DisplayName("(influencer:=nertag:(person) < ( lemma:(influence|impact) | (lemma:paid <lemma:tribute) )  < influencee:=nertag:(person)) - _PAR_")
+    fun anotherTest() = forEachMatch("(influencer:=nertag:(person) < ( lemma:(influence|impact) | (lemma:paid <lemma:tribute) )  < influencee:=nertag:(person)) - _PAR_") {
+        forEachInterval("not PAR should be there") {
+            val text = cellsAt("token", this.interval)
+            verify("§" !in text) { "no par sign should be in the match" }
+        }
+
+        forEachIdentifier("influencer") {
+            val nertagCells = cellsAt("nertag", leafMatch.match)
+            verify(nertagCells.all { it == "person" }) { "all cells should have a person in it" }
+        }
+
+        forEachIdentifier("influencee") {
+            val nertagCells = cellsAt("nertag", leafMatch.match)
+            verify(nertagCells.all { it == "person" }) { "all cells should have an artist in it" }
+        }
+    }
 }
