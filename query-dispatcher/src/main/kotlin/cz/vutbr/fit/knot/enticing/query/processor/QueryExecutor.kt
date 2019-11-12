@@ -20,10 +20,10 @@ interface QueryExecutor<T : Query<T>, OffsetType, Result : QueryResult<OffsetTyp
  * @see https://github.com/kittinunf/fuel
  * It is asynchronous and integrated with coroutines
  */
-class FuelQueryExecutor(private val path: String = "/api/v1/query", private val port: Int = 5627) : QueryExecutor<SearchQuery, Map<CollectionName, Offset>, IndexServer.IndexResultList> {
+class FuelQueryExecutor(private val path: String = "/api/v1/query") : QueryExecutor<SearchQuery, Map<CollectionName, Offset>, IndexServer.IndexResultList> {
 
     override suspend fun invoke(searchQuery: SearchQuery, requestData: RequestData<Map<CollectionName, Offset>>): MResult<IndexServer.IndexResultList> = MResult.runCatching {
-        val url = "http://${requestData.address}:$port$path"
+        val url = "http://${requestData.address}$path"
         try {
             url.httpPost()
                     .jsonBody(searchQuery.copy(offset = requestData.offset))

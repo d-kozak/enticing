@@ -12,15 +12,15 @@ config = read_default_config()
 
 
 def handle_args(args):
-    if len(args) != 3:
-        raise ValueError("format: collection_dir kts_config logfile")
+    if len(args) != 5:
+        raise ValueError("format: collection_dir kts_config name port_number logfile")
     collection_dir = args[0]
     if not os.path.isdir(collection_dir):
         raise ValueError(f"{collection_dir} is not a directory")
     kts_config = args[1]
     if not os.path.isfile(kts_config):
         raise ValueError(f"{kts_config} is not a real file")
-    return collection_dir, kts_config, args[2]
+    return collection_dir, kts_config, args[2], args[3], args[4]
 
 
 def inspect_collection_dir(collection_dir):
@@ -46,12 +46,12 @@ def serialize_config(config):
 
 def main():
     init_logging(log.DEBUG)
-    collection_dir, kts_config, logfile = handle_args(sys.argv[1:])
+    collection_dir, kts_config, name, port_number, logfile = handle_args(sys.argv[1:])
     enticing_home = get_enticing_home()
     collection_config = inspect_collection_dir(collection_dir)
     start_screen(
-        f'{enticing_home}/bin/index-server {kts_config} {serialize_config(collection_config)} --server.port=5627',
-        name="enticing-index-server", logfile=logfile)
+        f'{enticing_home}/bin/index-server {kts_config} {serialize_config(collection_config)} --server.port={port_number}',
+        name=name, logfile=logfile)
 
 
 if __name__ == "__main__":
