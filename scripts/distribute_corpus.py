@@ -3,13 +3,14 @@ import logging as log
 import os
 import sys
 import threading
+from typing import List, Dict
 
 from utils.utils import count_size, execute_command, create_remote_dir, measure, execute_via_ssh, read_default_config
 
 config = read_default_config()
 
 
-def handle_args(args):
+def handle_args(args: List[str]) -> (List[str], List[str], str):
     if len(args) != 3:
         raise ValueError("format: input_dir server_file output_dir(on the servers)")
     input_dir = args[0]
@@ -26,7 +27,7 @@ def execute_local_indexing(output_dir):
         os.makedirs(output_dir)
 
 
-def split_files(input_files, nodes):
+def split_files(input_files: List[str], nodes: List[str]) -> Dict[str, List[str]]:
     extra = len(input_files) % len(nodes)
     per_server = len(input_files) // len(nodes)
     batches = {}
@@ -41,7 +42,7 @@ def split_files(input_files, nodes):
     return batches
 
 
-def send_files(server, server_batch, output_dir):
+def send_files(server: str, server_batch: List[str], output_dir: str) -> None:
     create_remote_dir(server, config["user"]["username"], output_dir)
     log.info(f"server {server} : {count_size(server_batch)} MB : {server_batch} ")
     collections = [f"{server}-{x}" for x in range(int(config["indexing"]["collections_per_server"]))]
@@ -55,7 +56,7 @@ def send_files(server, server_batch, output_dir):
         execute_command(cmd)
 
 
-def distribute_files(server_batches, output_dir):
+def distribute_files(server_batches: Dict[str, List[str]], output_dir: str) -> None:
     threads = []
     try:
         for server, batch in server_batches.items():
@@ -68,7 +69,7 @@ def distribute_files(server_batches, output_dir):
         log.info("all threads finished")
 
 
-def print_final_stats(servers, output_dir):
+def print_final_stats(servers: List[str], output_dir: str):
     log.info('Final situation: ')
     for server in servers:
         cmd = f'ls -l {output_dir}'
@@ -82,7 +83,7 @@ def print_final_stats(servers, output_dir):
             log.info(f'\t\t{files}')
 
 
-def confirm_server_batches(server_batches):
+def confirm_server_batches(server_batches: Dict[str, List[str]]):
     for server, files in server_batches.items():
         print(f"server: {server}: {files}")
     print("Is is ok? [y/n]")
@@ -92,6 +93,13 @@ def confirm_server_batches(server_batches):
         exit(0)
 
 
+def distribute_corpus(input_files: List[str], output_dir: str, servers: List[str]) -> None:
+    server_batches = split_files(input_files, servers)
+    confirm_server_batches(server_batches)
+    measure(lambda: distribute_files(server_batches, output_dir), name="Distributing", print_duration=True)
+    print_final_stats(servers, output_dir)
+
+
 def main():
     log.basicConfig(level=int(config["debug"]["level"]), format='%(asctime)s - %(levelname)s - %(message)s')
     input_files, servers, output_dir = handle_args(sys.argv[1:])
@@ -99,10 +107,7 @@ def main():
         log.error("No mg4j files found")
         exit(1)
     log.info(f"distributing {len(input_files)} files over {len(servers)} servers({servers})")
-    server_batches = split_files(input_files, servers)
-    confirm_server_batches(server_batches)
-    measure(lambda: distribute_files(server_batches, output_dir), name="Distributing", print_duration=True)
-    print_final_stats(servers, output_dir)
+    distribute_corpus(input_files, output_dir, servers)
 
 
 if __name__ == "__main__":
