@@ -6,6 +6,7 @@ import glob
 import logging as log
 import sys
 
+from check_mg4j_files import show_all_mg4j_files
 from distribute_corpus import distribute_corpus
 from utils.config_validation import verify_config
 from utils.utils import execute_via_ssh
@@ -31,13 +32,14 @@ def read_config(content: str) -> configparser.ConfigParser:
 def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser("Enticing main run script")
     parser.add_argument("conf", type=argparse.FileType('r'), help="Configuration file")
+    parser.add_argument("-s", "--show", action='store_true', help="Show how mg4j files are distributed")
     parser.add_argument("-c", "--clean", action='store_true', help="Clean mg4j directories on the servers")
     parser.add_argument("-d", "--distrib", action='store_true', help="Distribute mg4j files over servers")
     parser.add_argument("-i", "--index", action='store_true', help="Index mg4j files using index-builder")
     parser.add_argument("-r", "--reboot", action='store_true', help="Reboot index servers and webserver")
     parser.add_argument("-k", "--kill", action='store_true', help="Kill all screens")
     namespace = parser.parse_args()
-    if not any([namespace.clean, namespace.distrib, namespace.index, namespace.reboot, namespace.kill]):
+    if not any([namespace.clean, namespace.show, namespace.distrib, namespace.index, namespace.reboot, namespace.kill]):
         print("At least one operation is required", file=sys.stderr)
         parser.print_help()
         sys.exit(1)
@@ -64,6 +66,12 @@ def execute_distrib(conf: configparser.ConfigParser) -> None:
     distribute_corpus(input_files, output_dir, servers)
 
 
+def execute_show(conf: configparser.ConfigParser) -> None:
+    mg4j_dir = conf["common"]["mg4j_dir"]
+    servers = conf["common"]["servers_file"]
+    show_all_mg4j_files(mg4j_dir, servers)
+
+
 def main():
     args = parse_arguments()
     conf = read_config(args.conf.read())
@@ -75,6 +83,9 @@ def main():
 
     if args.clean:
         execute_clean(conf)
+
+    if args.show:
+        execute_show(conf)
 
     if args.distrib:
         execute_distrib(conf)

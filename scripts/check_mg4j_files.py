@@ -36,11 +36,8 @@ def check_mg4j_files(server, collections, mg4j_dir):
     return all_files
 
 
-def main():
-    init_logging(int(config["debug"]["level"]))
-    server_file, mg4j_dir = handle_args(sys.argv[1:])
+def show_all_mg4j_files(mg4j_dir: str, server_file: str) -> None:
     res = execute_parallel_ssh(server_file, config["user"]["username"], f"ls {mg4j_dir} || exit 0")
-
     lines = res.stdout.split("\n")
     i = 0
     files = []
@@ -60,9 +57,14 @@ def main():
                 i += 1
                 while i < len(lines) and not lines[i].startswith('['):
                     i += 1
-
     print(f"Found {len(files)} files in total:")
     print(files)
+
+
+def main():
+    init_logging(int(config["debug"]["level"]))
+    server_file, mg4j_dir = handle_args(sys.argv[1:])
+    show_all_mg4j_files(mg4j_dir, server_file)
 
 
 if __name__ == "__main__":
