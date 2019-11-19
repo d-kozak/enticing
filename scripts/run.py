@@ -103,7 +103,7 @@ def execute_index_server_kill(conf: configparser.ConfigParser) -> None:
     user = conf["common"]["username"]
     index_screen = conf["index-server"]["screen_name"]
     cmd = f"screen -S {index_screen} -X quit"
-    execute_parallel_ssh(servers, user, cmd)
+    execute_parallel_ssh(servers, user, cmd, check_ret_val=False)
 
 
 def execute_webserver_start(conf: configparser.ConfigParser) -> None:
@@ -121,7 +121,7 @@ def execute_webserver_kill(conf: configparser.ConfigParser) -> None:
     webserver_server = conf["webserver"]["server"]
     webserver_screen_name = conf["webserver"]["screen_name"]
     cmd = f"screen -S {webserver_screen_name} -X quit"
-    execute_via_ssh(webserver_server, user, cmd)
+    execute_via_ssh(webserver_server, user, cmd, check_ret_val=False)
 
 
 def prepare_jars(conf: configparser.ConfigParser) -> None:
@@ -129,7 +129,8 @@ def prepare_jars(conf: configparser.ConfigParser) -> None:
     user = conf["common"]["username"]
     webserver_server = conf["webserver"]["server"]
     enticing_home = conf["common"]["enticing_home"]
-    cmd = f"scp lib/*.jar {user}@{webserver_server}:{enticing_home}/lib/"
+    jars = " ".join(glob.glob("lib/*.jar"))
+    cmd = f"scp {jars} {user}@{webserver_server}:{enticing_home}/lib/"
     execute_command(cmd)
 
 

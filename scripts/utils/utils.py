@@ -48,14 +48,14 @@ def create_remote_dir(server, username, directory):
     return execute_via_ssh(server, username, cmd)
 
 
-def execute_parallel_ssh(server_file, username, cmd):
+def execute_parallel_ssh(server_file, username, cmd, check_ret_val=True):
     cmd = f'parallel-ssh -l {username} -h {server_file} -i {cmd}'
-    return execute_command(cmd)
+    return execute_command(cmd, check_ret_val=check_ret_val)
 
 
-def execute_via_ssh(server, username, cmd):
+def execute_via_ssh(server, username, cmd, check_ret_val=True):
     cmd = f'ssh {username}@{server} {cmd}'
-    return execute_command(cmd)
+    return execute_command(cmd, check_ret_val=check_ret_val)
 
 
 def start_screen(cmd, name=None, logfile=None):
