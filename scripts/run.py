@@ -10,7 +10,7 @@ from check_mg4j_files import show_all_mg4j_files
 from distribute_corpus import distribute_corpus
 from start_indexing import start_indexing
 from utils.config_validation import verify_config
-from utils.utils import execute_via_ssh, execute_parallel_ssh
+from utils.utils import execute_via_ssh, execute_parallel_ssh, execute_command
 
 
 def print_config(config: configparser.ConfigParser) -> None:
@@ -124,6 +124,15 @@ def execute_webserver_kill(conf: configparser.ConfigParser) -> None:
     execute_via_ssh(webserver_server, user, cmd)
 
 
+def prepare_jars(conf: configparser.ConfigParser) -> None:
+    execute_command("gradle buildAll")
+    user = conf["common"]["username"]
+    webserver_server = conf["webserver"]["server"]
+    enticing_home = conf["common"]["enticing_home"]
+    cmd = f"scp lib/*.jar {user}@{webserver_server}:{enticing_home}/lib/"
+    execute_command(cmd)
+
+
 def main():
     args = parse_arguments()
     conf = read_config(args.conf.read())
@@ -150,10 +159,12 @@ def main():
         execute_start_indexing(conf)
 
     if args.webserver:
+        prepare_jars(conf)
         execute_webserver_kill(conf)
         execute_webserver_start(conf)
 
     if args.reboot:
+        prepare_jars(conf)
         execute_index_server_start(conf)
         execute_webserver_start(conf)
 
