@@ -12,8 +12,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.io.File
 import java.io.StringReader
-import kotlin.math.max
-import kotlin.math.min
 
 private val corpusConfig = testConfiguration.corpusConfiguration
 private val indexes = testConfiguration.indexes
@@ -25,6 +23,20 @@ fun assertStreamStartsWith(stream: Any, expected: String) {
 }
 
 internal class Mg4jDocumentFactoryTest {
+
+    @Nested
+    inner class NewWiki {
+        @Test
+        fun `load document test`() {
+            val factory = Mg4jDocumentFactory(corpusConfig)
+            val collection = Mg4jSingleFileDocumentCollection(File("../data/new_wiki/new_wiki.mg4j"), factory)
+            for (i in 0 until collection.size()) {
+                val document = collection.document(i)
+                println(document.title)
+            }
+        }
+
+    }
 
 
     @Test

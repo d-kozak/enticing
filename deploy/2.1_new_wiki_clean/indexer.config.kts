@@ -24,6 +24,7 @@ indexBuilder {
             params(9)
             "nertype" whichIs "nertype"
             "nerlength" whichIs "nerlength"
+            "_glue" whichIs "glue"
         }
 
         entities {

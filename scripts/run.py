@@ -8,6 +8,7 @@ import sys
 
 from check_mg4j_files import show_all_mg4j_files
 from distribute_corpus import distribute_corpus
+from start_indexing import start_indexing
 from utils.config_validation import verify_config
 from utils.utils import execute_via_ssh
 
@@ -72,6 +73,15 @@ def execute_show(conf: configparser.ConfigParser) -> None:
     show_all_mg4j_files(mg4j_dir, servers)
 
 
+def execute_index(conf: configparser.ConfigParser) -> None:
+    mg4j_dir = conf["common"]["mg4j_dir"]
+    kts_config = conf["index-builder"]["config"]
+    user = conf["common"]["username"]
+    servers = conf["common"]["servers_file"]
+    enticing_home = conf["common"]["enticing_home"]
+    start_indexing(mg4j_dir, kts_config, enticing_home, servers, user)
+
+
 def main():
     args = parse_arguments()
     conf = read_config(args.conf.read())
@@ -84,11 +94,14 @@ def main():
     if args.clean:
         execute_clean(conf)
 
+    if args.distrib:
+        execute_distrib(conf)
+
     if args.show:
         execute_show(conf)
 
-    if args.distrib:
-        execute_distrib(conf)
+    if args.index:
+        execute_index(conf)
 
 
 if __name__ == "__main__":
