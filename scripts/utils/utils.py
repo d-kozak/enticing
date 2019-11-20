@@ -65,11 +65,12 @@ def start_screen(cmd, name=None, logfile=None):
     return execute_command(cmd)
 
 
-def execute_command(command, print_stdout=True, print_stderr=True, check_ret_val=True):
+def execute_command(command, print_stdout=True, print_stderr=True, check_ret_val=True, cwd="."):
     log.debug(f"Executing '{command}'")
     proc = subprocess.run(
         command.split(),
         stdout=subprocess.PIPE,
+        cwd=cwd,
         universal_newlines=True)
     if print_stdout and proc.stdout:
         log.debug(f"process stdout: \n{proc.stdout}")

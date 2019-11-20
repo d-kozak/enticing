@@ -8,7 +8,8 @@ conf_req = Dict[str, Dict[str, str]]
 DEFAULT_STRUCTURE: conf_req = {
     "common": {
         "username": "username on the servers",
-        "enticing_home": "local git repository of the project",
+        "local_home": "local git repository of the project",
+        "remote_home": "remote git repository of the project",
         "name": "name of the corpus",
         "server": "server on which the webserver will be started",
         "files": "location of the input mg4j files",
@@ -41,12 +42,13 @@ def verify_config(config: configparser.ConfigParser, requirements: conf_req = DE
     for section in requirements.keys():
         requirement_block = requirements[section]
         if section not in config:
-            errors.append(f"Section {section} is not in configuration")
+            errors.append(f"Section '{section}' is not in configuration")
         else:
             section_block = config[section]
             for item in requirement_block.keys():
                 if item not in section_block:
-                    errors.append(f"Item {item} in section {section} is not in configuration")
+                    errors.append(
+                        f"Item '{item}' in section '{section}' is not in configuration, it should contain '{requirement_block[item]}'")
     if errors:
         for error in errors:
             print(error, file=sys.stderr)

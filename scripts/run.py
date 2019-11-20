@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # General high level script starting the process,
 # takes config file as input
 import argparse
@@ -44,7 +45,7 @@ def parse_arguments() -> argparse.Namespace:
     namespace = parser.parse_args()
     if not any(
             [namespace.clean, namespace.show, namespace.distrib, namespace.preprocess, namespace.reboot,
-             namespace.webserver, namespace.index]):
+             namespace.webserver, namespace.index, namespace.kill]):
         print("At least one operation is required", file=sys.stderr)
         parser.print_help()
         sys.exit(1)
@@ -84,8 +85,8 @@ def execute_start_indexing(conf: configparser.ConfigParser) -> None:
     kts_config = conf["index-builder"]["config"]
     user = conf["common"]["username"]
     servers = conf["common"]["servers_file"]
-    enticing_home = conf["common"]["enticing_home"]
-    start_indexing(mg4j_dir, kts_config, enticing_home, servers, user)
+    remote_home = conf["common"]["remote_home"]
+    start_indexing(mg4j_dir, kts_config, remote_home, servers, user)
 
 
 def execute_index_server_start(conf: configparser.ConfigParser) -> None:
@@ -96,9 +97,9 @@ def execute_index_server_start(conf: configparser.ConfigParser) -> None:
     index_port = conf["index-server"]["port"]
     index_conf = conf["index-server"]["config"]
     index_log = conf["index-server"]["log"]
-    enticing_home = conf["common"]["enticing_home"]
+    remote_home = conf["common"]["remote_home"]
     mg4j_dir = conf["common"]["mg4j_dir"]
-    cmd = f"/opt/anaconda3/bin/python3.6 {enticing_home}/scripts/node/start_server.py {mg4j_dir} {index_conf} {index_screen} {index_port} {index_log}"
+    cmd = f"/opt/anaconda3/bin/python3.6 {remote_home}/scripts/node/start_server.py {mg4j_dir} {index_conf} {index_screen} {index_port} {index_log}"
     execute_parallel_ssh(servers, user, cmd)
 
 
@@ -114,11 +115,11 @@ def execute_index_server_kill(conf: configparser.ConfigParser) -> None:
 def execute_webserver_start(conf: configparser.ConfigParser) -> None:
     log.info('Webserver start')
     user = conf["common"]["username"]
-    enticing_home = conf["common"]["enticing_home"]
+    remote_home = conf["common"]["remote_home"]
     webserver_server = conf["webserver"]["server"]
     webserver_screen_name = conf["webserver"]["screen_name"]
     webserver_log = conf["webserver"]["log"]
-    cmd = f"cd {enticing_home} && screen -S {webserver_screen_name} -d -m ./bin/webserver && screen -S {webserver_screen_name} -X logfile {webserver_log} && screen -S {webserver_screen_name} -X log"
+    cmd = f"cd {remote_home} && screen -S {webserver_screen_name} -d -m ./bin/webserver && screen -S {webserver_screen_name} -X logfile {webserver_log} && screen -S {webserver_screen_name} -X log"
     execute_via_ssh(webserver_server, user, cmd)
 
 
@@ -133,12 +134,14 @@ def execute_webserver_kill(conf: configparser.ConfigParser) -> None:
 
 def prepare_jars(conf: configparser.ConfigParser) -> None:
     log.info('Building the project...')
-    execute_command("gradle buildAll")
+    local_home = conf["common"]["local_home"]
+    execute_command("gradle buildAll", cwd=local_home)
+
     user = conf["common"]["username"]
     webserver_server = conf["webserver"]["server"]
-    enticing_home = conf["common"]["enticing_home"]
-    jars = " ".join(glob.glob("lib/*.jar"))
-    cmd = f"scp {jars} {user}@{webserver_server}:{enticing_home}/lib/"
+    remote_home = conf["common"]["remote_home"]
+    jars = " ".join(glob.glob(f"{local_home}/lib/*.jar"))
+    cmd = f"scp {jars} {user}@{webserver_server}:{remote_home}/lib/"
     log.info('Copying jars to the server...')
     execute_command(cmd)
 
