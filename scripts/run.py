@@ -36,18 +36,18 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument("-s", "--show", action='store_true', help="Show how mg4j files are distributed")
     parser.add_argument("-c", "--clean", action='store_true', help="Clean mg4j directories on the servers")
     parser.add_argument("-d", "--distrib", action='store_true', help="Distribute mg4j files over servers")
-    parser.add_argument("-i", "--index", action='store_true', help="Index mg4j files using index-builder")
-    parser.add_argument("-r", "--reboot", action='store_true', help="Reboot index servers and webserver")
-    parser.add_argument("-w", "--webserver", action='store_true', help="Reboot webserver only")
-    parser.add_argument("-k", "--kill", action='store_true', help="Kill all screens")
+    parser.add_argument("-p", "--preprocess", action='store_true', help="Index mg4j files using index-builder")
+    parser.add_argument("-w", "--webserver", action='store_true', help="Start or kill webserver")
+    parser.add_argument("-i", "--index", action='store_true', help="Start or kill indexservers")
+    parser.add_argument("-r", "--reboot", action='store_true', help="Reboot selected components(implicitly all)")
+    parser.add_argument("-k", "--kill", action='store_true', help="Kill selected components(implicilty all)")
     namespace = parser.parse_args()
     if not any(
-            [namespace.clean, namespace.show, namespace.distrib, namespace.index, namespace.reboot, namespace.webserver,
-             namespace.kill]):
+            [namespace.clean, namespace.show, namespace.distrib, namespace.preprocess, namespace.reboot,
+             namespace.webserver, namespace.index]):
         print("At least one operation is required", file=sys.stderr)
         parser.print_help()
         sys.exit(1)
-
     return namespace
 
 
@@ -64,6 +64,7 @@ def execute_clean(conf: configparser.ConfigParser) -> None:
 
 
 def execute_distrib(conf: configparser.ConfigParser) -> None:
+    log.info(f'Distributing files from {conf["common"]["files"]}')
     input_files = glob.glob(conf["common"]["files"] + "/*.mg4j")
     output_dir = conf["common"]["mg4j_dir"]
     servers = open(conf["common"]["servers_file"]).read().split("\n")
@@ -71,12 +72,14 @@ def execute_distrib(conf: configparser.ConfigParser) -> None:
 
 
 def execute_show(conf: configparser.ConfigParser) -> None:
+    log.info('Printing locations of all mg4j files')
     mg4j_dir = conf["common"]["mg4j_dir"]
     servers = conf["common"]["servers_file"]
     show_all_mg4j_files(mg4j_dir, servers)
 
 
 def execute_start_indexing(conf: configparser.ConfigParser) -> None:
+    log.info('Preprocessing start')
     mg4j_dir = conf["common"]["mg4j_dir"]
     kts_config = conf["index-builder"]["config"]
     user = conf["common"]["username"]
@@ -86,6 +89,7 @@ def execute_start_indexing(conf: configparser.ConfigParser) -> None:
 
 
 def execute_index_server_start(conf: configparser.ConfigParser) -> None:
+    log.info('Index server start')
     servers = conf["common"]["servers_file"]
     user = conf["common"]["username"]
     index_screen = conf["index-server"]["screen_name"]
@@ -99,6 +103,7 @@ def execute_index_server_start(conf: configparser.ConfigParser) -> None:
 
 
 def execute_index_server_kill(conf: configparser.ConfigParser) -> None:
+    log.info('Index server kill')
     servers = conf["common"]["servers_file"]
     user = conf["common"]["username"]
     index_screen = conf["index-server"]["screen_name"]
@@ -107,6 +112,7 @@ def execute_index_server_kill(conf: configparser.ConfigParser) -> None:
 
 
 def execute_webserver_start(conf: configparser.ConfigParser) -> None:
+    log.info('Webserver start')
     user = conf["common"]["username"]
     enticing_home = conf["common"]["enticing_home"]
     webserver_server = conf["webserver"]["server"]
@@ -117,6 +123,7 @@ def execute_webserver_start(conf: configparser.ConfigParser) -> None:
 
 
 def execute_webserver_kill(conf: configparser.ConfigParser) -> None:
+    log.info('Webserver kill')
     user = conf["common"]["username"]
     webserver_server = conf["webserver"]["server"]
     webserver_screen_name = conf["webserver"]["screen_name"]
@@ -125,12 +132,14 @@ def execute_webserver_kill(conf: configparser.ConfigParser) -> None:
 
 
 def prepare_jars(conf: configparser.ConfigParser) -> None:
+    log.info('Building the project...')
     execute_command("gradle buildAll")
     user = conf["common"]["username"]
     webserver_server = conf["webserver"]["server"]
     enticing_home = conf["common"]["enticing_home"]
     jars = " ".join(glob.glob("lib/*.jar"))
     cmd = f"scp {jars} {user}@{webserver_server}:{enticing_home}/lib/"
+    log.info('Copying jars to the server...')
     execute_command(cmd)
 
 
@@ -143,9 +152,13 @@ def main():
         sys.exit(1)
     print_config(conf)
 
+    target_all = (args.reboot or args.kill) and not (args.index or args.webserver)
+
     if args.kill or args.reboot:
-        execute_index_server_kill(conf)
-        execute_webserver_kill(conf)
+        if target_all or args.index:
+            execute_index_server_kill(conf)
+        if target_all or args.webserver:
+            execute_webserver_kill(conf)
 
     if args.clean:
         execute_clean(conf)
@@ -156,18 +169,17 @@ def main():
     if args.show:
         execute_show(conf)
 
-    if args.index:
+    if (args.preprocess or args.webserver or args.index or args.reboot) and not args.kill:
+        prepare_jars(conf)
+
+    if args.preprocess:
         execute_start_indexing(conf)
 
-    if args.webserver:
-        prepare_jars(conf)
-        execute_webserver_kill(conf)
+    if (args.webserver or target_all) and not args.kill:
         execute_webserver_start(conf)
 
-    if args.reboot:
-        prepare_jars(conf)
+    if (args.index or target_all) and not args.kill:
         execute_index_server_start(conf)
-        execute_webserver_start(conf)
 
 
 if __name__ == "__main__":
