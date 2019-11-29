@@ -92,6 +92,7 @@ class DslTest {
         @Test
         fun `Indexer config simple test`() {
             val config = indexBuilder {
+                logInto("foo")
                 collection("col1")
                 inputFiles("../data/mg4j/cc1.mg4j", "../data/mg4j/cc2.mg4j", "../data/mg4j/cc3.mg4j")
                 outputDirectory("../data/indexed")

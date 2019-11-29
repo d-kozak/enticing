@@ -34,13 +34,18 @@ class CollectionManager internal constructor(
         log.info("Executing query $query")
         val (documentOffset, resultOffset) = offset
 
-        val (resultList, processed) = searchEngine.search(query.eqlAst.toMgj4Query(), query.snippetCount, documentOffset - 1)
+        val ast = if (query.eqlAst == null) {
+            query.eqlAst = eqlCompiler.parseOrFail(query.query, corpusConfiguration)
+            query.eqlAst!!
+        } else query.eqlAst!!
+
+        val (resultList, processed) = searchEngine.search(ast.toMgj4Query(), query.snippetCount, documentOffset - 1)
 
         val matched = mutableListOf<IndexServer.SearchResult>()
         for ((i, result) in resultList.withIndex()) {
             val document = searchEngine.loadDocument(result.documentId)
             check(document.id == result.documentId) { "Invalid document id set in the search engine: ${result.documentId} vs ${document.id}" }
-            val matchInfo = postProcessor.process(query.eqlAst.deepCopy(), document, query.defaultIndex, corpusConfiguration, result.intervals)
+            val matchInfo = postProcessor.process(ast.deepCopy(), document, query.defaultIndex, corpusConfiguration, result.intervals)
                     ?: continue
             val (results, hasMore) = resultCreator.multipleResults(document, matchInfo, query, if (document.id == documentOffset) resultOffset else 0, query.snippetCount, query.resultFormat)
             val searchResults = results.map {

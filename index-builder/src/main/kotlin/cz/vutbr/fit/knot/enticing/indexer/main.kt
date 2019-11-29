@@ -3,6 +3,7 @@ package cz.vutbr.fit.knot.enticing.indexer
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexBuilderConfig
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
 import cz.vutbr.fit.knot.enticing.index.startIndexing
+import cz.vutbr.fit.knot.enticing.log.SimpleDirectoryBasedLogService
 import java.io.File
 
 fun handleArguments(vararg args: String, loadConfig: (path: String) -> IndexBuilderConfig = ::executeScript): IndexBuilderConfig {
@@ -34,5 +35,14 @@ fun main(args: Array<String>) {
     val config = handleArguments(*args)
     println(config)
 
-    startIndexing(config)
+    val logger = SimpleDirectoryBasedLogService(config.collectionName, config.logDirectory)
+    logger.measure("indexing")
+
+    try {
+        startIndexing(config)
+        logger.reportSuccess("finished", "indexing")
+    } catch (ex: Exception) {
+        ex.printStackTrace()
+        logger.reportCrash(ex, "indexing")
+    }
 }

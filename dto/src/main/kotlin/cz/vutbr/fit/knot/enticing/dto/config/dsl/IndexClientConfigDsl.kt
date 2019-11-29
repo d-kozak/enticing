@@ -12,11 +12,17 @@ open class IndexClientConfig {
 
     val collections = mutableListOf<CollectionConfiguration>()
 
+    lateinit var logDirectory: String
+
     lateinit var corpusConfiguration: CorpusConfiguration
 
     val indexes
         get() = corpusConfiguration.indexes.values.toList()
 
+
+    fun logInto(directory: String) {
+        this.logDirectory = directory
+    }
 
     fun collections(block: MutableList<CollectionConfiguration>.() -> Unit) {
         this.collections.apply(block)
@@ -48,6 +54,11 @@ open class IndexClientConfig {
         if (collections.isEmpty()) {
             errors.add("No collections specified, at least one is necessary")
         }
+
+        if (!::logDirectory.isInitialized) {
+            errors.add("No log directory was specified")
+        }
+
         collections.forEach { it.validate(errors) }
         corpusConfiguration.validate(errors)
         return errors

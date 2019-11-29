@@ -52,15 +52,13 @@ data class SearchQuery(
          * the others are considered the metadata of the default index
          */
         @field:NotBlank
-        override val defaultIndex: String = Defaults.defaultIndex
+        override val defaultIndex: String = Defaults.defaultIndex,
+        @JsonIgnore
+        var eqlAst: AstNode? = null
 ) : GeneralFormatInfo, Query<SearchQuery> {
     override fun updateSnippetCount(newSnippetCount: Int): SearchQuery = copy(snippetCount = newSnippetCount).also {
-        if (this::eqlAst.isInitialized)
-            it.eqlAst = this.eqlAst.deepCopy()
+        it.eqlAst = this.eqlAst?.deepCopy()
     }
-
-    @JsonIgnore
-    lateinit var eqlAst: AstNode
 }
 
 

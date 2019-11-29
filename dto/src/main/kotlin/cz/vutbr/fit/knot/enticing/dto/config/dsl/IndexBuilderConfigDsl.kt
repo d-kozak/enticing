@@ -6,6 +6,8 @@ fun indexBuilder(block: IndexBuilderConfig.() -> Unit): IndexBuilderConfig = Ind
 
 class IndexBuilderConfig {
 
+    lateinit var logDirectory: String
+
     lateinit var collectionName: String
     lateinit var input: List<File>
     lateinit var output: File
@@ -16,6 +18,10 @@ class IndexBuilderConfig {
 
     fun collection(name: String) {
         this.collectionName = name
+    }
+
+    fun logInto(directory: String) {
+        this.logDirectory = directory
     }
 
     fun inputFiles(vararg files: String) {
@@ -52,6 +58,10 @@ class IndexBuilderConfig {
 
         if (!::collectionName.isInitialized) {
             errors.add("No name was specified")
+        }
+
+        if (!::logDirectory.isInitialized) {
+            errors.add("No log directory was specified")
         }
 
         checkMg4jFiles(input, errors)

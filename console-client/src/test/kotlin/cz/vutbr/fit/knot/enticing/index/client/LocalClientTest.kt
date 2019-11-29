@@ -30,7 +30,7 @@ internal class LocalClientTest {
 
     @Test
     fun `execute locally test`() {
-        val input = sequenceOf("foo bar baz", "hello", "nertag:person{{nertag->token}}", "lemma:work{{lemma->token}}")
+        val input = sequenceOf("foo bar baz", "hello", "nertag:person", "lemma:work")
         val executor = initMg4jCollectionManager(localConfig.indexClientConfig.corpusConfiguration, localConfig.indexClientConfig.collections[0])
         for (line in input) {
             executeLine(executor, line)

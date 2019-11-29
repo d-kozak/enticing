@@ -9,6 +9,7 @@ import java.io.File
 
 val DUMMY_LOAD_CONFIGURATION: (path: String) -> IndexBuilderConfig = {
     indexBuilder {
+        logInto("foo")
         corpus("CC") {
             indexes {
                 "position" whichIs "Position of the word in the document"

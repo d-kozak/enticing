@@ -2,8 +2,9 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.*
 
 consoleClient {
     local {
-        collections{
-            collection("one"){
+        logInto("foo")
+        collections {
+            collection("one") {
                 mg4jDirectory("../data/mg4j")
                 indexDirectory("../data/indexed")
             }
