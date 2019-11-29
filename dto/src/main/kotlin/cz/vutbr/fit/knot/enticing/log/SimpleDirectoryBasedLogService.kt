@@ -30,7 +30,7 @@ class SimpleDirectoryBasedLogService(private val serviceName: String, private va
             require(serviceLogDirectory.mkdir()) { "could not create log directory ${serviceLogDirectory.path}" }
         }
 
-        val crashLogFile = File("$logDirectory/$serviceName/crashlog")
+        val crashLogFile = File("$logDirectory/$serviceName/log")
 
         crashLogWriter = crashLogFile.printWriter()
     }
@@ -38,19 +38,24 @@ class SimpleDirectoryBasedLogService(private val serviceName: String, private va
 
     override fun reportSuccess(msg: String, name: String) {
         crashLogWriter.println("${createTimestamp()} : SUCCESS : ${msg} , took ${calcDuration(name)} ms")
+        crashLogWriter.flush()
     }
 
     override fun reportCrash(ex: Throwable, name: String?) = reportCrash(ex.message!!, name)
 
 
-    override fun reportCrash(msg: String, name: String?) = crashLogWriter.println(buildString {
-        append(createTimestamp())
-        append(" : FAIL : ")
-        append(msg)
-        if (name != null) {
-            append("task took ${calcDuration(name)} ms")
+    override fun reportCrash(msg: String, name: String?) {
+        val finalMessage = buildString {
+            append(createTimestamp())
+            append(" : FAIL : ")
+            append(msg)
+            if (name != null) {
+                append("task took ${calcDuration(name)} ms")
+            }
         }
-    })
+        crashLogWriter.println(finalMessage)
+        crashLogWriter.flush()
+    }
 
     private fun calcDuration(name: String): Long {
         val start = measurements[name] ?: throw IllegalArgumentException("Task with name '${name}' was not started")

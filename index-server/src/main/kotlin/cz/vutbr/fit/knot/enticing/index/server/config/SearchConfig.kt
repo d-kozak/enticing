@@ -1,6 +1,5 @@
 package cz.vutbr.fit.knot.enticing.index.server.config
 
-import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexClientConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.collection
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
@@ -8,11 +7,14 @@ import cz.vutbr.fit.knot.enticing.dto.utils.toDto
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.index.collection.manager.CollectionManager
 import cz.vutbr.fit.knot.enticing.index.mg4j.initMg4jCollectionManager
+import cz.vutbr.fit.knot.enticing.log.LogService
+import cz.vutbr.fit.knot.enticing.log.SimpleDirectoryBasedLogService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import java.net.InetAddress
 
 
 /**
@@ -42,6 +44,9 @@ class SearchConfig(
 
     @Bean
     fun compiler(config: IndexClientConfig) = EqlCompiler()
+
+    @Bean
+    fun logger(config: IndexClientConfig): LogService = SimpleDirectoryBasedLogService(InetAddress.getLocalHost().hostName + "_index", config.logDirectory)
 
     /**
      * Creates SearchExecutors for all collections in the config

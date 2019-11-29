@@ -36,13 +36,14 @@ fun main(args: Array<String>) {
     println(config)
 
     val logger = SimpleDirectoryBasedLogService(config.collectionName, config.logDirectory)
-    logger.measure("indexing")
-
-    try {
-        startIndexing(config)
-        logger.reportSuccess("finished", "indexing")
-    } catch (ex: Exception) {
-        ex.printStackTrace()
-        logger.reportCrash(ex, "indexing")
+    logger.use {
+        logger.measure("indexing")
+        try {
+            startIndexing(config)
+            logger.reportSuccess("finished", "indexing")
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            logger.reportCrash(ex, "indexing")
+        }
     }
 }
