@@ -6,6 +6,7 @@ import cz.vutbr.fit.knot.enticing.dto.IndexServer
 import cz.vutbr.fit.knot.enticing.dto.SnippetExtension
 import cz.vutbr.fit.knot.enticing.dto.WebServer
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
+import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import org.slf4j.LoggerFactory
 import org.springframework.http.*
@@ -57,6 +58,18 @@ class IndexServerConnector(private val template: RestTemplate = RestTemplate(), 
         } catch (ex: Exception) {
             log.warn("Could not get corpus format from $url")
             throw ex
+        }
+    }
+
+    @WhatIf("create special endpoint or maybe use spring actuator?")
+    fun getStatus(server: String): String {
+        val url = "http://$server$apiBathPath/format"
+        return try {
+            val response = template.getForEntity(url, CorpusFormat::class.java)
+            if (response.body != null) "RUNNING" else throw IllegalStateException("Could no get format from server $server")
+        } catch (ex: Exception) {
+            log.warn("Server $server is not responding correctly")
+            ex.message!!
         }
     }
 }

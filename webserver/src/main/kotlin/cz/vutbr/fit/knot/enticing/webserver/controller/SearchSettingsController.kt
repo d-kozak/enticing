@@ -17,6 +17,9 @@ class SearchSettingsController(private val searchSettingsService: SearchSettings
         userService.selectSettings(id)
     }
 
+    @GetMapping("/status/{id}")
+    fun getStatus(@PathVariable id: Long): Map<String, String> = searchSettingsService.getStatus(id)
+
     @PutMapping("/default/{id}")
     fun selectDefault(@PathVariable id: Long) = searchSettingsService.setDefault(id)
 

@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver.service
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.webserver.dto.ImportedSearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.dto.toEntity
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
@@ -16,7 +17,8 @@ private val log = LoggerFactory.getLogger(SearchSettingsService::class.java)
 
 @Service
 @Transactional
-class SearchSettingsService(private val searchSettingsRepository: SearchSettingsRepository, private val userRepository: UserRepository) {
+@Incomplete("seems that there is no authorization check, but there should be one - only admins should be able to edit these")
+class SearchSettingsService(private val searchSettingsRepository: SearchSettingsRepository, private val userRepository: UserRepository, private val indexServerConnector: IndexServerConnector) {
 
     fun setDefault(id: Long) {
         val previousDefault = searchSettingsRepository.findByDefaultIsTrue()
@@ -46,9 +48,13 @@ class SearchSettingsService(private val searchSettingsRepository: SearchSettings
     fun update(searchSettings: SearchSettings) = searchSettingsRepository.save(searchSettings)
 
     fun delete(id: Long) {
-        val searchSettings = searchSettingsRepository.findById(id).orElseThrow { java.lang.IllegalArgumentException("No settings with id $id found") }
+        val searchSettings = searchSettingsRepository.findById(id).orElseThrow { IllegalArgumentException("No settings with id $id found") }
         userRepository.detachSettingsFromAllUsers(searchSettings)
         searchSettingsRepository.deleteById(id)
     }
 
+    fun getStatus(id: Long): Map<String, String> {
+        val settings = searchSettingsRepository.findById(id).orElseThrow { IllegalArgumentException("No settings with id $id found") }
+        return settings.servers.associateWith { indexServerConnector.getStatus(it) }
+    }
 }

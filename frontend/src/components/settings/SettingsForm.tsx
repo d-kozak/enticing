@@ -1,7 +1,7 @@
 import createStyles from "@material-ui/core/es/styles/createStyles";
 import {WithStyles} from "@material-ui/core";
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Field, FieldArray, Form, Formik} from "formik";
 import * as Yup from 'yup';
 import {Switch, TextField} from "formik-material-ui";
@@ -14,6 +14,8 @@ import {SearchSettings} from "../../entities/SearchSettings";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
+import RunningIcon from '@material-ui/icons/CloudDone';
+import DownIcon from '@material-ui/icons/CloudOff';
 import {ApplicationState} from "../../ApplicationState";
 import withStyles from "@material-ui/core/styles/withStyles";
 import {connect} from "react-redux";
@@ -31,6 +33,9 @@ import ListItemText from "@material-ui/core/ListItemText";
 import {ExpandLess, ExpandMore} from "@material-ui/icons";
 import CorpusFormatConfig from "../corpusformat/CorpusFormatConfig";
 import ConfirmationDialog from "../dialog/ConfirmationDialog";
+import {String2StringObjectMap} from "../../entities/CorpusFormat";
+import {checkIndexServerStatus} from "../../actions/indexStatusActions";
+import {consoleDump} from "../utils/dump";
 
 const styles = (theme: Theme) => createStyles({
     formContent: {
@@ -104,7 +109,22 @@ const SettingsForm = (props: SettingsFormProps) => {
     const [serversOpen, setServersOpen] = useState(settings.isTransient);
     const [metadataOpen, setMetadataOpen] = useState(false);
 
+    const [serverStatus, setServerStatus] = useState<String2StringObjectMap>({});
+
     const [deleteSettingsDialogOpen, setDeleteSettingDialogOpen] = useState(false);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            checkIndexServerStatus(settings)
+                .then(status => {
+                    setServerStatus(status)
+                }).catch(err => {
+                consoleDump(err);
+            });
+        }, 1000);
+        return () => clearInterval(interval);
+
+    }, [settings.servers]);
 
     return <Formik
         initialValues={settings}
@@ -207,6 +227,7 @@ const SettingsForm = (props: SettingsFormProps) => {
                                 {values.servers.map((server, index) => <div key={index}>
                                     <Field name={`servers.${index}`} component={TextField}
                                            className={classes.textField}/>
+                                    {serverStatus[server] === "RUNNING" ? <RunningIcon/> : <DownIcon/>}
                                     <Button color="secondary" onClick={() => remove(index)}>X</Button>
                                 </div>)}
 
