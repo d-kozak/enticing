@@ -1,9 +1,13 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess
 
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
+import cz.vutbr.fit.knot.enticing.dto.annotation.Speed
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
+@Disabled
+@Speed("optimize the algorithms so that these tests can be executed during CI")
 class GlobalConstraintsTest : AbstractDocumentMatchingTest() {
 
     @DisplayName("one:=food two:=food && one != two")
