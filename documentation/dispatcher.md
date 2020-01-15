@@ -10,17 +10,18 @@ Both versions are implemented using [coroutines](https://kotlinlang.org/docs/ref
 ## Synchronous version
 Simplified pseudocode of the algorithm is the following:
 ```
-snippets = []
-nodes = allAvailableNodes
-while len(snippets) < wantedSnippets and nodes.isNotEmpty():
-   results = call(nodes)
-   nodes = []
-   for result in results:
-        if result.isSuccess and result.snippets.isNotEmpty():
-             snippets.addAll(result.snippets)
-             if result.offset:
-                nodes.add(NodeWithOffset(result.node,result.offset))
-               
+def queryDispatcher(query,initialNodes,snippetCount)
+    snippets = []
+    nodes = initialNodes
+    while len(snippets) < snippetCount and nodes.isNotEmpty():
+       results = call(query,nodes)
+       nodes = []
+       for result in results:
+            if result.isSuccess and result.snippets.isNotEmpty():
+                 snippets.addAll(result.snippets)
+                 if result.offset:
+                    nodes.add(NodeWithOffset(result.node,result.offset))
+    return snippets
 ```
 The algorithm is iterative and maintains a set of nodes that should be called in the next iteration. 
 This set initially contains all the nodes that are available. In each step, the wanted amount of snippets is distributed between the nodes and a request is sent to each of them. 
