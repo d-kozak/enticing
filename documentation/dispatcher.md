@@ -9,7 +9,7 @@ few snippets. It is used in [two different parts](./query_processing.md) of the 
 Both versions are implemented using [coroutines](https://kotlinlang.org/docs/reference/coroutines/coroutines-guide.html).
 ## Synchronous version
 Simplified pseudocode of the algorithm is the following:
-```
+```python
 def queryDispatcher(query,initialNodes,snippetCount)
     snippets = []
     nodes = initialNodes
