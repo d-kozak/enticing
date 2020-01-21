@@ -121,7 +121,7 @@ const SettingsForm = (props: SettingsFormProps) => {
                 }).catch(err => {
                 consoleDump(err);
             });
-        }, 1000);
+        }, 5000);
         return () => clearInterval(interval);
 
     }, [settings.servers]);
