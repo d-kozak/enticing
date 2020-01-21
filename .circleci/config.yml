@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
-  gradle: circleci/gradle@1.0.0
+  gradle: bizzabo/gradle@1.1.0
 workflows:
-  checkout-build-test:
+  checkout_build_project:
     jobs:
-      - gradle/test
+      - gradle/checkout_build_test_publish
