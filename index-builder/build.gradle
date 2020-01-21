@@ -24,12 +24,12 @@ jar {
 
 
 dependencies {
-    compile(project(":index-lib")){
+    compile(project(path:":index-lib",configuration:'default')){
         // exclude mg4j, it makes the output jar too big, needs to be added externally
         exclude group: "it.unimi.di"
         exclude group: "it.unimi.dsi"
     }
-    compile(project(":dto"))
+    compile(project(path:":dto",configuration:'default'))
 
     /**
      * Kotlin lang deps

@@ -22,7 +22,9 @@ internal class SearchSettingsServiceTest {
 
     val userRepository = mockk<UserRepository>()
 
-    val searchSettingsService = SearchSettingsService(searchSettingsRepository, userRepository)
+    val indexServerConnector = mockk<IndexServerConnector>()
+
+    val searchSettingsService = SearchSettingsService(searchSettingsRepository, userRepository, indexServerConnector)
 
     @Nested
     inner class GetAll {

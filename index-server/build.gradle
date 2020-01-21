@@ -26,10 +26,10 @@ bootJar {
 }
 
 dependencies {
-    implementation(project(":dto"))
-    implementation(project(":index-lib"))
-    implementation(project(":query-dispatcher"))
-    implementation(project(":eql-compiler"))
+    implementation(project(path:":dto",configuration:'default'))
+    implementation(project(path:":index-lib",configuration:'default'))
+    implementation(project(path:":query-dispatcher",configuration:'default'))
+    implementation(project(path:":eql-compiler",configuration:'default'))
 
     /**
      * Kotlin lang deps

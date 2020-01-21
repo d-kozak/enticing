@@ -12,9 +12,9 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":eql-compiler"))
-    implementation(project(":dto"))
-    implementation(project(":query-dispatcher"))
+    implementation(project(path:":eql-compiler",configuration:'default'))
+    implementation(project(path:":dto",configuration:'default'))
+    implementation(project(path:":query-dispatcher",configuration:'default'))
 
     /**
      * Kotlin lang deps
