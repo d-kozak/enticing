@@ -99,7 +99,7 @@ def execute_index_server_start(conf: configparser.ConfigParser) -> None:
     index_log = conf["index-server"]["log"]
     remote_home = conf["common"]["remote_home"]
     mg4j_dir = conf["common"]["mg4j_dir"]
-    cmd = f"/opt/anaconda3/bin/python3.6 {remote_home}/scripts/node/start_server.py {mg4j_dir} {index_conf} {index_screen} {index_port} {index_log}"
+    cmd = f"python3.6 {remote_home}/scripts/node/start_server.py {mg4j_dir} {index_conf} {index_screen} {index_port} {index_log}"
     execute_parallel_ssh(servers, user, cmd)
 
 

@@ -1,7 +1,7 @@
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.*
 
 indexBuilder {
-    logInto("/mnt/minerva1/nlp/projects/corpproc_search/corpproc_search/deploy/2.1_new_wiki_first_clean/logs")
+    logInto("/mnt/minerva1/nlp/projects/corpproc_search/corpproc_search/deploy/2.1_new_wiki_clean/logs")
 
     inputDirectory("../data/mg4j")
     outputDirectory("../data/indexed")
