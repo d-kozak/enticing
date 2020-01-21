@@ -5,7 +5,3 @@ workflows:
   checkout-build-test:
     jobs:
       - gradle/test
-  checkout-run_task:
-    jobs:
-      - gradle/run:
-          command: build -x test
