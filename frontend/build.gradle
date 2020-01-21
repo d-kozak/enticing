@@ -10,7 +10,7 @@ version = "0.0.1-SNAPSHOT"
 node {
     version = '12.14.1'
     npmVersion = '6.9.0'
-    download = true
+    download = false // use installed node (CI fix)
 }
 
 npm_run_build {
