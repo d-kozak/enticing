@@ -1,5 +1,4 @@
 rootProject.name = "enticing"
-include "frontend", "webserver", "eql-compiler", "dto", "index-lib", "index-builder", "index-server", "console-client", "query-dispatcher"
-include 'management-core'
-include 'management-core'
+include "frontend", "webserver", "eql-compiler", "dto", "index-lib", "index-builder", "index-server", "console-client", "query-dispatcher", "management-core"
+
 
