@@ -60,7 +60,7 @@ data class StartScreenCommand(
         val logFile: String,
         val command: LocalCommand
 ) : Command {
-    override val value: String = "screen -S $screenName -d -m '${command.value}' &&& screen -S $screenName -X logfile $logFile && screen -S $screenName -X log"
+    override val value: String = "screen -S $screenName -d -m ${command.value} && screen -S $screenName -X logfile $logFile && screen -S $screenName -X log"
 }
 
 data class KillScreenCommand(
