@@ -10,7 +10,7 @@ Both versions are implemented using [coroutines](https://kotlinlang.org/docs/ref
 ## Synchronous version
 Simplified pseudocode of the algorithm is the following:
 ```python
-def queryDispatcher(query,initialNodes,snippetCount)
+def queryDispatcher(query,initialNodes,snippetCount):
     snippets = []
     nodes = initialNodes
     while len(snippets) < snippetCount and nodes.isNotEmpty():
