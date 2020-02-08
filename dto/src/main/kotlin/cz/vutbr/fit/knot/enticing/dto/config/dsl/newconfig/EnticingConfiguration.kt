@@ -5,21 +5,23 @@ fun enticingConfiguration(block: EnticingConfiguration.() -> Unit) = EnticingCon
 /**
  * Global configuration of the whole platform
  */
-class EnticingConfiguration {
-
-    var managementServiceConfiguration = ManagementServiceConfiguration()
-
-    var webserverConfiguration = WebserverConfiguration()
-
-    /**
-     * list of available corpuses
-     */
-    var corpuses = mutableListOf<CorpusConfiguration>()
-
-    /**
-     * list of separate index servers(not belonging to any corpus)
-     */
-    var indexServers = mutableListOf<IndexServerConfiguration>()
+data class EnticingConfiguration(
+        /**
+         * configuration of the management service
+         */
+        var managementServiceConfiguration: ManagementServiceConfiguration = ManagementServiceConfiguration(),
+        /**
+         * configuration of the webserver
+         */
+        var webserverConfiguration: WebserverConfiguration = WebserverConfiguration(),
+        /**
+         * list of available corpuses
+         */
+        var corpuses: MutableList<CorpusConfiguration> = mutableListOf(),
+        /**
+         * list of separate index servers(not belonging to any corpus)
+         */
+        var indexServers: MutableList<IndexServerConfiguration> = mutableListOf()) {
 
     fun webserver(block: WebserverConfiguration.() -> Unit) {
         webserverConfiguration = WebserverConfiguration().apply(block)

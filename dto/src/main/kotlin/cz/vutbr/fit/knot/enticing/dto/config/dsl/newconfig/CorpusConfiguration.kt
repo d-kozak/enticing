@@ -1,40 +1,51 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig
 
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
 import java.io.File
 
 /**
  * Configuration of one corpus
  */
-class CorpusConfiguration {
-    /**
-     * metadata configuration for this corpus
-     */
-    lateinit var metadata: MetadataConfiguration
+data class CorpusConfiguration(
+        /**
+         * name of the corpus
+         */
+        var name: String,
+        /**
+         * metadata configuration for this corpus
+         */
+        var metadataConfiguration: MetadataConfiguration = MetadataConfiguration(),
+        /**
+         * list of index servers that belong to this corpus
+         */
+        var indexServers: MutableList<IndexServerConfiguration> = mutableListOf(),
 
-    /**
-     * list of index servers that belong to this corpus
-     */
-    var indexServers = mutableListOf<IndexServerConfiguration>()
+        /**
+         * Directory with mg4j files that should be maintained by this server
+         */
+        var mg4jDir: String? = null,
 
-    /**
-     * Directory with mg4j files that should be maintained by this server
-     */
-    var mg4jDir: String? = null
-
-    /**
-     * Directory containing metadata for files in mg4jDir
-     */
-    var indexedDir: String? = null
+        /**
+         * Directory containing metadata for files in mg4jDir
+         */
+        var indexedDir: String? = null) {
 
     fun indexServers(block: IndexServerList.() -> Unit) {
-        indexServers = IndexServerList().apply(block).indexList
+        indexServers = IndexServerList(this).apply(block).indexList
     }
 
     fun serverFile(path: String) {
         val servers = File(path).readLines()
         indexServers = servers.map { address ->
-            IndexServerConfiguration().also { it.address = address }
+            IndexServerConfiguration().also {
+                it.address = address
+                it.corpus = this
+            }
         }.toMutableList()
+    }
+
+    fun metadata(block: MetadataConfiguration.() -> Unit) {
+        metadataConfiguration = MetadataConfiguration().apply(block)
     }
 
 }
@@ -42,9 +53,7 @@ class CorpusConfiguration {
 
 data class CorpusListDsl(val corpusList: MutableList<CorpusConfiguration> = mutableListOf()) {
 
-    fun corpus(block: CorpusConfiguration.() -> Unit) = CorpusConfiguration()
-            .apply(block)
-            .also {
-                corpusList.add(it)
-            }
+    fun corpus(name: String, block: CorpusConfiguration.() -> Unit) {
+        corpusList.add(CorpusConfiguration(name).apply(block))
+    }
 }
