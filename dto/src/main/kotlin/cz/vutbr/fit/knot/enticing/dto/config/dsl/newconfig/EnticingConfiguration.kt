@@ -1,5 +1,7 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig
 
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.visitor.EnticingConfigurationVisitor
+
 fun enticingConfiguration(block: EnticingConfiguration.() -> Unit) = EnticingConfiguration().apply(block)
 
 /**
@@ -21,22 +23,40 @@ data class EnticingConfiguration(
         /**
          * list of separate index servers(not belonging to any corpus)
          */
-        var indexServers: MutableList<IndexServerConfiguration> = mutableListOf()) {
+        var indexServers: MutableList<IndexServerConfiguration> = mutableListOf()) : EnticingConfigurationUnit {
 
-    fun webserver(block: WebserverConfiguration.() -> Unit) {
+    /**
+     * errors encountered when initializing the configuration
+     */
+    internal val errors = mutableListOf<String>()
+
+    fun webserver(block: WebserverConfiguration.() -> Unit) = runCatching {
         webserverConfiguration = WebserverConfiguration().apply(block)
     }
 
-    fun management(block: ManagementServiceConfiguration.() -> Unit) {
+
+    fun management(block: ManagementServiceConfiguration.() -> Unit) = runCatching {
         managementServiceConfiguration = ManagementServiceConfiguration().apply(block)
     }
 
-    fun corpusConfig(block: CorpusListDsl.() -> Unit) {
-        corpuses = CorpusListDsl().apply(block).corpusList
+    fun corpusConfig(block: CorpusList.() -> Unit) = runCatching {
+        corpuses = CorpusList(::runCatching).apply(block).corpusList
     }
 
-    fun indexServers(block: IndexServerList.() -> Unit) {
-        indexServers = IndexServerList().apply(block).indexList
+    fun indexServers(block: IndexServerList.() -> Unit) = runCatching {
+        indexServers = IndexServerList(null, ::runCatching).apply(block).indexList
+    }
+
+    private fun runCatching(block: () -> Unit) {
+        try {
+            block()
+        } catch (ex: IllegalStateException) {
+            errors.add(ex.message ?: "unknown error")
+        }
+    }
+
+    override fun accept(visitor: EnticingConfigurationVisitor) {
+        visitor.visitEnticingConfiguration(this)
     }
 }
 

@@ -1,5 +1,8 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata
 
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.EnticingConfigurationUnit
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.visitor.EnticingConfigurationVisitor
+
 data class IndexConfiguration(
         /**
          * name of the index
@@ -14,7 +17,12 @@ data class IndexConfiguration(
          * Index of the column this index is located at
          */
         var columnIndex: Int = 0
-)
+) : EnticingConfigurationUnit {
+
+    override fun accept(visitor: EnticingConfigurationVisitor) {
+        visitor.visitIndexConfiguration(this)
+    }
+}
 
 
 class IndexList(val metadataConfiguration: MetadataConfiguration, val indexes: MutableList<IndexConfiguration> = mutableListOf()) {

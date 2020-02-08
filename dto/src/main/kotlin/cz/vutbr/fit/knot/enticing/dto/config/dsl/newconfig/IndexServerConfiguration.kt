@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.visitor.EnticingConfigurationVisitor
 
 /**
  * Configuration of the index server
@@ -28,14 +29,24 @@ data class IndexServerConfiguration(
      * corpus this index server belongs to, null means it does not belong to any
      */
     var corpus: CorpusConfiguration? = null
+
+    override fun accept(visitor: EnticingConfigurationVisitor) {
+        visitor.visitIndexServerConfiguration(this)
+    }
 }
 
-class IndexServerList(val corpus: CorpusConfiguration? = null, val indexList: MutableList<IndexServerConfiguration> = mutableListOf()) {
+class IndexServerList(val corpus: CorpusConfiguration? = null, val errorCatcher: (() -> Unit) -> Unit) {
 
-    fun indexServer(block: IndexServerConfiguration.() -> Unit) = IndexServerConfiguration()
-            .apply(block)
-            .also {
-                indexList.add(it)
-                it.corpus = corpus
-            }
+    val indexList: MutableList<IndexServerConfiguration> = mutableListOf()
+
+    fun indexServer(block: IndexServerConfiguration.() -> Unit) {
+        errorCatcher {
+            IndexServerConfiguration()
+                    .apply(block)
+                    .also {
+                        indexList.add(it)
+                        it.corpus = corpus
+                    }
+        }
+    }
 }

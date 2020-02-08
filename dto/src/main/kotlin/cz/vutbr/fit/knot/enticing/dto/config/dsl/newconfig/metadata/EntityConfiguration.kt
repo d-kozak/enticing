@@ -1,5 +1,8 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata
 
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.EnticingConfigurationUnit
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.visitor.EnticingConfigurationVisitor
+
 data class EntityConfiguration(
         /**
          * name of the index
@@ -12,7 +15,7 @@ data class EntityConfiguration(
         var description: String = "",
 
         var attributes: MutableMap<String, AttributeConfiguration> = mutableMapOf()
-) {
+) : EnticingConfigurationUnit {
 
     internal lateinit var metadataConfiguration: MetadataConfiguration
 
@@ -28,6 +31,10 @@ data class EntityConfiguration(
             for (name in names)
                 attribute(name)
         }
+    }
+
+    override fun accept(visitor: EnticingConfigurationVisitor) {
+        visitor.visitEntityConfiguration(this)
     }
 }
 

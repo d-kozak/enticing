@@ -1,5 +1,8 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata
 
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.EnticingConfigurationUnit
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.visitor.EnticingConfigurationVisitor
+
 /**
  * Configuration of metadata
  * usable both for individual index servers or whole corpuses
@@ -16,7 +19,7 @@ data class MetadataConfiguration(
          * The index based on which the length of entity is determined(how many words it consists of)
          */
         var lengthIndex: String = "nerlength"
-) {
+) : EnticingConfigurationUnit {
 
     /**
      * Indexes of mg4j indexes that are used for entity attributes, left inclusive, right exclusive TODO change client code appropriately
@@ -40,6 +43,10 @@ data class MetadataConfiguration(
         for (entityConfiguration in entityList.entities) {
             entities[entityConfiguration.name] = entityConfiguration
         }
+    }
+
+    override fun accept(visitor: EnticingConfigurationVisitor) {
+        visitor.visitMetadataConfiguration(this)
     }
 }
 

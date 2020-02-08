@@ -1,5 +1,7 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig
 
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.visitor.EnticingConfigurationVisitor
+
 /**
  * Configuration of the manager service
  */
@@ -12,6 +14,10 @@ data class ManagementServiceConfiguration(
 ) : ComponentConfiguration {
     fun hearthBeat(block: HearthBeatConfiguration.() -> Unit) {
         hearthBeatConfiguration = HearthBeatConfiguration(true).apply(block)
+    }
+
+    override fun accept(visitor: EnticingConfigurationVisitor) {
+        visitor.visitManagementConfiguration(this)
     }
 }
 

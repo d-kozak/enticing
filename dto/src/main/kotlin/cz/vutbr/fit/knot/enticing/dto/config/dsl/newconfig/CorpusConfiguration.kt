@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.visitor.EnticingConfigurationVisitor
 import java.io.File
 
 /**
@@ -28,10 +29,13 @@ data class CorpusConfiguration(
         /**
          * Directory containing metadata for files in mg4jDir
          */
-        var indexedDir: String? = null) {
+        var indexedDir: String? = null) : EnticingConfigurationUnit {
+
+
+    lateinit var errorCatcher: (() -> Unit) -> Unit
 
     fun indexServers(block: IndexServerList.() -> Unit) {
-        indexServers = IndexServerList(this).apply(block).indexList
+        indexServers = IndexServerList(this, errorCatcher).apply(block).indexList
     }
 
     fun serverFile(path: String) {
@@ -48,12 +52,23 @@ data class CorpusConfiguration(
         metadataConfiguration = MetadataConfiguration().apply(block)
     }
 
+    override fun accept(visitor: EnticingConfigurationVisitor) {
+        visitor.visitCorpusConfiguration(this)
+    }
 }
 
 
-data class CorpusListDsl(val corpusList: MutableList<CorpusConfiguration> = mutableListOf()) {
+data class CorpusList(val errorCatcher: (() -> Unit) -> Unit) {
+
+    val corpusList: MutableList<CorpusConfiguration> = mutableListOf()
 
     fun corpus(name: String, block: CorpusConfiguration.() -> Unit) {
-        corpusList.add(CorpusConfiguration(name).apply(block))
+        errorCatcher {
+            corpusList.add(CorpusConfiguration(name)
+                    .also {
+                        it.errorCatcher = errorCatcher
+                    }
+                    .apply(block))
+        }
     }
 }

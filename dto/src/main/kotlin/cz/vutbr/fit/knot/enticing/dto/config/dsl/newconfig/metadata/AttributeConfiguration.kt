@@ -1,5 +1,8 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata
 
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.EnticingConfigurationUnit
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.visitor.EnticingConfigurationVisitor
+
 data class AttributeConfiguration(
         /**
          * name of the index
@@ -10,11 +13,15 @@ data class AttributeConfiguration(
          * details about that index
          */
         var description: String = ""
-) {
+) : EnticingConfigurationUnit {
     /**
      * corresponding index
      */
     lateinit var index: IndexConfiguration
+
+    override fun accept(visitor: EnticingConfigurationVisitor) {
+        visitor.visitAttributeConfiguration(this)
+    }
 }
 
 class AttributeList(var metadataConfiguration: MetadataConfiguration, val attributes: MutableList<AttributeConfiguration> = mutableListOf()) {
@@ -24,7 +31,7 @@ class AttributeList(var metadataConfiguration: MetadataConfiguration, val attrib
     init {
         var values = metadataConfiguration.indexes.values.asSequence()
         if (metadataConfiguration.attributeIndexes.first > 0)
-            values = values.drop(metadataConfiguration.attributeIndexes.first - 1)
+            values = values.drop(metadataConfiguration.attributeIndexes.first)
         indexIterator = values.take(metadataConfiguration.attributeLimit)
                 .iterator()
     }
