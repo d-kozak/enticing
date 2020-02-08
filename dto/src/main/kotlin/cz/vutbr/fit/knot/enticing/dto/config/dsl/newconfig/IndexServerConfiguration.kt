@@ -11,7 +11,7 @@ data class IndexServerConfiguration(
         /**
          * metadata configuration for this server
          */
-        var metadata: MetadataConfiguration? = null,
+        var metadataConfiguration: MetadataConfiguration? = null,
 
         /**
          * Directory with mg4j files that should be maintained by this server
@@ -32,6 +32,10 @@ data class IndexServerConfiguration(
 
     override fun accept(visitor: EnticingConfigurationVisitor) {
         visitor.visitIndexServerConfiguration(this)
+    }
+
+    fun metadata(block: MetadataConfiguration.() -> Unit) {
+        metadataConfiguration = MetadataConfiguration().apply(block)
     }
 }
 

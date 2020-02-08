@@ -62,7 +62,7 @@ class PrettyPrintingVisitor : EnticingConfigurationVisitor {
             appendProperty("address", configuration.address)
             appendProperty("mg4jDir", configuration.mg4jDir)
             appendProperty("indexedDir", configuration.indexedDir)
-            configuration.metadata?.accept(this)
+            configuration.metadataConfiguration?.accept(this)
         }
     }
 
