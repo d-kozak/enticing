@@ -35,8 +35,8 @@ class EnticingConfigurationValidatorTest {
 
                                 extraAttributes("position")
 
-                                entityIndex = "nertag"
-                                lengthIndex = "nerlength"
+                                entityIndexName = "nertag"
+                                lengthIndexName = "nerlength"
                             }
                         }
                     }

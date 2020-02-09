@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.analysis
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
+
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.eql.compiler.analysis.check.*
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.EqlAstNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.RootNode
@@ -21,7 +22,7 @@ val DEFAULT_CHECKS: List<EqlAstCheck<*>> = listOf(
 )
 
 
-class SemanticAnalyzer(private val config: CorpusConfiguration, checks: List<EqlAstCheck<*>> = DEFAULT_CHECKS) {
+class SemanticAnalyzer(private val config: MetadataConfiguration, checks: List<EqlAstCheck<*>> = DEFAULT_CHECKS) {
 
     private val checksByType = checks.groupBy { it.clazz }
 

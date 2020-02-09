@@ -1,9 +1,10 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.analysis
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.*
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.metadataConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.validateOrFail
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
-import cz.vutbr.fit.knot.enticing.dto.toCorpusConfig
 import cz.vutbr.fit.knot.enticing.dto.toCorpusFormat
+import cz.vutbr.fit.knot.enticing.dto.toMetadataConfiguration
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.eql.compiler.forEachQuery
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.CompilerError
@@ -12,7 +13,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal val config = corpusConfig("CC") {
+internal val config = metadataConfiguration {
     indexes {
         "position" whichIs "Position of the word in the document"
         "token" whichIs "Original word in the document"
@@ -29,11 +30,10 @@ internal val config = corpusConfig("CC") {
         "lower" whichIs "lower"
         "nerid" whichIs "nerid"
         "nertag" whichIs "nertag"
-        params(9)
+        attributeIndexes(10)
         "nertype" whichIs "nertype"
         "nerlength" whichIs "nerlength"
     }
-
     entities {
         "person" with attributes("url", "image", "name", "gender", "birthplace", "birthdate", "deathplace", "deathdate", "profession", "nationality")
 
@@ -67,18 +67,12 @@ internal val config = corpusConfig("CC") {
 
         "genre" with attributes("url", "image", "name")
 
-    }
-    entityMapping {
-        entityIndex = "nertag"
-        attributeIndexes = 15 to 24
         extraAttributes("nertype", "nerlength")
     }
 }.also {
-    val errors = mutableListOf<String>()
-    it.validate(errors)
-    assertThat(errors).isEmpty()
-}.toCorpusFormat() // "double transform it to ensure all important data is still there"
-        .toCorpusConfig()
+    it.validateOrFail()
+}.toCorpusFormat()
+        .toMetadataConfiguration() // "double transform" it to ensure all important data is still there
 
 fun assertHasError(errors: List<CompilerError>, id: String, count: Int = 1, location: Interval? = null) {
     assertThat(errors).hasSize(count)

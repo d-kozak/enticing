@@ -3,6 +3,8 @@ package cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.EnticingConfigurationUnit
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.visitor.EnticingConfigurationVisitor
 
+fun metadataConfiguration(block: MetadataConfiguration.() -> Unit) = MetadataConfiguration().apply(block)
+
 /**
  * Configuration of metadata
  * usable both for individual index servers or whole corpuses
@@ -13,13 +15,19 @@ data class MetadataConfiguration(
         /**
          * The index based on which the type of entity is determined
          */
-        var entityIndex: String = "nertag",
+        var entityIndexName: String = "nertag",
 
         /**
          * The index based on which the length of entity is determined(how many words it consists of)
          */
-        var lengthIndex: String = "nerlength"
+        var lengthIndexName: String = "nerlength"
 ) : EnticingConfigurationUnit {
+
+    val entityIndex: IndexConfiguration?
+        get() = indexes[entityIndexName]
+
+    val lengthIndex: IndexConfiguration?
+        get() = indexes[lengthIndexName]
 
     /**
      * Indexes of mg4j indexes that are used for entity attributes, left inclusive, right exclusive TODO change client code appropriately
@@ -27,6 +35,9 @@ data class MetadataConfiguration(
      * currently those are url to param9
      */
     internal var attributeIndexes: IntRange = IntRange.EMPTY
+
+    val firstAttributeIndex: Int?
+        get() = if (attributeIndexes.isEmpty()) null else attributeIndexes.first
 
     val attributeLimit: Int
         get() = attributeIndexes.last - attributeIndexes.first + 1
@@ -48,5 +59,7 @@ data class MetadataConfiguration(
     override fun accept(visitor: EnticingConfigurationVisitor) {
         visitor.visitMetadataConfiguration(this)
     }
+
+    fun indexOf(name: String): Int = indexes.getValue(name).columnIndex
 }
 

@@ -5,7 +5,7 @@ import cz.vutbr.fit.knot.enticing.dto.Offset
 import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.SnippetExtension
 import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.format.result.emptySnippet
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
@@ -25,7 +25,7 @@ class CollectionManager internal constructor(
         private val postProcessor: PostProcessor,
         private val resultCreator: ResultCreator,
         private val eqlCompiler: EqlCompiler,
-        private val corpusConfiguration: CorpusConfiguration
+        private val metadataConfiguration: MetadataConfiguration
 ) {
 
     private val log = LoggerFactory.getLogger(CollectionManager::class.java)
@@ -35,7 +35,7 @@ class CollectionManager internal constructor(
         val (documentOffset, resultOffset) = offset
 
         val ast = if (query.eqlAst == null) {
-            query.eqlAst = eqlCompiler.parseOrFail(query.query, corpusConfiguration)
+            query.eqlAst = eqlCompiler.parseOrFail(query.query, metadataConfiguration)
             query.eqlAst!!
         } else query.eqlAst!!
 
@@ -45,7 +45,7 @@ class CollectionManager internal constructor(
         for ((i, result) in resultList.withIndex()) {
             val document = searchEngine.loadDocument(result.documentId)
             check(document.id == result.documentId) { "Invalid document id set in the search engine: ${result.documentId} vs ${document.id}" }
-            val matchInfo = postProcessor.process(ast.deepCopy(), document, query.defaultIndex, corpusConfiguration, result.intervals)
+            val matchInfo = postProcessor.process(ast.deepCopy(), document, query.defaultIndex, metadataConfiguration, result.intervals)
                     ?: continue
             val (results, hasMore) = resultCreator.multipleResults(document, matchInfo, query, if (document.id == documentOffset) resultOffset else 0, query.snippetCount, query.resultFormat)
             val searchResults = results.map {
@@ -87,8 +87,8 @@ class CollectionManager internal constructor(
     fun getDocument(query: IndexServer.DocumentQuery): IndexServer.FullDocument {
         val document = searchEngine.loadDocument(query.documentId)
         val matchInfo = if (query.query != null) {
-            val ast = eqlCompiler.parseOrFail(query.query!!, corpusConfiguration)
-            postProcessor.process(ast, document, query.defaultIndex, corpusConfiguration) ?: MatchInfo.empty()
+            val ast = eqlCompiler.parseOrFail(query.query!!, metadataConfiguration)
+            postProcessor.process(ast, document, query.defaultIndex, metadataConfiguration) ?: MatchInfo.empty()
         } else MatchInfo.empty()
 
         val offset = query.offset

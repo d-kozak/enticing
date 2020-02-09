@@ -22,6 +22,10 @@ data class IndexServerConfiguration(
          * Directory containing metadata for files in mg4jDir
          */
         var indexedDir: String? = null,
+        /**
+         * used to identify mg4j indexed files
+         */
+        var name: String? = null,
         override var address: String? = null
 ) : ComponentConfiguration {
 

@@ -4,7 +4,8 @@ import cz.vutbr.fit.knot.enticing.dto.Offset
 import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.TextFormat
 import cz.vutbr.fit.knot.enticing.dto.TextMetadata
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.*
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.metadataConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.validateOrFail
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.format.text.*
 import cz.vutbr.fit.knot.enticing.dto.format.text.Annotation
@@ -28,42 +29,38 @@ internal class ResultFormatCreatorTest {
             TextFormat.STRING_WITH_METADATA
     )
 
-    private val noMetadataConfig = corpusConfig("empty") {
+    private val noMetadataConfig = metadataConfiguration {
         indexes {
             index("token")
         }
-    }.also { it.validate() }
+    }.also { it.validateOrFail() }
 
     private val noMetadataDocument = testDocument(3, "one two three")
 
-    private val simpleStructureConfig = corpusConfig("simple") {
+    private val simpleStructureConfig = metadataConfiguration {
         indexes {
             index("token")
             index("lemma")
             index("url")
         }
-    }.also { it.validate() }
+    }.also { it.validateOrFail() }
 
     private val simpleStructureDocument = testDocument(3, "one two three", "1 2 3", "google.com yahoo.com localhost")
 
-    private val withEntitiesConfig = corpusConfig("simple") {
+    private val withEntitiesConfig = metadataConfiguration {
         indexes {
             index("token")
             index("lemma")
             index("url")
             index("nertag")
-            index("param")
+            attributeIndexes(1)
             index("len")
         }
         entities {
             "person" with attributes("name")
         }
-        entityMapping {
-            entityIndex = "nertag"
-            lengthIndex = "len"
-            attributeIndexes = 4 to 4
-        }
-    }.also { it.validate() }
+        lengthIndexName = "len"
+    }.also { it.validateOrFail() }
 
     private val withEntitiesDocument = testDocument(5, "one two three harry potter", "1 2 3 3 3", "google.com yahoo.com localhost localhost localhost", "0 0 0 person 0", "0 0 0 harry 0", "0 0 0 2 0")
 

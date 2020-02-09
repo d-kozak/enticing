@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.analysis.check
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.SymbolTable
 import cz.vutbr.fit.knot.enticing.eql.compiler.analysis.EqlAstCheck
@@ -10,7 +10,7 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.ast.QueryElemNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.ReferenceNode
 
 class NestedRefCheck(id: String) : EqlAstCheck<ReferenceNode.NestedReferenceNode>(id, ReferenceNode.NestedReferenceNode::class) {
-    override fun analyze(node: ReferenceNode.NestedReferenceNode, symbolTable: SymbolTable, corpusConfiguration: CorpusConfiguration, reporter: Reporter) {
+    override fun analyze(node: ReferenceNode.NestedReferenceNode, symbolTable: SymbolTable, metadataConfiguration: MetadataConfiguration, reporter: Reporter) {
         val idLocation = Interval.valueOf(node.location.from, node.location.from + node.identifier.length - 1)
         val attrLocation = Interval.valueOf(node.location.from + node.identifier.length + 1, node.location.to)
         val source = symbolTable[node.identifier]
@@ -23,9 +23,9 @@ class NestedRefCheck(id: String) : EqlAstCheck<ReferenceNode.NestedReferenceNode
              *
              * overlapping is also possible -> "person.name:york | nertag:location"
              */
-            val entities = collectAllEntities(source.elem, corpusConfiguration)
+            val entities = collectAllEntities(source.elem, metadataConfiguration)
             if (entities != null) {
-                val validEntities = entities.mapNotNull { corpusConfiguration.entities[it] }.toSet()
+                val validEntities = entities.mapNotNull { metadataConfiguration.entities[it] }.toSet()
                 if (!validEntities.all { node.attribute in it.attributes }) {
                     val all = validEntities.map { it.name }
                     val missingIn = validEntities.filter { node.attribute !in it.attributes }
@@ -43,15 +43,15 @@ class NestedRefCheck(id: String) : EqlAstCheck<ReferenceNode.NestedReferenceNode
         }
     }
 
-    fun collectAllEntities(root: QueryElemNode, corpusConfiguration: CorpusConfiguration): Set<String>? {
+    fun collectAllEntities(root: QueryElemNode, metadataConfiguration: MetadataConfiguration): Set<String>? {
         val nodes = mutableSetOf<String>()
         fun collect(node: QueryElemNode): Boolean = when (node) {
             is QueryElemNode.SimpleNode -> {
                 nodes.add(node.content)
                 true
             }
-            is QueryElemNode.IndexNode -> if (node.index == corpusConfiguration.entityMapping.entityIndex) collect(node.elem) else false
-            is QueryElemNode.AttributeNode -> if (node.entity in corpusConfiguration.entities && node.attribute in corpusConfiguration.entities.getValue(node.entity).attributes) {
+            is QueryElemNode.IndexNode -> if (node.index == metadataConfiguration.entityIndexName) collect(node.elem) else false
+            is QueryElemNode.AttributeNode -> if (node.entity in metadataConfiguration.entities && node.attribute in metadataConfiguration.entities.getValue(node.entity).attributes) {
                 nodes.add(node.entity)
             } else false
             is QueryElemNode.ParenNode -> if (node.query.query.size == 1) collect(node.query.query[0]) else false

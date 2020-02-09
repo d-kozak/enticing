@@ -1,11 +1,11 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager.format.text
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 
-class HtmlGeneratingVisitor(config: CorpusConfiguration, defaultIndexName: String, interval: Interval, document: IndexedDocument) : TextFormatGeneratingVisitor(config, defaultIndexName, interval, document) {
+class HtmlGeneratingVisitor(config: MetadataConfiguration, defaultIndexName: String, interval: Interval, document: IndexedDocument) : TextFormatGeneratingVisitor(config, defaultIndexName, interval, document) {
 
     private val builder = StringBuilder()
 

@@ -1,6 +1,5 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.parser
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.corpusConfig
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import org.assertj.core.api.Assertions.assertThat
 

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.io.File
 
-val testDocumentFactory = Mg4jDocumentFactory(testConfiguration.corpusConfiguration)
+val testDocumentFactory = Mg4jDocumentFactory(fullTestMetadataConfig)
 
 internal class Mg4jSingleFileDocumentCollectionTest {
 

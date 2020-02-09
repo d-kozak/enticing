@@ -19,6 +19,8 @@ data class AttributeConfiguration(
      */
     lateinit var index: IndexConfiguration
 
+    var attributeIndex: Int = 0
+
     override fun accept(visitor: EnticingConfigurationVisitor) {
         visitor.visitAttributeConfiguration(this)
     }
@@ -39,7 +41,10 @@ class AttributeList(var metadataConfiguration: MetadataConfiguration, val attrib
     fun attribute(name: String, block: AttributeConfiguration.() -> Unit = {}) {
         check(indexIterator.hasNext()) { "too many attributes in $name, limit is ${metadataConfiguration.attributeLimit}" }
         val newAttribute = AttributeConfiguration(name).apply(block)
-                .also { it.index = indexIterator.next() }
+                .also {
+                    it.index = indexIterator.next()
+                    it.attributeIndex = attributes.size
+                }
         attributes.add(newAttribute)
     }
 

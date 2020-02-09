@@ -68,8 +68,8 @@ class PrettyPrintingVisitor : EnticingConfigurationVisitor {
 
     override fun visitMetadataConfiguration(configuration: MetadataConfiguration) {
         withIndent("metadata") {
-            appendProperty("entityIndex", configuration.entityIndex)
-            appendProperty("lengthIndex", configuration.lengthIndex)
+            appendProperty("entityIndex", configuration.entityIndexName)
+            appendProperty("lengthIndex", configuration.lengthIndexName)
             if (configuration.indexes.isNotEmpty())
                 withIndent("indexes") {
                     for (index in configuration.indexes.values)

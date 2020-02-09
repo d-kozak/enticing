@@ -3,8 +3,8 @@ package cz.vutbr.fit.knot.enticing.index.mg4j
 import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.annotation.Speed
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.Index
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.IndexConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
 import it.unimi.di.big.mg4j.document.AbstractDocumentFactory
 import it.unimi.di.big.mg4j.document.DocumentFactory
 import it.unimi.dsi.fastutil.bytes.ByteArrays
@@ -15,12 +15,12 @@ import java.io.InputStream
 
 private val log = LoggerFactory.getLogger(Mg4jDocumentFactory::class.java)
 
-class Mg4jDocumentFactory(private val corpusConfiguration: CorpusConfiguration) : AbstractDocumentFactory() {
+class Mg4jDocumentFactory(private val metadataConfiguration: MetadataConfiguration) : AbstractDocumentFactory() {
 
     internal data class EntityReplicationInfo(val elems: List<String>, val entityType: String, val lineCount: Int)
 
-    private val indexes: List<Index>
-        get() = corpusConfiguration.indexes.values.toList()
+    private val indexes: List<IndexConfiguration>
+        get() = metadataConfiguration.indexes.values.toList()
 
     override fun numberOfFields(): Int = indexes.size
 
@@ -29,9 +29,9 @@ class Mg4jDocumentFactory(private val corpusConfiguration: CorpusConfiguration) 
     override fun fieldIndex(fieldName: String): Int = indexes.find { it.name == fieldName }?.columnIndex
             ?: throw IllegalArgumentException("Unknown field $fieldName")
 
-    override fun fieldType(field: Int): DocumentFactory.FieldType = indexes[field].type.mg4jType
+    override fun fieldType(field: Int): DocumentFactory.FieldType = DocumentFactory.FieldType.TEXT
 
-    override fun copy() = Mg4jDocumentFactory(corpusConfiguration)
+    override fun copy() = Mg4jDocumentFactory(metadataConfiguration)
 
     override fun getDocument(rawContent: InputStream, metadata: Reference2ObjectMap<Enum<*>, Any>): Mg4jDocument {
         val stream = (rawContent as FastBufferedInputStream).bufferedReader()
@@ -57,19 +57,19 @@ class Mg4jDocumentFactory(private val corpusConfiguration: CorpusConfiguration) 
                     lineIndex++
                 }
                 !line.isMetaInfo() -> {
-                    val (parseSuccess, replicationInfo) = processLine(line, fields, lineIndex, corpusConfiguration)
+                    val (parseSuccess, replicationInfo) = processLine(line, fields, lineIndex, metadataConfiguration)
                     if (!parseSuccess) invalidLines.add(lineIndex)
                     if (parseSuccess && replicationInfo != null) {
                         val lastParsedLineIndex = fields[0].size - 1
                         for (i in lastParsedLineIndex - (replicationInfo.lineCount - 1) until lastParsedLineIndex) {
                             for ((j, elem) in replicationInfo.elems.withIndex()) {
-                                fields[corpusConfiguration.firstAttributeIndex!! + j][i] = elem
+                                fields[metadataConfiguration.firstAttributeIndex!! + j][i] = elem
                             }
-                            fields[corpusConfiguration.entityIndex!!][i] = replicationInfo.entityType
-                            fields[corpusConfiguration.entityLengthIndex!!][i] = "-1"  // hardwired constant to signal that this entity is replicated
+                            fields[metadataConfiguration.entityIndex!!.columnIndex][i] = replicationInfo.entityType
+                            fields[metadataConfiguration.lengthIndex!!.columnIndex][i] = "-1"  // hardwired constant to signal that this entity is replicated
                         }
-                        fields[corpusConfiguration.entityLengthIndex!!][lastParsedLineIndex - (replicationInfo.lineCount - 1)] = replicationInfo.lineCount.toString()
-                        fields[corpusConfiguration.entityIndex!!][lastParsedLineIndex - (replicationInfo.lineCount - 1)] = replicationInfo.entityType
+                        fields[metadataConfiguration.lengthIndex!!.columnIndex][lastParsedLineIndex - (replicationInfo.lineCount - 1)] = replicationInfo.lineCount.toString()
+                        fields[metadataConfiguration.entityIndex!!.columnIndex][lastParsedLineIndex - (replicationInfo.lineCount - 1)] = replicationInfo.entityType
                     }
                     lineIndex++
                 }
@@ -80,12 +80,12 @@ class Mg4jDocumentFactory(private val corpusConfiguration: CorpusConfiguration) 
         if (invalidLines.isNotEmpty())
             log.warn("Document ${metadata[DocumentMetadata.ID]}:${metadata[DocumentMetadata.TITLE]} has invalid lines: $invalidLines, they were skipped")
         metadata[DocumentMetadata.SIZE] = lineIndex
-        return Mg4jDocument(corpusConfiguration, metadata, fields)
+        return Mg4jDocument(metadataConfiguration, metadata, fields)
     }
 
     @Incomplete("'token' is hardwired here")
     private fun addSpecialToken(tokenValue: String, fields: List<MutableList<String>>, lineIndex: Int) {
-        val tokenIndex = corpusConfiguration.indexes.getValue("token").columnIndex
+        val tokenIndex = metadataConfiguration.indexes.getValue("token").columnIndex
         for ((i, list) in fields.withIndex()) {
             list.add(if (i == tokenIndex) tokenValue else "0")
         }
@@ -97,15 +97,16 @@ private val whitespaceRegex = """\s""".toRegex()
 
 @Speed("rewrite using MutableStrings and whitespace readers?")
 @Cleanup("Should be refactored, it is smelly")
-internal fun processLine(line: String, fields: List<MutableList<String>>, lineIndex: Int, corpusConfiguration: CorpusConfiguration): Pair<Boolean, Mg4jDocumentFactory.EntityReplicationInfo?> {
+internal fun processLine(line: String, fields: List<MutableList<String>>, lineIndex: Int, metadataConfiguration: MetadataConfiguration): Pair<Boolean, Mg4jDocumentFactory.EntityReplicationInfo?> {
     val cells = line.split(whitespaceRegex)
-    val indexCount = corpusConfiguration.indexes.size
-    val entityLenIndex = corpusConfiguration.entityLengthIndex
-    val tokenIndex = corpusConfiguration.indexes.getValue("token").columnIndex
-    val firstEntityIndex = corpusConfiguration.firstAttributeIndex
-    val nertagIndex = corpusConfiguration.entityIndex
+    val indexCount = metadataConfiguration.indexes.size
+    val entityLenIndex = metadataConfiguration.lengthIndex?.columnIndex ?: -1
+    val tokenIndex = metadataConfiguration.indexes.getValue("token").columnIndex
+    val firstEntityIndex = metadataConfiguration.firstAttributeIndex
+    val nertagIndex = metadataConfiguration.entityIndex
 
-    val glueIndex = corpusConfiguration.glueIndex
+    // todo fix glue index
+    val glueIndex = -1
 
     //             + 1 because the glue index is hidden inside the token index
     if (cells.size + 1 != indexCount || cells[tokenIndex].isBlank() || cells[tokenIndex] == glueSymbol1 || cells[tokenIndex] == glueSymbol2) {
@@ -141,7 +142,7 @@ internal fun processLine(line: String, fields: List<MutableList<String>>, lineIn
         if (i == entityLenIndex && firstEntityIndex != null && nertagIndex != null) {
             val nerlen = elem.toIntOrNull() ?: 0
             if (nerlen != 0) {
-                replicationInfo = Mg4jDocumentFactory.EntityReplicationInfo(cells.subList(firstEntityIndex, indexCount - 1), cells[nertagIndex], nerlen)
+                replicationInfo = Mg4jDocumentFactory.EntityReplicationInfo(cells.subList(firstEntityIndex, indexCount - 1), cells[nertagIndex.columnIndex], nerlen)
                 currentIndexWords.add("-1")
             } else {
                 currentIndexWords.add(elem)

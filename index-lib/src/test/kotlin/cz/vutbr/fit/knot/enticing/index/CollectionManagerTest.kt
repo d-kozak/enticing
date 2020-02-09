@@ -4,7 +4,7 @@ import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.annotation.Warning
 import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.*
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.metadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.format.text.StringWithMetadata
 import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnit
@@ -13,12 +13,13 @@ import cz.vutbr.fit.knot.enticing.dto.utils.toDto
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompilerException
 import cz.vutbr.fit.knot.enticing.index.collection.manager.computeExtensionIntervals
+import cz.vutbr.fit.knot.enticing.index.mg4j.CollectionManagerConfiguration
 import cz.vutbr.fit.knot.enticing.index.mg4j.initMg4jCollectionManager
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.*
 import java.io.File
 
-val corpusConfig = corpusConfig("CC") {
+val metadataConfiguration = metadataConfiguration {
     indexes {
         "position" whichIs "Position of the word in the document"
         "token" whichIs "Original word in the document"
@@ -35,10 +36,10 @@ val corpusConfig = corpusConfig("CC") {
         "lower" whichIs "lower"
         "nerid" whichIs "nerid"
         "nertag" whichIs "nertag"
-        params(9)
+        attributeIndexes(10)
         "nertype" whichIs "nertype"
         "nerlength" whichIs "nerlength"
-        "_glue" whichIs "glue"
+//        "_glue" whichIs "glue" todo glue
     }
 
     entities {
@@ -75,30 +76,24 @@ val corpusConfig = corpusConfig("CC") {
 
         "genre" with attributes("url", "image", "name")
 
-    }
-    entityMapping {
-        entityIndex = "nertag"
-        attributeIndexes = 15 to 24
         extraAttributes("nertype", "nerlength")
     }
 }
 
-val builderConfig = indexBuilder {
-    inputDirectory("../data/mg4j")
-    outputDirectory("../data/indexed")
-    corpusConfiguration = corpusConfig
+val builderConfig = IndexBuilderConfig(
+        "CC",
+        metadataConfiguration,
+        File("../data/mg4j"),
+        File("../data/indexed")
+)
 
-}
 
-val clientConfig = indexClient {
-    collections {
-        collection("one") {
-            mg4jDirectory("../data/mg4j")
-            indexDirectory("../data/indexed")
-        }
-    }
-    corpusConfiguration = corpusConfig
-}
+val collectionManagerConfiguration = CollectionManagerConfiguration(
+        "CC",
+        File("../data/indexed"),
+        File("../data/mg4j"),
+        metadataConfiguration
+)
 
 @Incomplete("more complete test suite needed")
 class CollectionManagerTest {
@@ -118,8 +113,8 @@ class CollectionManagerTest {
         @JvmStatic
         internal fun beforeAll() {
             // it is necessary to validate the configuration, because some initialization happens at that phase
-            builderConfig.validate()
-            clientConfig.validate()
+//            builderConfig.validate() todo fix
+//            clientConfig.validate()
             startIndexing(builderConfig)
         }
 
@@ -127,7 +122,7 @@ class CollectionManagerTest {
 
     @Test
     fun `valid queries with all text formats`() {
-        val queryEngine = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
+        val queryEngine = initMg4jCollectionManager(collectionManagerConfiguration)
         for (textFormat in TextFormat.values()) {
             for (input in listOf(
                     "hello",
@@ -137,7 +132,7 @@ class CollectionManagerTest {
                     "job work"
             )) {
                 val query = templateQuery.copy(query = input, textFormat = textFormat)
-                query.eqlAst = EqlCompiler().parseOrFail(input, clientConfig.corpusConfiguration)
+                query.eqlAst = EqlCompiler().parseOrFail(input, collectionManagerConfiguration.metadataConfiguration)
                 val result = queryEngine.query(query)
             }
         }
@@ -146,7 +141,7 @@ class CollectionManagerTest {
     @Test
     @Disabled
     fun allQueries() {
-        val queryEngine = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
+        val queryEngine = initMg4jCollectionManager(collectionManagerConfiguration)
         val compiler = EqlCompiler()
         val badQueries = mutableListOf<String>()
         for (line in File("../eql-compiler/src/test/resources/semantic_ok.eql").readLines()) {
@@ -154,7 +149,7 @@ class CollectionManagerTest {
             println("query: $line")
             try {
                 val query = templateQuery.copy(line)
-                val (ast, errors) = compiler.parseAndAnalyzeQuery(line, clientConfig.corpusConfiguration)
+                val (ast, errors) = compiler.parseAndAnalyzeQuery(line, collectionManagerConfiguration.metadataConfiguration)
                 assertThat(errors).isEmpty()
                 query.eqlAst = ast
                 val result = queryEngine.query(query)
@@ -172,21 +167,20 @@ class CollectionManagerTest {
     }
 
 
-
     @Test
     fun exampleQuery() {
-        val queryEngine = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
+        val queryEngine = initMg4jCollectionManager(collectionManagerConfiguration)
         val input = "nertag:person (killed|visited)"
         val query = templateQuery.copy(query = input, textFormat = TextFormat.TEXT_UNIT_LIST)
-        query.eqlAst = EqlCompiler().parseOrFail(input, clientConfig.corpusConfiguration)
+        query.eqlAst = EqlCompiler().parseOrFail(input, collectionManagerConfiguration.metadataConfiguration)
         val result = queryEngine.query(query)
     }
 
 
     private fun <T : ResultFormat> check(query: SearchQuery, resultFormatClass: Class<T>, check: (T) -> Unit) {
-        val queryEngine = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
+        val queryEngine = initMg4jCollectionManager(collectionManagerConfiguration)
         val updatedQuery = if (query.query.isEmpty()) query.copy(query = "nertag:person (killed|visited)") else query
-        updatedQuery.eqlAst = EqlCompiler().parseOrFail(updatedQuery.query, clientConfig.corpusConfiguration)
+        updatedQuery.eqlAst = EqlCompiler().parseOrFail(updatedQuery.query, collectionManagerConfiguration.metadataConfiguration)
         for (result in queryEngine.query(updatedQuery).searchResults) {
             assertThat(result.payload).isInstanceOf(resultFormatClass)
             check(result.payload as T)
@@ -363,7 +357,7 @@ class CollectionManagerTest {
         @Test
         fun textUnitList() {
             fun checkWord(word: TextUnit.Word) {
-                assertThat(word.indexes[corpusConfig.indexes.getValue("token").columnIndex]).doesNotContain("§", "¶")
+                assertThat(word.indexes[metadataConfiguration.indexes.getValue("token").columnIndex]).doesNotContain("§", "¶")
             }
 
             fun checkEntity(entity: TextUnit.Entity) {
@@ -398,24 +392,24 @@ class CollectionManagerTest {
     fun problematicQuery() {
         val input = "job work"
         val query = SearchQuery(query = input, snippetCount = 33, offset = mapOf("one" to Offset(document = 0, snippet = 0)), metadata = TextMetadata.Predefined(value = "all"), resultFormat = cz.vutbr.fit.knot.enticing.dto.ResultFormat.SNIPPET, textFormat = TextFormat.TEXT_UNIT_LIST, defaultIndex = "token")
-        val queryEngine = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
-        query.eqlAst = EqlCompiler().parseOrFail(input, clientConfig.corpusConfiguration)
+        val queryEngine = initMg4jCollectionManager(collectionManagerConfiguration)
+        query.eqlAst = EqlCompiler().parseOrFail(input, collectionManagerConfiguration.metadataConfiguration)
         val result = queryEngine.query(query)
     }
 
     @Test
     fun `syntax error should be caught`() {
-        val queryEngine = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
+        val queryEngine = initMg4jCollectionManager(collectionManagerConfiguration)
         val input = "lemma:(work|)"
         val query = templateQuery.copy(query = input)
         assertThrows<EqlCompilerException> {
-            query.eqlAst = EqlCompiler().parseOrFail(input, clientConfig.corpusConfiguration)
+            query.eqlAst = EqlCompiler().parseOrFail(input, collectionManagerConfiguration.metadataConfiguration)
         }
     }
 
     @Test
     fun `document retrieval test`() {
-        val executor = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
+        val executor = initMg4jCollectionManager(collectionManagerConfiguration)
         for (i in 0..10) {
             val query = IndexServer.DocumentQuery("col1", i)
 
@@ -431,7 +425,7 @@ class CollectionManagerTest {
 
     @Test
     fun `context extension test`() {
-        val executor = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
+        val executor = initMg4jCollectionManager(collectionManagerConfiguration)
 
         val (prefix, suffix, _) = executor.extendSnippet(
                 IndexServer.ContextExtensionQuery("col1", 2, 5, 5, 10, textFormat = TextFormat.STRING_WITH_METADATA
@@ -446,7 +440,7 @@ class CollectionManagerTest {
     @Test
     fun `real context extension request`() {
         val query = """{"collection":"name","docId":56,"defaultIndex":"token","location":10,"size":50,"extension":20}""".toDto<IndexServer.ContextExtensionQuery>()
-        val executor = initMg4jCollectionManager(clientConfig.corpusConfiguration, clientConfig.collections[0])
+        val executor = initMg4jCollectionManager(collectionManagerConfiguration)
         val (prefix, suffix, _) = executor.extendSnippet(query)
 
     }

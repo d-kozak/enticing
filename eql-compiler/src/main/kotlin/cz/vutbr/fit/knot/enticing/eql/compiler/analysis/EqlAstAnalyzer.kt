@@ -1,9 +1,9 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.analysis
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.SymbolTable
-import cz.vutbr.fit.knot.enticing.eql.compiler.ast.*
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.EqlAstNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.CompilerError
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.SemanticError
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.Severity
@@ -11,8 +11,8 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.cast
 
 abstract class EqlAstCheck<AstNote : EqlAstNode>(val id: String, internal val clazz: KClass<AstNote>) {
-    internal fun doAnalyze(node: EqlAstNode, symbolTable: SymbolTable, reporter: Reporter, corpusConfiguration: CorpusConfiguration) = analyze(clazz.cast(node), symbolTable, corpusConfiguration, reporter)
-    abstract fun analyze(node: AstNote, symbolTable: SymbolTable, corpusConfiguration: CorpusConfiguration, reporter: Reporter)
+    internal fun doAnalyze(node: EqlAstNode, symbolTable: SymbolTable, reporter: Reporter, metadataConfiguration: MetadataConfiguration) = analyze(clazz.cast(node), symbolTable, metadataConfiguration, reporter)
+    abstract fun analyze(node: AstNote, symbolTable: SymbolTable, metadataConfiguration: MetadataConfiguration, reporter: Reporter)
 }
 
 interface Reporter {

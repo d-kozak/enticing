@@ -1,8 +1,8 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager.format.text
 
 import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.Index
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.IndexConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
@@ -24,16 +24,16 @@ interface DocumentVisitor {
  * Base class for visitors that generate [ResultFormat.Snippet] formats, provides some helper properties that the subclasses can use
  */
 abstract class TextFormatGeneratingVisitor(
-        protected val config: CorpusConfiguration,
+        protected val config: MetadataConfiguration,
         private val defaultIndexName: String,
         private val interval: Interval,
         private val document: IndexedDocument
 ) : DocumentVisitor {
     abstract fun build(): ResultFormat.Snippet
 
-    protected val defaultIndex: Index = config.indexes.getValue(defaultIndexName)
+    protected val defaultIndex: IndexConfiguration = config.indexes.getValue(defaultIndexName)
 
-    protected val metaIndexes: List<Index> = config.indexes.values.filter { it.name != defaultIndexName }
+    protected val metaIndexes: List<IndexConfiguration> = config.indexes.values.filter { it.name != defaultIndexName }
 
     protected val location = interval.from
 
@@ -47,7 +47,7 @@ abstract class TextFormatGeneratingVisitor(
  * Iterates over a document and informs the visitor about matched regions, entities and words encountered
  */
 @Cleanup("Maybe turn into a function OR move some of the function params to constructor?")
-class StructuredDocumentIterator(private val corpusConfiguration: CorpusConfiguration) {
+class StructuredDocumentIterator(private val corpusConfiguration: MetadataConfiguration) {
     private val log = LoggerFactory.getLogger(StructuredDocumentIterator::class.java)
 
     /**
@@ -57,7 +57,7 @@ class StructuredDocumentIterator(private val corpusConfiguration: CorpusConfigur
     fun iterateDocument(document: IndexedDocument, matchStarts: Map<Int, Interval>, matchEnds: Set<Int>, visitor: DocumentVisitor, interval: Interval? = null) {
         if (corpusConfiguration.entities.isNotEmpty()) {
             requireNotNull(corpusConfiguration.entityIndex) { "some entities are defined, entity index cannot be null" }
-            requireNotNull(corpusConfiguration.entityLengthIndex) { "some entities are defined, entity length index cannot be null" }
+            requireNotNull(corpusConfiguration.lengthIndex) { "some entities are defined, entity length index cannot be null" }
         }
 
 
@@ -76,17 +76,17 @@ class StructuredDocumentIterator(private val corpusConfiguration: CorpusConfigur
             }
 
             if (corpusConfiguration.entities.isNotEmpty()) {
-                val entityClass = word[corpusConfiguration.entityIndex!!]
+                val entityClass = word[corpusConfiguration.entityIndex!!.columnIndex]
                 if (entityClass != "0") {
-                    val len = word[corpusConfiguration.entityLengthIndex!!].toIntOrNull() ?: {
-                        log.warn("${document.title}:${document.id}:[$i]:could not parse entity length index ${word[corpusConfiguration.entityLengthIndex!!]}")
+                    val len = word[corpusConfiguration.lengthIndex!!.columnIndex].toIntOrNull() ?: {
+                        log.warn("${document.title}:${document.id}:[$i]:could not parse entity length index ${word[corpusConfiguration.lengthIndex!!.columnIndex]}")
                         1
                     }()
                     val isReplicated = len == -1
                     if (!isReplicated) {
                         val attributeInfo = corpusConfiguration.entities[entityClass]
                         startedEntity = if (attributeInfo != null) {
-                            val attributes = attributeInfo.attributes.values.map { it.columnIndex }.map { word[it] }
+                            val attributes = attributeInfo.attributes.values.map { it.index.columnIndex }.map { word[it] }
 
                             visitor.visitEntityStart(attributes, entityClass)
                             Triple(attributes, entityClass, i + len - 1)

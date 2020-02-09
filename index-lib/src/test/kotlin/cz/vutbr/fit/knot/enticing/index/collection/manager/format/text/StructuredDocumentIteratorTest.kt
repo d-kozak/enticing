@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager.format.text
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.*
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.metadataConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.validateOrFail
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.index.utils.testDocument
 import org.assertj.core.api.Assertions.assertThat
@@ -33,24 +34,19 @@ private class TestVisitor : DocumentVisitor {
 }
 
 internal class StructuredDocumentIteratorTest {
-    private val withEntities = corpusConfig("simple") {
+    private val withEntities = metadataConfiguration {
         indexes {
             index("token")
             index("pos")
             index("nertag")
-            index("param")
+            attributeIndexes(1)
             index("len")
         }
         entities {
             "person" with attributes("name")
         }
-        entityMapping {
-            entityIndex = "nertag"
-            lengthIndex = "len"
-
-            attributeIndexes = 3 to 3
-        }
-    }.also { it.validate() }
+        lengthIndexName = "len"
+    }.also { it.validateOrFail() }
 
 
     @Test

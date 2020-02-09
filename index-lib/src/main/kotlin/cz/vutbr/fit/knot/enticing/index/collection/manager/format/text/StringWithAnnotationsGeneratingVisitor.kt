@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager.format.text
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
+
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.format.text.*
 import cz.vutbr.fit.knot.enticing.dto.format.text.Annotation
@@ -8,7 +9,7 @@ import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import org.slf4j.LoggerFactory
 
-class StringWithAnnotationsGeneratingVisitor(config: CorpusConfiguration, defaultIndexName: String, interval: Interval, document: IndexedDocument) : TextFormatGeneratingVisitor(config, defaultIndexName, interval, document) {
+class StringWithAnnotationsGeneratingVisitor(config: MetadataConfiguration, defaultIndexName: String, interval: Interval, document: IndexedDocument) : TextFormatGeneratingVisitor(config, defaultIndexName, interval, document) {
 
     private val log = LoggerFactory.getLogger(StringWithAnnotationsGeneratingVisitor::class.java)
 
@@ -55,8 +56,8 @@ class StringWithAnnotationsGeneratingVisitor(config: CorpusConfiguration, defaul
                         .mapIndexed { i, attribute -> attribute.name to attributes!![i] }
                         .toMap()
                         .toMutableMap()
-                if (config.entityMapping.entityIndex !in annotationContent) {
-                    annotationContent[config.entityMapping.entityIndex] = entityClass!!
+                if (config.entityIndexName !in annotationContent) {
+                    annotationContent[config.entityIndexName] = entityClass!!
                 }
                 addAnnotation("e-${annotations.size}", annotationContent, entityStartPosition, builder.length - entityStartPosition)
             }

@@ -3,8 +3,8 @@ package cz.vutbr.fit.knot.enticing.index.collection.manager.format.result
 import cz.vutbr.fit.knot.enticing.dto.GeneralFormatInfo
 import cz.vutbr.fit.knot.enticing.dto.TextFormat
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.filterBy
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.filterBy
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.index.boundary.EqlMatch
@@ -15,7 +15,7 @@ import cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.*
 import java.lang.Math.min
 
 @Incomplete("not finished yet")
-class EqlResultCreator(private val corpusConfiguration: CorpusConfiguration) : ResultCreator {
+class EqlResultCreator(private val metadataConfiguration: MetadataConfiguration) : ResultCreator {
     override fun multipleResults(document: IndexedDocument, matchInfo: MatchInfo, formatInfo: GeneralFormatInfo, resultOffset: Int, resultCount: Int, resultFormat: cz.vutbr.fit.knot.enticing.dto.ResultFormat): Pair<List<ResultFormat>, Boolean> {
         return when (resultFormat) {
             cz.vutbr.fit.knot.enticing.dto.ResultFormat.SNIPPET -> {
@@ -35,7 +35,7 @@ class EqlResultCreator(private val corpusConfiguration: CorpusConfiguration) : R
 
     override fun singleResult(document: IndexedDocument, formatInfo: GeneralFormatInfo, eqlMatch: List<EqlMatch>, interval: Interval): ResultFormat.Snippet {
         val expanded = if (interval.size < 50) interval.expand(50, 0, document.size - 1) else interval
-        val filteredConfig = corpusConfiguration.filterBy(formatInfo.metadata, formatInfo.defaultIndex)
+        val filteredConfig = metadataConfiguration.filterBy(formatInfo.metadata, formatInfo.defaultIndex)
         val (matchStart, matchEnd) = eqlMatch.split()
 
         val visitor = when (formatInfo.textFormat) {
@@ -44,7 +44,7 @@ class EqlResultCreator(private val corpusConfiguration: CorpusConfiguration) : R
             TextFormat.STRING_WITH_METADATA -> StringWithAnnotationsGeneratingVisitor(filteredConfig, formatInfo.defaultIndex, expanded, document)
             TextFormat.TEXT_UNIT_LIST -> TextUnitListGeneratingVisitor(filteredConfig, formatInfo.defaultIndex, expanded, document)
         }
-        val iterator = StructuredDocumentIterator(corpusConfiguration)
+        val iterator = StructuredDocumentIterator(metadataConfiguration)
         iterator.iterateDocument(document, matchStart, matchEnd, visitor, expanded)
         return visitor.build()
     }

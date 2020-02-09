@@ -1,12 +1,12 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
 import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.CollectionConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.index.collection.manager.CollectionManager
 import cz.vutbr.fit.knot.enticing.index.collection.manager.format.result.EqlResultCreator
 import cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess.EqlPostProcessor
+import cz.vutbr.fit.knot.enticing.index.mg4jFiles
 import it.unimi.di.big.mg4j.index.Index
 import it.unimi.di.big.mg4j.index.TermProcessor
 import it.unimi.di.big.mg4j.query.IntervalSelector
@@ -17,25 +17,34 @@ import it.unimi.di.big.mg4j.search.DocumentIteratorBuilderVisitor
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.objects.Object2ReferenceLinkedOpenHashMap
 import it.unimi.dsi.fastutil.objects.Reference2DoubleOpenHashMap
+import java.io.File
 
-fun initMg4jCollectionManager(corpusConfiguration: CorpusConfiguration, collectionConfig: CollectionConfiguration): CollectionManager {
-    val collection = Mg4jCompositeDocumentCollection(corpusConfiguration, collectionConfig.mg4jFiles)
-    val engine = initMg4jQueryEngine(collectionConfig, corpusConfiguration)
+// todo refactor
+data class CollectionManagerConfiguration(
+        val corpusName: String,
+        val indexDir: File,
+        val mg4jDir: File,
+        val metadataConfiguration: MetadataConfiguration
+)
+
+fun initMg4jCollectionManager(configuration: CollectionManagerConfiguration): CollectionManager {
+    val collection = Mg4jCompositeDocumentCollection(configuration.metadataConfiguration, configuration.mg4jDir.mg4jFiles)
+    val engine = initMg4jQueryEngine(configuration)
 
     val mg4jSearchEngine = Mg4jSearchEngine(collection, engine)
-    return CollectionManager(collectionConfig.name, mg4jSearchEngine, EqlPostProcessor(), EqlResultCreator(corpusConfiguration), EqlCompiler(), corpusConfiguration)
+    return CollectionManager(configuration.corpusName, mg4jSearchEngine, EqlPostProcessor(), EqlResultCreator(configuration.metadataConfiguration), EqlCompiler(), configuration.metadataConfiguration)
 }
 
 @WhatIf("default index is hardwired to token internally, is it enough or should we provide a way to tweak this? maybe as an AST operation in EQL-compiler (to avoid expensive reinitialization of mg4j internals)?")
-internal fun initMg4jQueryEngine(collectionConfig: CollectionConfiguration, corpusConfiguration: CorpusConfiguration): QueryEngine {
-    val indexDir = collectionConfig.indexDirectory
+internal fun initMg4jQueryEngine(configuration: CollectionManagerConfiguration): QueryEngine {
+    val indexDir = configuration.indexDir
 
     val indexMap = Object2ReferenceLinkedOpenHashMap<String, Index>()
     val termProcessors = Object2ObjectOpenHashMap<String, TermProcessor>()
     val index2weight = Reference2DoubleOpenHashMap<Index>()
-    for (index in corpusConfiguration.indexes.values.toList()) {
-        if (index.isSynthetic) continue
-        val mg4jIndex = Index.getInstance(indexDir.resolve("${corpusConfiguration.corpusName}-${index.name}").path)
+    for (index in configuration.metadataConfiguration.indexes.values.toList()) {
+//        if (index.isSynthetic) continue todo glue index
+        val mg4jIndex = Index.getInstance(indexDir.resolve("${configuration.corpusName}-${index.name}").path)
         requireNotNull(mg4jIndex.field)
         indexMap[mg4jIndex.field] = mg4jIndex
         termProcessors[mg4jIndex.field] = mg4jIndex.termProcessor

@@ -3,7 +3,7 @@ package cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.annotation.Speed
 import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.*
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.EqlListener
@@ -29,17 +29,17 @@ internal fun dumpMatch(ast: EqlAstNode, match: Map<Long, List<Interval>>) {
  * http://vigna.di.unimi.it/ftp/papers/EfficientAlgorithmsMinimalIntervalSemantics.pdf
  */
 
-fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: String, corpusConfiguration: CorpusConfiguration, interval: Interval): MatchInfo {
+fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: String, metadataConfiguration: MetadataConfiguration, interval: Interval): MatchInfo {
     log.debug("Matching document $document using query $ast")
     ast as RootNode
     val nodesByIndex = getNodesByIndex(ast, defaultIndex)
     val leafMatch = mutableMapOf<QueryElemNode.SimpleNode, MutableList<Int>>()
             .withDefault { mutableListOf() }
-    val indexNameByIndex = corpusConfiguration.indexes.keys.mapIndexed { i, name -> i to name }.toMap()
+    val indexNameByIndex = metadataConfiguration.indexes.keys.mapIndexed { i, name -> i to name }.toMap()
 
     val sentenceMarks = mutableSetOf<Int>()
     val paragraphMarks = mutableSetOf<Int>()
-    val tokenIndex = corpusConfiguration.indexes.getValue("token")
+    val tokenIndex = metadataConfiguration.indexes.getValue("token")
 
     for ((i, word) in document.withIndex()) {
         if (i < interval.from) continue
@@ -86,11 +86,11 @@ fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: Stri
         return MatchInfo.empty()
     }
     val textAt: (String, Interval) -> List<String> = { indexName, (from, to) ->
-        val index = corpusConfiguration.indexes[indexName]?.columnIndex
+        val index = metadataConfiguration.indexes[indexName]?.columnIndex
                 ?: fail("could not load text for index $indexName")
         document.content[index].subList(from, to + 1)
     }
-    val evaluated = filtered.filter { evaluateGlobalConstraint(ast, it, textAt, corpusConfiguration) }
+    val evaluated = filtered.filter { evaluateGlobalConstraint(ast, it, textAt, metadataConfiguration) }
     return MatchInfo(evaluated.map { it.second to createMatchInfo(ast.query, it.first) })
 }
 

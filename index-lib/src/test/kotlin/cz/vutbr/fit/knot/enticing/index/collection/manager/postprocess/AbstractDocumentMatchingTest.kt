@@ -1,21 +1,22 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.dto.interval.substring
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.EqlAstNode
 import cz.vutbr.fit.knot.enticing.index.boundary.EqlMatch
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
-import cz.vutbr.fit.knot.enticing.index.clientConfig
+import cz.vutbr.fit.knot.enticing.index.collectionManagerConfiguration
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jCompositeDocumentCollection
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jSearchEngine
 import cz.vutbr.fit.knot.enticing.index.mg4j.initMg4jQueryEngine
+import cz.vutbr.fit.knot.enticing.index.mg4jFiles
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.fail
 
-abstract class Check(val name: String, val document: IndexedDocument, val corpusConfiguration: CorpusConfiguration) {
+abstract class Check(val name: String, val document: IndexedDocument, val metadataConfiguration: MetadataConfiguration) {
     var success: Boolean = true
 
     fun checkFailed(reason: String): Boolean {
@@ -35,24 +36,24 @@ abstract class Check(val name: String, val document: IndexedDocument, val corpus
     protected abstract fun doCheck(): Boolean
 
     fun textAt(index: String, interval: Interval? = null): String {
-        var content = document.content[corpusConfiguration.indexes.getValue(index).columnIndex]
+        var content = document.content[metadataConfiguration.indexes.getValue(index).columnIndex]
         content = if (interval != null) content.subList(interval.from, interval.to + 1) else content
         return content.joinToString(" ") { it.toLowerCase() }
     }
 
 
     fun cellsAt(index: String, interval: Interval? = null): List<String> {
-        val content = document.content[corpusConfiguration.indexes.getValue(index).columnIndex]
+        val content = document.content[metadataConfiguration.indexes.getValue(index).columnIndex]
         return (if (interval != null) content.subList(interval.from, interval.to + 1) else content).map { it.toLowerCase() }
     }
 
     fun attributeCellsAt(entity: String, attribute: String, interval: Interval? = null): List<String> {
-        val content = document.content[corpusConfiguration.entities.getValue(entity).attributes.getValue(attribute).columnIndex]
+        val content = document.content[metadataConfiguration.entities.getValue(entity).attributes.getValue(attribute).index.columnIndex]
         return (if (interval != null) content.subList(interval.from, interval.to + 1) else content).map { it.toLowerCase() }
     }
 
     fun multipleEntityAttributeCellsAt(entities: Set<String>, attribute: String, interval: Interval? = null): List<String> {
-        val contentAt = cellsAt(corpusConfiguration.entityMapping.entityIndex, interval).toSet()
+        val contentAt = cellsAt(metadataConfiguration.entityIndexName, interval).toSet()
         check(contentAt.size == 1) { "entity should be the same across the region" }
         val matchedEntity = contentAt.first()
         if (matchedEntity !in entities) {
@@ -62,7 +63,7 @@ abstract class Check(val name: String, val document: IndexedDocument, val corpus
     }
 }
 
-class IntervalCheck constructor(name: String, document: IndexedDocument, corpusConfiguration: CorpusConfiguration, val interval: Interval, val leafMatch: List<EqlMatch>, private val checkStrategy: IntervalCheck.() -> Boolean) : Check(name, document, corpusConfiguration) {
+class IntervalCheck constructor(name: String, document: IndexedDocument, metadataConfiguration: MetadataConfiguration, val interval: Interval, val leafMatch: List<EqlMatch>, private val checkStrategy: IntervalCheck.() -> Boolean) : Check(name, document, metadataConfiguration) {
     override fun doCheck(): Boolean = this.let(checkStrategy)
 
     fun verifyLeafCount(n: Int, msgFactory: (() -> String)? = null): Boolean = if (msgFactory != null) verifyLeafCount(n..n, msgFactory) else verifyLeafCount(n..n)
@@ -71,11 +72,11 @@ class IntervalCheck constructor(name: String, document: IndexedDocument, corpusC
 
 }
 
-class LeafCheck constructor(name: String, document: IndexedDocument, corpusConfiguration: CorpusConfiguration, val leafMatch: EqlMatch, private val checkStrategy: LeafCheck.() -> Boolean) : Check(name, document, corpusConfiguration) {
+class LeafCheck constructor(name: String, document: IndexedDocument, metadataConfiguration: MetadataConfiguration, val leafMatch: EqlMatch, private val checkStrategy: LeafCheck.() -> Boolean) : Check(name, document, metadataConfiguration) {
     override fun doCheck(): Boolean = this.let(checkStrategy)
 }
 
-class GlobalConstraintCheck(name: String, document: IndexedDocument, corpusConfiguration: CorpusConfiguration, val identifiers: Map<String, EqlMatch>, private val checkStrategy: GlobalConstraintCheck.() -> Boolean) : Check(name, document, corpusConfiguration) {
+class GlobalConstraintCheck(name: String, document: IndexedDocument, metadataConfiguration: MetadataConfiguration, val identifiers: Map<String, EqlMatch>, private val checkStrategy: GlobalConstraintCheck.() -> Boolean) : Check(name, document, metadataConfiguration) {
     override fun doCheck(): Boolean = this.let(checkStrategy)
 }
 
@@ -110,10 +111,10 @@ class CheckDsl {
 
 abstract class AbstractDocumentMatchingTest {
 
-    private val collection = Mg4jCompositeDocumentCollection(clientConfig.corpusConfiguration, clientConfig.collections[0].mg4jFiles)
+    private val collection = Mg4jCompositeDocumentCollection(collectionManagerConfiguration.metadataConfiguration, collectionManagerConfiguration.mg4jDir.mg4jFiles)
     protected val searchEngine = Mg4jSearchEngine(
             collection,
-            initMg4jQueryEngine(clientConfig.collections[0], clientConfig.corpusConfiguration)
+            initMg4jQueryEngine(collectionManagerConfiguration)
     )
 
     protected val documentCount = collection.size()
@@ -125,7 +126,7 @@ abstract class AbstractDocumentMatchingTest {
         @BeforeAll
         @JvmStatic
         internal fun beforeAll() {
-            clientConfig.validate()
+//            collectionManagerConfiguration.validate() todo fix
         }
 
     }
@@ -142,7 +143,7 @@ abstract class AbstractDocumentMatchingTest {
     }
 
     private fun forEachMatchInternal(query: String, documentRange: LongRange, checks: CheckDsl) {
-        val (ast, errors) = compiler.parseAndAnalyzeQuery(query, clientConfig.corpusConfiguration)
+        val (ast, errors) = compiler.parseAndAnalyzeQuery(query, collectionManagerConfiguration.metadataConfiguration)
         Assertions.assertThat(errors).isEmpty()
 
         val (intervalChecks, leafChecks, _, globalConstraintChecks) = checks
@@ -155,18 +156,18 @@ abstract class AbstractDocumentMatchingTest {
             val failedChecks = mutableListOf<String>()
             val doc = searchEngine.loadDocument(i.toInt())
             println("testing on document [$i] '${doc.title}'")
-            val match = matchDocument(ast.deepCopy() as EqlAstNode, doc, "token", clientConfig.corpusConfiguration, Interval.valueOf(0, doc.size() - 1))
+            val match = matchDocument(ast.deepCopy() as EqlAstNode, doc, "token", collectionManagerConfiguration.metadataConfiguration, Interval.valueOf(0, doc.size() - 1))
             if (match.intervals.isNotEmpty()) {
                 matchCount++
             }
             for ((interval, leafMatch) in match) {
-                intervalChecks.map { (name, check) -> IntervalCheck(name, doc, clientConfig.corpusConfiguration, interval, leafMatch, check) }
+                intervalChecks.map { (name, check) -> IntervalCheck(name, doc, collectionManagerConfiguration.metadataConfiguration, interval, leafMatch, check) }
                         .filter { !it.performCheck() }
                         .forEach { failedChecks.add("INT: ${it.name}") }
                 val encounteredIdentifiers = mutableMapOf<String, EqlMatch>()
                 val encounteredGlobalConstraintIdentifiers = mutableMapOf<String, EqlMatch>()
                 for (leaf in leafMatch) {
-                    leafChecks.map { (name, check) -> LeafCheck(name, doc, clientConfig.corpusConfiguration, leaf, check) }
+                    leafChecks.map { (name, check) -> LeafCheck(name, doc, collectionManagerConfiguration.metadataConfiguration, leaf, check) }
                             .filter { !it.performCheck() }
                             .forEach { failedChecks.add("LEAF: ${it.name}") }
                     val maybeIdentifier = query.substring(leaf.queryInterval)
@@ -176,7 +177,7 @@ abstract class AbstractDocumentMatchingTest {
                     identifierChecks[maybeIdentifier]?.let {
                         val name = maybeIdentifier
                         encounteredIdentifiers[name] = leaf
-                        val check = LeafCheck(name, doc, clientConfig.corpusConfiguration, leaf, it)
+                        val check = LeafCheck(name, doc, collectionManagerConfiguration.metadataConfiguration, leaf, it)
                         if (!check.performCheck()) {
                             failedChecks.add("ID: $name")
                         }
@@ -189,7 +190,7 @@ abstract class AbstractDocumentMatchingTest {
 
                 if (globalConstraintIdentifiers.isNotEmpty()) {
                     if (globalConstraintIdentifiers.size == encounteredGlobalConstraintIdentifiers.size) {
-                        val check = GlobalConstraintCheck(globalConstraintChecks!!.first, doc, clientConfig.corpusConfiguration, encounteredGlobalConstraintIdentifiers, globalConstraintChecks!!.third)
+                        val check = GlobalConstraintCheck(globalConstraintChecks!!.first, doc, collectionManagerConfiguration.metadataConfiguration, encounteredGlobalConstraintIdentifiers, globalConstraintChecks!!.third)
                         if (!check.performCheck()) {
                             failedChecks.add("GLOBAL: ${globalConstraintChecks!!.first}")
                         }

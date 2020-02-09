@@ -17,9 +17,10 @@ class EnticingConfigurationValidator(val validator: Validator) : EnticingConfigu
 }
 
 
-fun EnticingConfiguration.validateOrFail() {
+fun EnticingConfiguration.validateOrFail(): EnticingConfiguration {
     val validator = EnticingConfigurationValidator(ValidatorImpl())
     this.walk(validator)
     if (validator.errors.isNotEmpty())
         throw IllegalStateException(validator.errors.joinToString("\n"))
+    return this
 }

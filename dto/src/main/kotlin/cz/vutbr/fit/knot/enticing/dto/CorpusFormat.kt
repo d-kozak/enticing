@@ -1,8 +1,9 @@
 package cz.vutbr.fit.knot.enticing.dto
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.Entity
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.Index
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.AttributeConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.EntityConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.IndexConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
 import javax.validation.constraints.NotBlank
 
 
@@ -19,7 +20,7 @@ data class CorpusFormat(
          * Name of the corpus this server handles
          */
         @field:NotBlank
-        val corpusName: String,
+        var corpusName: String,
         /**
          * Indexes with their descriptions
          */
@@ -40,15 +41,30 @@ data class CorpusFormat(
     )
 }
 
-fun CorpusFormat.toCorpusConfig() = CorpusConfiguration(
-        corpusName,
-        indexes.mapValues { (key, _) -> Index(key, "") },
-        entities.mapValues { (entityName, entityFormat) ->
-            Entity(
-                    entityName,
-                    attributes = entityFormat.attributes.mapValues { (attributeName, attributeInfo) -> cz.vutbr.fit.knot.enticing.dto.config.dsl.Attribute(attributeName, correspondingIndex = attributeInfo.correspondingIndex) }.toMutableMap()
-            )
-        })
+fun CorpusFormat.toMetadataConfiguration(): MetadataConfiguration {
+    val indexMetadata = LinkedHashMap<String, IndexConfiguration>()
+    val entityMetadata = LinkedHashMap<String, EntityConfiguration>()
+
+    for ((name, description) in indexes) {
+        indexMetadata[name] = IndexConfiguration(name, description)
+    }
+
+    for ((name, format) in entities) {
+        entityMetadata[name] = EntityConfiguration(
+                name,
+                format.description,
+                format.attributes.mapValues { (attributeName, attributeInfo) ->
+                    AttributeConfiguration(attributeName, attributeInfo.description)
+                            .also {
+                                it.index = indexMetadata[attributeInfo.correspondingIndex]
+                                        ?: throw IllegalArgumentException("cannot find index ${attributeInfo.correspondingIndex}")
+                            }
+                }.toMutableMap()
+        )
+    }
+
+    return MetadataConfiguration(indexMetadata, entityMetadata)
+}
 
 /**
  * Format of one attribute
@@ -68,13 +84,13 @@ data class AttributeInfo(
 /**
  * Convert corpus configuration to Corpusformat
  */
-fun CorpusConfiguration.toCorpusFormat() =
+fun MetadataConfiguration.toCorpusFormat() =
         CorpusFormat(
-                corpusName,
+                "unknown",
                 indexes.mapValues { (_, index) -> index.description },
                 entities.mapValues { (_, entity) ->
                     EntityFormat(entity.description,
-                            entity.attributes.mapValues { (_, attribute) -> AttributeInfo(attribute.correspondingIndex, attribute.description) })
+                            entity.attributes.mapValues { (_, attribute) -> AttributeInfo(attribute.index.name, attribute.description) })
                 }
         )
 

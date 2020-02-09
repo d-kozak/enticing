@@ -13,8 +13,7 @@ import org.junit.jupiter.api.Test
 import java.io.File
 import java.io.StringReader
 
-private val corpusConfig = testConfiguration.corpusConfiguration
-private val indexes = testConfiguration.indexes
+private val indexes = fullTestMetadataConfig.indexes.values.toList()
 
 fun assertStreamStartsWith(stream: Any, expected: String) {
     val actual = (stream as StringReader).readText().substring(0, expected.length)
@@ -28,7 +27,7 @@ internal class Mg4jDocumentFactoryTest {
     inner class NewWiki {
         @Test
         fun `load document test`() {
-            val factory = Mg4jDocumentFactory(corpusConfig)
+            val factory = Mg4jDocumentFactory(fullTestMetadataConfig)
             val collection = Mg4jSingleFileDocumentCollection(File("../data/new_wiki/new_wiki.mg4j"), factory)
             for (i in 0 until collection.size()) {
                 val document = collection.document(i)
@@ -41,7 +40,7 @@ internal class Mg4jDocumentFactoryTest {
 
     @Test
     fun `load document test`() {
-        val factory = Mg4jDocumentFactory(corpusConfig)
+        val factory = Mg4jDocumentFactory(fullTestMetadataConfig)
         val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), factory)
 
         val document = collection.document(2)
@@ -57,7 +56,7 @@ internal class Mg4jDocumentFactoryTest {
 
     @Test
     fun `special glue index is present`() {
-        val factory = Mg4jDocumentFactory(corpusConfig)
+        val factory = Mg4jDocumentFactory(fullTestMetadataConfig)
         val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), factory)
 
         val document = collection.document(0) as Mg4jDocument
@@ -65,7 +64,7 @@ internal class Mg4jDocumentFactoryTest {
                 .isEqualTo("http://119.doorblog.jp/archives/51981348.html")
 
 
-        assertStreamStartsWith(document.content(corpusConfig.indexOf("_glue")), "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 N P 0 0 0 0 0 0 0 0 0 0 N P 0 0 N P 0 0 0 N P 0 N P 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 N P 0 0 0 0 0 0 0 N P 0 0 0 0 0 0 0 0 0 0 0 0 0 N P")
+        assertStreamStartsWith(document.content(fullTestMetadataConfig.indexOf("_glue")), "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 N P 0 0 0 0 0 0 0 0 0 0 N P 0 0 N P 0 0 0 N P 0 N P 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 N P 0 0 0 0 0 0 0 N P 0 0 0 0 0 0 0 0 0 0 0 0 0 N P")
     }
 
 
@@ -78,11 +77,11 @@ internal class Mg4jDocumentFactoryTest {
         @Test
         fun `use only lowlevel factory-getdocument method`() {
             val document = initMockDocument()
-            val nertagReader = (document.content(corpusConfig.entityIndex!!) as StringReader)
+            val nertagReader = (document.content(fullTestMetadataConfig.entityIndex!!.columnIndex) as StringReader)
             assertThat(nertagReader.readText()).isEqualTo("0 0 0 person person 0 0 0")
-            val nerlenReader = (document.content(corpusConfig.entityLengthIndex!!) as StringReader)
+            val nerlenReader = (document.content(fullTestMetadataConfig.lengthIndex!!.columnIndex) as StringReader)
             assertThat(nerlenReader.readText()).isEqualTo("0 0 0 2 -1 0 0 0")
-            for (i in corpusConfig.entityIndex!! + 1 until corpusConfig.entityLengthIndex!!) {
+            for (i in fullTestMetadataConfig.entityIndex!!.columnIndex + 1 until fullTestMetadataConfig.lengthIndex!!.columnIndex) {
                 val reader = (document.content(i) as StringReader)
                 assertThat(reader.readText()).isEqualTo("0 0 0 X X 0 0 0")
             }
@@ -91,8 +90,8 @@ internal class Mg4jDocumentFactoryTest {
         @Test
         fun `with eql result creator`() {
             val document = initMockDocument()
-            val iterator = StructuredDocumentIterator(corpusConfig)
-            val visitor = TextUnitListGeneratingVisitor(corpusConfig, "token", Interval.valueOf(0, document.size()), document)
+            val iterator = StructuredDocumentIterator(fullTestMetadataConfig)
+            val visitor = TextUnitListGeneratingVisitor(fullTestMetadataConfig, "token", Interval.valueOf(0, document.size()), document)
             iterator.iterateDocument(document, emptyMap(), emptySet(), visitor)
             val result = visitor.build() as cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat.Snippet.TextUnitList
             val elems = result.content.content
@@ -103,7 +102,7 @@ internal class Mg4jDocumentFactoryTest {
         }
 
         private fun initMockDocument(): Mg4jDocument {
-            val factory = Mg4jDocumentFactory(corpusConfig)
+            val factory = Mg4jDocumentFactory(fullTestMetadataConfig)
             val inputStream = FastBufferedInputStream("""
                     %%#DOC	2c25c27f-60b1-541b-a5fc-287c7c4318c5
                     %%#PAGE Disclaimer - Automated Exemption System	http://aes.faa.gov/AES/Help
@@ -130,7 +129,7 @@ internal class Mg4jDocumentFactoryTest {
         val input = """43		CC	0	1	NMOD	In	in	-42	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0"""
 
         val output = indexes.map { mutableListOf<String>() }
-        processLine(input, output, 0, corpusConfig)
+        processLine(input, output, 0, fullTestMetadataConfig)
         val allEmpty = output.all { it.isEmpty() }
         println(allEmpty)
         assertThat(allEmpty).isTrue()
@@ -139,14 +138,14 @@ internal class Mg4jDocumentFactoryTest {
 
     @Test
     fun `number of fields test`() {
-        val factory = Mg4jDocumentFactory(corpusConfig)
+        val factory = Mg4jDocumentFactory(fullTestMetadataConfig)
         assertThat(factory.numberOfFields())
                 .isEqualTo(indexes.size)
     }
 
     @Test
     fun `field name test`() {
-        val factory = Mg4jDocumentFactory(corpusConfig)
+        val factory = Mg4jDocumentFactory(fullTestMetadataConfig)
         for (i in 0 until indexes.size) {
             assertThat(factory.fieldName(i))
                     .isEqualTo(indexes[i].name)
@@ -155,19 +154,10 @@ internal class Mg4jDocumentFactoryTest {
 
     @Test
     fun `field index test`() {
-        val factory = Mg4jDocumentFactory(corpusConfig)
+        val factory = Mg4jDocumentFactory(fullTestMetadataConfig)
         for (i in 0 until indexes.size) {
             assertThat(factory.fieldIndex(indexes[i].name))
                     .isEqualTo(i)
-        }
-    }
-
-    @Test
-    fun `field type test`() {
-        val factory = Mg4jDocumentFactory(corpusConfig)
-        for (i in 0 until indexes.size) {
-            assertThat(factory.fieldType(i))
-                    .isEqualTo(indexes[i].type.mg4jType)
         }
     }
 }

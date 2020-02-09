@@ -1,12 +1,12 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager.format.text
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import cz.vutbr.fit.knot.enticing.index.boundary.TokenReader
 
-fun generatePlainText(document: IndexedDocument, filteredConfig: CorpusConfiguration, defaultIndex: String, interval: Interval?): ResultFormat.Snippet.PlainText {
+fun generatePlainText(document: IndexedDocument, filteredConfig: MetadataConfiguration, defaultIndex: String, interval: Interval?): ResultFormat.Snippet.PlainText {
     val defaultColumnIndex = filteredConfig.indexes[defaultIndex]?.columnIndex
             ?: throw IllegalArgumentException("Default index $defaultIndex not found")
     val defaultContent = document.content[defaultColumnIndex].joinToString(" ")

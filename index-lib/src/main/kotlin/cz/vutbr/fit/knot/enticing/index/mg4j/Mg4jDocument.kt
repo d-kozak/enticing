@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.Index
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.IndexConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import it.unimi.di.big.mg4j.document.AbstractDocument
 import it.unimi.dsi.fastutil.objects.Reference2ObjectMap
@@ -24,7 +24,7 @@ enum class DocumentMetadata {
  * Represents one single document, the content is currently preloaded when the document instance is created
  */
 class Mg4jDocument(
-        private val corpusConfiguration: CorpusConfiguration,
+        private val metadataConfiguration: MetadataConfiguration,
         internal val metadata: Reference2ObjectMap<Enum<*>, Any>,
         override val content: List<List<String>>
 ) : AbstractDocument(), IndexedDocument {
@@ -49,7 +49,7 @@ class Mg4jDocument(
     override val size: Int
         get() = metadata[DocumentMetadata.SIZE] as Int
 
-    private val indexes: List<Index> = corpusConfiguration.indexes.values.toList()
+    private val indexes: List<IndexConfiguration> = metadataConfiguration.indexes.values.toList()
 
     override fun title(): CharSequence = title
 

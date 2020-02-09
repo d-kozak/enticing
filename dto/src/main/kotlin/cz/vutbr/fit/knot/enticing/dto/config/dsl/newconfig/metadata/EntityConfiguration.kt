@@ -48,6 +48,15 @@ class EntityList(val metadataConfiguration: MetadataConfiguration, val entities:
         entities.add(entity)
     }
 
+    infix fun String.with(attributes: Array<out String>) {
+        val entity = EntityConfiguration(this)
+        entity.metadataConfiguration = metadataConfiguration
+        entity.attributes(*attributes)
+        entities.add(entity)
+    }
+
+    fun attributes(vararg names: String) = names.copyOf()
+
     fun extraAttributes(vararg names: String) {
         val indexes = names.map {
             metadataConfiguration.indexes[it] ?: throw IllegalStateException("Unknown index $it")

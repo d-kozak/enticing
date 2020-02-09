@@ -2,7 +2,7 @@ package cz.vutbr.fit.knot.enticing.eql.compiler
 
 import cz.vutbr.fit.knot.enticing.dto.AstNode
 import cz.vutbr.fit.knot.enticing.dto.PureMgj4Node
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.analysis.SemanticAnalyzer
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.EqlAstNode
@@ -23,8 +23,8 @@ class EqlCompiler {
         return parseToEqlAst(input)
     }
 
-    fun parseOrFail(input: String, corpusConfiguration: CorpusConfiguration): AstNode {
-        val analyzer = SemanticAnalyzer(corpusConfiguration)
+    fun parseOrFail(input: String, metadataConfiguration: MetadataConfiguration): AstNode {
+        val analyzer = SemanticAnalyzer(metadataConfiguration)
         val (parseTree, errors) = parseWithAntlr(input)
         if (errors.isNotEmpty()) throw EqlCompilerException(errors.toString())
         val ast = parseTree.accept(EqlAstGeneratingVisitor())
@@ -33,8 +33,8 @@ class EqlCompiler {
         return ast
     }
 
-    fun parseAndAnalyzeQuery(input: String, corpusConfiguration: CorpusConfiguration): ParsedQuery {
-        val analyzer = SemanticAnalyzer(corpusConfiguration)
+    fun parseAndAnalyzeQuery(input: String, metadataConfiguration: MetadataConfiguration): ParsedQuery {
+        val analyzer = SemanticAnalyzer(metadataConfiguration)
         val (parseTree, errors) = parseWithAntlr(input)
         return if (errors.isEmpty()) {
             val ast = parseTree.accept(EqlAstGeneratingVisitor())

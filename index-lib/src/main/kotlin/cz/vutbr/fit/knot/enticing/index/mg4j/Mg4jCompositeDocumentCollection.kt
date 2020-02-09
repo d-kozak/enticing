@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
+
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
 import it.unimi.di.big.mg4j.document.AbstractDocumentCollection
 import it.unimi.di.big.mg4j.document.DocumentCollection
 import it.unimi.di.big.mg4j.document.DocumentFactory
@@ -14,7 +15,7 @@ import java.io.InputStream
  */
 internal fun initDocumentRanges(limits: List<Long>): Array<Long> {
     val result = Array(limits.size) { 0L }
-    for (i in 0 until limits.size) {
+    for (i in limits.indices) {
         val prev = if (i > 0) result[i - 1] else -1
         result[i] = prev + limits[i]
     }
@@ -25,11 +26,11 @@ internal fun initDocumentRanges(limits: List<Long>): Array<Long> {
  * Composite collection that handles multiple @see Mg4jSingleFileDocumentCollection and delegates requests to the appropriate ones based on the index
  */
 class Mg4jCompositeDocumentCollection(
-        private val corpusConfiguration: CorpusConfiguration,
+        private val metadataConfiguration: MetadataConfiguration,
         private val files: List<File>)
     : AbstractDocumentCollection() {
 
-    private val factory = Mg4jDocumentFactory(corpusConfiguration)
+    private val factory = Mg4jDocumentFactory(metadataConfiguration)
 
     private val singleFileCollections = files.map { Mg4jSingleFileDocumentCollection(it, factory.copy()) }
 
@@ -69,7 +70,7 @@ class Mg4jCompositeDocumentCollection(
         return singleFileCollections[insertionPoint] to localIndex
     }
 
-    override fun copy(): DocumentCollection = Mg4jCompositeDocumentCollection(corpusConfiguration, files)
+    override fun copy(): DocumentCollection = Mg4jCompositeDocumentCollection(metadataConfiguration, files)
 
     override fun factory(): DocumentFactory = factory
 

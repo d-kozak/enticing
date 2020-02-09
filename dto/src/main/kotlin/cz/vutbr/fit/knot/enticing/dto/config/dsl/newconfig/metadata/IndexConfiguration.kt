@@ -30,6 +30,10 @@ class IndexList(val metadataConfiguration: MetadataConfiguration, val indexes: M
         indexes.add(IndexConfiguration(name, columnIndex = indexes.size).apply(block))
     }
 
+    infix fun String.whichIs(description: String) {
+        indexes.add(IndexConfiguration(this, description, columnIndex = indexes.size))
+    }
+
     fun attributeIndexes(count: Int) {
         check(count > 0) { "positive value required,was given $count" }
         metadataConfiguration.attributeIndexes = indexes.size until indexes.size + count

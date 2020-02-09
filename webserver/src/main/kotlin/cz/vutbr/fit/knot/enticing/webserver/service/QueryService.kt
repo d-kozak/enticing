@@ -28,7 +28,7 @@ class QueryService(
 ) {
 
 
-    fun validateQuery(query: String, settings: Long) = compilerService.validateQuery(query, format(settings).toCorpusConfig())
+    fun validateQuery(query: String, settings: Long) = compilerService.validateQuery(query, format(settings).toMetadataConfiguration())
 
     fun query(query: SearchQuery, selectedSettings: Long, session: HttpSession): WebServer.ResultList {
         val errors = validateQuery(query.query, selectedSettings).errors
