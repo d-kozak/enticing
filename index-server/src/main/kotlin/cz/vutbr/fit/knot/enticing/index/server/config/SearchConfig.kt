@@ -4,6 +4,7 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.EnticingConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.IndexServerConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.validateOrFail
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.visitor.prettyPrint
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.index.collection.manager.CollectionManager
@@ -22,7 +23,7 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class SearchConfig(
         @Value("\${config.file}") private val configFile: String,
-        @Value("\${server.address}") private val address: String
+        @Value("\${service.id}") private val address: String
 ) {
 
     private val log: Logger = LoggerFactory.getLogger(SearchConfig::class.java)
@@ -31,7 +32,8 @@ class SearchConfig(
     fun enticingConfiguration(): EnticingConfiguration {
         log.info("Loading configuration from $configFile")
         val config = executeScript<EnticingConfiguration>(configFile)
-        log.info("Loaded config $config")
+        log.info("Loaded config")
+        log.info("\n${config.prettyPrint()}")
         config.validateOrFail()
         return config
     }

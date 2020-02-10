@@ -24,7 +24,7 @@ val fullTestMetadataConfig = metadataConfiguration {
         attributeIndexes(10)
         "nertype" whichIs "nertype"
         "nerlength" whichIs "nerlength"
-//        "_glue" whichIs "glue" todo glue
+        "_glue" whichIs "Contains information whether words in the default index should be separated by spaces or not"
     }
 
     entities {

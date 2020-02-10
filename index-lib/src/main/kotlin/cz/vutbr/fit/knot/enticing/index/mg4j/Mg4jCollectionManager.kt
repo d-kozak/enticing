@@ -23,8 +23,8 @@ import java.io.File
 data class CollectionManagerConfiguration(
         val corpusName: String,
         val collectionName: String,
-        val indexDir: File,
         val mg4jDir: File,
+        val indexDir: File,
         val metadataConfiguration: MetadataConfiguration
 )
 

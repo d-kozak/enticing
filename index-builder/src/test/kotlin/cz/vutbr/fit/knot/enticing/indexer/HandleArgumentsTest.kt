@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.indexer
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.EnticingConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.executeScript
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -9,18 +10,15 @@ import org.junit.jupiter.api.assertThrows
 class HandleArgumentsTest {
 
     @Test
-    fun `At least four arguments necessary`() {
+    fun `Exactly arguments necessary`() {
         assertThrows<IllegalArgumentException> {
             handleArguments()
         }
         assertThrows<IllegalArgumentException> {
-            handleArguments("foo/config.kts")
+            handleArguments("../dto/src/test/resources/config.kts")
         }
         assertThrows<IllegalArgumentException> {
-            handleArguments("foo/config.kts", "../data/mg4j")
-        }
-        assertThrows<IllegalArgumentException> {
-            handleArguments("foo/config.kts", "../data/mg4j", "../data/indexed")
+            handleArguments("../dto/src/test/resources/config.kts", "foo")
         }
     }
 
@@ -30,13 +28,14 @@ class HandleArgumentsTest {
         val load: (String) -> EnticingConfiguration = { path ->
             calledWith != null && throw IllegalStateException("Called with param is set, which suggest that load was called more than once")
             calledWith = path
-            fullConf
+            executeScript(path)
         }
-        handleArguments("foo/bar/baz/config.kts", "col1") { load(it) }
+
+        handleArguments("../dto/src/test/resources/config.kts", "minerva3.fit.vutbr.cz") { load(it) }
 
         assertThat(calledWith)
                 .isNotNull()
-                .isEqualTo("foo/bar/baz/config.kts")
+                .isEqualTo("../dto/src/test/resources/config.kts")
     }
 
 }

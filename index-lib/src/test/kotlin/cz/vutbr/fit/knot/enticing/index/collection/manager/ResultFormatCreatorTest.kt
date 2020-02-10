@@ -99,7 +99,7 @@ internal class ResultFormatCreatorTest {
 
             val payload = resultCreator.singleResult(withEntitiesDocument, htmlQuery, listOf(EqlMatch(Interval.valueOf(1), Interval.valueOf(1, 2))))
             assertThat(payload)
-                    .isEqualTo(ResultFormat.Snippet.Html("""<span eql-word eql-lemma="1" eql-url="google.com" eql-nertag="0" eql-param="0" eql-len="0">one</span><b><span eql-word eql-lemma="2" eql-url="yahoo.com" eql-nertag="0" eql-param="0" eql-len="0">two</span><span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="0" eql-param="0" eql-len="0">three</span></b><span eql-entity eql-name="harry"><span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="person" eql-param="harry" eql-len="2">harry</span><span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="0" eql-param="0" eql-len="0">potter</span></span>""", 0, 5, false))
+                    .isEqualTo(ResultFormat.Snippet.Html("""<span eql-word eql-lemma="1" eql-url="google.com" eql-nertag="0" eql-param0="0" eql-len="0">one</span><b><span eql-word eql-lemma="2" eql-url="yahoo.com" eql-nertag="0" eql-param0="0" eql-len="0">two</span><span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="0" eql-param0="0" eql-len="0">three</span></b><span eql-entity eql-name="harry"><span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="person" eql-param0="harry" eql-len="2">harry</span><span eql-word eql-lemma="3" eql-url="localhost" eql-nertag="0" eql-param0="0" eql-len="0">potter</span></span>""", 0, 5, false))
         }
     }
 
@@ -163,11 +163,11 @@ internal class ResultFormatCreatorTest {
                     .isEqualTo(ResultFormat.Snippet.StringWithMetadata(StringWithMetadata(
                             "one two three harry potter",
                             mapOf(
-                                    "w-0" to Annotation("w-0", mapOf("lemma" to "1", "url" to "google.com", "nertag" to "0", "param" to "0", "len" to "0")),
-                                    "w-1" to Annotation("w-1", mapOf("lemma" to "2", "url" to "yahoo.com", "nertag" to "0", "param" to "0", "len" to "0")),
-                                    "w-2" to Annotation("w-2", mapOf("lemma" to "3", "url" to "localhost", "nertag" to "0", "param" to "0", "len" to "0")),
-                                    "w-3" to Annotation("w-3", mapOf("lemma" to "3", "url" to "localhost", "nertag" to "person", "param" to "harry", "len" to "2")),
-                                    "w-4" to Annotation("w-4", mapOf("lemma" to "3", "url" to "localhost", "nertag" to "0", "param" to "0", "len" to "0")),
+                                    "w-0" to Annotation("w-0", mapOf("lemma" to "1", "url" to "google.com", "nertag" to "0", "param0" to "0", "len" to "0")),
+                                    "w-1" to Annotation("w-1", mapOf("lemma" to "2", "url" to "yahoo.com", "nertag" to "0", "param0" to "0", "len" to "0")),
+                                    "w-2" to Annotation("w-2", mapOf("lemma" to "3", "url" to "localhost", "nertag" to "0", "param0" to "0", "len" to "0")),
+                                    "w-3" to Annotation("w-3", mapOf("lemma" to "3", "url" to "localhost", "nertag" to "person", "param0" to "harry", "len" to "2")),
+                                    "w-4" to Annotation("w-4", mapOf("lemma" to "3", "url" to "localhost", "nertag" to "0", "param0" to "0", "len" to "0")),
                                     "e-5" to Annotation("e-5", mapOf("name" to "harry", "nertag" to "person"))
                             ),
                             setOf(AnnotationPosition("w-0", 0 to 3), AnnotationPosition("w-1", 4 to 7), AnnotationPosition("w-2", 8 to 13),

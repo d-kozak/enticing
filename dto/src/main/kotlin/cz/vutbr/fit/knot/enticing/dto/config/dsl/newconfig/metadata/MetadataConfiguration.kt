@@ -29,6 +29,9 @@ data class MetadataConfiguration(
     val lengthIndex: IndexConfiguration?
         get() = indexes[lengthIndexName]
 
+    val glueIndex:IndexConfiguration
+        get() = indexes["_glue"]!!
+
     /**
      * Indexes of mg4j indexes that are used for entity attributes, left inclusive, right exclusive TODO change client code appropriately
      *

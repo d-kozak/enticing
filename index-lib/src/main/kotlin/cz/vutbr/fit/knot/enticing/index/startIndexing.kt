@@ -8,7 +8,7 @@ import java.io.File
 
 // todo refactor
 val File.mg4jFiles: List<File>
-    get() = this.listFiles { file -> file.endsWith(".mg4j") }?.toList() ?: emptyList()
+    get() = this.listFiles { file -> file.name.endsWith(".mg4j") }?.toList() ?: emptyList()
 
 data class IndexBuilderConfig(
         val corpusName: String,
