@@ -22,14 +22,9 @@ data class CorpusConfiguration(
         var indexServers: MutableList<IndexServerConfiguration> = mutableListOf(),
 
         /**
-         * Directory with mg4j files that should be maintained by this server
+         * Directory with collections that should be maintained by this server
          */
-        var mg4jDir: String? = null,
-
-        /**
-         * Directory containing metadata for files in mg4jDir
-         */
-        var indexedDir: String? = null) : EnticingConfigurationUnit {
+        var collectionsDir: String = "") : EnticingConfigurationUnit {
 
 
     lateinit var errorCatcher: (() -> Unit) -> Unit

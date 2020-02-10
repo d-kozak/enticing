@@ -22,6 +22,7 @@ import java.io.File
 // todo refactor
 data class CollectionManagerConfiguration(
         val corpusName: String,
+        val collectionName: String,
         val indexDir: File,
         val mg4jDir: File,
         val metadataConfiguration: MetadataConfiguration
@@ -32,7 +33,7 @@ fun initMg4jCollectionManager(configuration: CollectionManagerConfiguration): Co
     val engine = initMg4jQueryEngine(configuration)
 
     val mg4jSearchEngine = Mg4jSearchEngine(collection, engine)
-    return CollectionManager(configuration.corpusName, mg4jSearchEngine, EqlPostProcessor(), EqlResultCreator(configuration.metadataConfiguration), EqlCompiler(), configuration.metadataConfiguration)
+    return CollectionManager("${configuration.corpusName}-${configuration.collectionName}", mg4jSearchEngine, EqlPostProcessor(), EqlResultCreator(configuration.metadataConfiguration), EqlCompiler(), configuration.metadataConfiguration)
 }
 
 @WhatIf("default index is hardwired to token internally, is it enough or should we provide a way to tweak this? maybe as an AST operation in EQL-compiler (to avoid expensive reinitialization of mg4j internals)?")

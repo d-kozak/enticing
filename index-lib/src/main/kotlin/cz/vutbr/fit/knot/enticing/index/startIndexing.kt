@@ -12,6 +12,7 @@ val File.mg4jFiles: List<File>
 
 data class IndexBuilderConfig(
         val corpusName: String,
+        val collectionName: String,
         val metadataConfiguration: MetadataConfiguration,
         val inputDir: File,
         val outputDir: File

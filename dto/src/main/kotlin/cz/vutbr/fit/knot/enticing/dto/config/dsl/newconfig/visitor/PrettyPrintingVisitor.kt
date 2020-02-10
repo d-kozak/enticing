@@ -34,21 +34,13 @@ class PrettyPrintingVisitor : EnticingConfigurationVisitor {
                 }
 
             }
-
-            if (configuration.indexServers.isNotEmpty()) {
-                withIndent("indexServers") {
-                    for (indexServer in configuration.indexServers)
-                        indexServer.accept(this)
-                }
-            }
         }
     }
 
     override fun visitCorpusConfiguration(configuration: CorpusConfiguration) {
         withIndent("corpusConfiguration") {
             appendProperty("name", configuration.name)
-            appendProperty("mg4jDir", configuration.mg4jDir)
-            appendProperty("indexedDir", configuration.indexedDir)
+            appendProperty("collectionsDir", configuration.collectionsDir)
             configuration.metadataConfiguration.accept(this)
             withIndent("indexServers") {
                 for (indexServer in configuration.indexServers)
@@ -60,8 +52,7 @@ class PrettyPrintingVisitor : EnticingConfigurationVisitor {
     override fun visitIndexServerConfiguration(configuration: IndexServerConfiguration) {
         withIndent("indexServer") {
             appendProperty("address", configuration.address)
-            appendProperty("mg4jDir", configuration.mg4jDir)
-            appendProperty("indexedDir", configuration.indexedDir)
+            appendProperty("mg4jDir", configuration.collectionsDir)
             configuration.metadataConfiguration?.accept(this)
         }
     }

@@ -13,8 +13,7 @@ val fullConf = enticingConfiguration {
 
     corpusConfig {
         corpus("wiki-2018") {
-            mg4jDir = "location of mg4j files"
-            indexedDir = "location of the indexed metadata for the mg4j files"
+            collectionsDir = "location of the collections"
             serverFile("./src/test/resources/servers.txt")
 
             metadata {

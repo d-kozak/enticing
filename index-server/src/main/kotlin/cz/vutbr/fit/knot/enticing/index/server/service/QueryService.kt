@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.index.server.service
 
 import cz.vutbr.fit.knot.enticing.dto.*
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexClientConfig
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.index.collection.manager.CollectionManager
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service
 @Service
 class QueryService(
         private val collectionManagers: Map<String, CollectionManager>,
-        private val indexClientConfig: IndexClientConfig,
+        private val metadataConfiguration: MetadataConfiguration,
         private val eqlCompiler: EqlCompiler
 ) {
 
@@ -23,7 +23,7 @@ class QueryService(
     val queryDispatcher = QueryDispatcher(CollectionQueryExecutor(collectionManagers))
 
     fun processQuery(query: SearchQuery): IndexServer.IndexResultList {
-        query.eqlAst = eqlCompiler.parseOrFail(query.query, indexClientConfig.corpusConfiguration)
+        query.eqlAst = eqlCompiler.parseOrFail(query.query, metadataConfiguration)
 
         val requestData = if (query.offset != null) query.offset!!.map { (collection, offset) -> CollectionRequestData(collection, offset) }
         else collectionManagers.keys.map { CollectionRequestData(it, Offset(0, 0)) }
@@ -38,7 +38,7 @@ class QueryService(
     fun getDocument(query: IndexServer.DocumentQuery) = collectionManagers[query.collection]?.getDocument(query)
             ?: throw IllegalArgumentException("Unknown collection ${query.collection}, known collections are ${collectionManagers.keys}")
 
-    fun loadCorpusFormat(): CorpusFormat = indexClientConfig.corpusConfiguration.toCorpusFormat()
+    fun loadCorpusFormat(): CorpusFormat = metadataConfiguration.toCorpusFormat()
 
     fun getRawDocument(collection: String, documentId: Int, from: Int, to: Int): String = collectionManagers[collection]?.getRawDocument(documentId, from, to)
             ?: throw IllegalArgumentException("Unknown collection $collection, known collections are ${collectionManagers.keys}")

@@ -13,10 +13,8 @@ class EnticingConfigurationValidatorTest {
         @Test
         fun `valid conf`() {
             val conf = enticingConfiguration {
-                indexServers {
-                    indexServer {
-                        indexedDir = "foo/bar"
-                        mg4jDir = "bar/baz"
+                corpusConfig {
+                    corpus("foo") {
                         metadata {
                             indexes {
                                 index("position")
@@ -39,6 +37,12 @@ class EnticingConfigurationValidatorTest {
                                 lengthIndexName = "nerlength"
                             }
                         }
+
+                        indexServers {
+                            indexServer {
+                                collectionsDir = "bar/baz"
+                            }
+                        }
                     }
                 }
             }
@@ -48,11 +52,16 @@ class EnticingConfigurationValidatorTest {
         @Test
         fun `should fail without metadata`() {
             val conf = enticingConfiguration {
-                indexServers {
-                    indexServer {
+                corpusConfig {
+                    corpus("foo") {
+                        indexServers {
+                            indexServer {
 
+                            }
+                        }
                     }
                 }
+
             }
             assertThrows<IllegalStateException> {
                 conf.validateOrFail()

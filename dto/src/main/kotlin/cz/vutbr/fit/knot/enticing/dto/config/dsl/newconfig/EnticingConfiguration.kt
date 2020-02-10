@@ -19,11 +19,7 @@ data class EnticingConfiguration(
         /**
          * list of available corpuses
          */
-        var corpuses: MutableList<CorpusConfiguration> = mutableListOf(),
-        /**
-         * list of separate index servers(not belonging to any corpus)
-         */
-        var indexServers: MutableList<IndexServerConfiguration> = mutableListOf()) : EnticingConfigurationUnit {
+        var corpuses: MutableList<CorpusConfiguration> = mutableListOf()) : EnticingConfigurationUnit {
 
     /**
      * errors encountered when initializing the configuration
@@ -43,8 +39,13 @@ data class EnticingConfiguration(
         corpuses = CorpusList(::runCatching).apply(block).corpusList
     }
 
-    fun indexServers(block: IndexServerList.() -> Unit) = runCatching {
-        indexServers = IndexServerList(null, ::runCatching).apply(block).indexList
+    fun indexServerByAddress(address: String): IndexServerConfiguration {
+        for (corpus in corpuses) {
+            for (server in corpus.indexServers)
+                if (server.address == address) return server
+        }
+
+        throw IllegalArgumentException("no index server with address $address found")
     }
 
     private fun runCatching(block: () -> Unit) {

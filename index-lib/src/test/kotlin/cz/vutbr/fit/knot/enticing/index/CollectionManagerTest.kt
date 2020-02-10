@@ -82,6 +82,7 @@ val metadataConfiguration = metadataConfiguration {
 
 val builderConfig = IndexBuilderConfig(
         "CC",
+        "col1",
         metadataConfiguration,
         File("../data/mg4j"),
         File("../data/indexed")
@@ -90,6 +91,7 @@ val builderConfig = IndexBuilderConfig(
 
 val collectionManagerConfiguration = CollectionManagerConfiguration(
         "CC",
+        "col1",
         File("../data/indexed"),
         File("../data/mg4j"),
         metadataConfiguration

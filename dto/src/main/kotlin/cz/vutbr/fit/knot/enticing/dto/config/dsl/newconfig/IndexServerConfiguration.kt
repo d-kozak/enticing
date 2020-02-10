@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.visitor.EnticingConfigurationVisitor
+import java.io.File
 
 /**
  * Configuration of the index server
@@ -14,25 +15,28 @@ data class IndexServerConfiguration(
         var metadataConfiguration: MetadataConfiguration? = null,
 
         /**
-         * Directory with mg4j files that should be maintained by this server
+         * Directory with collections that should be maintained by this server
          */
-        var mg4jDir: String? = null,
+        var collectionsDir: String? = null,
 
-        /**
-         * Directory containing metadata for files in mg4jDir
-         */
-        var indexedDir: String? = null,
-        /**
-         * used to identify mg4j indexed files
-         */
-        var name: String? = null,
         override var address: String? = null
 ) : ComponentConfiguration {
 
     /**
-     * corpus this index server belongs to, null means it does not belong to any
+     * corpus this index server belongs to
      */
-    var corpus: CorpusConfiguration? = null
+    lateinit var corpus: CorpusConfiguration
+
+    fun loadCollections(): Sequence<Triple<File, File, File>> = sequence {
+        val inputDir = File(collectionsDir ?: corpus.collectionsDir)
+        for (dir in inputDir.listFiles() ?: emptyArray()) {
+            if (!dir.isDirectory) continue
+            val files = dir.listFiles() ?: emptyArray()
+            val mg4jDir = files.find { it.name == "mg4j" } ?: throw IllegalArgumentException("mg4j dir not found")
+            val indexDir = files.find { it.name == "indexed" } ?: throw IllegalStateException("indexed dir not found")
+            yield(Triple(inputDir, mg4jDir, indexDir))
+        }
+    }
 
     override fun accept(visitor: EnticingConfigurationVisitor) {
         visitor.visitIndexServerConfiguration(this)
@@ -43,7 +47,7 @@ data class IndexServerConfiguration(
     }
 }
 
-class IndexServerList(val corpus: CorpusConfiguration? = null, val errorCatcher: (() -> Unit) -> Unit) {
+class IndexServerList(val corpus: CorpusConfiguration, val errorCatcher: (() -> Unit) -> Unit) {
 
     val indexList: MutableList<IndexServerConfiguration> = mutableListOf()
 

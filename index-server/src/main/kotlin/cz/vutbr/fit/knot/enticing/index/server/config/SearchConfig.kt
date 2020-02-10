@@ -1,20 +1,19 @@
 package cz.vutbr.fit.knot.enticing.index.server.config
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexClientConfig
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.collection
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.EnticingConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.IndexServerConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.validateOrFail
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
-import cz.vutbr.fit.knot.enticing.dto.utils.toDto
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.index.collection.manager.CollectionManager
+import cz.vutbr.fit.knot.enticing.index.mg4j.CollectionManagerConfiguration
 import cz.vutbr.fit.knot.enticing.index.mg4j.initMg4jCollectionManager
-import cz.vutbr.fit.knot.enticing.log.LogService
-import cz.vutbr.fit.knot.enticing.log.SimpleDirectoryBasedLogService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import java.net.InetAddress
 
 
 /**
@@ -23,66 +22,42 @@ import java.net.InetAddress
 @Configuration
 class SearchConfig(
         @Value("\${config.file}") private val configFile: String,
-        @Value("\${collections.config}") private val collectionsConfig: String
+        @Value("\${server.address}") private val address: String
 ) {
 
     private val log: Logger = LoggerFactory.getLogger(SearchConfig::class.java)
 
     @Bean
-    fun indexClientConfig(): IndexClientConfig {
+    fun enticingConfiguration(): EnticingConfiguration {
         log.info("Loading configuration from $configFile")
-        val config = executeScript<IndexClientConfig>(configFile)
+        val config = executeScript<EnticingConfiguration>(configFile)
         log.info("Loaded config $config")
-        log.info("Updating with $collectionsConfig")
-        config.update(collectionsConfig)
-        val errors = config.validate()
-        if (errors.isNotEmpty()) {
-            throw IllegalArgumentException("$errors")
-        }
+        config.validateOrFail()
         return config
     }
 
     @Bean
-    fun compiler(config: IndexClientConfig) = EqlCompiler()
+    fun indexServerConfiguration(config: EnticingConfiguration): IndexServerConfiguration = config.indexServerByAddress(address)
 
     @Bean
-    fun logger(config: IndexClientConfig): LogService = SimpleDirectoryBasedLogService(InetAddress.getLocalHost().hostName + "_index", config.logDirectory)
+    fun metadataConfiguration(config: IndexServerConfiguration): MetadataConfiguration = config.metadataConfiguration
+            ?: config.corpus.metadataConfiguration
+
+    @Bean
+    fun compiler() = EqlCompiler()
+
+//    @Bean todo fix
+//    fun logger(config: IndexClientConfig): LogService = SimpleDirectoryBasedLogService(InetAddress.getLocalHost().hostName + "_index", config.logDirectory)
 
     /**
-     * Creates SearchExecutors for all collections in the config
+     * Creates CollectionManagers for all collections in the config
      */
     @Bean
-    fun collectionManagers(config: IndexClientConfig): Map<String, CollectionManager> =
-            config.collections.asSequence()
-                    .map { initMg4jCollectionManager(config.corpusConfiguration, it) }
-                    .map { it.collectionName to it }
-                    .toMap()
-}
-
-internal fun IndexClientConfig.update(serializedConfig: String) {
-    val config = serializedConfig.toDto<Map<String, List<String>>>()
-    require(config.isNotEmpty()) { "at least one collection is necessary" }
-
-    // get rid of the original config
-    this.collections.clear()
-    collections {
-        for ((name, files) in config) {
-            collection(name) {
-                require(files.size >= 2) { "at least two files are needed" }
-                if (files.size == 2) {
-                    val (input, output) = files
-                    if (input.endsWith(".mg4j")) {
-                        mg4jFiles(input)
-                        indexDirectory(output)
-                    } else {
-                        mg4jDirectory(input)
-                        indexDirectory(output)
-                    }
-                } else {
-                    mg4jFiles(files.subList(0, files.size - 1))
-                    indexDirectory(files.last())
-                }
-            }
-        }
+    fun collectionManagers(config: IndexServerConfiguration, metadataConfiguration: MetadataConfiguration): Map<String, CollectionManager> {
+        return config.loadCollections()
+                .asSequence()
+                .map { (collectionDir, mg4jDir, indexDir) -> CollectionManagerConfiguration(config.corpus.name, collectionDir.name, indexDir, mg4jDir, metadataConfiguration) }
+                .map { initMg4jCollectionManager(it) }
+                .associateBy { it.collectionName }
     }
 }

@@ -13,7 +13,6 @@ class EnticingConfigurationWalker(val listener: EnticingConfigurationListener) :
         configuration.managementServiceConfiguration.accept(this)
         configuration.webserverConfiguration.accept(this)
         configuration.corpuses.forEach { it.accept(this) }
-        configuration.indexServers.forEach { it.accept(this) }
     }
 
     override fun visitManagementConfiguration(configuration: ManagementServiceConfiguration) {
