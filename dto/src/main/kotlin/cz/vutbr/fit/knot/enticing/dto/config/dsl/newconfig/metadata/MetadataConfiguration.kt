@@ -33,7 +33,7 @@ data class MetadataConfiguration(
         get() = indexes["_glue"]!!
 
     /**
-     * Indexes of mg4j indexes that are used for entity attributes, left inclusive, right exclusive TODO change client code appropriately
+     * Indexes of mg4j indexes that are used for entity attributes, left inclusive, right exclusive
      *
      * currently those are url to param9
      */

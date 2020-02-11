@@ -19,6 +19,9 @@ data class IndexConfiguration(
         var columnIndex: Int = 0
 ) : EnticingConfigurationUnit {
 
+    val isSynthetic: Boolean
+        get() = name.startsWith('_')
+
     override fun accept(visitor: EnticingConfigurationVisitor) {
         visitor.visitIndexConfiguration(this)
     }

@@ -34,7 +34,7 @@ internal fun initMg4jQueryEngine(configuration: CollectionManagerConfiguration):
     val termProcessors = Object2ObjectOpenHashMap<String, TermProcessor>()
     val index2weight = Reference2DoubleOpenHashMap<Index>()
     for (index in configuration.metadataConfiguration.indexes.values.toList()) {
-//        if (index.isSynthetic) continue todo glue index
+        if (index.isSynthetic) continue
         val mg4jIndex = Index.getInstance(indexDir.resolve("${configuration.corpusName}-${index.name}").path)
         requireNotNull(mg4jIndex.field)
         indexMap[mg4jIndex.field] = mg4jIndex

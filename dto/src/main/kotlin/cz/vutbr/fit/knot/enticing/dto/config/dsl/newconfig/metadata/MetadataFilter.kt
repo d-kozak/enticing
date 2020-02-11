@@ -11,7 +11,7 @@ fun MetadataConfiguration.filterBy(metadata: TextMetadata, defaultIndex: String)
     }
     // copy computed metadata
     filtered.entityIndexName = this.entityIndexName
-    // todo copy rest
+    filtered.lengthIndexName = this.lengthIndexName
     return filtered
 }
 
