@@ -13,6 +13,7 @@ data class LoggingConfiguration(
         /**
          * what types of messages should be written to the logfiles
          */
+        var pattern: String = "dd-MM-yyyy HH:mm:ss",
         var messageTypes: MutableSet<LogType> = mutableSetOf(),
         var managementLoggingConfiguration: ManagementLoggingConfiguration = ManagementLoggingConfiguration()
 ) {

@@ -12,7 +12,7 @@ val fullConf = enticingConfiguration {
     }
 
     logging {
-        rootDirectory = "where all logs go"
+        rootDirectory = "../logs"
         messageTypes(LogType.INFO, LogType.PERF, LogType.ERROR)
         managementLogs {
             messageTypes(LogType.PERF, LogType.ERROR)
