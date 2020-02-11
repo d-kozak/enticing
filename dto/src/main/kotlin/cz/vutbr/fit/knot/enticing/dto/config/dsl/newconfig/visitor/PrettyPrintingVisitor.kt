@@ -46,6 +46,14 @@ class PrettyPrintingVisitor : EnticingConfigurationVisitor {
                 for (indexServer in configuration.indexServers)
                     indexServer.accept(this)
             }
+            configuration.corpusSourceConfiguration?.accept(this)
+        }
+    }
+
+    override fun visitCorpusSourceConfiguration(corpusSourceConfiguration: CorpusSourceConfiguration) {
+        withIndent("corpusSource") {
+            appendProperty("server", corpusSourceConfiguration.server)
+            appendProperty("directory", corpusSourceConfiguration.directory)
         }
     }
 

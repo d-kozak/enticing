@@ -13,6 +13,12 @@ val fullConf = enticingConfiguration {
 
     corpusConfig {
         corpus("wiki-2018") {
+
+            corpusSource {
+                server = "minerva3.fit.vutbr.cz"
+                directory = "source directory"
+            }
+
             collectionsDir = "location of the collections"
             serverFile("./src/test/resources/servers.txt")
 

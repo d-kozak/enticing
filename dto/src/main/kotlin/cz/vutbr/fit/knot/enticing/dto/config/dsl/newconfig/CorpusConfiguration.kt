@@ -24,10 +24,19 @@ data class CorpusConfiguration(
         /**
          * Directory with collections that should be maintained by this server
          */
-        var collectionsDir: String = "") : EnticingConfigurationUnit {
+        var collectionsDir: String = "",
+        /**
+         * Information about the location of the original files of that corpus before distribution
+         */
+        var corpusSourceConfiguration: CorpusSourceConfiguration? = null
+) : EnticingConfigurationUnit {
 
 
     lateinit var errorCatcher: (() -> Unit) -> Unit
+
+    fun corpusSource(block: CorpusSourceConfiguration.() -> Unit) {
+        corpusSourceConfiguration = CorpusSourceConfiguration().apply(block)
+    }
 
     fun indexServers(block: IndexServerList.() -> Unit) {
         indexServers = IndexServerList(this, errorCatcher).apply(block).indexList

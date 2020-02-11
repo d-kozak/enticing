@@ -32,6 +32,7 @@ class EnticingConfigurationWalker(val listener: EnticingConfigurationListener) :
         listener.enterCorpusConfiguration(configuration)
         configuration.indexServers.forEach { it.accept(this) }
         listener.enterMetadataConfiguration(configuration.metadataConfiguration)
+        configuration.corpusSourceConfiguration?.accept(this)
     }
 
     override fun visitMetadataConfiguration(configuration: MetadataConfiguration) {
@@ -51,6 +52,10 @@ class EnticingConfigurationWalker(val listener: EnticingConfigurationListener) :
 
     override fun visitAttributeConfiguration(configuration: AttributeConfiguration) {
         listener.enterAttributeConfiguration(configuration)
+    }
+
+    override fun visitCorpusSourceConfiguration(corpusSourceConfiguration: CorpusSourceConfiguration) {
+        listener.enterCorpusSourceConfiguration(corpusSourceConfiguration)
     }
 }
 

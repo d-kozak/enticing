@@ -42,4 +42,8 @@ interface EnticingConfigurationListener {
     fun enterAttributeConfiguration(configuration: AttributeConfiguration) {
 
     }
+
+    fun enterCorpusSourceConfiguration(corpusSourceConfiguration: CorpusSourceConfiguration) {
+
+    }
 }

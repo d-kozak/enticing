@@ -46,6 +46,10 @@ interface EnticingConfigurationVisitor {
     fun visitAttributeConfiguration(configuration: AttributeConfiguration) {
 
     }
+
+    fun visitCorpusSourceConfiguration(corpusSourceConfiguration: CorpusSourceConfiguration) {
+
+    }
 }
 
 interface EnticingConfigurationVisitee {
