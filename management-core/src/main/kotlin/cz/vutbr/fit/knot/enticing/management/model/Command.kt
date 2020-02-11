@@ -14,6 +14,7 @@ interface Command {
      * @param printStderr If true, stderr of the command will be printed to the console
      */
     fun execute(checkReturnCode: Boolean = true, printStdout: Boolean = true, printStderr: Boolean = true): String {
+        println("executing command ${this.value}")
         val builder = ProcessBuilder(value.split(" "))
         if (printStdout)
             builder.redirectOutput(ProcessBuilder.Redirect.PIPE)
@@ -22,9 +23,15 @@ interface Command {
 
         val process = builder.start()
         process.waitFor(3, TimeUnit.MINUTES)
-        if (checkReturnCode)
-            check(process.exitValue() == 0) { "Command $this exited with value ${process.exitValue()}" }
-        return process.inputStream.bufferedReader().readText()
+
+        val stdout = process.inputStream.bufferedReader().readText()
+        if (printStdout)
+            println(stdout)
+        if (printStderr)
+            println(process.errorStream.bufferedReader().readText())
+
+        check(!checkReturnCode || process.exitValue() == 0) { "Command $this exited with value ${process.exitValue()}" }
+        return stdout
     }
 }
 
@@ -41,18 +48,18 @@ data class SshCommand(
         val server: String,
         val command: Command
 ) : Command {
-    override val value: String = "ssh $username@$server '${command.value}'"
+    override val value: String = "ssh $username@$server ${command.value}"
 }
 
 /**
  * Command executed on multiple machines via parallel ssh
  */
 data class ParallelSshCommand(
-        val servers: List<String>,
         val username: String,
+        val servers: List<String>,
         val command: Command
 ) : Command {
-    override val value: String = "parallel-ssh -l $username -H '${servers.joinToString(" ")}' -i '${command.value}'"
+    override val value: String = "parallel-ssh -l $username ${servers.map { "-H $it" }.joinToString(" ")} -i ${command.value}"
 }
 
 data class StartScreenCommand(
