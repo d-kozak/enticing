@@ -19,9 +19,9 @@ val File.mg4jFiles: List<File>
 data class IndexBuilderConfig(
         val corpusName: String,
         val collectionName: String,
-        val metadataConfiguration: MetadataConfiguration,
-        val inputDir: File,
-        val outputDir: File
+        val mg4jDir: File,
+        val indexDir: File,
+        val metadataConfiguration: MetadataConfiguration
 ) : TransientConfigurationUnit, Validator by ValidatorImpl() {
 
     init {
@@ -31,9 +31,9 @@ data class IndexBuilderConfig(
     override fun validateOrFail() {
         checkNotEmpty(corpusName, "corpusName")
         checkNotEmpty(collectionName, "collectionName")
-        checkDirectory(inputDir)
-        checkNotEmpty(inputDir.mg4jFiles, "mg4jFiles")
-        checkDirectory(outputDir, createIfNecessary = true)
+        checkDirectory(mg4jDir)
+        checkNotEmpty(mg4jDir.mg4jFiles, "mg4jFiles")
+        checkDirectory(indexDir, createIfNecessary = true)
         requireNoErrors()
     }
 }

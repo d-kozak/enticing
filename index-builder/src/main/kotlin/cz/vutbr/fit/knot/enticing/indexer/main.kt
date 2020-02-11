@@ -23,8 +23,8 @@ suspend fun main(args: Array<String>) {
     withContext(Dispatchers.Default) {
         for ((collection, mg4jDir, indexDir) in config.loadCollections()) {
             launch {
-                val builderConf = IndexBuilderConfig(config.corpus.name, collection.name, config.metadataConfiguration
-                        ?: config.corpus.metadataConfiguration, mg4jDir, indexDir)
+                val builderConf = IndexBuilderConfig(config.corpus.name, collection.name, mg4jDir, indexDir, config.metadataConfiguration
+                        ?: config.corpus.metadataConfiguration)
                 try {
                     startIndexing(builderConf)
                 } catch (ex: java.lang.Exception) {

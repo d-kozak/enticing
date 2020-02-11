@@ -23,9 +23,9 @@ import java.io.File
 val builderConfig = IndexBuilderConfig(
         "CC",
         "col1",
-        fullTestMetadataConfig,
         File("../data/mg4j"),
-        File("../data/indexed")
+        File("../data/indexed"),
+        fullTestMetadataConfig
 )
 
 

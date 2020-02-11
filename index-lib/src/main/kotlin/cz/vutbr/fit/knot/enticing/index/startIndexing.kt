@@ -10,8 +10,8 @@ import it.unimi.di.big.mg4j.tool.IndexBuilder
  * Executes indexing based on the configuration passed in
  */
 fun startIndexing(config: IndexBuilderConfig) {
-    val documentCollection = Mg4jCompositeDocumentCollection(config.metadataConfiguration, config.inputDir.mg4jFiles)
+    val documentCollection = Mg4jCompositeDocumentCollection(config.metadataConfiguration, config.mg4jDir.mg4jFiles)
     IndexBuilder(config.corpusName, documentCollection)
-            .ioFactory(DirectoryIOFactory(config.outputDir.toPath()))
+            .ioFactory(DirectoryIOFactory(config.indexDir.toPath()))
             .run()
 }
