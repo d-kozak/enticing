@@ -11,6 +11,14 @@ val fullConf = enticingConfiguration {
         }
     }
 
+    logging {
+        rootDirectory = "where all logs go"
+        messageTypes(LogType.INFO, LogType.PERF, LogType.ERROR)
+        managementLogs {
+            messageTypes(LogType.PERF, LogType.ERROR)
+        }
+    }
+
     corpusConfig {
         corpus("wiki-2018") {
 

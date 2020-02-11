@@ -17,6 +17,10 @@ data class EnticingConfiguration(
          */
         var webserverConfiguration: WebserverConfiguration = WebserverConfiguration(),
         /**
+         * configuration of the logging infrastructure
+         */
+        var loggingConfiguration: LoggingConfiguration = LoggingConfiguration(),
+        /**
          * list of available corpuses
          */
         var corpuses: MutableList<CorpusConfiguration> = mutableListOf()) : EnticingConfigurationUnit {
@@ -30,6 +34,10 @@ data class EnticingConfiguration(
         webserverConfiguration = WebserverConfiguration().apply(block)
     }
 
+
+    fun logging(block: LoggingConfiguration.() -> Unit) {
+        loggingConfiguration = LoggingConfiguration().apply(block)
+    }
 
     fun management(block: ManagementServiceConfiguration.() -> Unit) = runCatching {
         managementServiceConfiguration = ManagementServiceConfiguration().apply(block)
