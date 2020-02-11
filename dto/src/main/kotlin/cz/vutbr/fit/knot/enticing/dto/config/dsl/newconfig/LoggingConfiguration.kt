@@ -1,5 +1,7 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig
 
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.visitor.EnticingConfigurationVisitor
+
 /**
  * Specifies how the log files should be structured
  * Each component writes it's own local logs about important events  and specified subsets of events are
@@ -16,7 +18,11 @@ data class LoggingConfiguration(
         var pattern: String = "dd-MM-yyyy HH:mm:ss",
         var messageTypes: MutableSet<LogType> = mutableSetOf(),
         var managementLoggingConfiguration: ManagementLoggingConfiguration = ManagementLoggingConfiguration()
-) {
+) : EnticingConfigurationUnit {
+
+    override fun accept(visitor: EnticingConfigurationVisitor) {
+        visitor.visitLoggingConfiguration(this)
+    }
 
     fun managementLogs(block: ManagementLoggingConfiguration.() -> Unit) {
         managementLoggingConfiguration = ManagementLoggingConfiguration().apply(block)

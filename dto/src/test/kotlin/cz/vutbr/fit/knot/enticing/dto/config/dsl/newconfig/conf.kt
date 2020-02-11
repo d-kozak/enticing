@@ -54,4 +54,4 @@ val fullConf = enticingConfiguration {
             }
         }
     }
-}
+}.validateOrFail()

@@ -50,6 +50,10 @@ interface EnticingConfigurationVisitor {
     fun visitCorpusSourceConfiguration(corpusSourceConfiguration: CorpusSourceConfiguration) {
 
     }
+
+    fun visitLoggingConfiguration(loggingConfiguration: LoggingConfiguration) {
+
+    }
 }
 
 interface EnticingConfigurationVisitee {

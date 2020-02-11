@@ -46,4 +46,8 @@ interface EnticingConfigurationListener {
     fun enterCorpusSourceConfiguration(corpusSourceConfiguration: CorpusSourceConfiguration) {
 
     }
+
+    fun enterLoggingConfiguration(loggingConfiguration: LoggingConfiguration) {
+
+    }
 }

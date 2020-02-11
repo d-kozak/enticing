@@ -27,12 +27,12 @@ class PrettyPrintingVisitor : EnticingConfigurationVisitor {
         withIndent("enticingConfiguration") {
             configuration.managementServiceConfiguration.accept(this)
             configuration.webserverConfiguration.accept(this)
+            configuration.loggingConfiguration.accept(this)
             if (configuration.corpuses.isNotEmpty()) {
                 withIndent("corpuses") {
                     for (corpus in configuration.corpuses)
                         corpus.accept(this)
                 }
-
             }
         }
     }
@@ -60,7 +60,7 @@ class PrettyPrintingVisitor : EnticingConfigurationVisitor {
     override fun visitIndexServerConfiguration(configuration: IndexServerConfiguration) {
         withIndent("indexServer") {
             appendProperty("address", configuration.address)
-            appendProperty("mg4jDir", configuration.collectionsDir)
+            appendProperty("collectionsDir", configuration.collectionsDir)
             configuration.metadataConfiguration?.accept(this)
         }
     }
@@ -116,6 +116,17 @@ class PrettyPrintingVisitor : EnticingConfigurationVisitor {
 
     override fun visitWebserverConfiguration(configuration: WebserverConfiguration) {
         appendLine(configuration.toString())
+    }
+
+    override fun visitLoggingConfiguration(loggingConfiguration: LoggingConfiguration) {
+        withIndent("logging") {
+            appendProperty("rootDirectory", loggingConfiguration.rootDirectory)
+            appendProperty("pattern", loggingConfiguration.pattern)
+            appendProperty("messagesTypes", loggingConfiguration.messageTypes)
+            withIndent("managementLogging") {
+                appendProperty("messageTypes", loggingConfiguration.messageTypes)
+            }
+        }
     }
 
     /**
