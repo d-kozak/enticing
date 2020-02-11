@@ -1,12 +1,12 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
 import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.CollectionManagerConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.mg4jFiles
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.index.collection.manager.CollectionManager
 import cz.vutbr.fit.knot.enticing.index.collection.manager.format.result.EqlResultCreator
 import cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess.EqlPostProcessor
-import cz.vutbr.fit.knot.enticing.index.mg4jFiles
 import it.unimi.di.big.mg4j.index.Index
 import it.unimi.di.big.mg4j.index.TermProcessor
 import it.unimi.di.big.mg4j.query.IntervalSelector
@@ -17,16 +17,6 @@ import it.unimi.di.big.mg4j.search.DocumentIteratorBuilderVisitor
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.objects.Object2ReferenceLinkedOpenHashMap
 import it.unimi.dsi.fastutil.objects.Reference2DoubleOpenHashMap
-import java.io.File
-
-// todo refactor
-data class CollectionManagerConfiguration(
-        val corpusName: String,
-        val collectionName: String,
-        val mg4jDir: File,
-        val indexDir: File,
-        val metadataConfiguration: MetadataConfiguration
-)
 
 fun initMg4jCollectionManager(configuration: CollectionManagerConfiguration): CollectionManager {
     val collection = Mg4jCompositeDocumentCollection(configuration.metadataConfiguration, configuration.mg4jDir.mg4jFiles)

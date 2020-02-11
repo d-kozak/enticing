@@ -4,7 +4,8 @@ import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.annotation.Warning
 import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.metadataConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.CollectionManagerConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.IndexBuilderConfig
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.format.text.StringWithMetadata
 import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnit
@@ -13,7 +14,6 @@ import cz.vutbr.fit.knot.enticing.dto.utils.toDto
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompilerException
 import cz.vutbr.fit.knot.enticing.index.collection.manager.computeExtensionIntervals
-import cz.vutbr.fit.knot.enticing.index.mg4j.CollectionManagerConfiguration
 import cz.vutbr.fit.knot.enticing.index.mg4j.fullTestMetadataConfig
 import cz.vutbr.fit.knot.enticing.index.mg4j.initMg4jCollectionManager
 import org.assertj.core.api.Assertions.assertThat
@@ -54,9 +54,6 @@ class CollectionManagerTest {
         @BeforeAll
         @JvmStatic
         internal fun beforeAll() {
-            // it is necessary to validate the configuration, because some initialization happens at that phase
-//            builderConfig.validate() todo fix
-//            clientConfig.validate()
             startIndexing(builderConfig)
         }
 

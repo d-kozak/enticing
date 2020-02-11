@@ -20,6 +20,14 @@ interface Validator {
     } else true
 
 
+    fun checkNotEmpty(string: String, name: String) {
+        if (string.isEmpty()) errors.add("$name should not be empty")
+    }
+
+    fun checkNotEmpty(collection: Collection<*>, name: String) {
+        if (collection.isEmpty()) errors.add("$name should not be empty")
+    }
+
     fun checkDirectory(directory: File, createIfNecessary: Boolean = false): Boolean {
         if (createIfNecessary) {
             if (!directory.exists()) {
@@ -64,5 +72,10 @@ interface Validator {
         }
 
         return isValid
+    }
+
+    fun requireNoErrors() {
+        if (errors.isNotEmpty())
+            throw IllegalStateException(errors.joinToString("\n"))
     }
 }

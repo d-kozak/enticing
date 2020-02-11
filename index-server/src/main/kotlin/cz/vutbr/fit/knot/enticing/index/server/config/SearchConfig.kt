@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.server.config
 
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.CollectionManagerConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.EnticingConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.IndexServerConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
@@ -8,7 +9,6 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.visitor.prettyPrint
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.index.collection.manager.CollectionManager
-import cz.vutbr.fit.knot.enticing.index.mg4j.CollectionManagerConfiguration
 import cz.vutbr.fit.knot.enticing.index.mg4j.initMg4jCollectionManager
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

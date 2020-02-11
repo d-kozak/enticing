@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.mg4jFiles
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.dto.interval.substring
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
@@ -11,7 +12,6 @@ import cz.vutbr.fit.knot.enticing.index.collectionManagerConfiguration
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jCompositeDocumentCollection
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jSearchEngine
 import cz.vutbr.fit.knot.enticing.index.mg4j.initMg4jQueryEngine
-import cz.vutbr.fit.knot.enticing.index.mg4jFiles
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.fail
