@@ -4,14 +4,14 @@ import com.github.kittinunf.fuel.core.Request
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
-import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.LogService
 import cz.vutbr.fit.knot.enticing.log.logger
 
-class BasicEnticingApi(val address: String, logService: MeasuringLogService) : EnticingApi {
+abstract class EnticingComponentApi(val address: String, logService: LogService) {
 
     private val logger = logService.logger { }
 
-    override fun httpPost(endPoint: String, dto: Any) {
+    fun httpPost(endPoint: String, dto: Any) {
         (address + endPoint).httpPost()
                 .body(dto.toJson())
                 .submit()
