@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.management.model
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -21,7 +22,7 @@ class ShellCommandTest {
 
 
     @Nested
-//    @Disabled // these tests can be performed only from within knot network
+    @Disabled // these tests can be performed only from within knot network
     inner class SshTest {
         @Test
         fun `simple echo`() {
