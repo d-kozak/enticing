@@ -20,8 +20,10 @@ interface Validator {
     } else true
 
 
-    fun checkNotEmpty(string: String, name: String) {
-        if (string.isEmpty()) errors.add("$name should not be empty")
+    fun checkNotEmpty(string: String, name: String): Boolean {
+        val isEmpty = string.isEmpty()
+        if (isEmpty) errors.add("$name should not be empty")
+        return !isEmpty
     }
 
     fun checkNotEmpty(collection: Collection<*>, name: String) {

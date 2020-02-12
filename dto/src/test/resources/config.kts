@@ -1,3 +1,4 @@
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.LogType
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.enticingConfiguration
 
 enticingConfiguration {
@@ -8,6 +9,14 @@ enticingConfiguration {
     management {
         hearthBeat {
             period = 2_000
+        }
+    }
+
+    logging {
+        rootDirectory = "../logs"
+        messageTypes(LogType.INFO, LogType.PERF, LogType.ERROR)
+        managementLogs {
+            messageTypes(LogType.PERF, LogType.ERROR)
         }
     }
 

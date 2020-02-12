@@ -14,8 +14,8 @@ class EnticingConfigurationValidator(val validator: Validator) : EnticingConfigu
     }
 
     override fun enterLoggingConfiguration(loggingConfiguration: LoggingConfiguration) {
-        validator.checkNotEmpty(loggingConfiguration.rootDirectory, "rootDirectory")
-        validator.checkDirectory(File(loggingConfiguration.rootDirectory), createIfNecessary = true)
+        if (validator.checkNotEmpty(loggingConfiguration.rootDirectory, "rootDirectory"))
+            validator.checkDirectory(File(loggingConfiguration.rootDirectory), createIfNecessary = true)
     }
 }
 
