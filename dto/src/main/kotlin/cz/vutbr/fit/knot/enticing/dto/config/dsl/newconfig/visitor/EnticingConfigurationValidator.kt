@@ -7,15 +7,15 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.util.Validator
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.util.ValidatorImpl
 import java.io.File
 
-class EnticingConfigurationValidator(val validator: Validator) : EnticingConfigurationListener, Validator by validator {
+class EnticingConfigurationValidator(validator: Validator) : EnticingConfigurationListener, Validator by validator {
 
     override fun enterCorpusConfiguration(configuration: CorpusConfiguration) {
-        validator.check(configuration.metadataConfiguration.indexes.isNotEmpty()) { "at least one index should be present" }
+        check(configuration.metadataConfiguration.indexes.isNotEmpty()) { "at least one index should be present" }
     }
 
     override fun enterLoggingConfiguration(loggingConfiguration: LoggingConfiguration) {
-        if (validator.checkNotEmpty(loggingConfiguration.rootDirectory, "rootDirectory"))
-            validator.checkDirectory(File(loggingConfiguration.rootDirectory), createIfNecessary = true)
+        if (checkNotEmpty(loggingConfiguration.rootDirectory, "rootDirectory"))
+            checkDirectory(File(loggingConfiguration.rootDirectory), createIfNecessary = true)
     }
 }
 
