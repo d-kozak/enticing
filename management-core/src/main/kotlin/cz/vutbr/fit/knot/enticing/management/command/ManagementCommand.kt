@@ -6,12 +6,7 @@ package cz.vutbr.fit.knot.enticing.management.command
  */
 abstract class ManagementCommand {
 
-    fun executeCommand() {
-        execute()
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    internal open fun canExecute(): Boolean = true
 
-    protected abstract fun execute()
-
-
+    internal abstract fun execute()
 }
