@@ -1,4 +1,4 @@
-package cz.vutbr.fit.knot.enticing.management.model
+package cz.vutbr.fit.knot.enticing.management.shell
 
 import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
 import cz.vutbr.fit.knot.enticing.log.logger

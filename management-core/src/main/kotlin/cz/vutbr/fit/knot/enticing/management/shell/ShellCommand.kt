@@ -1,4 +1,4 @@
-package cz.vutbr.fit.knot.enticing.management.model
+package cz.vutbr.fit.knot.enticing.management.shell
 
 /**
  * Shell command to be executed by the underlying OS

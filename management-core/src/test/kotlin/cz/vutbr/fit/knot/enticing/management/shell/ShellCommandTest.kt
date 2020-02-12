@@ -1,5 +1,6 @@
-package cz.vutbr.fit.knot.enticing.management.model
+package cz.vutbr.fit.knot.enticing.management.shell
 
+import cz.vutbr.fit.knot.enticing.management.stdoutLogService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
