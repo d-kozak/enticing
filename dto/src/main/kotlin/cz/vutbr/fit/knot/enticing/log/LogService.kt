@@ -26,7 +26,7 @@ abstract class ConfiguredLogService(val config: LoggingConfiguration) : LogServi
  * Logservice delegating all messages to the next logger
  * subclasses can override it's methods to perform something special only for a specific method
  */
-abstract class DelegatingLogService(val next: LogService, config: LoggingConfiguration) : ConfiguredLogService(config) {
+abstract class DelegatingLogService(var next: LogService, config: LoggingConfiguration) : ConfiguredLogService(config) {
     override fun debug(message: String) = next.debug(message)
     override fun info(message: String) = next.info(message)
     override fun perf(message: String) = next.perf(message)

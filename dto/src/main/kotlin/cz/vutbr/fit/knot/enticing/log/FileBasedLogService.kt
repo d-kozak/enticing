@@ -6,22 +6,14 @@ import java.io.PrintWriter
 
 fun String.asLogger(config: LoggingConfiguration) = FileBasedLogService(this, config)
 
-class FileBasedLogService(logFile: String, config: LoggingConfiguration) : ConfiguredLogService(config), AutoCloseable {
+class FileBasedLogService(logFile: String, config: LoggingConfiguration) : AggregatingLogService(config), AutoCloseable {
 
     private var writer: PrintWriter = File(logFile).printWriter()
 
-    override fun debug(message: String) = message("DEBUG", message)
-
-    override fun info(message: String) = message("INFO", message)
-
-    override fun perf(message: String) = message("PERF", message)
-
-    override fun error(message: String) = message("ERROR", message)
-
-    private fun message(prefix: String, message: String) {
+    override fun onMessage(kind: String, message: String) {
         writer.print(timestamp())
         writer.print(" : ")
-        writer.print(prefix)
+        writer.print(kind)
         writer.print(" : ")
         writer.println(message)
         writer.flush()

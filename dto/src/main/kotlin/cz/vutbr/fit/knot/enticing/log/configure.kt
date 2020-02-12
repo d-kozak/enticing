@@ -10,5 +10,6 @@ fun LoggingConfiguration.configureFor(serviceId: String): MeasuringLogService {
     val stdoutLogger = StdoutLogService(this)
     return DispatchingLogService(stdoutLogger, fileLogger)
             .measuring(this)
+
 }
 
