@@ -1,0 +1,83 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+plugins {
+	id("org.jetbrains.kotlin.plugin.jpa") version "1.3.50"
+	id("org.springframework.boot") version "2.1.4.RELEASE"
+	id("org.jetbrains.kotlin.jvm")
+	id("org.jetbrains.kotlin.plugin.spring") version "1.3.50"
+}
+
+apply plugin: "io.spring.dependency-management"
+
+group = "cz.vutbr.knot.enticing.management"
+version = "0.0.1-SNAPSHOT"
+sourceCompatibility = "1.8"
+libsDirName = "../../lib"
+
+repositories {
+	mavenCentral()
+	jcenter()
+}
+
+dependencies {
+	implementation(project(path: ":management-core", configuration: 'default'))
+	implementation(project(path: ":dto", configuration: 'default'))
+	implementation(project(path: ":query-dispatcher", configuration: 'default'))
+	implementation(project(path: ":eql-compiler", configuration: 'default'))
+
+	/**
+	 * Kotlin lang deps
+	 */
+	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0-M1")
+
+	/**
+	 * Spring deps
+	 */
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-websocket")
+	runtimeOnly("org.springframework.boot:spring-boot-devtools")
+
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
+	/**
+	 * Database
+	 */
+	runtimeOnly("com.h2database:h2")
+	runtimeOnly("org.postgresql:postgresql")
+	implementation("commons-dbcp:commons-dbcp:1.4")
+
+
+	/**
+	 * Spring test
+	 */
+	testImplementation("org.springframework.boot:spring-boot-starter-test") {
+		// exclude junit4 that would be otherwise added as transitive dependency
+		exclude group: "junit", module: "junit"
+	}
+	testImplementation("org.springframework.security:spring-security-test")
+
+	/**
+	 * Testing & mocking
+	 */
+	testImplementation("io.mockk:mockk:1.9")
+	testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
+	testCompile("org.junit.jupiter:junit-jupiter-api:5.3.2")
+	testRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.2")
+}
+
+test {
+	useJUnitPlatform()
+}
+
+tasks.withType(KotlinCompile) {
+	kotlinOptions {
+		freeCompilerArgs = ["-Xjsr305=strict"]
+		jvmTarget = "1.8"
+	}
+}
+
