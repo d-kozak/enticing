@@ -27,6 +27,6 @@ class LogServiceTest {
             }
             42
         }
-        logger.info("The answer is ${result.value}")
+        logger.info("The answer is $result")
     }
 }

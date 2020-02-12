@@ -1,11 +1,12 @@
 package cz.vutbr.fit.knot.enticing.management.model
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-class CommandTest {
+class ShellCommandTest {
+
+    val executor = ShellCommandExecutor(stdoutLogService)
 
     @Nested
     inner class LocalCommandTest {
@@ -13,26 +14,26 @@ class CommandTest {
         @Test
         fun `simple echo`() {
             val cmd = LocalCommand("echo hello")
-            assertThat(cmd.execute())
+            assertThat(executor.execute(cmd))
                     .isEqualTo("hello\n")
         }
     }
 
 
     @Nested
-    @Disabled // these tests can be performed only from within knot network
+//    @Disabled // these tests can be performed only from within knot network
     inner class SshTest {
         @Test
         fun `simple echo`() {
             val cmd = SshCommand("xkozak15", "minerva3.fit.vutbr.cz", LocalCommand("echo hello"))
-            assertThat(cmd.execute())
+            assertThat(executor.execute(cmd))
                     .isEqualTo("hello\n")
         }
 
         @Test
         fun `parallel echo`() {
             val cmd = ParallelSshCommand("xkozak15", listOf("minerva1.fit.vutbr.cz", "minerva2.fit.vutbr.cz", "minerva3.fit.vutbr.cz"), LocalCommand("echo hello"))
-            assertThat(cmd.execute())
+            assertThat(executor.execute(cmd))
                     .isNotEmpty()
         }
     }
