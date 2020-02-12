@@ -9,12 +9,12 @@ class ManagementEngine(val configuration: EnticingConfiguration, logService: Mea
     private val logger = logService.logger { }
 
     fun executeCommand(command: ManagementCommand) {
-        if (!command.canExecute()) {
+        if (!command.canExecute(configuration)) {
             logger.error("command $command cannot be executed")
             return
         }
         logger.measure("command $command") {
-            command.execute()
+            command.execute(configuration)
         }
     }
 }
