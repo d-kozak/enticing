@@ -14,7 +14,7 @@ class MeasuringLogService(next: LogService, config: LoggingConfiguration) : Dele
             val res = block()
             reportSuccess(handle)
             res
-        } catch (ex: Exception) {
+        } catch (ex: Throwable) {
             reportCrash(ex, handle)
             throw ex
         }

@@ -30,6 +30,12 @@ interface Validator {
         if (collection.isEmpty()) errors.add("$name should not be empty")
     }
 
+    fun checkFile(file: File) = if (!file.exists()) {
+        errors.add("file $file does not exist")
+        false
+    } else true
+
+
     fun checkDirectory(directory: File, createIfNecessary: Boolean = false): Boolean {
         if (createIfNecessary) {
             if (!directory.exists()) {

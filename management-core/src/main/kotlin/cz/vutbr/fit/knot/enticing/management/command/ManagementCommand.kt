@@ -8,7 +8,9 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.EnticingConfiguration
  */
 abstract class ManagementCommand {
 
-    internal open fun canExecute(configuration: EnticingConfiguration): Boolean = true
+    internal open fun validateOrFail(configuration: EnticingConfiguration) {
+
+    }
 
     internal abstract fun execute(configuration: EnticingConfiguration)
 }
