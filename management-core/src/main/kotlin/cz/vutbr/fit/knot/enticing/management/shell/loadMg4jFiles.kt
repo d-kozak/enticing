@@ -4,6 +4,10 @@ import cz.vutbr.fit.knot.enticing.management.model.Mg4jFile
 
 fun PrintMg4jFilesCommand(username: String, server: String, directory: String) = SshCommand(username, server, LocalCommand("ls -l $directory/*.mg4j"))
 
+fun CopyFilesCommand(username: String, sourceServer: String, files: List<Mg4jFile>, destinationServer: String, destinationDirectory: String) = SshCommand(username, sourceServer, LocalCommand("scp ${files.joinToString(" ") { it.path }} $username@$destinationServer:$destinationDirectory"))
+
+fun CreateRemoteDirCommand(username: String, server: String, path: String) = SshCommand(username, server, LocalCommand("mkdir -p $path"))
+
 private val whitespaceRegex = """\s+""".toRegex()
 
 private val sizeColumn = 4

@@ -26,7 +26,7 @@ enticingConfiguration {
 
     corpusConfig {
         corpus("wiki-2018") {
-            collectionsDir = "location of the collections"
+            collectionsDir = "/mnt/data/indexes/xkozak15/new_wiki"
             serverFile("../dto/src/test/resources/servers.txt")
 
             corpusSource {
