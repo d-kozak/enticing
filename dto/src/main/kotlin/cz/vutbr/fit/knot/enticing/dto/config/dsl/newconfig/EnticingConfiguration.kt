@@ -23,7 +23,9 @@ data class EnticingConfiguration(
         /**
          * list of available corpuses
          */
-        var corpuses: MutableList<CorpusConfiguration> = mutableListOf()) : EnticingConfigurationUnit {
+        var corpuses: MutableMap<String, CorpusConfiguration> = mutableMapOf(),
+        var authentication: EnticingAuthentication = EnticingAuthentication()
+) : EnticingConfigurationUnit {
 
     /**
      * errors encountered when initializing the configuration
@@ -43,12 +45,16 @@ data class EnticingConfiguration(
         managementServiceConfiguration = ManagementServiceConfiguration().apply(block)
     }
 
-    fun corpusConfig(block: CorpusList.() -> Unit) = runCatching {
-        corpuses = CorpusList(::runCatching).apply(block).corpusList
+    fun corpusConfig(block: CorpusMap.() -> Unit) = runCatching {
+        corpuses = CorpusMap(::runCatching).apply(block).corpusMap
+    }
+
+    fun authentication(block: EnticingAuthentication.() -> Unit) = runCatching {
+        authentication = EnticingAuthentication().apply(block)
     }
 
     fun indexServerByAddress(address: String): IndexServerConfiguration {
-        for (corpus in corpuses) {
+        for (corpus in corpuses.values) {
             for (server in corpus.indexServers)
                 if (server.address == address) return server
         }

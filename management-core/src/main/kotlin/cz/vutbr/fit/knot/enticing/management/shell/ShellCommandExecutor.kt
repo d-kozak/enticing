@@ -21,7 +21,7 @@ class ShellCommandExecutor(logService: MeasuringLogService) {
             builder.redirectError(ProcessBuilder.Redirect.PIPE)
 
         val process = builder.start()
-        process.waitFor(3, TimeUnit.MINUTES)
+        process.waitFor(3, TimeUnit.SECONDS)
 
         val stdout = process.inputStream.bufferedReader().readText()
         if (printStdout)
@@ -29,7 +29,7 @@ class ShellCommandExecutor(logService: MeasuringLogService) {
         if (printStderr)
             println(process.errorStream.bufferedReader().readText())
 
-        check(!checkReturnCode || process.exitValue() == 0) { "Command $this exited with value ${process.exitValue()}" }
+        check(!checkReturnCode || process.exitValue() == 0) { "Command ${command.value} exited with value ${process.exitValue()}" }
         stdout
     }
 }

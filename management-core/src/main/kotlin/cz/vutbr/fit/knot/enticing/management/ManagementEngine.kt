@@ -5,35 +5,26 @@ import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
 import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.management.command.ManagementCommand
 import cz.vutbr.fit.knot.enticing.management.command.concrete.*
+import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
 
-class ManagementEngine(val configuration: EnticingConfiguration, logService: MeasuringLogService) {
+class ManagementEngine(val configuration: EnticingConfiguration, val logService: MeasuringLogService) {
 
     private val logger = logService.logger { }
+
+    private val executor = ShellCommandExecutor(logService)
 
     fun execute(args: ManagementCliArguments) {
         if (args.removeFiles) args.corpuses.executeAll { RemoveDistributedFiles(it) }
         if (args.distribute) args.corpuses.executeAll { DistributeCorpus(it) }
         if (args.printFiles) args.corpuses.executeAll { ShowDistributedFiles(it) }
         if (args.startIndexing) args.corpuses.executeAll { StartIndexing(it) }
-        when {
-            !args.indexServers && !args.webserver -> {
-                args.corpuses.executeAll { KillIndexServers(it) }
-                executeCommand(KillWebserver)
-                if (args.startComponents) {
-                    args.corpuses.executeAll { StartIndexServers(it) }
-                    executeCommand(StartWebserver)
-                }
-            }
-            args.indexServers -> {
-                args.corpuses.executeAll { KillIndexServers(it) }
-                if (args.startComponents) args.corpuses.executeAll { StartIndexServers(it) }
-
-            }
-            args.webserver -> {
-                executeCommand(KillWebserver)
-                if (args.startComponents) executeCommand(StartWebserver)
-
-            }
+        if (args.indexServers) {
+            args.corpuses.executeAll { KillIndexServers(it) }
+            if (args.startComponents) args.corpuses.executeAll { StartIndexServers(it) }
+        }
+        if (args.webserver) {
+            executeCommand(KillWebserver)
+            if (args.startComponents) executeCommand(StartWebserver)
         }
     }
 
@@ -41,11 +32,11 @@ class ManagementEngine(val configuration: EnticingConfiguration, logService: Mea
     fun executeCommand(command: ManagementCommand) {
         command.validateOrFail(configuration)
         logger.measure("command $command") {
-            command.execute(configuration)
+            command.execute(configuration, executor, logService)
         }
     }
 
-    fun Collection<String>.executeAll(factory: (String) -> ManagementCommand) {
+    private fun Collection<String>.executeAll(factory: (String) -> ManagementCommand) {
         for (name in this) executeCommand(factory(name))
     }
 }

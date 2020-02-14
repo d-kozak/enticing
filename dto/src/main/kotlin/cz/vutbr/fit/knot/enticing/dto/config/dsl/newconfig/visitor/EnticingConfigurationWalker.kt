@@ -12,8 +12,9 @@ class EnticingConfigurationWalker(val listener: EnticingConfigurationListener) :
         listener.enterEnticingConfiguration(configuration)
         configuration.managementServiceConfiguration.accept(this)
         configuration.webserverConfiguration.accept(this)
-        configuration.corpuses.forEach { it.accept(this) }
+        configuration.corpuses.values.forEach { it.accept(this) }
         configuration.loggingConfiguration.accept(this)
+        configuration.authentication.accept(this)
     }
 
     override fun visitManagementConfiguration(configuration: ManagementServiceConfiguration) {
@@ -33,7 +34,7 @@ class EnticingConfigurationWalker(val listener: EnticingConfigurationListener) :
         listener.enterCorpusConfiguration(configuration)
         configuration.indexServers.forEach { it.accept(this) }
         listener.enterMetadataConfiguration(configuration.metadataConfiguration)
-        configuration.corpusSourceConfiguration?.accept(this)
+        configuration.corpusSourceConfiguration.accept(this)
     }
 
     override fun visitMetadataConfiguration(configuration: MetadataConfiguration) {
@@ -61,6 +62,10 @@ class EnticingConfigurationWalker(val listener: EnticingConfigurationListener) :
 
     override fun visitLoggingConfiguration(loggingConfiguration: LoggingConfiguration) {
         listener.enterLoggingConfiguration(loggingConfiguration)
+    }
+
+    override fun visitEnticingAuthentication(enticingAuthentication: EnticingAuthentication) {
+        listener.enterEnticingAuthentication(enticingAuthentication)
     }
 }
 

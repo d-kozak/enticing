@@ -28,9 +28,10 @@ class PrettyPrintingVisitor : EnticingConfigurationVisitor {
             configuration.managementServiceConfiguration.accept(this)
             configuration.webserverConfiguration.accept(this)
             configuration.loggingConfiguration.accept(this)
+            configuration.authentication.accept(this)
             if (configuration.corpuses.isNotEmpty()) {
                 withIndent("corpuses") {
-                    for (corpus in configuration.corpuses)
+                    for (corpus in configuration.corpuses.values)
                         corpus.accept(this)
                 }
             }
@@ -46,7 +47,7 @@ class PrettyPrintingVisitor : EnticingConfigurationVisitor {
                 for (indexServer in configuration.indexServers)
                     indexServer.accept(this)
             }
-            configuration.corpusSourceConfiguration?.accept(this)
+            configuration.corpusSourceConfiguration.accept(this)
         }
     }
 
@@ -126,6 +127,12 @@ class PrettyPrintingVisitor : EnticingConfigurationVisitor {
             withIndent("managementLogging") {
                 appendProperty("messageTypes", loggingConfiguration.messageTypes)
             }
+        }
+    }
+
+    override fun visitEnticingAuthentication(enticingAuthentication: EnticingAuthentication) {
+        withIndent("authentication") {
+            appendProperty("username", enticingAuthentication.username)
         }
     }
 

@@ -71,7 +71,7 @@ class ManagementCliArguments(parser: ArgParser) : Validator by ValidatorImpl() {
         configuration = executeScript<EnticingConfiguration>(scriptPath).validateOrFail()
 
         if (corpuses.isEmpty()) {
-            for (corpus in configuration.corpuses) corpuses.add(corpus.name)
+            for (corpus in configuration.corpuses.values) corpuses.add(corpus.name)
         }
 
         check(listOf(printFiles, removeFiles, distribute, startIndexing, webserver, indexServers, kill).any()) { "At least one option should be set" }

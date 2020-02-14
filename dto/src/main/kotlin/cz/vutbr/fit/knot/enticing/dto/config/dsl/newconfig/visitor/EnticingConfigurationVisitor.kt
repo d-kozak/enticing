@@ -54,6 +54,10 @@ interface EnticingConfigurationVisitor {
     fun visitLoggingConfiguration(loggingConfiguration: LoggingConfiguration) {
 
     }
+
+    fun visitEnticingAuthentication(enticingAuthentication: EnticingAuthentication) {
+
+    }
 }
 
 interface EnticingConfigurationVisitee {

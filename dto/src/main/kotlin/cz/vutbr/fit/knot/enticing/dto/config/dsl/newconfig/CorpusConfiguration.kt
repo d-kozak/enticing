@@ -28,7 +28,7 @@ data class CorpusConfiguration(
         /**
          * Information about the location of the original files of that corpus before distribution
          */
-        var corpusSourceConfiguration: CorpusSourceConfiguration? = null
+        var corpusSourceConfiguration: CorpusSourceConfiguration = CorpusSourceConfiguration()
 ) : EnticingConfigurationUnit {
 
 
@@ -62,17 +62,15 @@ data class CorpusConfiguration(
 }
 
 
-data class CorpusList(val errorCatcher: (() -> Unit) -> Unit) {
+data class CorpusMap(val errorCatcher: (() -> Unit) -> Unit) {
 
-    val corpusList: MutableList<CorpusConfiguration> = mutableListOf()
+    val corpusMap: MutableMap<String, CorpusConfiguration> = mutableMapOf()
 
     fun corpus(name: String, block: CorpusConfiguration.() -> Unit) {
         errorCatcher {
-            corpusList.add(CorpusConfiguration(name)
-                    .also {
-                        it.errorCatcher = errorCatcher
-                    }
-                    .apply(block))
+            corpusMap[name] = CorpusConfiguration(name)
+                    .also { it.errorCatcher = errorCatcher }
+                    .apply(block)
         }
     }
 }

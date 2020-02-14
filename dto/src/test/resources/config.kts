@@ -20,10 +20,19 @@ enticingConfiguration {
         }
     }
 
+    authentication {
+        username = "xkozak15"
+    }
+
     corpusConfig {
         corpus("wiki-2018") {
             collectionsDir = "location of the collections"
             serverFile("../dto/src/test/resources/servers.txt")
+
+            corpusSource {
+                server = "minerva3.fit.vutbr.cz"
+                directory = "/var/xdolez52/Zpracovani_Wikipedie/html_from_wikipedia_en_all_novid_2018-10.zim/6-mg4j/old-2019-10-18"
+            }
 
             metadata {
                 indexes {

@@ -50,4 +50,8 @@ interface EnticingConfigurationListener {
     fun enterLoggingConfiguration(loggingConfiguration: LoggingConfiguration) {
 
     }
+
+    fun enterEnticingAuthentication(enticingAuthentication: EnticingAuthentication) {
+
+    }
 }

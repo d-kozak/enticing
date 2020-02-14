@@ -1,8 +1,6 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.visitor
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.CorpusConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.EnticingConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.LoggingConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.*
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.util.Validator
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.util.ValidatorImpl
 import java.io.File
@@ -16,6 +14,15 @@ class EnticingConfigurationValidator(validator: Validator) : EnticingConfigurati
     override fun enterLoggingConfiguration(loggingConfiguration: LoggingConfiguration) {
         if (checkNotEmpty(loggingConfiguration.rootDirectory, "rootDirectory"))
             checkDirectory(File(loggingConfiguration.rootDirectory), createIfNecessary = true)
+    }
+
+    override fun enterEnticingAuthentication(enticingAuthentication: EnticingAuthentication) {
+        checkNotEmpty(enticingAuthentication.username, "username")
+    }
+
+    override fun enterCorpusSourceConfiguration(corpusSourceConfiguration: CorpusSourceConfiguration) {
+        checkNotEmpty(corpusSourceConfiguration.server, "corpus source server")
+        checkNotEmpty(corpusSourceConfiguration.directory, "corpus source directory")
     }
 }
 
