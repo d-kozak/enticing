@@ -1,36 +1,33 @@
 package cz.vutbr.fit.knot.enticing.management.command.concrete
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.CorpusConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.CorpusSourceConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.EnticingConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.IndexServerConfiguration
 import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
-import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.management.command.ManagementCommand
 import cz.vutbr.fit.knot.enticing.management.model.Mg4jFile
 import cz.vutbr.fit.knot.enticing.management.shell.CopyFilesCommand
 import cz.vutbr.fit.knot.enticing.management.shell.CreateRemoteDirCommand
 import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
 import cz.vutbr.fit.knot.enticing.management.shell.loadMg4jFiles
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 
 data class DistributeCorpus(val corpusName: String) : ManagementCommand() {
 
-    private lateinit var shellExecutor: ShellCommandExecutor
-    private lateinit var logger: MeasuringLogService
-    private lateinit var enticingConfiguration: EnticingConfiguration
     private lateinit var corpusConfiguration: CorpusConfiguration
+    private lateinit var corpusSourceConfiguration: CorpusSourceConfiguration
 
-    override fun execute(configuration: EnticingConfiguration, executor: ShellCommandExecutor, logService: MeasuringLogService) {
-        shellExecutor = executor
-        logger = logService.logger { }
-        enticingConfiguration = configuration
+    override fun init(configuration: EnticingConfiguration, executor: ShellCommandExecutor, logService: MeasuringLogService) {
+        super.init(configuration, executor, logService)
         corpusConfiguration = configuration.corpuses.getValue(corpusName)
+        corpusSourceConfiguration = corpusConfiguration.corpusSourceConfiguration
+    }
 
-        val (sourceServer, directory, collectionsPerServer) = corpusConfiguration.corpusSourceConfiguration
-        val allFiles = executor.loadMg4jFiles(configuration.authentication.username, sourceServer, directory)
+    override suspend fun execute(scope: CoroutineScope) {
+        val (sourceServer, directory, collectionsPerServer) = corpusSourceConfiguration
+        val allFiles = shellExecutor.loadMg4jFiles(username, sourceServer, directory)
 
         val divided = divideFiles(corpusConfiguration.indexServers, allFiles)
         logger.info("Found ${allFiles.size} files")
@@ -42,27 +39,25 @@ data class DistributeCorpus(val corpusName: String) : ManagementCommand() {
         }
         check(allFiles.size == total) { "the amount of distributed files is not equal to the original amount of files" }
 
-        divided.forEach { sendToServer(it.first, collectionsPerServer, it.second) }
+        divided.forEach { scope.sendToServer(it.first, collectionsPerServer, it.second) }
 
     }
 
-    private fun sendToServer(server: IndexServerConfiguration, collectionCount: Int, files: List<Mg4jFile>) = runBlocking {
+    private fun CoroutineScope.sendToServer(server: IndexServerConfiguration, collectionCount: Int, files: List<Mg4jFile>) {
         val collections = (1..collectionCount).map { "col$it" }
         val divided = divideFiles(collections, files)
-        val username = enticingConfiguration.authentication.username
         val outputDir = server.collectionsDir ?: server.corpus.collectionsDir
 
         shellExecutor.execute(CreateRemoteDirCommand(username, server.address!!, outputDir))
 
-        withContext(Dispatchers.IO) {
-            for ((collection, collectionFiles) in divided) {
-                launch {
-                    val collectionDir = "$outputDir/$collection"
-                    shellExecutor.execute(CreateRemoteDirCommand(username, server.address!!, collectionDir))
-                    shellExecutor.execute(CopyFilesCommand(username, corpusConfiguration.corpusSourceConfiguration.server, collectionFiles, server.address!!, collectionDir))
-                }
+        for ((collection, collectionFiles) in divided) {
+            launch {
+                val collectionDir = "$outputDir/$collection"
+                shellExecutor.execute(CreateRemoteDirCommand(username, server.address!!, collectionDir))
+                shellExecutor.execute(CopyFilesCommand(username, corpusSourceConfiguration.server, collectionFiles, server.address!!, collectionDir))
             }
         }
+
     }
 
     private fun <T> divideFiles(components: List<T>, files: List<Mg4jFile>): MutableList<Pair<T, List<Mg4jFile>>> {

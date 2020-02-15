@@ -8,12 +8,17 @@ interface ShellCommand {
      * String version of the command the execute
      */
     val value: String
+
+    fun split(): List<String> = listOf(value)
+
 }
 
 /**
  * Command executed locally
  */
-data class LocalCommand(override val value: String) : ShellCommand
+data class LocalCommand(override val value: String) : ShellCommand {
+    override fun split(): List<String> = value.split(" ")
+}
 
 /**
  * Command executed via ssh
@@ -24,6 +29,8 @@ data class SshCommand(
         val command: ShellCommand
 ) : ShellCommand {
     override val value: String = "ssh $username@$server ${command.value}"
+
+    override fun split(): List<String> = listOf("ssh", "$username@$server", command.value)
 }
 
 /**
@@ -35,6 +42,18 @@ data class ParallelSshCommand(
         val command: ShellCommand
 ) : ShellCommand {
     override val value: String = "parallel-ssh -l $username ${servers.map { "-H $it" }.joinToString(" ")} -i ${command.value}"
+
+    override fun split(): List<String> {
+        val res = mutableListOf("parallel-ssh", "-l", username)
+
+        for (server in servers) {
+            res.add("-H")
+            res.add(server)
+        }
+        res.add("-i")
+        res.add(command.value)
+        return res
+    }
 }
 
 data class StartScreenCommand(

@@ -38,6 +38,12 @@ class ShellCommandTest {
             assertThat(executor.execute(cmd))
                     .isNotEmpty()
         }
+
+        @Test
+        fun `ls corpus dir`() {
+            val cmd = SshCommand("xkozak15", "minerva3.fit.vutbr.cz", LocalCommand("ls -l /var/xdolez52/Zpracovani_Wikipedie/html_from_wikipedia_en_all_novid_2018-10.zim/6-mg4j/old-2019-10-18/*.mg4j"))
+            println(executor.execute(cmd))
+        }
     }
 
     @Nested
