@@ -11,11 +11,7 @@ class FileBasedLogService(logFile: String, config: LoggingConfiguration) : Aggre
     private var writer: PrintWriter = File(logFile).printWriter()
 
     override fun onMessage(kind: String, message: String) {
-        writer.print(timestamp())
-        writer.print(" : ")
-        writer.print(kind)
-        writer.print(" : ")
-        writer.println(message)
+        writer.println("${timestamp()} : $kind : $message")
         writer.flush()
     }
 

@@ -23,8 +23,30 @@ class IntegrationTests {
 
 
     @Test
+    @Disabled
     fun `distribute corpus`() {
         val (cliArgs, config, engine) = initialize("../dto/src/test/resources/config.kts -d")
-        engine.execute(cliArgs)
+        engine.use {
+            it.execute(cliArgs)
+        }
+
+    }
+
+    //    @Test
+    @Disabled
+    fun `print corpus`() {
+        val (cliArgs, config, engine) = initialize("../dto/src/test/resources/config.kts --print")
+        engine.use {
+            it.execute(cliArgs)
+        }
+    }
+
+    //    @Test
+    @Disabled
+    fun `remove files`() {
+        val (cliArgs, config, engine) = initialize("../dto/src/test/resources/config.kts --remove")
+        engine.use {
+            it.execute(cliArgs)
+        }
     }
 }

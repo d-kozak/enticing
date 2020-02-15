@@ -17,7 +17,7 @@ private val pathColumn = 8
  * Load mg4j files located in a given directory
  */
 fun ShellCommandExecutor.loadMg4jFiles(username: String, server: String, directory: String): List<Mg4jFile> {
-    val stdout = this.execute(PrintMg4jFilesCommand(username, server, directory), printStdout = false)
+    val stdout = this.execute(PrintMg4jFilesCommand(username, server, directory), printStdout = false, checkReturnCode = false)
     return stdout.split("\n").mapNotNull {
         val line = it.split(whitespaceRegex)
         if (line.size < 9) return@mapNotNull null
@@ -26,3 +26,15 @@ fun ShellCommandExecutor.loadMg4jFiles(username: String, server: String, directo
 }
 
 
+fun ShellCommandExecutor.recursiveRemove(username: String, server: String, directory: String) {
+    this.execute(SshCommand(username, server, LocalCommand("rm -rf $directory")), checkReturnCode = false)
+}
+
+fun ShellCommandExecutor.loadFiles(username: String, server: String, directory: String): List<String> {
+    val stdout = this.execute(SshCommand(username, server, LocalCommand("ls -l $directory")), printStdout = false, checkReturnCode = false)
+    return stdout.split("\n").mapNotNull {
+        val line = it.split(whitespaceRegex)
+        if (line.size < 9) return@mapNotNull null
+        line[pathColumn]
+    }
+}

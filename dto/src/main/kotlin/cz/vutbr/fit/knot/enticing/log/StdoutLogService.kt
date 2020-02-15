@@ -5,10 +5,6 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.LoggingConfiguration
 class StdoutLogService(config: LoggingConfiguration) : AggregatingLogService(config) {
 
     override fun onMessage(kind: String, message: String) {
-        print(timestamp())
-        print(" : ")
-        print(kind)
-        print(" : ")
-        println(message)
+        println("${timestamp()} : $kind : $message")
     }
 }
