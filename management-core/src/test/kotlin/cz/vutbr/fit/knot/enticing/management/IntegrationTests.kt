@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 /**
  * Tests triggering the whole machinery in the management service including starting remote services.
- * They should be run only from within KNOT network and MANUALLY, that's why they are disabled by default (not a good candidate for CI)
+ * They should be run only from within the KNOT network and MANUALLY, that's why they are disabled by default (not a good candidate for CI)
  */
 @Disabled
 class IntegrationTests {
@@ -22,7 +22,7 @@ class IntegrationTests {
     }
 
 
-    @Test
+    //    @Test
     @Disabled
     fun `distribute corpus`() {
         val (cliArgs, config, engine) = initialize("../dto/src/test/resources/config.kts -d")
@@ -32,7 +32,7 @@ class IntegrationTests {
 
     }
 
-//        @Test
+    @Test
     @Disabled
     fun `print corpus`() {
         val (cliArgs, config, engine) = initialize("../dto/src/test/resources/config.kts --print")

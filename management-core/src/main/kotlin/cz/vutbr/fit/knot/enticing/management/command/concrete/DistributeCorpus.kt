@@ -7,9 +7,9 @@ import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.management.command.CorpusSpecificCommandContext
 import cz.vutbr.fit.knot.enticing.management.command.ManagementCommand
 import cz.vutbr.fit.knot.enticing.management.model.Mg4jFile
-import cz.vutbr.fit.knot.enticing.management.shell.CopyFilesCommand
-import cz.vutbr.fit.knot.enticing.management.shell.CreateRemoteDirCommand
 import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
+import cz.vutbr.fit.knot.enticing.management.shell.copyFiles
+import cz.vutbr.fit.knot.enticing.management.shell.createRemoteDirectory
 import cz.vutbr.fit.knot.enticing.management.shell.loadMg4jFiles
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -72,8 +72,8 @@ class DistributeCorpusContext(corpusName: String, configuration: EnticingConfigu
     private suspend fun createCollection(server: IndexServerConfiguration, collection: String, files: List<Mg4jFile>) {
         val outputDir = server.collectionsDir ?: server.corpus.collectionsDir
         val collectionDir = "$outputDir/$collection"
-        shellExecutor.execute(CreateRemoteDirCommand(username, server.address!!, collectionDir))
-        shellExecutor.execute(CopyFilesCommand(username, corpusSourceConfiguration.server, files, server.address!!, collectionDir))
+        shellExecutor.createRemoteDirectory(username, server.address!!, collectionDir)
+        shellExecutor.copyFiles(username, corpusSourceConfiguration.server, files, server.address!!, collectionDir)
         logger.info("[${finishedCollection.incrementAndGet()}/$totalCollections]  Created collection $collection at server ${server.address} with files $files")
     }
 
