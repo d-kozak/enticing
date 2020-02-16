@@ -13,7 +13,21 @@ interface ShellCommand {
 /**
  * Command executed locally
  */
-data class LocalCommand(override val value: String) : ShellCommand
+interface LocalCommand : ShellCommand {
+    infix fun and(other: LocalCommand): LocalCommand {
+        return AndCommand(this, other)
+    }
+}
+
+data class SimpleCommand(override val value: String) : LocalCommand
+
+/**
+ * two commands connected with '&&'
+ */
+data class AndCommand(val left: ShellCommand, val right: ShellCommand) : LocalCommand {
+    override val value: String
+        get() = "${left.value} && ${right.value}"
+}
 
 /**
  * Command executed via ssh

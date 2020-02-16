@@ -16,7 +16,7 @@ class ShellCommandTest {
 
         @Test
         fun `simple echo`() = runBlocking<Unit> {
-            val cmd = LocalCommand("echo hello")
+            val cmd = SimpleCommand("echo hello")
             assertThat(executor.execute(cmd))
                     .isEqualTo("hello\n")
         }
@@ -27,7 +27,7 @@ class ShellCommandTest {
     inner class SshTest {
         @Test
         fun `simple echo`() = runBlocking<Unit> {
-            val cmd = SshCommand("xkozak15", "minerva3.fit.vutbr.cz", LocalCommand("echo hello"))
+            val cmd = SshCommand("xkozak15", "minerva3.fit.vutbr.cz", SimpleCommand("echo hello"))
             assertThat(executor.execute(cmd))
                     .isEqualTo("hello\n")
         }
@@ -35,7 +35,7 @@ class ShellCommandTest {
 
         @Test
         fun `parallel echo`() = runBlocking<Unit> {
-            val cmd = ParallelSshCommand("xkozak15", listOf("minerva1.fit.vutbr.cz", "minerva2.fit.vutbr.cz", "minerva3.fit.vutbr.cz"), LocalCommand("echo hello"))
+            val cmd = ParallelSshCommand("xkozak15", listOf("minerva1.fit.vutbr.cz", "minerva2.fit.vutbr.cz", "minerva3.fit.vutbr.cz"), SimpleCommand("echo hello"))
             assertThat(executor.execute(cmd))
                     .isNotEmpty()
         }
@@ -43,7 +43,7 @@ class ShellCommandTest {
 
         @Test
         fun `ls corpus dir`() = runBlocking {
-            val cmd = SshCommand("xkozak15", "minerva3.fit.vutbr.cz", LocalCommand("ls -l /var/xdolez52/Zpracovani_Wikipedie/html_from_wikipedia_en_all_novid_2018-10.zim/6-mg4j/old-2019-10-18/*.mg4j"))
+            val cmd = SshCommand("xkozak15", "minerva3.fit.vutbr.cz", SimpleCommand("ls -l /var/xdolez52/Zpracovani_Wikipedie/html_from_wikipedia_en_all_novid_2018-10.zim/6-mg4j/old-2019-10-18/*.mg4j"))
             println(executor.execute(cmd))
         }
 
@@ -54,9 +54,9 @@ class ShellCommandTest {
 
         @Test
         fun `ssh command`() {
-            val cmd = SshCommand("xkozak15", "localhost", LocalCommand("ls -l"))
+            val cmd = SshCommand("xkozak15", "Simplehost", SimpleCommand("ls -l"))
             assertThat(cmd.value)
-                    .isEqualTo("ssh xkozak15@localhost ls -l")
+                    .isEqualTo("ssh xkozak15@Simplehost ls -l")
         }
 
         @Test
@@ -64,7 +64,7 @@ class ShellCommandTest {
             val cmd = ParallelSshCommand(
                     "xkozak15"
                     , listOf("123", "456", "789"),
-                    LocalCommand("rm foo")
+                    SimpleCommand("rm foo")
             )
             assertThat(cmd.value)
                     .isEqualTo("parallel-ssh -l xkozak15 -H 123 -H 456 -H 789 -i rm foo")
@@ -72,7 +72,7 @@ class ShellCommandTest {
 
         @Test
         fun `start screen test`() {
-            val cmd = StartScreenCommand("screen1", "foo.log", LocalCommand("run-run-long"))
+            val cmd = StartScreenCommand("screen1", "foo.log", SimpleCommand("run-run-long"))
             assertThat(cmd.value)
                     .isEqualTo("screen -S screen1 -d -m run-run-long && screen -S screen1 -X logfile foo.log && screen -S screen1 -X log")
         }
@@ -89,7 +89,7 @@ class ShellCommandTest {
             val cmd = ParallelSshCommand(
                     "xkozak15"
                     , listOf("123", "456", "789"),
-                    StartScreenCommand("screen1", "foo.log", LocalCommand("run-run-long"))
+                    StartScreenCommand("screen1", "foo.log", SimpleCommand("run-run-long"))
             )
             assertThat(cmd.value).isEqualTo("parallel-ssh -l xkozak15 -H 123 -H 456 -H 789 -i screen -S screen1 -d -m run-run-long && screen -S screen1 -X logfile foo.log && screen -S screen1 -X log")
         }

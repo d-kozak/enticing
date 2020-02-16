@@ -23,6 +23,11 @@ class ManagementCliArguments(parser: ArgParser) : Validator by ValidatorImpl() {
     val corpuses by parser.adding("-c", "--corpus", help = "Corpus name")
 
     /**
+     * build the project remotely
+     */
+    val build by parser.flagging("-b", "--build", help = "build the project remotely")
+
+    /**
      * Distribute mg4j files to the servers
      */
     val distribute by parser.flagging("-d", "--distrib", help = "Distribute mg4j files over servers")
@@ -87,6 +92,7 @@ class ManagementCliArguments(parser: ArgParser) : Validator by ValidatorImpl() {
         append(corpuses)
         append(',')
 
+        if (build) append("build,")
         if (distribute) append("distribute,")
         if (startIndexing) append("startIndexing,")
         if (webserver) append("webserver,")

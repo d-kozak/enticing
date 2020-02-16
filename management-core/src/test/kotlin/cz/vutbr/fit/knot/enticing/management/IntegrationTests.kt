@@ -22,6 +22,16 @@ class IntegrationTests {
     }
 
 
+    @Test
+    @Disabled
+    fun `build remotely`() {
+        val (cliArgs, config, engine) = initialize("../dto/src/test/resources/config.kts -b")
+        engine.use {
+            it.execute(cliArgs)
+        }
+
+    }
+
     //    @Test
     @Disabled
     fun `distribute corpus`() {
@@ -32,7 +42,7 @@ class IntegrationTests {
 
     }
 
-    @Test
+    //    @Test
     @Disabled
     fun `print corpus`() {
         val (cliArgs, config, engine) = initialize("../dto/src/test/resources/config.kts --print")

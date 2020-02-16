@@ -9,13 +9,15 @@ import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
 import kotlinx.coroutines.coroutineScope
 
 data class StartIndexingCommand(val corpusName: String) : ManagementCommand<StartIndexingCommandContext>() {
-    override fun buildContext(configuration: EnticingConfiguration, executor: ShellCommandExecutor, logService: MeasuringLogService): StartIndexingCommandContext = StartIndexingCommandContext(corpusName, configuration, executor, logService)
+    override fun buildContext(configuration: EnticingConfiguration, executor: ShellCommandExecutor, logService: MeasuringLogService) = StartIndexingCommandContext(corpusName, configuration, executor, logService)
 }
 
 class StartIndexingCommandContext(corpusName: String, configuration: EnticingConfiguration, executor: ShellCommandExecutor, logService: MeasuringLogService) : CorpusSpecificCommandContext(corpusName, configuration, executor, logService) {
     private val logger = logService.logger { }
 
-    override suspend fun execute() = coroutineScope {
+    private val deployment = configuration.deploymentConfiguration
 
+    override suspend fun execute() = coroutineScope {
+        TODO("not implemented yet")
     }
 }

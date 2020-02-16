@@ -4,17 +4,25 @@ import cz.vutbr.fit.knot.enticing.management.model.Mg4jFile
 
 
 /**
+ * connects to the given server, git pulls for new changes and builds the project
+ */
+suspend fun ShellCommandExecutor.pullAndBuild(username: String, sourceServer: String, repository: String) {
+    val local = SimpleCommand("cd $repository") and SimpleCommand("git pull") and SimpleCommand("gradle buildAll")
+    this.execute(SshCommand(username, sourceServer, local))
+}
+
+/**
  * copies files from source server to the destination server using scp
  */
 suspend fun ShellCommandExecutor.copyFiles(username: String, sourceServer: String, files: List<Mg4jFile>, destinationServer: String, destinationDirectory: String) {
-    this.execute(SshCommand(username, sourceServer, LocalCommand("scp ${files.joinToString(" ") { it.path }} $username@$destinationServer:$destinationDirectory")))
+    this.execute(SshCommand(username, sourceServer, SimpleCommand("scp ${files.joinToString(" ") { it.path }} $username@$destinationServer:$destinationDirectory")))
 }
 
 /**
  * creates a directory on a specified server using mkdir -p
  */
 suspend fun ShellCommandExecutor.createRemoteDirectory(username: String, server: String, path: String) {
-    this.execute(SshCommand(username, server, LocalCommand("mkdir -p $path")))
+    this.execute(SshCommand(username, server, SimpleCommand("mkdir -p $path")))
 }
 
 private val whitespaceRegex = """\s+""".toRegex()
@@ -36,11 +44,11 @@ suspend fun ShellCommandExecutor.loadMg4jFiles(username: String, server: String,
 
 
 suspend fun ShellCommandExecutor.recursiveRemove(username: String, server: String, directory: String) {
-    this.execute(SshCommand(username, server, LocalCommand("rm -rf $directory")), checkReturnCode = false)
+    this.execute(SshCommand(username, server, SimpleCommand("rm -rf $directory")), checkReturnCode = false)
 }
 
 suspend fun ShellCommandExecutor.loadFiles(username: String, server: String, directory: String): List<String> {
-    val stdout = this.execute(SshCommand(username, server, LocalCommand("ls -l $directory")), printStdout = false, checkReturnCode = false)
+    val stdout = this.execute(SshCommand(username, server, SimpleCommand("ls -l $directory")), printStdout = false, checkReturnCode = false)
     return stdout.split("\n").mapNotNull {
         val line = it.split(whitespaceRegex)
         if (line.size < 9) return@mapNotNull null
@@ -52,4 +60,4 @@ suspend fun ShellCommandExecutor.loadFiles(username: String, server: String, dir
 /**
  * Dumps specified directory for mg4j files using ls
  */
-private suspend fun ShellCommandExecutor.dumpMgj4Files(username: String, server: String, directory: String) = this.execute(SshCommand(username, server, LocalCommand("ls -l $directory/*.mg4j")), printStdout = false, checkReturnCode = false)
+private suspend fun ShellCommandExecutor.dumpMgj4Files(username: String, server: String, directory: String) = this.execute(SshCommand(username, server, SimpleCommand("ls -l $directory/*.mg4j")), printStdout = false, checkReturnCode = false)
