@@ -54,4 +54,8 @@ interface EnticingConfigurationListener {
     fun enterEnticingAuthentication(enticingAuthentication: EnticingAuthentication) {
 
     }
+
+    fun enterDeploymentConfiguration(deploymentConfiguration: DeploymentConfiguration) {
+
+    }
 }

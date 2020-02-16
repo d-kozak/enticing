@@ -15,6 +15,7 @@ class EnticingConfigurationWalker(val listener: EnticingConfigurationListener) :
         configuration.corpuses.values.forEach { it.accept(this) }
         configuration.loggingConfiguration.accept(this)
         configuration.authentication.accept(this)
+        configuration.deploymentConfiguration.accept(this)
     }
 
     override fun visitManagementConfiguration(configuration: ManagementServiceConfiguration) {
@@ -66,6 +67,10 @@ class EnticingConfigurationWalker(val listener: EnticingConfigurationListener) :
 
     override fun visitEnticingAuthentication(enticingAuthentication: EnticingAuthentication) {
         listener.enterEnticingAuthentication(enticingAuthentication)
+    }
+
+    override fun visitDeploymentConfiguration(deploymentConfiguration: DeploymentConfiguration) {
+        listener.enterDeploymentConfiguration(deploymentConfiguration)
     }
 }
 

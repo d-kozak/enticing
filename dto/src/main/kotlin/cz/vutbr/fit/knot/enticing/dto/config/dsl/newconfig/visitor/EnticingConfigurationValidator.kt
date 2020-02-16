@@ -24,6 +24,11 @@ class EnticingConfigurationValidator(validator: Validator) : EnticingConfigurati
         checkNotEmpty(corpusSourceConfiguration.server, "corpus source server")
         checkNotEmpty(corpusSourceConfiguration.directory, "corpus source directory")
     }
+
+    override fun enterDeploymentConfiguration(deploymentConfiguration: DeploymentConfiguration) {
+        checkNotEmpty(deploymentConfiguration.server, "deployment server")
+        checkNotEmpty(deploymentConfiguration.repository, "deployment repository")
+    }
 }
 
 

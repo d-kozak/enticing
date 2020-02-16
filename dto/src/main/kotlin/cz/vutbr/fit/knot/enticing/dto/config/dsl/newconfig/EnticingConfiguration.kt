@@ -24,7 +24,16 @@ data class EnticingConfiguration(
          * list of available corpuses
          */
         var corpuses: MutableMap<String, CorpusConfiguration> = mutableMapOf(),
-        var authentication: EnticingAuthentication = EnticingAuthentication()
+
+        /**
+         * configuration of authentication
+         */
+        var authentication: EnticingAuthentication = EnticingAuthentication(),
+
+        /**
+         * configuration of deployment
+         */
+        var deploymentConfiguration: DeploymentConfiguration = DeploymentConfiguration()
 ) : EnticingConfigurationUnit {
 
     /**
@@ -51,6 +60,10 @@ data class EnticingConfiguration(
 
     fun authentication(block: EnticingAuthentication.() -> Unit) = runCatching {
         authentication = EnticingAuthentication().apply(block)
+    }
+
+    fun deployment(block: DeploymentConfiguration.() -> Unit) = runCatching {
+        deploymentConfiguration = DeploymentConfiguration().apply(block)
     }
 
     fun indexServerByAddress(address: String): IndexServerConfiguration {

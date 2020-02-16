@@ -24,6 +24,11 @@ enticingConfiguration {
         username = "xkozak15"
     }
 
+    deployment {
+        server = "athena10.fit.vutbr.cz"
+        repository = "/mnt/minerva1/nlp/projects/corpproc_search/corpproc_search"
+    }
+
     corpusConfig {
         corpus("wiki-2018") {
             collectionsDir = "/mnt/data/indexes/xkozak15/new_wiki"

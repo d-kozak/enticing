@@ -58,6 +58,10 @@ interface EnticingConfigurationVisitor {
     fun visitEnticingAuthentication(enticingAuthentication: EnticingAuthentication) {
 
     }
+
+    fun visitDeploymentConfiguration(deploymentConfiguration: DeploymentConfiguration) {
+
+    }
 }
 
 interface EnticingConfigurationVisitee {
