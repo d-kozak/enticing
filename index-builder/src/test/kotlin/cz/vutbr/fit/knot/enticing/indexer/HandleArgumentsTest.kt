@@ -10,16 +10,14 @@ import org.junit.jupiter.api.assertThrows
 class HandleArgumentsTest {
 
     @Test
-    fun `Exactly arguments necessary`() {
+    fun `Exactly 2 arguments necessary`() {
         assertThrows<IllegalArgumentException> {
             handleArguments()
         }
         assertThrows<IllegalArgumentException> {
             handleArguments("../dto/src/test/resources/config.kts")
         }
-        assertThrows<IllegalArgumentException> {
-            handleArguments("../dto/src/test/resources/config.kts", "foo")
-        }
+        handleArguments("../dto/src/test/resources/config.kts", "foo")
     }
 
     @Test

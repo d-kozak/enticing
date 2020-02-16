@@ -7,6 +7,7 @@ import cz.vutbr.fit.knot.enticing.management.command.ManagementCommand
 import cz.vutbr.fit.knot.enticing.management.command.concrete.DistributeCorpus
 import cz.vutbr.fit.knot.enticing.management.command.concrete.RemoveDistributedFiles
 import cz.vutbr.fit.knot.enticing.management.command.concrete.ShowDistributedFiles
+import cz.vutbr.fit.knot.enticing.management.command.concrete.StartIndexingCommand
 import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -28,7 +29,7 @@ class ManagementEngine(val configuration: EnticingConfiguration, val logService:
         if (args.removeFiles) args.corpuses.executeAll { RemoveDistributedFiles(it) }
         if (args.distribute) args.corpuses.executeAll { DistributeCorpus(it) }
         if (args.printFiles) args.corpuses.executeAll { ShowDistributedFiles(it) }
-//        if (args.startIndexing) args.corpuses.executeAll { StartIndexing(it) }
+        if (args.startIndexing) args.corpuses.executeAll { StartIndexingCommand(it) }
 //        if (args.indexServers) {
 //            args.corpuses.executeAll { KillIndexServers(it) }
 //            if (args.startComponents) args.corpuses.executeAll { StartIndexServers(it) }

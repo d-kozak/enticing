@@ -71,7 +71,7 @@ class DistributeCorpusContext(corpusName: String, configuration: EnticingConfigu
 
     private suspend fun createCollection(server: IndexServerConfiguration, collection: String, files: List<Mg4jFile>) {
         val outputDir = server.collectionsDir ?: server.corpus.collectionsDir
-        val collectionDir = "$outputDir/$collection"
+        val collectionDir = "$outputDir/$collection/mg4j"
         shellExecutor.createRemoteDirectory(username, server.address!!, collectionDir)
         shellExecutor.copyFiles(username, corpusSourceConfiguration.server, files, server.address!!, collectionDir)
         logger.info("[${finishedCollection.incrementAndGet()}/$totalCollections]  Created collection $collection at server ${server.address} with files $files")
