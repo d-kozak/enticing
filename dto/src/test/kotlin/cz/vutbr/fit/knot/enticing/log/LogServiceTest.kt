@@ -1,12 +1,12 @@
 package cz.vutbr.fit.knot.enticing.log
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.fullConf
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.loadedConfiguration
 import org.junit.jupiter.api.Test
 import java.lang.Thread.sleep
 
 class LogServiceTest {
 
-    private val loggingConfiguration = fullConf.loggingConfiguration
+    private val loggingConfiguration = loadedConfiguration.loggingConfiguration
 
     @Test
     fun `send a few messages`() {

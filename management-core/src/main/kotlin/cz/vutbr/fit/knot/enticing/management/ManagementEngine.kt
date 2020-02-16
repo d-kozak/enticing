@@ -10,11 +10,13 @@ import cz.vutbr.fit.knot.enticing.management.command.concrete.ShowDistributedFil
 import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.runBlocking
 import java.util.concurrent.Executors
 
 class ManagementEngine(val configuration: EnticingConfiguration, val logService: MeasuringLogService) : AutoCloseable {
 
-    private val pool = Executors.newFixedThreadPool(12)
+    private val pool = Executors.newFixedThreadPool(24)
 
     private val scope = CoroutineScope(pool.asCoroutineDispatcher())
 
@@ -39,8 +41,10 @@ class ManagementEngine(val configuration: EnticingConfiguration, val logService:
 
 
     fun executeCommand(command: ManagementCommand<*>) {
-        logger.measure("command $command") {
-            command.execute(configuration, executor, logService, scope)
+        runBlocking(scope.coroutineContext) {
+            logger.measure("command $command") {
+                command.execute(configuration, executor, logService)
+            }
         }
     }
 
@@ -49,6 +53,9 @@ class ManagementEngine(val configuration: EnticingConfiguration, val logService:
     }
 
     override fun close() {
-        logger.measure("shutting down the thread pool") { pool.shutdown() }
+        logger.measure("shutting down the thread pool") {
+            scope.cancel()
+            pool.shutdown()
+        }
     }
 }

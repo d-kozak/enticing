@@ -8,7 +8,7 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.LoggingConfiguration
 class MeasuringLogService(next: LogService, config: LoggingConfiguration) : DelegatingLogService(next, config) {
     data class MeasurementHandle(val name: String, val startTime: Long = System.currentTimeMillis())
 
-    fun <T> measure(name: String, block: () -> T): T {
+    inline fun <T> measure(name: String, block: () -> T): T {
         val handle = startMeasurement(name)
         return try {
             val res = block()

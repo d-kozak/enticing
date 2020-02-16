@@ -7,6 +7,6 @@ class EnticingConfigurationTest {
 
     @Test
     fun `full config`() {
-        println(fullConf)
+        println(loadedConfiguration)
     }
 }

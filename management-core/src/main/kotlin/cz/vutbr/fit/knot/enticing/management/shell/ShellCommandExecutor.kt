@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.enticing.management.shell
 
 import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
 import cz.vutbr.fit.knot.enticing.log.logger
+import kotlinx.coroutines.future.await
 import java.util.concurrent.TimeUnit
 
 class ShellCommandExecutor(logService: MeasuringLogService) {
@@ -13,7 +14,7 @@ class ShellCommandExecutor(logService: MeasuringLogService) {
      * @param printStdout If true, stdout of the command will be printed to the console
      * @param printStderr If true, stderr of the command will be printed to the console
      */
-    fun execute(command: ShellCommand, checkReturnCode: Boolean = true, printStdout: Boolean = true, printStderr: Boolean = true, timeout: Long = 30, timeoutUnit: TimeUnit = TimeUnit.SECONDS): String = logger.measure("command ${command.value}") {
+    suspend fun execute(command: ShellCommand, checkReturnCode: Boolean = true, printStdout: Boolean = true, printStderr: Boolean = true, timeout: Long = 30, timeoutUnit: TimeUnit = TimeUnit.SECONDS): String = logger.measure("command ${command.value}") {
         val builder = ProcessBuilder(command.value.split(" "))
         if (printStdout)
             builder.redirectOutput(ProcessBuilder.Redirect.PIPE)
@@ -26,7 +27,7 @@ class ShellCommandExecutor(logService: MeasuringLogService) {
         val stdout = process.inputStream.bufferedReader().readText()
         val stderr = process.errorStream.bufferedReader().readText()
 
-        check(process.waitFor(timeout, timeoutUnit)) { "process hasn't finished" }
+        process.onExit().await()
 
         if (printStdout || process.exitValue() != 0)
             println(stdout)

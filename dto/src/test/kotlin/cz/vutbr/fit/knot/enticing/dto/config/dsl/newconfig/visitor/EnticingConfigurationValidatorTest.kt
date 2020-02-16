@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.visitor
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.enticingConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.fullConf
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.loadedConfiguration
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -13,7 +13,7 @@ class EnticingConfigurationValidatorTest {
     inner class IndexServerTest {
         @Test
         fun `valid conf`() {
-            fullConf.validateOrFail()
+            loadedConfiguration.validateOrFail()
         }
 
         @Test

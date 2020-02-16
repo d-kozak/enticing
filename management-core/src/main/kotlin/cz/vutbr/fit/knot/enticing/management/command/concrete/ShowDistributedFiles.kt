@@ -8,10 +8,9 @@ import cz.vutbr.fit.knot.enticing.management.command.ManagementCommand
 import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
 import cz.vutbr.fit.knot.enticing.management.shell.loadFiles
 import cz.vutbr.fit.knot.enticing.management.shell.loadMg4jFiles
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.coroutineScope
 
 data class ShowDistributedFiles(val corpusName: String) : ManagementCommand<ShowDistributedFilesContext>() {
     override fun buildContext(configuration: EnticingConfiguration, executor: ShellCommandExecutor, logService: MeasuringLogService): ShowDistributedFilesContext = ShowDistributedFilesContext(corpusName, configuration, executor, logService)
@@ -21,7 +20,7 @@ class ShowDistributedFilesContext(corpusName: String, configuration: EnticingCon
 
     private val logger = logService.logger { }
 
-    override suspend fun execute(scope: CoroutineScope) = withContext(scope.coroutineContext) {
+    override suspend fun execute() = coroutineScope {
         val totalStats = corpusConfiguration.indexServers.map { server ->
             async {
                 val collectionDir = server.collectionsDir ?: server.corpus.collectionsDir

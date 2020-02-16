@@ -11,9 +11,8 @@ import cz.vutbr.fit.knot.enticing.management.shell.CopyFilesCommand
 import cz.vutbr.fit.knot.enticing.management.shell.CreateRemoteDirCommand
 import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
 import cz.vutbr.fit.knot.enticing.management.shell.loadMg4jFiles
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.concurrent.atomic.AtomicInteger
 
 data class DistributeCorpus(val corpusName: String) : ManagementCommand<DistributeCorpusContext>() {
@@ -28,55 +27,54 @@ class DistributeCorpusContext(corpusName: String, configuration: EnticingConfigu
     @Volatile
     private var totalCollections = 0
 
-    override suspend fun execute(scope: CoroutineScope) {
-        withContext(scope.coroutineContext) {
-            val (sourceServer, directory, collectionsPerServer) = corpusSourceConfiguration
-            val allFiles = shellExecutor.loadMg4jFiles(username, sourceServer, directory)
-            logger.info("Found ${allFiles.size} files")
+    override suspend fun execute() = coroutineScope {
+        val (sourceServer, directory, collectionsPerServer) = corpusSourceConfiguration
+        val allFiles = shellExecutor.loadMg4jFiles(username, sourceServer, directory)
+        logger.info("Found ${allFiles.size} files")
 
-            val dividedPerServer = divideFiles(corpusConfiguration.indexServers, allFiles)
+        val dividedPerServer = divideFiles(corpusConfiguration.indexServers, allFiles)
 
-            val dividedPerCollection = dividedPerServer.map { (server, files) ->
-                val collections = (1..collectionsPerServer).map { "col$it" }
-                val divided = divideFiles(collections, files)
-                server to divided
-            }
+        val dividedPerCollection = dividedPerServer.map { (server, files) ->
+            val collections = (1..collectionsPerServer).map { "col$it" }
+            val divided = divideFiles(collections, files)
+            server to divided
+        }
 
-            var total = 0
-            for ((server, collections) in dividedPerCollection) {
-                logger.info("Server ${server.address}:")
-                var serverFiles = 0
-                for ((collection, files) in collections) {
-                    serverFiles += files.size
-                    logger.info("\t collection $collection:")
-                    for (file in files) {
-                        logger.info("\t\t$file")
-                    }
+        var fileCount = 0
+        for ((server, collections) in dividedPerCollection) {
+            logger.info("Server ${server.address}:")
+            var filesOnServer = 0
+            for ((collection, files) in collections) {
+                filesOnServer += files.size
+                logger.info("\t collection $collection:")
+                for (file in files) {
+                    logger.info("\t\t$file")
                 }
-
-                logger.info("\t Server ${server.address!!} will have $serverFiles files")
-                totalCollections += collections.size
-                total += serverFiles
             }
-            logger.info("Total distributed files $total")
-            check(allFiles.size == total) { "the amount of distributed files is not equal to the original amount of files" }
 
-            for ((server, collections) in dividedPerCollection) {
-                for ((collection, files) in collections) {
-                    launch {
-                        createCollection(server, collection, files)
-                    }
+            logger.info("\t Server ${server.address!!} will have $filesOnServer files")
+            totalCollections += collections.size
+            fileCount += filesOnServer
+        }
+        logger.info("Total distributed files $fileCount")
+        check(allFiles.size == fileCount) { "the amount of distributed files is not equal to the original amount of files" }
+
+        for ((server, collections) in dividedPerCollection) {
+            for ((collection, files) in collections) {
+                launch {
+                    createCollection(server, collection, files)
                 }
             }
         }
     }
 
-    private fun createCollection(server: IndexServerConfiguration, collection: String, files: List<Mg4jFile>) {
+
+    private suspend fun createCollection(server: IndexServerConfiguration, collection: String, files: List<Mg4jFile>) {
         val outputDir = server.collectionsDir ?: server.corpus.collectionsDir
         val collectionDir = "$outputDir/$collection"
         shellExecutor.execute(CreateRemoteDirCommand(username, server.address!!, collectionDir))
         shellExecutor.execute(CopyFilesCommand(username, corpusSourceConfiguration.server, files, server.address!!, collectionDir))
-        logger.info("${finishedCollection.incrementAndGet()}/$totalCollections  Created collection $collection at server ${server.address} with files $files")
+        logger.info("[${finishedCollection.incrementAndGet()}/$totalCollections]  Created collection $collection at server ${server.address} with files $files")
     }
 
     private fun <T> divideFiles(components: List<T>, files: List<Mg4jFile>): MutableList<Pair<T, List<Mg4jFile>>> {

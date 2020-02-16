@@ -3,8 +3,6 @@ package cz.vutbr.fit.knot.enticing.management.command
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.EnticingConfiguration
 import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
 import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.runBlocking
 
 
 /**
@@ -21,10 +19,8 @@ abstract class ManagementCommand<Ctx : ManagementCommandContext> {
     /**
      * Executes the command in given coroutine scope
      */
-    internal fun execute(configuration: EnticingConfiguration, executor: ShellCommandExecutor, logService: MeasuringLogService, scope: CoroutineScope) {
-        runBlocking(scope.coroutineContext) {
-            buildContext(configuration, executor, logService).execute(scope)
-        }
+    internal suspend fun execute(configuration: EnticingConfiguration, executor: ShellCommandExecutor, logService: MeasuringLogService) {
+        buildContext(configuration, executor, logService).execute()
     }
 
 }
@@ -38,7 +34,7 @@ abstract class ManagementCommandContext(configuration: EnticingConfiguration, ex
     protected val enticingConfiguration = configuration
     protected val username = configuration.authentication.username
 
-    internal abstract suspend fun execute(scope: CoroutineScope)
+    internal abstract suspend fun execute()
 }
 
 abstract class CorpusSpecificCommandContext(protected val corpusName: String, configuration: EnticingConfiguration, executor: ShellCommandExecutor, logService: MeasuringLogService) : ManagementCommandContext(configuration, executor, logService) {

@@ -32,7 +32,7 @@ class IntegrationTests {
 
     }
 
-    //    @Test
+//        @Test
     @Disabled
     fun `print corpus`() {
         val (cliArgs, config, engine) = initialize("../dto/src/test/resources/config.kts --print")
@@ -41,7 +41,7 @@ class IntegrationTests {
         }
     }
 
-    //    @Test
+    //        @Test
     @Disabled
     fun `remove files`() {
         val (cliArgs, config, engine) = initialize("../dto/src/test/resources/config.kts --remove")

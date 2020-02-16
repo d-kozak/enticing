@@ -7,9 +7,8 @@ import cz.vutbr.fit.knot.enticing.management.command.CorpusSpecificCommandContex
 import cz.vutbr.fit.knot.enticing.management.command.ManagementCommand
 import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
 import cz.vutbr.fit.knot.enticing.management.shell.recursiveRemove
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 data class RemoveDistributedFiles(val corpusName: String) : ManagementCommand<RemoveDistributedFilesContext>() {
     override fun buildContext(configuration: EnticingConfiguration, executor: ShellCommandExecutor, logService: MeasuringLogService) = RemoveDistributedFilesContext(corpusName, configuration, executor, logService)
@@ -19,15 +18,12 @@ class RemoveDistributedFilesContext(corpusName: String, configuration: EnticingC
 
     private val logger = logService.logger { }
 
-    override suspend fun execute(scope: CoroutineScope) {
-        withContext(scope.coroutineContext) {
-            corpusConfiguration.indexServers.map { server ->
-                launch {
-                    shellExecutor.recursiveRemove(username, server.address!!, server.collectionsDir
-                            ?: server.corpus.collectionsDir)
-                }
+    override suspend fun execute() = coroutineScope<Unit> {
+        corpusConfiguration.indexServers.map { server ->
+            launch {
+                shellExecutor.recursiveRemove(username, server.address!!, server.collectionsDir
+                        ?: server.corpus.collectionsDir)
             }
-
         }
     }
 }

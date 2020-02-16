@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.management.shell
 
 import cz.vutbr.fit.knot.enticing.management.stdoutLogService
+import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
@@ -14,36 +15,38 @@ class ShellCommandTest {
     inner class LocalCommandTest {
 
         @Test
-        fun `simple echo`() {
+        fun `simple echo`() = runBlocking<Unit> {
             val cmd = LocalCommand("echo hello")
             assertThat(executor.execute(cmd))
                     .isEqualTo("hello\n")
         }
     }
 
-
     @Nested
     @Disabled // these tests can be performed only from within knot network
     inner class SshTest {
         @Test
-        fun `simple echo`() {
+        fun `simple echo`() = runBlocking<Unit> {
             val cmd = SshCommand("xkozak15", "minerva3.fit.vutbr.cz", LocalCommand("echo hello"))
             assertThat(executor.execute(cmd))
                     .isEqualTo("hello\n")
         }
 
+
         @Test
-        fun `parallel echo`() {
+        fun `parallel echo`() = runBlocking<Unit> {
             val cmd = ParallelSshCommand("xkozak15", listOf("minerva1.fit.vutbr.cz", "minerva2.fit.vutbr.cz", "minerva3.fit.vutbr.cz"), LocalCommand("echo hello"))
             assertThat(executor.execute(cmd))
                     .isNotEmpty()
         }
 
+
         @Test
-        fun `ls corpus dir`() {
+        fun `ls corpus dir`() = runBlocking {
             val cmd = SshCommand("xkozak15", "minerva3.fit.vutbr.cz", LocalCommand("ls -l /var/xdolez52/Zpracovani_Wikipedie/html_from_wikipedia_en_all_novid_2018-10.zim/6-mg4j/old-2019-10-18/*.mg4j"))
             println(executor.execute(cmd))
         }
+
     }
 
     @Nested
