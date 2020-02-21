@@ -47,10 +47,13 @@ jobs:
           paths:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
-      - run:
-          - name: "Setup ENTICING_HOME"
-          - command: |
-              echo 'export ENTICING_HOME="."' >> $BASH_ENV
 
+      - run:
+          name: "Setup ENTICING_HOME"
+          command: echo 'export ENTICING_HOME="."' >> $BASH_ENV
+
+      - run:
+          name: "Locate enting home"
+          command: echo "Enticing home is... ${ENTICING_HOME}"
       # run tests!
       - run: gradle test --info
