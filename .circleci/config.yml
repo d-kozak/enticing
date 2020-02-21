@@ -50,7 +50,7 @@ jobs:
 
       - run:
           name: "Setup ENTICING_HOME"
-          command: echo 'export ENTICING_HOME="."' >> $BASH_ENV
+          command: echo 'export ENTICING_HOME=`realpath .`' >> $BASH_ENV
 
       - run:
           name: "Locate enting home"
