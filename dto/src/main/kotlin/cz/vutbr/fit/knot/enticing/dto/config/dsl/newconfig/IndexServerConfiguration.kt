@@ -30,10 +30,16 @@ data class IndexServerConfiguration(
     fun loadCollections(): Sequence<Triple<File, File, File>> = sequence {
         val inputDir = File(collectionsDir ?: corpus.collectionsDir)
         for (dir in inputDir.listFiles() ?: emptyArray()) {
-            if (!dir.isDirectory) continue
-            val files = dir.listFiles() ?: emptyArray()
-            val mg4jDir = files.find { it.name == "mg4j" } ?: throw IllegalArgumentException("mg4j dir not found")
-            val indexDir = files.find { it.name == "indexed" } ?: throw IllegalStateException("indexed dir not found")
+            if (!dir.isDirectory || !dir.name.startsWith("col")) continue
+            val mg4jDir = File(dir.path + File.separatorChar + "mg4j")
+            check(mg4jDir.exists()) { "mg4j ${mg4jDir.path} directory does not exist" }
+            check(mg4jDir.isDirectory()) { "${mg4jDir.path} is not a directory" }
+            val indexDir = File(dir.path + File.separatorChar + "indexed")
+            if (!indexDir.exists()) {
+                check(indexDir.mkdirs()) { "failed to create index dir for indexing" }
+            } else {
+                check(indexDir.isDirectory()) { "${indexDir.path} is not a directory" }
+            }
             yield(Triple(inputDir, mg4jDir, indexDir))
         }
     }

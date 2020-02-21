@@ -22,7 +22,7 @@ class IntegrationTests {
     }
 
 
-    @Test
+//    @Test
     @Disabled
     fun `build remotely`() {
         val (cliArgs, config, engine) = initialize("../dto/src/test/resources/config.kts -b")
@@ -42,7 +42,7 @@ class IntegrationTests {
 
     }
 
-    //    @Test
+    //        @Test
     @Disabled
     fun `print corpus`() {
         val (cliArgs, config, engine) = initialize("../dto/src/test/resources/config.kts --print")
@@ -55,6 +55,14 @@ class IntegrationTests {
     @Disabled
     fun `remove files`() {
         val (cliArgs, config, engine) = initialize("../dto/src/test/resources/config.kts --remove")
+        engine.use {
+            it.execute(cliArgs)
+        }
+    }
+
+    @Test
+    fun `start indexing`() {
+        val (cliArgs, config, engine) = initialize("../dto/src/test/resources/config.kts -p")
         engine.use {
             it.execute(cliArgs)
         }

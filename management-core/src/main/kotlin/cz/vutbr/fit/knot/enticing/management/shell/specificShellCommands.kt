@@ -3,6 +3,8 @@ package cz.vutbr.fit.knot.enticing.management.shell
 import cz.vutbr.fit.knot.enticing.management.model.Mg4jFile
 
 
+suspend fun ShellCommandExecutor.preprocessCollections(username: String, server: String, enticingHome: String, configFile: String) = this.execute(SshCommand(username, server, SimpleCommand("$enticingHome/bin/index-builder $configFile $server")))
+
 /**
  * connects to the given server, git pulls for new changes and builds the project
  */

@@ -28,6 +28,7 @@ class EnticingConfigurationValidator(validator: Validator) : EnticingConfigurati
     override fun enterDeploymentConfiguration(deploymentConfiguration: DeploymentConfiguration) {
         checkNotEmpty(deploymentConfiguration.server, "deployment server")
         checkNotEmpty(deploymentConfiguration.repository, "deployment repository")
+        checkNotEmpty(deploymentConfiguration.configurationScript, "configuration script")
     }
 }
 

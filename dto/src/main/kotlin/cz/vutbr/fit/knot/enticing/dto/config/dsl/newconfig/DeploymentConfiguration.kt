@@ -13,7 +13,12 @@ data class DeploymentConfiguration(
         /**
          * path the the repository
          */
-        var repository: String = ""
+        var repository: String = "",
+        /**
+         * location of the configuration script
+         * (has to be accessible from all components (shared on nfs)
+         */
+        var configurationScript: String = ""
 ) : EnticingConfigurationUnit {
 
     val indexBuilderScript: String

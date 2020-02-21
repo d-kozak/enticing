@@ -30,7 +30,7 @@ class ShowDistributedFilesContext(corpusName: String, configuration: EnticingCon
 
                 val collectionsContent = collections.map { collection ->
                     async {
-                        val files = shellExecutor.loadMg4jFiles(username, server.address!!, "$collectionDir/$collection")
+                        val files = shellExecutor.loadMg4jFiles(username, server.address!!, "$collectionDir/$collection/mg4j")
                         for (file in files) {
                             logger.info("server ${server.address}, collection $collection, files: $files")
                         }
