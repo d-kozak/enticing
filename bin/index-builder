@@ -1,8 +1,8 @@
 #!/bin/bash
 export ENTICING_HOME=$("$(dirname "$BASH_SOURCE")"/../scripts/utils/get_enticing_home.sh)
-echo "repository found at: $ENTICING_HOME"
 retval=$?
 if [[ "$retval" -ne "0" ]] ; then
   exit $retval
 fi
+echo "repository found at: $ENTICING_HOME"
 java -cp "${ENTICING_HOME}/lib/index-builder-0.0.1-SNAPSHOT.jar:${ENTICING_HOME}/lib/mg4j-bin/*" cz.vutbr.fit.knot.enticing.indexer.MainKt "$@"
