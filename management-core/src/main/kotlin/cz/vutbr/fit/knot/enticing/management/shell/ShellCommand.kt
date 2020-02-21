@@ -35,9 +35,10 @@ data class AndCommand(val left: ShellCommand, val right: ShellCommand) : LocalCo
 data class SshCommand(
         val username: String,
         val server: String,
-        val command: ShellCommand
+        val command: ShellCommand,
+        val forcePseudoTerminal: Boolean = false
 ) : ShellCommand {
-    override val value: String = "ssh $username@$server ${command.value}"
+    override val value: String = "ssh ${if (forcePseudoTerminal) "-T " else ""}$username@$server ${command.value}"
 }
 
 /**

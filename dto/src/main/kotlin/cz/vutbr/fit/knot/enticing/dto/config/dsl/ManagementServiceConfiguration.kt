@@ -6,7 +6,7 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.visitor.EnticingConfigurationVi
  * Configuration of the manager service
  */
 data class ManagementServiceConfiguration(
-        override var address: String? = null,
+        override var address: String = "",
         /**
          * Hearthbeat configuration
          */

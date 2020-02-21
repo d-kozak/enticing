@@ -21,7 +21,7 @@ class RemoveDistributedFilesContext(corpusName: String, configuration: EnticingC
     override suspend fun execute() = coroutineScope<Unit> {
         corpusConfiguration.indexServers.map { server ->
             launch {
-                shellExecutor.recursiveRemove(username, server.address!!, server.collectionsDir
+                shellExecutor.recursiveRemove(username, server.address, server.collectionsDir
                         ?: server.corpus.collectionsDir)
             }
         }

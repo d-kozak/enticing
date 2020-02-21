@@ -19,7 +19,7 @@ data class IndexServerConfiguration(
          */
         var collectionsDir: String? = null,
 
-        override var address: String? = null
+        override var address: String = ""
 ) : ComponentConfiguration {
 
     /**
@@ -40,7 +40,7 @@ data class IndexServerConfiguration(
             } else {
                 check(indexDir.isDirectory()) { "${indexDir.path} is not a directory" }
             }
-            yield(Triple(inputDir, mg4jDir, indexDir))
+            yield(Triple(dir, mg4jDir, indexDir))
         }
     }
 

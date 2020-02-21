@@ -24,13 +24,13 @@ class ShowDistributedFilesContext(corpusName: String, configuration: EnticingCon
         val totalStats = corpusConfiguration.indexServers.map { server ->
             async {
                 val collectionDir = server.collectionsDir ?: server.corpus.collectionsDir
-                val collections = shellExecutor.loadFiles(username, server.address!!, collectionDir)
+                val collections = shellExecutor.loadFiles(username, server.address, collectionDir)
 
                 logger.info("server ${server.address}, collections $collections")
 
                 val collectionsContent = collections.map { collection ->
                     async {
-                        val files = shellExecutor.loadMg4jFiles(username, server.address!!, "$collectionDir/$collection/mg4j")
+                        val files = shellExecutor.loadMg4jFiles(username, server.address, "$collectionDir/$collection/mg4j")
                         for (file in files) {
                             logger.info("server ${server.address}, collection $collection, files: $files")
                         }

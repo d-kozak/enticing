@@ -23,7 +23,7 @@ class StartIndexingCommandContext(corpusName: String, configuration: EnticingCon
     override suspend fun execute() = coroutineScope {
         val outputs = corpusConfiguration.indexServers.map { server ->
             async {
-                shellExecutor.preprocessCollections(username, server.address!!, enticingConfiguration.deploymentConfiguration.repository, enticingConfiguration.deploymentConfiguration.configurationScript)
+                shellExecutor.preprocessCollections(username, server.address, enticingConfiguration.deploymentConfiguration.repository, enticingConfiguration.deploymentConfiguration.configurationScript)
             }
         }.awaitAll()
 
