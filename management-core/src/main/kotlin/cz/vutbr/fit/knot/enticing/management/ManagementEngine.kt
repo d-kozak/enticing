@@ -20,7 +20,7 @@ class ManagementEngine(val configuration: EnticingConfiguration, val logService:
 
     private val logger = logService.logger { }
 
-    private val executor = ShellCommandExecutor(logService)
+    private val executor = ShellCommandExecutor(logService, scope)
 
     fun execute(args: ManagementCliArguments) {
         if (args.build)
