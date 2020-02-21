@@ -1,6 +1,9 @@
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.LogType
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.enticingConfiguration
 
+val ENTICING_HOME = System.getenv("ENTICING_HOME")
+        ?: throw IllegalStateException("ENTICING_HOME environment variable not set")
+
 enticingConfiguration {
     webserver {
         address = "localhost"
@@ -13,7 +16,7 @@ enticingConfiguration {
     }
 
     logging {
-        rootDirectory = "/mnt/minerva1/nlp/projects/corpproc_search/corpproc_search/logs"
+        rootDirectory = "$ENTICING_HOME/logs"
         messageTypes(LogType.INFO, LogType.PERF, LogType.ERROR)
         managementLogs {
             messageTypes(LogType.PERF, LogType.ERROR)
@@ -26,14 +29,14 @@ enticingConfiguration {
 
     deployment {
         server = "athena10.fit.vutbr.cz"
-        repository = "/mnt/minerva1/nlp/projects/corpproc_search/corpproc_search"
+        repository = ENTICING_HOME
         configurationScript = "$repository/dto/src/test/resources/config.kts"
     }
 
     corpusConfig {
         corpus("wiki-2018") {
             collectionsDir = "/mnt/data/indexes/xkozak15/new_wiki"
-            serverFile("../dto/src/test/resources/servers.txt")
+            serverFile("$ENTICING_HOME/dto/src/test/resources/servers.txt")
 
             corpusSource {
                 server = "minerva3.fit.vutbr.cz"
