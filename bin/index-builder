@@ -1,5 +1,6 @@
 #!/bin/bash
 export ENTICING_HOME=$("$(dirname "$BASH_SOURCE")"/../scripts/utils/get_enticing_home.sh)
+echo "repository found at: $ENTICING_HOME"
 retval=$?
 if [[ "$retval" -ne "0" ]] ; then
   exit $retval
