@@ -3,7 +3,7 @@ package cz.vutbr.fit.knot.enticing.eql.compiler.ast
 import cz.vutbr.fit.knot.enticing.dto.AstNode
 import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.EntityConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.EntityConfiguration
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.AgregatingListener
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.EqlListener

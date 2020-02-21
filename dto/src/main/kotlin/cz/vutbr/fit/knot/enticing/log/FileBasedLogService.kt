@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.log
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.LoggingConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.LoggingConfiguration
 import java.io.File
 import java.io.PrintWriter
 

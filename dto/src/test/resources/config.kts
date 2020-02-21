@@ -1,5 +1,5 @@
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.LogType
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.enticingConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.LogType
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.enticingConfiguration
 
 enticingConfiguration {
     webserver {

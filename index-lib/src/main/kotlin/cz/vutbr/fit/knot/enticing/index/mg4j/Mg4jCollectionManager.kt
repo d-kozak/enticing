@@ -1,8 +1,8 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
 import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.CollectionManagerConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.mg4jFiles
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.CollectionManagerConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.mg4jFiles
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.index.collection.manager.CollectionManager
 import cz.vutbr.fit.knot.enticing.index.collection.manager.format.result.EqlResultCreator

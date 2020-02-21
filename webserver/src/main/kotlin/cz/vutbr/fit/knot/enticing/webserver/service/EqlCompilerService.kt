@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver.service
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.webserver.dto.QueryValidationReply
 import org.springframework.stereotype.Service

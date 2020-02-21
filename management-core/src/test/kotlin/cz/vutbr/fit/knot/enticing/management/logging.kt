@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.management
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.EnticingConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
 import cz.vutbr.fit.knot.enticing.log.StdoutLogService
 import cz.vutbr.fit.knot.enticing.log.measuring

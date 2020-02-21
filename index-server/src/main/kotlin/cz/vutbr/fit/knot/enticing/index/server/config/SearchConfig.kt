@@ -1,11 +1,11 @@
 package cz.vutbr.fit.knot.enticing.index.server.config
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.CollectionManagerConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.EnticingConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.IndexServerConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.validateOrFail
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.visitor.prettyPrint
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.CollectionManagerConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexServerConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.validateOrFail
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.visitor.prettyPrint
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.index.collection.manager.CollectionManager

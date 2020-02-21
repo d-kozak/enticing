@@ -4,8 +4,8 @@ import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.annotation.Warning
 import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.CollectionManagerConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.IndexBuilderConfig
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.CollectionManagerConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexBuilderConfig
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.format.text.StringWithMetadata
 import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnit

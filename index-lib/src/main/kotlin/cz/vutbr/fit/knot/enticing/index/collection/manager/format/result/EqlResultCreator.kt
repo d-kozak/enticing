@@ -3,8 +3,8 @@ package cz.vutbr.fit.knot.enticing.index.collection.manager.format.result
 import cz.vutbr.fit.knot.enticing.dto.GeneralFormatInfo
 import cz.vutbr.fit.knot.enticing.dto.TextFormat
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.filterBy
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.filterBy
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.index.boundary.EqlMatch

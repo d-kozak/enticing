@@ -2,7 +2,7 @@ package cz.vutbr.fit.knot.enticing.eql.compiler
 
 import cz.vutbr.fit.knot.enticing.dto.AstNode
 import cz.vutbr.fit.knot.enticing.dto.PureMgj4Node
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.analysis.SemanticAnalyzer
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.EqlAstNode

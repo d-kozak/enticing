@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.analysis
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.metadataConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.validateOrFail
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.metadataConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.validateOrFail
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.dto.toCorpusFormat
 import cz.vutbr.fit.knot.enticing.dto.toMetadataConfiguration

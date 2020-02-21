@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.indexer
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.EnticingConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

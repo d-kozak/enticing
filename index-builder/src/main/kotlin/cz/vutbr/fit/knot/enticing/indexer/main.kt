@@ -1,8 +1,8 @@
 package cz.vutbr.fit.knot.enticing.indexer
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.EnticingConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.IndexBuilderConfig
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.validateOrFail
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexBuilderConfig
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.validateOrFail
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
 import cz.vutbr.fit.knot.enticing.index.startIndexing
 import cz.vutbr.fit.knot.enticing.log.configureFor

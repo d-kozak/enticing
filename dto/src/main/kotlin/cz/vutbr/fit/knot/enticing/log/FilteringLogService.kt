@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.log
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.LogType
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.LogType
 
 fun LogService.filtered(logTypes: Set<LogType>) = FilteringLogService(this, logTypes)
 

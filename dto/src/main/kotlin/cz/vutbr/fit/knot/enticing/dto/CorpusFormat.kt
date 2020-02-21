@@ -1,9 +1,9 @@
 package cz.vutbr.fit.knot.enticing.dto
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.AttributeConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.EntityConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.IndexConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.AttributeConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.EntityConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.IndexConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 import javax.validation.constraints.NotBlank
 
 

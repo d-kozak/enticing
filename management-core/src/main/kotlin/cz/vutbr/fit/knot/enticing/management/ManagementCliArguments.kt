@@ -2,10 +2,10 @@ package cz.vutbr.fit.knot.enticing.management
 
 import com.xenomachina.argparser.ArgParser
 import com.xenomachina.argparser.mainBody
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.EnticingConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.util.Validator
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.util.ValidatorImpl
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.validateOrFail
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.util.Validator
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.util.ValidatorImpl
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.validateOrFail
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
 
 

@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.log
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.LoggingConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.LoggingConfiguration
 
 /**
  * Aggregates all log types into one method onMessage, which receives the type as a parameter

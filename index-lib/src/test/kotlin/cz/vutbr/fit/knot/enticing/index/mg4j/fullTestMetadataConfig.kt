@@ -1,8 +1,8 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.metadataConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.validateOrFail
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.metadataConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.validateOrFail
 
 val fullTestMetadataConfig = metadataConfiguration {
     indexes {

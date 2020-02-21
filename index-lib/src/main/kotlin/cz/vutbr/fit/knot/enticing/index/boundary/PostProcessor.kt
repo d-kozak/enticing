@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.index.boundary
 
 import cz.vutbr.fit.knot.enticing.dto.AstNode
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.metadata.MetadataConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 
 typealias DocumentMatch = Pair<Interval, List<EqlMatch>>

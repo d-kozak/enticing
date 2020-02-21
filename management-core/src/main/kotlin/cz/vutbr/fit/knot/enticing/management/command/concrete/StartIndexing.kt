@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.management.command.concrete
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.newconfig.EnticingConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
 import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
 import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.management.command.CorpusSpecificCommandContext
