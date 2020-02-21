@@ -63,6 +63,7 @@ enticingConfiguration {
                     attributeIndexes(10)
                     "nertype" whichIs "nertype"
                     "nerlength" whichIs "nerlength"
+                    "_glue" whichIs "glue"
                 }
                 entities {
                     "person" with attributes("url", "image", "name", "gender", "birthplace", "birthdate", "deathplace", "deathdate", "profession", "nationality")

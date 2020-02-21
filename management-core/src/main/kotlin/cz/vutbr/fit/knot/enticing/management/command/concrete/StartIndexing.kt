@@ -7,9 +7,9 @@ import cz.vutbr.fit.knot.enticing.management.command.CorpusSpecificCommandContex
 import cz.vutbr.fit.knot.enticing.management.command.ManagementCommand
 import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
 import cz.vutbr.fit.knot.enticing.management.shell.preprocessCollections
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.joinAll
-import kotlinx.coroutines.launch
 
 data class StartIndexingCommand(val corpusName: String) : ManagementCommand<StartIndexingCommandContext>() {
     override fun buildContext(configuration: EnticingConfiguration, executor: ShellCommandExecutor, logService: MeasuringLogService) = StartIndexingCommandContext(corpusName, configuration, executor, logService)
@@ -21,10 +21,14 @@ class StartIndexingCommandContext(corpusName: String, configuration: EnticingCon
     private val deployment = configuration.deploymentConfiguration
 
     override suspend fun execute() = coroutineScope {
-        corpusConfiguration.indexServers.map { server ->
-            launch {
+        val outputs = corpusConfiguration.indexServers.map { server ->
+            async {
                 shellExecutor.preprocessCollections(username, server.address!!, enticingConfiguration.deploymentConfiguration.repository, enticingConfiguration.deploymentConfiguration.configurationScript)
             }
-        }.joinAll()
+        }.awaitAll()
+
+        for ((i, output) in outputs.withIndex()) {
+            logger.info("server ${corpusConfiguration.indexServers[i].address}: $output")
+        }
     }
 }

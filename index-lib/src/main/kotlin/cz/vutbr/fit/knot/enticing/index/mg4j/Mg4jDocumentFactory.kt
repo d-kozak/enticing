@@ -105,7 +105,7 @@ internal fun processLine(line: String, fields: List<MutableList<String>>, lineIn
     val firstEntityIndex = metadataConfiguration.firstAttributeIndex
     val nertagIndex = metadataConfiguration.entityIndex
 
-    val glueIndex = metadataConfiguration.glueIndex.columnIndex
+    val glueIndex = metadataConfiguration.glueIndex?.columnIndex ?: -1
 
     //             + 1 because the glue index is hidden inside the token index
     if (cells.size + 1 != indexCount || cells[tokenIndex].isBlank() || cells[tokenIndex] == glueSymbol1 || cells[tokenIndex] == glueSymbol2) {
