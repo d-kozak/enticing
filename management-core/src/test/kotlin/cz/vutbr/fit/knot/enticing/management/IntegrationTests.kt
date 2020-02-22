@@ -60,11 +60,32 @@ class IntegrationTests {
         }
     }
 
-    @Test
+    //    @Test
+    @Disabled
     fun `start indexing`() {
         val (cliArgs, config, engine) = initialize("../dto/src/test/resources/config.kts -p")
         engine.use {
             it.execute(cliArgs)
         }
     }
+
+    //        @Test
+    @Disabled
+    fun `start webserver`() {
+        val (cliArgs, config, engine) = initialize("../dto/src/test/resources/config.kts -w")
+        engine.use {
+            it.execute(cliArgs)
+        }
+    }
+
+    @Test
+    @Disabled
+    fun `kill webserver`() {
+        val (cliArgs, config, engine) = initialize("../dto/src/test/resources/config.kts -wk")
+        engine.use {
+            it.execute(cliArgs)
+        }
+    }
+
+
 }

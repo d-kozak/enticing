@@ -14,7 +14,7 @@ import java.util.concurrent.Executors
 
 class ManagementEngine(val configuration: EnticingConfiguration, val logService: MeasuringLogService) : AutoCloseable {
 
-    private val pool = Executors.newFixedThreadPool(24)
+    private val pool = Executors.newFixedThreadPool(64)
 
     private val scope = CoroutineScope(pool.asCoroutineDispatcher())
 
@@ -25,18 +25,19 @@ class ManagementEngine(val configuration: EnticingConfiguration, val logService:
     fun execute(args: ManagementCliArguments) {
         if (args.build)
             executeCommand(BuildProjectCommand)
-        if (args.removeFiles) args.corpuses.executeAll { RemoveDistributedFiles(it) }
-        if (args.distribute) args.corpuses.executeAll { DistributeCorpus(it) }
+        if (args.removeFiles) args.corpuses.executeAll { RemoveDistributedFilesCommand(it) }
+        if (args.distribute) args.corpuses.executeAll { DistributeCorpusCommand(it) }
         if (args.printFiles) args.corpuses.executeAll { ShowDistributedFiles(it) }
         if (args.startIndexing) args.corpuses.executeAll { StartIndexingCommand(it) }
-//        if (args.indexServers) {
-//            args.corpuses.executeAll { KillIndexServers(it) }
-//            if (args.startComponents) args.corpuses.executeAll { StartIndexServers(it) }
-//        }
-//        if (args.webserver) {
-//            executeCommand(KillWebserver)
-//            if (args.startComponents) executeCommand(StartWebserver)
-//        }
+        if (args.indexServers) {
+            if (args.kill)
+                args.corpuses.executeAll { KillIndexServersCommand(it) }
+            else args.corpuses.executeAll { StartIndexServersCommand(it) }
+        }
+        if (args.webserver) {
+            if (args.kill) executeCommand(KillWebserverCommand)
+            else executeCommand(StartWebserverCommand)
+        }
     }
 
 

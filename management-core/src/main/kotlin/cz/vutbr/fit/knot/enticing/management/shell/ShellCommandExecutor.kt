@@ -50,7 +50,6 @@ class ShellCommandExecutor(logService: MeasuringLogService, val scope: Coroutine
         stream.bufferedReader().use {
             var line = it.readLine()
             while (line != null) {
-                println(line)
                 if (printContent) println(if (logPrefix.isNotBlank()) "$logPrefix: $line" else line)
                 appendln(line)
                 line = it.readLine()

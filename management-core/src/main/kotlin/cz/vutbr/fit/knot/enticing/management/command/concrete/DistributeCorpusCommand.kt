@@ -15,7 +15,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicInteger
 
-data class DistributeCorpus(val corpusName: String) : ManagementCommand<DistributeCorpusContext>() {
+data class DistributeCorpusCommand(val corpusName: String) : ManagementCommand<DistributeCorpusContext>() {
     override fun buildContext(configuration: EnticingConfiguration, executor: ShellCommandExecutor, logService: MeasuringLogService): DistributeCorpusContext = DistributeCorpusContext(corpusName, configuration, executor, logService)
 }
 

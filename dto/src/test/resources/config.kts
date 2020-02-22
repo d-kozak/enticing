@@ -6,7 +6,7 @@ val ENTICING_HOME = System.getenv("ENTICING_HOME")
 
 enticingConfiguration {
     webserver {
-        address = "localhost"
+        address = "athena10.fit.vutbr.cz"
     }
 
     management {

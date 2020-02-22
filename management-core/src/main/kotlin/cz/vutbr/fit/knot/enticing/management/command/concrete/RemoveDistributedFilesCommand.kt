@@ -10,11 +10,11 @@ import cz.vutbr.fit.knot.enticing.management.shell.recursiveRemove
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
-data class RemoveDistributedFiles(val corpusName: String) : ManagementCommand<RemoveDistributedFilesContext>() {
-    override fun buildContext(configuration: EnticingConfiguration, executor: ShellCommandExecutor, logService: MeasuringLogService) = RemoveDistributedFilesContext(corpusName, configuration, executor, logService)
+data class RemoveDistributedFilesCommand(val corpusName: String) : ManagementCommand<RemoveDistributedFilesCommandContext>() {
+    override fun buildContext(configuration: EnticingConfiguration, executor: ShellCommandExecutor, logService: MeasuringLogService) = RemoveDistributedFilesCommandContext(corpusName, configuration, executor, logService)
 }
 
-class RemoveDistributedFilesContext(corpusName: String, configuration: EnticingConfiguration, executor: ShellCommandExecutor, logService: MeasuringLogService) : CorpusSpecificCommandContext(corpusName, configuration, executor, logService) {
+class RemoveDistributedFilesCommandContext(corpusName: String, configuration: EnticingConfiguration, executor: ShellCommandExecutor, logService: MeasuringLogService) : CorpusSpecificCommandContext(corpusName, configuration, executor, logService) {
 
     private val logger = logService.logger { }
 
