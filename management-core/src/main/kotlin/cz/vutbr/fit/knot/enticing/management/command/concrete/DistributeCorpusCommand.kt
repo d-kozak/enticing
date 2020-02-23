@@ -12,6 +12,7 @@ import cz.vutbr.fit.knot.enticing.management.shell.copyFiles
 import cz.vutbr.fit.knot.enticing.management.shell.createRemoteDirectory
 import cz.vutbr.fit.knot.enticing.management.shell.loadMg4jFiles
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -28,8 +29,8 @@ class DistributeCorpusContext(corpusName: String, configuration: EnticingConfigu
     private var totalCollections = 0
 
     override suspend fun execute() = coroutineScope {
-        val (sourceServer, directory, collectionsPerServer) = corpusSourceConfiguration
-        val allFiles = shellExecutor.loadMg4jFiles(username, sourceServer, directory)
+        val (sourceServer, directory, collectionsPerServer, fileLimit) = corpusSourceConfiguration
+        val allFiles = shellExecutor.loadMg4jFiles(username, sourceServer, directory, fileLimit)
         logger.info("Found ${allFiles.size} files")
 
         val dividedPerServer = divideFiles(corpusConfiguration.indexServers, allFiles)
@@ -59,12 +60,13 @@ class DistributeCorpusContext(corpusName: String, configuration: EnticingConfigu
         logger.info("Total distributed files $fileCount")
         check(allFiles.size == fileCount) { "the amount of distributed files is not equal to the original amount of files" }
 
-        for ((server, collections) in dividedPerCollection) {
-            for ((collection, files) in collections) {
+        for (i in 0 until collectionsPerServer) {
+            dividedPerCollection.map { (server, collections) ->
+                val (collection, files) = collections[i]
                 launch {
                     createCollection(server, collection, files)
                 }
-            }
+            }.joinAll()
         }
     }
 

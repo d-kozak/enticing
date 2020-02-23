@@ -3,6 +3,7 @@ package cz.vutbr.fit.knot.enticing.management
 import cz.vutbr.fit.knot.enticing.log.StdoutLogService
 import cz.vutbr.fit.knot.enticing.log.measuring
 import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 /**
@@ -22,76 +23,90 @@ class IntegrationTests {
         }
     }
 
-    @Test
-    @Disabled
-    fun `run what I want`() {
-        runCliApp("../dto/src/test/resources/config.kts -wi")
+    @Nested
+    inner class SmallTestConfig {
+        @Test
+        @Disabled
+        fun `whole pipeline`() {
+            runCliApp("../management-core/src/test/resources/testConfig.kts --remove -dpwi")
+        }
     }
 
-    //    @Test
     @Disabled
-    fun `build remotely`() {
-        runCliApp("../dto/src/test/resources/config.kts -b")
+    inner class FullWiki {
+
+        @Test
+        @Disabled
+        fun `run what I want`() {
+            runCliApp("../dto/src/test/resources/config.kts -wi")
+        }
+
+        //    @Test
+        @Disabled
+        fun `build remotely`() {
+            runCliApp("../dto/src/test/resources/config.kts -b")
+        }
+
+        //    @Test
+        @Disabled
+        fun `distribute corpus`() {
+            runCliApp("../dto/src/test/resources/config.kts -d")
+        }
+
+        //        @Test
+        @Disabled
+        fun `print corpus`() {
+            runCliApp("../dto/src/test/resources/config.kts --print")
+        }
+
+        //        @Test
+        @Disabled
+        fun `remove files`() {
+            runCliApp("../dto/src/test/resources/config.kts --remove")
+        }
+
+        //    @Test
+        @Disabled
+        fun `start indexing`() {
+            runCliApp("../dto/src/test/resources/config.kts -p")
+        }
+
+        //        @Test
+        @Disabled
+        fun `start webserver`() {
+            runCliApp("../dto/src/test/resources/config.kts -w")
+        }
+
+        //        @Test
+        @Disabled
+        fun `kill webserver`() {
+            runCliApp("../dto/src/test/resources/config.kts -wk")
+        }
+
+        //        @Test
+        @Disabled
+        fun `start index servers`() {
+            runCliApp("../dto/src/test/resources/config.kts -i")
+        }
+
+        //            @Test
+        @Disabled
+        fun `kill index servers`() {
+            runCliApp("../dto/src/test/resources/config.kts -ik")
+        }
+
+
+        //        @Test
+        @Disabled
+        fun `start all`() {
+            runCliApp("../dto/src/test/resources/config.kts -wi")
+        }
+
+        //    @Test
+        @Disabled
+        fun `kill all`() {
+            runCliApp("../dto/src/test/resources/config.kts -wik")
+        }
     }
 
-    //    @Test
-    @Disabled
-    fun `distribute corpus`() {
-        runCliApp("../dto/src/test/resources/config.kts -d")
-    }
-
-    //        @Test
-    @Disabled
-    fun `print corpus`() {
-        runCliApp("../dto/src/test/resources/config.kts --print")
-    }
-
-    //        @Test
-    @Disabled
-    fun `remove files`() {
-        runCliApp("../dto/src/test/resources/config.kts --remove")
-    }
-
-    //    @Test
-    @Disabled
-    fun `start indexing`() {
-        runCliApp("../dto/src/test/resources/config.kts -p")
-    }
-
-    //        @Test
-    @Disabled
-    fun `start webserver`() {
-        runCliApp("../dto/src/test/resources/config.kts -w")
-    }
-
-    //        @Test
-    @Disabled
-    fun `kill webserver`() {
-        runCliApp("../dto/src/test/resources/config.kts -wk")
-    }
-
-    //        @Test
-    @Disabled
-    fun `start index servers`() {
-        runCliApp("../dto/src/test/resources/config.kts -i")
-    }
-
-    //            @Test
-    @Disabled
-    fun `kill index servers`() {
-        runCliApp("../dto/src/test/resources/config.kts -ik")
-    }
-
-
-    //        @Test
-    @Disabled
-    fun `start all`() {
-        runCliApp("../dto/src/test/resources/config.kts -wi")
-    }
-
-    //    @Test
-    @Disabled
-    fun `kill all`() {
-        runCliApp("../dto/src/test/resources/config.kts -wik")
-    }
 }

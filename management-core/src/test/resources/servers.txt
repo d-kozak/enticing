@@ -1,0 +1,5 @@
+knot01.fit.vutbr.cz
+knot02.fit.vutbr.cz
+knot03.fit.vutbr.cz
+knot04.fit.vutbr.cz
+knot05.fit.vutbr.cz

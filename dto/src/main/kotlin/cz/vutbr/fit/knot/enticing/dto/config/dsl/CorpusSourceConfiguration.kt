@@ -11,7 +11,11 @@ data class CorpusSourceConfiguration(
         /**
          * how many collections should be created on each server during distribution
          */
-        var collectionsPerServer: Int = 5
+        var collectionsPerServer: Int = 5,
+        /**
+         * how many mg4j files to take
+         */
+        var fileLimit: Int = Int.MAX_VALUE
 ) : EnticingConfigurationUnit {
     override fun accept(visitor: EnticingConfigurationVisitor) {
         visitor.visitCorpusSourceConfiguration(this)

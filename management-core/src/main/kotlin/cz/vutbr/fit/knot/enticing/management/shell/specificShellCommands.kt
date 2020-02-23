@@ -49,8 +49,8 @@ private val pathColumn = 8
 /**
  * Load mg4j files located in a given directory
  */
-suspend fun ShellCommandExecutor.loadMg4jFiles(username: String, server: String, directory: String): List<Mg4jFile> {
-    val stdout = this.dumpMgj4Files(username, server, directory)
+suspend fun ShellCommandExecutor.loadMg4jFiles(username: String, server: String, directory: String, fileLimit: Int = Int.MAX_VALUE): List<Mg4jFile> {
+    val stdout = this.dumpMgj4Files(username, server, directory, fileLimit)
     return stdout.split("\n").mapNotNull {
         val line = it.split(whitespaceRegex)
         if (line.size < 9) return@mapNotNull null
@@ -76,4 +76,7 @@ suspend fun ShellCommandExecutor.loadFiles(username: String, server: String, dir
 /**
  * Dumps specified directory for mg4j files using ls
  */
-private suspend fun ShellCommandExecutor.dumpMgj4Files(username: String, server: String, directory: String) = this.execute(SshCommand(username, server, SimpleCommand("ls -l $directory/*.mg4j")), printStdout = false, checkReturnCode = false)
+private suspend fun ShellCommandExecutor.dumpMgj4Files(username: String, server: String, directory: String, fileLimit: Int) =
+        this.execute(
+                SshCommand(username, server,
+                        SimpleCommand("ls -l $directory/*.mg4j | head -n $fileLimit")), printStdout = false, checkReturnCode = false)

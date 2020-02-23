@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.log
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.LoggingConfiguration
+import java.time.Duration
 
 /**
  * Logservice capable of measuring time
@@ -35,7 +36,7 @@ class MeasuringLogService(next: LogService, config: LoggingConfiguration) : Dele
         next.error("'${handle.name}' : FAILURE - $msg : it took ${calcDuration(handle)} ms")
     }
 
-    private fun calcDuration(handle: MeasurementHandle): Long = System.currentTimeMillis() - handle.startTime
+    private fun calcDuration(handle: MeasurementHandle): String = Duration.ofMillis(System.currentTimeMillis() - handle.startTime).toString().substring(2)
 }
 
 fun LogService.measuring(config: LoggingConfiguration): MeasuringLogService = MeasuringLogService(this, config)

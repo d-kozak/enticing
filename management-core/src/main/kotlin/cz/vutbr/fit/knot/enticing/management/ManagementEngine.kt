@@ -14,7 +14,7 @@ import java.util.concurrent.Executors
 
 class ManagementEngine(val configuration: EnticingConfiguration, val logService: MeasuringLogService) : AutoCloseable {
 
-    private val pool = Executors.newFixedThreadPool(64)
+    private val pool = Executors.newFixedThreadPool(32)
 
     private val scope = CoroutineScope(pool.asCoroutineDispatcher())
 
