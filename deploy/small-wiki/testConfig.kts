@@ -30,13 +30,13 @@ enticingConfiguration {
     deployment {
         server = "athena10.fit.vutbr.cz"
         repository = "/mnt/minerva1/nlp/projects/corpproc_search/corpproc_search"
-        configurationScript = "$repository/management-core/src/test/resources/testConfig.kts"
+        configurationScript = "$repository/deploy/small-wiki/testConfig.kts"
     }
 
     corpusConfig {
         corpus("wiki-2018") {
             collectionsDir = "/mnt/data/indexes/xkozak15/test_config"
-            serverFile("$ENTICING_HOME/management-core/src/test/resources/servers.txt")
+            serverFile("$ENTICING_HOME/deploy/small-wiki/servers.txt")
 
             corpusSource {
                 server = "minerva3.fit.vutbr.cz"

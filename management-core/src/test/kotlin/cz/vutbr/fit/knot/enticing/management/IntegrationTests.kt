@@ -24,12 +24,21 @@ class IntegrationTests {
     }
 
     @Nested
+    @Disabled
     inner class SmallTestConfig {
+
         @Test
         @Disabled
-        fun `whole pipeline`() {
-            runCliApp("../management-core/src/test/resources/testConfig.kts --remove -dpwi")
+        fun `run what I want`() {
+            runCliApp("../deploy/small-wiki/testConfig.kts -wi")
         }
+
+        //@Test
+        @Disabled
+        fun `whole pipeline`() {
+            runCliApp("../deploy/small-wiki/testConfig.kts --remove -dpwi")
+        }
+
     }
 
     @Disabled
