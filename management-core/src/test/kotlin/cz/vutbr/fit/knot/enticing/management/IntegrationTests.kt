@@ -30,7 +30,7 @@ class IntegrationTests {
         @Test
         @Disabled
         fun `run what I want`() {
-            runCliApp("../deploy/small-wiki/testConfig.kts -wi")
+            runCliApp("../deploy/small-wiki/testConfig.kts -wik")
         }
 
         //@Test

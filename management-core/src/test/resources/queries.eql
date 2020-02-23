@@ -1,0 +1,6 @@
+hello
+hi
+how are you
+horse
+person.name:Jo*
+influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) - _PAR_ && influencer.url != influencee.url
