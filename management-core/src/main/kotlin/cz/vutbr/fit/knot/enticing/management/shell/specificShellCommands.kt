@@ -3,7 +3,7 @@ package cz.vutbr.fit.knot.enticing.management.shell
 import cz.vutbr.fit.knot.enticing.management.model.Mg4jFile
 
 
-suspend fun ShellCommandExecutor.startWebserver(username: String, server: String, enticingHome: String, configFile: String) = this.execute(SshCommand(username, server, StartScreenCommand("enticing-webserver", "webserver.log", SimpleCommand("$enticingHome/bin/webserver"))))
+suspend fun ShellCommandExecutor.startWebserver(username: String, server: String, enticingHome: String, configFile: String) = this.execute(SshCommand(username, server, StartScreenCommand("enticing-webserver", "$enticingHome/logs/$server-webserver.log", SimpleCommand("$enticingHome/bin/webserver"))))
 
 suspend fun ShellCommandExecutor.killWebserver(username: String, server: String) =
         this.execute(SshCommand(username, server, KillScreenCommand("enticing-webserver")), checkReturnCode = false)
