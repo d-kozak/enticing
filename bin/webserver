@@ -1,7 +1,8 @@
 #!/bin/bash
-ENTICING_HOME=$("$(dirname "$BASH_SOURCE")"/../scripts/utils/get_enticing_home.sh)
+export ENTICING_HOME=$("$(dirname "$BASH_SOURCE")"/../scripts/utils/get_enticing_home.sh)
 retval=$?
 if [[ "$retval" -ne "0" ]] ; then
   exit $retval
 fi
+echo "repository found at: $ENTICING_HOME"
 java -jar "${ENTICING_HOME}"/lib/webserver-0.0.1-SNAPSHOT.jar "$@"
