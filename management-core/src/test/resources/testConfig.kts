@@ -30,7 +30,7 @@ enticingConfiguration {
     deployment {
         server = "athena10.fit.vutbr.cz"
         repository = "/mnt/minerva1/nlp/projects/corpproc_search/corpproc_search"
-        configurationScript = "$repository/management-core/src/test/resources/config.kts"
+        configurationScript = "$repository/management-core/src/test/resources/testConfig.kts"
     }
 
     corpusConfig {
