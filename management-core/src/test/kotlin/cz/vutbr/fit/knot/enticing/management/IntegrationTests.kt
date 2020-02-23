@@ -1,6 +1,5 @@
 package cz.vutbr.fit.knot.enticing.management
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
 import cz.vutbr.fit.knot.enticing.log.StdoutLogService
 import cz.vutbr.fit.knot.enticing.log.measuring
 import org.junit.jupiter.api.Disabled
@@ -13,79 +12,86 @@ import org.junit.jupiter.api.Test
 @Disabled
 class IntegrationTests {
 
-    private fun initialize(args: String): Triple<ManagementCliArguments, EnticingConfiguration, ManagementEngine> {
+    private fun runCliApp(args: String) {
         val cliArgs = parseCliArgs(args.split("""\s+""".toRegex()).toTypedArray()).validateOrFail()
         val config = cliArgs.configuration
         val logger = StdoutLogService(config.loggingConfiguration).measuring(config.loggingConfiguration)
         val engine = ManagementEngine(config, logger)
-        return Triple(cliArgs, config, engine)
-    }
-
-
-//    @Test
-    @Disabled
-    fun `build remotely`() {
-        val (cliArgs, config, engine) = initialize("../dto/src/test/resources/config.kts -b")
         engine.use {
-            it.execute(cliArgs)
-        }
-
-    }
-
-    //    @Test
-    @Disabled
-    fun `distribute corpus`() {
-        val (cliArgs, config, engine) = initialize("../dto/src/test/resources/config.kts -d")
-        engine.use {
-            it.execute(cliArgs)
-        }
-
-    }
-
-    //        @Test
-    @Disabled
-    fun `print corpus`() {
-        val (cliArgs, config, engine) = initialize("../dto/src/test/resources/config.kts --print")
-        engine.use {
-            it.execute(cliArgs)
-        }
-    }
-
-    //        @Test
-    @Disabled
-    fun `remove files`() {
-        val (cliArgs, config, engine) = initialize("../dto/src/test/resources/config.kts --remove")
-        engine.use {
-            it.execute(cliArgs)
-        }
-    }
-
-    //    @Test
-    @Disabled
-    fun `start indexing`() {
-        val (cliArgs, config, engine) = initialize("../dto/src/test/resources/config.kts -p")
-        engine.use {
-            it.execute(cliArgs)
-        }
-    }
-
-    //        @Test
-    @Disabled
-    fun `start webserver`() {
-        val (cliArgs, config, engine) = initialize("../dto/src/test/resources/config.kts -w")
-        engine.use {
-            it.execute(cliArgs)
+            engine.execute(cliArgs)
         }
     }
 
     @Test
     @Disabled
+    fun `run what I want`() {
+        runCliApp("../dto/src/test/resources/config.kts -wi")
+    }
+
+    //    @Test
+    @Disabled
+    fun `build remotely`() {
+        runCliApp("../dto/src/test/resources/config.kts -b")
+    }
+
+    //    @Test
+    @Disabled
+    fun `distribute corpus`() {
+        runCliApp("../dto/src/test/resources/config.kts -d")
+    }
+
+    //        @Test
+    @Disabled
+    fun `print corpus`() {
+        runCliApp("../dto/src/test/resources/config.kts --print")
+    }
+
+    //        @Test
+    @Disabled
+    fun `remove files`() {
+        runCliApp("../dto/src/test/resources/config.kts --remove")
+    }
+
+    //    @Test
+    @Disabled
+    fun `start indexing`() {
+        runCliApp("../dto/src/test/resources/config.kts -p")
+    }
+
+    //        @Test
+    @Disabled
+    fun `start webserver`() {
+        runCliApp("../dto/src/test/resources/config.kts -w")
+    }
+
+    //        @Test
+    @Disabled
     fun `kill webserver`() {
-        val (cliArgs, config, engine) = initialize("../dto/src/test/resources/config.kts -wk")
-        engine.use {
-            it.execute(cliArgs)
-        }
+        runCliApp("../dto/src/test/resources/config.kts -wk")
+    }
+
+    //        @Test
+    @Disabled
+    fun `start index servers`() {
+        runCliApp("../dto/src/test/resources/config.kts -i")
+    }
+
+    //            @Test
+    @Disabled
+    fun `kill index servers`() {
+        runCliApp("../dto/src/test/resources/config.kts -ik")
     }
 
 
+    //        @Test
+    @Disabled
+    fun `start all`() {
+        runCliApp("../dto/src/test/resources/config.kts -wi")
+    }
+
+    //    @Test
+    @Disabled
+    fun `kill all`() {
+        runCliApp("../dto/src/test/resources/config.kts -wik")
+    }
 }

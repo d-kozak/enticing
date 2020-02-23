@@ -58,7 +58,7 @@ class SearchConfig(
     fun collectionManagers(config: IndexServerConfiguration, metadataConfiguration: MetadataConfiguration): Map<String, CollectionManager> {
         return config.loadCollections()
                 .asSequence()
-                .map { (collectionDir, mg4jDir, indexDir) -> CollectionManagerConfiguration(config.corpus.name, collectionDir.name, indexDir, mg4jDir, metadataConfiguration) }
+                .map { (collectionDir, mg4jDir, indexDir) -> CollectionManagerConfiguration(config.corpus.name, collectionDir.name, mg4jDir, indexDir, metadataConfiguration) }
                 .map { initMg4jCollectionManager(it) }
                 .associateBy { it.collectionName }
     }

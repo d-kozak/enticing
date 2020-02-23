@@ -6,13 +6,13 @@ import cz.vutbr.fit.knot.enticing.management.model.Mg4jFile
 suspend fun ShellCommandExecutor.startWebserver(username: String, server: String, enticingHome: String, configFile: String) = this.execute(SshCommand(username, server, StartScreenCommand("enticing-webserver", "webserver.log", SimpleCommand("$enticingHome/bin/webserver"))))
 
 suspend fun ShellCommandExecutor.killWebserver(username: String, server: String) =
-        this.execute(SshCommand(username, server, KillScreenCommand("enticing-webserver")))
+        this.execute(SshCommand(username, server, KillScreenCommand("enticing-webserver")), checkReturnCode = false)
 
 suspend fun ShellCommandExecutor.startIndexServer(username: String, server: String, enticingHome: String, configFile: String) =
-        this.execute(SshCommand(username, server, StartScreenCommand("enticing-index-server", "index-server.log", SimpleCommand("$enticingHome/bin/index-server $configFile $server"))))
+        this.execute(SshCommand(username, server, StartScreenCommand("enticing-index-server", "$enticingHome/logs/$server-index-server.log", SimpleCommand("$enticingHome/bin/index-server $configFile $server"))))
 
 suspend fun ShellCommandExecutor.killIndexServer(username: String, server: String) =
-        this.execute(SshCommand(username, server, KillScreenCommand("enticing-index-server")))
+        this.execute(SshCommand(username, server, KillScreenCommand("enticing-index-server")), checkReturnCode = false)
 
 suspend fun ShellCommandExecutor.preprocessCollections(username: String, server: String, enticingHome: String, configFile: String) = this.execute(
         SshCommand(username, server,
