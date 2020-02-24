@@ -5,48 +5,28 @@ import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.github.kittinunf.fuel.coroutines.awaitString
 import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.WebServer
-import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.validateOrFail
-import cz.vutbr.fit.knot.enticing.dto.config.executeScript
 import cz.vutbr.fit.knot.enticing.dto.utils.toDto
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
-import cz.vutbr.fit.knot.enticing.log.StdoutLogService
-import cz.vutbr.fit.knot.enticing.log.measuring
+import cz.vutbr.fit.knot.enticing.log.logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 import java.io.File
 
-/**
- * assumes the webserver and index servers are running
- */
-@Incomplete("startup the server automatically instead of relying on it being running")
 @Disabled
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class EndToEndPerformanceTest {
 
-    /**
-     * id of the search settings to use
-     */
-    val settingsId = 2
+    val logger = SmallWikiTestFixture.logger.logger { }
 
-    val config = executeScript<EnticingConfiguration>("../deploy/small-wiki/testConfig.kts").validateOrFail()
-
-    val webserver = config.webserverConfiguration.address
-
-    val queryEndpoint = "http://$webserver:8080/api/v1/query?settings=$settingsId"
-
-    val logger = StdoutLogService(config.loggingConfiguration)
-            .measuring(config.loggingConfiguration)
-
-    private suspend fun sendQuery(query: String): WebServer.ResultList = Fuel.post(queryEndpoint)
-            .timeout(60_000)
-            .jsonBody(SearchQuery("hello").toJson())
-            .awaitString()
-            .toDto()
-
+    @BeforeAll
+    fun startUp() {
+        SmallWikiTestFixture.fullInitialization()
+    }
 
     @Test
     fun `ask simple query hello`() = runBlocking<Unit> {
@@ -56,6 +36,7 @@ class EndToEndPerformanceTest {
         }
 
     }
+
 
     @Test
     fun `ask queries from file`() = runBlocking<Unit> {
@@ -80,4 +61,10 @@ class EndToEndPerformanceTest {
             }
         }
     }
+
+    private suspend fun sendQuery(query: String): WebServer.ResultList = Fuel.post(SmallWikiTestFixture.queryEndpoint)
+            .timeout(60_000)
+            .jsonBody(SearchQuery(query).toJson())
+            .awaitString()
+            .toDto()
 }
