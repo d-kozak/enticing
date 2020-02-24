@@ -7,6 +7,10 @@ import java.io.File
 
 class EnticingConfigurationValidator(validator: Validator) : EnticingConfigurationListener, Validator by validator {
 
+    override fun enterEnticingConfiguration(configuration: EnticingConfiguration) {
+        checkNotEmpty(configuration.localHome, "local home")
+    }
+
     override fun enterCorpusConfiguration(configuration: CorpusConfiguration) {
         check(configuration.metadataConfiguration.indexes.isNotEmpty()) { "at least one index should be present" }
     }

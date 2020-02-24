@@ -8,11 +8,11 @@ import cz.vutbr.fit.knot.enticing.management.command.ManagementCommandContext
 import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
 import cz.vutbr.fit.knot.enticing.management.shell.pullAndBuild
 
-object BuildProjectCommand : ManagementCommand<BuildProjectCommandContext>() {
-    override fun buildContext(configuration: EnticingConfiguration, executor: ShellCommandExecutor, logService: MeasuringLogService): BuildProjectCommandContext = BuildProjectCommandContext(configuration, executor, logService)
+object RemoteBuildCommand : ManagementCommand<RemoteBuildCommandContext>() {
+    override fun buildContext(configuration: EnticingConfiguration, executor: ShellCommandExecutor, logService: MeasuringLogService): RemoteBuildCommandContext = RemoteBuildCommandContext(configuration, executor, logService)
 }
 
-class BuildProjectCommandContext(configuration: EnticingConfiguration, executor: ShellCommandExecutor, logService: MeasuringLogService) : ManagementCommandContext(configuration, executor, logService) {
+class RemoteBuildCommandContext(configuration: EnticingConfiguration, executor: ShellCommandExecutor, logService: MeasuringLogService) : ManagementCommandContext(configuration, executor, logService) {
     private val logger = logService.logger { }
 
     private val deployment = configuration.deploymentConfiguration

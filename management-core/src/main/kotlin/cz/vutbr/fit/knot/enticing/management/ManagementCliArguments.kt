@@ -25,7 +25,7 @@ class ManagementCliArguments(parser: ArgParser) : Validator by ValidatorImpl() {
     /**
      * build the project remotely
      */
-    val build by parser.flagging("-b", "--build", help = "build the project remotely")
+    val remoteBuild by parser.flagging("-b", "--build", help = "build the project remotely")
 
     /**
      * Distribute mg4j files to the servers
@@ -69,6 +69,8 @@ class ManagementCliArguments(parser: ArgParser) : Validator by ValidatorImpl() {
      */
     val removeFiles by parser.flagging("--remove", help = "Remove mg4j directories on the servers")
 
+    val localBuild by parser.flagging("--local-build", help = "Locally build the project, copy resulting jars to the deployment server")
+
 
     lateinit var configuration: EnticingConfiguration
 
@@ -92,7 +94,8 @@ class ManagementCliArguments(parser: ArgParser) : Validator by ValidatorImpl() {
         append(corpuses)
         append(',')
 
-        if (build) append("build,")
+        if (localBuild) append("localBuild,")
+        if (remoteBuild) append("remoteBuild,")
         if (distribute) append("distribute,")
         if (startIndexing) append("startIndexing,")
         if (webserver) append("webserver,")

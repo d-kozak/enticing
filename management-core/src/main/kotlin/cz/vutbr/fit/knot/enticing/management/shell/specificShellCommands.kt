@@ -1,7 +1,13 @@
 package cz.vutbr.fit.knot.enticing.management.shell
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.management.model.Mg4jFile
 
+suspend fun ShellCommandExecutor.localBuild(enticingHome: String): String {
+    @Incomplete("find a way to just use 'gradle'")
+    val localGradleBin = "/home/dkozak/.sdkman/candidates/gradle/current/bin/gradle buildAll"
+    return this.execute(SimpleCommand(localGradleBin), workingDirectory = enticingHome)
+}
 
 suspend fun ShellCommandExecutor.startWebserver(username: String, server: String, enticingHome: String, configFile: String) = this.execute(SshCommand(username, server, StartScreenCommand("enticing-webserver", "$enticingHome/logs/$server-webserver.log", SimpleCommand("$enticingHome/bin/webserver"))))
 

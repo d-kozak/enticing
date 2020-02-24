@@ -23,8 +23,10 @@ class ManagementEngine(val configuration: EnticingConfiguration, val logService:
     private val executor = ShellCommandExecutor(logService, scope)
 
     fun execute(args: ManagementCliArguments) = with(args) {
-        if (build)
-            executeCommand(BuildProjectCommand)
+        if (localBuild)
+            executeCommand(LocalBuildCommand)
+        if (remoteBuild)
+            executeCommand(RemoteBuildCommand)
         if (removeFiles) corpuses.executeAll { RemoveDistributedFilesCommand(it) }
         if (distribute) corpuses.executeAll { DistributeCorpusCommand(it) }
         if (printFiles) corpuses.executeAll { ShowDistributedFiles(it) }

@@ -10,7 +10,7 @@ task stage {
 }
 
 task buildAll {
-    dependsOn "webserver:bootJar", "index-server:bootJar", "management-service:bootJar", "index-builder:jar", "console-client:jar"
+    dependsOn "webserver:bootJar", "index-server:bootJar", "management-service:bootJar", "index-builder:jar", "console-client:jar","management-core:jar"
 }
 
 task downloadDeps(type: Exec) {

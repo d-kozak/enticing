@@ -33,7 +33,8 @@ data class EnticingConfiguration(
         /**
          * configuration of deployment
          */
-        var deploymentConfiguration: DeploymentConfiguration = DeploymentConfiguration()
+        var deploymentConfiguration: DeploymentConfiguration = DeploymentConfiguration(),
+        var localHome: String = ""
 ) : EnticingConfigurationUnit {
 
     /**

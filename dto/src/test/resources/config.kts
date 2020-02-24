@@ -5,6 +5,7 @@ val ENTICING_HOME = System.getenv("ENTICING_HOME")
         ?: throw IllegalStateException("ENTICING_HOME environment variable not set")
 
 enticingConfiguration {
+    localHome = ENTICING_HOME
     webserver {
         address = "athena10.fit.vutbr.cz"
     }

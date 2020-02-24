@@ -29,6 +29,12 @@ class ManagementCliIntegrationTests {
 
         @Test
         @Disabled
+        fun `local build`() {
+            runCliApp("../deploy/small-wiki/testConfig.kts --local-build")
+        }
+
+        //        @Test
+        @Disabled
         fun `run what I want`() {
             runCliApp("../deploy/small-wiki/testConfig.kts -wik")
         }
