@@ -7,7 +7,6 @@ import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
-import java.util.*
 
 @Component
 class AddAdminRunner(
@@ -20,8 +19,8 @@ class AddAdminRunner(
     override fun run(args: ApplicationArguments?) {
         val admins = userRepository.findAllAdmins()
         if (admins.isEmpty()) {
-            val rawPassword = UUID.randomUUID().toString()
-            var login = "admin${randomInt()}"
+            val rawPassword = "knot12"
+            var login = "admin"
             while (userRepository.existsByLogin(login)) {
                 login += "${randomInt()}"
             }
