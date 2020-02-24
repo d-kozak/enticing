@@ -6,11 +6,11 @@ import cz.vutbr.fit.knot.enticing.dto.config.executeScript
 import cz.vutbr.fit.knot.enticing.log.StdoutLogService
 import cz.vutbr.fit.knot.enticing.log.measuring
 
+private const val CONFIG_PATH = "../deploy/small-wiki/testConfig.kts"
 
 class SmallWikiTestFixture(rebootComponents: Boolean) {
 
-    val configPath = "../deploy/small-wiki/testConfig.kts"
-    val config = executeScript<EnticingConfiguration>(configPath).validateOrFail()
+    val config = executeScript<EnticingConfiguration>(CONFIG_PATH).validateOrFail()
 
     val logService = StdoutLogService(config.loggingConfiguration)
             .measuring(config.loggingConfiguration)
@@ -22,7 +22,7 @@ class SmallWikiTestFixture(rebootComponents: Boolean) {
             killTestSetup()
             startTestSetup()
         }
-        webserverApi = webserverLogin(config.webserverConfiguration.address + ":8080", "admin", "knot12")
+        webserverApi = webserverLogin(config.webserverConfiguration.fullAddress, "admin", "knot12")
         println(webserverApi.userInfo())
     }
 
@@ -31,7 +31,7 @@ class SmallWikiTestFixture(rebootComponents: Boolean) {
     private fun startTestSetup() = runTestConfig("-wi")
     private fun killTestSetup() = runTestConfig("-wik")
 
-    private fun runTestConfig(args: String) = runManagementCli("$configPath $args")
+    private fun runTestConfig(args: String) = runManagementCli("$CONFIG_PATH $args")
 
 
 }

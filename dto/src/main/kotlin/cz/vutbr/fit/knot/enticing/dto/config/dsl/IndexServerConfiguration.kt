@@ -19,7 +19,9 @@ data class IndexServerConfiguration(
          */
         var collectionsDir: String? = null,
 
-        override var address: String = ""
+        override var address: String = "",
+
+        override var port: Int = 8081
 ) : ComponentConfiguration {
 
     /**

@@ -7,6 +7,7 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.visitor.EnticingConfigurationVi
  */
 data class ManagementServiceConfiguration(
         override var address: String = "",
+        override var port: Int = 8082,
         /**
          * Hearthbeat configuration
          */

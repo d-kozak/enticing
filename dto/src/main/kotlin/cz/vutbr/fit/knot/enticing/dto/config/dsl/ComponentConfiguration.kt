@@ -10,5 +10,10 @@ interface ComponentConfiguration : EnticingConfigurationUnit {
      * null means that it should be started on this machine
      */
     var address: String
+
+    var port: Int
+
+    val fullAddress: String
+        get() = "$address:$port"
 }
 
