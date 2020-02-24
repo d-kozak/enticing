@@ -1,4 +1,4 @@
-package cz.vutbr.fit.knot.enticing.management.performance
+package cz.vutbr.fit.knot.enticing.testing.performance
 
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.extensions.jsonBody
@@ -25,7 +25,7 @@ import java.io.File
  */
 @Incomplete("startup the server automatically instead of relying on it being running")
 @Disabled
-class QueryPerformanceTest {
+class EndToEndPerformanceTest {
 
     /**
      * id of the search settings to use

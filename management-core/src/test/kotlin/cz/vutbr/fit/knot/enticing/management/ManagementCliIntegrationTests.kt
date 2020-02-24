@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
  * They should be run only from within the KNOT network and MANUALLY, that's why they are disabled by default (not a good candidate for CI)
  */
 @Disabled
-class IntegrationTests {
+class ManagementCliIntegrationTests {
 
     private fun runCliApp(args: String) {
         val cliArgs = parseCliArgs(args.split("""\s+""".toRegex()).toTypedArray()).validateOrFail()
