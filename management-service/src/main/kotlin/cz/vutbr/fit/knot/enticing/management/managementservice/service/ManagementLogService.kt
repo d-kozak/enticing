@@ -9,7 +9,7 @@ import javax.transaction.Transactional
 
 @Service
 @Transactional
-class LogService(val logRepository: LogRepository) {
+class ManagementLogService(val logRepository: LogRepository) {
 
     fun add(log: LogMessage) = logRepository.save(log.toEntity()).toDto()
 

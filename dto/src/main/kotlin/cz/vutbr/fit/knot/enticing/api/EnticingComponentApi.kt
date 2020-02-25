@@ -12,7 +12,7 @@ abstract class EnticingComponentApi(val address: String, logService: LogService)
     private val logger = logService.logger { }
 
     protected fun httpPost(endPoint: String, dto: Any) {
-        (address + endPoint).httpPost()
+        ("http://$address$endPoint").httpPost()
                 .body(dto.toJson())
                 .submit()
     }
@@ -21,6 +21,8 @@ abstract class EnticingComponentApi(val address: String, logService: LogService)
         val (_, _, result) = this.responseString()
         if (result is Result.Failure) {
             logger.error("Failed to submit message ${result.error.exception.message}")
+        } else {
+            logger.info(result.toString())
         }
     }
 }

@@ -5,7 +5,6 @@ import com.github.kittinunf.fuel.httpGet
 import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.WebServer
 import cz.vutbr.fit.knot.enticing.dto.utils.toDto
-import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import cz.vutbr.fit.knot.enticing.query.processor.fuel.jsonBody
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -56,7 +55,7 @@ class WebserverApi(
     fun sendQuery(query: String): WebServer.ResultList {
         val (_, _, result) = Fuel.post(queryEndpoint)
                 .timeout(60_000)
-                .jsonBody(SearchQuery(query).toJson())
+                .jsonBody(SearchQuery(query))
                 .responseString()
         return result.get()
                 .toDto()

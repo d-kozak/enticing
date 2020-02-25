@@ -8,6 +8,7 @@ import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcherException
 import cz.vutbr.fit.knot.enticing.webserver.dto.LastQuery
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
+import cz.vutbr.fit.knot.enticing.webserver.exception.InvalidSearchSettingsException
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -87,10 +88,10 @@ class QueryService(
     fun checkUserCanAccessSettings(selectedSettings: Long): SearchSettings {
         val currentUser = userService.currentUser
 
-        val searchSettings = searchSettingsRepository.findById(selectedSettings).orElseThrow { IllegalArgumentException("Unknown searchSettings id $selectedSettings") }
+        val searchSettings = searchSettingsRepository.findById(selectedSettings).orElseThrow { InvalidSearchSettingsException("Unknown searchSettings id $selectedSettings") }
 
         if (searchSettings.private && (currentUser == null || !currentUser.isAdmin)) {
-            throw IllegalArgumentException("Settings is private, current user (or anonymous user) cannot use it")
+            throw InvalidSearchSettingsException("Settings is private, current user (or anonymous user) cannot use it")
         }
         return searchSettings
     }
