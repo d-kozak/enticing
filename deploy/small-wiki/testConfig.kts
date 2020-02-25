@@ -11,6 +11,7 @@ enticingConfiguration {
     }
 
     management {
+        address = "athena11.fit.vutbr.cz"
         hearthBeat {
             period = 2_000
         }

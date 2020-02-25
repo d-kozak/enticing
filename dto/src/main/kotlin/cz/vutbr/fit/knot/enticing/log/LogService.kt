@@ -11,6 +11,7 @@ interface LogService {
     fun debug(message: String)
     fun info(message: String)
     fun perf(message: String)
+    fun warn(message: String)
     fun error(message: String)
 }
 
@@ -30,6 +31,7 @@ abstract class DelegatingLogService(var next: LogService, config: LoggingConfigu
     override fun debug(message: String) = next.debug(message)
     override fun info(message: String) = next.info(message)
     override fun perf(message: String) = next.perf(message)
+    override fun warn(message: String) = next.warn(message)
     override fun error(message: String) = next.error(message)
 }
 

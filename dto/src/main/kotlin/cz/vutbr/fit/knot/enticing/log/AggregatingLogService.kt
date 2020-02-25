@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.log
 
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.LogType
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.LoggingConfiguration
 
 /**
@@ -7,14 +8,15 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.LoggingConfiguration
  */
 abstract class AggregatingLogService(config: LoggingConfiguration) : ConfiguredLogService(config) {
 
-    abstract fun onMessage(kind: String, message: String)
+    abstract fun onMessage(type: LogType, message: String)
 
-    override fun debug(message: String) = onMessage("DEBUG", message)
+    override fun debug(message: String) = onMessage(LogType.DEBUG, message)
 
-    override fun info(message: String) = onMessage("INFO", message)
+    override fun info(message: String) = onMessage(LogType.INFO, message)
 
-    override fun perf(message: String) = onMessage("PERF", message)
+    override fun perf(message: String) = onMessage(LogType.PERF, message)
 
-    override fun error(message: String) = onMessage("ERROR", message)
+    override fun warn(message: String) = onMessage(LogType.WARN, message)
 
+    override fun error(message: String) = onMessage(LogType.ERROR, message)
 }

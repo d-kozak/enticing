@@ -18,6 +18,10 @@ class DispatchingLogService(val children: List<LogService>) : LogService {
         children.forEach { it.perf(message) }
     }
 
+    override fun warn(message: String) {
+        children.forEach { it.warn(message) }
+    }
+
     override fun error(message: String) {
         children.forEach { it.error(message) }
     }

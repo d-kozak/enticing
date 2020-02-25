@@ -1,8 +1,11 @@
 package cz.vutbr.fit.knot.enticing.api
 
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.LogType
 import cz.vutbr.fit.knot.enticing.log.LogMessage
 import cz.vutbr.fit.knot.enticing.log.LogService
 import cz.vutbr.fit.knot.enticing.log.RemoteLoggingApi
+
+private const val API_BASE_PATH = "/api/v1"
 
 /**
  * Wrapper around the api of the management service
@@ -10,7 +13,7 @@ import cz.vutbr.fit.knot.enticing.log.RemoteLoggingApi
 class ManagementServiceApi(address: String, logService: LogService)
     : EnticingComponentApi(address, logService), RemoteLoggingApi {
 
-    override fun log(kind: String, message: String) {
-        httpPost("/log", LogMessage(kind, message))
+    override fun log(type: LogType, message: String) {
+        httpPost("$API_BASE_PATH/log", LogMessage(type, message))
     }
 }

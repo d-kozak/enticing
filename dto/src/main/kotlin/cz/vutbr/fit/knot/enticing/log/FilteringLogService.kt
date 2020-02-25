@@ -20,6 +20,10 @@ class FilteringLogService(val next: LogService, val logTypes: Set<LogType>) : Lo
         if (LogType.PERF in logTypes) next.perf(message)
     }
 
+    override fun warn(message: String) {
+        if (LogType.WARN in logTypes) next.perf(message)
+    }
+
     override fun error(message: String) {
         if (LogType.ERROR in logTypes) next.error(message)
     }

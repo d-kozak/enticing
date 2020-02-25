@@ -26,6 +26,8 @@ class PrefixedLogService(val prefix: String, var next: LogService) : LogService 
 
     override fun perf(message: String) = next.perf("$prefix : $message")
 
+    override fun warn(message: String) = next.warn("$prefix : $message")
+
     override fun error(message: String) = next.error("$prefix : $message")
 }
 

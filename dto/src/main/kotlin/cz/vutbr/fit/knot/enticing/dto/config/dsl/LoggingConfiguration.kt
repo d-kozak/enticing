@@ -67,6 +67,10 @@ enum class LogType {
      */
     PERF,
     /**
+     * something has gone wrong, but it is not critical
+     */
+    WARN,
+    /**
      * something has gone seriously wrong
      */
     ERROR,
