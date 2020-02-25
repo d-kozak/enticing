@@ -12,7 +12,7 @@ suspend fun ShellCommandExecutor.localBuild(enticingHome: String): String {
 suspend fun ShellCommandExecutor.copyJars(username: String, server: String, localRepository: String, remoteRepository: String) = this.execute(SimpleCommand("scp $localRepository/lib/*.jar $username@$server:$remoteRepository/lib"))
 
 @Incomplete("specify ports...")
-suspend fun ShellCommandExecutor.startWebserver(username: String, server: String, enticingHome: String, configFile: String) = this.execute(SshCommand(username, server, StartScreenCommand("enticing-webserver", SimpleCommand("$enticingHome/bin/webserver"))))
+suspend fun ShellCommandExecutor.startWebserver(username: String, server: String, enticingHome: String, configFile: String) = this.execute(SshCommand(username, server, StartScreenCommand("enticing-webserver", SimpleCommand("$enticingHome/bin/webserver $configFile $server"))))
 
 suspend fun ShellCommandExecutor.killWebserver(username: String, server: String) =
         this.execute(SshCommand(username, server, KillScreenCommand("enticing-webserver")), checkReturnCode = false)
