@@ -44,9 +44,14 @@ data class CorpusConfiguration(
 
     fun serverFile(path: String) {
         val servers = File(path).readLines()
-        indexServers = servers.map { address ->
+        indexServers = servers.map { line ->
+            val separator = line.indexOf(":")
+            val (address, port) = if (separator >= 0) {
+                line.substring(0, separator) to line.substring(separator + 1).toInt()
+            } else line to IndexServerConfiguration.DEFAULT_PORT
             IndexServerConfiguration().also {
                 it.address = address
+                it.port = port
                 it.corpus = this
             }
         }.toMutableList()

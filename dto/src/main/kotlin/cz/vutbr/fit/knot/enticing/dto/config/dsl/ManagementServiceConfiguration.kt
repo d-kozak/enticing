@@ -7,12 +7,18 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.visitor.EnticingConfigurationVi
  */
 data class ManagementServiceConfiguration(
         override var address: String = "",
-        override var port: Int = 8082,
+        override var port: Int = DEFAULT_PORT,
         /**
          * Hearthbeat configuration
          */
         var hearthBeatConfiguration: HearthBeatConfiguration = HearthBeatConfiguration(false)
 ) : ComponentConfiguration {
+
+
+    companion object {
+        const val DEFAULT_PORT = 5628
+    }
+
     fun hearthBeat(block: HearthBeatConfiguration.() -> Unit) {
         hearthBeatConfiguration = HearthBeatConfiguration(true).apply(block)
     }

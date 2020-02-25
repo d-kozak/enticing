@@ -12,7 +12,7 @@ fun LogMessage.toEntity() = LogEntity(
         id = 0, text = text, type = type, timestamp = timestamp
 )
 
-fun LogEntity.toDto() = LogMessage(type, text, timestamp)
+fun LogEntity.toDto() = LogMessage(text, type, timestamp)
 
 @Entity
 class LogEntity(

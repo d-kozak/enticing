@@ -12,19 +12,20 @@ suspend fun ShellCommandExecutor.localBuild(enticingHome: String): String {
 suspend fun ShellCommandExecutor.copyJars(username: String, server: String, localRepository: String, remoteRepository: String) = this.execute(SimpleCommand("scp $localRepository/lib/*.jar $username@$server:$remoteRepository/lib"))
 
 @Incomplete("specify ports...")
-suspend fun ShellCommandExecutor.startWebserver(username: String, server: String, enticingHome: String, configFile: String) = this.execute(SshCommand(username, server, StartScreenCommand("enticing-webserver", SimpleCommand("$enticingHome/bin/webserver $configFile $server"))))
+suspend fun ShellCommandExecutor.startWebserver(username: String, server: String, enticingHome: String, configFile: String, port: Int) = this.execute(SshCommand(username, server,
+        StartScreenCommand("enticing-webserver", SimpleCommand("$enticingHome/bin/webserver $configFile $server --server.port=$port"))))
 
 suspend fun ShellCommandExecutor.killWebserver(username: String, server: String) =
         this.execute(SshCommand(username, server, KillScreenCommand("enticing-webserver")), checkReturnCode = false)
 
-suspend fun ShellCommandExecutor.startManagementService(username: String, server: String, enticingHome: String, configFile: String) =
-        this.execute(SshCommand(username, server, StartScreenCommand("enticing-management", SimpleCommand("$enticingHome/bin/management-service $configFile $server"))))
+suspend fun ShellCommandExecutor.startManagementService(username: String, server: String, enticingHome: String, configFile: String, port: Int) = this.execute(SshCommand(username, server,
+        StartScreenCommand("enticing-management", SimpleCommand("$enticingHome/bin/management-service $configFile $server --server.port=$port"))))
 
 suspend fun ShellCommandExecutor.killManagementService(username: String, server: String) =
         this.execute(SshCommand(username, server, KillScreenCommand("enticing-management")), checkReturnCode = false)
 
-suspend fun ShellCommandExecutor.startIndexServer(username: String, server: String, enticingHome: String, configFile: String) =
-        this.execute(SshCommand(username, server, StartScreenCommand("enticing-index-server", SimpleCommand("$enticingHome/bin/index-server $configFile $server"))))
+suspend fun ShellCommandExecutor.startIndexServer(username: String, server: String, enticingHome: String, configFile: String, port: Int) = this.execute(SshCommand(username, server,
+        StartScreenCommand("enticing-index-server", SimpleCommand("$enticingHome/bin/index-server $configFile $server --server.port=$port"))))
 
 suspend fun ShellCommandExecutor.killIndexServer(username: String, server: String) =
         this.execute(SshCommand(username, server, KillScreenCommand("enticing-index-server")), checkReturnCode = false)

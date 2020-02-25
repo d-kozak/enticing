@@ -21,8 +21,12 @@ data class IndexServerConfiguration(
 
         override var address: String = "",
 
-        override var port: Int = 8081
+        override var port: Int = DEFAULT_PORT
 ) : ComponentConfiguration {
+
+    companion object {
+        const val DEFAULT_PORT: Int = 5627
+    }
 
     /**
      * corpus this index server belongs to

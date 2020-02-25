@@ -15,6 +15,6 @@ object StartWebserverCommand : ManagementCommand<StartWebserverCommandContext>()
 class StartWebserverCommandContext(configuration: EnticingConfiguration, executor: ShellCommandExecutor, logService: MeasuringLogService) : ManagementCommandContext(configuration, executor, logService) {
 
     override suspend fun execute() {
-        shellExecutor.startWebserver(username, enticingConfiguration.webserverConfiguration.address, enticingConfiguration.deploymentConfiguration.repository, enticingConfiguration.deploymentConfiguration.configurationScript)
+        shellExecutor.startWebserver(username, webserverConfiguration.address, enticingConfiguration.deploymentConfiguration.repository, enticingConfiguration.deploymentConfiguration.configurationScript, webserverConfiguration.port)
     }
 }

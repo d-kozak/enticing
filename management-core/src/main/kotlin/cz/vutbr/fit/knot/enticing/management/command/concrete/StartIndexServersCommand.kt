@@ -17,7 +17,7 @@ class StartIndexServerCommandContext(corpusName: String, configuration: Enticing
     override suspend fun execute() = coroutineScope<Unit> {
         corpusConfiguration.indexServers.map { server ->
             launch {
-                shellExecutor.startIndexServer(username, server.address, enticingConfiguration.deploymentConfiguration.repository, enticingConfiguration.deploymentConfiguration.configurationScript)
+                shellExecutor.startIndexServer(username, server.address, enticingConfiguration.deploymentConfiguration.repository, enticingConfiguration.deploymentConfiguration.configurationScript, server.port)
             }
         }
     }

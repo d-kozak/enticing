@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.api
 
 import com.github.kittinunf.fuel.core.Request
+import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
@@ -13,7 +14,7 @@ abstract class EnticingComponentApi(val address: String, logService: LogService)
 
     protected fun httpPost(endPoint: String, dto: Any) {
         ("http://$address$endPoint").httpPost()
-                .body(dto.toJson())
+                .jsonBody(dto.toJson())
                 .submit()
     }
 
@@ -21,8 +22,6 @@ abstract class EnticingComponentApi(val address: String, logService: LogService)
         val (_, _, result) = this.responseString()
         if (result is Result.Failure) {
             logger.error("Failed to submit message ${result.error.exception.message}")
-        } else {
-            logger.info(result.toString())
         }
     }
 }

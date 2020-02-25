@@ -14,6 +14,6 @@ object StartManagementServiceCommand : ManagementCommand<StartManagementServiceC
 class StartManagementServiceCommandContext(configuration: EnticingConfiguration, executor: ShellCommandExecutor, logService: MeasuringLogService) : ManagementCommandContext(configuration, executor, logService) {
 
     override suspend fun execute() {
-        shellExecutor.startManagementService(username, enticingConfiguration.managementServiceConfiguration.address, deploymentConfiguration.repository, deploymentConfiguration.configurationScript)
+        shellExecutor.startManagementService(username, managementConfiguration.address, deploymentConfiguration.repository, deploymentConfiguration.configurationScript, managementConfiguration.port)
     }
 }
