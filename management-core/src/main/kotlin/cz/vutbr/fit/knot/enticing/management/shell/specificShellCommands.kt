@@ -9,6 +9,8 @@ suspend fun ShellCommandExecutor.localBuild(enticingHome: String): String {
     return this.execute(SimpleCommand(localGradleBin), workingDirectory = enticingHome)
 }
 
+suspend fun ShellCommandExecutor.copyJars(username: String, server: String, localRepository: String, remoteRepository: String) = this.execute(SimpleCommand("scp $localRepository/lib/*.jar $username@$server:$remoteRepository/lib"))
+
 @Incomplete("specify ports...")
 suspend fun ShellCommandExecutor.startWebserver(username: String, server: String, enticingHome: String, configFile: String) = this.execute(SshCommand(username, server, StartScreenCommand("enticing-webserver", "$enticingHome/logs/$server-webserver.log", SimpleCommand("$enticingHome/bin/webserver"))))
 

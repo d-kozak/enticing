@@ -53,6 +53,11 @@ class ManagementCliArguments(parser: ArgParser) : Validator by ValidatorImpl() {
     val indexServers by parser.flagging("-i", "--index", help = "Start or kill indexservers")
 
     /**
+     * Copy jar files to the deployment repository
+     */
+    val copyJars by parser.flagging("--copy-jars", help = "copy jar files to the deployment repository")
+
+    /**
      * Kill selected components (implicitly all)
      */
     val kill by parser.flagging("-k", "--kill", help = "Kill selected components(implicitly all)")
@@ -101,6 +106,7 @@ class ManagementCliArguments(parser: ArgParser) : Validator by ValidatorImpl() {
 
         if (localBuild) append("localBuild,")
         if (remoteBuild) append("remoteBuild,")
+        if (copyJars) append("copyJars,")
         if (distribute) append("distribute,")
         if (startIndexing) append("startIndexing,")
         if (webserver) append("webserver,")

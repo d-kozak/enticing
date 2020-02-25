@@ -27,6 +27,8 @@ class ManagementEngine(val configuration: EnticingConfiguration, val logService:
             executeCommand(LocalBuildCommand)
         if (remoteBuild)
             executeCommand(RemoteBuildCommand)
+        if (copyJars)
+            executeCommand(CopyJarsCommand)
         if (removeFiles) corpuses.executeAll { RemoveDistributedFilesCommand(it) }
         if (distribute) corpuses.executeAll { DistributeCorpusCommand(it) }
         if (printFiles) corpuses.executeAll { ShowDistributedFiles(it) }
