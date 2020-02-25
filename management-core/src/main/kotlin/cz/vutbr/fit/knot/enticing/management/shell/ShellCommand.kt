@@ -54,10 +54,9 @@ data class ParallelSshCommand(
 
 data class StartScreenCommand(
         val screenName: String,
-        val logFile: String,
         val command: LocalCommand
 ) : ShellCommand {
-    override val value: String = "screen -S $screenName -d -m ${command.value} && screen -S $screenName -X logfile $logFile && screen -S $screenName -X log"
+    override val value: String = "screen -S $screenName -d -m ${command.value}"
 }
 
 data class KillScreenCommand(

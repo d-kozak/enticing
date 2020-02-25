@@ -27,13 +27,13 @@ class ManagementCliIntegrationTests {
     @Disabled
     inner class SmallTestConfig {
 
-        @Test
+//        @Test
         @Disabled
         fun `local build and copy jars`() {
             runCliApp("../deploy/small-wiki/testConfig.kts --local-build --copy-jars")
         }
 
-        //        @Test
+        @Test
         @Disabled
         fun `run what I want`() {
             runCliApp("../deploy/small-wiki/testConfig.kts -wim")

@@ -74,9 +74,9 @@ class ShellCommandTest {
 
         @Test
         fun `start screen test`() {
-            val cmd = StartScreenCommand("screen1", "foo.log", SimpleCommand("run-run-long"))
+            val cmd = StartScreenCommand("screen1", SimpleCommand("run-run-long"))
             assertThat(cmd.value)
-                    .isEqualTo("screen -S screen1 -d -m run-run-long && screen -S screen1 -X logfile foo.log && screen -S screen1 -X log")
+                    .isEqualTo("screen -S screen1 -d -m run-run-long")
         }
 
         @Test
@@ -91,9 +91,9 @@ class ShellCommandTest {
             val cmd = ParallelSshCommand(
                     "xkozak15"
                     , listOf("123", "456", "789"),
-                    StartScreenCommand("screen1", "foo.log", SimpleCommand("run-run-long"))
+                    StartScreenCommand("screen1", SimpleCommand("run-run-long"))
             )
-            assertThat(cmd.value).isEqualTo("parallel-ssh -l xkozak15 -H 123 -H 456 -H 789 -i screen -S screen1 -d -m run-run-long && screen -S screen1 -X logfile foo.log && screen -S screen1 -X log")
+            assertThat(cmd.value).isEqualTo("parallel-ssh -l xkozak15 -H 123 -H 456 -H 789 -i screen -S screen1 -d -m run-run-long")
         }
     }
 }
