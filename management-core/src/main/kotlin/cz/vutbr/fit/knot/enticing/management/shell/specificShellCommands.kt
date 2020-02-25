@@ -9,10 +9,17 @@ suspend fun ShellCommandExecutor.localBuild(enticingHome: String): String {
     return this.execute(SimpleCommand(localGradleBin), workingDirectory = enticingHome)
 }
 
+@Incomplete("specify ports...")
 suspend fun ShellCommandExecutor.startWebserver(username: String, server: String, enticingHome: String, configFile: String) = this.execute(SshCommand(username, server, StartScreenCommand("enticing-webserver", "$enticingHome/logs/$server-webserver.log", SimpleCommand("$enticingHome/bin/webserver"))))
 
 suspend fun ShellCommandExecutor.killWebserver(username: String, server: String) =
         this.execute(SshCommand(username, server, KillScreenCommand("enticing-webserver")), checkReturnCode = false)
+
+suspend fun ShellCommandExecutor.startManagementService(username: String, server: String, enticingHome: String, configFile: String) =
+        this.execute(SshCommand(username, server, StartScreenCommand("enticing-management-service", "$enticingHome/logs/$server-index-server.log", SimpleCommand("$enticingHome/bin/management-service $configFile $server"))))
+
+suspend fun ShellCommandExecutor.killManagementService(username: String, server: String) =
+        this.execute(SshCommand(username, server, KillScreenCommand("enticing-management-service")), checkReturnCode = false)
 
 suspend fun ShellCommandExecutor.startIndexServer(username: String, server: String, enticingHome: String, configFile: String) =
         this.execute(SshCommand(username, server, StartScreenCommand("enticing-index-server", "$enticingHome/logs/$server-index-server.log", SimpleCommand("$enticingHome/bin/index-server $configFile $server"))))

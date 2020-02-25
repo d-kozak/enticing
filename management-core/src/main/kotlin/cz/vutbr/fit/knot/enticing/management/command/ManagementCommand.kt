@@ -32,6 +32,8 @@ abstract class ManagementCommand<Ctx : ManagementCommandContext> {
 abstract class ManagementCommandContext(configuration: EnticingConfiguration, executor: ShellCommandExecutor, logService: MeasuringLogService) {
     protected val shellExecutor = executor
     protected val enticingConfiguration = configuration
+    protected val managementConfiguration = configuration.managementServiceConfiguration
+    protected val deploymentConfiguration = configuration.deploymentConfiguration
     protected val username = configuration.authentication.username
 
     internal abstract suspend fun execute()

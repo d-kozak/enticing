@@ -43,6 +43,11 @@ class ManagementCliArguments(parser: ArgParser) : Validator by ValidatorImpl() {
     val webserver by parser.flagging("-w", "--webserver", help = "Start or kill webserver")
 
     /**
+     * Start or kill the management service
+     */
+    val management by parser.flagging("-m", "--management", help = "Start or kill management service")
+
+    /**
      * Start or kill the index servers
      */
     val indexServers by parser.flagging("-i", "--index", help = "Start or kill indexservers")
@@ -81,7 +86,7 @@ class ManagementCliArguments(parser: ArgParser) : Validator by ValidatorImpl() {
             for (corpus in configuration.corpuses.values) corpuses.add(corpus.name)
         }
 
-        check(listOf(printFiles, removeFiles, distribute, startIndexing, webserver, indexServers, kill).any()) { "At least one option should be set" }
+        check(listOf(printFiles, removeFiles, distribute, startIndexing, webserver, management, indexServers, kill).any()) { "At least one option should be set" }
         if (errors.isNotEmpty())
             throw IllegalArgumentException(errors.joinToString("\n"))
         return this
@@ -99,6 +104,7 @@ class ManagementCliArguments(parser: ArgParser) : Validator by ValidatorImpl() {
         if (distribute) append("distribute,")
         if (startIndexing) append("startIndexing,")
         if (webserver) append("webserver,")
+        if (management) append("management,")
         if (indexServers) append("indexServers,")
         if (kill) append("kill,")
         if (printFiles) append("printFiles,")

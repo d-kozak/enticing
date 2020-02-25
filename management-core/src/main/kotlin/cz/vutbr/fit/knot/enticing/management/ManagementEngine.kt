@@ -31,6 +31,10 @@ class ManagementEngine(val configuration: EnticingConfiguration, val logService:
         if (distribute) corpuses.executeAll { DistributeCorpusCommand(it) }
         if (printFiles) corpuses.executeAll { ShowDistributedFiles(it) }
         if (startIndexing) corpuses.executeAll { StartIndexingCommand(it) }
+        if (management) {
+            if (kill) executeCommand(KillManagementServiceCommand)
+            else executeCommand(StartManagementServiceCommand)
+        }
         if (webserver) {
             if (kill) executeCommand(KillWebserverCommand)
             else executeCommand(StartWebserverCommand)
