@@ -20,6 +20,10 @@ repositories {
     jcenter()
 }
 
+bootJar {
+    requiresUnpack "**/*kotlin-compiler*.jar"
+}
+
 dependencies {
     runtimeOnly(project(path: ":frontend", configuration: 'default'))
     implementation(project(path: ":query-dispatcher", configuration: 'default'))

@@ -11,17 +11,6 @@ repositories {
     jcenter()
 }
 
-jar {
-    manifest {
-        attributes 'Main-Class': 'cz.vutbr.fit.knot.enticing.management.MainKt'
-    }
-    from {
-        configurations.compile.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }
-}
-
 dependencies {
     compile(project(path: ":dto", configuration: 'default'))
 

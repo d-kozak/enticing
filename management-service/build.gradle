@@ -19,6 +19,10 @@ repositories {
 	jcenter()
 }
 
+bootJar {
+	requiresUnpack "**/*kotlin-compiler*.jar"
+}
+
 dependencies {
 	implementation(project(path: ":management-core", configuration: 'default'))
 	implementation(project(path: ":dto", configuration: 'default'))
