@@ -25,7 +25,7 @@ bootJar {
 }
 
 dependencies {
-    runtimeOnly(project(path: ":frontend", configuration: 'default'))
+    runtimeOnly(project(path: ":webserver-frontend", configuration: 'default'))
     implementation(project(path: ":query-dispatcher", configuration: 'default'))
     implementation(project(path: ":dto", configuration: 'default'))
     implementation(project(path: ":eql-compiler", configuration: 'default'))

@@ -1,4 +1,4 @@
 rootProject.name = "enticing"
-include "frontend", "webserver", "eql-compiler", "dto", "index-lib", "index-builder", "index-server", "console-client", "query-dispatcher", "management-core", "management-service", "management-frontend", "testing"
+include "webserver-frontend", "webserver", "eql-compiler", "dto", "index-lib", "index-builder", "index-server", "console-client", "query-dispatcher", "management-core", "management-service", "management-frontend", "testing"
 
 
