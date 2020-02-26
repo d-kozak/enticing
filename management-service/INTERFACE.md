@@ -1,4 +1,4 @@
-BΑSE=api/v1/
+BΑSE=/api/v1/
 BASE/log
     post LogMessage 
     get List<LogMessage>

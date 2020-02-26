@@ -1,5 +1,6 @@
-# Management service functionality
+# Management service 
 
+## Wanted functionality
 1) represent all information within enticing configuration object (cofig.kts)
 2) aggregate all important logs and present it to the user
 3) performance logs from all components
@@ -17,10 +18,11 @@
 8) authentization
 
 
-TODO
-8) authentization
-2) aggregate all important logs and present it to the user
-3) performance logs from all components
-4) hearthbeat
+## TODO - What to do first
+- [ ] authentization
+- [ ] aggregate all important logs and present it to the user
+- [ ] performance logs from all components
+- [ ] hearthbeat
   
-    
+## Interface Documentation
+Located in [separate document](./INTERFACE.md).
