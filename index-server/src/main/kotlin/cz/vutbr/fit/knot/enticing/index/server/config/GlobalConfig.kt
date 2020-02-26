@@ -6,7 +6,9 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.validateOrFail
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.visitor.prettyPrint
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
+import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.RemoteLoggingConfiguration
 import cz.vutbr.fit.knot.enticing.log.configureFor
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -34,7 +36,7 @@ class GlobalConfig(
 
     @Bean
     fun logger(enticingConfiguration: EnticingConfiguration): MeasuringLogService {
-        return enticingConfiguration.loggingConfiguration.configureFor(address, enticingConfiguration.managementServiceConfiguration.fullAddress)
+        return enticingConfiguration.loggingConfiguration.configureFor(address, RemoteLoggingConfiguration(address, enticingConfiguration.managementServiceConfiguration.fullAddress, ComponentType.INDEX_SERVER))
     }
 
     @Bean
