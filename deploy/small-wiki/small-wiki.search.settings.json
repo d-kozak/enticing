@@ -3,10 +3,10 @@
   "annotationDataServer": "google.com",
   "annotationServer": "google.com",
   "servers": [
-    "knot01.fit.vutbr.cz:8080",
-    "knot04.fit.vutbr.cz:8080",
-    "knot05.fit.vutbr.cz:8080",
-    "knot03.fit.vutbr.cz:8080",
-    "knot02.fit.vutbr.cz:8080"
+    "knot01.fit.vutbr.cz:5627",
+    "knot04.fit.vutbr.cz:5627",
+    "knot05.fit.vutbr.cz:5627",
+    "knot03.fit.vutbr.cz:5627",
+    "knot02.fit.vutbr.cz:5627"
   ]
 }

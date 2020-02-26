@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.entity
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.LogType
+import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.LogMessage
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -8,11 +9,9 @@ import javax.persistence.Id
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Positive
 
-fun LogMessage.toEntity() = LogEntity(
-        id = 0, text = text, type = type, timestamp = timestamp
-)
+fun LogMessage.toEntity() = LogEntity(0, text, logType, source, componentType, timestamp)
 
-fun LogEntity.toDto() = LogMessage(text, type, timestamp)
+fun LogEntity.toDto() = LogMessage(text, logType, source, componentType, timestamp)
 
 @Entity
 class LogEntity(
@@ -21,7 +20,10 @@ class LogEntity(
         var id: Long = 0,
         @field:NotEmpty
         var text: String = "",
-        var type: LogType = LogType.INFO,
+        var logType: LogType = LogType.INFO,
+        @field:NotEmpty
+        val source: String,
+        val componentType: ComponentType,
         @field:Positive
         var timestamp: Long = System.currentTimeMillis()
 ) {
@@ -40,6 +42,8 @@ class LogEntity(
     }
 
     override fun toString(): String {
-        return "LogEntity(id=$id, text='$text', type=$type)"
+        return "LogEntity(id=$id, text='$text', logType=$logType, source='$source', componentType=$componentType, timestamp=$timestamp)"
     }
+
+
 }

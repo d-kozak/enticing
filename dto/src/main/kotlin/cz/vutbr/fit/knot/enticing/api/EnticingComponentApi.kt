@@ -5,15 +5,16 @@ import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
+import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.LogService
 import cz.vutbr.fit.knot.enticing.log.logger
 
-abstract class EnticingComponentApi(val address: String, logService: LogService) {
+abstract class EnticingComponentApi(val componentAddress: String, val componentType: ComponentType, val localAddress: String, logService: LogService) {
 
     private val logger = logService.logger { }
 
     protected fun httpPost(endPoint: String, dto: Any) {
-        ("http://$address$endPoint").httpPost()
+        ("http://$componentAddress$endPoint").httpPost()
                 .jsonBody(dto.toJson())
                 .submit()
     }

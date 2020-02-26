@@ -9,5 +9,14 @@ import javax.validation.constraints.NotBlank
 data class LogMessage(
         @field:NotBlank
         val text: String,
-        val type: LogType,
+        val logType: LogType,
+        val source: String,
+        val componentType: ComponentType,
         val timestamp: Long = System.currentTimeMillis())
+
+
+enum class ComponentType {
+    WEBSERVER,
+    INDEX_SERVER,
+    INDEX_BUILDER
+}
