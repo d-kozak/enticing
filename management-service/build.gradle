@@ -24,6 +24,7 @@ bootJar {
 }
 
 dependencies {
+	runtimeOnly(project(path: ":management-frontend", configuration: 'default'))
 	implementation(project(path: ":management-core", configuration: 'default'))
 	implementation(project(path: ":dto", configuration: 'default'))
 	implementation(project(path: ":query-dispatcher", configuration: 'default'))
