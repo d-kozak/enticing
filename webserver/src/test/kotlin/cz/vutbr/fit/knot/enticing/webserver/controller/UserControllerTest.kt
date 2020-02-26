@@ -10,6 +10,7 @@ import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
 import cz.vutbr.fit.knot.enticing.webserver.service.EqlCompilerService
 import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
 import cz.vutbr.fit.knot.enticing.webserver.service.SearchSettingsService
+import cz.vutbr.fit.knot.enticing.webserver.testconfig.LogServiceTestConfig
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
@@ -27,6 +29,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @WebMvcTest(secure = false)
 @ExtendWith(SpringExtension::class)
+@Import(LogServiceTestConfig::class)
 internal class UserControllerTest(
         @Autowired val mockMvc: MockMvc,
         @Value("\${api.base.path}") val apiBasePath: String

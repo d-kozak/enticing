@@ -14,6 +14,7 @@ import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
 import cz.vutbr.fit.knot.enticing.webserver.service.EqlCompilerService
 import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
 import cz.vutbr.fit.knot.enticing.webserver.service.SearchSettingsService
+import cz.vutbr.fit.knot.enticing.webserver.testconfig.LogServiceTestConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -34,7 +35,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @WebMvcTest
-@Import(PasswordEncoderConfiguration::class)
+@Import(PasswordEncoderConfiguration::class, LogServiceTestConfig::class)
 @ExtendWith(SpringExtension::class)
 internal class SecurityConfigTest(
         @Autowired val mockMvc: MockMvc,

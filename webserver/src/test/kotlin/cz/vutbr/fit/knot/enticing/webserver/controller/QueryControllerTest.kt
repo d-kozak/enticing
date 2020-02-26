@@ -14,12 +14,14 @@ import cz.vutbr.fit.knot.enticing.webserver.service.SearchSettingsService
 import cz.vutbr.fit.knot.enticing.webserver.service.mock.dummyDocument
 import cz.vutbr.fit.knot.enticing.webserver.service.mock.firstResult
 import cz.vutbr.fit.knot.enticing.webserver.service.mock.snippetExtension
+import cz.vutbr.fit.knot.enticing.webserver.testconfig.LogServiceTestConfig
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.mock.web.MockHttpSession
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -30,6 +32,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 
 @WebMvcTest
 @ExtendWith(SpringExtension::class)
+@Import(LogServiceTestConfig::class)
 internal class QueryControllerTest(
         @Autowired val mockMvc: MockMvc,
         @Value("\${api.base.path}") val apiBasePath: String

@@ -8,6 +8,7 @@ import cz.vutbr.fit.knot.enticing.webserver.dto.QueryValidationReply
 import cz.vutbr.fit.knot.enticing.webserver.dto.User
 import cz.vutbr.fit.knot.enticing.webserver.dto.UserSettings
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
+import cz.vutbr.fit.knot.enticing.webserver.exception.InvalidSearchSettingsException
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.service.mock.*
 import io.mockk.clearMocks
@@ -101,7 +102,7 @@ internal class QueryServiceTest {
 
             val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector, compilerService)
 
-            assertThrows<IllegalArgumentException> {
+            assertThrows<InvalidSearchSettingsException> {
                 queryService.query(SearchQuery("nertag:person", 33), 42, mockSession)
             }
         }
@@ -116,7 +117,7 @@ internal class QueryServiceTest {
 
             val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector, compilerService)
 
-            assertThrows<IllegalArgumentException> {
+            assertThrows<InvalidSearchSettingsException> {
                 queryService.query(SearchQuery("nertag:person", 33), 42, mockSession)
             }
         }
@@ -128,7 +129,7 @@ internal class QueryServiceTest {
 
             val queryService = QueryService(dispatcher, searchSettingsRepository, userService, indexServerConnector, compilerService)
 
-            assertThrows<IllegalArgumentException> { queryService.query(SearchQuery("nertag:person", 33), 42, mockSession) }
+            assertThrows<InvalidSearchSettingsException> { queryService.query(SearchQuery("nertag:person", 33), 42, mockSession) }
         }
 
         @AfterEach
