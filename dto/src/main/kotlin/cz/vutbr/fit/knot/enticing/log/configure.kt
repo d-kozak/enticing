@@ -13,7 +13,7 @@ fun LoggingConfiguration.configureFor(serviceId: String, remoteLoggingConfigurat
     val stdoutLogger = StdoutLogService(this)
     val dispatchingLogger = DispatchingLogService(stdoutLogger, fileLogger)
     val maybeRemoteLogger: LogService = if (remoteLoggingConfiguration != null) {
-        val (managementAddress, localAddress, componentType) = remoteLoggingConfiguration
+        val (localAddress, managementAddress, componentType) = remoteLoggingConfiguration
         val managementApi = ManagementServiceApi(managementAddress, componentType, localAddress, dispatchingLogger)
         val remoteLogger = RemoteLogService(this, managementApi)
                 .filtered(this.managementLoggingConfiguration.messageTypes)

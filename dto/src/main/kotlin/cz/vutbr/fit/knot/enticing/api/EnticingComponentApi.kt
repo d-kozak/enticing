@@ -14,7 +14,9 @@ abstract class EnticingComponentApi(val componentAddress: String, val componentT
     private val logger = logService.logger { }
 
     protected fun httpPost(endPoint: String, dto: Any) {
-        ("http://$componentAddress$endPoint").httpPost()
+        val address = "http://$componentAddress$endPoint"
+        logger.info("Http POST $address $dto")
+        address.httpPost()
                 .jsonBody(dto.toJson())
                 .submit()
     }
