@@ -1,11 +1,11 @@
 package cz.vutbr.fit.knot.enticing.testing.performance
 
-import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.httpGet
 import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.WebServer
+import cz.vutbr.fit.knot.enticing.dto.utils.asJsonObject
 import cz.vutbr.fit.knot.enticing.dto.utils.toDto
-import cz.vutbr.fit.knot.enticing.query.processor.fuel.jsonBody
+import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
@@ -24,11 +24,12 @@ class WebserverApi(
         var address: String
 ) {
 
-    var settingsId: Int = -1
+    var settingsId: Int = 2
 
     var sessionId: String? = null
 
-    val queryEndpoint = "http://$address/api/v1/query?settings=$settingsId"
+    val queryEndpoint: String
+        get() = "http://$address/api/v1/query?settings=$settingsId"
 
 
     fun login(username: String, password: String) {
@@ -37,28 +38,46 @@ class WebserverApi(
         val map = LinkedMultiValueMap<String, String>()
         map.add("username", username)
         map.add("password", password)
-        val req = HttpEntity(map, headers)
-
-        val res = RestTemplate().exchange("http://$address/api/v1/login", HttpMethod.POST, req, String::class.java)
-        val outHeaders = res.headers
-        val jsessidCookie = outHeaders.getFirst(HttpHeaders.SET_COOKIE)!!
-        sessionId = jsessidCookie.substring(jsessidCookie.indexOf('=') + 1, jsessidCookie.indexOf(';'))
+        performRequest("http://$address/api/v1/login", HttpMethod.POST, headers, contentMap = map)
     }
 
     fun userInfo(): String {
-        val userHeaders = HttpHeaders()
-        userHeaders.add("Cookie", "JSESSIONID=$sessionId")
-        val user = RestTemplate().exchange("http://$address/api/v1/user", HttpMethod.GET, HttpEntity<String>(userHeaders), String::class.java)
-        return user.body!!
+        return performRequest("http://$address/api/v1/user", HttpMethod.GET, HttpHeaders())
     }
 
     fun sendQuery(query: String): WebServer.ResultList {
-        val (_, _, result) = Fuel.post(queryEndpoint)
-                .timeout(60_000)
-                .jsonBody(SearchQuery(query))
-                .responseString()
-        return result.get()
-                .toDto()
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.APPLICATION_JSON
+        return performRequest(queryEndpoint, HttpMethod.POST, headers, content = SearchQuery(query).toJson()).toDto()
+    }
+
+    fun importSearchSettings(searchSettings: String) {
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.APPLICATION_JSON
+        val res = performRequest("http://$address/api/v1/search-settings/import/", HttpMethod.POST, headers, searchSettings)
+        settingsId = res.asJsonObject()["id"].intValue()
+    }
+
+    /**
+     * memoizes JSESSION
+     */
+    private fun performRequest(address: String, method: HttpMethod, headers: HttpHeaders, content: String? = null, contentMap: LinkedMultiValueMap<String, String>? = null): String {
+        if (sessionId != null)
+            headers.add("Cookie", "JSESSIONID=$sessionId")
+
+        val entity = when {
+            content != null -> HttpEntity(content, headers)
+            contentMap != null -> HttpEntity(contentMap, headers)
+            else -> HttpEntity(headers)
+        }
+
+        val res = RestTemplate().exchange(address, method, entity, String::class.java)
+
+        val outHeaders = res.headers
+        val newJSession = outHeaders.get(HttpHeaders.SET_COOKIE)?.find { it.startsWith("JSESSIONID=") }
+        if (newJSession != null)
+            sessionId = newJSession.substring(newJSession.indexOf('=') + 1).trim()
+        return res.body ?: ""
     }
 
 

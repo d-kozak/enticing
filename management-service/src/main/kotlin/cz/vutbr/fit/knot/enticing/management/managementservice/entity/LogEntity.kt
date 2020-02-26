@@ -3,6 +3,7 @@ package cz.vutbr.fit.knot.enticing.management.managementservice.entity
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.LogType
 import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.LogMessage
+import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
@@ -19,6 +20,7 @@ class LogEntity(
         @field:GeneratedValue
         var id: Long = 0,
         @field:NotEmpty
+        @field:Column(length = 2048)
         var text: String = "",
         var logType: LogType = LogType.INFO,
         @field:NotEmpty

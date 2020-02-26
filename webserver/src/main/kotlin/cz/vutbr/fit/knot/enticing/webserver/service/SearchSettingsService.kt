@@ -1,24 +1,25 @@
 package cz.vutbr.fit.knot.enticing.webserver.service
 
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
+import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.webserver.dto.ImportedSearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.dto.toEntity
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.exception.ValueNotUniqueException
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
-import org.slf4j.LoggerFactory
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
-private val log = LoggerFactory.getLogger(SearchSettingsService::class.java)
-
 @Service
 @Transactional
 @Incomplete("seems that there is no authorization check, but there should be one - only admins should be able to edit these")
-class SearchSettingsService(private val searchSettingsRepository: SearchSettingsRepository, private val userRepository: UserRepository, private val indexServerConnector: IndexServerConnector) {
+class SearchSettingsService(logService: MeasuringLogService, private val searchSettingsRepository: SearchSettingsRepository, private val userRepository: UserRepository, private val indexServerConnector: IndexServerConnector) {
+
+    val logger = logService.logger { }
 
     fun setDefault(id: Long) {
         val previousDefault = searchSettingsRepository.findByDefaultIsTrue()
@@ -37,7 +38,11 @@ class SearchSettingsService(private val searchSettingsRepository: SearchSettings
         else searchSettingsRepository.findByPrivateIsFalse()
     }
 
-    fun import(searchSettings: ImportedSearchSettings) = searchSettingsRepository.save(searchSettings.toEntity())
+    fun import(searchSettings: ImportedSearchSettings): SearchSettings {
+        val res = searchSettingsRepository.save(searchSettings.toEntity())
+        logger.info("Imported new settings $res")
+        return res
+    }
 
     fun create(searchSettings: SearchSettings): SearchSettings {
         if (searchSettingsRepository.existsByName(searchSettings.name))

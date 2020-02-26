@@ -12,7 +12,9 @@ import java.io.File
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class EndToEndPerformanceTest {
 
-    val fixture = SmallWikiTestFixture(true)
+    val rebootComponents = true
+
+    val fixture = SmallWikiTestFixture(rebootComponents)
 
     val logger = fixture.logService.logger { }
 
