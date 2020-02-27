@@ -11,38 +11,42 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.dto.ParsedQuery
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.SyntaxError
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.parseToEqlAst
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.parseWithAntlr
+import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.logger
 import org.antlr.v4.runtime.BaseErrorListener
 import org.antlr.v4.runtime.RecognitionException
 import org.antlr.v4.runtime.Recognizer
 import org.antlr.v4.runtime.Token
 import kotlin.math.min
 
-class EqlCompiler {
+class EqlCompiler(logService: MeasuringLogService) {
 
-    fun parse(input: String): ParsedQuery {
-        return parseToEqlAst(input)
-    }
+    val logger = logService.logger { }
 
-    fun parseOrFail(input: String, metadataConfiguration: MetadataConfiguration): AstNode {
+    fun parseOrFail(input: String, metadataConfiguration: MetadataConfiguration): AstNode = logger.measure("Query '$input'") {
         val analyzer = SemanticAnalyzer(metadataConfiguration)
         val (parseTree, errors) = parseWithAntlr(input)
         if (errors.isNotEmpty()) throw EqlCompilerException(errors.toString())
         val ast = parseTree.accept(EqlAstGeneratingVisitor())
         val semanticErrors = analyzer.performAnalysis(ast as EqlAstNode)
         if (semanticErrors.isNotEmpty()) throw EqlCompilerException(semanticErrors.toString())
-        return ast
+        ast
     }
 
-    fun parseAndAnalyzeQuery(input: String, metadataConfiguration: MetadataConfiguration): ParsedQuery {
+    fun parseAndAnalyzeQuery(input: String, metadataConfiguration: MetadataConfiguration): ParsedQuery = logger.measure("Query '$input'") {
         val analyzer = SemanticAnalyzer(metadataConfiguration)
         val (parseTree, errors) = parseWithAntlr(input)
-        return if (errors.isEmpty()) {
+        if (errors.isEmpty()) {
             val ast = parseTree.accept(EqlAstGeneratingVisitor())
             val semanticErrors = analyzer.performAnalysis(ast as EqlAstNode)
             ParsedQuery(ast, semanticErrors)
         } else {
             ParsedQuery(PureMgj4Node(input), errors)
         }
+    }
+
+    internal fun parse(input: String): ParsedQuery {
+        return parseToEqlAst(input)
     }
 
     class ErrorListener : BaseErrorListener() {

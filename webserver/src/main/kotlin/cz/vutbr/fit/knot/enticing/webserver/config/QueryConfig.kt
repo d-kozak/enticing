@@ -14,10 +14,10 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.web.client.RestTemplate
 
 @Configuration
-class QueryConfig {
+class QueryConfig(val logService: MeasuringLogService) {
 
     @Bean
-    fun queryDispatcher(@Value("\${index.server.api.base.path}") apiBasePath: String): QueryDispatcher<SearchQuery, Map<CollectionName, Offset>, IndexServer.IndexResultList> = QueryDispatcher(FuelQueryExecutor("$apiBasePath/query"))
+    fun queryDispatcher(@Value("\${index.server.api.base.path}") apiBasePath: String): QueryDispatcher<SearchQuery, Map<CollectionName, Offset>, IndexServer.IndexResultList> = QueryDispatcher(FuelQueryExecutor("$apiBasePath/query"), logService)
 
     @Bean
     fun indexServerConnector(@Value("\${index.server.api.base.path}") apiBasePath: String, logService: MeasuringLogService) = IndexServerConnector(RestTemplate(), apiBasePath, logService)

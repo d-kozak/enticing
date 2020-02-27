@@ -9,6 +9,7 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.eql.compiler.forEachQuery
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.CompilerError
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.SemanticError
+import cz.vutbr.fit.knot.enticing.eql.compiler.testconfig.dummyLogger
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -85,7 +86,7 @@ fun assertHasError(errors: List<CompilerError>, id: String, count: Int = 1, loca
 
 class AllChecksTest {
 
-    val compiler = EqlCompiler()
+    val compiler = EqlCompiler(dummyLogger)
 
     @Test
     fun `queries from file`() {

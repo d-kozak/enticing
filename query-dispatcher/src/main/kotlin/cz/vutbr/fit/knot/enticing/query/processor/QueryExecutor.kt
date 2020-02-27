@@ -29,7 +29,7 @@ class FuelQueryExecutor(private val path: String = "/api/v1/query") : QueryExecu
                     .jsonBody(searchQuery.copy(offset = requestData.offset))
                     .awaitDto<IndexServer.IndexResultList>()
         } catch (error: FuelError) {
-            throw (QueryDispatcherException(String(error.response.data)))
+            throw QueryDispatcherException("url $url, error $error")
         }
     }
 }

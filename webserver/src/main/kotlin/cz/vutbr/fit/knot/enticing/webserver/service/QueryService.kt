@@ -73,12 +73,12 @@ class QueryService(
         return runBlocking {
             val formats = searchSettings.servers.map { server ->
                 async {
-                    repeat(5) {
+                    for (i in 1..5) {
                         try {
                             return@async indexServerConnector.getFormat(server)
                         } catch (ex: Exception) {
-                            logger.warn("Could not contact server $server: ${ex}, try $it/5")
-                            delay(500)
+                            logger.warn("Could not contact server $server: ${ex}, try $i/5")
+                            delay(1_000)
                         }
                     }
                     null

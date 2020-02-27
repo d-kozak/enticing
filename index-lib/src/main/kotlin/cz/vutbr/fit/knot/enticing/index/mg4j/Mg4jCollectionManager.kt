@@ -24,7 +24,7 @@ fun initMg4jCollectionManager(configuration: CollectionManagerConfiguration, log
     val engine = initMg4jQueryEngine(configuration)
 
     val mg4jSearchEngine = Mg4jSearchEngine(collection, engine, logService)
-    return CollectionManager("${configuration.corpusName}-${configuration.collectionName}", mg4jSearchEngine, EqlPostProcessor(), EqlResultCreator(configuration.metadataConfiguration, logService), EqlCompiler(), configuration.metadataConfiguration, logService)
+    return CollectionManager("${configuration.corpusName}-${configuration.collectionName}", mg4jSearchEngine, EqlPostProcessor(), EqlResultCreator(configuration.metadataConfiguration, logService), EqlCompiler(logService), configuration.metadataConfiguration, logService)
 }
 
 @WhatIf("default index is hardwired to token internally, is it enough or should we provide a way to tweak this? maybe as an AST operation in EQL-compiler (to avoid expensive reinitialization of mg4j internals)?")

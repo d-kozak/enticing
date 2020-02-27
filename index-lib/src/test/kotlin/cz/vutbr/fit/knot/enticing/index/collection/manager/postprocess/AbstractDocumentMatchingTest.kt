@@ -121,7 +121,7 @@ abstract class AbstractDocumentMatchingTest {
 
     protected val documentCount = collection.size()
 
-    protected val compiler = EqlCompiler()
+    protected val compiler = EqlCompiler(dummyLogger)
 
     companion object {
 

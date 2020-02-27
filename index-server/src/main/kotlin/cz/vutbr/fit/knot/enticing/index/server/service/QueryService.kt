@@ -22,7 +22,7 @@ class QueryService(
 
     private val logger = logService.logger { }
 
-    val queryDispatcher = QueryDispatcher(CollectionQueryExecutor(collectionManagers))
+    val queryDispatcher = QueryDispatcher(CollectionQueryExecutor(collectionManagers), logService)
 
     fun processQuery(query: SearchQuery): IndexServer.IndexResultList {
         query.eqlAst = eqlCompiler.parseOrFail(query.query, metadataConfiguration)

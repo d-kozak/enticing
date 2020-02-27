@@ -7,6 +7,7 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompilerException
 import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
 import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.log.util.error
+import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcherException
 import cz.vutbr.fit.knot.enticing.webserver.exception.InvalidPasswordException
 import cz.vutbr.fit.knot.enticing.webserver.exception.InvalidSearchSettingsException
 import cz.vutbr.fit.knot.enticing.webserver.exception.ValueNotUniqueException
@@ -21,6 +22,12 @@ import javax.servlet.http.HttpServletResponse
 class GlobalControllerExceptionHandler(logService: MeasuringLogService) {
 
     val logger = logService.logger { }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(QueryDispatcherException::class)
+    fun queryDispatcherException(e: Exception) {
+        logger.error(e)
+    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalArgumentException::class)

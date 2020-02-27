@@ -24,7 +24,7 @@ internal class QueryDispatcherTest {
 
         val fail: QueryExecutor<SearchQuery, Map<CollectionName, Offset>, IndexServer.IndexResultList> = dummyDispatcher { _, server -> MResult.failure(FailOnPurposeException(server.address)) }
 
-        val dispatcher = QueryDispatcher(fail)
+        val dispatcher = QueryDispatcher(fail, dummyLogger)
         val result = dispatcher.dispatchQuery(templateQuery, servers)
         val expected: Map<String, List<MResult<IndexServer.IndexResultList>>> = mapOf(
                 "yahoo.com" to listOf(MResult.failure(FailOnPurposeException("yahoo.com"))),
@@ -52,7 +52,7 @@ internal class QueryDispatcherTest {
             MResult.failure(FailOnPurposeException(server.address))
         }
 
-        val dispatcher = QueryDispatcher(queryExecutor)
+        val dispatcher = QueryDispatcher(queryExecutor, dummyLogger)
         val result = dispatcher.dispatchQuery(templateQuery, servers)
         val expected: Map<String, List<MResult<IndexServer.IndexResultList>>> = mapOf(
                 "yahoo.com" to listOf(MResult.failure(FailOnPurposeException("yahoo.com"))),
@@ -76,7 +76,7 @@ internal class QueryDispatcherTest {
             }
         }
 
-        val dispatcher = QueryDispatcher(fail)
+        val dispatcher = QueryDispatcher(fail, dummyLogger)
         val result = dispatcher.dispatchQuery(templateQuery, servers)
         val expected: Map<String, List<MResult<IndexServer.IndexResultList>>> = mapOf(
                 "yahoo.com" to listOf(MResult.failure(FailOnPurposeException("yahoo.com"))),

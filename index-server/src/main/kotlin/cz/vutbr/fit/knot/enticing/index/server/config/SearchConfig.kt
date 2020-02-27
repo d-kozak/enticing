@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Configuration
 class SearchConfig(val logService: MeasuringLogService) {
 
     @Bean
-    fun compiler() = EqlCompiler()
+    fun compiler() = EqlCompiler(logService)
 
     /**
      * Creates CollectionManagers for all collections in the config

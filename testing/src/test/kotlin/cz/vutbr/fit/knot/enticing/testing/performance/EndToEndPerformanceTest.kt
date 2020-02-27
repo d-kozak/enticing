@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.testing.performance
 
 import cz.vutbr.fit.knot.enticing.log.logger
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Disabled
@@ -12,7 +13,7 @@ import java.io.File
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class EndToEndPerformanceTest {
 
-    val rebootComponents = true
+    val rebootComponents = false
 
     val fixture = SmallWikiTestFixture(rebootComponents)
 
@@ -44,7 +45,7 @@ class EndToEndPerformanceTest {
     }
 
     @Test
-    fun `fuzz test`() = runBlocking {
+    fun `fuzz test`() = runBlocking(context = Dispatchers.IO) {
         val queries = File("../management-core/src/test/resources/queries.eql").readLines()
         for (query in queries) {
             repeat(10) {

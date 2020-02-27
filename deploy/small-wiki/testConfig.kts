@@ -19,9 +19,9 @@ enticingConfiguration {
 
     logging {
         rootDirectory = "$ENTICING_HOME/logs"
-        messageTypes(LogType.INFO, LogType.PERF, LogType.ERROR)
+        messageTypes(LogType.INFO, LogType.PERF, LogType.WARN, LogType.ERROR)
         managementLogs {
-            messageTypes(LogType.PERF, LogType.ERROR)
+            messageTypes(LogType.PERF, LogType.WARN, LogType.ERROR)
         }
     }
 

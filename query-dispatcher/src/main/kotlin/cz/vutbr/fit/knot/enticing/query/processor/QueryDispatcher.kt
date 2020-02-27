@@ -4,6 +4,8 @@ import cz.vutbr.fit.knot.enticing.dto.Query
 import cz.vutbr.fit.knot.enticing.dto.QueryResult
 import cz.vutbr.fit.knot.enticing.dto.RequestData
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
+import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.logger
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
@@ -23,44 +25,49 @@ import kotlin.math.max
  * @param <Result> result of the query execution
  *
  **/
-class QueryDispatcher<QueryType: Query<QueryType>,OffsetType,Result:QueryResult<OffsetType>>(
+class QueryDispatcher<QueryType : Query<QueryType>, OffsetType, Result : QueryResult<OffsetType>>(
 
         /**
          * The actual execution of the query is handled by it.
          */
-        private val queryExecutor: QueryExecutor<QueryType, OffsetType, Result>
+        private val queryExecutor: QueryExecutor<QueryType, OffsetType, Result>,
+        logService: MeasuringLogService
 ) {
+
+    val logger = logService.logger { }
 
     /**
      * Dispatches query onto a list of node, collects the results and retries if necessary and possible.
      */
-    fun dispatchQuery(searchQuery: QueryType, nodes: List<RequestData<OffsetType>>): Map<String, List<MResult<Result>>> = runBlocking {
-        val serversToCall = nodes.toMutableList()
-        var collectedSnippetsCount = 0
-        val serverResults = mutableMapOf<String, MutableList<MResult<Result>>>()
+    fun dispatchQuery(searchQuery: QueryType, nodes: List<RequestData<OffsetType>>): Map<String, List<MResult<Result>>> = logger.measure("query $searchQuery to nodes $nodes") {
+        runBlocking {
+            val serversToCall = nodes.toMutableList()
+            var collectedSnippetsCount = 0
+            val serverResults = mutableMapOf<String, MutableList<MResult<Result>>>()
 
-        while (serversToCall.isNotEmpty() && collectedSnippetsCount < searchQuery.snippetCount) {
-            val snippetsToCollect = searchQuery.snippetCount - collectedSnippetsCount
-            val lastResults = serversToCall
-                    .mapIndexed { i, server -> splitSnippetCount(i, serversToCall.size, snippetsToCollect, searchQuery) to server }
-                    .map { (query, server) ->
-                        async {
-                            server.address to queryExecutor(query, server)
-                        }
-                    }.awaitAll()
-            serversToCall.clear()
-            for ((server, result) in lastResults) {
-                val resultsPerServer = serverResults[server] ?: mutableListOf()
-                if (result.isSuccess && result.value.searchResults.isNotEmpty()) {
-                    if (result.value.offset != null)
-                        serversToCall.add(result.value.createRequest(server))
-                    collectedSnippetsCount += result.value.searchResults.size
+            while (serversToCall.isNotEmpty() && collectedSnippetsCount < searchQuery.snippetCount) {
+                val snippetsToCollect = searchQuery.snippetCount - collectedSnippetsCount
+                val lastResults = serversToCall
+                        .mapIndexed { i, server -> splitSnippetCount(i, serversToCall.size, snippetsToCollect, searchQuery) to server }
+                        .map { (query, server) ->
+                            async {
+                                server.address to queryExecutor(query, server)
+                            }
+                        }.awaitAll()
+                serversToCall.clear()
+                for ((server, result) in lastResults) {
+                    val resultsPerServer = serverResults[server] ?: mutableListOf()
+                    if (result.isSuccess && result.value.searchResults.isNotEmpty()) {
+                        if (result.value.offset != null)
+                            serversToCall.add(result.value.createRequest(server))
+                        collectedSnippetsCount += result.value.searchResults.size
+                    }
+                    resultsPerServer.add(result)
+                    serverResults[server] = resultsPerServer
                 }
-                resultsPerServer.add(result)
-                serverResults[server] = resultsPerServer
             }
+            serverResults
         }
-        serverResults
     }
 }
 

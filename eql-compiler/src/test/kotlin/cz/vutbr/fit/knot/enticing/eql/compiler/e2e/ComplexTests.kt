@@ -3,13 +3,14 @@ package cz.vutbr.fit.knot.enticing.eql.compiler.e2e
 import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.eql.compiler.analysis.config
+import cz.vutbr.fit.knot.enticing.eql.compiler.testconfig.dummyLogger
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 class ComplexTests {
 
-    private val compiler = EqlCompiler()
+    private val compiler = EqlCompiler(dummyLogger)
 
     @Test
     @DisplayName("person.name:And* lemma:go")
