@@ -1,5 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.config
 
+import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.logger
 import org.apache.commons.dbcp.BasicDataSource
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.*
@@ -7,8 +9,11 @@ import org.springframework.core.type.AnnotatedTypeMetadata
 import java.net.URI
 
 @Configuration
-class DatabaseConfig {
-    private val logger = LoggerFactory.getLogger(DatabaseConfig::class.java)
+class DatabaseConfig(
+        logService: MeasuringLogService
+) {
+
+    private val logger = logService.logger { }
 
     @Bean
     @Conditional(DatabaseUrlIsSetCondition::class)

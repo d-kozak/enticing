@@ -1,4 +1,4 @@
-package cz.vutbr.fit.knot.enticing.webserver.testconfig
+package cz.vutbr.fit.knot.enticing.index.testconfig
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.validateOrFail

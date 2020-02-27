@@ -12,10 +12,11 @@ import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import cz.vutbr.fit.knot.enticing.index.boundary.MatchInfo
 import cz.vutbr.fit.knot.enticing.index.boundary.ResultCreator
 import cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.*
+import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
 import java.lang.Math.min
 
 @Incomplete("not finished yet")
-class EqlResultCreator(private val metadataConfiguration: MetadataConfiguration) : ResultCreator {
+class EqlResultCreator(private val metadataConfiguration: MetadataConfiguration, val logService: MeasuringLogService) : ResultCreator {
     override fun multipleResults(document: IndexedDocument, matchInfo: MatchInfo, formatInfo: GeneralFormatInfo, resultOffset: Int, resultCount: Int, resultFormat: cz.vutbr.fit.knot.enticing.dto.ResultFormat): Pair<List<ResultFormat>, Boolean> {
         return when (resultFormat) {
             cz.vutbr.fit.knot.enticing.dto.ResultFormat.SNIPPET -> {
@@ -41,10 +42,10 @@ class EqlResultCreator(private val metadataConfiguration: MetadataConfiguration)
         val visitor = when (formatInfo.textFormat) {
             TextFormat.PLAIN_TEXT -> return generatePlainText(document, filteredConfig, formatInfo.defaultIndex, expanded)
             TextFormat.HTML -> HtmlGeneratingVisitor(filteredConfig, formatInfo.defaultIndex, expanded, document)
-            TextFormat.STRING_WITH_METADATA -> StringWithAnnotationsGeneratingVisitor(filteredConfig, formatInfo.defaultIndex, expanded, document)
-            TextFormat.TEXT_UNIT_LIST -> TextUnitListGeneratingVisitor(filteredConfig, formatInfo.defaultIndex, expanded, document)
+            TextFormat.STRING_WITH_METADATA -> StringWithAnnotationsGeneratingVisitor(filteredConfig, formatInfo.defaultIndex, expanded, document, logService)
+            TextFormat.TEXT_UNIT_LIST -> TextUnitListGeneratingVisitor(filteredConfig, formatInfo.defaultIndex, expanded, document, logService)
         }
-        val iterator = StructuredDocumentIterator(metadataConfiguration)
+        val iterator = StructuredDocumentIterator(metadataConfiguration, logService)
         iterator.iterateDocument(document, matchStart, matchEnd, visitor, expanded)
         return visitor.build()
     }

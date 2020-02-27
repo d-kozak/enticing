@@ -24,7 +24,7 @@ abstract class EnticingComponentApi(val componentAddress: String, val componentT
     private fun Request.submit() {
         val (_, _, result) = this.responseString()
         if (result is Result.Failure) {
-            logger.error("Failed to submit message ${result.error.exception.message}")
+           logger.error("Failed to submit message ${result.error.exception.message}")
         }
     }
 }

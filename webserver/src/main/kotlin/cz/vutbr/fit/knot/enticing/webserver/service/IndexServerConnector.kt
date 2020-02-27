@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.service
 
 
+import cz.vutbr.fit.knot.enticing.api.ComponentNotAccessibleException
 import cz.vutbr.fit.knot.enticing.dto.CorpusFormat
 import cz.vutbr.fit.knot.enticing.dto.IndexServer
 import cz.vutbr.fit.knot.enticing.dto.SnippetExtension
@@ -8,13 +9,15 @@ import cz.vutbr.fit.knot.enticing.dto.WebServer
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
-import org.slf4j.LoggerFactory
+import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.logger
 import org.springframework.http.*
+import org.springframework.web.client.ResourceAccessException
 import org.springframework.web.client.RestTemplate
 
-class IndexServerConnector(private val template: RestTemplate = RestTemplate(), private val apiBathPath: String) {
+class IndexServerConnector(private val template: RestTemplate = RestTemplate(), private val apiBathPath: String, logService: MeasuringLogService) {
 
-    private val log = LoggerFactory.getLogger(IndexServerConnector::class.java)
+    val logger = logService.logger { }
 
     fun getDocument(query: WebServer.DocumentQuery): IndexServer.FullDocument = resultOrThrow(query.host, query.toIndexFormat(), "document")
 
@@ -26,9 +29,8 @@ class IndexServerConnector(private val template: RestTemplate = RestTemplate(), 
             val response = template.getForEntity(url, CorpusFormat::class.java)
             return response.body
                     ?: throw IllegalStateException("Could no get format from server $server")
-        } catch (ex: Exception) {
-            log.warn("Could not get corpus format from $url")
-            throw ex
+        } catch (ex: ResourceAccessException) {
+            throw ComponentNotAccessibleException("Could not get corpus format from $url", ex)
         }
     }
 
@@ -37,13 +39,13 @@ class IndexServerConnector(private val template: RestTemplate = RestTemplate(), 
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
         val entity = HttpEntity(input, headers)
-        val response = template.exchange<T>("http://$host$apiBathPath/$endpoint", HttpMethod.POST, entity)
+        val url = "http://$host$apiBathPath/$endpoint"
+        val response = template.exchange<T>(url, HttpMethod.POST, entity)
         return if (response.statusCode == HttpStatus.OK) {
             response.body!!
         } else {
             @Incomplete("somehow rethrow the real exception?")
-            log.warn("Could not contact $host")
-            throw RuntimeException(response.body?.toString() ?: "message lost")
+            throw ComponentNotAccessibleException("Could not get corpus format from $url: ${response.body}")
         }
     }
 
@@ -55,9 +57,8 @@ class IndexServerConnector(private val template: RestTemplate = RestTemplate(), 
             val response = template.getForEntity(url, String::class.java)
             return response.body
                     ?: throw IllegalStateException("Request $request failed")
-        } catch (ex: Exception) {
-            log.warn("Could not get corpus format from $url")
-            throw ex
+        } catch (ex: ResourceAccessException) {
+            throw ComponentNotAccessibleException("Could not get corpus format from $url")
         }
     }
 
@@ -67,8 +68,8 @@ class IndexServerConnector(private val template: RestTemplate = RestTemplate(), 
         return try {
             val response = template.getForEntity(url, CorpusFormat::class.java)
             if (response.body != null) "RUNNING" else throw IllegalStateException("Could no get format from server $server")
-        } catch (ex: Exception) {
-            log.warn("Server $server is not responding correctly")
+        } catch (ex: ResourceAccessException) {
+            logger.warn("Server $server is not responding correctly")
             ex.message!!
         }
     }

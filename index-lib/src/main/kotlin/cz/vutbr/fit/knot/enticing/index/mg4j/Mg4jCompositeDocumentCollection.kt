@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.enticing.index.mg4j
 
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
+import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
 import it.unimi.di.big.mg4j.document.AbstractDocumentCollection
 import it.unimi.di.big.mg4j.document.DocumentCollection
 import it.unimi.di.big.mg4j.document.DocumentFactory
@@ -27,12 +28,14 @@ internal fun initDocumentRanges(limits: List<Long>): Array<Long> {
  */
 class Mg4jCompositeDocumentCollection(
         private val metadataConfiguration: MetadataConfiguration,
-        private val files: List<File>)
+        private val files: List<File>,
+        private val logService: MeasuringLogService
+)
     : AbstractDocumentCollection() {
 
-    private val factory = Mg4jDocumentFactory(metadataConfiguration)
+    private val factory = Mg4jDocumentFactory(metadataConfiguration, logService)
 
-    private val singleFileCollections = files.map { Mg4jSingleFileDocumentCollection(it, factory.copy()) }
+    private val singleFileCollections = files.map { Mg4jSingleFileDocumentCollection(it, factory.copy(), logService) }
 
     private val documentRanges = initDocumentRanges(singleFileCollections.map { it.size() })
 
@@ -70,7 +73,7 @@ class Mg4jCompositeDocumentCollection(
         return singleFileCollections[insertionPoint] to localIndex
     }
 
-    override fun copy(): DocumentCollection = Mg4jCompositeDocumentCollection(metadataConfiguration, files)
+    override fun copy(): DocumentCollection = Mg4jCompositeDocumentCollection(metadataConfiguration, files, logService)
 
     override fun factory(): DocumentFactory = factory
 

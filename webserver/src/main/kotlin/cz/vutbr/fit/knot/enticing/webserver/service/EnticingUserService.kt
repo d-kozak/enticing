@@ -1,6 +1,8 @@
 package cz.vutbr.fit.knot.enticing.webserver.service
 
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
+import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.webserver.dto.*
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettingsId
 import cz.vutbr.fit.knot.enticing.webserver.entity.SelectedMetadata
@@ -13,7 +15,6 @@ import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.SelectedEntityMetadataRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.SelectedMetadataRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
-import org.slf4j.LoggerFactory
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -25,9 +26,9 @@ import javax.transaction.Transactional
 @Service
 @Transactional
 @Incomplete("selected metadata from user and search settings is probably not deleted properly")
-class EnticingUserService(private val userRepository: UserRepository, private val selectedMetadataRepository: SelectedMetadataRepository, private val selectedEntityMetadataRepository: SelectedEntityMetadataRepository, private val encoder: PasswordEncoder, private val searchSettingsRepository: SearchSettingsRepository) : UserDetailsService {
+class EnticingUserService(private val userRepository: UserRepository, private val selectedMetadataRepository: SelectedMetadataRepository, private val selectedEntityMetadataRepository: SelectedEntityMetadataRepository, private val encoder: PasswordEncoder, private val searchSettingsRepository: SearchSettingsRepository, logService: MeasuringLogService) : UserDetailsService {
 
-    private val logger = LoggerFactory.getLogger(EnticingUserService::class.java)
+    private val logger = logService.logger { }
 
     override fun loadUserByUsername(username: String): UserDetails = userRepository.findByLogin(username)
             ?: throw UsernameNotFoundException("UserSpecification with login $username not found")

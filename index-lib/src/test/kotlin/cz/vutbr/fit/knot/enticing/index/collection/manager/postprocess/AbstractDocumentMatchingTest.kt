@@ -12,6 +12,7 @@ import cz.vutbr.fit.knot.enticing.index.collectionManagerConfiguration
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jCompositeDocumentCollection
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jSearchEngine
 import cz.vutbr.fit.knot.enticing.index.mg4j.initMg4jQueryEngine
+import cz.vutbr.fit.knot.enticing.index.testconfig.dummyLogger
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.fail
@@ -111,10 +112,11 @@ class CheckDsl {
 
 abstract class AbstractDocumentMatchingTest {
 
-    private val collection = Mg4jCompositeDocumentCollection(collectionManagerConfiguration.metadataConfiguration, collectionManagerConfiguration.mg4jDir.mg4jFiles)
+    private val collection = Mg4jCompositeDocumentCollection(collectionManagerConfiguration.metadataConfiguration, collectionManagerConfiguration.mg4jDir.mg4jFiles, dummyLogger)
     protected val searchEngine = Mg4jSearchEngine(
             collection,
             initMg4jQueryEngine(collectionManagerConfiguration)
+            , dummyLogger
     )
 
     protected val documentCount = collection.size()

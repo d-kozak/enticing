@@ -11,6 +11,7 @@ import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.SelectedEntityMetadataRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.SelectedMetadataRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
+import cz.vutbr.fit.knot.enticing.webserver.testconfig.dummyLogger
 import cz.vutbr.fit.knot.enticing.webserver.utils.withAuthentication
 import io.mockk.every
 import io.mockk.mockk
@@ -34,7 +35,7 @@ internal class EnticingUserServiceTest {
     private val encoder = BCryptPasswordEncoder(11)
     private val selectedMetadataRepositoryMock = mockk<SelectedMetadataRepository>()
     private val selectedEntityMetadataRepositoryMock = mockk<SelectedEntityMetadataRepository>()
-    private val userService = EnticingUserService(userRepositoryMock, selectedMetadataRepositoryMock, selectedEntityMetadataRepositoryMock, encoder, searchSettingsRepositoryMock)
+    private val userService = EnticingUserService(userRepositoryMock, selectedMetadataRepositoryMock, selectedEntityMetadataRepositoryMock, encoder, searchSettingsRepositoryMock, dummyLogger)
 
     @Test
     fun `loadUserByUsername Test`() {

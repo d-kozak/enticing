@@ -4,6 +4,8 @@ import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.annotation.Temporary
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompilerException
+import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcherException
 import cz.vutbr.fit.knot.enticing.webserver.dto.LastQuery
@@ -12,12 +14,10 @@ import cz.vutbr.fit.knot.enticing.webserver.exception.InvalidSearchSettingsExcep
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import javax.servlet.http.HttpSession
-
-private val log = LoggerFactory.getLogger(QueryService::class.java)
 
 @Service
 class QueryService(
@@ -25,9 +25,11 @@ class QueryService(
         private val searchSettingsRepository: SearchSettingsRepository,
         private val userService: EnticingUserService,
         private val indexServerConnector: IndexServerConnector,
-        private val compilerService: EqlCompilerService
+        private val compilerService: EqlCompilerService,
+        logService: MeasuringLogService
 ) {
 
+    val logger = logService.logger { }
 
     fun validateQuery(query: String, settings: Long) = compilerService.validateQuery(query, format(settings).toMetadataConfiguration())
 
@@ -36,7 +38,7 @@ class QueryService(
         if (errors.isNotEmpty()) throw EqlCompilerException(errors.toString())
         val searchSettings = checkUserCanAccessSettings(selectedSettings)
         val requestData = searchSettings.servers.map { IndexServerRequestData(it) }
-        log.info("Executing query $query with requestData $requestData")
+        logger.info("Executing query $query with requestData $requestData")
         val (result, offset) = flatten(dispatcher.dispatchQuery(query, requestData))
 
         session.setAttribute("lastQuery", LastQuery(query, selectedSettings, offset))
@@ -50,7 +52,7 @@ class QueryService(
         val requestData = searchSettings.servers
                 .filter { it in offset && offset.getValue(it).isNotEmpty() }
                 .map { IndexServerRequestData(it, offset[it]) }
-        log.info("Executing query $offset with requestData $requestData")
+        logger.info("Executing query $offset with requestData $requestData")
         val (result, newOffset) = flatten(dispatcher.dispatchQuery(query, requestData))
         session.setAttribute("lastQuery", LastQuery(query, selectedSettings, newOffset))
         return result
@@ -71,13 +73,15 @@ class QueryService(
         return runBlocking {
             val formats = searchSettings.servers.map { server ->
                 async {
-                    try {
-                        indexServerConnector.getFormat(server)
-                    } catch (ex: Exception) {
-                        log.warn("Could not contact server $server")
-                        ex.printStackTrace()
-                        null
+                    repeat(5) {
+                        try {
+                            return@async indexServerConnector.getFormat(server)
+                        } catch (ex: Exception) {
+                            logger.warn("Could not contact server $server: ${ex}, try $it/5")
+                            delay(500)
+                        }
                     }
+                    null
                 }
             }.awaitAll().filterNotNull()
 
@@ -98,37 +102,38 @@ class QueryService(
 
     fun getRawDocument(request: WebServer.RawDocumentRequest): String = indexServerConnector.getRawDocument(request)
 
-}
 
-fun flatten(result: Map<String, List<MResult<IndexServer.IndexResultList>>>): Pair<WebServer.ResultList, MutableMap<String, Map<String, Offset>>> {
-    val snippets = mutableListOf<WebServer.SearchResult>()
-    val errors = mutableMapOf<ServerId, ErrorMessage>()
+    internal fun flatten(result: Map<String, List<MResult<IndexServer.IndexResultList>>>): Pair<WebServer.ResultList, MutableMap<String, Map<String, Offset>>> {
+        val snippets = mutableListOf<WebServer.SearchResult>()
+        val errors = mutableMapOf<ServerId, ErrorMessage>()
 
-    val offset = mutableMapOf<String, Map<String, Offset>>()
+        val offset = mutableMapOf<String, Map<String, Offset>>()
 
-    for ((serverId, results) in result) {
-        for (serverResult in results) {
-            if (serverResult.isSuccess) {
-                snippets.addAll(
-                        serverResult.value.searchResults.map { it.withHost(serverId) }
-                )
-                if (serverResult.value.offset.isNotEmpty())
-                    offset[serverId] = serverResult.value.offset
-                if (serverResult.value.errors.isNotEmpty()) {
-                    val msg = serverResult.value.errors.toString()
-                    errors[serverId] = msg
-                    log.warn("Server $serverId responded with $msg")
+        for ((serverId, results) in result) {
+            for (serverResult in results) {
+                if (serverResult.isSuccess) {
+                    snippets.addAll(
+                            serverResult.value.searchResults.map { it.withHost(serverId) }
+                    )
+                    if (serverResult.value.offset.isNotEmpty())
+                        offset[serverId] = serverResult.value.offset
+                    if (serverResult.value.errors.isNotEmpty()) {
+                        val msg = serverResult.value.errors.toString()
+                        errors[serverId] = msg
+                        logger.warn("Server $serverId responded with $msg")
+                    }
+                } else {
+                    val exception = serverResult.exception as QueryDispatcherException
+                    errors[serverId] = "${exception::class.simpleName}:${exception.message}"
+
+                    offset.remove(serverId)
+                    @Temporary("should be delegated to error logging service...when there is one...")
+                    exception.printStackTrace()
                 }
-            } else {
-                val exception = serverResult.exception as QueryDispatcherException
-                errors[serverId] = "${exception::class.simpleName}:${exception.message}"
-
-                offset.remove(serverId)
-                @Temporary("should be delegated to error logging service...when there is one...")
-                exception.printStackTrace()
             }
         }
-    }
 
-    return WebServer.ResultList(snippets, errors) to offset
+        return WebServer.ResultList(snippets, errors) to offset
+    }
 }
+

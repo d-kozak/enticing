@@ -4,6 +4,7 @@ import cz.vutbr.fit.knot.enticing.dto.CollectionName
 import cz.vutbr.fit.knot.enticing.dto.IndexServer
 import cz.vutbr.fit.knot.enticing.dto.Offset
 import cz.vutbr.fit.knot.enticing.dto.SearchQuery
+import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
 import cz.vutbr.fit.knot.enticing.query.processor.FuelQueryExecutor
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
 import cz.vutbr.fit.knot.enticing.webserver.service.IndexServerConnector
@@ -19,5 +20,5 @@ class QueryConfig {
     fun queryDispatcher(@Value("\${index.server.api.base.path}") apiBasePath: String): QueryDispatcher<SearchQuery, Map<CollectionName, Offset>, IndexServer.IndexResultList> = QueryDispatcher(FuelQueryExecutor("$apiBasePath/query"))
 
     @Bean
-    fun indexServerConnector(@Value("\${index.server.api.base.path}") apiBasePath: String) = IndexServerConnector(RestTemplate(), apiBasePath)
+    fun indexServerConnector(@Value("\${index.server.api.base.path}") apiBasePath: String, logService: MeasuringLogService) = IndexServerConnector(RestTemplate(), apiBasePath, logService)
 }

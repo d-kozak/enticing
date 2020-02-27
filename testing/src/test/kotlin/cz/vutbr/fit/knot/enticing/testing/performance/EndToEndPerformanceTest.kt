@@ -19,8 +19,8 @@ class EndToEndPerformanceTest {
     val logger = fixture.logService.logger { }
 
     @Test
-    fun foo() {
-
+    fun killAll() {
+        fixture.killTestSetup()
     }
 
     @Test

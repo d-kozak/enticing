@@ -32,6 +32,6 @@ class GlobalConfig(
 
     @Bean
     fun logger(enticingConfiguration: EnticingConfiguration): MeasuringLogService {
-        return enticingConfiguration.loggingConfiguration.configureFor(address)
+        return enticingConfiguration.loggingConfiguration.configureFor("$address-management")
     }
 }

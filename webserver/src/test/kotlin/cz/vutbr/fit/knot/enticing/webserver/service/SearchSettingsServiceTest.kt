@@ -4,6 +4,7 @@ import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.exception.ValueNotUniqueException
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
+import cz.vutbr.fit.knot.enticing.webserver.testconfig.dummyLogger
 import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.mockk
@@ -24,7 +25,8 @@ internal class SearchSettingsServiceTest {
 
     val indexServerConnector = mockk<IndexServerConnector>()
 
-    val searchSettingsService = SearchSettingsService(searchSettingsRepository, userRepository, indexServerConnector)
+
+    val searchSettingsService = SearchSettingsService(dummyLogger, searchSettingsRepository, userRepository, indexServerConnector)
 
     @Nested
     inner class GetAll {

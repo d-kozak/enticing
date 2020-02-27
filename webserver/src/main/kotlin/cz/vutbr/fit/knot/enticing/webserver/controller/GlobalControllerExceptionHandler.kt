@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.controller
 
 
+import cz.vutbr.fit.knot.enticing.api.ComponentNotAccessibleException
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompilerException
 import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
@@ -20,6 +21,18 @@ import javax.servlet.http.HttpServletResponse
 class GlobalControllerExceptionHandler(logService: MeasuringLogService) {
 
     val logger = logService.logger { }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException::class)
+    fun illegalArgumentException(e: Exception) {
+        logger.error(e)
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ComponentNotAccessibleException::class)
+    fun componentNotAccessibleException(e: Exception) {
+        logger.error(e)
+    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(DataIntegrityViolationException::class)

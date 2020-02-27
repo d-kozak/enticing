@@ -5,6 +5,8 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexBuilderConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.validateOrFail
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
 import cz.vutbr.fit.knot.enticing.index.startIndexing
+import cz.vutbr.fit.knot.enticing.log.ComponentType
+import cz.vutbr.fit.knot.enticing.log.RemoteLoggingConfiguration
 import cz.vutbr.fit.knot.enticing.log.configureFor
 
 fun handleArguments(vararg args: String, loadConfig: (path: String) -> EnticingConfiguration = ::executeScript): Pair<EnticingConfiguration, String> {
@@ -17,7 +19,8 @@ fun main(args: Array<String>) {
     val (enticingConfiguration, address) = handleArguments(*args)
     val config = enticingConfiguration.indexServerByAddress(address)
 
-    val logger = enticingConfiguration.loggingConfiguration.configureFor("$address-builder")
+    val logger = enticingConfiguration.loggingConfiguration.configureFor("$address-builder",
+            RemoteLoggingConfiguration("$address-builder", enticingConfiguration.managementServiceConfiguration.fullAddress, ComponentType.INDEX_BUILDER))
 
     logger.measure("indexing") {
         for ((collection, mg4jDir, indexDir) in config.loadCollections()) {
@@ -26,7 +29,7 @@ fun main(args: Array<String>) {
                     val builderConf = IndexBuilderConfig(config.corpus.name, collection.name, mg4jDir, indexDir, config.metadataConfiguration
                             ?: config.corpus.metadataConfiguration)
 
-                    startIndexing(builderConf)
+                    startIndexing(builderConf, logger)
                 }
             } catch (ex: java.lang.Exception) {
                 ex.printStackTrace()

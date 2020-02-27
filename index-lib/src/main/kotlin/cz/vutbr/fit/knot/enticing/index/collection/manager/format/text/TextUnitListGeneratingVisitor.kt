@@ -6,11 +6,12 @@ import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnit
 import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnitList
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
-import org.slf4j.LoggerFactory
+import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.logger
 
-class TextUnitListGeneratingVisitor(config: MetadataConfiguration, defaultIndexName: String, interval: Interval, document: IndexedDocument) : TextFormatGeneratingVisitor(config, defaultIndexName, interval, document) {
+class TextUnitListGeneratingVisitor(config: MetadataConfiguration, defaultIndexName: String, interval: Interval, document: IndexedDocument, logService: MeasuringLogService) : TextFormatGeneratingVisitor(config, defaultIndexName, interval, document) {
 
-    private val log = LoggerFactory.getLogger(TextUnitListGeneratingVisitor::class.java)
+    private val logger = logService.logger { }
 
     private val resultList = mutableListOf<TextUnit>()
 
@@ -25,7 +26,7 @@ class TextUnitListGeneratingVisitor(config: MetadataConfiguration, defaultIndexN
 
     override fun visitMatchStart(queryInterval: Interval) {
         if (currentQueryInterval != null || unitsForQueryMatch != null) {
-            log.warn("matchStart called while some match interval metadata are still present inside the listener, they will be overwritten")
+            logger.warn("matchStart called while some match interval metadata are still present inside the listener, they will be overwritten")
         }
         currentQueryInterval = queryInterval
         unitsForQueryMatch = mutableListOf()
@@ -33,7 +34,7 @@ class TextUnitListGeneratingVisitor(config: MetadataConfiguration, defaultIndexN
 
     override fun visitEntityStart(attributes: List<String>, entityClass: String) {
         if (this.attributes != null || this.entityClass != null || this.wordsForEntity?.isNotEmpty() == true) {
-            log.warn("entityStart called while some entity metadata are still present inside the listener, they will be overwritten")
+            logger.warn("entityStart called while some entity metadata are still present inside the listener, they will be overwritten")
         }
         if (entityClass in config.entities) {
             this.attributes = config.entities.getValue(entityClass).attributes.values.map { attributes[it.attributeIndex] }
@@ -61,7 +62,7 @@ class TextUnitListGeneratingVisitor(config: MetadataConfiguration, defaultIndexN
                 resultList.add(newEntity)
             }
         } else {
-            log.warn("entityEnd called, but no data for entity have been collected")
+            logger.warn("entityEnd called, but no data for entity have been collected")
         }
         attributes = null
         entityClass = null
@@ -72,7 +73,7 @@ class TextUnitListGeneratingVisitor(config: MetadataConfiguration, defaultIndexN
         if (currentQueryInterval != null && unitsForQueryMatch?.isNotEmpty() == true) {
             resultList.add(TextUnit.QueryMatch(currentQueryInterval!!, unitsForQueryMatch!!))
         } else {
-            log.warn("matchEnd called, but no data for query match have been collected")
+            logger.warn("matchEnd called, but no data for query match have been collected")
         }
         currentQueryInterval = null
         unitsForQueryMatch = null

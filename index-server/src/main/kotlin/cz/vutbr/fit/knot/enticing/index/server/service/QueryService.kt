@@ -6,8 +6,9 @@ import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.index.collection.manager.CollectionManager
 import cz.vutbr.fit.knot.enticing.index.collection.manager.CollectionQueryExecutor
+import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 
@@ -15,10 +16,11 @@ import org.springframework.stereotype.Service
 class QueryService(
         private val collectionManagers: Map<String, CollectionManager>,
         private val metadataConfiguration: MetadataConfiguration,
-        private val eqlCompiler: EqlCompiler
+        private val eqlCompiler: EqlCompiler,
+        logService: MeasuringLogService
 ) {
 
-    private val log = LoggerFactory.getLogger(QueryService::class.java)
+    private val logger = logService.logger { }
 
     val queryDispatcher = QueryDispatcher(CollectionQueryExecutor(collectionManagers))
 
@@ -28,7 +30,7 @@ class QueryService(
         val requestData = if (query.offset != null) query.offset!!.map { (collection, offset) -> CollectionRequestData(collection, offset) }
         else collectionManagers.keys.map { CollectionRequestData(it, Offset(0, 0)) }
 
-        log.info("Executing query $query with requestData $requestData")
+        logger.info("Executing query $query with requestData $requestData")
         return flatten(queryDispatcher.dispatchQuery(query, requestData))
     }
 

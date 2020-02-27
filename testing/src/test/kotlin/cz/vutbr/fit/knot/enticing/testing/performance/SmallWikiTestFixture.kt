@@ -33,9 +33,9 @@ class SmallWikiTestFixture(rebootComponents: Boolean) {
 
     fun sendQuery(query: String) = webserverApi.sendQuery(query)
 
-    private fun buildLocally() = runTestConfig("--local-build --copy-jars")
-    private fun startTestSetup() = runTestConfig("-wim")
-    private fun killTestSetup() = runTestConfig("-wimk")
+    fun buildLocally() = runTestConfig("--local-build --copy-jars")
+    fun startTestSetup() = runTestConfig("-wim")
+    fun killTestSetup() = runTestConfig("-wimk")
 
     private fun runTestConfig(args: String) = runManagementCli("$CONFIG_PATH $args")
 

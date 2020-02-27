@@ -36,7 +36,7 @@ class GlobalConfig(
 
     @Bean
     fun logger(enticingConfiguration: EnticingConfiguration): MeasuringLogService {
-        return enticingConfiguration.loggingConfiguration.configureFor(address, RemoteLoggingConfiguration(address, enticingConfiguration.managementServiceConfiguration.fullAddress, ComponentType.INDEX_SERVER))
+        return enticingConfiguration.loggingConfiguration.configureFor("$address-index-server", RemoteLoggingConfiguration(address, enticingConfiguration.managementServiceConfiguration.fullAddress, ComponentType.INDEX_SERVER))
     }
 
     @Bean

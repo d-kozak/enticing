@@ -13,7 +13,8 @@ import cz.vutbr.fit.knot.enticing.index.boundary.MatchInfo
 import cz.vutbr.fit.knot.enticing.index.boundary.PostProcessor
 import cz.vutbr.fit.knot.enticing.index.boundary.ResultCreator
 import cz.vutbr.fit.knot.enticing.index.boundary.SearchEngine
-import org.slf4j.LoggerFactory
+import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.logger
 import kotlin.math.min
 
 /**
@@ -25,13 +26,14 @@ class CollectionManager internal constructor(
         private val postProcessor: PostProcessor,
         private val resultCreator: ResultCreator,
         private val eqlCompiler: EqlCompiler,
-        private val metadataConfiguration: MetadataConfiguration
+        private val metadataConfiguration: MetadataConfiguration,
+        logService: MeasuringLogService
 ) {
 
-    private val log = LoggerFactory.getLogger(CollectionManager::class.java)
+    val logger = logService.logger { }
 
     fun query(query: SearchQuery, offset: Offset = Offset(0, 0)): IndexServer.CollectionResultList {
-        log.info("Executing query $query")
+        logger.info("Executing query $query")
         val (documentOffset, resultOffset) = offset
 
         val ast = if (query.eqlAst == null) {

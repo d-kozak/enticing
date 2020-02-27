@@ -1,12 +1,13 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
+import cz.vutbr.fit.knot.enticing.index.testconfig.dummyLogger
 import it.unimi.dsi.fastutil.io.FastBufferedInputStream
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.io.File
 
-val testDocumentFactory = Mg4jDocumentFactory(fullTestMetadataConfig)
+val testDocumentFactory = Mg4jDocumentFactory(fullTestMetadataConfig, dummyLogger)
 
 internal class Mg4jSingleFileDocumentCollectionTest {
 
@@ -21,7 +22,7 @@ internal class Mg4jSingleFileDocumentCollectionTest {
                 "../data/mg4j/cc3.mg4j" to 158L
         )
         for ((path, count) in inputFiles) {
-            val collection = Mg4jSingleFileDocumentCollection(File(path), testDocumentFactory)
+            val collection = Mg4jSingleFileDocumentCollection(File(path), testDocumentFactory, dummyLogger)
             assertThat(collection.size())
                     .isEqualTo(count)
         }
@@ -30,7 +31,7 @@ internal class Mg4jSingleFileDocumentCollectionTest {
     @Nested
     inner class ReadRawDocument {
 
-        private val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), testDocumentFactory)
+        private val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), testDocumentFactory, dummyLogger)
 
         @Test
         fun `whole document`() {
@@ -68,7 +69,7 @@ internal class Mg4jSingleFileDocumentCollectionTest {
 
     @Test
     fun `Check input stream`() {
-        val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), testDocumentFactory)
+        val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), testDocumentFactory, dummyLogger)
 
         val buffer = ByteArray(1024)
 
@@ -90,7 +91,7 @@ internal class Mg4jSingleFileDocumentCollectionTest {
 
     @Test
     fun `Check metadata`() {
-        val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), testDocumentFactory)
+        val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), testDocumentFactory, dummyLogger)
         for ((index, title, uri) in listOf(
                 Triple(2L, "Toy Soldiers Studio: II/20c Ptolemaic", "http://15mm25mm.blogspot.com/2014/07/ii20c-ptolemaic.html"),
                 Triple(3L, " - Writing Treatments That Sell: How to Create and Market Your Story Ideas to the Motion Picture and TV Industry, Second Edition", "http://1d-film.ru/books/2595289/"),

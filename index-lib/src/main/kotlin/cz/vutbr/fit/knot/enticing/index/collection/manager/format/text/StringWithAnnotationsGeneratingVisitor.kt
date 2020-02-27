@@ -7,11 +7,12 @@ import cz.vutbr.fit.knot.enticing.dto.format.text.*
 import cz.vutbr.fit.knot.enticing.dto.format.text.Annotation
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
-import org.slf4j.LoggerFactory
+import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.logger
 
-class StringWithAnnotationsGeneratingVisitor(config: MetadataConfiguration, defaultIndexName: String, interval: Interval, document: IndexedDocument) : TextFormatGeneratingVisitor(config, defaultIndexName, interval, document) {
+class StringWithAnnotationsGeneratingVisitor(config: MetadataConfiguration, defaultIndexName: String, interval: Interval, document: IndexedDocument, logService: MeasuringLogService) : TextFormatGeneratingVisitor(config, defaultIndexName, interval, document) {
 
-    private val log = LoggerFactory.getLogger(StringWithAnnotationsGeneratingVisitor::class.java)
+    private val logger = logService.logger { }
 
     private val builder = StringBuilder()
     private val annotations = mutableMapOf<String, Annotation>()
@@ -33,7 +34,7 @@ class StringWithAnnotationsGeneratingVisitor(config: MetadataConfiguration, defa
             matchStartPosition = -1
             queryInterval = null
         } else {
-            log.error("matchEnd executed, but there was no start position")
+            logger.error("matchEnd executed, but there was no start position")
         }
     }
 

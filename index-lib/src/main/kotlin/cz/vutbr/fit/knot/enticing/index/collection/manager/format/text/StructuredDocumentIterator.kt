@@ -6,7 +6,8 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
-import org.slf4j.LoggerFactory
+import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.logger
 
 
 /**
@@ -47,8 +48,9 @@ abstract class TextFormatGeneratingVisitor(
  * Iterates over a document and informs the visitor about matched regions, entities and words encountered
  */
 @Cleanup("Maybe turn into a function OR move some of the function params to constructor?")
-class StructuredDocumentIterator(private val corpusConfiguration: MetadataConfiguration) {
-    private val log = LoggerFactory.getLogger(StructuredDocumentIterator::class.java)
+class StructuredDocumentIterator(private val corpusConfiguration: MetadataConfiguration, logService: MeasuringLogService) {
+
+    private val logger = logService.logger { }
 
     /**
      * Iterates over a document and notifies the visitor about every start and end of matched region, start and end of entity and every word,
@@ -79,7 +81,7 @@ class StructuredDocumentIterator(private val corpusConfiguration: MetadataConfig
                 val entityClass = word[corpusConfiguration.entityIndex!!.columnIndex]
                 if (entityClass != "0") {
                     val len = word[corpusConfiguration.lengthIndex!!.columnIndex].toIntOrNull() ?: {
-                        log.warn("${document.title}:${document.id}:[$i]:could not parse entity length index ${word[corpusConfiguration.lengthIndex!!.columnIndex]}")
+                        logger.warn("${document.title}:${document.id}:[$i]:could not parse entity length index ${word[corpusConfiguration.lengthIndex!!.columnIndex]}")
                         1
                     }()
                     val isReplicated = len == -1
@@ -91,7 +93,7 @@ class StructuredDocumentIterator(private val corpusConfiguration: MetadataConfig
                             visitor.visitEntityStart(attributes, entityClass)
                             Triple(attributes, entityClass, i + len - 1)
                         } else {
-                            log.warn("${document.title}:${document.id}:[$i]:encountered entity $entityClass for which there is no known format, attributes will be empty")
+                            logger.warn("${document.title}:${document.id}:[$i]:encountered entity $entityClass for which there is no known format, attributes will be empty")
                             visitor.visitEntityStart(emptyList(), entityClass)
                             Triple(emptyList(), entityClass, i)
                         }

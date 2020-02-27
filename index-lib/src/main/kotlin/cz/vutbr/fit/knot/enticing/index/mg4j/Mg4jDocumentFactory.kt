@@ -5,17 +5,18 @@ import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.annotation.Speed
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.IndexConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
+import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.logger
 import it.unimi.di.big.mg4j.document.AbstractDocumentFactory
 import it.unimi.di.big.mg4j.document.DocumentFactory
 import it.unimi.dsi.fastutil.bytes.ByteArrays
 import it.unimi.dsi.fastutil.io.FastBufferedInputStream
 import it.unimi.dsi.fastutil.objects.Reference2ObjectMap
-import org.slf4j.LoggerFactory
 import java.io.InputStream
 
-private val log = LoggerFactory.getLogger(Mg4jDocumentFactory::class.java)
+class Mg4jDocumentFactory(private val metadataConfiguration: MetadataConfiguration, val logService: MeasuringLogService) : AbstractDocumentFactory() {
 
-class Mg4jDocumentFactory(private val metadataConfiguration: MetadataConfiguration) : AbstractDocumentFactory() {
+    private val logger = logService.logger { }
 
     internal data class EntityReplicationInfo(val elems: List<String>, val entityType: String, val lineCount: Int)
 
@@ -31,7 +32,7 @@ class Mg4jDocumentFactory(private val metadataConfiguration: MetadataConfigurati
 
     override fun fieldType(field: Int): DocumentFactory.FieldType = DocumentFactory.FieldType.TEXT
 
-    override fun copy() = Mg4jDocumentFactory(metadataConfiguration)
+    override fun copy() = Mg4jDocumentFactory(metadataConfiguration, logService)
 
     override fun getDocument(rawContent: InputStream, metadata: Reference2ObjectMap<Enum<*>, Any>): Mg4jDocument {
         val stream = (rawContent as FastBufferedInputStream).bufferedReader()
@@ -46,7 +47,7 @@ class Mg4jDocumentFactory(private val metadataConfiguration: MetadataConfigurati
         var lineIndex = 0
         loop@ while (line != null) {
             when {
-                line.isPage() -> log.error("page tag should never be encountered at this context, only after the start of another document and the stream should not proceed that far")
+                line.isPage() -> logger.error("page tag should never be encountered at this context, only after the start of another document and the stream should not proceed that far")
                 line.isDoc() -> break@loop // reach the end of current document
                 line.isPar() -> {
                     addSpecialToken("§", fields, lineIndex)
@@ -57,7 +58,7 @@ class Mg4jDocumentFactory(private val metadataConfiguration: MetadataConfigurati
                     lineIndex++
                 }
                 !line.isMetaInfo() -> {
-                    val (parseSuccess, replicationInfo) = processLine(line, fields, lineIndex, metadataConfiguration)
+                    val (parseSuccess, replicationInfo) = processLine(line, fields, lineIndex, metadataConfiguration, logger)
                     if (!parseSuccess) invalidLines.add(lineIndex)
                     if (parseSuccess && replicationInfo != null) {
                         val lastParsedLineIndex = fields[0].size - 1
@@ -73,12 +74,12 @@ class Mg4jDocumentFactory(private val metadataConfiguration: MetadataConfigurati
                     }
                     lineIndex++
                 }
-                else -> log.error("Unknown meta line $line")
+                else -> logger.error("Unknown meta line $line")
             }
             line = stream.readLine()
         }
         if (invalidLines.isNotEmpty())
-            log.warn("Document ${metadata[DocumentMetadata.ID]}:${metadata[DocumentMetadata.TITLE]} has invalid lines: $invalidLines, they were skipped")
+            logger.warn("Document ${metadata[DocumentMetadata.ID]}:${metadata[DocumentMetadata.TITLE]} has invalid lines: $invalidLines, they were skipped")
         metadata[DocumentMetadata.SIZE] = lineIndex
         return Mg4jDocument(metadataConfiguration, metadata, fields)
     }
@@ -97,7 +98,7 @@ private val whitespaceRegex = """\s""".toRegex()
 
 @Speed("rewrite using MutableStrings and whitespace readers?")
 @Cleanup("Should be refactored, it is smelly")
-internal fun processLine(line: String, fields: List<MutableList<String>>, lineIndex: Int, metadataConfiguration: MetadataConfiguration): Pair<Boolean, Mg4jDocumentFactory.EntityReplicationInfo?> {
+internal fun processLine(line: String, fields: List<MutableList<String>>, lineIndex: Int, metadataConfiguration: MetadataConfiguration, logger: MeasuringLogService): Pair<Boolean, Mg4jDocumentFactory.EntityReplicationInfo?> {
     val cells = line.split(whitespaceRegex)
     val indexCount = metadataConfiguration.indexes.size
     val entityLenIndex = metadataConfiguration.lengthIndex?.columnIndex ?: -1
@@ -134,7 +135,7 @@ internal fun processLine(line: String, fields: List<MutableList<String>>, lineIn
 
         var elem = if (cell.isGlued()) cell.removeGlue() else cell
         if (elem.isBlank()) {
-            log.debug("$lineIndex:$i is blank, at line '$line'")
+            logger.debug("$lineIndex:$i is blank, at line '$line'")
             elem = NULL
         }
 
