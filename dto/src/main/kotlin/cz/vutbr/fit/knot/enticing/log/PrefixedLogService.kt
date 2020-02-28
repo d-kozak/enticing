@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.log
 
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.LoggingConfiguration
 import cz.vutbr.fit.knot.enticing.log.util.resolveName
 
 /**
@@ -7,18 +8,18 @@ import cz.vutbr.fit.knot.enticing.log.util.resolveName
  */
 inline fun MeasuringLogService.logger(noinline func: () -> Unit): MeasuringLogService {
     val name = resolveName(func)
-    return MeasuringLogService(PrefixedLogService(name, this.next), this.config)
+    return MeasuringLogService(PrefixedLogService(config, name, this.next), this.config)
 }
 
 inline fun LogService.logger(noinline func: () -> Unit): LogService {
     val name = resolveName(func)
-    return PrefixedLogService(name, this)
+    return PrefixedLogService(config, name, this)
 }
 
 /**
  * Logger which prefixes all messages
  */
-class PrefixedLogService(val prefix: String, var next: LogService) : LogService {
+class PrefixedLogService(override val config: LoggingConfiguration, val prefix: String, var next: LogService) : LogService {
 
     override fun debug(message: String) = next.debug("$prefix : $message")
 

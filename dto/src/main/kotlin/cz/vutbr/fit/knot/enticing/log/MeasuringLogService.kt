@@ -39,5 +39,5 @@ class MeasuringLogService(next: LogService, config: LoggingConfiguration) : Dele
     private fun calcDuration(handle: MeasurementHandle): String = Duration.ofMillis(System.currentTimeMillis() - handle.startTime).toString().substring(2)
 }
 
-fun LogService.measuring(config: LoggingConfiguration): MeasuringLogService = MeasuringLogService(this, config)
+fun LogService.measuring(): MeasuringLogService = MeasuringLogService(this, config)
 

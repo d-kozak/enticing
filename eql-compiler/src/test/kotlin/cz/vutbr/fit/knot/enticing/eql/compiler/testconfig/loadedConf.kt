@@ -9,4 +9,4 @@ import cz.vutbr.fit.knot.enticing.log.measuring
 val loadedConfiguration = executeScript<EnticingConfiguration>("../dto/src/test/resources/config.kts")
         .validateOrFail()
 
-val dummyLogger = StdoutLogService(loadedConfiguration.loggingConfiguration).measuring(loadedConfiguration.loggingConfiguration)
+val dummyLogger = StdoutLogService(loadedConfiguration.loggingConfiguration).measuring()

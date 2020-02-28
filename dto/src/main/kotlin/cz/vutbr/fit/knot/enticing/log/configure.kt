@@ -11,15 +11,15 @@ fun LoggingConfiguration.configureFor(serviceId: String, remoteLoggingConfigurat
     val fileLogger = (this.rootDirectory + File.separatorChar + serviceId).asLogger(this)
             .filtered(this.messageTypes)
     val stdoutLogger = StdoutLogService(this)
-    val dispatchingLogger = DispatchingLogService(stdoutLogger, fileLogger)
+    val dispatchingLogger = DispatchingLogService(this, stdoutLogger, fileLogger)
     val maybeRemoteLogger: LogService = if (remoteLoggingConfiguration != null) {
         val (localAddress, managementAddress, componentType) = remoteLoggingConfiguration
         val managementApi = ManagementServiceApi(managementAddress, componentType, localAddress, dispatchingLogger)
         val remoteLogger = RemoteLogService(this, managementApi)
                 .filtered(this.managementLoggingConfiguration.messageTypes)
-        DispatchingLogService(dispatchingLogger, remoteLogger)
+        DispatchingLogService(this, dispatchingLogger, remoteLogger)
     } else dispatchingLogger
 
-    return maybeRemoteLogger.measuring(this)
+    return maybeRemoteLogger.measuring()
 }
 

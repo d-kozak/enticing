@@ -7,4 +7,4 @@ import cz.vutbr.fit.knot.enticing.log.measuring
 
 val config = executeScript<EnticingConfiguration>("../dto/src/test/resources/config.kts")
 
-val stdoutLogService = StdoutLogService(config.loggingConfiguration).measuring(config.loggingConfiguration)
+val stdoutLogService = StdoutLogService(config.loggingConfiguration).measuring()

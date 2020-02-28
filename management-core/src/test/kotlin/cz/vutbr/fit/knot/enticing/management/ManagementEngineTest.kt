@@ -13,7 +13,7 @@ class ManagementEngineTest {
     fun `just config`() {
         val conf = parseCliArgs(arrayOf("../dto/src/test/resources/config.kts"))
                 .validateOrFail()
-        val executor = ManagementEngine(conf.configuration, StdoutLogService(conf.configuration.loggingConfiguration).measuring(conf.configuration.loggingConfiguration))
+        val executor = ManagementEngine(conf.configuration, StdoutLogService(conf.configuration.loggingConfiguration).measuring())
         executor.execute(conf)
     }
 

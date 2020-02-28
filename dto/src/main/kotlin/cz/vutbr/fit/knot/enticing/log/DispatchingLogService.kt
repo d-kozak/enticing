@@ -1,10 +1,12 @@
 package cz.vutbr.fit.knot.enticing.log
 
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.LoggingConfiguration
+
 /**
  * Dispatches messages to all child log services
  */
-class DispatchingLogService(val children: List<LogService>) : LogService {
-    constructor(vararg children: LogService) : this(children.toList())
+class DispatchingLogService(override val config: LoggingConfiguration, val children: List<LogService>) : LogService {
+    constructor(config: LoggingConfiguration, vararg children: LogService) : this(config, children.toList())
 
     override fun debug(message: String) {
         children.forEach { it.debug(message) }

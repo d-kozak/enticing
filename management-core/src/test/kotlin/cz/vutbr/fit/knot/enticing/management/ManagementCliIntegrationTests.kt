@@ -16,7 +16,7 @@ class ManagementCliIntegrationTests {
     private fun runCliApp(args: String) {
         val cliArgs = parseCliArgs(args.split("""\s+""".toRegex()).toTypedArray()).validateOrFail()
         val config = cliArgs.configuration
-        val logger = StdoutLogService(config.loggingConfiguration).measuring(config.loggingConfiguration)
+        val logger = StdoutLogService(config.loggingConfiguration).measuring()
         val engine = ManagementEngine(config, logger)
         engine.use {
             engine.execute(cliArgs)

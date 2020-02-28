@@ -15,7 +15,7 @@ class SmallWikiTestFixture(rebootComponents: Boolean) {
     val config = executeScript<EnticingConfiguration>(CONFIG_PATH).validateOrFail()
 
     val logService = StdoutLogService(config.loggingConfiguration)
-            .measuring(config.loggingConfiguration)
+            .measuring()
 
     val webserverApi: WebserverApi
 

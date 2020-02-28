@@ -9,6 +9,6 @@ import org.springframework.context.annotation.Bean
 class LogServiceTestConfig {
 
     @Bean
-    fun measuringLogService() = StdoutLogService(loadedConfiguration.loggingConfiguration).measuring(loadedConfiguration.loggingConfiguration)
+    fun measuringLogService() = StdoutLogService(loadedConfiguration.loggingConfiguration).measuring()
 
 }

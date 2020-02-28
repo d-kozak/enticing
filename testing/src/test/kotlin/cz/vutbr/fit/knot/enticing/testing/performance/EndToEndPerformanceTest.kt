@@ -30,7 +30,6 @@ class EndToEndPerformanceTest {
             val result = fixture.sendQuery("hello")
             println(result)
         }
-
     }
 
 

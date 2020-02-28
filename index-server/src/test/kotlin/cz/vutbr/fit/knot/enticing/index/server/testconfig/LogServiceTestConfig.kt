@@ -11,6 +11,6 @@ class LogServiceTestConfig {
 
     @Bean
     @Primary
-    fun measuringLogService() = StdoutLogService(loadedConfiguration.loggingConfiguration).measuring(loadedConfiguration.loggingConfiguration)
+    fun measuringLogService() = StdoutLogService(loadedConfiguration.loggingConfiguration).measuring()
 
 }

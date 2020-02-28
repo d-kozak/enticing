@@ -8,6 +8,8 @@ import java.time.format.DateTimeFormatter
  * Basic logging interface
  */
 interface LogService {
+    val config: LoggingConfiguration
+
     fun debug(message: String)
     fun info(message: String)
     fun perf(message: String)
@@ -18,7 +20,8 @@ interface LogService {
 /**
  * Configuration aware log service
  */
-abstract class ConfiguredLogService(val config: LoggingConfiguration) : LogService {
+abstract class ConfiguredLogService(override val config: LoggingConfiguration) : LogService {
+
     protected val formatter = DateTimeFormatter.ofPattern(config.pattern)
     protected fun timestamp(): String = LocalDateTime.now().format(formatter)
 }
