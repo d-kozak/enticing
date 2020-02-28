@@ -33,7 +33,8 @@ class SecurityConfig(
                 .antMatchers("/*",
                         "/static/**",
                         "$apiBasePath/login",
-                        "$apiBasePath/log")
+                        "$apiBasePath/log",
+                        "$apiBasePath/perf")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

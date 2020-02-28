@@ -50,9 +50,9 @@ inline fun <T> Logger.measure(operationId: String, arguments: String? = null, bl
     }
 }
 
-private fun LogMessage.toPrintableString(formatter: DateTimeFormatter) = "${readableTimestamp(timestamp, formatter)} : $className :$logType : $message"
+private fun LogMessage.toPrintableString(formatter: DateTimeFormatter) = "${readableTimestamp(timestamp, formatter)} : $className :$logType \n message:  $message"
 
-private fun PerfMessage.toPrintableString(formatter: DateTimeFormatter) = "${readableTimestamp(timestamp, formatter)} : $className : PERF : Operation '$operationId' : ${readableDuration(duration)} : $outcome "
+private fun PerfMessage.toPrintableString(formatter: DateTimeFormatter) = "${readableTimestamp(timestamp, formatter)} : $className : PERF : Operation '$operationId' : $outcome : ${readableDuration(duration)}  \n arguments $arguments"
 
 private fun readableDuration(millis: Long) = Duration.ofMillis(millis).toString().substring(2)
 

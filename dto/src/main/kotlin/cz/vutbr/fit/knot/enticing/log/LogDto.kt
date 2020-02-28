@@ -1,16 +1,9 @@
 package cz.vutbr.fit.knot.enticing.log
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.LogType
-import javax.validation.constraints.NotBlank
-
-data class PerfMessage(
-        val className: String,
-        val operationId: String,
-        val arguments: String?,
-        val duration: Long,
-        val outcome: String,
-        val timestamp: Long = System.currentTimeMillis()
-)
+import javax.validation.constraints.NotEmpty
+import javax.validation.constraints.Positive
+import javax.validation.constraints.Size
 
 data class LogMessage(
         val className: String,
@@ -19,18 +12,22 @@ data class LogMessage(
         val timestamp: Long = System.currentTimeMillis()
 )
 
+fun LogMessage.toLogDto(componentId: String, componentType: ComponentType) = LogDto(className, message, logType, componentId, componentType, timestamp)
+
 /**
  * Log message to be transmitted
  */
 data class LogDto(
-        @field:NotBlank
+        @field:NotEmpty
         val className: String,
-        @field:NotBlank
+        @field:NotEmpty
+        @field:Size(max = 2048)
         val message: String,
         val logType: LogType,
-        @field:NotBlank
+        @field:NotEmpty
         val componentId: String,
         val componentType: ComponentType,
+        @field:Positive
         val timestamp: Long = System.currentTimeMillis()
 )
 
