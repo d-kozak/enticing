@@ -22,7 +22,7 @@ class PerfEntity(
         @field:NotEmpty
         val className: String,
         @field:NotEmpty
-        @field:Column(length = 2048)
+        @field:Column(length = 512)
         val operationId: String,
         @field:Column(length = 2048)
         val arguments: String?,

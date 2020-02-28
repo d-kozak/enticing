@@ -20,7 +20,7 @@ data class PerfDto(
         @field:NotBlank
         val className: String,
         @field:NotBlank
-        @field:Size(max = 2048)
+        @field:Size(max = 512)
         val operationId: String,
         @field:Size(max = 2048)
         val arguments: String?,
