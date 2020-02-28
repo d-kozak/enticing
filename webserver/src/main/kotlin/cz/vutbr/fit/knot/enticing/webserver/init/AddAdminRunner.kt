@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver.init
 
-import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
@@ -13,10 +13,10 @@ import org.springframework.stereotype.Component
 class AddAdminRunner(
         val userRepository: UserRepository,
         val encoder: PasswordEncoder,
-        logService: MeasuringLogService
+        loggerFactory: LoggerFactory
 ) : ApplicationRunner {
 
-    private val logger = logService.logger { }
+    private val logger = loggerFactory.logger { }
 
     override fun run(args: ApplicationArguments?) {
         val admins = userRepository.findAllAdmins()

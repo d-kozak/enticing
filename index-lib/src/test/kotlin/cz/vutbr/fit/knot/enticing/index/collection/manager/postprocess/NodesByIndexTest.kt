@@ -3,7 +3,7 @@ package cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.EqlAstNode
 import cz.vutbr.fit.knot.enticing.index.collectionManagerConfiguration
-import cz.vutbr.fit.knot.enticing.index.testconfig.dummyLogger
+import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 @DisplayName("get nodes by index")
 class NodeByIndexTest {
 
-    private val compiler = EqlCompiler(dummyLogger)
+    private val compiler = EqlCompiler(SimpleStdoutLoggerFactory)
 
     @DisplayName("That Motion three")
     @Test

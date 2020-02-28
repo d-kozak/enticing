@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.visitor.EnticingConfigurationVisitor
+import java.util.*
 
 /**
  * Specifies how the log files should be structured
@@ -13,10 +14,10 @@ data class LoggingConfiguration(
          */
         var rootDirectory: String = "",
         /**
-         * what types of messages should be written to the logfiles
+         * what types of messages should be written to the log files
          */
         var pattern: String = "dd-MM-yyyy HH:mm:ss",
-        var messageTypes: MutableSet<LogType> = mutableSetOf(),
+        var messageTypes: EnumSet<LogType> = EnumSet.noneOf(LogType::class.java),
         var managementLoggingConfiguration: ManagementLoggingConfiguration = ManagementLoggingConfiguration()
 ) : EnticingConfigurationUnit {
 
@@ -29,7 +30,7 @@ data class LoggingConfiguration(
     }
 
     fun messageTypes(vararg types: LogType) {
-        messageTypes = types.toMutableSet()
+        for (type in types) messageTypes.add(type)
     }
 }
 
@@ -41,10 +42,10 @@ data class ManagementLoggingConfiguration(
         /**
          * what types of messages should be sent to the management service
          */
-        var messageTypes: MutableSet<LogType> = mutableSetOf()
+        var messageTypes: EnumSet<LogType> = EnumSet.noneOf(LogType::class.java)
 ) {
     fun messageTypes(vararg types: LogType) {
-        messageTypes = types.toMutableSet()
+        for (type in types) messageTypes.add(type)
     }
 }
 

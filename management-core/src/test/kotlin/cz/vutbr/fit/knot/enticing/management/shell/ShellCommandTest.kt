@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.management.shell
 
-import cz.vutbr.fit.knot.enticing.management.stdoutLogService
+import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 
 class ShellCommandTest {
 
-    val executor = ShellCommandExecutor(stdoutLogService, CoroutineScope(Dispatchers.IO))
+    val executor = ShellCommandExecutor(SimpleStdoutLoggerFactory, CoroutineScope(Dispatchers.IO))
 
     @Nested
     inner class LocalCommandTest {

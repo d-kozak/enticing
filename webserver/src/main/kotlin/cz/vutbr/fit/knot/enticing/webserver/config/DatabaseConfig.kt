@@ -1,19 +1,18 @@
 package cz.vutbr.fit.knot.enticing.webserver.config
 
-import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import org.apache.commons.dbcp.BasicDataSource
-import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.*
 import org.springframework.core.type.AnnotatedTypeMetadata
 import java.net.URI
 
 @Configuration
 class DatabaseConfig(
-        logService: MeasuringLogService
+        loggerFactory: LoggerFactory
 ) {
 
-    private val logger = logService.logger { }
+    private val logger = loggerFactory.logger { }
 
     @Bean
     @Conditional(DatabaseUrlIsSetCondition::class)
@@ -34,7 +33,8 @@ class DatabaseConfig(
     }
 
     class DatabaseUrlIsSetCondition : Condition {
-        private val logger = LoggerFactory.getLogger(DatabaseUrlIsSetCondition::class.java)
+
+        private val logger = org.slf4j.LoggerFactory.getLogger(DatabaseUrlIsSetCondition::class.java)
 
         override fun matches(context: ConditionContext, metadata: AnnotatedTypeMetadata): Boolean = (System.getenv("DATABASE_URL") != null).apply {
             if (!this) {

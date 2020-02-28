@@ -3,8 +3,8 @@ package cz.vutbr.fit.knot.enticing.index.collection.manager.format.text
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.metadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.validateOrFail
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
-import cz.vutbr.fit.knot.enticing.index.testconfig.dummyLogger
 import cz.vutbr.fit.knot.enticing.index.utils.testDocument
+import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -52,7 +52,7 @@ internal class StructuredDocumentIteratorTest {
 
     @Test
     fun `entity and match start at the same index and match goes on`() {
-        val iterator = StructuredDocumentIterator(withEntities, dummyLogger)
+        val iterator = StructuredDocumentIterator(withEntities, SimpleStdoutLoggerFactory)
         val document = testDocument(8,
                 "Country roads , take Jan Novak home foo",
                 "1 2 3 4 5 6 7 8",
@@ -84,7 +84,7 @@ internal class StructuredDocumentIteratorTest {
 
     @Test
     fun `entity is within the match`() {
-        val iterator = StructuredDocumentIterator(withEntities, dummyLogger)
+        val iterator = StructuredDocumentIterator(withEntities, SimpleStdoutLoggerFactory)
         val document = testDocument(8,
                 "Country roads , take Jan Novak home foo",
                 "1 2 3 4 5 6 7 8",
@@ -117,7 +117,7 @@ internal class StructuredDocumentIteratorTest {
 
     @Test
     fun `entity is split by match and entity starts first`() {
-        val iterator = StructuredDocumentIterator(withEntities, dummyLogger)
+        val iterator = StructuredDocumentIterator(withEntities, SimpleStdoutLoggerFactory)
         val document = testDocument(8,
                 "Country roads , take Jan Novak home foo",
                 "1 2 3 4 5 6 7 8",
@@ -151,7 +151,7 @@ internal class StructuredDocumentIteratorTest {
 
     @Test
     fun `entity is split because it continues after the matched region`() {
-        val iterator = StructuredDocumentIterator(withEntities, dummyLogger)
+        val iterator = StructuredDocumentIterator(withEntities, SimpleStdoutLoggerFactory)
         val document = testDocument(4,
                 "Jan Novak home foo",
                 "1 2 3 4",

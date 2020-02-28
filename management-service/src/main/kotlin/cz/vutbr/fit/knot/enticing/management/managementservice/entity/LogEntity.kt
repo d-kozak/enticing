@@ -10,9 +10,9 @@ import javax.persistence.Id
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Positive
 
-fun LogDto.toEntity() = LogEntity(0, text, logType, source, componentType, timestamp)
+fun LogDto.toEntity() = LogEntity(0, className, message, logType, componentId, componentType, timestamp)
 
-fun LogEntity.toDto() = LogDto(text, logType, source, componentType, timestamp)
+fun LogEntity.toDto() = LogDto(classname, message, logType, componentId, componentType, timestamp)
 
 @Entity
 class LogEntity(
@@ -20,11 +20,13 @@ class LogEntity(
         @field:GeneratedValue
         var id: Long = 0,
         @field:NotEmpty
+        var classname: String,
+        @field:NotEmpty
         @field:Column(length = 2048)
-        var text: String = "",
+        var message: String = "",
         var logType: LogType = LogType.INFO,
         @field:NotEmpty
-        val source: String,
+        val componentId: String,
         val componentType: ComponentType,
         @field:Positive
         var timestamp: Long
@@ -44,7 +46,7 @@ class LogEntity(
     }
 
     override fun toString(): String {
-        return "LogEntity(id=$id, text='$text', logType=$logType, source='$source', componentType=$componentType, timestamp=$timestamp)"
+        return "LogEntity(id=$id, classname='$classname', message='$message', logType=$logType, componentId='$componentId', componentType=$componentType, timestamp=$timestamp)"
     }
 
 

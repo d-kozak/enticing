@@ -1,7 +1,6 @@
 package cz.vutbr.fit.knot.enticing.management
 
-import cz.vutbr.fit.knot.enticing.log.StdoutLogService
-import cz.vutbr.fit.knot.enticing.log.measuring
+import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -16,8 +15,7 @@ class ManagementCliIntegrationTests {
     private fun runCliApp(args: String) {
         val cliArgs = parseCliArgs(args.split("""\s+""".toRegex()).toTypedArray()).validateOrFail()
         val config = cliArgs.configuration
-        val logger = StdoutLogService(config.loggingConfiguration).measuring()
-        val engine = ManagementEngine(config, logger)
+        val engine = ManagementEngine(config, SimpleStdoutLoggerFactory)
         engine.use {
             engine.execute(cliArgs)
         }

@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver.controller
 
-import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.webserver.dto.ChangePasswordCredentials
 import cz.vutbr.fit.knot.enticing.webserver.dto.CreateUserRequest
@@ -14,9 +14,9 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping("\${api.base.path}/user")
-class UserController(private val userService: EnticingUserService, logService: MeasuringLogService) {
+class UserController(private val userService: EnticingUserService, loggerFactory: LoggerFactory) {
 
-    private val logger = logService.logger { }
+    private val logger = loggerFactory.logger { }
 
     @GetMapping
     fun get(): User? {

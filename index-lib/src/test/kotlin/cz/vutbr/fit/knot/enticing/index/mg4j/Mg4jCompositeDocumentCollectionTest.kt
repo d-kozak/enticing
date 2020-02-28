@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
-import cz.vutbr.fit.knot.enticing.index.testconfig.dummyLogger
+import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -17,14 +17,14 @@ internal class Mg4jCompositeDocumentCollectionTest {
 
     @Test
     fun `load and check size test`() {
-        val collection = Mg4jCompositeDocumentCollection(fullTestMetadataConfig, files, dummyLogger)
+        val collection = Mg4jCompositeDocumentCollection(fullTestMetadataConfig, files, SimpleStdoutLoggerFactory)
         assertThat(collection.size())
                 .isEqualTo(146 + 146 + 158)
     }
 
     @Test
     fun `load from first collection`() {
-        val collection = Mg4jCompositeDocumentCollection(fullTestMetadataConfig, files, dummyLogger)
+        val collection = Mg4jCompositeDocumentCollection(fullTestMetadataConfig, files, SimpleStdoutLoggerFactory)
         assertThat(collection.document(2).title())
                 .isEqualTo("Toy Soldiers Studio: II/20c Ptolemaic")
         assertThat(collection.document(145).title())
@@ -33,7 +33,7 @@ internal class Mg4jCompositeDocumentCollectionTest {
 
     @Test
     fun `load from second collection`() {
-        val collection = Mg4jCompositeDocumentCollection(fullTestMetadataConfig, files, dummyLogger)
+        val collection = Mg4jCompositeDocumentCollection(fullTestMetadataConfig, files, SimpleStdoutLoggerFactory)
         assertThat(collection.document(146 + 0).title())
                 .isEqualTo("Disclaimer - Automated Exemption System")
         assertThat(collection.document(146 + 3).title())
@@ -45,7 +45,7 @@ internal class Mg4jCompositeDocumentCollectionTest {
 
     @Test
     fun `load from third collection`() {
-        val collection = Mg4jCompositeDocumentCollection(fullTestMetadataConfig, files, dummyLogger)
+        val collection = Mg4jCompositeDocumentCollection(fullTestMetadataConfig, files, SimpleStdoutLoggerFactory)
         assertThat(collection.document(146 + 146 + 0).title())
                 .isEqualTo("Beijing City Guide")
         assertThat(collection.document(146 + 146 + 7).title())
@@ -57,7 +57,7 @@ internal class Mg4jCompositeDocumentCollectionTest {
 
     @Test
     fun `load from multiple collections in random order`() {
-        val collection = Mg4jCompositeDocumentCollection(fullTestMetadataConfig, files, dummyLogger)
+        val collection = Mg4jCompositeDocumentCollection(fullTestMetadataConfig, files, SimpleStdoutLoggerFactory)
         val input = mutableListOf(2L to "Toy Soldiers Studio: II/20c Ptolemaic",
                 145L to "celebrity weight loss secrets revealed best way to lose weight in your 40s ¦ best way lose weight fast after 40 diet for women over 40",
                 146L + 3L to "Missouri Rice Research ¦ Rice Weed Control 101",

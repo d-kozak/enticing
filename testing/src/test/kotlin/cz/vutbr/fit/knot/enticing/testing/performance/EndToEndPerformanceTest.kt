@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.testing.performance
 
 import cz.vutbr.fit.knot.enticing.log.logger
+import cz.vutbr.fit.knot.enticing.log.measure
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking

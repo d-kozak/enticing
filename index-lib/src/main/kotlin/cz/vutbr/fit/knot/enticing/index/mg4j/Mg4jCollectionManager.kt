@@ -7,7 +7,7 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.index.collection.manager.CollectionManager
 import cz.vutbr.fit.knot.enticing.index.collection.manager.format.result.EqlResultCreator
 import cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess.EqlPostProcessor
-import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import it.unimi.di.big.mg4j.index.Index
 import it.unimi.di.big.mg4j.index.TermProcessor
 import it.unimi.di.big.mg4j.query.IntervalSelector
@@ -19,12 +19,12 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.objects.Object2ReferenceLinkedOpenHashMap
 import it.unimi.dsi.fastutil.objects.Reference2DoubleOpenHashMap
 
-fun initMg4jCollectionManager(configuration: CollectionManagerConfiguration, logService: MeasuringLogService): CollectionManager {
-    val collection = Mg4jCompositeDocumentCollection(configuration.metadataConfiguration, configuration.mg4jDir.mg4jFiles, logService)
+fun initMg4jCollectionManager(configuration: CollectionManagerConfiguration, loggerFactory: LoggerFactory): CollectionManager {
+    val collection = Mg4jCompositeDocumentCollection(configuration.metadataConfiguration, configuration.mg4jDir.mg4jFiles, loggerFactory)
     val engine = initMg4jQueryEngine(configuration)
 
-    val mg4jSearchEngine = Mg4jSearchEngine(collection, engine, logService)
-    return CollectionManager("${configuration.corpusName}-${configuration.collectionName}", mg4jSearchEngine, EqlPostProcessor(), EqlResultCreator(configuration.metadataConfiguration, logService), EqlCompiler(logService), configuration.metadataConfiguration, logService)
+    val mg4jSearchEngine = Mg4jSearchEngine(collection, engine, loggerFactory)
+    return CollectionManager("${configuration.corpusName}-${configuration.collectionName}", mg4jSearchEngine, EqlPostProcessor(), EqlResultCreator(configuration.metadataConfiguration, loggerFactory), EqlCompiler(loggerFactory), configuration.metadataConfiguration, loggerFactory)
 }
 
 @WhatIf("default index is hardwired to token internally, is it enough or should we provide a way to tweak this? maybe as an AST operation in EQL-compiler (to avoid expensive reinitialization of mg4j internals)?")

@@ -6,7 +6,7 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
-import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 
 
@@ -48,9 +48,9 @@ abstract class TextFormatGeneratingVisitor(
  * Iterates over a document and informs the visitor about matched regions, entities and words encountered
  */
 @Cleanup("Maybe turn into a function OR move some of the function params to constructor?")
-class StructuredDocumentIterator(private val corpusConfiguration: MetadataConfiguration, logService: MeasuringLogService) {
+class StructuredDocumentIterator(private val corpusConfiguration: MetadataConfiguration, loggerFactory: LoggerFactory) {
 
-    private val logger = logService.logger { }
+    private val logger = loggerFactory.logger { }
 
     /**
      * Iterates over a document and notifies the visitor about every start and end of matched region, start and end of entity and every word,

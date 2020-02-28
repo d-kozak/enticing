@@ -11,19 +11,20 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.dto.ParsedQuery
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.SyntaxError
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.parseToEqlAst
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.parseWithAntlr
-import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
+import cz.vutbr.fit.knot.enticing.log.measure
 import org.antlr.v4.runtime.BaseErrorListener
 import org.antlr.v4.runtime.RecognitionException
 import org.antlr.v4.runtime.Recognizer
 import org.antlr.v4.runtime.Token
 import kotlin.math.min
 
-class EqlCompiler(logService: MeasuringLogService) {
+class EqlCompiler(loggerFactory: LoggerFactory) {
 
-    val logger = logService.logger { }
+    val logger = loggerFactory.logger { }
 
-    fun parseOrFail(input: String, metadataConfiguration: MetadataConfiguration): AstNode = logger.measure("Query '$input'") {
+    fun parseOrFail(input: String, metadataConfiguration: MetadataConfiguration): AstNode = logger.measure("parseOrFail", input) {
         val analyzer = SemanticAnalyzer(metadataConfiguration)
         val (parseTree, errors) = parseWithAntlr(input)
         if (errors.isNotEmpty()) throw EqlCompilerException(errors.toString())
@@ -33,7 +34,7 @@ class EqlCompiler(logService: MeasuringLogService) {
         ast
     }
 
-    fun parseAndAnalyzeQuery(input: String, metadataConfiguration: MetadataConfiguration): ParsedQuery = logger.measure("Query '$input'") {
+    fun parseAndAnalyzeQuery(input: String, metadataConfiguration: MetadataConfiguration): ParsedQuery = logger.measure("parseAndAnalyze", input) {
         val analyzer = SemanticAnalyzer(metadataConfiguration)
         val (parseTree, errors) = parseWithAntlr(input)
         if (errors.isEmpty()) {

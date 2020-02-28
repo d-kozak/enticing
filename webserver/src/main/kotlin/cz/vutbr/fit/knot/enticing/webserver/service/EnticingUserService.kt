@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.service
 
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
-import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.webserver.dto.*
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettingsId
@@ -26,9 +26,9 @@ import javax.transaction.Transactional
 @Service
 @Transactional
 @Incomplete("selected metadata from user and search settings is probably not deleted properly")
-class EnticingUserService(private val userRepository: UserRepository, private val selectedMetadataRepository: SelectedMetadataRepository, private val selectedEntityMetadataRepository: SelectedEntityMetadataRepository, private val encoder: PasswordEncoder, private val searchSettingsRepository: SearchSettingsRepository, logService: MeasuringLogService) : UserDetailsService {
+class EnticingUserService(private val userRepository: UserRepository, private val selectedMetadataRepository: SelectedMetadataRepository, private val selectedEntityMetadataRepository: SelectedEntityMetadataRepository, private val encoder: PasswordEncoder, private val searchSettingsRepository: SearchSettingsRepository, loggerFactory: LoggerFactory) : UserDetailsService {
 
-    private val logger = logService.logger { }
+    private val logger = loggerFactory.logger { }
 
     override fun loadUserByUsername(username: String): UserDetails = userRepository.findByLogin(username)
             ?: throw UsernameNotFoundException("UserSpecification with login $username not found")

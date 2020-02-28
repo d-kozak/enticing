@@ -4,9 +4,9 @@ package cz.vutbr.fit.knot.enticing.webserver.controller
 import cz.vutbr.fit.knot.enticing.api.ComponentNotAccessibleException
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompilerException
-import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.LoggerFactory
+import cz.vutbr.fit.knot.enticing.log.error
 import cz.vutbr.fit.knot.enticing.log.logger
-import cz.vutbr.fit.knot.enticing.log.util.error
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcherException
 import cz.vutbr.fit.knot.enticing.webserver.exception.InvalidPasswordException
 import cz.vutbr.fit.knot.enticing.webserver.exception.InvalidSearchSettingsException
@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import javax.servlet.http.HttpServletResponse
 
 @ControllerAdvice
-class GlobalControllerExceptionHandler(logService: MeasuringLogService) {
+class GlobalControllerExceptionHandler(loggerFactory: LoggerFactory) {
 
-    val logger = logService.logger { }
+    val logger = loggerFactory.logger { }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(QueryDispatcherException::class)

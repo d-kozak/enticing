@@ -5,7 +5,7 @@ import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnit
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.StructuredDocumentIterator
 import cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.TextUnitListGeneratingVisitor
-import cz.vutbr.fit.knot.enticing.index.testconfig.dummyLogger
+import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import it.unimi.dsi.fastutil.io.FastBufferedInputStream
 import it.unimi.dsi.fastutil.objects.Reference2ObjectArrayMap
 import org.assertj.core.api.Assertions.assertThat
@@ -28,8 +28,8 @@ internal class Mg4jDocumentFactoryTest {
     inner class NewWiki {
         @Test
         fun `load document test`() {
-            val factory = Mg4jDocumentFactory(fullTestMetadataConfig, dummyLogger)
-            val collection = Mg4jSingleFileDocumentCollection(File("../data/new_wiki/new_wiki.mg4j"), factory, dummyLogger)
+            val factory = Mg4jDocumentFactory(fullTestMetadataConfig, SimpleStdoutLoggerFactory)
+            val collection = Mg4jSingleFileDocumentCollection(File("../data/new_wiki/new_wiki.mg4j"), factory, SimpleStdoutLoggerFactory)
             for (i in 0 until collection.size()) {
                 val document = collection.document(i)
                 println(document.title)
@@ -41,8 +41,8 @@ internal class Mg4jDocumentFactoryTest {
 
     @Test
     fun `load document test`() {
-        val factory = Mg4jDocumentFactory(fullTestMetadataConfig, dummyLogger)
-        val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), factory, dummyLogger)
+        val factory = Mg4jDocumentFactory(fullTestMetadataConfig, SimpleStdoutLoggerFactory)
+        val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), factory, SimpleStdoutLoggerFactory)
 
         val document = collection.document(2)
         assertThat(document.title())
@@ -57,8 +57,8 @@ internal class Mg4jDocumentFactoryTest {
 
     @Test
     fun `special glue index is present`() {
-        val factory = Mg4jDocumentFactory(fullTestMetadataConfig, dummyLogger)
-        val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), factory, dummyLogger)
+        val factory = Mg4jDocumentFactory(fullTestMetadataConfig, SimpleStdoutLoggerFactory)
+        val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/small.mg4j"), factory, SimpleStdoutLoggerFactory)
 
         val document = collection.document(0) as Mg4jDocument
         assertThat(document.uri())
@@ -91,8 +91,8 @@ internal class Mg4jDocumentFactoryTest {
         @Test
         fun `with eql result creator`() {
             val document = initMockDocument()
-            val iterator = StructuredDocumentIterator(fullTestMetadataConfig, dummyLogger)
-            val visitor = TextUnitListGeneratingVisitor(fullTestMetadataConfig, "token", Interval.valueOf(0, document.size()), document, dummyLogger)
+            val iterator = StructuredDocumentIterator(fullTestMetadataConfig, SimpleStdoutLoggerFactory)
+            val visitor = TextUnitListGeneratingVisitor(fullTestMetadataConfig, "token", Interval.valueOf(0, document.size()), document, SimpleStdoutLoggerFactory)
             iterator.iterateDocument(document, emptyMap(), emptySet(), visitor)
             val result = visitor.build() as cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat.Snippet.TextUnitList
             val elems = result.content.content
@@ -103,7 +103,7 @@ internal class Mg4jDocumentFactoryTest {
         }
 
         private fun initMockDocument(): Mg4jDocument {
-            val factory = Mg4jDocumentFactory(fullTestMetadataConfig, dummyLogger)
+            val factory = Mg4jDocumentFactory(fullTestMetadataConfig, SimpleStdoutLoggerFactory)
             val inputStream = FastBufferedInputStream("""
                     %%#DOC	2c25c27f-60b1-541b-a5fc-287c7c4318c5
                     %%#PAGE Disclaimer - Automated Exemption System	http://aes.faa.gov/AES/Help
@@ -130,7 +130,7 @@ internal class Mg4jDocumentFactoryTest {
         val input = """43		CC	0	1	NMOD	In	in	-42	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0"""
 
         val output = indexes.map { mutableListOf<String>() }
-        processLine(input, output, 0, fullTestMetadataConfig, dummyLogger)
+        processLine(input, output, 0, fullTestMetadataConfig, SimpleStdoutLoggerFactory.namedLogger("testLogger"))
         val allEmpty = output.all { it.isEmpty() }
         println(allEmpty)
         assertThat(allEmpty).isTrue()
@@ -139,14 +139,14 @@ internal class Mg4jDocumentFactoryTest {
 
     @Test
     fun `number of fields test`() {
-        val factory = Mg4jDocumentFactory(fullTestMetadataConfig, dummyLogger)
+        val factory = Mg4jDocumentFactory(fullTestMetadataConfig, SimpleStdoutLoggerFactory)
         assertThat(factory.numberOfFields())
                 .isEqualTo(indexes.size)
     }
 
     @Test
     fun `field name test`() {
-        val factory = Mg4jDocumentFactory(fullTestMetadataConfig, dummyLogger)
+        val factory = Mg4jDocumentFactory(fullTestMetadataConfig, SimpleStdoutLoggerFactory)
         for (i in 0 until indexes.size) {
             assertThat(factory.fieldName(i))
                     .isEqualTo(indexes[i].name)
@@ -155,7 +155,7 @@ internal class Mg4jDocumentFactoryTest {
 
     @Test
     fun `field index test`() {
-        val factory = Mg4jDocumentFactory(fullTestMetadataConfig, dummyLogger)
+        val factory = Mg4jDocumentFactory(fullTestMetadataConfig, SimpleStdoutLoggerFactory)
         for (i in 0 until indexes.size) {
             assertThat(factory.fieldIndex(indexes[i].name))
                     .isEqualTo(i)

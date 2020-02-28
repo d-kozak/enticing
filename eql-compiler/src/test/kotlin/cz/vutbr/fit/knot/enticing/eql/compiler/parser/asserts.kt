@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.parser
 
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
-import cz.vutbr.fit.knot.enticing.eql.compiler.testconfig.dummyLogger
+import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import org.assertj.core.api.Assertions.assertThat
 
 fun assertParseWithAntlrWithoutErrors(input: String) {
@@ -10,7 +10,7 @@ fun assertParseWithAntlrWithoutErrors(input: String) {
 }
 
 fun assertParseWithAntlrWithErrors(input: String, errorCount: Int? = null) {
-    val (_, errors) = EqlCompiler(dummyLogger).parse(input)
+    val (_, errors) = EqlCompiler(SimpleStdoutLoggerFactory).parse(input)
     println(errors)
     if (errorCount != null)
         assertThat(errors).hasSize(errorCount)

@@ -5,7 +5,8 @@ import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.annotation.Speed
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.IndexConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
-import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.Logger
+import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import it.unimi.di.big.mg4j.document.AbstractDocumentFactory
 import it.unimi.di.big.mg4j.document.DocumentFactory
@@ -14,9 +15,9 @@ import it.unimi.dsi.fastutil.io.FastBufferedInputStream
 import it.unimi.dsi.fastutil.objects.Reference2ObjectMap
 import java.io.InputStream
 
-class Mg4jDocumentFactory(private val metadataConfiguration: MetadataConfiguration, val logService: MeasuringLogService) : AbstractDocumentFactory() {
+class Mg4jDocumentFactory(private val metadataConfiguration: MetadataConfiguration, val loggerFactory: LoggerFactory) : AbstractDocumentFactory() {
 
-    private val logger = logService.logger { }
+    private val logger = loggerFactory.logger { }
 
     internal data class EntityReplicationInfo(val elems: List<String>, val entityType: String, val lineCount: Int)
 
@@ -32,7 +33,7 @@ class Mg4jDocumentFactory(private val metadataConfiguration: MetadataConfigurati
 
     override fun fieldType(field: Int): DocumentFactory.FieldType = DocumentFactory.FieldType.TEXT
 
-    override fun copy() = Mg4jDocumentFactory(metadataConfiguration, logService)
+    override fun copy() = Mg4jDocumentFactory(metadataConfiguration, loggerFactory)
 
     override fun getDocument(rawContent: InputStream, metadata: Reference2ObjectMap<Enum<*>, Any>): Mg4jDocument {
         val stream = (rawContent as FastBufferedInputStream).bufferedReader()
@@ -98,7 +99,7 @@ private val whitespaceRegex = """\s""".toRegex()
 
 @Speed("rewrite using MutableStrings and whitespace readers?")
 @Cleanup("Should be refactored, it is smelly")
-internal fun processLine(line: String, fields: List<MutableList<String>>, lineIndex: Int, metadataConfiguration: MetadataConfiguration, logger: MeasuringLogService): Pair<Boolean, Mg4jDocumentFactory.EntityReplicationInfo?> {
+internal fun processLine(line: String, fields: List<MutableList<String>>, lineIndex: Int, metadataConfiguration: MetadataConfiguration, logger: Logger): Pair<Boolean, Mg4jDocumentFactory.EntityReplicationInfo?> {
     val cells = line.split(whitespaceRegex)
     val indexCount = metadataConfiguration.indexes.size
     val entityLenIndex = metadataConfiguration.lengthIndex?.columnIndex ?: -1

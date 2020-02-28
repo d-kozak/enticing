@@ -4,6 +4,7 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.LogType
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.LoggingConfiguration
 import cz.vutbr.fit.knot.enticing.log.util.resolveName
 import java.io.File
+import java.io.FileWriter
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDateTime
@@ -19,51 +20,25 @@ interface Logger {
     fun perf(operationId: String, arguments: String?, duration: Long, outcome: String)
 }
 
-class SimpleStdoutLogger : Logger {
+object SimpleStdoutLoggerFactory : LoggerFactory {
 
-    companion object {
-        private val FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")
+    private val config = LoggingConfiguration().apply {
+        pattern = "dd-MM-yyyy HH:mm:ss"
     }
 
-    override fun debug(message: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
-    override fun info(message: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun namedLogger(name: String): Logger = NamedLogger(name, listOf(StdoutLoggerNode(config)))
 
-    override fun warn(message: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun addRemoteApi(remoteLoggingApi: RemoteLoggingApi) {
+        throw UnsupportedOperationException("adding loggers not supported here")
     }
-
-    override fun error(message: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun perf(operationId: String, arguments: String?, duration: Long, outcome: String) {
-        println(PerfMessage())
-    }
-
-    private fun onLog(logMessage: LogMessage) {
-        println(logMessage.toPrintableString(FORMATTER))
-    }
-
 }
-
-private fun LogMessage.toPrintableString(formatter: DateTimeFormatter) = "${readableTimestamp(timestamp, formatter)} : $className :$logType : $message"
-
-private fun PerfMessage.toPrintableString(formatter: DateTimeFormatter) = "${readableTimestamp(timestamp, formatter)} : $className : PERF : Operation '$operationId' : ${readableDuration(duration)} : $outcome "
-
-private fun readableDuration(millis: Long) = Duration.ofMillis(millis).toString().substring(2)
-
-private fun readableTimestamp(timestamp: Long, formatter: DateTimeFormatter): String = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault()).format(formatter)
 
 fun Logger.error(ex: Exception) {
     this.error("${ex::class} ${ex.message}")
 }
 
-inline fun <T> Logger.measure(operationId: String, arguments: String, block: () -> T): T {
+inline fun <T> Logger.measure(operationId: String, arguments: String? = null, block: () -> T): T {
     val start = System.currentTimeMillis()
     return try {
         val res = block()
@@ -75,36 +50,47 @@ inline fun <T> Logger.measure(operationId: String, arguments: String, block: () 
     }
 }
 
+private fun LogMessage.toPrintableString(formatter: DateTimeFormatter) = "${readableTimestamp(timestamp, formatter)} : $className :$logType : $message"
+
+private fun PerfMessage.toPrintableString(formatter: DateTimeFormatter) = "${readableTimestamp(timestamp, formatter)} : $className : PERF : Operation '$operationId' : ${readableDuration(duration)} : $outcome "
+
+private fun readableDuration(millis: Long) = Duration.ofMillis(millis).toString().substring(2)
+
+private fun readableTimestamp(timestamp: Long, formatter: DateTimeFormatter): String = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault()).format(formatter)
+
+
 inline fun LoggerFactory.logger(noinline func: () -> Unit): Logger = namedLogger(resolveName(func))
 
 interface LoggerFactory {
     fun namedLogger(name: String): Logger
+
+    fun addRemoteApi(remoteLoggingApi: RemoteLoggingApi)
 }
 
 
 private class NamedLogger(val componentName: String, val pipelines: List<LoggerPipeLineNode>) : Logger {
-    override fun debug(message: String) = onLog(LogType.DEBUG, System.currentTimeMillis(), message)
+    override fun debug(message: String) = onLog(LogMessage(componentName, message, LogType.DEBUG))
 
-    override fun info(message: String) = onLog(LogType.INFO, System.currentTimeMillis(), message)
+    override fun info(message: String) = onLog(LogMessage(componentName, message, LogType.INFO))
 
-    override fun warn(message: String) = onLog(LogType.WARN, System.currentTimeMillis(), message)
+    override fun warn(message: String) = onLog(LogMessage(componentName, message, LogType.WARN))
 
-    override fun error(message: String) = onLog(LogType.ERROR, System.currentTimeMillis(), message)
+    override fun error(message: String) = onLog(LogMessage(componentName, message, LogType.ERROR))
 
-    private fun onLog(logType: LogType, timestamp: Long, message: String) {
-        pipelines.forEach { it.log(LogMessage(componentName, message, logType, timestamp)) }
+    private fun onLog(logMessage: LogMessage) {
+        pipelines.forEach { it.log(logMessage) }
     }
 
     override fun perf(operationId: String, arguments: String?, duration: Long, outcome: String) {
-        val timestamp = System.currentTimeMillis()
-        pipelines.forEach { it.perf(componentName, operationId, arguments, timestamp, duration, outcome) }
+        val perfMessage = PerfMessage(componentName, operationId, arguments, duration, outcome)
+        pipelines.forEach { it.perf(perfMessage) }
     }
 }
 
 
-private interface LoggerPipeLineNode {
+interface LoggerPipeLineNode {
     fun log(logMessage: LogMessage)
-    fun perf(componentName: String, operationId: String, arguments: String?, timestamp: Long, duration: Long, outcome: String)
+    fun perf(perfMessage: PerfMessage)
 }
 
 private class FilteringLoggerNode(val filter: EnumSet<LogType>, val next: LoggerPipeLineNode) : LoggerPipeLineNode {
@@ -112,8 +98,8 @@ private class FilteringLoggerNode(val filter: EnumSet<LogType>, val next: Logger
         if (logMessage.logType in filter) next.log(logMessage)
     }
 
-    override fun perf(componentName: String, operationId: String, arguments: String?, timestamp: Long, duration: Long, outcome: String) {
-        if (LogType.PERF in filter) next.perf(componentName, operationId, arguments, timestamp, duration, outcome)
+    override fun perf(perfMessage: PerfMessage) {
+        if (LogType.PERF in filter) next.perf(perfMessage)
     }
 }
 
@@ -121,50 +107,46 @@ abstract class ConfiguredLoggerNode(config: LoggingConfiguration) : LoggerPipeLi
     protected val formatter = DateTimeFormatter.ofPattern(config.pattern)
 }
 
-private class StdoudLoggerNode(config: LoggingConfiguration) : ConfiguredLoggerNode(config) {
+private class StdoutLoggerNode(config: LoggingConfiguration) : ConfiguredLoggerNode(config) {
 
     override fun log(logMessage: LogMessage) {
         println(logMessage.toPrintableString(formatter))
     }
 
-    override fun perf(componentName: String, operationId: String, arguments: String?, timestamp: Long, duration: Long, outcome: String) {
-        println()
+    override fun perf(perfMessage: PerfMessage) {
+        println(perfMessage.toPrintableString(formatter))
     }
 }
 
 
 private class FileBasedLoggerNode(val file: File, config: LoggingConfiguration) : ConfiguredLoggerNode(config) {
     override fun log(logMessage: LogMessage) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        writeToFile(logMessage.toPrintableString(formatter))
     }
 
-    override fun perf(componentName: String, operationId: String, arguments: String?, timestamp: Long, duration: Long, outcome: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun perf(perfMessage: PerfMessage) {
+        writeToFile(perfMessage.toPrintableString(formatter))
     }
+
+    private fun writeToFile(content: String) = FileWriter(file, true).use { it.appendln(content) }
 }
 
 
-interface RemoteLoggingApi {
-    fun log(logMessage: LogMessage)
-}
+interface RemoteLoggingApi : LoggerPipeLineNode
 
-private class RemoteLoggerNode(config: LoggingConfiguration) : ConfiguredLoggerNode(config) {
-    override fun log(logMessage: LogMessage) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+fun LoggingConfiguration.loggerFactoryFor(serviceId: String, remoteLoggingApi: RemoteLoggingApi? = null): LoggerFactory {
+    val stdoutLogger = StdoutLoggerNode(this)
+    val fileLogger = FilteringLoggerNode(messageTypes, FileBasedLoggerNode(File("${this.rootDirectory}/$serviceId.log"), this))
+    val pipelines = mutableListOf(stdoutLogger, fileLogger)
+    if (remoteLoggingApi != null) {
+        pipelines.add(FilteringLoggerNode(managementLoggingConfiguration.messageTypes, remoteLoggingApi))
     }
-
-    override fun perf(componentName: String, operationId: String, arguments: String?, timestamp: Long, duration: Long, outcome: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-}
-
-data class RemoteLoggingConfiguration(val localAddress: String, val managementAddress: String, val componentType: ComponentType)
-
-
-fun LoggingConfiguration.loggerFactoryFor(serviceId: String, remoteLoggingConfiguration: RemoteLoggingConfiguration? = null): LoggerFactory {
-    val stdoutNode = StdoudLoggerNode(this)
-    val pipelines = mutableListOf(stdoutNode)
     return object : LoggerFactory {
         override fun namedLogger(name: String): Logger = NamedLogger(name, pipelines)
+
+        override fun addRemoteApi(remoteLoggingApi: RemoteLoggingApi) {
+            pipelines.add(remoteLoggingApi)
+        }
     }
 }

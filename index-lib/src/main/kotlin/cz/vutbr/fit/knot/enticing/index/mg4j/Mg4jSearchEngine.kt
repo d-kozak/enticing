@@ -5,7 +5,7 @@ import cz.vutbr.fit.knot.enticing.index.boundary.DocumentId
 import cz.vutbr.fit.knot.enticing.index.boundary.DocumentResult
 import cz.vutbr.fit.knot.enticing.index.boundary.QueryResult
 import cz.vutbr.fit.knot.enticing.index.boundary.SearchEngine
-import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import it.unimi.di.big.mg4j.index.Index
 import it.unimi.di.big.mg4j.query.QueryEngine
@@ -22,10 +22,10 @@ private typealias Mg4jSearchResult = DocumentScoreInfo<Reference2ObjectMap<Index
 class Mg4jSearchEngine(
         private val collection: Mg4jCompositeDocumentCollection,
         private val engine: QueryEngine,
-        logService: MeasuringLogService
+        loggerFactory: LoggerFactory
 ) : SearchEngine {
 
-    private val logger = logService.logger { }
+    private val logger = loggerFactory.logger { }
 
     override fun getRawDocument(id: DocumentId, from: Int, to: Int): String = collection.getRawDocument(id.toLong(), from, to)
 

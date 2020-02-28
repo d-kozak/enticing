@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.service
 
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
-import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.webserver.dto.ImportedSearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.dto.toEntity
@@ -17,9 +17,9 @@ import javax.transaction.Transactional
 @Service
 @Transactional
 @Incomplete("seems that there is no authorization check, but there should be one - only admins should be able to edit these")
-class SearchSettingsService(logService: MeasuringLogService, private val searchSettingsRepository: SearchSettingsRepository, private val userRepository: UserRepository, private val indexServerConnector: IndexServerConnector) {
+class SearchSettingsService(loggerFactory: LoggerFactory, private val searchSettingsRepository: SearchSettingsRepository, private val userRepository: UserRepository, private val indexServerConnector: IndexServerConnector) {
 
-    val logger = logService.logger { }
+    val logger = loggerFactory.logger { }
 
     fun setDefault(id: Long) {
         val previousDefault = searchSettingsRepository.findByDefaultIsTrue()

@@ -1,7 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver.testconfig
 
-import cz.vutbr.fit.knot.enticing.log.StdoutLogService
-import cz.vutbr.fit.knot.enticing.log.measuring
+import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 
@@ -9,6 +8,6 @@ import org.springframework.context.annotation.Bean
 class LogServiceTestConfig {
 
     @Bean
-    fun measuringLogService() = StdoutLogService(loadedConfiguration.loggingConfiguration).measuring()
+    fun loggerFactory() = SimpleStdoutLoggerFactory
 
 }

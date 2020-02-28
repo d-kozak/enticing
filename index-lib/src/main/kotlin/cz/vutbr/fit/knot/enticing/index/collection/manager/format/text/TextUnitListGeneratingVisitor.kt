@@ -6,12 +6,12 @@ import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnit
 import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnitList
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
-import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 
-class TextUnitListGeneratingVisitor(config: MetadataConfiguration, defaultIndexName: String, interval: Interval, document: IndexedDocument, logService: MeasuringLogService) : TextFormatGeneratingVisitor(config, defaultIndexName, interval, document) {
+class TextUnitListGeneratingVisitor(config: MetadataConfiguration, defaultIndexName: String, interval: Interval, document: IndexedDocument, loggerFactory: LoggerFactory) : TextFormatGeneratingVisitor(config, defaultIndexName, interval, document) {
 
-    private val logger = logService.logger { }
+    private val logger = loggerFactory.logger { }
 
     private val resultList = mutableListOf<TextUnit>()
 

@@ -10,20 +10,20 @@ class LogServiceTest {
 
     @Test
     fun `send a few messages`() {
-        val logger = loggingConfiguration.configureFor("testLogger1")
+        val logger = loggingConfiguration.loggerFactoryFor("testLogger1").logger { }
         logger.debug("just for stdout")
         logger.info("for both")
-        logger.perf("for both")
+        logger.perf("for both", null, 10, "success")
         logger.error("for both")
     }
 
     @Test
     fun `measured execution`() {
-        val logger = loggingConfiguration.configureFor("measuredLogger")
+        val logger = loggingConfiguration.loggerFactoryFor("measuredLogger").logger { }
         val result = logger.measure("finding the answer") {
             repeat(5) {
                 sleep(1000)
-                logger.perf("round $it finished")
+                logger.info("round $it finished")
             }
             42
         }

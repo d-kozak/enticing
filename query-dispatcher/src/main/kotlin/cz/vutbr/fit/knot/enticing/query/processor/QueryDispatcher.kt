@@ -4,8 +4,9 @@ import cz.vutbr.fit.knot.enticing.dto.Query
 import cz.vutbr.fit.knot.enticing.dto.QueryResult
 import cz.vutbr.fit.knot.enticing.dto.RequestData
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
-import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
+import cz.vutbr.fit.knot.enticing.log.measure
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
@@ -31,15 +32,15 @@ class QueryDispatcher<QueryType : Query<QueryType>, OffsetType, Result : QueryRe
          * The actual execution of the query is handled by it.
          */
         private val queryExecutor: QueryExecutor<QueryType, OffsetType, Result>,
-        logService: MeasuringLogService
+        loggerFactory: LoggerFactory
 ) {
 
-    val logger = logService.logger { }
+    val logger = loggerFactory.logger { }
 
     /**
      * Dispatches query onto a list of node, collects the results and retries if necessary and possible.
      */
-    fun dispatchQuery(searchQuery: QueryType, nodes: List<RequestData<OffsetType>>): Map<String, List<MResult<Result>>> = logger.measure("query $searchQuery to nodes $nodes") {
+    fun dispatchQuery(searchQuery: QueryType, nodes: List<RequestData<OffsetType>>): Map<String, List<MResult<Result>>> = logger.measure("DispatchQuery", "query=$searchQuery, nodes=$nodes") {
         runBlocking {
             val serversToCall = nodes.toMutableList()
             var collectedSnippetsCount = 0

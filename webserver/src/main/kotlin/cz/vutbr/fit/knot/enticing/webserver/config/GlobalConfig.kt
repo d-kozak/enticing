@@ -1,15 +1,13 @@
 package cz.vutbr.fit.knot.enticing.webserver.config
 
+import cz.vutbr.fit.knot.enticing.api.ManagementServiceApi
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.validateOrFail
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.visitor.prettyPrint
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
 import cz.vutbr.fit.knot.enticing.log.ComponentType
-import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
-import cz.vutbr.fit.knot.enticing.log.RemoteLoggingConfigurationOld
-import cz.vutbr.fit.knot.enticing.log.configureFor
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import cz.vutbr.fit.knot.enticing.log.LoggerFactory
+import cz.vutbr.fit.knot.enticing.log.loggerFactoryFor
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -20,7 +18,7 @@ class GlobalConfig(
         @Value("\${service.id}") private val address: String
 ) {
 
-    private val log: Logger = LoggerFactory.getLogger(GlobalConfig::class.java)
+    private val log = org.slf4j.LoggerFactory.getLogger(GlobalConfig::class.java)
 
     @Bean
     fun enticingConfiguration(): EnticingConfiguration {
@@ -33,7 +31,10 @@ class GlobalConfig(
     }
 
     @Bean
-    fun logger(enticingConfiguration: EnticingConfiguration): MeasuringLogService {
-        return enticingConfiguration.loggingConfiguration.configureFor("$address-webserver", RemoteLoggingConfigurationOld(address, enticingConfiguration.managementServiceConfiguration.fullAddress, ComponentType.WEBSERVER))
+    fun managementApi(enticingConfiguration: EnticingConfiguration) = ManagementServiceApi(enticingConfiguration.managementServiceConfiguration.fullAddress, ComponentType.WEBSERVER, address, enticingConfiguration.loggingConfiguration.loggerFactoryFor("$address-webserver"))
+
+    @Bean
+    fun loggerFactory(enticingConfiguration: EnticingConfiguration, managementServiceApi: ManagementServiceApi): LoggerFactory {
+        return enticingConfiguration.loggingConfiguration.loggerFactoryFor("$address-webserver", managementServiceApi)
     }
 }

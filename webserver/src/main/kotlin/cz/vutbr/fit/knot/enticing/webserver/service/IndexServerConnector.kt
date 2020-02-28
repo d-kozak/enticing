@@ -9,15 +9,15 @@ import cz.vutbr.fit.knot.enticing.dto.WebServer
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
-import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import org.springframework.http.*
 import org.springframework.web.client.ResourceAccessException
 import org.springframework.web.client.RestTemplate
 
-class IndexServerConnector(private val template: RestTemplate = RestTemplate(), private val apiBathPath: String, logService: MeasuringLogService) {
+class IndexServerConnector(private val template: RestTemplate = RestTemplate(), private val apiBathPath: String, loggerFactory: LoggerFactory) {
 
-    val logger = logService.logger { }
+    val logger = loggerFactory.logger { }
 
     fun getDocument(query: WebServer.DocumentQuery): IndexServer.FullDocument = resultOrThrow(query.host, query.toIndexFormat(), "document")
 

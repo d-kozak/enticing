@@ -6,7 +6,7 @@ import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.index.collection.manager.CollectionManager
 import cz.vutbr.fit.knot.enticing.index.collection.manager.CollectionQueryExecutor
-import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
 import org.springframework.stereotype.Service
@@ -17,12 +17,12 @@ class QueryService(
         private val collectionManagers: Map<String, CollectionManager>,
         private val metadataConfiguration: MetadataConfiguration,
         private val eqlCompiler: EqlCompiler,
-        logService: MeasuringLogService
+        loggerFactory: LoggerFactory
 ) {
 
-    private val logger = logService.logger { }
+    private val logger = loggerFactory.logger { }
 
-    val queryDispatcher = QueryDispatcher(CollectionQueryExecutor(collectionManagers), logService)
+    val queryDispatcher = QueryDispatcher(CollectionQueryExecutor(collectionManagers), loggerFactory)
 
     fun processQuery(query: SearchQuery): IndexServer.IndexResultList {
         query.eqlAst = eqlCompiler.parseOrFail(query.query, metadataConfiguration)

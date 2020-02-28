@@ -12,8 +12,8 @@ import cz.vutbr.fit.knot.enticing.dto.format.text.Annotation
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.index.boundary.EqlMatch
 import cz.vutbr.fit.knot.enticing.index.collection.manager.format.result.EqlResultCreator
-import cz.vutbr.fit.knot.enticing.index.testconfig.dummyLogger
 import cz.vutbr.fit.knot.enticing.index.utils.testDocument
+import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -72,7 +72,7 @@ internal class ResultFormatCreatorTest {
 
         @Test
         fun `simple format no metadata`() {
-            val resultCreator = EqlResultCreator(noMetadataConfig, dummyLogger)
+            val resultCreator = EqlResultCreator(noMetadataConfig, SimpleStdoutLoggerFactory)
 
             var payload = resultCreator.singleResult(noMetadataDocument, htmlQuery, listOf(EqlMatch(Interval.valueOf(1), Interval.valueOf(0, 2))))
             assertThat(payload)
@@ -87,7 +87,7 @@ internal class ResultFormatCreatorTest {
 
         @Test
         fun `two other indexes`() {
-            val resultCreator = EqlResultCreator(simpleStructureConfig, dummyLogger)
+            val resultCreator = EqlResultCreator(simpleStructureConfig, SimpleStdoutLoggerFactory)
 
             val payload = resultCreator.singleResult(simpleStructureDocument, htmlQuery, listOf(EqlMatch(Interval.valueOf(1), Interval.valueOf(1, 2))))
             assertThat(payload)
@@ -96,7 +96,7 @@ internal class ResultFormatCreatorTest {
 
         @Test
         fun `with one entity`() {
-            val resultCreator = EqlResultCreator(withEntitiesConfig, dummyLogger)
+            val resultCreator = EqlResultCreator(withEntitiesConfig, SimpleStdoutLoggerFactory)
 
             val payload = resultCreator.singleResult(withEntitiesDocument, htmlQuery, listOf(EqlMatch(Interval.valueOf(1), Interval.valueOf(1, 2))))
             assertThat(payload)
@@ -111,7 +111,7 @@ internal class ResultFormatCreatorTest {
 
         @Test
         fun `simple format no metadata`() {
-            val resultCreator = EqlResultCreator(noMetadataConfig, dummyLogger)
+            val resultCreator = EqlResultCreator(noMetadataConfig, SimpleStdoutLoggerFactory)
 
             var payload = resultCreator.singleResult(noMetadataDocument, jsonQuery, listOf(EqlMatch(Interval.valueOf(1), Interval.valueOf(0, 2))))
             assertThat(payload)
@@ -141,7 +141,7 @@ internal class ResultFormatCreatorTest {
 
         @Test
         fun `two other indexes`() {
-            val resultCreator = EqlResultCreator(simpleStructureConfig, dummyLogger)
+            val resultCreator = EqlResultCreator(simpleStructureConfig, SimpleStdoutLoggerFactory)
             val payload = resultCreator.singleResult(simpleStructureDocument, jsonQuery, listOf(EqlMatch(Interval.valueOf(1), Interval.valueOf(1, 2))))
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.StringWithMetadata(StringWithMetadata(
@@ -158,7 +158,7 @@ internal class ResultFormatCreatorTest {
 
         @Test
         fun `with one entity`() {
-            val resultCreator = EqlResultCreator(withEntitiesConfig, dummyLogger)
+            val resultCreator = EqlResultCreator(withEntitiesConfig, SimpleStdoutLoggerFactory)
             val payload = resultCreator.singleResult(withEntitiesDocument, jsonQuery, listOf(EqlMatch(Interval.valueOf(1), Interval.valueOf(1, 2))))
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.StringWithMetadata(StringWithMetadata(
@@ -186,7 +186,7 @@ internal class ResultFormatCreatorTest {
 
         @Test
         fun `simple format no metadata`() {
-            val resultCreator = EqlResultCreator(noMetadataConfig, dummyLogger)
+            val resultCreator = EqlResultCreator(noMetadataConfig, SimpleStdoutLoggerFactory)
             var payload = resultCreator.singleResult(noMetadataDocument, textUnitListQuery, listOf(EqlMatch(Interval.valueOf(1), Interval.valueOf(0, 2))))
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.TextUnitList(TextUnitList(
@@ -217,7 +217,7 @@ internal class ResultFormatCreatorTest {
 
         @Test
         fun `two other indexes`() {
-            val resultCreator = EqlResultCreator(simpleStructureConfig, dummyLogger)
+            val resultCreator = EqlResultCreator(simpleStructureConfig, SimpleStdoutLoggerFactory)
             val payload = resultCreator.singleResult(simpleStructureDocument, textUnitListQuery, listOf(EqlMatch(Interval.valueOf(1), Interval.valueOf(1, 2))))
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.TextUnitList(TextUnitList(
@@ -231,7 +231,7 @@ internal class ResultFormatCreatorTest {
 
         @Test
         fun `with one entity no intervals`() {
-            val resultCreator = EqlResultCreator(withEntitiesConfig, dummyLogger)
+            val resultCreator = EqlResultCreator(withEntitiesConfig, SimpleStdoutLoggerFactory)
             val payload = resultCreator.singleResult(withEntitiesDocument, textUnitListQuery, emptyList())
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.TextUnitList(TextUnitList(
@@ -245,7 +245,7 @@ internal class ResultFormatCreatorTest {
 
         @Test
         fun `with one entity that is broken by interval`() {
-            val resultCreator = EqlResultCreator(withEntitiesConfig, dummyLogger)
+            val resultCreator = EqlResultCreator(withEntitiesConfig, SimpleStdoutLoggerFactory)
             val payload = resultCreator.singleResult(withEntitiesDocument, textUnitListQuery, listOf(EqlMatch(Interval.valueOf(0), Interval.valueOf(2, 3))))
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.TextUnitList(TextUnitList(
@@ -264,7 +264,7 @@ internal class ResultFormatCreatorTest {
 
         @Test
         fun `with one entity that is broken by two intervals`() {
-            val resultCreator = EqlResultCreator(withEntitiesConfig, dummyLogger)
+            val resultCreator = EqlResultCreator(withEntitiesConfig, SimpleStdoutLoggerFactory)
             val payload = resultCreator.singleResult(withEntitiesDocument, textUnitListQuery, listOf(EqlMatch(Interval.valueOf(1), Interval.valueOf(2, 3)), EqlMatch(Interval.valueOf(1), Interval.valueOf(4))))
             assertThat(payload)
                     .isEqualTo(ResultFormat.Snippet.TextUnitList(TextUnitList(

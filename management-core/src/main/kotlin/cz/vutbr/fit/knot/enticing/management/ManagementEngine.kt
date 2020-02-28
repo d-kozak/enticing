@@ -1,8 +1,9 @@
 package cz.vutbr.fit.knot.enticing.management
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
-import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
+import cz.vutbr.fit.knot.enticing.log.measure
 import cz.vutbr.fit.knot.enticing.management.command.ManagementCommand
 import cz.vutbr.fit.knot.enticing.management.command.concrete.*
 import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
@@ -12,15 +13,15 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.Executors
 
-class ManagementEngine(val configuration: EnticingConfiguration, val logService: MeasuringLogService) : AutoCloseable {
+class ManagementEngine(val configuration: EnticingConfiguration, val loggerFactory: LoggerFactory) : AutoCloseable {
 
     private val pool = Executors.newFixedThreadPool(32)
 
     private val scope = CoroutineScope(pool.asCoroutineDispatcher())
 
-    private val logger = logService.logger { }
+    private val logger = loggerFactory.logger { }
 
-    private val executor = ShellCommandExecutor(logService, scope)
+    private val executor = ShellCommandExecutor(loggerFactory, scope)
 
     fun execute(args: ManagementCliArguments) = with(args) {
         if (localBuild)
@@ -50,8 +51,8 @@ class ManagementEngine(val configuration: EnticingConfiguration, val logService:
 
     fun executeCommand(command: ManagementCommand<*>) {
         runBlocking(scope.coroutineContext) {
-            logger.measure("command $command") {
-                command.execute(configuration, executor, logService)
+            logger.measure("ExecuteCommand", command.toString()) {
+                command.execute(configuration, executor, loggerFactory)
             }
         }
     }

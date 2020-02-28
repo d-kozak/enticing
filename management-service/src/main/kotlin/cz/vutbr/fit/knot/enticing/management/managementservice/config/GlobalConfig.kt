@@ -4,8 +4,7 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.validateOrFail
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.visitor.prettyPrint
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
-import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
-import cz.vutbr.fit.knot.enticing.log.configureFor
+import cz.vutbr.fit.knot.enticing.log.loggerFactoryFor
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -31,7 +30,6 @@ class GlobalConfig(
     }
 
     @Bean
-    fun logger(enticingConfiguration: EnticingConfiguration): MeasuringLogService {
-        return enticingConfiguration.loggingConfiguration.configureFor("$address-management")
-    }
+    fun loggerFactory(enticingConfiguration: EnticingConfiguration) = enticingConfiguration.loggingConfiguration.loggerFactoryFor("$address-management")
+
 }

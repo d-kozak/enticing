@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver.service
 
+import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import cz.vutbr.fit.knot.enticing.webserver.dto.*
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
@@ -11,7 +12,6 @@ import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.SelectedEntityMetadataRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.SelectedMetadataRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
-import cz.vutbr.fit.knot.enticing.webserver.testconfig.dummyLogger
 import cz.vutbr.fit.knot.enticing.webserver.utils.withAuthentication
 import io.mockk.every
 import io.mockk.mockk
@@ -35,7 +35,7 @@ internal class EnticingUserServiceTest {
     private val encoder = BCryptPasswordEncoder(11)
     private val selectedMetadataRepositoryMock = mockk<SelectedMetadataRepository>()
     private val selectedEntityMetadataRepositoryMock = mockk<SelectedEntityMetadataRepository>()
-    private val userService = EnticingUserService(userRepositoryMock, selectedMetadataRepositoryMock, selectedEntityMetadataRepositoryMock, encoder, searchSettingsRepositoryMock, dummyLogger)
+    private val userService = EnticingUserService(userRepositoryMock, selectedMetadataRepositoryMock, selectedEntityMetadataRepositoryMock, encoder, searchSettingsRepositoryMock, SimpleStdoutLoggerFactory)
 
     @Test
     fun `loadUserByUsername Test`() {

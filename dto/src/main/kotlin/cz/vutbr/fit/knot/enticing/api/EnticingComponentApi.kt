@@ -6,11 +6,12 @@ import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import cz.vutbr.fit.knot.enticing.log.ComponentType
-import cz.vutbr.fit.knot.enticing.log.LogServiceOld
+import cz.vutbr.fit.knot.enticing.log.LoggerFactory
+import cz.vutbr.fit.knot.enticing.log.logger
 
-abstract class EnticingComponentApi(val componentAddress: String, val componentType: ComponentType, val localAddress: String, logService: LogServiceOld) {
+abstract class EnticingComponentApi(val componentAddress: String, val componentType: ComponentType, val localAddress: String, loggerFactory: LoggerFactory) {
 
-    private val logger = logService.logger { }
+    private val logger = loggerFactory.logger { }
 
     protected fun httpPost(endPoint: String, dto: Any) {
         val address = "http://$componentAddress$endPoint"
@@ -23,7 +24,7 @@ abstract class EnticingComponentApi(val componentAddress: String, val componentT
     private fun Request.submit() {
         val (_, _, result) = this.responseString()
         if (result is Result.Failure) {
-           logger.error("Failed to submit message ${result.error.exception.message}")
+            logger.error("Failed to submit message ${result.error.exception.message}")
         }
     }
 }

@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.mg4j
 
-import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import it.unimi.di.big.mg4j.document.AbstractDocumentCollection
 import it.unimi.di.big.mg4j.document.DocumentCollection
@@ -20,16 +20,16 @@ import java.io.InputStream
 class Mg4jSingleFileDocumentCollection(
         private val inputFile: File,
         private val factory: Mg4jDocumentFactory,
-        val logService: MeasuringLogService
+        val loggerFactory: LoggerFactory
 ) : AbstractDocumentCollection() {
 
-    private val logger = logService.logger { }
+    private val logger = loggerFactory.logger { }
 
     private val documentIndexes = findDocumentIndexes(inputFile)
 
     override fun factory(): DocumentFactory = factory
 
-    override fun copy(): DocumentCollection = Mg4jSingleFileDocumentCollection(inputFile, factory, logService)
+    override fun copy(): DocumentCollection = Mg4jSingleFileDocumentCollection(inputFile, factory, loggerFactory)
 
 
     override fun metadata(index: Long): Reference2ObjectMap<Enum<*>, Any> = metadataAndStream(index).second

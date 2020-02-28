@@ -4,7 +4,7 @@ import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.annotation.Temporary
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompilerException
-import cz.vutbr.fit.knot.enticing.log.MeasuringLogService
+import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcherException
@@ -26,10 +26,10 @@ class QueryService(
         private val userService: EnticingUserService,
         private val indexServerConnector: IndexServerConnector,
         private val compilerService: EqlCompilerService,
-        logService: MeasuringLogService
+        loggerFactory: LoggerFactory
 ) {
 
-    val logger = logService.logger { }
+    val logger = loggerFactory.logger { }
 
     fun validateQuery(query: String, settings: Long) = compilerService.validateQuery(query, format(settings).toMetadataConfiguration())
 
