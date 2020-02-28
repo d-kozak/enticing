@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.service
 
-import cz.vutbr.fit.knot.enticing.log.LogMessage
+import cz.vutbr.fit.knot.enticing.log.LogDto
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toDto
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toEntity
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.LogRepository
@@ -11,7 +11,7 @@ import javax.transaction.Transactional
 @Transactional
 class ManagementLogService(val logRepository: LogRepository) {
 
-    fun add(log: LogMessage) = logRepository.save(log.toEntity()).toDto()
+    fun add(log: LogDto) = logRepository.save(log.toEntity()).toDto()
 
     fun getAll() = logRepository.findAll().map { it.toDto() }
 }

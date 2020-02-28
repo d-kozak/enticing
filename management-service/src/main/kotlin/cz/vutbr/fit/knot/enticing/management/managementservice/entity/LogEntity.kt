@@ -2,7 +2,7 @@ package cz.vutbr.fit.knot.enticing.management.managementservice.entity
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.LogType
 import cz.vutbr.fit.knot.enticing.log.ComponentType
-import cz.vutbr.fit.knot.enticing.log.LogMessage
+import cz.vutbr.fit.knot.enticing.log.LogDto
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -10,9 +10,9 @@ import javax.persistence.Id
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Positive
 
-fun LogMessage.toEntity() = LogEntity(0, text, logType, source, componentType, timestamp)
+fun LogDto.toEntity() = LogEntity(0, text, logType, source, componentType, timestamp)
 
-fun LogEntity.toDto() = LogMessage(text, logType, source, componentType, timestamp)
+fun LogEntity.toDto() = LogDto(text, logType, source, componentType, timestamp)
 
 @Entity
 class LogEntity(
@@ -27,7 +27,7 @@ class LogEntity(
         val source: String,
         val componentType: ComponentType,
         @field:Positive
-        var timestamp: Long = System.currentTimeMillis()
+        var timestamp: Long
 ) {
 
     override fun equals(other: Any?): Boolean {

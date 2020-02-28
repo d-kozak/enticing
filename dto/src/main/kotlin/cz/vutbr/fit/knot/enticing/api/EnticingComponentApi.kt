@@ -6,10 +6,9 @@ import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import cz.vutbr.fit.knot.enticing.log.ComponentType
-import cz.vutbr.fit.knot.enticing.log.LogService
-import cz.vutbr.fit.knot.enticing.log.logger
+import cz.vutbr.fit.knot.enticing.log.LogServiceOld
 
-abstract class EnticingComponentApi(val componentAddress: String, val componentType: ComponentType, val localAddress: String, logService: LogService) {
+abstract class EnticingComponentApi(val componentAddress: String, val componentType: ComponentType, val localAddress: String, logService: LogServiceOld) {
 
     private val logger = logService.logger { }
 

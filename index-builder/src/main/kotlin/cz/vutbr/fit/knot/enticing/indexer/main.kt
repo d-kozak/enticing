@@ -6,7 +6,7 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.validateOrFail
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
 import cz.vutbr.fit.knot.enticing.index.startIndexing
 import cz.vutbr.fit.knot.enticing.log.ComponentType
-import cz.vutbr.fit.knot.enticing.log.RemoteLoggingConfiguration
+import cz.vutbr.fit.knot.enticing.log.RemoteLoggingConfigurationOld
 import cz.vutbr.fit.knot.enticing.log.configureFor
 
 fun handleArguments(vararg args: String, loadConfig: (path: String) -> EnticingConfiguration = ::executeScript): Pair<EnticingConfiguration, String> {
@@ -20,7 +20,7 @@ fun main(args: Array<String>) {
     val config = enticingConfiguration.indexServerByAddress(address)
 
     val logger = enticingConfiguration.loggingConfiguration.configureFor("$address-builder",
-            RemoteLoggingConfiguration("$address-builder", enticingConfiguration.managementServiceConfiguration.fullAddress, ComponentType.INDEX_BUILDER))
+            RemoteLoggingConfigurationOld("$address-builder", enticingConfiguration.managementServiceConfiguration.fullAddress, ComponentType.INDEX_BUILDER))
 
     logger.measure("indexing") {
         for ((collection, mg4jDir, indexDir) in config.loadCollections()) {
