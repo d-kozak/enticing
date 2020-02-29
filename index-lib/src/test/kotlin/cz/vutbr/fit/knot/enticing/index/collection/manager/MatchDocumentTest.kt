@@ -169,7 +169,7 @@ class MatchDocumentTest {
 
 
     @Nested
-    @DisplayName("lemma:hello hi position:10 - _PAR_")
+    @DisplayName("lemma:hello hi - _PAR_")
     inner class ParagraphLimit {
 
         private val query = "lemma:hello hi - _PAR_"
@@ -202,9 +202,43 @@ class MatchDocumentTest {
             val result = queryExecutor.doMatch(query, document)
             assertThat(result.intervals).isEmpty()
         }
-
     }
 
+    @Nested
+    @DisplayName("(lemma:hello hi position:10) - _SENT_")
+    inner class SentenceLimitThreeParts {
+
+        private val query = "(lemma:hello hi position:10) - _SENT_"
+
+        @Test
+        fun `no match`() {
+            val document = TestDocument(10_000)
+            document["token"][10] = "hi"
+            document["position"][11] = "10"
+            document["token"][21] = SENTENCE_MARK
+            document["lemma"][22] = "hello"
+            val result = queryExecutor.doMatch(query, document)
+            assertThat(result.intervals).isEmpty()
+        }
+
+        @Test
+        fun `one match`() {
+            val document = TestDocument(10_000)
+            document["token"][10] = "hi"
+            document["position"][11] = "10"
+            document["token"][21] = SENTENCE_MARK
+            document["lemma"][22] = "hello"
+            document["token"][23] = "hi"
+            document["position"][34] = "10"
+            val result = queryExecutor.doMatch(query, document)
+            assertThat(result.intervals).hasSize(1)
+            assertThat(result.intervals).allSatisfy { match ->
+                assertThat(22 in match.first)
+                assertThat(23 in match.first)
+                assertThat(24 in match.first)
+            }
+        }
+    }
 
 }
 
