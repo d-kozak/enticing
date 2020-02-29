@@ -243,7 +243,7 @@ class DocumentMatchingVisitor(val leafMatch: Map<QueryElemNode.SimpleNode, List<
                 val res = mutableListOf<Pair<List<Int>, Interval>>()
                 for ((i, x) in leftResult.second.withIndex()) {
                     for ((j, y) in rightResult.second.withIndex()) {
-                        if (x.second.combineWith(y.second).size - x.second.size - y.second.size <= distance) res.add(listOf(i, j) to Interval.valueOf(x.second.from, y.second.to))
+                        if (x.second.combineWith(y.second).size <= distance) res.add(listOf(i, j) to Interval.valueOf(x.second.from, y.second.to))
                     }
                 }
                 res

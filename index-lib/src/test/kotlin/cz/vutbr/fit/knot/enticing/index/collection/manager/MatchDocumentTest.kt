@@ -240,6 +240,53 @@ class MatchDocumentTest {
         }
     }
 
+
+    @Nested
+    @DisplayName("lemma:word position:10 ~ 3")
+    inner class ProximityTest {
+        private val query = "lemma:word position:10 ~ 3"
+
+        @Test
+        fun `no match too far away`() {
+            val document = TestDocument(10_000)
+            document["lemma"][1455] = "word"
+            document["position"][1458] = "10"
+            val result = queryExecutor.doMatch(query, document)
+            assertThat(result.intervals).isEmpty()
+        }
+
+        @Test
+        fun `no match more far away`() {
+            val document = TestDocument(10_000)
+            document["lemma"][1455] = "word"
+            document["position"][1459] = "10"
+            val result = queryExecutor.doMatch(query, document)
+            assertThat(result.intervals).isEmpty()
+        }
+
+        @Test
+        fun `no match really far away`() {
+            val document = TestDocument(10_000)
+            document["lemma"][1455] = "word"
+            document["position"][1469] = "10"
+            val result = queryExecutor.doMatch(query, document)
+            assertThat(result.intervals).isEmpty()
+        }
+
+        @Test
+        fun `one match`() {
+            val document = TestDocument(10_000)
+            document["lemma"][1456] = "word"
+            document["position"][1458] = "10"
+            val result = queryExecutor.doMatch(query, document)
+            assertThat(result.intervals).hasSize(1)
+            assertThat(result.intervals).allSatisfy { match ->
+                assertThat(1456 in match.first)
+                assertThat(1457 in match.first)
+            }
+        }
+
+    }
 }
 
 class TestQueryExecutor(private val metadataConfiguration: MetadataConfiguration) {
