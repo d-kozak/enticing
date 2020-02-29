@@ -34,7 +34,9 @@ class SecurityConfig(
                         "/static/**",
                         "$apiBasePath/login",
                         "$apiBasePath/log",
-                        "$apiBasePath/perf")
+                        "$apiBasePath/perf",
+                        "$apiBasePath/heartbeat"
+                )
                 .permitAll()
                 .anyRequest()
                 .authenticated()

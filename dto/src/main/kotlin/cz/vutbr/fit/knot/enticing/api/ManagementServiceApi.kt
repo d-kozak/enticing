@@ -17,4 +17,8 @@ class ManagementServiceApi(remoteAddress: String, componentType: ComponentType, 
     override fun perf(perfMessage: PerfMessage) {
         httpPost("$API_BASE_PATH/perf", perfMessage.toPerfDto(localAddress, componentType))
     }
+
+    fun heartbeat() {
+        httpPost("$API_BASE_PATH/heartbeat", HeartbeatDto(localAddress, componentType))
+    }
 }
