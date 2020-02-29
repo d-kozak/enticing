@@ -5,6 +5,9 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.visitor.EnticingConfigurationVi
 
 fun metadataConfiguration(block: MetadataConfiguration.() -> Unit) = MetadataConfiguration().apply(block)
 
+const val PARAGRAPH_MARK = "§"
+const val SENTENCE_MARK = "¶"
+
 /**
  * Configuration of metadata
  * usable both for individual index servers or whole corpuses
@@ -20,7 +23,12 @@ data class MetadataConfiguration(
         /**
          * The index based on which the length of entity is determined(how many words it consists of)
          */
-        var lengthIndexName: String = "nerlength"
+        var lengthIndexName: String = "nerlength",
+
+        /**
+         * the default index
+         */
+        var defaultIndex: String = "token"
 ) : EnticingConfigurationUnit {
 
     val entityIndex: IndexConfiguration?
