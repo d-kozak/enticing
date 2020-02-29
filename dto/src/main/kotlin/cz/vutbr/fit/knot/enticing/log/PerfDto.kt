@@ -1,9 +1,6 @@
 package cz.vutbr.fit.knot.enticing.log
 
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotEmpty
-import javax.validation.constraints.Positive
-import javax.validation.constraints.Size
+import javax.validation.constraints.*
 
 data class PerfMessage(
         val className: String,
@@ -24,6 +21,7 @@ data class PerfDto(
         val operationId: String,
         @field:Size(max = 2048)
         val arguments: String?,
+        @field:PositiveOrZero
         val duration: Long,
         @field:NotEmpty
         val outcome: String,

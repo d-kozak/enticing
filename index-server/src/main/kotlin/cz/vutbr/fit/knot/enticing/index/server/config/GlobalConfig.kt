@@ -34,7 +34,7 @@ class GlobalConfig(
     }
 
     @Bean
-    fun managementApi(enticingConfiguration: EnticingConfiguration): ManagementServiceApi = ManagementServiceApi(enticingConfiguration.managementServiceConfiguration.fullAddress, ComponentType.WEBSERVER, address, enticingConfiguration.loggingConfiguration.loggerFactoryFor("$address-webserver"))
+    fun managementApi(enticingConfiguration: EnticingConfiguration): ManagementServiceApi = ManagementServiceApi(enticingConfiguration.managementServiceConfiguration.fullAddress, ComponentType.INDEX_SERVER, address, enticingConfiguration.loggingConfiguration.loggerFactoryFor("$address-webserver"))
 
     @Bean
     @Primary

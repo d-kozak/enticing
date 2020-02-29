@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Positive
+import javax.validation.constraints.PositiveOrZero
 
 fun PerfDto.toEntity() = PerfEntity(0, className, operationId, arguments, duration, outcome, componentId, componentType, timestamp)
 
@@ -26,7 +27,7 @@ class PerfEntity(
         val operationId: String,
         @field:Column(length = 2048)
         val arguments: String?,
-        @field:Positive
+        @field:PositiveOrZero
         val duration: Long,
         @field:NotEmpty
         val outcome: String,
