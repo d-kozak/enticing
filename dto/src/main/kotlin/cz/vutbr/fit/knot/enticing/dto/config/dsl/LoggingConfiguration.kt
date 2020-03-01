@@ -17,7 +17,8 @@ data class LoggingConfiguration(
          * what types of messages should be written to the log files
          */
         var pattern: String = "dd-MM-yyyy HH:mm:ss",
-        var messageTypes: EnumSet<LogType> = EnumSet.noneOf(LogType::class.java),
+        var stdoutLogs: EnumSet<LogType> = EnumSet.allOf(LogType::class.java),
+        var fileLogs: EnumSet<LogType> = EnumSet.of(LogType.INFO, LogType.PERF, LogType.WARN, LogType.ERROR),
         var managementLoggingConfiguration: ManagementLoggingConfiguration = ManagementLoggingConfiguration()
 ) : EnticingConfigurationUnit {
 
@@ -29,8 +30,14 @@ data class LoggingConfiguration(
         managementLoggingConfiguration = ManagementLoggingConfiguration().apply(block)
     }
 
-    fun messageTypes(vararg types: LogType) {
-        for (type in types) messageTypes.add(type)
+    fun stdoutLogs(vararg types: LogType) {
+        stdoutLogs.clear()
+        for (type in types) stdoutLogs.add(type)
+    }
+
+    fun fileLogs(vararg types: LogType) {
+        fileLogs.clear()
+        for (type in types) fileLogs.add(type)
     }
 }
 
@@ -42,10 +49,10 @@ data class ManagementLoggingConfiguration(
         /**
          * what types of messages should be sent to the management service
          */
-        var messageTypes: EnumSet<LogType> = EnumSet.noneOf(LogType::class.java)
+        var logTypes: EnumSet<LogType> = EnumSet.noneOf(LogType::class.java)
 ) {
-    fun messageTypes(vararg types: LogType) {
-        for (type in types) messageTypes.add(type)
+    fun logTypes(vararg types: LogType) {
+        for (type in types) logTypes.add(type)
     }
 }
 

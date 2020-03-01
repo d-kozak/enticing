@@ -15,10 +15,10 @@ class HeartbeatService(val scheduler: TaskScheduler, val configuration: Enticing
 
     @PostConstruct
     fun init() {
-        val hearthBeatConfiguration = configuration.managementServiceConfiguration.hearthBeatConfiguration
-        if (hearthBeatConfiguration.isEnabled) {
-            logger.info("Setting up heartbeat with period ${hearthBeatConfiguration.period}")
-            scheduler.scheduleAtFixedRate(api::heartbeat, hearthBeatConfiguration.period)
+        val heartbeatConfiguration = configuration.managementServiceConfiguration.heartbeatConfiguration
+        if (heartbeatConfiguration.isEnabled) {
+            logger.info("Setting up heartbeat with period ${heartbeatConfiguration.period}")
+            scheduler.scheduleAtFixedRate(api::heartbeat, heartbeatConfiguration.period)
         } else {
             logger.info("hearthbeat not scheduled")
         }

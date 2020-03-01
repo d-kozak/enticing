@@ -124,9 +124,10 @@ class PrettyPrintingVisitor : EnticingConfigurationVisitor {
         withIndent("logging") {
             appendProperty("rootDirectory", loggingConfiguration.rootDirectory)
             appendProperty("pattern", loggingConfiguration.pattern)
-            appendProperty("messagesTypes", loggingConfiguration.messageTypes)
+            appendProperty("stdoutLogs", loggingConfiguration.stdoutLogs)
+            appendProperty("fileLogs", loggingConfiguration.fileLogs)
             withIndent("managementLogging") {
-                appendProperty("messageTypes", loggingConfiguration.messageTypes)
+                appendProperty("logTypes", loggingConfiguration.managementLoggingConfiguration.logTypes)
             }
         }
     }

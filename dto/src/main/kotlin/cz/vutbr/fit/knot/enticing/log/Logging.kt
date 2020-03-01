@@ -136,11 +136,11 @@ interface RemoteLoggingApi : LoggerPipeLineNode
 
 
 fun LoggingConfiguration.loggerFactoryFor(serviceId: String, remoteLoggingApi: RemoteLoggingApi? = null): LoggerFactory {
-    val stdoutLogger = StdoutLoggerNode(this)
-    val fileLogger = FilteringLoggerNode(messageTypes, FileBasedLoggerNode(File("${this.rootDirectory}/$serviceId.log"), this))
-    val pipelines = mutableListOf(stdoutLogger, fileLogger)
+    val stdoutLogger = FilteringLoggerNode(stdoutLogs, StdoutLoggerNode(this))
+    val fileLogger = FilteringLoggerNode(fileLogs, FileBasedLoggerNode(File("${this.rootDirectory}/$serviceId.log"), this))
+    val pipelines = mutableListOf<LoggerPipeLineNode>(stdoutLogger, fileLogger)
     if (remoteLoggingApi != null) {
-        pipelines.add(FilteringLoggerNode(managementLoggingConfiguration.messageTypes, remoteLoggingApi))
+        pipelines.add(FilteringLoggerNode(managementLoggingConfiguration.logTypes, remoteLoggingApi))
     }
     return object : LoggerFactory {
         override fun namedLogger(name: String): Logger = NamedLogger(name, pipelines)

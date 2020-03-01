@@ -11,7 +11,7 @@ data class ManagementServiceConfiguration(
         /**
          * Hearthbeat configuration
          */
-        var hearthBeatConfiguration: HearthBeatConfiguration = HearthBeatConfiguration(false)
+        var heartbeatConfiguration: HeartbeatConfiguration = HeartbeatConfiguration(false)
 ) : ComponentConfiguration {
 
 
@@ -19,8 +19,8 @@ data class ManagementServiceConfiguration(
         const val DEFAULT_PORT = 5628
     }
 
-    fun hearthBeat(block: HearthBeatConfiguration.() -> Unit) {
-        hearthBeatConfiguration = HearthBeatConfiguration(true).apply(block)
+    fun heartbeat(block: HeartbeatConfiguration.() -> Unit) {
+        heartbeatConfiguration = HeartbeatConfiguration(true).apply(block)
     }
 
     override fun accept(visitor: EnticingConfigurationVisitor) {
@@ -31,7 +31,7 @@ data class ManagementServiceConfiguration(
 /**
  * configuration of the hearthbeat functionality
  */
-data class HearthBeatConfiguration(
+data class HeartbeatConfiguration(
         var isEnabled: Boolean = false,
         var period: Long = 1_000
 )

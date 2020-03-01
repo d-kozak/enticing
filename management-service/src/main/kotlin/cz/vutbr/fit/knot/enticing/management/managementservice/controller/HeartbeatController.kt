@@ -15,7 +15,7 @@ class HeartbeatController(loggerFactory: LoggerFactory, val heartbeatService: He
 
     @PostMapping
     fun add(@RequestBody @Valid dto: HeartbeatDto) {
-        logger.info("received heartbeat $dto")
+        logger.debug("received heartbeat $dto")
         heartbeatService.heartbeat(dto)
     }
 

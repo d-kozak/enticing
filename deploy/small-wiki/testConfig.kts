@@ -12,16 +12,17 @@ enticingConfiguration {
 
     management {
         address = "athena11.fit.vutbr.cz"
-        hearthBeat {
+        heartbeat {
             period = 2_000
         }
     }
 
     logging {
         rootDirectory = "$ENTICING_HOME/logs"
-        messageTypes(LogType.INFO, LogType.PERF, LogType.WARN, LogType.ERROR)
+        stdoutLogs(LogType.INFO, LogType.PERF, LogType.WARN, LogType.ERROR)
+        fileLogs(LogType.INFO, LogType.PERF, LogType.WARN, LogType.ERROR)
         managementLogs {
-            messageTypes(LogType.PERF, LogType.WARN, LogType.ERROR)
+            logTypes(LogType.PERF, LogType.WARN, LogType.ERROR)
         }
     }
 
