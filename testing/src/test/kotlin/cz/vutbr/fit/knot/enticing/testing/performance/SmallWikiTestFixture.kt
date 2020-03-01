@@ -3,7 +3,6 @@ package cz.vutbr.fit.knot.enticing.testing.performance
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.validateOrFail
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
-import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import java.io.File
 
 private const val CONFIG_PATH = "../deploy/small-wiki/testConfig.kts"
@@ -12,8 +11,6 @@ private const val SEARCH_SETTINGS_PATH = "../deploy/small-wiki/small-wiki.search
 class SmallWikiTestFixture(rebootComponents: Boolean) {
 
     val config = executeScript<EnticingConfiguration>(CONFIG_PATH).validateOrFail()
-
-    val logService = SimpleStdoutLoggerFactory
 
     val webserverApi: WebserverApi
 

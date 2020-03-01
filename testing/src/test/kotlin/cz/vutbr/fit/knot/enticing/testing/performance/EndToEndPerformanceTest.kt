@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.testing.performance
 
+import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.log.measure
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +19,7 @@ class EndToEndPerformanceTest {
 
     val fixture = SmallWikiTestFixture(rebootComponents)
 
-    val logger = fixture.logService.logger { }
+    val logger = SimpleStdoutLoggerFactory.logger { }
 
     @Test
     fun killAll() {
