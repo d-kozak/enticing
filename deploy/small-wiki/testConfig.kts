@@ -96,6 +96,10 @@ enticingConfiguration {
 
                     "film" with attributes("url", "image", "name")
 
+                    "structure" with attributes("url", "image", "name")
+
+                    "taxon" with attributes("url", "image", "name")
+
                     "form" with attributes("url", "image", "name")
 
                     "medium" with attributes("url", "image", "name")
