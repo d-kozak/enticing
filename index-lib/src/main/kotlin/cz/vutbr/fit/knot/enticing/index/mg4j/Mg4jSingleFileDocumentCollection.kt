@@ -35,16 +35,10 @@ class Mg4jSingleFileDocumentCollection(
     override fun metadata(index: Long): Reference2ObjectMap<Enum<*>, Any> = metadataAndStream(index).second
 
 
-    private var last: FastBufferedInputStream? = null
-    override fun stream(index: Long): InputStream {
-        if (last != null) {
-            last!!.close()
-        }
-        last = FastBufferedInputStream(FileInputStream(inputFile)).also {
-            it.position(documentIndexes.getLong(index))
-        }
-        return last!!
+    override fun stream(index: Long): InputStream = FastBufferedInputStream(FileInputStream(inputFile)).also {
+        it.position(documentIndexes.getLong(index))
     }
+
 
     fun getRawDocument(index: Long, from: Int = 0, to: Int = Int.MAX_VALUE): String {
         require(from >= 0) { "from >= 0" }
@@ -99,12 +93,6 @@ class Mg4jSingleFileDocumentCollection(
     override fun document(index: Long): Mg4jDocument = metadataAndStream(index).let { (stream, metadata) -> factory.getDocument(stream, metadata) }
 
     override fun size(): Long = documentIndexes.size64()
-
-    override fun close() {
-        super.close()
-        if (last != null)
-            last!!.close()
-    }
 
     internal fun findDocumentIndexes(inputFile: File): EliasFanoMonotoneLongBigList =
             FastBufferedInputStream(FileInputStream(inputFile)).use { stream ->
