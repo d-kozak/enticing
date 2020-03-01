@@ -32,10 +32,10 @@ class SecurityConfig(
                 .authorizeRequests()
                 .antMatchers("/*",
                         "/static/**",
-                        "$apiBasePath/login",
-                        "$apiBasePath/log",
-                        "$apiBasePath/perf",
-                        "$apiBasePath/heartbeat"
+                        "$apiBasePath/login/**",
+                        "$apiBasePath/log/**",
+                        "$apiBasePath/perf/**",
+                        "$apiBasePath/heartbeat/**"
                 )
                 .permitAll()
                 .anyRequest()

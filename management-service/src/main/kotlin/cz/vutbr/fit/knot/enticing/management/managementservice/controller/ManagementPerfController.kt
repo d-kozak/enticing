@@ -21,4 +21,7 @@ class ManagementPerfController(loggerFactory: LoggerFactory, val managementPefSe
 
     @GetMapping
     fun getAll() = managementPefService.getAll()
+
+    @GetMapping("/stats")
+    fun stats() = managementPefService.computeOperationStatistics()
 }
