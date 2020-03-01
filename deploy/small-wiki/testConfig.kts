@@ -98,6 +98,8 @@ enticingConfiguration {
 
                     "structure" with attributes("url", "image", "name")
 
+                    "activity" with attributes("url", "image", "name")
+
                     "taxon" with attributes("url", "image", "name")
 
                     "form" with attributes("url", "image", "name")
