@@ -69,6 +69,8 @@ enticingConfiguration {
                     "_glue" whichIs "glue"
                 }
                 entities {
+                    "person+artist" with attributes("url", "image", "name", "gender", "birthplace", "birthdate", "deathplace", "deathdate")
+
                     "person" with attributes("url", "image", "name", "gender", "birthplace", "birthdate", "deathplace", "deathdate", "profession", "nationality")
 
                     "artist" with attributes("url", "image", "name", "gender", "birthplace", "birthdate", "deathplace", "deathdate", "role", "nationality")
@@ -90,6 +92,8 @@ enticingConfiguration {
                     "date" with attributes("url", "image", "year", "month", "day")
 
                     "interval" with attributes("url", "image", "fromyear", "frommonth", "fromday", "toyear", "tomonth", "today")
+
+                    "film" with attributes("url", "image", "name")
 
                     "form" with attributes("url", "image", "name")
 
