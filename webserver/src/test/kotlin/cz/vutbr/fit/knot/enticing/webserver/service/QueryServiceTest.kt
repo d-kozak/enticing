@@ -234,7 +234,7 @@ internal class QueryServiceTest {
                     "server2" to listOf(MResult.success(IndexServer.IndexResultList(listOf(secondResult.toIndexServerFormat())))),
                     "server3" to listOf(MResult.success(IndexServer.IndexResultList(listOf(thirdResult.toIndexServerFormat()))))
             )
-            val actual = queryService.flatten(input)
+            val actual = queryService.flatten("dummy", input)
             assertThat(actual)
                     .isEqualTo(
                             WebServer.ResultList(listOf(firstResult, secondResult, thirdResult))
@@ -249,7 +249,7 @@ internal class QueryServiceTest {
                     "server2" to listOf(MResult.success(IndexServer.IndexResultList(listOf(secondResult.toIndexServerFormat())))),
                     "server3" to listOf(MResult.failure(QueryDispatcherException("my secret reason to fail")))
             )
-            val actual = queryService.flatten(input)
+            val actual = queryService.flatten("dummy", input)
             assertThat(actual)
                     .isEqualTo(
                             WebServer.ResultList(listOf(firstResult, secondResult), mapOf("server3" to "QueryDispatcherException:my secret reason to fail"))
@@ -264,7 +264,7 @@ internal class QueryServiceTest {
                     "server2" to listOf(MResult.success(IndexServer.IndexResultList(listOf(secondResult.toIndexServerFormat())))),
                     "server3" to listOf(MResult.failure(QueryDispatcherException("my secret reason to fail")))
             )
-            val actual = queryService.flatten(input)
+            val actual = queryService.flatten("dummy", input)
             assertThat(actual)
                     .isEqualTo(
                             WebServer.ResultList(listOf(firstResult, secondResult),

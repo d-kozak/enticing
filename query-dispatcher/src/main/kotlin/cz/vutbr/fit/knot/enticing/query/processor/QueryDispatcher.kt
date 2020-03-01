@@ -4,6 +4,7 @@ import cz.vutbr.fit.knot.enticing.dto.Query
 import cz.vutbr.fit.knot.enticing.dto.QueryResult
 import cz.vutbr.fit.knot.enticing.dto.RequestData
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
+import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.log.measure
@@ -32,6 +33,7 @@ class QueryDispatcher<QueryType : Query<QueryType>, OffsetType, Result : QueryRe
          * The actual execution of the query is handled by it.
          */
         private val queryExecutor: QueryExecutor<QueryType, OffsetType, Result>,
+        val componentType: ComponentType,
         loggerFactory: LoggerFactory
 ) {
 
@@ -40,7 +42,7 @@ class QueryDispatcher<QueryType : Query<QueryType>, OffsetType, Result : QueryRe
     /**
      * Dispatches query onto a list of node, collects the results and retries if necessary and possible.
      */
-    fun dispatchQuery(searchQuery: QueryType, nodes: List<RequestData<OffsetType>>): Map<String, List<MResult<Result>>> = logger.measure("DispatchQuery", "query=$searchQuery, nodes=$nodes") {
+    fun dispatchQuery(searchQuery: QueryType, nodes: List<RequestData<OffsetType>>): Map<String, List<MResult<Result>>> = logger.measure("DispatchQuery-$componentType", "query='${searchQuery.query}', nodes=${nodes.map { it.address }}") {
         runBlocking {
             val serversToCall = nodes.toMutableList()
             var collectedSnippetsCount = 0

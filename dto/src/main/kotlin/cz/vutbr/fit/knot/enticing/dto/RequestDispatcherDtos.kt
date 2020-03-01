@@ -7,7 +7,8 @@ interface GeneralFormatInfo {
 }
 
 interface Query<T:Query<T>>{
-    val snippetCount:Int
+    val query: String
+    val snippetCount: Int
     fun updateSnippetCount(newSnippetCount:Int):T
 }
 

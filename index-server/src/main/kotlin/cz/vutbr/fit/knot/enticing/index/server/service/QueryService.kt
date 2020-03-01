@@ -6,6 +6,7 @@ import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.index.collection.manager.CollectionManager
 import cz.vutbr.fit.knot.enticing.index.collection.manager.CollectionQueryExecutor
+import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
@@ -22,7 +23,7 @@ class QueryService(
 
     private val logger = loggerFactory.logger { }
 
-    val queryDispatcher = QueryDispatcher(CollectionQueryExecutor(collectionManagers), loggerFactory)
+    val queryDispatcher = QueryDispatcher(CollectionQueryExecutor(collectionManagers), ComponentType.INDEX_SERVER, loggerFactory)
 
     fun processQuery(query: SearchQuery): IndexServer.IndexResultList {
         query.eqlAst = eqlCompiler.parseOrFail(query.query, metadataConfiguration)

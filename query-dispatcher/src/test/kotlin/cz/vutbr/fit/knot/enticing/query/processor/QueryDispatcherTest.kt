@@ -3,6 +3,7 @@ package cz.vutbr.fit.knot.enticing.query.processor
 import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
+import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -25,7 +26,7 @@ internal class QueryDispatcherTest {
 
         val fail: QueryExecutor<SearchQuery, Map<CollectionName, Offset>, IndexServer.IndexResultList> = dummyDispatcher { _, server -> MResult.failure(FailOnPurposeException(server.address)) }
 
-        val dispatcher = QueryDispatcher(fail, SimpleStdoutLoggerFactory)
+        val dispatcher = QueryDispatcher(fail, ComponentType.WEBSERVER, SimpleStdoutLoggerFactory)
         val result = dispatcher.dispatchQuery(templateQuery, servers)
         val expected: Map<String, List<MResult<IndexServer.IndexResultList>>> = mapOf(
                 "yahoo.com" to listOf(MResult.failure(FailOnPurposeException("yahoo.com"))),
@@ -53,7 +54,7 @@ internal class QueryDispatcherTest {
             MResult.failure(FailOnPurposeException(server.address))
         }
 
-        val dispatcher = QueryDispatcher(queryExecutor, SimpleStdoutLoggerFactory)
+        val dispatcher = QueryDispatcher(queryExecutor, ComponentType.WEBSERVER, SimpleStdoutLoggerFactory)
         val result = dispatcher.dispatchQuery(templateQuery, servers)
         val expected: Map<String, List<MResult<IndexServer.IndexResultList>>> = mapOf(
                 "yahoo.com" to listOf(MResult.failure(FailOnPurposeException("yahoo.com"))),
@@ -77,7 +78,7 @@ internal class QueryDispatcherTest {
             }
         }
 
-        val dispatcher = QueryDispatcher(fail, SimpleStdoutLoggerFactory)
+        val dispatcher = QueryDispatcher(fail, ComponentType.WEBSERVER, SimpleStdoutLoggerFactory)
         val result = dispatcher.dispatchQuery(templateQuery, servers)
         val expected: Map<String, List<MResult<IndexServer.IndexResultList>>> = mapOf(
                 "yahoo.com" to listOf(MResult.failure(FailOnPurposeException("yahoo.com"))),

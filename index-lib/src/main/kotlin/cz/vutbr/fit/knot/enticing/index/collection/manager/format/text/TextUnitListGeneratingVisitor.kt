@@ -62,7 +62,7 @@ class TextUnitListGeneratingVisitor(config: MetadataConfiguration, defaultIndexN
                 resultList.add(newEntity)
             }
         } else {
-            logger.warn("entityEnd called, but no data for entity have been collected")
+            logger.info("entityEnd called, but no data for entity have been collected")
         }
         attributes = null
         entityClass = null
@@ -73,7 +73,7 @@ class TextUnitListGeneratingVisitor(config: MetadataConfiguration, defaultIndexN
         if (currentQueryInterval != null && unitsForQueryMatch?.isNotEmpty() == true) {
             resultList.add(TextUnit.QueryMatch(currentQueryInterval!!, unitsForQueryMatch!!))
         } else {
-            logger.warn("matchEnd called, but no data for query match have been collected")
+            logger.info("matchEnd called, but no data for query match have been collected")
         }
         currentQueryInterval = null
         unitsForQueryMatch = null

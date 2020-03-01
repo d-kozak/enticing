@@ -19,7 +19,7 @@ data class SearchQuery(
          * mg4j query to execute
          */
         @field:NotBlank
-        val query: String,
+        override val query: String,
         /**
          * Number of snippets to be returned
          */

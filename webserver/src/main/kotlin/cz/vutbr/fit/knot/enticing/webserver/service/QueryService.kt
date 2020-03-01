@@ -39,7 +39,7 @@ class QueryService(
         val searchSettings = checkUserCanAccessSettings(selectedSettings)
         val requestData = searchSettings.servers.map { IndexServerRequestData(it) }
         logger.info("Executing query $query with requestData $requestData")
-        val (result, offset) = flatten(dispatcher.dispatchQuery(query, requestData))
+        val (result, offset) = flatten(query.query, dispatcher.dispatchQuery(query, requestData))
 
         session.setAttribute("lastQuery", LastQuery(query, selectedSettings, offset))
 
@@ -53,7 +53,7 @@ class QueryService(
                 .filter { it in offset && offset.getValue(it).isNotEmpty() }
                 .map { IndexServerRequestData(it, offset[it]) }
         logger.info("Executing query $offset with requestData $requestData")
-        val (result, newOffset) = flatten(dispatcher.dispatchQuery(query, requestData))
+        val (result, newOffset) = flatten(query.query, dispatcher.dispatchQuery(query, requestData))
         session.setAttribute("lastQuery", LastQuery(query, selectedSettings, newOffset))
         return result
     }
@@ -104,7 +104,7 @@ class QueryService(
     fun getRawDocument(request: WebServer.RawDocumentRequest): String = indexServerConnector.getRawDocument(request)
 
 
-    internal fun flatten(result: Map<String, List<MResult<IndexServer.IndexResultList>>>): Pair<WebServer.ResultList, MutableMap<String, Map<String, Offset>>> {
+    internal fun flatten(query: String, result: Map<String, List<MResult<IndexServer.IndexResultList>>>): Pair<WebServer.ResultList, MutableMap<String, Map<String, Offset>>> {
         val snippets = mutableListOf<WebServer.SearchResult>()
         val errors = mutableMapOf<ServerId, ErrorMessage>()
 
@@ -121,7 +121,7 @@ class QueryService(
                     if (serverResult.value.errors.isNotEmpty()) {
                         val msg = serverResult.value.errors.toString()
                         errors[serverId] = msg
-                        logger.warn("Server $serverId responded with $msg")
+                        logger.warn("Server $serverId for query '$query' responded with $msg")
                     }
                 } else {
                     val exception = serverResult.exception as QueryDispatcherException
