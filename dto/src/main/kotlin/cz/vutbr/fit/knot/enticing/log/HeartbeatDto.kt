@@ -8,5 +8,6 @@ data class HeartbeatDto(
         val componentId: String,
         val componentType: ComponentType,
         @field:Positive
-        var timestamp: Long = System.currentTimeMillis()
+        var timestamp: Long = System.currentTimeMillis(),
+        var isAlive: Boolean = true
 )

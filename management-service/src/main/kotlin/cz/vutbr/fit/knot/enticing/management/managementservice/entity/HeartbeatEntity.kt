@@ -9,7 +9,7 @@ import javax.validation.constraints.Positive
 
 fun HeartbeatDto.toEntity() = HeartbeatEntity(componentId, componentType, timestamp)
 
-fun HeartbeatEntity.toDto() = HeartbeatDto(componentId, componentType, timestamp)
+fun HeartbeatEntity.toDto(isAlive: Boolean) = HeartbeatDto(componentId, componentType, timestamp, isAlive)
 
 @Entity
 class HeartbeatEntity(
