@@ -21,7 +21,7 @@ private typealias Mg4jSearchResult = DocumentScoreInfo<Reference2ObjectMap<Index
 
 class Mg4jSearchEngine(
         private val collection: Mg4jCompositeDocumentCollection,
-        private val engine: QueryEngine,
+        private val engineFactory: QueryEngine,
         loggerFactory: LoggerFactory
 ) : SearchEngine {
 
@@ -30,6 +30,7 @@ class Mg4jSearchEngine(
     override fun getRawDocument(id: DocumentId, from: Int, to: Int): String = collection.getRawDocument(id.toLong(), from, to)
 
     override fun search(query: String, documentCount: Int, offset: Int): QueryResult {
+        val engine = engineFactory.copy()
         logger.info("Executing query $query")
         val resultList = ObjectArrayList<Mg4jSearchResult>()
         val processed = engine.process(query, offset, documentCount, resultList)
