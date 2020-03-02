@@ -7,10 +7,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import cz.vutbr.fit.knot.enticing.webserver.dto.ImportedSearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.dto.toEntity
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
-import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
-import cz.vutbr.fit.knot.enticing.webserver.service.EqlCompilerService
-import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
-import cz.vutbr.fit.knot.enticing.webserver.service.SearchSettingsService
+import cz.vutbr.fit.knot.enticing.webserver.service.*
 import cz.vutbr.fit.knot.enticing.webserver.testconfig.LogServiceTestConfig
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -44,6 +41,9 @@ internal class SearchSettingsControllerTest(
 
     @MockBean
     lateinit var userService: EnticingUserService
+
+    @MockBean
+    lateinit var userHolder: CurrentUserHolder
 
     @MockBean
     lateinit var queryService: QueryService

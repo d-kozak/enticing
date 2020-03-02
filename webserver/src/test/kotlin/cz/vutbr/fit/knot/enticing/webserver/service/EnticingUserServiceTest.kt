@@ -35,7 +35,8 @@ internal class EnticingUserServiceTest {
     private val encoder = BCryptPasswordEncoder(11)
     private val selectedMetadataRepositoryMock = mockk<SelectedMetadataRepository>()
     private val selectedEntityMetadataRepositoryMock = mockk<SelectedEntityMetadataRepository>()
-    private val userService = EnticingUserService(userRepositoryMock, selectedMetadataRepositoryMock, selectedEntityMetadataRepositoryMock, encoder, searchSettingsRepositoryMock, SimpleStdoutLoggerFactory)
+    private val userHolder = CurrentUserHolder(SimpleStdoutLoggerFactory)
+    private val userService = EnticingUserService(userRepositoryMock, selectedMetadataRepositoryMock, selectedEntityMetadataRepositoryMock, encoder, searchSettingsRepositoryMock, userHolder, SimpleStdoutLoggerFactory)
 
     @Test
     fun `loadUserByUsername Test`() {
@@ -107,7 +108,7 @@ internal class EnticingUserServiceTest {
 
     @Test
     fun `update user test cannot update another user because not logged in`() {
-        assertThrows<InsufficientRoleException> {
+        assertThrows<IllegalStateException> {
             val user = User(10, "donald", active = false, roles = setOf("R2"), selectedSettings = 11, userSettings = cz.vutbr.fit.knot.enticing.webserver.dto.UserSettings(22))
             userService.updateUser(user)
         }
@@ -172,7 +173,7 @@ internal class EnticingUserServiceTest {
     fun `delete user test cannot delete user because not logged in`() {
         val user = User(0, "123")
         every { userRepositoryMock.findById(0) } returns Optional.of(user.toEntity())
-        assertThrows<InsufficientRoleException> {
+        assertThrows<IllegalStateException> {
             userService.deleteUser(0)
         }
     }
@@ -231,10 +232,9 @@ internal class EnticingUserServiceTest {
     @Test
     fun `change password should fail not logged in`() {
         every { userRepositoryMock.findByLogin("testLogin") } returns UserEntity(login = "testLogin", encryptedPassword = encoder.encode("oldPass"))
-        assertThrows<InsufficientRoleException> {
+        assertThrows<IllegalStateException> {
             userService.changePassword(ChangePasswordCredentials("testLogin", "oldPass", "newPass"))
         }
-        verify(exactly = 1) { userRepositoryMock.findByLogin("testLogin") }
     }
 
 
@@ -282,7 +282,7 @@ internal class EnticingUserServiceTest {
     fun `Get user test`() {
         val dummyUserEntity = UserEntity(login = "Honza")
         withAuthentication(dummyUserEntity) {
-            assertThat(userService.currentUser)
+            assertThat(userHolder.getCurrentUser())
                     .isEqualTo(dummyUserEntity.toUser())
         }
     }
@@ -309,7 +309,7 @@ internal class EnticingUserServiceTest {
         assertThat(SecurityContextHolder.getContext().authentication).isNull()
         SecurityContextHolder.getContext().authentication = authentication
         try {
-            val user = userService.currentUser
+            val user = userHolder.getCurrentUser()
         } finally {
             SecurityContextHolder.getContext().authentication = null
         }

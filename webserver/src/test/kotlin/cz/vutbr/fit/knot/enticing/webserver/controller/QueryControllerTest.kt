@@ -7,10 +7,7 @@ import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.TextMetadata
 import cz.vutbr.fit.knot.enticing.dto.WebServer
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
-import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
-import cz.vutbr.fit.knot.enticing.webserver.service.EqlCompilerService
-import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
-import cz.vutbr.fit.knot.enticing.webserver.service.SearchSettingsService
+import cz.vutbr.fit.knot.enticing.webserver.service.*
 import cz.vutbr.fit.knot.enticing.webserver.service.mock.dummyDocument
 import cz.vutbr.fit.knot.enticing.webserver.service.mock.firstResult
 import cz.vutbr.fit.knot.enticing.webserver.service.mock.snippetExtension
@@ -43,6 +40,9 @@ internal class QueryControllerTest(
 
     @MockBean
     lateinit var userService: EnticingUserService
+
+    @MockBean
+    lateinit var userHolder: CurrentUserHolder
 
     @MockBean
     lateinit var searchSettingsService: SearchSettingsService

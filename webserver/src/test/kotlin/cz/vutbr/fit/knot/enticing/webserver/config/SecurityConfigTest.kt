@@ -10,10 +10,7 @@ import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.entity.SelectedEntityMetadata
 import cz.vutbr.fit.knot.enticing.webserver.entity.SelectedMetadata
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
-import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
-import cz.vutbr.fit.knot.enticing.webserver.service.EqlCompilerService
-import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
-import cz.vutbr.fit.knot.enticing.webserver.service.SearchSettingsService
+import cz.vutbr.fit.knot.enticing.webserver.service.*
 import cz.vutbr.fit.knot.enticing.webserver.testconfig.LogServiceTestConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
@@ -54,6 +51,9 @@ internal class SecurityConfigTest(
 
     @MockBean
     lateinit var queryService: QueryService
+
+    @MockBean
+    lateinit var userHolder: CurrentUserHolder
 
     @Nested
     inner class Login {

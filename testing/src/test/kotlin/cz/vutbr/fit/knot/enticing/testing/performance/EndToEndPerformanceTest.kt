@@ -15,7 +15,7 @@ import java.io.File
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class EndToEndPerformanceTest {
 
-    val rebootComponents = true
+    val rebootComponents = false
 
     val fixture = SmallWikiTestFixture(rebootComponents)
 

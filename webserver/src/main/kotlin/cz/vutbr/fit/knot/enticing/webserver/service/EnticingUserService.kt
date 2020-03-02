@@ -15,7 +15,6 @@ import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.SelectedEntityMetadataRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.SelectedMetadataRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
@@ -26,7 +25,7 @@ import javax.transaction.Transactional
 @Service
 @Transactional
 @Incomplete("selected metadata from user and search settings is probably not deleted properly")
-class EnticingUserService(private val userRepository: UserRepository, private val selectedMetadataRepository: SelectedMetadataRepository, private val selectedEntityMetadataRepository: SelectedEntityMetadataRepository, private val encoder: PasswordEncoder, private val searchSettingsRepository: SearchSettingsRepository, loggerFactory: LoggerFactory) : UserDetailsService {
+class EnticingUserService(private val userRepository: UserRepository, private val selectedMetadataRepository: SelectedMetadataRepository, private val selectedEntityMetadataRepository: SelectedEntityMetadataRepository, private val encoder: PasswordEncoder, private val searchSettingsRepository: SearchSettingsRepository, val userHolder: CurrentUserHolder, loggerFactory: LoggerFactory) : UserDetailsService {
 
     private val logger = loggerFactory.logger { }
 
@@ -67,10 +66,11 @@ class EnticingUserService(private val userRepository: UserRepository, private va
     }
 
     fun changePassword(userCredentials: ChangePasswordCredentials) {
+        val currentUser = userHolder.requireLoggedInUser()
         val userEntity = userRepository.findByLogin(userCredentials.login)
                 ?: throw IllegalArgumentException("Unknown login ${userCredentials.login}")
         requireCanEditUser(userEntity.toUser())
-        if (!encoder.matches(userCredentials.oldPassword, userEntity.encryptedPassword) && !currentUser!!.isAdmin) {
+        if (!encoder.matches(userCredentials.oldPassword, userEntity.encryptedPassword) && !currentUser.isAdmin) {
             throw InvalidPasswordException("Invalid password")
         }
         userEntity.encryptedPassword = encoder.encode(userCredentials.newPassword)
@@ -80,22 +80,23 @@ class EnticingUserService(private val userRepository: UserRepository, private va
     fun getAllUsers(): List<User> = userRepository.findAll().map(UserEntity::toUser)
 
     fun selectSettings(searchSettingsId: Long) {
+        val currentUser = userHolder.requireLoggedInUser()
         val searchSettings = searchSettingsRepository.findById(searchSettingsId).orElseThrow { IllegalArgumentException("No settings with id $searchSettingsId found") }
-        val currentUser = userRepository.findById(currentUser!!.id).orElseThrow { IllegalArgumentException("User not located in db") }
-        currentUser.selectedSettings = searchSettings
-        userRepository.save(currentUser)
+        val currentUserEntity = userRepository.findById(currentUser.id).orElseThrow { IllegalArgumentException("User not located in db") }
+        currentUserEntity.selectedSettings = searchSettings
+        userRepository.save(currentUserEntity)
     }
 
     private fun requireCanEditUser(user: User) {
         if (!canEditUser(user)) {
-            throw InsufficientRoleException("User $currentUser cannot edit user $user")
+            throw InsufficientRoleException("User ${userHolder.getCurrentUser()} cannot edit user $user")
         }
     }
 
 
     fun loadSelectedMetadata(searchSettingsId: SearchSettingsId): SelectedMetadata {
         val searchSettings = searchSettingsRepository.findById(searchSettingsId).orElseThrow { IllegalArgumentException("Cannot find searchSettings with id $searchSettingsId") }
-        val user = currentUser
+        val user = userHolder.getCurrentUser()
         if (user != null) {
             val userEntity = userRepository.findByLogin(user.login)
                     ?: throw IllegalStateException("User $user is in the SecurityContextHolder, but does not have corresponding entity in the db")
@@ -120,28 +121,20 @@ class EnticingUserService(private val userRepository: UserRepository, private va
     }
 
     fun saveSelectedMetadata(metadata: SelectedMetadata, searchSettingsId: SearchSettingsId) {
-        val userEntity = currentUser?.let { userRepository.findByLogin(it.login) }
+        val currentUser = userHolder.requireLoggedInUser()
+        val userEntity = currentUser.let { userRepository.findByLogin(it.login) }
                 ?: throw IllegalArgumentException("could not find necessary user information")
         userEntity.selectedMetadata[searchSettingsId] = saveMetadata(metadata)
     }
 
-    private fun canEditUser(targetUser: User): Boolean = currentUser != null && (currentUser!!.isAdmin || currentUser!!.id == targetUser.id)
+    private fun canEditUser(targetUser: User): Boolean = userHolder.requireLoggedInUser().let { currentUser -> currentUser.isAdmin || currentUser.id == targetUser.id }
 
     fun saveDefaultMetadata(id: SearchSettingsId, metadata: SelectedMetadata) {
         logger.info("saving default metadata for $id: $metadata")
-        val user = currentUser
-        if (user == null || !user.isAdmin) throw throw InsufficientRoleException("User $currentUser cannot set default settings")
+        val user = userHolder.getCurrentUser()
+        if (user == null || !user.isAdmin) throw throw InsufficientRoleException("User $user cannot set default settings")
         val searchSettings = searchSettingsRepository.findById(id).orElseThrow { IllegalArgumentException("Cannot find searchSettings with id $id") }
         searchSettings.defaultMetadata = saveMetadata(metadata)
     }
-
-
-    val currentUser: User?
-        get() {
-            val principal = SecurityContextHolder.getContext().authentication?.principal ?: return null
-            return if (principal is UserEntity) principal.toUser() else {
-                logger.warn("Stored principal $principal in not of type UserEntity")
-                null
-            }
-        }
 }
+

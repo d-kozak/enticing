@@ -8,20 +8,20 @@ import cz.vutbr.fit.knot.enticing.webserver.dto.User
 import cz.vutbr.fit.knot.enticing.webserver.dto.UserCredentials
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettingsId
 import cz.vutbr.fit.knot.enticing.webserver.entity.SelectedMetadata
+import cz.vutbr.fit.knot.enticing.webserver.service.CurrentUserHolder
 import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
 @RestController
 @RequestMapping("\${api.base.path}/user")
-class UserController(private val userService: EnticingUserService, loggerFactory: LoggerFactory) {
+class UserController(private val userService: EnticingUserService, val userHolder: CurrentUserHolder, loggerFactory: LoggerFactory) {
 
     private val logger = loggerFactory.logger { }
 
     @GetMapping
-    fun get(): User? {
-        return userService.currentUser
-    }
+    fun get(): User? = userHolder.getCurrentUser()
+
 
     @GetMapping("/all")
     fun getAll(): List<User> = userService.getAllUsers()

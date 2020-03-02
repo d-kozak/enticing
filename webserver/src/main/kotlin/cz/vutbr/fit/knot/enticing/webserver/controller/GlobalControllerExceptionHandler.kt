@@ -11,6 +11,7 @@ import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcherException
 import cz.vutbr.fit.knot.enticing.webserver.exception.InvalidPasswordException
 import cz.vutbr.fit.knot.enticing.webserver.exception.InvalidSearchSettingsException
 import cz.vutbr.fit.knot.enticing.webserver.exception.ValueNotUniqueException
+import org.hibernate.exception.JDBCConnectionException
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -22,6 +23,12 @@ import javax.servlet.http.HttpServletResponse
 class GlobalControllerExceptionHandler(loggerFactory: LoggerFactory) {
 
     val logger = loggerFactory.logger { }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(JDBCConnectionException::class)
+    fun jDBCConnectionException(e: Exception) {
+        logger.error(e)
+    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(QueryDispatcherException::class)

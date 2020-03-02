@@ -23,7 +23,7 @@ import javax.servlet.http.HttpSession
 class QueryService(
         private val dispatcher: QueryDispatcher<SearchQuery, Map<CollectionName, Offset>, IndexServer.IndexResultList>,
         private val searchSettingsRepository: SearchSettingsRepository,
-        private val userService: EnticingUserService,
+        private val userHolder: CurrentUserHolder,
         private val indexServerConnector: IndexServerConnector,
         private val compilerService: EqlCompilerService,
         loggerFactory: LoggerFactory
@@ -91,7 +91,7 @@ class QueryService(
     }
 
     fun checkUserCanAccessSettings(selectedSettings: Long): SearchSettings {
-        val currentUser = userService.currentUser
+        val currentUser = userHolder.getCurrentUser()
 
         val searchSettings = searchSettingsRepository.findById(selectedSettings).orElseThrow { InvalidSearchSettingsException("Unknown searchSettings id $selectedSettings") }
 

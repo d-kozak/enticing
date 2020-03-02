@@ -6,10 +6,7 @@ import cz.vutbr.fit.knot.enticing.webserver.dto.*
 import cz.vutbr.fit.knot.enticing.webserver.entity.SelectedEntityMetadata
 import cz.vutbr.fit.knot.enticing.webserver.entity.SelectedMetadata
 import cz.vutbr.fit.knot.enticing.webserver.exception.InvalidPasswordException
-import cz.vutbr.fit.knot.enticing.webserver.service.EnticingUserService
-import cz.vutbr.fit.knot.enticing.webserver.service.EqlCompilerService
-import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
-import cz.vutbr.fit.knot.enticing.webserver.service.SearchSettingsService
+import cz.vutbr.fit.knot.enticing.webserver.service.*
 import cz.vutbr.fit.knot.enticing.webserver.testconfig.LogServiceTestConfig
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -47,6 +44,9 @@ internal class UserControllerTest(
     @MockBean
     lateinit var queryService: QueryService
 
+    @MockBean
+    lateinit var userHolder: CurrentUserHolder
+
     @Test
     fun `Signup test`() {
         val user = UserCredentials("Pepa1", "12345")
@@ -65,13 +65,13 @@ internal class UserControllerTest(
     fun `Get user test`() {
         val dummyUser = User(login = "ferda")
         val serialized = ObjectMapper().writeValueAsString(dummyUser)
-        Mockito.`when`(userService.currentUser).thenReturn(dummyUser)
+        Mockito.`when`(userHolder.getCurrentUser()).thenReturn(dummyUser)
 
         mockMvc.perform(get("$apiBasePath/user"))
                 .andExpect(status().isOk)
                 .andExpect(MockMvcResultMatchers.content().string(serialized))
 
-        Mockito.verify(userService).currentUser
+        Mockito.verify(userHolder).getCurrentUser()
         Mockito.clearInvocations(userService)
     }
 
