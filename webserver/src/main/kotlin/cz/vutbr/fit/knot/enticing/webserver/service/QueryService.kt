@@ -12,10 +12,7 @@ import cz.vutbr.fit.knot.enticing.webserver.dto.LastQuery
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.exception.InvalidSearchSettingsException
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import org.springframework.stereotype.Service
 import javax.servlet.http.HttpSession
 
@@ -70,7 +67,7 @@ class QueryService(
 
         require(searchSettings.servers.isNotEmpty()) { "Search settings $searchSettings has no associated servers, therefore it has no CorpusFormat" }
 
-        return runBlocking {
+        return runBlocking(context = Dispatchers.IO) {
             val formats = searchSettings.servers.map { server ->
                 async {
                     for (i in 1..10) {
