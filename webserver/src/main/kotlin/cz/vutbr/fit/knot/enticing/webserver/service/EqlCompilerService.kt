@@ -13,4 +13,8 @@ class EqlCompilerService(
         val (ast, errors) = compiler.parseAndAnalyzeQuery(input, configuration)
         return QueryValidationReply(ast.toMgj4Query(), errors)
     }
+
+    fun validateOrFail(input: String, configuration: MetadataConfiguration) {
+        compiler.parseOrFail(input, configuration)
+    }
 }

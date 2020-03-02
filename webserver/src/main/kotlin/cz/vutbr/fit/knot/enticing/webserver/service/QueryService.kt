@@ -2,7 +2,6 @@ package cz.vutbr.fit.knot.enticing.webserver.service
 
 import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
-import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompilerException
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.error
 import cz.vutbr.fit.knot.enticing.log.logger
@@ -12,7 +11,6 @@ import cz.vutbr.fit.knot.enticing.webserver.dto.LastQuery
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.exception.InvalidSearchSettingsException
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
-import kotlinx.coroutines.*
 import org.springframework.stereotype.Service
 import javax.servlet.http.HttpSession
 
@@ -23,6 +21,7 @@ class QueryService(
         private val userHolder: CurrentUserHolder,
         private val indexServerConnector: IndexServerConnector,
         private val compilerService: EqlCompilerService,
+        private val corpusFormatService: CorpusFormatService,
         loggerFactory: LoggerFactory
 ) {
 
@@ -30,10 +29,11 @@ class QueryService(
 
     fun validateQuery(query: String, settings: Long) = compilerService.validateQuery(query, format(settings).toMetadataConfiguration())
 
+    fun format(settings: Long) = corpusFormatService.loadFormat(checkUserCanAccessSettings(settings))
+
     fun query(query: SearchQuery, selectedSettings: Long, session: HttpSession): WebServer.ResultList {
-        val errors = validateQuery(query.query, selectedSettings).errors
-        if (errors.isNotEmpty()) throw EqlCompilerException(errors.toString())
         val searchSettings = checkUserCanAccessSettings(selectedSettings)
+        compilerService.validateOrFail(query.query, corpusFormatService.loadFormat(searchSettings).toMetadataConfiguration())
         val requestData = searchSettings.servers.map { IndexServerRequestData(it) }
         logger.info("Executing query $query with requestData $requestData")
         val (result, offset) = flatten(query.query, dispatcher.dispatchQuery(query, requestData))
@@ -62,30 +62,6 @@ class QueryService(
         return indexDocument.toWebserverFormat(query.host, query.collection, query.documentId, query.query)
     }
 
-    fun format(selectedSettings: Long): CorpusFormat {
-        val searchSettings = checkUserCanAccessSettings(selectedSettings)
-
-        require(searchSettings.servers.isNotEmpty()) { "Search settings $searchSettings has no associated servers, therefore it has no CorpusFormat" }
-
-        return runBlocking(context = Dispatchers.IO) {
-            val formats = searchSettings.servers.map { server ->
-                async {
-                    for (i in 1..10) {
-                        try {
-                            return@async indexServerConnector.getFormat(server)
-                        } catch (ex: Exception) {
-                            logger.info("Could not contact server $server: ${ex}, try $i/10")
-                            delay(1_000)
-                        }
-                    }
-                    logger.warn("Could not contact server $server")
-                    null
-                }
-            }.awaitAll().filterNotNull()
-
-            mergeCorpusFormats(formats)
-        }
-    }
 
     fun checkUserCanAccessSettings(selectedSettings: Long): SearchSettings {
         val currentUser = userHolder.getCurrentUser()

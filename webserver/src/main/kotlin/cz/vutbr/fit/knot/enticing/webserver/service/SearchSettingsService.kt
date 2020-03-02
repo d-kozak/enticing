@@ -9,6 +9,7 @@ import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.exception.ValueNotUniqueException
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import cz.vutbr.fit.knot.enticing.webserver.repository.UserRepository
+import org.springframework.cache.annotation.CacheEvict
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.stereotype.Service
@@ -41,21 +42,34 @@ class SearchSettingsService(loggerFactory: LoggerFactory, private val searchSett
     fun import(searchSettings: ImportedSearchSettings): SearchSettings {
         val res = searchSettingsRepository.save(searchSettings.toEntity())
         logger.info("Imported new settings $res")
+        corpusFormatCacheEvict(res)
         return res
     }
 
     fun create(searchSettings: SearchSettings): SearchSettings {
         if (searchSettingsRepository.existsByName(searchSettings.name))
             throw ValueNotUniqueException("name", "Name ${searchSettings.name} is already taken")
-        return searchSettingsRepository.save(searchSettings)
+        val res = searchSettingsRepository.save(searchSettings)
+        corpusFormatCacheEvict(res)
+        return res
     }
 
-    fun update(searchSettings: SearchSettings) = searchSettingsRepository.save(searchSettings)
+    fun update(searchSettings: SearchSettings): SearchSettings {
+        val res = searchSettingsRepository.save(searchSettings)
+        corpusFormatCacheEvict(res)
+        return res
+    }
 
     fun delete(id: Long) {
         val searchSettings = searchSettingsRepository.findById(id).orElseThrow { IllegalArgumentException("No settings with id $id found") }
         userRepository.detachSettingsFromAllUsers(searchSettings)
         searchSettingsRepository.deleteById(id)
+        corpusFormatCacheEvict(searchSettings)
+    }
+
+    @CacheEvict("corpusFormat")
+    fun corpusFormatCacheEvict(searchSettings: SearchSettings) {
+        logger.info("Evicting corpusFormat cache for ${searchSettings.name}")
     }
 
     fun getStatus(id: Long): Map<String, String> {
