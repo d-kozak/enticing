@@ -32,6 +32,10 @@ object SimpleStdoutLoggerFactory : LoggerFactory {
     override fun addRemoteApi(remoteLoggingApi: RemoteLoggingApi) {
         throw UnsupportedOperationException("adding loggers not supported here")
     }
+
+    override fun close() {
+
+    }
 }
 
 fun Logger.error(ex: Exception) {
@@ -61,7 +65,7 @@ private fun readableTimestamp(timestamp: Long, formatter: DateTimeFormatter): St
 
 inline fun LoggerFactory.logger(noinline func: () -> Unit): Logger = namedLogger(resolveName(func))
 
-interface LoggerFactory {
+interface LoggerFactory : AutoCloseable {
     fun namedLogger(name: String): Logger
 
     fun addRemoteApi(remoteLoggingApi: RemoteLoggingApi)
@@ -119,16 +123,21 @@ private class StdoutLoggerNode(config: LoggingConfiguration) : ConfiguredLoggerN
 }
 
 
-private class FileBasedLoggerNode(val file: File, config: LoggingConfiguration) : ConfiguredLoggerNode(config) {
+private class FileBasedLoggerNode(val file: File, config: LoggingConfiguration) : ConfiguredLoggerNode(config), AutoCloseable {
+
+    private val writer = FileWriter(file, true)
+
     override fun log(logMessage: LogMessage) {
-        writeToFile(logMessage.toPrintableString(formatter))
+        writer.appendln(logMessage.toPrintableString(formatter))
     }
 
     override fun perf(perfMessage: PerfMessage) {
-        writeToFile(perfMessage.toPrintableString(formatter))
+        writer.appendln(perfMessage.toPrintableString(formatter))
     }
 
-    private fun writeToFile(content: String) = FileWriter(file, true).use { it.appendln(content) }
+    override fun close() {
+        writer.close()
+    }
 }
 
 
@@ -137,8 +146,9 @@ interface RemoteLoggingApi : LoggerPipeLineNode
 
 fun LoggingConfiguration.loggerFactoryFor(serviceId: String, remoteLoggingApi: RemoteLoggingApi? = null): LoggerFactory {
     val stdoutLogger = FilteringLoggerNode(stdoutLogs, StdoutLoggerNode(this))
-    val fileLogger = FilteringLoggerNode(fileLogs, FileBasedLoggerNode(File("${this.rootDirectory}/$serviceId.log"), this))
-    val pipelines = mutableListOf<LoggerPipeLineNode>(stdoutLogger, fileLogger)
+    val fileLogger = FileBasedLoggerNode(File("${this.rootDirectory}/$serviceId.log"), this)
+    val filteredFileLogger = FilteringLoggerNode(fileLogs, fileLogger)
+    val pipelines = mutableListOf<LoggerPipeLineNode>(stdoutLogger, filteredFileLogger)
     if (remoteLoggingApi != null) {
         pipelines.add(FilteringLoggerNode(managementLoggingConfiguration.logTypes, remoteLoggingApi))
     }
@@ -147,6 +157,10 @@ fun LoggingConfiguration.loggerFactoryFor(serviceId: String, remoteLoggingApi: R
 
         override fun addRemoteApi(remoteLoggingApi: RemoteLoggingApi) {
             pipelines.add(remoteLoggingApi)
+        }
+
+        override fun close() {
+            fileLogger.close()
         }
     }
 }
