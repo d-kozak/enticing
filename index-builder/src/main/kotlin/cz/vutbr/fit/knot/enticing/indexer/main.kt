@@ -9,6 +9,9 @@ import cz.vutbr.fit.knot.enticing.index.startIndexing
 import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.loggerFactoryFor
 import cz.vutbr.fit.knot.enticing.log.measure
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 fun handleArguments(vararg args: String, loadConfig: (path: String) -> EnticingConfiguration = ::executeScript): Pair<EnticingConfiguration, String> {
     args.size == 2 || throw IllegalArgumentException("format: /path/to/config.kts serverAddress")
@@ -27,16 +30,20 @@ fun main(args: Array<String>) {
 
 
     logger.measure("indexing", config.toString()) {
-        for ((collection, mg4jDir, indexDir) in config.loadCollections()) {
-            try {
-                logger.measure("collection ${collection.name}") {
-                    val builderConf = IndexBuilderConfig(config.corpus.name, collection.name, mg4jDir, indexDir, config.metadataConfiguration
-                            ?: config.corpus.metadataConfiguration)
+        runBlocking(context = Dispatchers.IO) {
+            for ((collection, mg4jDir, indexDir) in config.loadCollections()) {
+                launch {
+                    try {
+                        logger.measure("collection ${collection.name}") {
+                            val builderConf = IndexBuilderConfig(config.corpus.name, collection.name, mg4jDir, indexDir, config.metadataConfiguration
+                                    ?: config.corpus.metadataConfiguration)
 
-                    startIndexing(builderConf, loggerFactory)
+                            startIndexing(builderConf, loggerFactory)
+                        }
+                    } catch (ex: java.lang.Exception) {
+                        ex.printStackTrace()
+                    }
                 }
-            } catch (ex: java.lang.Exception) {
-                ex.printStackTrace()
             }
         }
     }
