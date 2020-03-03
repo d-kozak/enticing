@@ -38,7 +38,7 @@ enticingConfiguration {
 
     corpusConfig {
         corpus("wiki-2018") {
-            collectionsDir = "/mnt/data/indexes/xkozak15/test_config"
+            collectionsDir = "/mnt/data/indexes/xkozak15/wiki-2018"
             serverFile("$ENTICING_HOME/deploy/big-wiki/servers.txt")
 
             corpusSource {
