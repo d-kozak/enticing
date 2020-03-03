@@ -61,12 +61,33 @@ class DistributeCorpusContext(corpusName: String, configuration: EnticingConfigu
         check(allFiles.size == fileCount) { "the amount of distributed files is not equal to the original amount of files" }
 
         for (i in 0 until collectionsPerServer) {
-            dividedPerCollection.map { (server, collections) ->
-                val (collection, files) = collections[i]
-                launch {
-                    createCollection(server, collection, files)
-                }
-            }.joinAll()
+            val batchSize = 20
+            val size = dividedPerCollection.size / batchSize
+            val rem = dividedPerCollection.size % batchSize
+
+            repeat(size) {
+                val start = (it) * batchSize
+                val end = start + batchSize - 1
+                dividedPerCollection.slice(start..end)
+                        .map { (server, collections) ->
+                            val (collection, files) = collections[i]
+                            launch {
+                                createCollection(server, collection, files)
+                            }
+                        }.joinAll()
+            }
+
+            if (rem != 0) {
+                val start = size * batchSize
+                val end = start + rem - 1
+                dividedPerCollection.slice(start..end)
+                        .map { (server, collections) ->
+                            val (collection, files) = collections[i]
+                            launch {
+                                createCollection(server, collection, files)
+                            }
+                        }.joinAll()
+            }
         }
     }
 

@@ -25,18 +25,18 @@ class ManagementCliIntegrationTests {
     @Disabled
     inner class BigWikiConfig {
 
+        val configScript = "../deploy/big-wiki/config.kts"
+
         @Test
         @Disabled
         fun `run what I want`() {
-            runCliApp("../deploy/big-wiki/testConfig.kts --local-build --copy-jars")
-            runCliApp("../deploy/big-wiki/testConfig.kts -wimk")
-            runCliApp("../deploy/big-wiki/testConfig.kts -wim")
+            runCliApp("$configScript -d")
         }
 
         //@Test
         @Disabled
         fun `whole pipeline`() {
-            runCliApp("../deploy/big-wiki/testConfig.kts --remove -dpwi")
+            runCliApp("$configScript --remove -dpwi")
         }
 
 
