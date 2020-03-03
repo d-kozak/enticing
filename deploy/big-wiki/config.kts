@@ -33,7 +33,7 @@ enticingConfiguration {
     deployment {
         server = "athena10.fit.vutbr.cz"
         repository = "/mnt/minerva1/nlp/projects/corpproc_search/corpproc_search"
-        configurationScript = "$repository/deploy/big-wiki/testConfig.kts"
+        configurationScript = "$repository/deploy/big-wiki/config.kts"
     }
 
     corpusConfig {
