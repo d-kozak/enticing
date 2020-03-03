@@ -23,6 +23,27 @@ class ManagementCliIntegrationTests {
 
     @Nested
     @Disabled
+    inner class BigWikiConfig {
+
+        @Test
+        @Disabled
+        fun `run what I want`() {
+            runCliApp("../deploy/big-wiki/testConfig.kts --local-build --copy-jars")
+            runCliApp("../deploy/big-wiki/testConfig.kts -wimk")
+            runCliApp("../deploy/big-wiki/testConfig.kts -wim")
+        }
+
+        //@Test
+        @Disabled
+        fun `whole pipeline`() {
+            runCliApp("../deploy/big-wiki/testConfig.kts --remove -dpwi")
+        }
+
+
+    }
+
+    @Nested
+    @Disabled
     inner class SmallTestConfig {
 
         @Test
