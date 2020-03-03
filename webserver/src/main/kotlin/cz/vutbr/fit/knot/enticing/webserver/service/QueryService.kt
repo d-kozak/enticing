@@ -5,6 +5,7 @@ import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.error
 import cz.vutbr.fit.knot.enticing.log.logger
+import cz.vutbr.fit.knot.enticing.log.measure
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcherException
 import cz.vutbr.fit.knot.enticing.webserver.dto.LastQuery
@@ -27,11 +28,13 @@ class QueryService(
 
     val logger = loggerFactory.logger { }
 
-    fun validateQuery(query: String, settings: Long) = compilerService.validateQuery(query, format(settings).toMetadataConfiguration())
+    fun validateQuery(query: String, settings: Long) = logger.measure("validateQuery", "query='$query',settingsId=$settings") {
+        compilerService.validateQuery(query, format(settings).toMetadataConfiguration())
+    }
 
     fun format(settings: Long) = corpusFormatService.loadFormat(checkUserCanAccessSettings(settings))
 
-    fun query(query: SearchQuery, selectedSettings: Long, session: HttpSession): WebServer.ResultList {
+    fun query(query: SearchQuery, selectedSettings: Long, session: HttpSession): WebServer.ResultList = logger.measure("query", "query='${query.query}',settingsId=$selectedSettings") {
         val searchSettings = checkUserCanAccessSettings(selectedSettings)
         compilerService.validateOrFail(query.query, corpusFormatService.loadFormat(searchSettings).toMetadataConfiguration())
         val requestData = searchSettings.servers.map { IndexServerRequestData(it) }
@@ -40,7 +43,7 @@ class QueryService(
 
         session.setAttribute("lastQuery", LastQuery(query, selectedSettings, offset))
 
-        return result
+        result
     }
 
     fun getMore(session: HttpSession): WebServer.ResultList? {
