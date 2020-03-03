@@ -42,6 +42,7 @@ class ShowDistributedFilesContext(corpusName: String, configuration: EnticingCon
             }
         }.awaitAll()
 
+        var fileSize = 0L
         var fileCount = 0
 
         for ((server, collections) in totalStats) {
@@ -49,10 +50,13 @@ class ShowDistributedFilesContext(corpusName: String, configuration: EnticingCon
             for ((collection, files) in collections) {
                 logger.info("\t $collection")
                 fileCount += files.size
-                for (file in files)
+                for (file in files) {
                     logger.info("\t\t $file")
+                    fileSize += file.size
+                }
             }
         }
         logger.info("Total file count $fileCount")
+        logger.info("Total file size ${fileSize}B")
     }
 }
