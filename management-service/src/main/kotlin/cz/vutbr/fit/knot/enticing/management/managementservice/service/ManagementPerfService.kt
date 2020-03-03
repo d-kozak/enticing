@@ -26,8 +26,8 @@ class ManagementPerfService(val perfRepository: PerfRepository) {
         val stats = GeneralOperationStatistics(operationId)
         stats.invocationCount = operations.size
         val durationSum = operations.fold(0L) { acc, perf ->
-            if (stats.minDuration > perf.duration) stats.minDuration = perf.duration
-            if (stats.maxDuration < perf.duration) stats.maxDuration = perf.duration
+            if (stats.minDuration == 0L || stats.minDuration > perf.duration) stats.minDuration = perf.duration
+            if (stats.maxDuration == 0L || stats.maxDuration < perf.duration) stats.maxDuration = perf.duration
             acc + perf.duration
         }
         stats.averageDuration = durationSum.toDouble() / operations.size
