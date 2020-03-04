@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.enticing.management.managementservice.entity
 
 import cz.vutbr.fit.knot.enticing.mx.StaticServerInfo
 import javax.persistence.Entity
+import javax.persistence.FetchType
 import javax.persistence.Id
 import javax.persistence.OneToMany
 import javax.validation.constraints.NotEmpty
@@ -15,7 +16,7 @@ class ServerEntity(
         val componentId: String,
         val availableProcessors: Int,
         val totalPhysicalMemorySize: Long,
-        @OneToMany(mappedBy = "server")
+        @OneToMany(mappedBy = "server", fetch = FetchType.EAGER)
         val status: MutableList<ServerStatusEntity>
 ) {
 

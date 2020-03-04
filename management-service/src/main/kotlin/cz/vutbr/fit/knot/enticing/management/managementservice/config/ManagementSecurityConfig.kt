@@ -35,7 +35,8 @@ class SecurityConfig(
                         "$apiBasePath/login/**",
                         "$apiBasePath/log/**",
                         "$apiBasePath/perf/**",
-                        "$apiBasePath/heartbeat/**"
+                        "$apiBasePath/heartbeat/**",
+                        "$apiBasePath/server/**"
                 )
                 .permitAll()
                 .anyRequest()

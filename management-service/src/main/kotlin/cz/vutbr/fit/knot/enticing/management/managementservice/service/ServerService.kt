@@ -27,6 +27,8 @@ class ServerService(
     val logger = loggerFactory.logger { }
 
 
+    fun getAllServers() = serverRepository.findAll()
+
     @Transactional
     fun heartbeat(heartbeat: HeartbeatDto) {
         val server = getOrCreateServer(heartbeat.fullAddress) ?: return
@@ -47,10 +49,11 @@ class ServerService(
     }
 
     fun getStaticServerInfo(fullAddress: String): StaticServerInfo? {
-        val (_, _, result) = "http://$fullAddress$API_BASE_PATH/server-status".httpGet()
+        val url = "http://$fullAddress$API_BASE_PATH/server-status"
+        val (_, _, result) = url.httpGet()
                 .responseString()
         return if (result is Result.Failure) {
-            logger.error("Failed to submit message ${result.error.exception.message}")
+            logger.error("Failed to load server info from $url ${result.error.exception.message}")
             null
         } else result.get().toDto()
     }
