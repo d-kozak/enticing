@@ -7,9 +7,9 @@ import javax.persistence.Id
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Positive
 
-fun HeartbeatDto.toEntity() = HeartbeatEntity(componentId, componentType, timestamp)
+fun HeartbeatDto.toEntity() = HeartbeatEntity(fullAddress, componentType, timestamp)
 
-fun HeartbeatEntity.toDto(isAlive: Boolean) = HeartbeatDto(componentId, componentType, timestamp, isAlive)
+fun HeartbeatEntity.toDto(isAlive: Boolean) = HeartbeatDto(componentId, componentType, null, timestamp, isAlive)
 
 @Entity
 class HeartbeatEntity(

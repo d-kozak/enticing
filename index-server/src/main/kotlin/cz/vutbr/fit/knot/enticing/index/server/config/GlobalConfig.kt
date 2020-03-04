@@ -10,6 +10,7 @@ import cz.vutbr.fit.knot.enticing.dto.config.executeScript
 import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.loggerFactoryFor
+import cz.vutbr.fit.knot.enticing.mx.ServerMonitoringService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -18,7 +19,8 @@ import org.springframework.context.annotation.Primary
 @Configuration
 class GlobalConfig(
         @Value("\${config.file}") private val configFile: String,
-        @Value("\${service.id}") private val address: String
+        @Value("\${service.id}") private val address: String,
+        @Value("\${server.port}") private val port: Int
 ) {
 
     private val log = org.slf4j.LoggerFactory.getLogger(GlobalConfig::class.java)
@@ -34,7 +36,7 @@ class GlobalConfig(
     }
 
     @Bean
-    fun managementApi(enticingConfiguration: EnticingConfiguration): ManagementServiceApi = ManagementServiceApi(enticingConfiguration.managementServiceConfiguration.fullAddress, ComponentType.INDEX_SERVER, address, enticingConfiguration.loggingConfiguration.loggerFactoryFor("$address-webserver"))
+    fun managementApi(enticingConfiguration: EnticingConfiguration): ManagementServiceApi = ManagementServiceApi(enticingConfiguration.managementServiceConfiguration.fullAddress, ComponentType.INDEX_SERVER, "$address:$port", enticingConfiguration.loggingConfiguration.loggerFactoryFor("$address-webserver"))
 
     @Bean
     @Primary
@@ -48,5 +50,8 @@ class GlobalConfig(
     @Bean
     fun metadataConfiguration(config: IndexServerConfiguration): MetadataConfiguration = config.metadataConfiguration
             ?: config.corpus.metadataConfiguration
+
+    @Bean
+    fun monitoringService(loggerFactory: LoggerFactory) = ServerMonitoringService(loggerFactory)
 
 }

@@ -30,7 +30,8 @@ class ManagementCliIntegrationTests {
         @Test
         @Disabled
         fun `run what I want`() {
-            runCliApp("$configScript -d")
+//            runCliApp("$configScript --local-build --copy-jars")
+            runCliApp("$configScript -p")
         }
 
         //@Test

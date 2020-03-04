@@ -48,7 +48,8 @@ class SecurityConfig(
                         "$apiBasePath/query",
                         "$apiBasePath/query/**",
                         "$apiBasePath/user/default-metadata/*",
-                        "$apiBasePath/compiler")
+                        "$apiBasePath/compiler",
+                        "$apiBasePath/server-status")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
