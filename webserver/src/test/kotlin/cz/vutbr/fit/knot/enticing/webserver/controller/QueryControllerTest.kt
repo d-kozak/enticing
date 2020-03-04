@@ -7,6 +7,7 @@ import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.TextMetadata
 import cz.vutbr.fit.knot.enticing.dto.WebServer
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
+import cz.vutbr.fit.knot.enticing.mx.ServerMonitoringService
 import cz.vutbr.fit.knot.enticing.webserver.service.*
 import cz.vutbr.fit.knot.enticing.webserver.service.mock.dummyDocument
 import cz.vutbr.fit.knot.enticing.webserver.service.mock.firstResult
@@ -49,6 +50,9 @@ internal class QueryControllerTest(
 
     @MockBean
     lateinit var queryService: QueryService
+
+    @MockBean
+    lateinit var monitoringService: ServerMonitoringService
 
     @Test
     fun query() {

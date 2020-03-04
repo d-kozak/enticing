@@ -17,7 +17,7 @@ data class ServerStatus(
         val systemCpuLoad: Double
 )
 
-class ServerMonitoringService(loggerFactory: LoggerFactory) {
+open class ServerMonitoringService(loggerFactory: LoggerFactory) {
 
     private val logger = loggerFactory.logger { }
 

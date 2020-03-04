@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.enticing.webserver.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
+import cz.vutbr.fit.knot.enticing.mx.ServerMonitoringService
 import cz.vutbr.fit.knot.enticing.webserver.dto.*
 import cz.vutbr.fit.knot.enticing.webserver.entity.SelectedEntityMetadata
 import cz.vutbr.fit.knot.enticing.webserver.entity.SelectedMetadata
@@ -47,13 +48,16 @@ internal class UserControllerTest(
     @MockBean
     lateinit var userHolder: CurrentUserHolder
 
+    @MockBean
+    lateinit var monitoringService: ServerMonitoringService
+
     @Test
     fun `Signup test`() {
         val user = UserCredentials("Pepa1", "12345")
         val serialized = ObjectMapper().writeValueAsString(user)
         mockMvc.perform(post("$apiBasePath/user")
-                .content(serialized)
-                .contentType(MediaType.APPLICATION_JSON))
+                        .content(serialized)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk)
 
         Mockito.verify(userService)

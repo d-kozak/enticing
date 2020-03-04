@@ -5,6 +5,7 @@ import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.TextMetadata
 import cz.vutbr.fit.knot.enticing.dto.WebServer
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
+import cz.vutbr.fit.knot.enticing.mx.ServerMonitoringService
 import cz.vutbr.fit.knot.enticing.webserver.dto.*
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.entity.SelectedEntityMetadata
@@ -54,6 +55,9 @@ internal class SecurityConfigTest(
 
     @MockBean
     lateinit var userHolder: CurrentUserHolder
+
+    @MockBean
+    lateinit var monitoringService: ServerMonitoringService
 
     @Nested
     inner class Login {

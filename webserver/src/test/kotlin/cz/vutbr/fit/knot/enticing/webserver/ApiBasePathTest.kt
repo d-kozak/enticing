@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver
 
+import cz.vutbr.fit.knot.enticing.mx.ServerMonitoringService
 import cz.vutbr.fit.knot.enticing.webserver.service.*
 import cz.vutbr.fit.knot.enticing.webserver.testconfig.LogServiceTestConfig
 import org.assertj.core.api.Assertions
@@ -31,6 +32,9 @@ internal class ApiBasePathTest(
 
     @MockBean
     lateinit var userHolder: CurrentUserHolder
+
+    @MockBean
+    lateinit var monitoringService: ServerMonitoringService
 
     @Test
     fun `Property api base path is set`() {

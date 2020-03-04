@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.whenever
+import cz.vutbr.fit.knot.enticing.mx.ServerMonitoringService
 import cz.vutbr.fit.knot.enticing.webserver.dto.ImportedSearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.dto.toEntity
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
@@ -48,12 +49,15 @@ internal class SearchSettingsControllerTest(
     @MockBean
     lateinit var queryService: QueryService
 
+    @MockBean
+    lateinit var monitoringService: ServerMonitoringService
+
     @Test
     fun create() {
         val searchSettings = SearchSettings(1, "foo", annotationServer = "foo.baz", annotationDataServer = "baz.paz", servers = setOf("127.0.0.1"))
         Mockito.`when`(searchSettingsService.create(searchSettings)).thenReturn(searchSettings)
         mockMvc.perform(post("$apiBasePath/search-settings").content(ObjectMapper().writeValueAsString(searchSettings))
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk)
         Mockito.verify(searchSettingsService).create(searchSettings)
         Mockito.clearInvocations(searchSettingsService)
