@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.enticing.api
 
 import cz.vutbr.fit.knot.enticing.log.*
 import cz.vutbr.fit.knot.enticing.mx.ServerStatus
+import cz.vutbr.fit.knot.enticing.mx.StaticServerInfo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -24,6 +25,8 @@ class ManagementServiceApi(remoteAddress: String, componentType: ComponentType, 
     override fun perf(perfMessage: PerfMessage) {
         scope.launch { httpPost("$API_BASE_PATH/perf", perfMessage.toPerfDto(localAddress, componentType)) }
     }
+
+    fun register(info: StaticServerInfo): Boolean = httpPost("$API_BASE_PATH/server", info)
 
     fun heartbeat(status: ServerStatus) {
         httpPost("$API_BASE_PATH/heartbeat", HeartbeatDto(localAddress, componentType, status))

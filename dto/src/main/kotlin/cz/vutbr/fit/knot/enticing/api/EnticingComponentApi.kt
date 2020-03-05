@@ -13,18 +13,19 @@ abstract class EnticingComponentApi(val componentAddress: String, val componentT
 
     private val logger = loggerFactory.logger { }
 
-    protected fun httpPost(endPoint: String, dto: Any) {
+    protected fun httpPost(endPoint: String, dto: Any): Boolean {
         val address = "http://$componentAddress$endPoint"
         logger.debug("Http POST $address $dto")
-        address.httpPost()
+        return address.httpPost()
                 .jsonBody(dto.toJson())
                 .submit()
     }
 
-    private fun Request.submit() {
+    private fun Request.submit(): Boolean {
         val (_, _, result) = this.responseString()
-        if (result is Result.Failure) {
+        return if (result is Result.Failure) {
             logger.error("Failed to submit message ${result.error.exception.message}")
-        }
+            false
+        } else true
     }
 }

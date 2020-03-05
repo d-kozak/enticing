@@ -20,6 +20,8 @@ class GlobalConfig(
         @Value("\${server.port}") private val port: Int
 ) {
 
+    private val fullAddress: String = "$address:$port"
+
     private val log = org.slf4j.LoggerFactory.getLogger(GlobalConfig::class.java)
 
     @Bean
@@ -33,7 +35,7 @@ class GlobalConfig(
     }
 
     @Bean
-    fun managementApi(enticingConfiguration: EnticingConfiguration) = ManagementServiceApi(enticingConfiguration.managementServiceConfiguration.fullAddress, ComponentType.WEBSERVER, "$address:$port", enticingConfiguration.loggingConfiguration.loggerFactoryFor("$address-webserver"))
+    fun managementApi(enticingConfiguration: EnticingConfiguration) = ManagementServiceApi(enticingConfiguration.managementServiceConfiguration.fullAddress, ComponentType.WEBSERVER, fullAddress, enticingConfiguration.loggingConfiguration.loggerFactoryFor("$address-webserver"))
 
     @Bean
     fun loggerFactory(enticingConfiguration: EnticingConfiguration, managementServiceApi: ManagementServiceApi): LoggerFactory {
@@ -41,5 +43,5 @@ class GlobalConfig(
     }
 
     @Bean
-    fun monitoringService(loggerFactory: LoggerFactory) = ServerMonitoringService(loggerFactory)
+    fun monitoringService(loggerFactory: LoggerFactory) = ServerMonitoringService(fullAddress, ComponentType.WEBSERVER, loggerFactory)
 }
