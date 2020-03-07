@@ -16,8 +16,8 @@ object SmallWiki2018Config : FixtureConfiguration {
 }
 
 object FullWiki2018Config : FixtureConfiguration {
-    override val scriptPath = "../deploy/big-wiki/testConfig.kts"
-    override val searchSettingsPath = "../deploy/big-wiki/small-wiki.search.settings.json"
+    override val scriptPath = "../deploy/big-wiki/config.kts"
+    override val searchSettingsPath = "../deploy/big-wiki/webserver-search-settings.json"
 }
 
 
