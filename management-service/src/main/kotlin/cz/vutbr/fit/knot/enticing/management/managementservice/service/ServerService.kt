@@ -23,7 +23,7 @@ class ServerService(
 
     fun getServers(pageable: Pageable) = serverRepository.findAll(pageable)
 
-    fun getServerStatus(componentId: String, pageable: Pageable) = serverStatusRepository.findAllByServerCustom(componentId, pageable)
+    fun getServerStatus(componentId: String, pageable: Pageable) = serverStatusRepository.findStatusByServer(componentId, pageable)
 
     @Transactional
     fun heartbeat(heartbeat: HeartbeatDto) {

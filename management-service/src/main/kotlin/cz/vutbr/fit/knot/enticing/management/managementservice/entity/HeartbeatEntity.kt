@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.enticing.management.managementservice.entity
 
 import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.HeartbeatDto
+import cz.vutbr.fit.knot.enticing.mx.ServerStatus
 import javax.persistence.Entity
 import javax.persistence.Id
 import javax.validation.constraints.NotEmpty
@@ -9,7 +10,7 @@ import javax.validation.constraints.Positive
 
 fun HeartbeatDto.toEntity() = HeartbeatEntity(fullAddress, componentType, timestamp)
 
-fun HeartbeatEntity.toDto(isAlive: Boolean) = HeartbeatDto(componentId, componentType, null, timestamp, isAlive)
+fun HeartbeatEntity.toDto(isAlive: Boolean, status: ServerStatus?) = HeartbeatDto(componentId, componentType, status, timestamp, isAlive)
 
 @Entity
 class HeartbeatEntity(

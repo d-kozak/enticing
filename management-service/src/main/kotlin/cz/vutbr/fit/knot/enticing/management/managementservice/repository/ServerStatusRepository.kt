@@ -8,7 +8,12 @@ import org.springframework.data.jpa.repository.Query
 
 interface ServerStatusRepository : JpaRepository<ServerStatusEntity, Long> {
 
-    @Query("select s from ServerStatusEntity s where s.server.componentId=:componentId",
+    @Query("select s from ServerStatusEntity s where s.server.componentId=:componentId order by s.timestamp",
             countQuery = "select count(s) from ServerStatusEntity s where s.server.componentId=:componentId")
-    fun findAllByServerCustom(componentId: String, pageable: Pageable): Page<ServerStatusEntity>
+    fun findStatusByServer(componentId: String, pageable: Pageable): Page<ServerStatusEntity>
+
+
+    @Query("select s from ServerStatusEntity s where s.server.componentId=:componentId and s.timestamp=(select max(s2.timestamp) from ServerStatusEntity s2 where s2.server.componentId=:componentId)")
+    fun findLastLastStatusFor(componentId: String): ServerStatusEntity?
+
 }
