@@ -8,16 +8,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 import java.io.File
 
 @Disabled
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class EndToEndPerformanceTest {
+class FullWikiEndToEndPerformanceTest {
 
     val rebootComponents = true
 
-    val fixture = SmallWikiTestFixture(rebootComponents)
+    val fixture = EnticingTestFixture(FullWiki2018Config, rebootComponents)
 
     val logger = SimpleStdoutLoggerFactory.logger { }
 
@@ -58,6 +56,4 @@ class EndToEndPerformanceTest {
             }
         }
     }
-
-
 }
