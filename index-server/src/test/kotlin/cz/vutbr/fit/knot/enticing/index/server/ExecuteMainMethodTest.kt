@@ -9,7 +9,8 @@ class ExecuteMainMethodTest {
         // any argument in format --key=value is converted into a property and takes precedence over other property sources(e.g. application.properties)
         main(arrayOf(
                 "../dto/src/test/resources/config.kts",
-                "minerva3.fit.vutbr.cz"
+                "minerva3.fit.vutbr.cz",
+                "--server.port=5627"
         ))
     }
 }
