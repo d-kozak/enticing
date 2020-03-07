@@ -7,6 +7,7 @@ import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toEntity
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ServerRepository
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ServerStatusRepository
 import cz.vutbr.fit.knot.enticing.mx.StaticServerInfo
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import javax.transaction.Transactional
@@ -20,7 +21,9 @@ class ServerService(
 
     val logger = loggerFactory.logger { }
 
-    fun getAllServers() = serverRepository.findAll()
+    fun getServers(pageable: Pageable) = serverRepository.findAll(pageable)
+
+    fun getServerStatus(componentId: String, pageable: Pageable) = serverStatusRepository.findAllByServerCustom(componentId, pageable)
 
     @Transactional
     fun heartbeat(heartbeat: HeartbeatDto) {

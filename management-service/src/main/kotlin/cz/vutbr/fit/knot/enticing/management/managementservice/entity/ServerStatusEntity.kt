@@ -15,14 +15,15 @@ fun ServerStatus.toEntity(server: ServerEntity, timestamp: Long) = ServerStatusE
 class ServerStatusEntity(
         @field:GeneratedValue
         @field:Id
+        @field:JsonIgnore
         val id: Long,
         val freePhysicalMemorySize: Long,
         val processCpuLoad: Double,
         val systemCpuLoad: Double,
         @field:Positive
         val timestamp: Long,
-        @ManyToOne
-        @JsonIgnore
+        @field:ManyToOne
+        @field:JsonIgnore
         val server: ServerEntity
 ) {
 

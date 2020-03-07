@@ -1,9 +1,9 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.entity
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.mx.StaticServerInfo
 import javax.persistence.Entity
-import javax.persistence.FetchType
 import javax.persistence.Id
 import javax.persistence.OneToMany
 import javax.validation.constraints.NotEmpty
@@ -18,7 +18,8 @@ class ServerEntity(
         val componentType: ComponentType,
         val availableProcessors: Int,
         val totalPhysicalMemorySize: Long,
-        @OneToMany(mappedBy = "server", fetch = FetchType.EAGER)
+        @OneToMany(mappedBy = "server")
+        @field:JsonIgnore
         val status: MutableList<ServerStatusEntity>
 ) {
 
