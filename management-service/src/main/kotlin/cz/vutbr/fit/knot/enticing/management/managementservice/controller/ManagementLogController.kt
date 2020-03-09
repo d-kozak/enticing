@@ -4,6 +4,7 @@ import cz.vutbr.fit.knot.enticing.log.LogDto
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.management.managementservice.service.ManagementLogService
+import org.springframework.data.domain.Pageable
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
@@ -20,5 +21,5 @@ class ManagementLogController(loggerFactory: LoggerFactory, val managementLogSer
     }
 
     @GetMapping
-    fun getAll() = managementLogService.getAll()
+    fun getAll(pageable: Pageable) = managementLogService.getAll(pageable)
 }

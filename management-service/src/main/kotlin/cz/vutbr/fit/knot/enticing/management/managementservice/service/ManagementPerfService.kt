@@ -6,6 +6,7 @@ import cz.vutbr.fit.knot.enticing.management.managementservice.entity.PerfEntity
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toDto
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toEntity
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.PerfRepository
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import kotlin.math.abs
 import kotlin.math.sqrt
@@ -35,5 +36,5 @@ class ManagementPerfService(val perfRepository: PerfRepository) {
         return stats
     }
 
-    fun getAll() = perfRepository.findAll().map { it.toDto() }
+    fun getAll(pageable: Pageable) = perfRepository.findAll(pageable).map { it.toDto() }
 }
