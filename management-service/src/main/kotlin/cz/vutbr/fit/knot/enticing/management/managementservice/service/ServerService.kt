@@ -3,7 +3,9 @@ package cz.vutbr.fit.knot.enticing.management.managementservice.service
 import cz.vutbr.fit.knot.enticing.log.HeartbeatDto
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
+import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toDto
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toEntity
+import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toServerInfo
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ServerRepository
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ServerStatusRepository
 import cz.vutbr.fit.knot.enticing.mx.StaticServerInfo
@@ -21,7 +23,7 @@ class ServerService(
 
     val logger = loggerFactory.logger { }
 
-    fun getServers(pageable: Pageable) = serverRepository.findAll(pageable)
+    fun getServers(pageable: Pageable) = serverRepository.findAll(pageable).map { it.toServerInfo(serverStatusRepository.findLastLastStatusFor(it.componentId)?.toDto()) }
 
     fun getServerStatus(componentId: String, pageable: Pageable) = serverStatusRepository.findStatusByServer(componentId, pageable)
 
@@ -32,8 +34,7 @@ class ServerService(
             logger.warn("Received heartbeat from an unknown component ${heartbeat.fullAddress}")
             return
         }
-        val status = heartbeat.status!!
-        server.status.add(serverStatusRepository.save(status.toEntity(server, heartbeat.timestamp)))
+        serverStatusRepository.save(heartbeat.status!!.toEntity(server, heartbeat.timestamp))
     }
 
     fun addServer(serverInfo: StaticServerInfo) = serverRepository.save(serverInfo.toEntity())

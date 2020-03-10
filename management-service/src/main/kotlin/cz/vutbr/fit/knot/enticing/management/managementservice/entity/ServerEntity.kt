@@ -2,6 +2,8 @@ package cz.vutbr.fit.knot.enticing.management.managementservice.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import cz.vutbr.fit.knot.enticing.log.ComponentType
+import cz.vutbr.fit.knot.enticing.management.managementservice.dto.ServerInfo
+import cz.vutbr.fit.knot.enticing.mx.ServerStatus
 import cz.vutbr.fit.knot.enticing.mx.StaticServerInfo
 import javax.persistence.Entity
 import javax.persistence.Id
@@ -9,6 +11,8 @@ import javax.persistence.OneToMany
 import javax.validation.constraints.NotEmpty
 
 fun StaticServerInfo.toEntity() = ServerEntity(fullAddress, componentType, availableProcessors, totalPhysicalMemorySize, mutableListOf())
+
+fun ServerEntity.toServerInfo(status: ServerStatus?) = ServerInfo(componentId, componentType, availableProcessors, totalPhysicalMemorySize, status)
 
 @Entity
 class ServerEntity(
