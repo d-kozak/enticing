@@ -1,15 +1,15 @@
 package cz.vutbr.fit.knot.enticing.log
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.LogType
+import java.time.LocalDateTime
 import javax.validation.constraints.NotEmpty
-import javax.validation.constraints.Positive
 import javax.validation.constraints.Size
 
 data class LogMessage(
         val className: String,
         val message: String,
         val logType: LogType,
-        val timestamp: Long = System.currentTimeMillis()
+        val timestamp: LocalDateTime = LocalDateTime.now()
 )
 
 fun LogMessage.toLogDto(componentId: String, componentType: ComponentType) = LogDto(className, message, logType, componentId, componentType, timestamp)
@@ -27,8 +27,7 @@ data class LogDto(
         @field:NotEmpty
         val componentId: String,
         val componentType: ComponentType,
-        @field:Positive
-        val timestamp: Long = System.currentTimeMillis()
+        val timestamp: LocalDateTime
 )
 
 

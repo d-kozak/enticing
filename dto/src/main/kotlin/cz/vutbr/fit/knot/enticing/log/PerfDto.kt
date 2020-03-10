@@ -1,6 +1,10 @@
 package cz.vutbr.fit.knot.enticing.log
 
-import javax.validation.constraints.*
+import java.time.LocalDateTime
+import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotEmpty
+import javax.validation.constraints.PositiveOrZero
+import javax.validation.constraints.Size
 
 data class PerfMessage(
         val className: String,
@@ -8,7 +12,7 @@ data class PerfMessage(
         val arguments: String?,
         val duration: Long,
         val outcome: String,
-        val timestamp: Long = System.currentTimeMillis()
+        val timestamp: LocalDateTime = LocalDateTime.now()
 )
 
 fun PerfMessage.toPerfDto(componentId: String, componentType: ComponentType) = PerfDto(className, operationId, arguments, duration, outcome, componentId, componentType, timestamp)
@@ -28,6 +32,5 @@ data class PerfDto(
         @field:NotBlank
         val componentId: String,
         val componentType: ComponentType,
-        @field:Positive
-        val timestamp: Long = System.currentTimeMillis()
+        val timestamp: LocalDateTime
 )

@@ -6,9 +6,7 @@ import cz.vutbr.fit.knot.enticing.log.util.resolveName
 import java.io.File
 import java.io.FileWriter
 import java.time.Duration
-import java.time.Instant
 import java.time.LocalDateTime
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -60,7 +58,7 @@ private fun PerfMessage.toPrintableString(formatter: DateTimeFormatter) = "${rea
 
 private fun readableDuration(millis: Long) = Duration.ofMillis(millis).toString().substring(2)
 
-private fun readableTimestamp(timestamp: Long, formatter: DateTimeFormatter): String = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault()).format(formatter)
+private fun readableTimestamp(timestamp: LocalDateTime, formatter: DateTimeFormatter): String = timestamp.format(formatter)
 
 
 inline fun LoggerFactory.logger(noinline func: () -> Unit): Logger = namedLogger(resolveName(func))

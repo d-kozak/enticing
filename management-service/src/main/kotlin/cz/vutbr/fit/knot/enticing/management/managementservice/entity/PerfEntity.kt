@@ -3,12 +3,12 @@ package cz.vutbr.fit.knot.enticing.management.managementservice.entity
 
 import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.PerfDto
+import java.time.LocalDateTime
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.validation.constraints.NotEmpty
-import javax.validation.constraints.Positive
 import javax.validation.constraints.PositiveOrZero
 
 fun PerfDto.toEntity() = PerfEntity(0, className, operationId, arguments, duration, outcome, componentId, componentType, timestamp)
@@ -34,8 +34,7 @@ class PerfEntity(
         @field:NotEmpty
         val componentId: String,
         val componentType: ComponentType,
-        @field:Positive
-        val timestamp: Long = System.currentTimeMillis()
+        val timestamp: LocalDateTime
 ) {
 
     override fun equals(other: Any?): Boolean {

@@ -3,12 +3,12 @@ package cz.vutbr.fit.knot.enticing.management.managementservice.entity
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.LogType
 import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.LogDto
+import java.time.LocalDateTime
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.validation.constraints.NotEmpty
-import javax.validation.constraints.Positive
 
 fun LogDto.toEntity() = LogEntity(0, className, message, logType, componentId, componentType, timestamp)
 
@@ -28,8 +28,7 @@ class LogEntity(
         @field:NotEmpty
         val componentId: String,
         val componentType: ComponentType,
-        @field:Positive
-        var timestamp: Long
+        var timestamp: LocalDateTime
 ) {
 
     override fun equals(other: Any?): Boolean {

@@ -3,10 +3,10 @@ package cz.vutbr.fit.knot.enticing.management.managementservice.entity
 import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.HeartbeatDto
 import cz.vutbr.fit.knot.enticing.mx.ServerStatus
+import java.time.LocalDateTime
 import javax.persistence.Entity
 import javax.persistence.Id
 import javax.validation.constraints.NotEmpty
-import javax.validation.constraints.Positive
 
 fun HeartbeatDto.toEntity() = HeartbeatEntity(fullAddress, componentType, timestamp)
 
@@ -18,8 +18,7 @@ class HeartbeatEntity(
         @field:NotEmpty
         val componentId: String,
         val componentType: ComponentType,
-        @field:Positive
-        var timestamp: Long
+        var timestamp: LocalDateTime
 ) {
 
     override fun equals(other: Any?): Boolean {

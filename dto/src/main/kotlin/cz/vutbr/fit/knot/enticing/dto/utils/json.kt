@@ -2,7 +2,7 @@ package cz.vutbr.fit.knot.enticing.dto.utils
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
-val objectMapper = jacksonObjectMapper()
+val objectMapper = jacksonObjectMapper().findAndRegisterModules()
 
 fun <T> T.toJson(): String = objectMapper.writeValueAsString(this)
 

@@ -2,11 +2,11 @@ package cz.vutbr.fit.knot.enticing.management.managementservice.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import cz.vutbr.fit.knot.enticing.mx.ServerStatus
+import java.time.LocalDateTime
 import javax.persistence.*
-import javax.validation.constraints.Positive
 
 
-fun ServerStatus.toEntity(server: ServerEntity, timestamp: Long) = ServerStatusEntity(0, freePhysicalMemorySize, processCpuLoad, systemCpuLoad, timestamp, server)
+fun ServerStatus.toEntity(server: ServerEntity, timestamp: LocalDateTime) = ServerStatusEntity(0, freePhysicalMemorySize, processCpuLoad, systemCpuLoad, timestamp, server)
 
 fun ServerStatusEntity.toDto() = ServerStatus(freePhysicalMemorySize, processCpuLoad, systemCpuLoad)
 
@@ -20,8 +20,7 @@ class ServerStatusEntity(
         val freePhysicalMemorySize: Long,
         val processCpuLoad: Double,
         val systemCpuLoad: Double,
-        @field:Positive
-        val timestamp: Long,
+        val timestamp: LocalDateTime,
         @field:ManyToOne
         @field:JsonIgnore
         val server: ServerEntity

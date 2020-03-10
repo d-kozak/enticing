@@ -11,6 +11,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import org.springframework.stereotype.Service
+import java.time.Duration
+import java.time.LocalDateTime
 
 @Service
 class HeartbeatService(
@@ -33,8 +35,7 @@ class HeartbeatService(
                 it.toDto(isComponentAlive(it.timestamp), serverStatusRepository.findLastLastStatusFor(it.componentId)?.toDto())
             }
 
-    private fun isComponentAlive(lastTimestamp: Long) =
-            System.currentTimeMillis() - lastTimestamp < 5 * configuration.managementServiceConfiguration.heartbeatConfiguration.period
+    private fun isComponentAlive(lastTimestamp: LocalDateTime) = Duration.between(lastTimestamp, LocalDateTime.now()).toMillis() < 5 * configuration.managementServiceConfiguration.heartbeatConfiguration.period
 
     override fun close() {
         scope.cancel()
