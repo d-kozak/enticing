@@ -12,5 +12,5 @@ class ManagementLogService(val logRepository: LogRepository) {
 
     fun add(log: LogDto) = logRepository.save(log.toEntity()).toDto()
 
-    fun getAll(pageable: Pageable) = logRepository.findAll(pageable).map { it.toDto() }
+    fun getAll(pageable: Pageable) = logRepository.findAllByOrderByTimestampDesc(pageable).map { it.toDto() }
 }

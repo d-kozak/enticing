@@ -36,5 +36,5 @@ class ManagementPerfService(val perfRepository: PerfRepository) {
         return stats
     }
 
-    fun getAll(pageable: Pageable) = perfRepository.findAll(pageable).map { it.toDto() }
+    fun getAll(pageable: Pageable) = perfRepository.findAllByOrderByTimestampDesc(pageable).map { it.toDto() }
 }
