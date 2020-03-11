@@ -1,7 +1,6 @@
 package cz.vutbr.fit.knot.enticing.management
 
 import com.xenomachina.argparser.ArgParser
-import com.xenomachina.argparser.mainBody
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.util.Validator
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.util.ValidatorImpl
@@ -9,7 +8,7 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.validateOrFail
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
 
 
-fun parseCliArgs(args: Array<String>): ManagementCliArguments = mainBody { ArgParser(args).parseInto(::ManagementCliArguments) }
+fun parseCliArgs(args: Array<String>): ManagementCliArguments = ArgParser(args).parseInto(::ManagementCliArguments)
 
 class ManagementCliArguments(parser: ArgParser) : Validator by ValidatorImpl() {
     /**
