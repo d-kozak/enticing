@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice
 
+import cz.vutbr.fit.knot.enticing.management.runManagementCli
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
@@ -8,11 +9,19 @@ class ManagementServiceApplication
 
 fun main(args: Array<String>) {
     require(args.isNotEmpty()) { "two arguments expected - config file and server address" }
-    if (!args[0].startsWith("--config.file=")) {
-        args[0] = "--config.file=" + args[0]
+    when (val type = args[0]) {
+        "cli" -> runManagementCli(args.copyOfRange(1, args.size))
+        "server" -> {
+            require(args.size == 3) { "three arguments expected - component type config file service id" }
+            if (!args[1].startsWith("--config.file=")) {
+                args[1] = "--config.file=" + args[1]
+            }
+            if (!args[2].startsWith("--service.id=")) {
+                args[2] = "--service.id=" + args[2]
+            }
+            runApplication<ManagementServiceApplication>(*args)
+        }
+        else -> throw IllegalArgumentException("Unknown management type '$type'")
     }
-    if (!args[1].startsWith("--service.id=")) {
-        args[1] = "--service.id=" + args[1]
-    }
-    runApplication<ManagementServiceApplication>(*args)
+
 }

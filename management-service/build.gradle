@@ -20,7 +20,6 @@ repositories {
 }
 
 bootJar {
-	requiresUnpack "**/*management-core*.jar"
 	requiresUnpack "**/*kotlin-compiler*.jar"
 }
 

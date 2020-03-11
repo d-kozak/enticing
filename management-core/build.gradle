@@ -11,26 +11,14 @@ repositories {
     jcenter()
 }
 
-
-jar {
-    manifest {
-        attributes 'Main-Class': 'cz.vutbr.fit.knot.enticing.management.MainKt'
-    }
-    from {
-        configurations.compile.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }
-}
-
 dependencies {
-    compile(project(path: ":dto", configuration: 'default'))
+    implementation(project(path: ":dto", configuration: 'default'))
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0-M1")
 
-    compile("com.xenomachina:kotlin-argparser:2.0.7")
+    implementation("com.xenomachina:kotlin-argparser:2.0.7")
 
     /**
      * Fuel - asynchronous coroutine compatible http requests
