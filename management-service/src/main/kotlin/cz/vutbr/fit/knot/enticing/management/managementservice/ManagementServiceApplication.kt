@@ -12,7 +12,7 @@ fun main(args: Array<String>) {
     when (val type = args[0]) {
         "cli" -> runManagementCli(args.copyOfRange(1, args.size))
         "server" -> {
-            require(args.size == 3) { "three arguments expected - component type config file service id" }
+            require(args.size >= 3) { "at least three arguments expected - component type config file service id, got '${args.contentToString()}'" }
             if (!args[1].startsWith("--config.file=")) {
                 args[1] = "--config.file=" + args[1]
             }
