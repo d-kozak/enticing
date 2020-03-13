@@ -4,9 +4,7 @@ grammar Eql;
     package cz.vutbr.fit.knot.enticing.eql.compiler.parser;
 }
 
-root: query (CONSTRAINT_SEPARATOR globalConstraint)? EOF;
-
-query: queryElem+ restrictionType?;
+root: queryElem restrictionType? (CONSTRAINT_SEPARATOR globalConstraint)? EOF;
 
 queryElem:
     IDENTIFIER COLON EQ queryElem #assign
@@ -15,11 +13,11 @@ queryElem:
     | IDENTIFIER COLON queryElem #index
     | IDENTIFIER DOT IDENTIFIER COLON queryElem #attribute
     | queryElem EXPONENT queryElem #align
-    | PAREN_OPEN query PAREN_CLOSE restrictionType? #parenQuery
+    | PAREN_OPEN queryElem PAREN_CLOSE #parenQuery
     | queryElem booleanOperator queryElem #booleanQuery
     | queryElem LT queryElem #order
     | QUOTATION queryElem+ QUOTATION #sequence
-    | queryElem queryElem restrictionType #restriction
+    | queryElem queryElem #tuple
     ;
 
 restrictionType
