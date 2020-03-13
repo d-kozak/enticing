@@ -4,7 +4,7 @@ grammar Eql;
     package cz.vutbr.fit.knot.enticing.eql.compiler.parser;
 }
 
-root: queryElem restrictionType? (CONSTRAINT_SEPARATOR globalConstraint)? EOF;
+root: queryElem (CONSTRAINT_SEPARATOR globalConstraint)? EOF;
 
 queryElem:
     IDENTIFIER COLON EQ queryElem #assign
@@ -17,13 +17,10 @@ queryElem:
     | queryElem booleanOperator queryElem #booleanQuery
     | queryElem LT queryElem #order
     | QUOTATION queryElem+ QUOTATION #sequence
-    | queryElem queryElem #tuple
+    | queryElem queryElem proximity? #tuple
     ;
 
-restrictionType
-    : SIMILARITY IDENTIFIER #proximity // don't forget that it actually has to be a number!
-    | MINUS (queryElem | PAR | SENT) #context
-    ;
+proximity : SIMILARITY IDENTIFIER ; // don't forget that it actually has to be a number!
 
 interval: BRACKET_OPEN (ANY_TEXT|IDENTIFIER) DOUBLE_DOT (ANY_TEXT|IDENTIFIER) BRACKET_CLOSE; // don't forget that it actually has to be a number or date!
 
@@ -36,11 +33,16 @@ booleanExpression:
     | booleanExpression booleanOperator booleanExpression #binaryExpression
     ;
 
-comparison: reference comparisonOperator reference;
+comparison: reference comparisonOperator referenceOrValue;
 
-reference: IDENTIFIER (DOT IDENTIFIER)?;
+referenceOrValue: reference | nestedReference;
+
+reference: IDENTIFIER (DOT nestedReference)?;
+
+nestedReference: IDENTIFIER | RAW;
 
 booleanOperator: AND | OR ;
+
 comparisonOperator: EQ | NE | GT |  GE | LT | LE ;
 
 RAW: [']~[']+['];
@@ -72,7 +74,7 @@ QUOTATION: '"';
 
 
 
-IDENTIFIER: [a-zA-Z0-9][a-zA-Z0-9_]*;
+IDENTIFIER: [_]?[a-zA-Z0-9][a-zA-Z0-9_]*;
 ANY_TEXT: ~[ "'\u005B\u005D\t\r&|=<>:.()*^-]+[*]? ;
 
 
