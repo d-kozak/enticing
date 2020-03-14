@@ -15,6 +15,7 @@ class AstWalker(protected val listener: EqlListener) : EqlVisitor<Unit> {
             node.query.accept(this)
             node.constraint?.accept(this)
         }
+        listener.exitRootNode(node)
     }
 
     override fun visitQueryElemNotNode(node: QueryElemNode.NotNode) {
@@ -22,6 +23,7 @@ class AstWalker(protected val listener: EqlListener) : EqlVisitor<Unit> {
         if (shouldContinue(node)) {
             node.elem.accept(this)
         }
+        listener.exitQueryElemNotNode(node)
     }
 
     override fun visitQueryElemAssignNode(node: QueryElemNode.AssignNode) {
@@ -29,10 +31,12 @@ class AstWalker(protected val listener: EqlListener) : EqlVisitor<Unit> {
         if (shouldContinue(node)) {
             node.elem.accept(this)
         }
+        listener.exitQueryElemAssignNode(node)
     }
 
     override fun visitQueryElemSimpleNode(node: QueryElemNode.SimpleNode) {
         listener.enterQueryElemSimpleNode(node)
+        listener.exitQueryElemSimpleNode(node)
     }
 
     override fun visitQueryElemIndexNode(node: QueryElemNode.IndexNode) {
@@ -40,6 +44,7 @@ class AstWalker(protected val listener: EqlListener) : EqlVisitor<Unit> {
         if (shouldContinue(node)) {
             node.elem.accept(this)
         }
+        listener.exitQueryElemIndexNode(node)
     }
 
     override fun visitQueryElemAttributeNode(node: QueryElemNode.AttributeNode) {
@@ -47,6 +52,7 @@ class AstWalker(protected val listener: EqlListener) : EqlVisitor<Unit> {
         if (shouldContinue(node)) {
             node.elem.accept(this)
         }
+        listener.exitQueryElemAttributeNode(node)
     }
 
     override fun visitQueryElemParenNode(node: QueryElemNode.ParenNode) {
@@ -55,6 +61,7 @@ class AstWalker(protected val listener: EqlListener) : EqlVisitor<Unit> {
             node.query.accept(this)
             node.restriction?.accept(this)
         }
+        listener.enterQueryElemParenNode(node)
     }
 
     override fun visitQueryElemBooleanNode(node: QueryElemNode.BooleanNode) {
@@ -63,6 +70,7 @@ class AstWalker(protected val listener: EqlListener) : EqlVisitor<Unit> {
             node.children.toList().forEach { it.accept(this) }
             node.restriction?.accept(this)
         }
+        listener.exitQueryElemBooleanNode(node)
     }
 
     override fun visitQueryElemOrderNode(node: QueryElemNode.OrderNode) {
@@ -72,6 +80,7 @@ class AstWalker(protected val listener: EqlListener) : EqlVisitor<Unit> {
             node.right.accept(this)
             node.restriction?.accept(this)
         }
+        listener.exitQueryElemOrderNode(node)
     }
 
     override fun visitQueryElemSequenceNode(node: QueryElemNode.SequenceNode) {
@@ -79,51 +88,7 @@ class AstWalker(protected val listener: EqlListener) : EqlVisitor<Unit> {
         if (shouldContinue(node)) {
             node.elems.forEach { it.accept(this) }
         }
-    }
-
-    override fun visitConstraintNode(node: ConstraintNode) {
-        listener.enterConstraintNode(node)
-        if (shouldContinue(node)) {
-            node.expression.accept(this)
-        }
-    }
-
-    override fun visitConstraintBooleanExpressionNotNode(node: ConstraintNode.BooleanExpressionNode.NotNode) {
-        listener.enterConstraintBooleanExpressionNotNode(node)
-        if (shouldContinue(node)) {
-            node.elem.accept(this)
-        }
-    }
-
-    override fun visitConstraintBooleanExpressionParenNode(node: ConstraintNode.BooleanExpressionNode.ParenNode) {
-        listener.enterConstraintBooleanExpressionParenNode(node)
-        if (shouldContinue(node)) {
-            node.expression.accept(this)
-        }
-    }
-
-    override fun visitConstraintBooleanExpressionOperatorNode(node: ConstraintNode.BooleanExpressionNode.OperatorNode) {
-        listener.enterConstraintBooleanExpressionOperatorNode(node)
-        if (shouldContinue(node)) {
-            node.left.accept(this)
-            node.right.accept(this)
-        }
-    }
-
-    override fun visitConstraintBooleanExpressionComparisonNode(node: ConstraintNode.BooleanExpressionNode.ComparisonNode) {
-        listener.enterConstraintBooleanExpressionComparisonNode(node)
-        if (shouldContinue(node)) {
-            node.left.accept(this)
-            node.right.accept(this)
-        }
-    }
-
-    override fun visitSimpleReferenceNode(node: ReferenceNode.SimpleReferenceNode) {
-        listener.enterSimpleReferenceNode(node)
-    }
-
-    override fun visitNestedReferenceNode(node: ReferenceNode.NestedReferenceNode) {
-        listener.enterNestedReferenceNode(node)
+        listener.exitQueryElemSequenceNode(node)
     }
 
     override fun visitQueryElemAlignNode(node: QueryElemNode.AlignNode) {
@@ -132,10 +97,66 @@ class AstWalker(protected val listener: EqlListener) : EqlVisitor<Unit> {
             node.left.accept(this)
             node.right.accept(this)
         }
+        listener.exitQueryElemAlignNode(node)
     }
+
+    override fun visitConstraintNode(node: ConstraintNode) {
+        listener.enterConstraintNode(node)
+        if (shouldContinue(node)) {
+            node.expression.accept(this)
+        }
+        listener.exitConstraintNode(node)
+    }
+
+    override fun visitConstraintBooleanExpressionNotNode(node: ConstraintNode.BooleanExpressionNode.NotNode) {
+        listener.enterConstraintBooleanExpressionNotNode(node)
+        if (shouldContinue(node)) {
+            node.elem.accept(this)
+        }
+        listener.exitConstraintBooleanExpressionNotNode(node)
+    }
+
+    override fun visitConstraintBooleanExpressionParenNode(node: ConstraintNode.BooleanExpressionNode.ParenNode) {
+        listener.enterConstraintBooleanExpressionParenNode(node)
+        if (shouldContinue(node)) {
+            node.expression.accept(this)
+        }
+        listener.exitConstraintBooleanExpressionParenNode(node)
+    }
+
+    override fun visitConstraintBooleanExpressionOperatorNode(node: ConstraintNode.BooleanExpressionNode.OperatorNode) {
+        listener.enterConstraintBooleanExpressionOperatorNode(node)
+        if (shouldContinue(node)) {
+            node.left.accept(this)
+            node.right.accept(this)
+        }
+        listener.exitConstraintBooleanExpressionOperatorNode(node)
+    }
+
+    override fun visitConstraintBooleanExpressionComparisonNode(node: ConstraintNode.BooleanExpressionNode.ComparisonNode) {
+        listener.enterConstraintBooleanExpressionComparisonNode(node)
+        if (shouldContinue(node)) {
+            node.left.accept(this)
+            node.right.accept(this)
+        }
+        listener.exitConstraintBooleanExpressionComparisonNode(node)
+    }
+
+    override fun visitSimpleReferenceNode(node: ReferenceNode.SimpleReferenceNode) {
+        listener.enterSimpleReferenceNode(node)
+        listener.exitSimpleReferenceNode(node)
+    }
+
+    override fun visitNestedReferenceNode(node: ReferenceNode.NestedReferenceNode) {
+        listener.enterNestedReferenceNode(node)
+        listener.exitNestedReferenceNode(node)
+    }
+
+
 
     override fun visitProximityRestrictionNode(node: ProximityRestrictionNode) {
         listener.enterProximityRestrictionNode(node)
+        listener.exitProximityRestrictionNode(node)
     }
 
 }

@@ -23,6 +23,26 @@ interface EqlListener {
     fun enterSimpleReferenceNode(node: ReferenceNode.SimpleReferenceNode) {}
     fun enterNestedReferenceNode(node: ReferenceNode.NestedReferenceNode) {}
     fun enterProximityRestrictionNode(node: ProximityRestrictionNode) {}
+
+    fun exitRootNode(node: RootNode) {}
+    fun exitQueryElemNotNode(node: QueryElemNode.NotNode) {}
+    fun exitQueryElemAssignNode(node: QueryElemNode.AssignNode) {}
+    fun exitQueryElemSimpleNode(node: QueryElemNode.SimpleNode) {}
+    fun exitQueryElemIndexNode(node: QueryElemNode.IndexNode) {}
+    fun exitQueryElemAttributeNode(node: QueryElemNode.AttributeNode) {}
+    fun exitQueryElemParenNode(node: QueryElemNode.ParenNode) {}
+    fun exitQueryElemBooleanNode(node: QueryElemNode.BooleanNode) {}
+    fun exitQueryElemOrderNode(node: QueryElemNode.OrderNode) {}
+    fun exitQueryElemSequenceNode(node: QueryElemNode.SequenceNode) {}
+    fun exitQueryElemAlignNode(node: QueryElemNode.AlignNode) {}
+    fun exitConstraintNode(node: ConstraintNode) {}
+    fun exitConstraintBooleanExpressionNotNode(node: ConstraintNode.BooleanExpressionNode.NotNode) {}
+    fun exitConstraintBooleanExpressionParenNode(node: ConstraintNode.BooleanExpressionNode.ParenNode) {}
+    fun exitConstraintBooleanExpressionOperatorNode(node: ConstraintNode.BooleanExpressionNode.OperatorNode) {}
+    fun exitConstraintBooleanExpressionComparisonNode(node: ConstraintNode.BooleanExpressionNode.ComparisonNode) {}
+    fun exitSimpleReferenceNode(node: ReferenceNode.SimpleReferenceNode) {}
+    fun exitNestedReferenceNode(node: ReferenceNode.NestedReferenceNode) {}
+    fun exitProximityRestrictionNode(node: ProximityRestrictionNode) {}
 }
 
 
