@@ -30,7 +30,7 @@ abstract class EqlAstNode : AstNode {
      * Contains information how the query matched the document
      * Each item consists of indexes of node's children intervals and interval created using these subintervals
      */
-    var matchInfo: MutableList<Pair<List<Int>, Interval>>? = null
+    var matchInfo: MutableList<Pair<List<Int>, Interval>> = mutableListOf()
 
     /**
      * Execute given piece of code for each node in the ast

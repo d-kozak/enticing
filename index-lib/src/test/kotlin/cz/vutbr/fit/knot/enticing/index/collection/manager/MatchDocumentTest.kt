@@ -121,10 +121,10 @@ class MatchDocumentTest {
     }
 
     @Nested
-    @DisplayName("lemma:hello hi - _SENT_")
+    @DisplayName("lemma:hello hi ctx:sent")
     inner class SentenceLimit {
 
-        private val query = "lemma:hello hi - _SENT_"
+        private val query = "lemma:hello hi ctx:sent"
 
         @Test
         fun `one match`() {
@@ -169,10 +169,10 @@ class MatchDocumentTest {
 
 
     @Nested
-    @DisplayName("lemma:hello hi - _PAR_")
+    @DisplayName("lemma:hello hi ctx:par")
     inner class ParagraphLimit {
 
-        private val query = "lemma:hello hi - _PAR_"
+        private val query = "lemma:hello hi ctx:par"
 
         @Test
         fun `a lot of matches`() {
@@ -205,10 +205,10 @@ class MatchDocumentTest {
     }
 
     @Nested
-    @DisplayName("(lemma:hello hi position:10) - _SENT_")
+    @DisplayName("(lemma:hello hi position:10) ctx:sent")
     inner class SentenceLimitThreeParts {
 
-        private val query = "(lemma:hello hi position:10) - _SENT_"
+        private val query = "(lemma:hello hi position:10) ctx:sent"
 
         @Test
         fun `no match`() {
@@ -286,6 +286,17 @@ class MatchDocumentTest {
             }
         }
 
+    }
+
+    @Nested
+    inner class WithEntities {
+        @Test
+        fun noMatch() {
+            val document = TestDocument(10_000)
+            val result = queryExecutor.doMatch("1:=person.name:John 2:=person.name:Rupert 3:=location.name:Barcelona && (1.url != 2.url) | !(3.name = 1.name)", document)
+            assertThat(result.intervals).isEmpty()
+
+        }
     }
 }
 

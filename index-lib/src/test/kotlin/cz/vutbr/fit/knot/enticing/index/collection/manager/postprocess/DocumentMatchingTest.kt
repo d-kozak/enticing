@@ -2,11 +2,9 @@ package cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess
 
 import cz.vutbr.fit.knot.enticing.dto.annotation.Speed
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@Disabled
 @Speed("optimize the algorithms so that these tests can be executed during CI")
 internal class DocumentMatchingTest : AbstractDocumentMatchingTest() {
 
@@ -171,9 +169,9 @@ internal class DocumentMatchingTest : AbstractDocumentMatchingTest() {
     }
 
 
-    @DisplayName("(influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist)) - _PAR_ && influencer.url != influencee.url")
+    @DisplayName("(influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist)) ctx:par && influencer.url != influencee.url")
     @Test
-    fun exampleQuery() = forEachMatch("(influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist)) - _PAR_ && influencer.url != influencee.url") {
+    fun exampleQuery() = forEachMatch("(influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist)) ctx:par && influencer.url != influencee.url") {
         forEachInterval("test") {
             val nertag = textAt("nertag", interval)
             verify("person" in nertag || "artist" in nertag) { "entities of type 'person' or 'artist'  should be found in '$nertag'" }
@@ -214,8 +212,8 @@ internal class DocumentMatchingTest : AbstractDocumentMatchingTest() {
     }
 
     @Test
-    @DisplayName("(influencer:=nertag:(person) < ( lemma:(influence|impact) | (lemma:paid <lemma:tribute) )  < influencee:=nertag:(person)) - _PAR_")
-    fun anotherTest() = forEachMatch("(influencer:=nertag:(person) < ( lemma:(influence|impact) | (lemma:paid <lemma:tribute) )  < influencee:=nertag:(person)) - _PAR_") {
+    @DisplayName("(influencer:=nertag:(person) < ( lemma:(influence|impact) | (lemma:paid <lemma:tribute) )  < influencee:=nertag:(person)) ctx:par")
+    fun anotherTest() = forEachMatch("(influencer:=nertag:(person) < ( lemma:(influence|impact) | (lemma:paid <lemma:tribute) )  < influencee:=nertag:(person)) ctx:par") {
         forEachInterval("not PAR should be there") {
             val text = cellsAt("token", this.interval)
             verify("§" !in text) { "no par sign should be in the match" }

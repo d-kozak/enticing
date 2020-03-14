@@ -3,19 +3,35 @@ package cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.EqlAstNode
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.QueryElemNode
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.EqlListener
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import cz.vutbr.fit.knot.enticing.index.boundary.MatchInfo
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import cz.vutbr.fit.knot.enticing.log.Logger
+import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
+import kotlin.math.max
 
-class DocumentMatching
-
-private val log: Logger = LoggerFactory.getLogger(DocumentMatching::class.java)
+private val log = SimpleStdoutLoggerFactory.namedLogger("EqlDocumentMatching")
 
 internal fun dumpMatch(ast: EqlAstNode, match: Map<Long, List<Interval>>) {
     ast.forEachNode {
         println("$it => ${match[it.id]}")
     }
+}
+
+fun EqlAstNode.clearMatchInfo() {
+    this.forEachNode { it.matchInfo.clear() }
+}
+
+fun Logger.dumpNodesByIndex(nodeByIndex: Array<List<QueryElemNode.SimpleNode>>, metadataConfiguration: MetadataConfiguration) {
+    val msg = buildString {
+        for (index in metadataConfiguration.indexes.values) {
+            if (nodeByIndex[index.columnIndex].isNotEmpty()) {
+                appendln("\t${index.name}=${nodeByIndex[index.columnIndex].map { it.content }}")
+            }
+        }
+    }
+    log.debug("Nodes by index mapping: \n$msg")
 }
 
 /**
@@ -24,7 +40,66 @@ internal fun dumpMatch(ast: EqlAstNode, match: Map<Long, List<Interval>>) {
  */
 
 fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: String, metadataConfiguration: MetadataConfiguration, interval: Interval): MatchInfo {
+    log.debug("Matching document '${document.title}' with query ${ast.toMgj4Query()}")
+    val nodesByIndex = groupNodesByIndex(ast, metadataConfiguration, defaultIndex)
+    log.dumpNodesByIndex(nodesByIndex, metadataConfiguration)
+
+    ast.clearMatchInfo()
+
+    val words = document.drop(max(interval.from - 1, 0))
+            .take(interval.size)
+
+    for (word in words) {
+        for ((i, value) in word.withIndex()) {
+
+        }
+    }
+
+
     return MatchInfo.empty()
+}
+
+
+fun groupNodesByIndex(ast: EqlAstNode, metadataConfiguration: MetadataConfiguration, defaultIndex: String): Array<List<QueryElemNode.SimpleNode>> = GroupNodesByIndexListener(metadataConfiguration, defaultIndex)
+        .let {
+            ast.walk(it)
+            it.nodesByIndex as Array<List<QueryElemNode.SimpleNode>>
+        }
+
+class GroupNodesByIndexListener(val metadataConfiguration: MetadataConfiguration, defaultIndex: String) : EqlListener {
+
+    val nodesByIndex = Array(metadataConfiguration.indexes.size) { mutableListOf<QueryElemNode.SimpleNode>() }
+
+    private val indexStack = mutableListOf(defaultIndex)
+
+    override fun enterQueryElemSimpleNode(node: QueryElemNode.SimpleNode) {
+        if (node.isEntityNameNode()) return
+        nodesByIndex[metadataConfiguration.indexOf(indexStack.last())].add(node)
+    }
+
+    override fun enterQueryElemIndexNode(node: QueryElemNode.IndexNode) {
+        indexStack.add(node.index)
+    }
+
+    override fun exitQueryElemIndexNode(node: QueryElemNode.IndexNode) {
+        indexStack.removeAt(indexStack.size - 1)
+    }
+
+    override fun enterQueryElemAttributeNode(node: QueryElemNode.AttributeNode) {
+        nodesByIndex[metadataConfiguration.indexOf(metadataConfiguration.entityIndexName)].add(node.entityNode)
+        indexStack.add(node.correspondingIndex)
+    }
+
+    override fun exitQueryElemAttributeNode(node: QueryElemNode.AttributeNode) {
+        indexStack.removeAt(indexStack.size - 1)
+    }
+
+    private fun QueryElemNode.SimpleNode.isEntityNameNode(): Boolean {
+        val parent = this.parent
+        return parent is QueryElemNode.AttributeNode && this == parent.entityNode
+    }
+}
+
 //    log.debug("Matching document $document using query $ast")
 //    ast as RootNode
 //    val nodesByIndex = getNodesByIndex(ast, defaultIndex)
@@ -87,7 +162,7 @@ fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: Stri
 //    }
 //    val evaluated = filtered.filter { evaluateGlobalConstraint(ast, it, textAt, metadataConfiguration) }
 //    return MatchInfo(evaluated.map { it.second to createMatchInfo(ast.query, it.first) })
-}
+//}
 
 
 //fun filterIntervals(info: List<Pair<List<Int>, Interval>>): List<Pair<Int, Interval>> {
