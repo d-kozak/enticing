@@ -36,9 +36,6 @@ pepa:=nertag:person ^ person.name:pepa
 
 1:=person.name:John 2:=person.name:Rupert 3:=location.name:Barcelona && (1.id != 2.id) | !(3.name = 1.name)
 
-(happy < cow - milk) | meat
-(happy < animal.type:cow - milk) | meat
-
 (letter ink) ~ 3
 letter ink
 not_related letter ink ~ 3

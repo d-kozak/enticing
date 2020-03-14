@@ -58,43 +58,43 @@ internal class Mgj4QueryGeneratingVisitorTest {
         }
 
         @Test
-        @DisplayName("""(Picasso visited Paris) - _PAR_""")
+        @DisplayName("""(Picasso visited Paris) ctx:par""")
         fun `Query 4`() {
-            val (ast, errors) = compiler.parseAndAnalyzeQuery("(Picasso visited Paris) - _PAR_", config)
+            val (ast, errors) = compiler.parseAndAnalyzeQuery("(Picasso visited Paris) ctx:par", config)
             assertThat(errors).isEmpty()
             assertThat(ast.toMgj4Query()).isEqualTo("(Picasso visited Paris)  - §")
         }
 
 
         @Test
-        @DisplayName("""(Picasso visited Paris)  - _SENT_""")
+        @DisplayName("""(Picasso visited Paris)  ctx:sent""")
         fun `Query 5`() {
-            val (ast, errors) = compiler.parseAndAnalyzeQuery("(Picasso visited Paris) - _SENT_", config)
+            val (ast, errors) = compiler.parseAndAnalyzeQuery("(Picasso visited Paris) ctx:sent", config)
             assertThat(errors).isEmpty()
             assertThat(ast.toMgj4Query()).isEqualTo("(Picasso visited Paris)  - ¶")
         }
 
         @Test
-        @DisplayName("""(person.name:Picasso lemma:(visit|explore) Paris) - _SENT_""")
+        @DisplayName("""(person.name:Picasso lemma:(visit|explore) Paris) ctx:sent""")
         fun `Query 9`() {
-            val (ast, errors) = compiler.parseAndAnalyzeQuery("(person.name:Picasso lemma:(visit|explore) Paris) - _SENT_", config)
+            val (ast, errors) = compiler.parseAndAnalyzeQuery("(person.name:Picasso lemma:(visit|explore) Paris) ctx:sent", config)
             assertThat(errors).isEmpty()
             assertThat(ast.toMgj4Query()).isEqualTo("(((nertag:person{{nertag->token}}) ^ (param2:(Picasso){{param2->token}})) (lemma:((visit | explore)){{lemma->token}}) Paris)  - ¶")
         }
 
         @Test
-        @DisplayName("""(person.name:Picasso lemma:(visit|explore)  location.name:Paris) - _SENT_""")
+        @DisplayName("""(person.name:Picasso lemma:(visit|explore)  location.name:Paris) context:sentence""")
         fun `Query 10`() {
-            val (ast, errors) = compiler.parseAndAnalyzeQuery("(person.name:Picasso lemma:(visit|explore)  location.name:Paris) - _SENT_", config)
+            val (ast, errors) = compiler.parseAndAnalyzeQuery("(person.name:Picasso lemma:(visit|explore)  location.name:Paris) context:sentence", config)
             assertThat(errors).isEmpty()
             assertThat(ast.toMgj4Query()).isEqualTo("(((nertag:person{{nertag->token}}) ^ (param2:(Picasso){{param2->token}})) (lemma:((visit | explore)){{lemma->token}}) ((nertag:location{{nertag->token}}) ^ (param2:(Paris){{param2->token}})))  - ¶")
         }
 
 
         @Test
-        @DisplayName("""(influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist)) - _PAR_ && influencer.url != influencee.url""")
+        @DisplayName("""(influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist)) context:paragraph && influencer.url != influencee.url""")
         fun `Query 12`() {
-            val (ast, errors) = compiler.parseAndAnalyzeQuery("(influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist)) - _PAR_ && influencer.url != influencee.url", config)
+            val (ast, errors) = compiler.parseAndAnalyzeQuery("(influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist)) context:paragraph && influencer.url != influencee.url", config)
             assertThat(errors).isEmpty()
             assertThat(ast.toMgj4Query()).isEqualTo("((((nertag:((person | artist)){{nertag->token}}) < ((lemma:((influence | impact)){{lemma->token}}) | ((lemma:(paid){{lemma->token}}) < (lemma:(tribute){{lemma->token}})))) < (nertag:((person | artist)){{nertag->token}})))  - §")
         }

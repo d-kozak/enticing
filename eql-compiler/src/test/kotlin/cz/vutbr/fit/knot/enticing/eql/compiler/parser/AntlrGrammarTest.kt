@@ -31,65 +31,65 @@ class AntlrGrammarTest {
         }
 
         @Test
-        @DisplayName("""Picasso visited Paris - _PAR_""")
+        @DisplayName("""Picasso visited Paris context:paragraph""")
         fun `Query 4`() {
-            assertParseWithAntlrWithoutErrors("""Picasso visited Paris - _PAR_""")
+            assertParseWithAntlrWithoutErrors("""Picasso visited Paris context:paragraph""")
         }
 
         @Test
-        @DisplayName("""Picasso visited Paris - _SENT_""")
+        @DisplayName("""Picasso visited Paris context:sentence""")
         fun `Query 5`() {
-            assertParseWithAntlrWithoutErrors("""Picasso visited Paris - _SENT_""")
+            assertParseWithAntlrWithoutErrors("""Picasso visited Paris context:sentence""")
         }
 
         @Test
-        @DisplayName("""Picasso ( visited | explored )  Paris - _SENT_""")
+        @DisplayName("""Picasso ( visited | explored )  Paris context:sentence""")
         fun `Query 6`() {
-            assertParseWithAntlrWithoutErrors("""Picasso ( visited | explored )  Paris - _SENT_""")
+            assertParseWithAntlrWithoutErrors("""Picasso ( visited | explored )  Paris context:sentence""")
         }
 
 
         @Test
-        @DisplayName("""Picasso ( lemma:visit | lemma:explore )  Paris - _SENT_""")
+        @DisplayName("""Picasso ( lemma:visit | lemma:explore )  Paris context:sentence""")
         fun `Query 7`() {
-            assertParseWithAntlrWithoutErrors("""Picasso ( lemma:visit | lemma:explore )  Paris - _SENT_""")
+            assertParseWithAntlrWithoutErrors("""Picasso ( lemma:visit | lemma:explore )  Paris context:sentence""")
         }
 
         @Test
-        @DisplayName("""Picasso lemma:(visit|explore) Paris - _SENT_""")
+        @DisplayName("""Picasso lemma:(visit|explore) Paris context:sentence""")
         fun `Query 8`() {
-            assertParseWithAntlrWithoutErrors("""Picasso lemma:(visit|explore) Paris - _SENT_""")
+            assertParseWithAntlrWithoutErrors("""Picasso lemma:(visit|explore) Paris context:sentence""")
         }
 
         @Test
-        @DisplayName("""nertag:person^(person.name:Picasso) lemma:(visit|explore) Paris - _SENT_""")
+        @DisplayName("""nertag:person^(person.name:Picasso) lemma:(visit|explore) Paris context:sentence""")
         fun `Query 9`() {
-            assertParseWithAntlrWithoutErrors("""nertag:person^(person.name:Picasso) lemma:(visit|explore) Paris - _SENT_""")
+            assertParseWithAntlrWithoutErrors("""nertag:person^(person.name:Picasso) lemma:(visit|explore) Paris context:sentence""")
         }
 
         @Test
-        @DisplayName("""nertag:person^(person.name:Picasso) lemma:(visit|explore)  nertag:place^(place.name:Paris) - _SENT_""")
+        @DisplayName("""nertag:person^(person.name:Picasso) lemma:(visit|explore)  nertag:place^(place.name:Paris) context:sentence""")
         fun `Query 10`() {
-            assertParseWithAntlrWithoutErrors("""nertag:person^(person.name:Picasso) lemma:(visit|explore)  nertag:place^(place.name:Paris) - _SENT_""")
+            assertParseWithAntlrWithoutErrors("""nertag:person^(person.name:Picasso) lemma:(visit|explore)  nertag:place^(place.name:Paris) context:sentence""")
         }
 
         @Test
-        @DisplayName("""nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < nertag:(person|artist) - _PAR_""")
+        @DisplayName("""nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < nertag:(person|artist) context:paragraph""")
         fun `Query 11`() {
-            assertParseWithAntlrWithoutErrors("""nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < nertag:(person|artist) - _PAR_""")
+            assertParseWithAntlrWithoutErrors("""nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < nertag:(person|artist) context:paragraph""")
         }
 
         @Test
-        @DisplayName("""influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) - _PAR_ && influencer.nerid != influencee.nerid""")
+        @DisplayName("""influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) context:paragraph && influencer.nerid != influencee.nerid""")
         fun `Query 12`() {
-            assertParseWithAntlrWithoutErrors("""influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) - _PAR_ && influencer.nerid != influencee.nerid""")
+            assertParseWithAntlrWithoutErrors("""influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) context:paragraph && influencer.nerid != influencee.nerid""")
         }
 
 
         @Test
-        @DisplayName("""a:=nertag:(person|artist) < lemma:visit < b:=nertag:(person|artist) nertag:place^place.name:Barcelona nertag:event^event.date:[1/1/1960..12/12/2012] - _PAR_ && a.nerid != b.nerid""")
+        @DisplayName("""a:=nertag:(person|artist) < lemma:visit < b:=nertag:(person|artist) nertag:place^place.name:Barcelona nertag:event^event.date:[1/1/1960..12/12/2012] context:paragraph && a.nerid != b.nerid""")
         fun `Query 13`() {
-            assertParseWithAntlrWithoutErrors("""a:=nertag:(person|artist) < lemma:visit < b:=nertag:(person|artist) nertag:place^place.name:Barcelona nertag:event^event.date:[1/1/1960..12/12/2012] - _PAR_ && a.nerid != b.nerid""")
+            assertParseWithAntlrWithoutErrors("""a:=nertag:(person|artist) < lemma:visit < b:=nertag:(person|artist) nertag:place^place.name:Barcelona nertag:event^event.date:[1/1/1960..12/12/2012] context:paragraph && a.nerid != b.nerid""")
         }
 
         @Test
@@ -135,15 +135,15 @@ class AntlrGrammarTest {
         }
 
         @Test
-        @DisplayName("""Picasso visited | explored  Paris - _SENT_""")
+        @DisplayName("""Picasso visited | explored  Paris context:sentence""")
         fun `Query 21`() {
-            assertParseWithAntlrWithoutErrors("""Picasso visited | explored  Paris - _SENT_""")
+            assertParseWithAntlrWithoutErrors("""Picasso visited | explored  Paris context:sentence""")
         }
 
         @Test
-        @DisplayName("""(Picasso visited) | (explored  Paris) - _SENT_""")
+        @DisplayName("""(Picasso visited) | (explored  Paris) context:sentence""")
         fun `Query 22`() {
-            assertParseWithAntlrWithoutErrors("""(Picasso visited) | (explored  Paris) - _SENT_""")
+            assertParseWithAntlrWithoutErrors("""(Picasso visited) | (explored  Paris) context:sentence""")
         }
 
     }

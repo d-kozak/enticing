@@ -17,29 +17,29 @@ class ComplexTests {
     fun one() {
         val (ast, errors) = compiler.parseAndAnalyzeQuery("person.name:And* lemma:go", config)
         assertThat(errors).isEmpty()
-        assertThat(ast.toMgj4Query()).isEqualTo("((nertag:person{{nertag->token}}) ^ (param2:(And*){{param2->token}})) (lemma:(go){{lemma->token}})")
+        assertThat(ast.toMgj4Query()).isEqualTo("(((nertag:person{{nertag->token}}) ^ (param2:(And*){{param2->token}})) & (lemma:(go){{lemma->token}}))")
     }
 
     @Test
-    @DisplayName("nertag:person (visited|entered) - _SENT_")
+    @DisplayName("nertag:person (visited|entered) context:sentence")
     fun two() {
-        val (ast, errors) = compiler.parseAndAnalyzeQuery("nertag:person (visited|entered) - _SENT_", config)
+        val (ast, errors) = compiler.parseAndAnalyzeQuery("nertag:person (visited|entered) context:sentence", config)
         assertThat(errors).isEmpty()
         assertThat(ast.toMgj4Query()).isEqualTo("(((nertag:(person){{nertag->token}}) (visited | entered))  - ¶)")
     }
 
     @Test
-    @DisplayName("nertag:person (visited|entered) - _PAR_")
+    @DisplayName("nertag:person (visited|entered) ctx:sent")
     fun three() {
-        val (ast, errors) = compiler.parseAndAnalyzeQuery("nertag:person (visited|entered) - _PAR_", config)
+        val (ast, errors) = compiler.parseAndAnalyzeQuery("nertag:person (visited|entered) ctx:sent", config)
         assertThat(errors).isEmpty()
         assertThat(ast.toMgj4Query()).isEqualTo("(((nertag:(person){{nertag->token}}) (visited | entered))  - §)")
     }
 
     @Test
-    @DisplayName("(nertag:person (visited|entered)) - held")
+    @DisplayName("(nertag:person (visited|entered)) ctx:par")
     fun four() {
-        val (ast, errors) = compiler.parseAndAnalyzeQuery("(nertag:person (visited|entered)) - held", config)
+        val (ast, errors) = compiler.parseAndAnalyzeQuery("(nertag:person (visited|entered)) ctx:par", config)
         assertThat(errors).isEmpty()
         assertThat(ast.toMgj4Query()).isEqualTo("((nertag:(person){{nertag->token}}) (visited | entered))  - held")
     }
@@ -76,7 +76,7 @@ class ComplexTests {
     fun eight() {
         val (ast, errors) = compiler.parseAndAnalyzeQuery("(a:=(horse !bread))|(b:=(house !wall))", config)
         assertThat(errors).isEmpty()
-        assertThat(ast.toMgj4Query()).isEqualTo("(horse !bread | house !wall)")
+        assertThat(ast.toMgj4Query()).isEqualTo("((horse & !bread) | (house & !wall))")
     }
 
 

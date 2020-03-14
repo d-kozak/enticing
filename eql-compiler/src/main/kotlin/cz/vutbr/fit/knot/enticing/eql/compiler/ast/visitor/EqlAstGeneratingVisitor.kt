@@ -33,7 +33,7 @@ class EqlAstGeneratingVisitor : EqlVisitor<AstNode> {
     override fun visitTuple(ctx: EqlParser.TupleContext): AstNode {
         val left = ctx.queryElem(0).accept(this) as QueryElemNode
         val right = ctx.queryElem(1).accept(this) as QueryElemNode
-        val proximity = ctx.proximity().accept(this) as? ProximityRestrictionNode
+        val proximity = ctx.proximity()?.accept(this) as? ProximityRestrictionNode
         return QueryElemNode.BooleanNode(mutableListOf(left, right), BooleanOperator.AND, proximity, ctx.location)
     }
 

@@ -195,7 +195,7 @@ class AllChecksTest {
 
         @Test
         fun `more complex query`() {
-            val (_, errors) = compiler.parseAndAnalyzeQuery("nertag:person^(person1.name:Picasso) lemma:(visit|explore) Paris - _SENT_", config)
+            val (_, errors) = compiler.parseAndAnalyzeQuery("nertag:person^(person1.name:Picasso) lemma:(visit|explore) Paris ctx:sent", config)
             assertHasError(errors, "ENT-1", location = Interval.valueOf(15, 21))
         }
     }
@@ -205,7 +205,7 @@ class AllChecksTest {
 
         @Test
         fun `person does not have age`() {
-            val (_, errors) = compiler.parseAndAnalyzeQuery("nertag:person^(person.name:Picasso) lemma:(visit|explore) person.age:10 Paris - _SENT_", config)
+            val (_, errors) = compiler.parseAndAnalyzeQuery("nertag:person^(person.name:Picasso) lemma:(visit|explore) person.age:10 Paris ctx:sent", config)
             assertHasError(errors, "ENT-2", location = Interval.valueOf(65, 67))
         }
     }
@@ -273,13 +273,13 @@ class AllChecksTest {
 
         @Test
         fun `comparison between two nested refs is allowed`() {
-            val (_, errors) = compiler.parseAndAnalyzeQuery("influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) - _PAR_ && influencer.url != influencee.url", config)
+            val (_, errors) = compiler.parseAndAnalyzeQuery("influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) ctx:par && influencer.url != influencee.url", config)
             assertThat(errors).isEmpty()
         }
 
         @Test
         fun `comparison between simple and nested ref is not allowed`() {
-            val (_, errors) = compiler.parseAndAnalyzeQuery("influencer:=nertag:(person|artist) < middle:=( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) - _PAR_ && influencer.url != middle", config)
+            val (_, errors) = compiler.parseAndAnalyzeQuery("influencer:=nertag:(person|artist) < middle:=( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) ctx:par && influencer.url != middle", config)
             assertHasError(errors, "COP-1", location = Interval.valueOf(168, 169))
         }
 
