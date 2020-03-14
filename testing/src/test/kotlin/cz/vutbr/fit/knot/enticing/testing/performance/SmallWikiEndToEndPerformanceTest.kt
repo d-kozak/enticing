@@ -13,7 +13,7 @@ import java.io.File
 @Disabled
 class SmallWikiEndToEndPerformanceTest {
 
-    val rebootComponents = false
+    val rebootComponents = true
 
     val fixture = EnticingTestFixture(SmallWiki2018Config, rebootComponents)
 

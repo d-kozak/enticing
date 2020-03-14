@@ -30,27 +30,21 @@ class EqlAstGeneratingVisitor : EqlVisitor<AstNode> {
         return QueryElemNode.AlignNode(left, right, ctx.location)
     }
 
-    override fun visitRestriction(ctx: EqlParser.RestrictionContext): AstNode {
+    override fun visitTuple(ctx: EqlParser.TupleContext): AstNode {
         val left = ctx.queryElem(0).accept(this) as QueryElemNode
         val right = ctx.queryElem(1).accept(this) as QueryElemNode
-        val type = ctx.restrictionType().accept(this) as RestrictionTypeNode
-        return QueryElemNode.RestrictionNode(left, right, type, ctx.location)
+        val proximity = ctx.proximity().accept(this) as? ProximityRestrictionNode
+        return QueryElemNode.BooleanNode(mutableListOf(left, right), BooleanOperator.AND, proximity, ctx.location)
     }
 
     override fun visitProximity(ctx: EqlParser.ProximityContext): AstNode {
-        return RestrictionTypeNode.ProximityNode(ctx.IDENTIFIER().symbol.text, ctx.location)
+        return ProximityRestrictionNode(ctx.IDENTIFIER().symbol.text, ctx.location)
     }
 
     override fun visitRoot(ctx: EqlParser.RootContext): AstNode {
-        val query = ctx.query().accept(this) as QueryNode
-        val constraint = ctx.globalConstraint()?.accept(this) as? GlobalConstraintNode
+        val query = ctx.queryElem().accept(this) as QueryElemNode
+        val constraint = ctx.constraint()?.accept(this) as? ConstraintNode
         return RootNode(query, constraint, ctx.location)
-    }
-
-    override fun visitQuery(ctx: EqlParser.QueryContext): AstNode {
-        val nodes = ctx.queryElem().map { it.accept(this) as QueryElemNode }
-        val type = ctx.restrictionType()?.accept(this) as? RestrictionTypeNode
-        return QueryNode(nodes, type, ctx.location)
     }
 
     override fun visitSequence(ctx: EqlParser.SequenceContext): AstNode {
@@ -59,9 +53,9 @@ class EqlAstGeneratingVisitor : EqlVisitor<AstNode> {
     }
 
     override fun visitParenQuery(ctx: EqlParser.ParenQueryContext): AstNode {
-        val query = ctx.query().accept(this) as QueryNode
-        val type = ctx.restrictionType()?.accept(this) as? RestrictionTypeNode
-        return QueryElemNode.ParenNode(query, type, ctx.location)
+        val query = ctx.queryElem().accept(this) as QueryElemNode
+        val proximity = ctx.proximity()?.accept(this) as? ProximityRestrictionNode
+        return QueryElemNode.ParenNode(query, proximity, ctx.location)
     }
 
     override fun visitNotQuery(ctx: EqlParser.NotQueryContext): AstNode {
@@ -70,12 +64,15 @@ class EqlAstGeneratingVisitor : EqlVisitor<AstNode> {
     }
 
     override fun visitBooleanQuery(ctx: EqlParser.BooleanQueryContext): AstNode {
-        val operator = if (ctx.booleanOperator().AND() != null) BooleanOperator.AND else if (ctx.booleanOperator().OR() != null) BooleanOperator.OR else {
-            throw IllegalStateException("should never happen")
+        val operator = when {
+            ctx.booleanOperator().AND() != null -> BooleanOperator.AND
+            ctx.booleanOperator().OR() != null -> BooleanOperator.OR
+            else -> throw IllegalStateException("should never happen")
         }
         val left = ctx.queryElem(0).accept(this) as QueryElemNode
         val right = ctx.queryElem(1).accept(this) as QueryElemNode
-        return QueryElemNode.BooleanNode(left, operator, right, ctx.location)
+        val proximity = ctx.proximity()?.accept(this) as? ProximityRestrictionNode
+        return QueryElemNode.BooleanNode(mutableListOf(left, right), operator, proximity, ctx.location)
     }
 
     override fun visitIndex(ctx: EqlParser.IndexContext): AstNode {
@@ -99,14 +96,6 @@ class EqlAstGeneratingVisitor : EqlVisitor<AstNode> {
         return QueryElemNode.AssignNode(identifier, query, ctx.location)
     }
 
-    override fun visitReference(ctx: EqlParser.ReferenceContext): AstNode {
-        return if (ctx.IDENTIFIER().size == 2) {
-            ReferenceNode.NestedReferenceNode(ctx.IDENTIFIER(0).text, ctx.IDENTIFIER(1).text, ctx.location)
-        } else {
-            ReferenceNode.SimpleReferenceNode(ctx.IDENTIFIER(0).text, ctx.location)
-        }
-    }
-
     private val intIntervalRegex = """\[\s*\d+\s*\.\.\s*\d+\s*]""".toRegex()
 
     override fun visitSimpleQuery(ctx: EqlParser.SimpleQueryContext): AstNode {
@@ -127,48 +116,40 @@ class EqlAstGeneratingVisitor : EqlVisitor<AstNode> {
     override fun visitOrder(ctx: EqlParser.OrderContext): AstNode {
         val left = ctx.queryElem(0).accept(this) as QueryElemNode
         val right = ctx.queryElem(1).accept(this) as QueryElemNode
-        return QueryElemNode.OrderNode(left, right, ctx.location)
+        val proximity = ctx.proximity()?.accept(this) as? ProximityRestrictionNode
+        return QueryElemNode.OrderNode(left, right, proximity, ctx.location)
     }
 
-    override fun visitContext(ctx: EqlParser.ContextContext): AstNode {
-        val restrictionType = when {
-            ctx.queryElem() != null -> ContextRestrictionType.Query(ctx.queryElem().accept(this) as QueryElemNode)
-            ctx.PAR() != null -> ContextRestrictionType.Paragraph
-            ctx.SENT() != null -> ContextRestrictionType.Sentence
-            else -> fail("should never be called")
-        }
-        return RestrictionTypeNode.ContextNode(restrictionType, ctx.location)
-    }
-
-    override fun visitGlobalConstraint(ctx: EqlParser.GlobalConstraintContext): AstNode {
-        val expression = ctx.booleanExpression().accept(this) as GlobalConstraintNode.BooleanExpressionNode
-        return GlobalConstraintNode(expression, ctx.location)
+    override fun visitConstraint(ctx: EqlParser.ConstraintContext): AstNode {
+        val expression = ctx.booleanExpression().accept(this) as ConstraintNode.BooleanExpressionNode
+        return ConstraintNode(expression, ctx.location)
     }
 
     override fun visitBinaryExpression(ctx: EqlParser.BinaryExpressionContext): AstNode {
-        val left = ctx.booleanExpression(0).accept(this) as GlobalConstraintNode.BooleanExpressionNode
-        val right = ctx.booleanExpression(1).accept(this) as GlobalConstraintNode.BooleanExpressionNode
+        val left = ctx.booleanExpression(0).accept(this) as ConstraintNode.BooleanExpressionNode
+        val right = ctx.booleanExpression(1).accept(this) as ConstraintNode.BooleanExpressionNode
         val operator = if (ctx.booleanOperator().AND() != null) BooleanOperator.AND else if (ctx.booleanOperator().OR() != null) BooleanOperator.OR else fail("should never happen")
-        return GlobalConstraintNode.BooleanExpressionNode.OperatorNode(left, operator, right, ctx.location)
+        return ConstraintNode.BooleanExpressionNode.OperatorNode(left, operator, right, ctx.location)
     }
 
     override fun visitNotExpression(ctx: EqlParser.NotExpressionContext): AstNode {
-        val expression = ctx.booleanExpression().accept(this) as GlobalConstraintNode.BooleanExpressionNode
-        return GlobalConstraintNode.BooleanExpressionNode.NotNode(expression, ctx.location)
+        val expression = ctx.booleanExpression().accept(this) as ConstraintNode.BooleanExpressionNode
+        return ConstraintNode.BooleanExpressionNode.NotNode(expression, ctx.location)
     }
 
     override fun visitSimpleComparison(ctx: EqlParser.SimpleComparisonContext): AstNode {
-        return ctx.comparison().accept(this) as GlobalConstraintNode.BooleanExpressionNode.ComparisonNode
+        return ctx.comparison().accept(this) as ConstraintNode.BooleanExpressionNode.ComparisonNode
     }
 
     override fun visitParenExpression(ctx: EqlParser.ParenExpressionContext): AstNode {
-        val expression = ctx.booleanExpression().accept(this) as GlobalConstraintNode.BooleanExpressionNode
-        return GlobalConstraintNode.BooleanExpressionNode.ParenNode(expression, ctx.location)
+        val expression = ctx.booleanExpression().accept(this) as ConstraintNode.BooleanExpressionNode
+        return ConstraintNode.BooleanExpressionNode.ParenNode(expression, ctx.location)
     }
 
+
     override fun visitComparison(ctx: EqlParser.ComparisonContext): AstNode {
-        val left = ctx.reference(0).accept(this) as ReferenceNode
-        val right = ctx.reference(1).accept(this) as ReferenceNode
+        val left = ctx.reference().accept(this) as ReferenceNode
+        val right = ctx.referenceOrValue().accept(this) as ReferenceNode
         val operator = when {
             ctx.comparisonOperator().EQ() != null -> RelationalOperator.EQ
             ctx.comparisonOperator().NE() != null -> RelationalOperator.NE
@@ -178,7 +159,28 @@ class EqlAstGeneratingVisitor : EqlVisitor<AstNode> {
             ctx.comparisonOperator().LT() != null -> RelationalOperator.LT
             else -> fail("should never happen")
         }
-        return GlobalConstraintNode.BooleanExpressionNode.ComparisonNode(left, operator, right, ctx.location)
+        return ConstraintNode.BooleanExpressionNode.ComparisonNode(left, operator, right, ctx.location)
+    }
+
+    override fun visitReferenceOrValue(ctx: EqlParser.ReferenceOrValueContext): AstNode = when {
+        ctx.reference() != null -> ctx.reference().accept(this)
+        ctx.nestedReference() != null -> ctx.nestedReference().accept(this)
+        else -> fail("should never happen")
+    }
+
+    override fun visitReference(ctx: EqlParser.ReferenceContext): AstNode {
+        val nested = ctx.nestedReference()
+        return if (nested != null) when {
+            nested.IDENTIFIER() != null -> ReferenceNode.NestedReferenceNode(ctx.IDENTIFIER().text, nested.IDENTIFIER().text, ctx.location)
+            nested.RAW() != null -> ReferenceNode.NestedReferenceNode(ctx.IDENTIFIER().text, nested.RAW().text, ctx.location)
+            else -> fail("should never happen")
+
+        } else ReferenceNode.SimpleReferenceNode(ctx.IDENTIFIER().text, ctx.location)
+
+    }
+
+    override fun visitNestedReference(ctx: EqlParser.NestedReferenceContext?): AstNode {
+        fail("should never be called")
     }
 
     override fun visitBooleanOperator(ctx: EqlParser.BooleanOperatorContext?): AstNode {

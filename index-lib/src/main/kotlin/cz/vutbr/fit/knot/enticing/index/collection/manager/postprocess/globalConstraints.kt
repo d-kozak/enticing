@@ -19,17 +19,9 @@ fun evaluateGlobalConstraint(ast: RootNode, it: Pair<Int, Interval>, textAt: (St
     fun traverse(node: EqlAstNode, i: Int) {
         val (indexes, match) = node.matchInfo?.get(i) ?: return
         when (node) {
-            is QueryNode -> node.query.forEachIndexed { index, queryElemNode -> traverse(queryElemNode, indexes[index]) }
             is QueryElemNode.NotNode -> traverse(node.elem, i)
             is QueryElemNode.AssignNode -> {
                 node.matchInfoIndex = i
-            }
-            is QueryElemNode.RestrictionNode -> {
-                if (indexes[0] >= 0)
-                    traverse(node.left, indexes[0])
-
-                if (indexes[1] >= 0)
-                    traverse(node.right, indexes[1])
             }
             is QueryElemNode.SimpleNode -> { /* nothing to do */
             }
@@ -51,8 +43,9 @@ fun evaluateGlobalConstraint(ast: RootNode, it: Pair<Int, Interval>, textAt: (St
                 traverse(node.right, indexes[1])
             }
             is QueryElemNode.BooleanNode -> {
-                if (indexes[0] >= 0) traverse(node.left, indexes[0])
-                if (indexes[1] >= 0) traverse(node.right, indexes[1])
+                node.children.withIndex()
+                        .filter { indexes[it.index] >= 0 }
+                        .forEach { traverse(it.value, indexes[it.index]) }
             }
             else -> throw IllegalStateException("unknown node type $node")
         }
@@ -79,7 +72,7 @@ class GlobalConstraintEvaluatingVisitor(
         private val textAt: (String, Interval) -> List<String>,
         private val metadataConfiguration: MetadataConfiguration) : QueryAgnosticVisitor<Boolean>() {
 
-    override fun visitConstraintBooleanExpressionComparisonNode(node: GlobalConstraintNode.BooleanExpressionNode.ComparisonNode): Boolean {
+    override fun visitConstraintBooleanExpressionComparisonNode(node: ConstraintNode.BooleanExpressionNode.ComparisonNode): Boolean {
         val left = symbolTable[node.left.identifier]
                 ?: fail("could not find corresponding node for identifier '${node.left.identifier}', should be caught earlier")
         val right = symbolTable[node.right.identifier]
@@ -105,7 +98,7 @@ class GlobalConstraintEvaluatingVisitor(
         }
     }
 
-    private fun compareNestedReferences(leftAssign: QueryElemNode.AssignNode, rightAssign: QueryElemNode.AssignNode, comparisonNode: GlobalConstraintNode.BooleanExpressionNode.ComparisonNode): Boolean {
+    private fun compareNestedReferences(leftAssign: QueryElemNode.AssignNode, rightAssign: QueryElemNode.AssignNode, comparisonNode: ConstraintNode.BooleanExpressionNode.ComparisonNode): Boolean {
         val leftReference = comparisonNode.left as ReferenceNode.NestedReferenceNode
         val rightReference = comparisonNode.right as ReferenceNode.NestedReferenceNode
         val (leftEntity, leftMatch) = determineEntity(leftAssign, leftReference)
@@ -141,13 +134,13 @@ class GlobalConstraintEvaluatingVisitor(
         return entityData to matchInterval
     }
 
-    override fun visitGlobalContraintNode(node: GlobalConstraintNode): Boolean = node.expression.accept(this)
+    override fun visitConstraintNode(node: ConstraintNode): Boolean = node.expression.accept(this)
 
-    override fun visitConstraintBooleanExpressionNotNode(node: GlobalConstraintNode.BooleanExpressionNode.NotNode): Boolean = !node.elem.accept(this)
+    override fun visitConstraintBooleanExpressionNotNode(node: ConstraintNode.BooleanExpressionNode.NotNode): Boolean = !node.elem.accept(this)
 
-    override fun visitConstraintBooleanExpressionParenNode(node: GlobalConstraintNode.BooleanExpressionNode.ParenNode): Boolean = node.expression.accept(this)
+    override fun visitConstraintBooleanExpressionParenNode(node: ConstraintNode.BooleanExpressionNode.ParenNode): Boolean = node.expression.accept(this)
 
-    override fun visitConstraintBooleanExpressionOperatorNode(node: GlobalConstraintNode.BooleanExpressionNode.OperatorNode): Boolean {
+    override fun visitConstraintBooleanExpressionOperatorNode(node: ConstraintNode.BooleanExpressionNode.OperatorNode): Boolean {
         val left = node.left.accept(this)
         val right = node.right.accept(this)
         return when (node.operator) {

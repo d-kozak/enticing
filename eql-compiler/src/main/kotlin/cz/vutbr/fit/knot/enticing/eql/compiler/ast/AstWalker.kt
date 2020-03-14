@@ -31,15 +31,6 @@ class AstWalker(protected val listener: EqlListener) : EqlVisitor<Unit> {
         }
     }
 
-    override fun visitQueryElemRestrictionNode(node: QueryElemNode.RestrictionNode) {
-        listener.enterQueryElemRestrinctionNode(node)
-        if (shouldContinue(node)) {
-            node.left.accept(this)
-            node.right.accept(this)
-            node.type.accept(this)
-        }
-    }
-
     override fun visitQueryElemSimpleNode(node: QueryElemNode.SimpleNode) {
         listener.enterQueryElemSimpleNode(node)
     }
@@ -58,14 +49,6 @@ class AstWalker(protected val listener: EqlListener) : EqlVisitor<Unit> {
         }
     }
 
-    override fun visitQueryNode(node: QueryNode) {
-        listener.enterQueryNode(node)
-        if (shouldContinue(node)) {
-            node.query.forEach { it.accept(this) }
-            node.restriction?.accept(this)
-        }
-    }
-
     override fun visitQueryElemParenNode(node: QueryElemNode.ParenNode) {
         listener.enterQueryElemParenNode(node)
         if (shouldContinue(node)) {
@@ -77,8 +60,8 @@ class AstWalker(protected val listener: EqlListener) : EqlVisitor<Unit> {
     override fun visitQueryElemBooleanNode(node: QueryElemNode.BooleanNode) {
         listener.enterQueryElemBooleanNode(node)
         if (shouldContinue(node)) {
-            node.left.accept(this)
-            node.right.accept(this)
+            node.children.forEach { it.accept(this) }
+            node.restriction?.accept(this)
         }
     }
 
@@ -87,6 +70,7 @@ class AstWalker(protected val listener: EqlListener) : EqlVisitor<Unit> {
         if (shouldContinue(node)) {
             node.left.accept(this)
             node.right.accept(this)
+            node.restriction?.accept(this)
         }
     }
 
@@ -97,28 +81,28 @@ class AstWalker(protected val listener: EqlListener) : EqlVisitor<Unit> {
         }
     }
 
-    override fun visitGlobalContraintNode(node: GlobalConstraintNode) {
-        listener.enterGlobalContraintNode(node)
+    override fun visitConstraintNode(node: ConstraintNode) {
+        listener.enterConstraintNode(node)
         if (shouldContinue(node)) {
             node.expression.accept(this)
         }
     }
 
-    override fun visitConstraintBooleanExpressionNotNode(node: GlobalConstraintNode.BooleanExpressionNode.NotNode) {
+    override fun visitConstraintBooleanExpressionNotNode(node: ConstraintNode.BooleanExpressionNode.NotNode) {
         listener.enterConstraintBooleanExpressionNotNode(node)
         if (shouldContinue(node)) {
             node.elem.accept(this)
         }
     }
 
-    override fun visitConstraintBooleanExpressionParenNode(node: GlobalConstraintNode.BooleanExpressionNode.ParenNode) {
+    override fun visitConstraintBooleanExpressionParenNode(node: ConstraintNode.BooleanExpressionNode.ParenNode) {
         listener.enterConstraintBooleanExpressionParenNode(node)
         if (shouldContinue(node)) {
             node.expression.accept(this)
         }
     }
 
-    override fun visitConstraintBooleanExpressionOperatorNode(node: GlobalConstraintNode.BooleanExpressionNode.OperatorNode) {
+    override fun visitConstraintBooleanExpressionOperatorNode(node: ConstraintNode.BooleanExpressionNode.OperatorNode) {
         listener.enterConstraintBooleanExpressionOperatorNode(node)
         if (shouldContinue(node)) {
             node.left.accept(this)
@@ -126,7 +110,7 @@ class AstWalker(protected val listener: EqlListener) : EqlVisitor<Unit> {
         }
     }
 
-    override fun visitConstraintBooleanExpressionComparisonNode(node: GlobalConstraintNode.BooleanExpressionNode.ComparisonNode) {
+    override fun visitConstraintBooleanExpressionComparisonNode(node: ConstraintNode.BooleanExpressionNode.ComparisonNode) {
         listener.enterConstraintBooleanExpressionComparisonNode(node)
         if (shouldContinue(node)) {
             node.left.accept(this)
@@ -150,14 +134,8 @@ class AstWalker(protected val listener: EqlListener) : EqlVisitor<Unit> {
         }
     }
 
-    override fun visitRestrictionProximityNode(node: RestrictionTypeNode.ProximityNode) {
-        listener.enterRestrictionProximityNode(node)
+    override fun visitProximityRestrictionNode(node: ProximityRestrictionNode) {
+        listener.enterProximityRestrictionNode(node)
     }
 
-    override fun visitRestrictionContextNode(node: RestrictionTypeNode.ContextNode) {
-        listener.enterRestrictionContextNode(node)
-        if (node.restriction is ContextRestrictionType.Query && shouldContinue(node)) {
-            node.restriction.query.accept(this)
-        }
-    }
 }

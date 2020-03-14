@@ -4,7 +4,7 @@ grammar Eql;
     package cz.vutbr.fit.knot.enticing.eql.compiler.parser;
 }
 
-root: queryElem (CONSTRAINT_SEPARATOR globalConstraint)? EOF;
+root: queryElem (CONSTRAINT_SEPARATOR constraint)? EOF;
 
 queryElem:
     IDENTIFIER COLON EQ queryElem #assign
@@ -13,9 +13,9 @@ queryElem:
     | IDENTIFIER COLON queryElem #index
     | IDENTIFIER DOT IDENTIFIER COLON queryElem #attribute
     | queryElem EXPONENT queryElem #align
-    | PAREN_OPEN queryElem PAREN_CLOSE #parenQuery
-    | queryElem booleanOperator queryElem #booleanQuery
-    | queryElem LT queryElem #order
+    | PAREN_OPEN queryElem PAREN_CLOSE proximity? #parenQuery
+    | queryElem booleanOperator queryElem proximity? #booleanQuery
+    | queryElem LT queryElem proximity? #order
     | QUOTATION queryElem+ QUOTATION #sequence
     | queryElem queryElem proximity? #tuple
     ;
@@ -24,7 +24,7 @@ proximity : SIMILARITY IDENTIFIER ; // don't forget that it actually has to be a
 
 interval: BRACKET_OPEN (ANY_TEXT|IDENTIFIER) DOUBLE_DOT (ANY_TEXT|IDENTIFIER) BRACKET_CLOSE; // don't forget that it actually has to be a number or date!
 
-globalConstraint: booleanExpression;
+constraint: booleanExpression;
 
 booleanExpression:
     comparison #simpleComparison

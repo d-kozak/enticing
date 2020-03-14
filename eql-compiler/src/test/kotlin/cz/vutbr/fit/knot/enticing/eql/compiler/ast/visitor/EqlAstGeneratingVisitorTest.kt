@@ -16,7 +16,7 @@ internal fun parseToEqlAstOrFail(input: String): EqlAstNode {
     return ast as EqlAstNode
 }
 
-@Incomplete("fish when ast is finalized")
+@Incomplete("finish when ast is finalized")
 internal class EqlAstGeneratingVisitorTest {
     @Nested
     @DisplayName("Queries from files, just to test that it does not crash, no assertions here yet")
@@ -56,10 +56,10 @@ internal class EqlAstGeneratingVisitorTest {
         fun `Query 1`() {
             val ast = parseToEqlAstOrFail("Picasso visited Paris")
             assertThat(ast)
-                    .isEqualTo(RootNode(QueryNode(listOf(QueryElemNode.SimpleNode("Picasso", SimpleQueryType.STRING, Interval.valueOf(0, 6)),
+                    .isEqualTo(RootNode(QueryElemNode.BooleanNode(mutableListOf(QueryElemNode.SimpleNode("Picasso", SimpleQueryType.STRING, Interval.valueOf(0, 6)),
                             QueryElemNode.SimpleNode("visited", SimpleQueryType.STRING, Interval.valueOf(8, 14)),
                             QueryElemNode.SimpleNode("Paris", SimpleQueryType.STRING, Interval.valueOf(16, 20))
-                    ), null, Interval.Companion.valueOf(0, 20)), null,
+                    ), BooleanOperator.AND, null, Interval.Companion.valueOf(0, 20)), null,
                             Interval.valueOf(0, 20)))
         }
 
@@ -68,13 +68,7 @@ internal class EqlAstGeneratingVisitorTest {
         fun `Query 2`() {
             val ast = parseToEqlAstOrFail("""Picasso < visited < Paris""")
             assertThat(ast)
-                    .isEqualTo(RootNode(QueryNode(listOf(QueryElemNode.OrderNode(
-                            QueryElemNode.OrderNode(
-                                    QueryElemNode.SimpleNode("Picasso", SimpleQueryType.STRING, Interval.valueOf(0, 6)),
-                                    QueryElemNode.SimpleNode("visited", SimpleQueryType.STRING, Interval.valueOf(10, 16)),
-                                    Interval.valueOf(0, 16)
-                            ),
-                            QueryElemNode.SimpleNode("Paris", SimpleQueryType.STRING, Interval.valueOf(20, 24)), Interval.valueOf(0, 24))), null, Interval.valueOf(0, 24)), null, Interval.valueOf(0, 24)))
+                    .isEqualTo(null)
         }
 
         @Test
@@ -83,16 +77,7 @@ internal class EqlAstGeneratingVisitorTest {
             val ast = parseToEqlAstOrFail("""Picasso visited Paris - _PAR_""")
             println(ast.toKotlinDef())
             assertThat(ast)
-                    .isEqualTo(RootNode(QueryNode(listOf(
-                            QueryElemNode.SimpleNode("Picasso", SimpleQueryType.STRING, Interval.valueOf(0, 6)),
-                            QueryElemNode.RestrictionNode(
-                                    QueryElemNode.SimpleNode("visited", SimpleQueryType.STRING, Interval.valueOf(8, 14)),
-                                    QueryElemNode.SimpleNode("Paris", SimpleQueryType.STRING, Interval.valueOf(16, 20)),
-                                    RestrictionTypeNode.ContextNode(
-                                            ContextRestrictionType.Paragraph, Interval.valueOf(22, 28)), Interval.valueOf(8, 28)))
-                            , null, Interval.valueOf(0, 28)), null,
-                            Interval.valueOf(0, 28))
-                    )
+                    .isEqualTo(null)
         }
 
         @Test
@@ -101,48 +86,21 @@ internal class EqlAstGeneratingVisitorTest {
             val ast = parseToEqlAstOrFail("""(Picasso visited Paris) - _PAR_""")
 
             assertThat(ast)
-                    .isEqualTo(
-                            RootNode(QueryNode(listOf(
-                                    QueryElemNode.ParenNode(QueryNode(listOf(
-                                            QueryElemNode.SimpleNode("Picasso", SimpleQueryType.STRING, Interval.valueOf(1, 7)),
-                                            QueryElemNode.SimpleNode("visited", SimpleQueryType.STRING, Interval.valueOf(9, 15)),
-                                            QueryElemNode.SimpleNode("Paris", SimpleQueryType.STRING, Interval.valueOf(17, 21))), null, Interval.valueOf(1, 21)),
-                                            RestrictionTypeNode.ContextNode(ContextRestrictionType.Paragraph, Interval.valueOf(24, 30)), Interval.valueOf(0, 30))), null, Interval.valueOf(0, 30)),
-                                    null, Interval.valueOf(0, 30))
-                    )
+                    .isEqualTo(null)
         }
 
         @Test
         @DisplayName("""Picasso visited Paris - _SENT_""")
         fun `Query 5`() {
             val ast = parseToEqlAstOrFail("""Picasso visited Paris - _SENT_""")
-            assertThat(ast).isEqualTo(RootNode(QueryNode(listOf(
-                    QueryElemNode.SimpleNode("Picasso", SimpleQueryType.STRING, Interval.valueOf(0, 6)),
-                    QueryElemNode.RestrictionNode(
-                            QueryElemNode.SimpleNode("visited", SimpleQueryType.STRING, Interval.valueOf(8, 14)),
-                            QueryElemNode.SimpleNode("Paris", SimpleQueryType.STRING, Interval.valueOf(16, 20)),
-                            RestrictionTypeNode.ContextNode(ContextRestrictionType.Sentence, Interval.valueOf(22, 29)), Interval.valueOf(8, 29))), null, Interval.valueOf(0, 29)),
-                    null, Interval.valueOf(0, 29)))
+            assertThat(ast).isEqualTo(null)
         }
 
         @Test
         @DisplayName("""(Picasso ( visited | explored )  Paris) - _SENT_""")
         fun `Query 6`() {
             val ast = parseToEqlAstOrFail("""Picasso ( visited | explored )  Paris - _SENT_""")
-            assertThat(ast).isEqualTo(RootNode(QueryNode(listOf(
-                    QueryElemNode.SimpleNode("Picasso", SimpleQueryType.STRING, Interval.valueOf(0, 6)),
-                    QueryElemNode.RestrictionNode(
-                            QueryElemNode.ParenNode(QueryNode(listOf(
-                                    QueryElemNode.BooleanNode(
-                                            QueryElemNode.SimpleNode("visited", SimpleQueryType.STRING, Interval.valueOf(10, 16)),
-                                            BooleanOperator.OR,
-                                            QueryElemNode.SimpleNode("explored", SimpleQueryType.STRING, Interval.valueOf(20, 27)),
-                                            Interval.valueOf(10, 27))),
-                                    null, Interval.valueOf(10, 27)), null, Interval.valueOf(8, 29))
-                            , QueryElemNode.SimpleNode("Paris", SimpleQueryType.STRING, Interval.valueOf(32, 36)),
-                            RestrictionTypeNode.ContextNode(ContextRestrictionType.Sentence, Interval.valueOf(38, 45)), Interval.valueOf(8, 45))),
-                    null, Interval.valueOf(0, 45)), null,
-                    Interval.valueOf(0, 45)))
+            assertThat(ast).isEqualTo(null)
         }
 
 

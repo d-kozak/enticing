@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.analysis.check
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.SymbolTable
@@ -29,6 +30,7 @@ class BasicIndexCheck(id: String) : EqlAstCheck<QueryElemNode.IndexNode>(id, Que
     }
 }
 
+@WhatIf("Check if queries really contain just a single node")
 private fun QueryElemNode.collectAllSimpleNodesInExpression(output: MutableList<QueryElemNode.SimpleNode>): Boolean = when (this) {
     is QueryElemNode.SimpleNode -> {
         output.add(this)
@@ -36,7 +38,7 @@ private fun QueryElemNode.collectAllSimpleNodesInExpression(output: MutableList<
     }
     is QueryElemNode.OrderNode -> this.left.collectAllSimpleNodesInExpression(output) && this.right.collectAllSimpleNodesInExpression(output)
     is QueryElemNode.NotNode -> this.elem.collectAllSimpleNodesInExpression(output)
-    is QueryElemNode.BooleanNode -> this.left.collectAllSimpleNodesInExpression(output) && this.right.collectAllSimpleNodesInExpression(output)
-    is QueryElemNode.ParenNode -> this.query.query.size == 1 && this.query.query[0].collectAllSimpleNodesInExpression(output)
+    is QueryElemNode.BooleanNode -> this.children.map { it.collectAllSimpleNodesInExpression(output) }.all { it }
+    is QueryElemNode.ParenNode -> this.query.collectAllSimpleNodesInExpression(output)
     else -> false
 }

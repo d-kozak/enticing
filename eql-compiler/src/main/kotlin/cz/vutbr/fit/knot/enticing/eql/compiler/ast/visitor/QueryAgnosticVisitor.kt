@@ -11,15 +11,12 @@ abstract class QueryAgnosticVisitor<T> : EqlVisitor<T> {
 
     override fun visitQueryElemAssignNode(node: QueryElemNode.AssignNode): T = failInternal()
 
-    override fun visitQueryElemRestrictionNode(node: QueryElemNode.RestrictionNode): T = failInternal()
 
     override fun visitQueryElemSimpleNode(node: QueryElemNode.SimpleNode): T = failInternal()
 
     override fun visitQueryElemIndexNode(node: QueryElemNode.IndexNode): T = failInternal()
 
     override fun visitQueryElemAttributeNode(node: QueryElemNode.AttributeNode): T = failInternal()
-
-    override fun visitQueryNode(node: QueryNode): T = failInternal()
 
     override fun visitQueryElemParenNode(node: QueryElemNode.ParenNode): T = failInternal()
 
@@ -31,9 +28,7 @@ abstract class QueryAgnosticVisitor<T> : EqlVisitor<T> {
 
     override fun visitQueryElemAlignNode(node: QueryElemNode.AlignNode): T = failInternal()
 
-    override fun visitRestrictionProximityNode(node: RestrictionTypeNode.ProximityNode): T = failInternal()
-
-    override fun visitRestrictionContextNode(node: RestrictionTypeNode.ContextNode): T = failInternal()
+    override fun visitProximityRestrictionNode(node: ProximityRestrictionNode): T = failInternal()
 
     override fun visitSimpleReferenceNode(node: ReferenceNode.SimpleReferenceNode): T = failInternal()
 

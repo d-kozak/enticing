@@ -43,35 +43,42 @@ interface EqlVisitor<T> {
     fun visitRootNode(node: RootNode): T
     fun visitQueryElemNotNode(node: QueryElemNode.NotNode): T
     fun visitQueryElemAssignNode(node: QueryElemNode.AssignNode): T
-    fun visitQueryElemRestrictionNode(node: QueryElemNode.RestrictionNode): T
     fun visitQueryElemSimpleNode(node: QueryElemNode.SimpleNode): T
     fun visitQueryElemIndexNode(node: QueryElemNode.IndexNode): T
     fun visitQueryElemAttributeNode(node: QueryElemNode.AttributeNode): T
-    fun visitQueryNode(node: QueryNode): T
     fun visitQueryElemParenNode(node: QueryElemNode.ParenNode): T
     fun visitQueryElemBooleanNode(node: QueryElemNode.BooleanNode): T
     fun visitQueryElemOrderNode(node: QueryElemNode.OrderNode): T
     fun visitQueryElemSequenceNode(node: QueryElemNode.SequenceNode): T
-    fun visitGlobalContraintNode(node: GlobalConstraintNode): T
-    fun visitConstraintBooleanExpressionNotNode(node: GlobalConstraintNode.BooleanExpressionNode.NotNode): T
-    fun visitConstraintBooleanExpressionParenNode(node: GlobalConstraintNode.BooleanExpressionNode.ParenNode): T
-    fun visitConstraintBooleanExpressionOperatorNode(node: GlobalConstraintNode.BooleanExpressionNode.OperatorNode): T
-    fun visitConstraintBooleanExpressionComparisonNode(node: GlobalConstraintNode.BooleanExpressionNode.ComparisonNode): T
+    fun visitQueryElemAlignNode(node: QueryElemNode.AlignNode): T
+    fun visitConstraintNode(node: ConstraintNode): T
+    fun visitConstraintBooleanExpressionNotNode(node: ConstraintNode.BooleanExpressionNode.NotNode): T
+    fun visitConstraintBooleanExpressionParenNode(node: ConstraintNode.BooleanExpressionNode.ParenNode): T
+    fun visitConstraintBooleanExpressionOperatorNode(node: ConstraintNode.BooleanExpressionNode.OperatorNode): T
+    fun visitConstraintBooleanExpressionComparisonNode(node: ConstraintNode.BooleanExpressionNode.ComparisonNode): T
     fun visitSimpleReferenceNode(node: ReferenceNode.SimpleReferenceNode): T
     fun visitNestedReferenceNode(node: ReferenceNode.NestedReferenceNode): T
-    fun visitQueryElemAlignNode(node: QueryElemNode.AlignNode): T
-    fun visitRestrictionProximityNode(node: RestrictionTypeNode.ProximityNode): T
-    fun visitRestrictionContextNode(node: RestrictionTypeNode.ContextNode): T
+    fun visitProximityRestrictionNode(node: ProximityRestrictionNode): T
+
 }
 
-data class RootNode(val query: QueryNode, val constraint: GlobalConstraintNode?, override val location: Interval) : EqlAstNode() {
+data class RootNode(val query: QueryElemNode, val constraint: ConstraintNode?, override val location: Interval) : EqlAstNode() {
     var symbolTable: MutableMap<String, QueryElemNode.AssignNode>? = null
+    var contextRestriction: ContextRestriction? = null
+    var documentRestriction: DocumentRestriction? = null
 
     override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitRootNode(this)
 }
 
-data class QueryNode(val query: List<QueryElemNode>, val restriction: RestrictionTypeNode?, override val location: Interval) : EqlAstNode() {
-    override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryNode(this)
+enum class ContextRestriction {
+    SENTENCE,
+    PARAGRAPH
+}
+
+sealed class DocumentRestriction {
+    data class Id(val text: String) : DocumentRestriction()
+    data class Title(val text: String) : DocumentRestriction()
+    data class Url(val text: String) : DocumentRestriction()
 }
 
 sealed class QueryElemNode : EqlAstNode() {
@@ -107,45 +114,29 @@ sealed class QueryElemNode : EqlAstNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemAttributeNode(this)
     }
 
-    data class ParenNode(val query: QueryNode, val restriction: RestrictionTypeNode?, override val location: Interval) : QueryElemNode() {
+    data class ParenNode(val query: QueryElemNode, val restriction: ProximityRestrictionNode?, override val location: Interval) : QueryElemNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemParenNode(this)
     }
 
-    data class BooleanNode(val left: QueryElemNode, val operator: BooleanOperator, val right: QueryElemNode, override val location: Interval) : QueryElemNode() {
+    data class BooleanNode(val children: MutableList<QueryElemNode>, val operator: BooleanOperator, val restriction: ProximityRestrictionNode?, override val location: Interval) : QueryElemNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemBooleanNode(this)
     }
 
-    data class OrderNode(val left: QueryElemNode, val right: QueryElemNode, override val location: Interval) : QueryElemNode() {
+    data class OrderNode(val left: QueryElemNode, val right: QueryElemNode, val restriction: ProximityRestrictionNode?, override val location: Interval) : QueryElemNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemOrderNode(this)
     }
 
     data class SequenceNode(val elems: List<QueryElemNode>, override val location: Interval) : QueryElemNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemSequenceNode(this)
     }
-
-    data class RestrictionNode(val left: QueryElemNode, val right: QueryElemNode, val type: RestrictionTypeNode, override val location: Interval) : QueryElemNode() {
-        override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemRestrictionNode(this)
-    }
 }
 
-sealed class RestrictionTypeNode : EqlAstNode() {
-    data class ProximityNode(val distance: String, override val location: Interval) : RestrictionTypeNode() {
-        override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitRestrictionProximityNode(this)
-    }
-
-    data class ContextNode(val restriction: ContextRestrictionType, override val location: Interval) : RestrictionTypeNode() {
-        override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitRestrictionContextNode(this)
-    }
+data class ProximityRestrictionNode(val distance: String, override val location: Interval) : EqlAstNode() {
+    override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitProximityRestrictionNode(this)
 }
 
-sealed class ContextRestrictionType {
-    object Paragraph : ContextRestrictionType()
-    object Sentence : ContextRestrictionType()
-    data class Query(val query: QueryElemNode) : ContextRestrictionType()
-}
-
-data class GlobalConstraintNode(val expression: BooleanExpressionNode, override val location: Interval) : EqlAstNode() {
-    override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitGlobalContraintNode(this)
+data class ConstraintNode(val expression: BooleanExpressionNode, override val location: Interval) : EqlAstNode() {
+    override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitConstraintNode(this)
 
 
     sealed class BooleanExpressionNode : EqlAstNode() {

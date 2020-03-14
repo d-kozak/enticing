@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.analysis.check
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.SymbolTable
@@ -43,6 +44,7 @@ class NestedRefCheck(id: String) : EqlAstCheck<ReferenceNode.NestedReferenceNode
         }
     }
 
+    @WhatIf("Check if queries really contain just a single node")
     fun collectAllEntities(root: QueryElemNode, metadataConfiguration: MetadataConfiguration): Set<String>? {
         val nodes = mutableSetOf<String>()
         fun collect(node: QueryElemNode): Boolean = when (node) {
@@ -54,8 +56,8 @@ class NestedRefCheck(id: String) : EqlAstCheck<ReferenceNode.NestedReferenceNode
             is QueryElemNode.AttributeNode -> if (node.entity in metadataConfiguration.entities && node.attribute in metadataConfiguration.entities.getValue(node.entity).attributes) {
                 nodes.add(node.entity)
             } else false
-            is QueryElemNode.ParenNode -> if (node.query.query.size == 1) collect(node.query.query[0]) else false
-            is QueryElemNode.BooleanNode -> if (node.operator == BooleanOperator.OR) collect(node.left) && collect(node.right) else false
+            is QueryElemNode.ParenNode -> collect(node.query)
+            is QueryElemNode.BooleanNode -> if (node.operator == BooleanOperator.OR) node.children.map { collect(it) }.all { it } else false
             else -> false
         }
         return if (collect(root)) nodes else null
