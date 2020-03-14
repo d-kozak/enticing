@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.EqlAstNode
@@ -13,12 +14,6 @@ import kotlin.math.max
 
 private val log = SimpleStdoutLoggerFactory.namedLogger("EqlDocumentMatching")
 
-internal fun dumpMatch(ast: EqlAstNode, match: Map<Long, List<Interval>>) {
-    ast.forEachNode {
-        println("$it => ${match[it.id]}")
-    }
-}
-
 fun EqlAstNode.clearMatchInfo() {
     this.forEachNode { it.matchInfo.clear() }
 }
@@ -31,8 +26,9 @@ fun Logger.dumpNodesByIndex(nodeByIndex: Array<List<QueryElemNode.SimpleNode>>, 
             }
         }
     }
-    log.debug("Nodes by index mapping: \n$msg")
+    this.debug("Nodes by index mapping: \n$msg")
 }
+
 
 /**
  * This file contains all the logic which performs query to document matching, inspiration should be taken from
@@ -49,14 +45,27 @@ fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: Stri
     val words = document.drop(max(interval.from - 1, 0))
             .take(interval.size)
 
-    for (word in words) {
-        for ((i, value) in word.withIndex()) {
-
+    for ((i, word) in words.withIndex()) {
+        for ((j, value) in word.withIndex()) {
+            for (node in nodesByIndex[j]) {
+                node.checkWord(interval.from + i, value)
+            }
         }
     }
 
+    log.dumpAstMatch(ast)
 
     return MatchInfo.empty()
+}
+
+@WhatIf("make sure we are case insensitive - should happen before when transforming the AST")
+private fun QueryElemNode.SimpleNode.checkWord(index: Int, value: String) {
+    val match = if (this.content.endsWith("*")) {
+        value.startsWith(this.content.substring(0, this.content.length - 1))
+    } else {
+        value == this.content
+    }
+    if (match) matchInfo.add(emptyList<Int>() to Interval.valueOf(index))
 }
 
 
