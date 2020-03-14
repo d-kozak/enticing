@@ -6,11 +6,14 @@ import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.dto.toCorpusFormat
 import cz.vutbr.fit.knot.enticing.dto.toMetadataConfiguration
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.*
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor.AstDefinitionsGeneratingVisitor
 import cz.vutbr.fit.knot.enticing.eql.compiler.forEachQuery
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.CompilerError
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.SemanticError
 import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -71,8 +74,8 @@ internal val config = metadataConfiguration {
         extraAttributes("nertype", "nerlength")
     }
 }.also {
-    it.validateOrFail()
-}.toCorpusFormat()
+            it.validateOrFail()
+        }.toCorpusFormat()
         .toMetadataConfiguration() // "double transform" it to ensure all important data is still there
 
 fun assertHasError(errors: List<CompilerError>, id: String, count: Int = 1, location: Interval? = null) {
@@ -96,6 +99,34 @@ class AllChecksTest {
                 System.err.println(errors)
                 false
             } else true
+        }
+    }
+
+    @Nested
+    inner class BooleanFlatten {
+
+        @Test
+        @DisplayName("one two three")
+        fun `simple three nodes`() {
+            val (tree, errors) = compiler.parseAndAnalyzeQuery("one two three", config)
+            assertThat(errors).isEmpty()
+            assertThat(tree).isEqualTo(RootNode(
+                    QueryElemNode.BooleanNode(
+                            mutableListOf(
+                                    QueryElemNode.SimpleNode("one", SimpleQueryType.STRING, Interval.valueOf(0, 2)),
+                                    QueryElemNode.SimpleNode("two", SimpleQueryType.STRING, Interval.valueOf(4, 6)),
+                                    QueryElemNode.SimpleNode("three", SimpleQueryType.STRING, Interval.valueOf(8, 12))),
+                            BooleanOperator.AND,
+                            null, Interval.valueOf(0, 12)), null,
+                    Interval.valueOf(0, 12)))
+        }
+
+        @Test
+        @DisplayName("nertag:person (visited|entered) context:sentence")
+        fun `more complex`() {
+            val (tree, errors) = compiler.parseAndAnalyzeQuery("nertag:person (visited|entered) context:sentence", config)
+            assertThat(errors).isEmpty()
+            println((tree as EqlAstNode).accept(AstDefinitionsGeneratingVisitor()))
         }
     }
 

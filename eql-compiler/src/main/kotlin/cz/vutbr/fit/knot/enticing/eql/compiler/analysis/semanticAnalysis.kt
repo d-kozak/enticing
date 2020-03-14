@@ -9,7 +9,12 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.AgregatingListener
 import cz.vutbr.fit.knot.enticing.eql.compiler.emptySymbolTable
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.CompilerError
 
-val DEFAULT_CHECKS: List<EqlAstCheck<*>> = listOf(
+val FIRST_PASS = listOf(
+        FlattenBooleanOperationsCheck("BOOL-1")
+)
+
+val SECOND_PASS: List<EqlAstCheck<*>> = listOf(
+        RewriteContextRestrictionCheck("CTX-1"),
         ProximityNumberCheck("PROX-1"),
         BasicIndexCheck("IND-1"),
         NestedIndexCheck("IND-2"),
@@ -22,22 +27,26 @@ val DEFAULT_CHECKS: List<EqlAstCheck<*>> = listOf(
 )
 
 
-class SemanticAnalyzer(private val config: MetadataConfiguration, checks: List<EqlAstCheck<*>> = DEFAULT_CHECKS) {
+class SemanticAnalyzer(private val config: MetadataConfiguration, checks: List<List<EqlAstCheck<*>>> = listOf(FIRST_PASS, SECOND_PASS)) {
 
-    private val checksByType = checks.groupBy { it.clazz }
+    private val checksByType = checks.map { it.groupBy { it.clazz } }
 
     fun performAnalysis(node: EqlAstNode): List<CompilerError> {
         val symbolTable = emptySymbolTable()
         val reporter = SimpleAgregatingReporter()
-        node.walk(AgregatingListener({ currentNode ->
-            val checks = checksByType[currentNode::class]
-            checks?.forEach { it.doAnalyze(currentNode, symbolTable, reporter, config) }
-        }))
         if (node is RootNode) {
             node.symbolTable = symbolTable
         }
+
+        for (pass in checksByType) {
+            node.walk(AgregatingListener({ currentNode ->
+                val checks = pass[currentNode::class]
+                checks?.forEach { it.doAnalyze(currentNode, symbolTable, reporter, config) }
+            }))
+            if (reporter.reports.isNotEmpty()) break
+        }
+
         return reporter.reports
     }
-
 }
 

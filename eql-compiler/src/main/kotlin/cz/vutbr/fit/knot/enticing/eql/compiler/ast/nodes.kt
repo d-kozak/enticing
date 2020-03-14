@@ -70,9 +70,13 @@ data class RootNode(val query: QueryElemNode, val constraint: ConstraintNode?, o
     override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitRootNode(this)
 }
 
-enum class ContextRestriction {
-    SENTENCE,
-    PARAGRAPH
+enum class ContextRestriction(val restrictionNames: Set<String>) {
+    SENTENCE(setOf("sentence", "sent")),
+    PARAGRAPH(setOf("paragraph", "par"));
+
+    companion object {
+        val indexNames = setOf("context", "ctx")
+    }
 }
 
 sealed class DocumentRestriction {
