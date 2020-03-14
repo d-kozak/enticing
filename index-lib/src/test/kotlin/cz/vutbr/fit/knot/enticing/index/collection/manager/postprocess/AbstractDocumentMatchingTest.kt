@@ -6,7 +6,7 @@ import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.dto.interval.substring
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.EqlAstNode
-import cz.vutbr.fit.knot.enticing.index.boundary.EqlMatch
+import cz.vutbr.fit.knot.enticing.eql.compiler.matching.EqlMatch
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import cz.vutbr.fit.knot.enticing.index.collectionManagerConfiguration
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jCompositeDocumentCollection

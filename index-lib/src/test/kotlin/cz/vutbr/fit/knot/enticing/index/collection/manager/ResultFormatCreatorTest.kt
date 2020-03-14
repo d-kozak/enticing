@@ -10,7 +10,7 @@ import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.format.text.*
 import cz.vutbr.fit.knot.enticing.dto.format.text.Annotation
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
-import cz.vutbr.fit.knot.enticing.index.boundary.EqlMatch
+import cz.vutbr.fit.knot.enticing.eql.compiler.matching.EqlMatch
 import cz.vutbr.fit.knot.enticing.index.collection.manager.format.result.EqlResultCreator
 import cz.vutbr.fit.knot.enticing.index.utils.testDocument
 import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory

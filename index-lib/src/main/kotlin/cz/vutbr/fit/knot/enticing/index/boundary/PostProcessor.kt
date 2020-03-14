@@ -3,8 +3,7 @@ package cz.vutbr.fit.knot.enticing.index.boundary
 import cz.vutbr.fit.knot.enticing.dto.AstNode
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
-
-typealias DocumentMatch = Pair<Interval, List<EqlMatch>>
+import cz.vutbr.fit.knot.enticing.eql.compiler.matching.DocumentMatch
 
 /**
  * Represents how the document was matched by the query according to the PostProcessor
@@ -21,20 +20,6 @@ data class MatchInfo(
 
     override fun iterator(): Iterator<DocumentMatch> = intervals.iterator()
 }
-
-/**
- * One single match on the query
- */
-data class EqlMatch(
-        /**
-         * Interval over the query
-         */
-        val queryInterval: Interval,
-        /**
-         * Indexes in the document where the simple query was matched
-         */
-        val match: Interval
-)
 
 /**
  * Execute postprocessing

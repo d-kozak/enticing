@@ -3,6 +3,7 @@ package cz.vutbr.fit.knot.enticing.index.boundary
 import cz.vutbr.fit.knot.enticing.dto.GeneralFormatInfo
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
+import cz.vutbr.fit.knot.enticing.eql.compiler.matching.EqlMatch
 
 /**
  * Creates generates serializable representation of the document

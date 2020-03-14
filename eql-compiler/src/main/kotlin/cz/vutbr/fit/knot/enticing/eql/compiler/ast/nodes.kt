@@ -9,6 +9,7 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.AgregatingListener
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.EqlListener
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor.DeepCopyVisitor
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor.Mgj4QueryGeneratingVisitor
+import cz.vutbr.fit.knot.enticing.eql.compiler.matching.DocumentMatch
 
 @WhatIf("""
     this way creating ids prevents use from making the code parallel, but otherwise local ids shoudl be unique, 
@@ -30,7 +31,7 @@ abstract class EqlAstNode : AstNode {
      * Contains information how the query matched the document
      * Each item consists of indexes of node's children intervals and interval created using these subintervals
      */
-    var matchInfo: MutableList<Pair<List<Int>, Interval>> = mutableListOf()
+    var matchInfo: MutableSet<DocumentMatch> = mutableSetOf()
 
     /**
      * Execute given piece of code for each node in the ast

@@ -6,6 +6,8 @@ import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.EqlAstNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.QueryElemNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.EqlListener
+import cz.vutbr.fit.knot.enticing.eql.compiler.matching.DocumentMatch
+import cz.vutbr.fit.knot.enticing.eql.compiler.matching.EqlMatch
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import cz.vutbr.fit.knot.enticing.index.boundary.MatchInfo
 import cz.vutbr.fit.knot.enticing.log.Logger
@@ -53,9 +55,11 @@ fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: Stri
         }
     }
 
+    ast.walk(DocumentMatchingListener(document))
+
     log.dumpAstMatch(ast)
 
-    return MatchInfo.empty()
+    return MatchInfo(ast.matchInfo.toList())
 }
 
 @WhatIf("make sure we are case insensitive - should happen before when transforming the AST")
@@ -65,7 +69,7 @@ private fun QueryElemNode.SimpleNode.checkWord(index: Int, value: String) {
     } else {
         value == this.content
     }
-    if (match) matchInfo.add(emptyList<Int>() to Interval.valueOf(index))
+    if (match) matchInfo.add(DocumentMatch(Interval.valueOf(index), listOf(EqlMatch(this.location, Interval.valueOf(index)))))
 }
 
 

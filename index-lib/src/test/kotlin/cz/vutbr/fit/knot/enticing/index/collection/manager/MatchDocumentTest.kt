@@ -35,7 +35,7 @@ class MatchDocumentTest {
             val result = queryExecutor.doMatch("hello", document)
             assertThat(result.intervals).hasSize(1)
             assertThat(result.intervals).allSatisfy { match ->
-                assertThat(10 in match.first)
+                assertThat(10 in match.interval)
             }
         }
 
@@ -49,7 +49,7 @@ class MatchDocumentTest {
             val result = queryExecutor.doMatch("hello", document)
             assertThat(result.intervals).hasSize(3)
             assertThat(result.intervals).allSatisfy { match ->
-                assertThat(10 in match.first || 20 in match.first || 30 in match.first)
+                assertThat(10 in match.interval || 20 in match.interval || 30 in match.interval)
             }
         }
 
@@ -78,7 +78,7 @@ class MatchDocumentTest {
             val result = queryExecutor.doMatch("lemma:hello", document)
             assertThat(result.intervals).hasSize(1)
             assertThat(result.intervals).allSatisfy { match ->
-                assertThat(10 in match.first)
+                assertThat(10 in match.interval)
             }
         }
     }
@@ -98,9 +98,9 @@ class MatchDocumentTest {
             val result = queryExecutor.doMatch(query, document)
             assertThat(result.intervals).hasSize(1)
             assertThat(result.intervals).allSatisfy { match ->
-                assertThat(10 in match.first)
-                assertThat(75 in match.first)
-                assertThat(200 in match.first)
+                assertThat(10 in match.interval)
+                assertThat(75 in match.interval)
+                assertThat(200 in match.interval)
             }
         }
 
@@ -135,8 +135,8 @@ class MatchDocumentTest {
             val result = queryExecutor.doMatch(query, document)
             assertThat(result.intervals).hasSize(1)
             assertThat(result.intervals).allSatisfy { match ->
-                assertThat(10 in match.first)
-                assertThat(20 in match.first)
+                assertThat(10 in match.interval)
+                assertThat(20 in match.interval)
             }
         }
 
@@ -161,8 +161,8 @@ class MatchDocumentTest {
             val result = queryExecutor.doMatch(query, document)
             assertThat(result.intervals).hasSize(1)
             assertThat(result.intervals).allSatisfy { match ->
-                assertThat(20 in match.first)
-                assertThat(23 in match.first)
+                assertThat(20 in match.interval)
+                assertThat(23 in match.interval)
             }
         }
     }
@@ -185,7 +185,7 @@ class MatchDocumentTest {
             val result = queryExecutor.doMatch(query, document)
             assertThat(result.intervals).hasSize(332)
             assertThat(result.intervals).allSatisfy {
-                assertThat(it.first.size).isEqualTo(2)
+                assertThat(it.interval.size).isEqualTo(2)
             }
         }
 
@@ -233,9 +233,9 @@ class MatchDocumentTest {
             val result = queryExecutor.doMatch(query, document)
             assertThat(result.intervals).hasSize(1)
             assertThat(result.intervals).allSatisfy { match ->
-                assertThat(22 in match.first)
-                assertThat(23 in match.first)
-                assertThat(24 in match.first)
+                assertThat(22 in match.interval)
+                assertThat(23 in match.interval)
+                assertThat(24 in match.interval)
             }
         }
     }
@@ -281,8 +281,8 @@ class MatchDocumentTest {
             val result = queryExecutor.doMatch(query, document)
             assertThat(result.intervals).hasSize(1)
             assertThat(result.intervals).allSatisfy { match ->
-                assertThat(1456 in match.first)
-                assertThat(1457 in match.first)
+                assertThat(1456 in match.interval)
+                assertThat(1457 in match.interval)
             }
         }
 

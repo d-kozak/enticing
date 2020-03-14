@@ -79,6 +79,9 @@ data class Interval private constructor(
         return valueOf(max(x1, x2), min(y1, y2))
     }
 
+    override fun toString(): String = if (size == 1) "[$from]" else "[$from..$to]"
+
+
     @JsonIgnore
     val size: Int = if (isEmpty()) 0 else to - from + 1
 }

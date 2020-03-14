@@ -1,17 +1,17 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess
 
-import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.EqlAstNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.QueryElemNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.RootNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.EqlListener
+import cz.vutbr.fit.knot.enticing.eql.compiler.matching.DocumentMatch
 import cz.vutbr.fit.knot.enticing.log.Logger
 
 fun Logger.dumpAstMatch(ast: EqlAstNode) {
     val listener = DumpAstMatchListener()
     ast.walk(listener)
     val msg = listener.buildMsg()
-    this.debug("Leaf match: \n$msg")
+    this.debug("Match: \n$msg")
 }
 
 
@@ -26,14 +26,14 @@ class DumpAstMatchListener : EqlListener {
     fun buildMsg(): String = builder.toString()
 
 
-    private fun dumpMatch(prefix: String, matchInfo: MutableList<Pair<List<Int>, Interval>>) {
+    private fun dumpMatch(prefix: String, matchInfo: MutableSet<DocumentMatch>) {
         with(builder) {
             repeat(indent) {
                 append(" ")
             }
             append(prefix)
             append(" = ")
-            appendln(matchInfo)
+            appendln(matchInfo.joinToString { it.interval.toString() })
         }
     }
 

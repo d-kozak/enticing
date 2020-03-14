@@ -95,8 +95,8 @@ class CollectionManager internal constructor(
 
         val offset = query.offset
         val matchList = when {
-            offset != null && offset < matchInfo.intervals.size -> matchInfo.intervals[offset].second
-            offset == null && matchInfo.intervals.isNotEmpty() -> matchInfo.intervals[0].second
+            offset != null && offset < matchInfo.intervals.size -> matchInfo.intervals[offset].eqlMatch
+            offset == null && matchInfo.intervals.isNotEmpty() -> matchInfo.intervals[0].eqlMatch
             else -> emptyList()
         }
 
