@@ -3,6 +3,8 @@ package cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.*
 
+fun EqlAstNode.dumpKotlinDefs() = println(accept(AstDefinitionsGeneratingVisitor()))
+
 /**
  * Creates a string that should contain a piece of valid Kotlin code that creates the AST nodes ( e.g. for bootstraping tests - manual AST creation is time consuming)
  */

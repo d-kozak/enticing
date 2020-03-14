@@ -45,7 +45,7 @@ internal class Mgj4QueryGeneratingVisitorTest {
         fun `Query 1`() {
             val (ast, errors) = compiler.parseAndAnalyzeQuery("Picasso visited Paris", config)
             assertThat(errors).isEmpty()
-            assertThat(ast.toMgj4Query()).isEqualTo("Picasso visited Paris")
+            assertThat(ast.toMgj4Query()).isEqualTo("(Picasso & visited & Paris)")
 
         }
 
@@ -54,7 +54,7 @@ internal class Mgj4QueryGeneratingVisitorTest {
         fun `Query 2`() {
             val (ast, errors) = compiler.parseAndAnalyzeQuery("Picasso < visited < Paris", config)
             assertThat(errors).isEmpty()
-            assertThat(ast.toMgj4Query()).isEqualTo("((Picasso < visited) < Paris)")
+            assertThat(ast.toMgj4Query()).isEqualTo("(Picasso < (visited < Paris))")
         }
 
         @Test
@@ -62,7 +62,7 @@ internal class Mgj4QueryGeneratingVisitorTest {
         fun `Query 4`() {
             val (ast, errors) = compiler.parseAndAnalyzeQuery("(Picasso visited Paris) ctx:par", config)
             assertThat(errors).isEmpty()
-            assertThat(ast.toMgj4Query()).isEqualTo("(Picasso visited Paris)  - §")
+            assertThat(ast.toMgj4Query()).isEqualTo("((((Picasso & visited & Paris)))  - §)")
         }
 
 
@@ -71,7 +71,7 @@ internal class Mgj4QueryGeneratingVisitorTest {
         fun `Query 5`() {
             val (ast, errors) = compiler.parseAndAnalyzeQuery("(Picasso visited Paris) ctx:sent", config)
             assertThat(errors).isEmpty()
-            assertThat(ast.toMgj4Query()).isEqualTo("(Picasso visited Paris)  - ¶")
+            assertThat(ast.toMgj4Query()).isEqualTo("((((Picasso & visited & Paris)))  - ¶)")
         }
 
         @Test
@@ -79,7 +79,7 @@ internal class Mgj4QueryGeneratingVisitorTest {
         fun `Query 9`() {
             val (ast, errors) = compiler.parseAndAnalyzeQuery("(person.name:Picasso lemma:(visit|explore) Paris) ctx:sent", config)
             assertThat(errors).isEmpty()
-            assertThat(ast.toMgj4Query()).isEqualTo("(((nertag:person{{nertag->token}}) ^ (param2:(Picasso){{param2->token}})) (lemma:((visit | explore)){{lemma->token}}) Paris)  - ¶")
+            assertThat(ast.toMgj4Query()).isEqualTo("((((((nertag:person{{nertag->token}}) ^ (param2:(Picasso){{param2->token}})) & (lemma:((visit | explore)){{lemma->token}}) & Paris)))  - ¶)")
         }
 
         @Test
@@ -87,7 +87,7 @@ internal class Mgj4QueryGeneratingVisitorTest {
         fun `Query 10`() {
             val (ast, errors) = compiler.parseAndAnalyzeQuery("(person.name:Picasso lemma:(visit|explore)  location.name:Paris) context:sentence", config)
             assertThat(errors).isEmpty()
-            assertThat(ast.toMgj4Query()).isEqualTo("(((nertag:person{{nertag->token}}) ^ (param2:(Picasso){{param2->token}})) (lemma:((visit | explore)){{lemma->token}}) ((nertag:location{{nertag->token}}) ^ (param2:(Paris){{param2->token}})))  - ¶")
+            assertThat(ast.toMgj4Query()).isEqualTo("((((((nertag:person{{nertag->token}}) ^ (param2:(Picasso){{param2->token}})) & (lemma:((visit | explore)){{lemma->token}}) & ((nertag:location{{nertag->token}}) ^ (param2:(Paris){{param2->token}})))))  - ¶)")
         }
 
 
@@ -96,7 +96,7 @@ internal class Mgj4QueryGeneratingVisitorTest {
         fun `Query 12`() {
             val (ast, errors) = compiler.parseAndAnalyzeQuery("(influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist)) context:paragraph && influencer.url != influencee.url", config)
             assertThat(errors).isEmpty()
-            assertThat(ast.toMgj4Query()).isEqualTo("((((nertag:((person | artist)){{nertag->token}}) < ((lemma:((influence | impact)){{lemma->token}}) | ((lemma:(paid){{lemma->token}}) < (lemma:(tribute){{lemma->token}})))) < (nertag:((person | artist)){{nertag->token}})))  - §")
+            assertThat(ast.toMgj4Query()).isEqualTo("(((((nertag:((person | artist)){{nertag->token}}) < (((lemma:((influence | impact)){{lemma->token}}) | ((lemma:(paid){{lemma->token}}) < (lemma:(tribute){{lemma->token}}))) < (nertag:((person | artist)){{nertag->token}})))))  - §)")
         }
     }
 }

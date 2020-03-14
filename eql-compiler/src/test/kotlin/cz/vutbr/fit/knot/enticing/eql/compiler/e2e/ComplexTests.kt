@@ -85,7 +85,7 @@ class ComplexTests {
     fun nine() {
         val (ast, errors) = compiler.parseAndAnalyzeQuery("nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < nertag:(person|artist) ctx:par", config)
         assertThat(errors).isEmpty()
-        assertThat(ast.toMgj4Query()).isEqualTo("(((nertag:person{{nertag->token}}) ^ (param2:(pepa){{param2->token}})) | ((nertag:location{{nertag->token}}) ^ (param2:(new_york){{param2->token}})))")
+        assertThat(ast.toMgj4Query()).isEqualTo("((((nertag:((person | artist)){{nertag->token}}) < (((lemma:((influence | impact)){{lemma->token}}) | ((lemma:(paid){{lemma->token}}) < (lemma:(tribute){{lemma->token}}))) < ((nertag:((person | artist)){{nertag->token}})))))  - §)")
     }
 
 }
