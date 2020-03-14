@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess
 
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.BooleanOperator
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.ContextRestriction
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.QueryElemNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.RootNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.EqlListener
@@ -10,9 +11,22 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.matching.EqlMatch
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 
 
-class DocumentMatchingListener(val document: IndexedDocument, val matchLimit: Int = 100) : EqlListener {
+class DocumentMatchingListener(val document: IndexedDocument, val paragraphs: Set<Int>, val sentences: Set<Int>, val matchLimit: Int = 100) : EqlListener {
     override fun exitRootNode(node: RootNode) {
-        node.matchInfo = node.query.matchInfo
+        val forbiddenMarks = when (node.contextRestriction) {
+            ContextRestriction.SENTENCE -> sentences
+            ContextRestriction.PARAGRAPH -> paragraphs
+            else -> null
+        }
+        if (forbiddenMarks == null)
+            node.matchInfo = node.query.matchInfo
+        else {
+            loop@ for (match in node.query.matchInfo) {
+                for (i in match.interval)
+                    if (i in forbiddenMarks) continue@loop
+                node.matchInfo.add(match)
+            }
+        }
     }
 
     override fun exitQueryElemNotNode(node: QueryElemNode.NotNode) {

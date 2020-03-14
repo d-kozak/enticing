@@ -47,15 +47,25 @@ fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: Stri
     val words = document.drop(max(interval.from - 1, 0))
             .take(interval.size)
 
+    val paragraph = "§"
+    val sentence = "¶"
+    val tokenIndex = metadataConfiguration.indexOf("token")
+
+    val paragraphs = mutableSetOf<Int>()
+    val sentences = mutableSetOf<Int>()
+
     for ((i, word) in words.withIndex()) {
         for ((j, value) in word.withIndex()) {
             for (node in nodesByIndex[j]) {
                 node.checkWord(interval.from + i, value)
             }
+
+            if (word[tokenIndex] == paragraph) paragraphs.add(i)
+            else if (word[tokenIndex] == sentence) sentences.add(i)
         }
     }
 
-    ast.walk(DocumentMatchingListener(document))
+    ast.walk(DocumentMatchingListener(document, paragraphs, sentences))
 
     log.dumpAstMatch(ast)
 
