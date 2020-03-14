@@ -7,30 +7,25 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.analysis.Reporter
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.BooleanOperator
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.ContextRestriction
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.QueryElemNode
-import cz.vutbr.fit.knot.enticing.eql.compiler.ast.RootNode
 
-class RewriteContextRestrictionCheck(id: String) : EqlAstCheck<RootNode>(id, RootNode::class) {
-    override fun analyze(node: RootNode, symbolTable: SymbolTable, metadataConfiguration: MetadataConfiguration, reporter: Reporter) {
-        val query = node.query
-        if (query is QueryElemNode.BooleanNode && query.operator == BooleanOperator.AND) {
-            var ctxIndex = -1
-            for ((i, child) in query.children.withIndex()) {
-                if (child is QueryElemNode.IndexNode && child.index in ContextRestriction.indexNames) {
-                    val content = child.elem
-                    if (content is QueryElemNode.SimpleNode) {
-                        if (ctxIndex == -1) ctxIndex = i
-                        else reporter.error("Only one context restriction is allowed", child.location, id)
-                    } else reporter.error("Only simple enum based restrictions allowed", content.location, id)
-                }
-            }
-            if (ctxIndex != -1) {
-                val restrictionNode = query.children.removeAt(ctxIndex) as QueryElemNode.IndexNode
-                val restrictionContent = (restrictionNode.elem as QueryElemNode.SimpleNode).content.toLowerCase()
-                val restrictionType = ContextRestriction.values().firstOrNull { restrictionContent in it.restrictionNames }
-                if (restrictionType != null) {
-                    node.contextRestriction = restrictionType
-                } else reporter.error("Unknown restriction $restrictionContent", restrictionNode.elem.location, id)
-            }
+class RewriteContextRestrictionCheck(id: String) : EqlAstCheck<QueryElemNode.IndexNode>(id, QueryElemNode.IndexNode::class) {
+    override fun analyze(node: QueryElemNode.IndexNode, symbolTable: SymbolTable, metadataConfiguration: MetadataConfiguration, reporter: Reporter) {
+        if (node.index in ContextRestriction.indexNames) {
+            if (node.elem is QueryElemNode.SimpleNode) {
+                val content = node.elem.content.toLowerCase()
+                val restriction = ContextRestriction.values().find { content in it.restrictionNames }
+                if (restriction != null) {
+                    if (symbolTable.rootNode.contextRestriction == null) {
+                        val parent = node.parent!!
+                        if (parent is QueryElemNode.BooleanNode && parent.operator == BooleanOperator.AND) {
+                            if (parent.children.remove(node)) {
+                                symbolTable.rootNode.contextRestriction = restriction
+                            } else throw IllegalStateException("Failed to delete ConstraintNode from the tree")
+                        } else reporter.error("Invalid location for a restriction, should be in AND", node.location, id)
+                    } else reporter.error("Only one restriction per query is allowed", node.location, id)
+                } else reporter.error("Unknown restriction type $content", node.elem.location, id)
+            } else reporter.error("Only simple enum based restrictions allowed", node.elem.location, id)
         }
     }
+
 }

@@ -60,7 +60,7 @@ class AstWalker(protected val listener: EqlListener) : EqlVisitor<Unit> {
     override fun visitQueryElemBooleanNode(node: QueryElemNode.BooleanNode) {
         listener.enterQueryElemBooleanNode(node)
         if (shouldContinue(node)) {
-            node.children.forEach { it.accept(this) }
+            node.children.toList().forEach { it.accept(this) }
             node.restriction?.accept(this)
         }
     }

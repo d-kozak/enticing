@@ -6,7 +6,7 @@ class Mgj4QueryGeneratingVisitor : EqlVisitor<String> {
     override fun visitRootNode(node: RootNode): String {
         val query = node.query.accept(this)
         val restriction = node.contextRestriction
-        return if (restriction != null) "($query) ${visitContextRestriction(restriction)}" else query
+        return if (restriction != null) "(($query) ${visitContextRestriction(restriction)})" else query
     }
 
     private fun visitContextRestriction(restriction: ContextRestriction): String = when (restriction) {

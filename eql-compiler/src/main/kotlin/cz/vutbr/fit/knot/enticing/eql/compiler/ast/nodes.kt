@@ -18,6 +18,7 @@ var counter = 0L
 
 abstract class EqlAstNode : AstNode {
     val id: Long = counter++
+    var parent: EqlAstNode? = null
     abstract val location: Interval
     abstract fun <T> accept(visitor: EqlVisitor<T>): T
     fun walk(listener: EqlListener, walker: AstWalker = AstWalker(listener)) = this.accept(walker)

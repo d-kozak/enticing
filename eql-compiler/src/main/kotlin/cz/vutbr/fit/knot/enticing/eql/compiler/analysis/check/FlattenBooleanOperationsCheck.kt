@@ -18,6 +18,7 @@ class FlattenBooleanOperationsCheck(id: String) : EqlAstCheck<QueryElemNode.Bool
                     flatten(child)
                     node.children.removeAt(i)
                     node.children.addAll(i, child.children)
+                    child.children.forEach { it.parent = node }
                 }
             }
         }
