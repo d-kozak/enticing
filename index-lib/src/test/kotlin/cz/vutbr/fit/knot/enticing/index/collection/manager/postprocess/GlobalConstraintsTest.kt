@@ -2,11 +2,9 @@ package cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess
 
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.annotation.Speed
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@Disabled
 @Speed("optimize the algorithms so that these tests can be executed during CI")
 class GlobalConstraintsTest : AbstractDocumentMatchingTest() {
 
@@ -29,7 +27,7 @@ class GlobalConstraintsTest : AbstractDocumentMatchingTest() {
         }
     }
 
-    @DisplayName("one:=food two:=food && one == two")
+    @DisplayName("one:=food two:=food && one != two")
     @Test
     fun oneOne() = forEachMatch("one:=food two:=food && one != two") {
         forEachIdentifier("one") {
@@ -58,9 +56,9 @@ class GlobalConstraintsTest : AbstractDocumentMatchingTest() {
         }
     }
 
-    @DisplayName("influencer:=nertag:(person) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person) - _PAR_ && influencer.url != influencee.url")
+    @DisplayName("influencer:=nertag:(person) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person) ctx:par && influencer.url != influencee.url")
     @Test
-    fun nestedSimple() = forEachMatch("influencer:=nertag:(person) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person) - _PAR_ && influencer.url != influencee.url") {
+    fun nestedSimple() = forEachMatch("influencer:=nertag:(person) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person) ctx:par && influencer.url != influencee.url") {
         verifyGlobalConstraint("one should be different than two", "influencer", "influencee") {
             val one = identifiers["influencer"]
                     ?: return@verifyGlobalConstraint checkFailed("influencer was not matched")
@@ -75,9 +73,9 @@ class GlobalConstraintsTest : AbstractDocumentMatchingTest() {
         }
     }
 
-    @DisplayName("influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) - _PAR_ && influencer.url != influencee.url")
+    @DisplayName("influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) ctx:par && influencer.url != influencee.url")
     @Test
-    fun nestedPersonArtist() = forEachMatch("influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) - _PAR_ && influencer.url != influencee.url") {
+    fun nestedPersonArtist() = forEachMatch("influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) ctx:par && influencer.url != influencee.url") {
         verifyGlobalConstraint("one should be different than two", "influencer", "influencee") {
             val one = identifiers["influencer"]
                     ?: return@verifyGlobalConstraint checkFailed("influencer was not matched")
@@ -94,9 +92,9 @@ class GlobalConstraintsTest : AbstractDocumentMatchingTest() {
 
 
     @Incomplete("is not matched by anything :X")
-    @DisplayName("influencer:=person.name:Mic* < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) - _PAR_ && influencer.gender != influencee.gender")
+    @DisplayName("influencer:=person.name:Mic* < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) ctx:par && influencer.gender != influencee.gender")
     @Test
-    fun oneIdentifierWithAttribute() = forEachMatch("influencer:=person.name:Mic* < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) - _PAR_ && influencer.gender != influencee.gender") {
+    fun oneIdentifierWithAttribute() = forEachMatch("influencer:=person.name:Mic* < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) ctx:par && influencer.gender != influencee.gender") {
         forEachIdentifier("influencer") {
             val nertagCells = cellsAt("nertag", leafMatch.match)
             verify(nertagCells.all { it == "person" }) { "all cells should have a person in it" }
@@ -118,9 +116,9 @@ class GlobalConstraintsTest : AbstractDocumentMatchingTest() {
     }
 
     @Incomplete("is not matched by anything :X")
-    @DisplayName("influencer:=person.name:Jo* < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=influencer:=person.name:Mi* - _PAR_ && influencer.gender != influencee.gender")
+    @DisplayName("influencer:=person.name:Jo* < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=influencer:=person.name:Mi* ctx:par && influencer.gender != influencee.gender")
     @Test
-    fun twoAttributes() = forEachMatch("influencer:=person.name:Jo* < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=person.name:Jo* - _PAR_ && influencer.gender != influencee.gender") {
+    fun twoAttributes() = forEachMatch("influencer:=person.name:Jo* < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=person.name:Jo* ctx:par && influencer.gender != influencee.gender") {
         forEachIdentifier("influencer") {
             val nertagCells = cellsAt("nertag", leafMatch.match)
             verify(nertagCells.all { it == "person" }) { "all cells should have a person in it" }

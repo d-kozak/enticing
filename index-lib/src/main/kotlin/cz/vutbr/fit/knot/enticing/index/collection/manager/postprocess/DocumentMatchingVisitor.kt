@@ -4,6 +4,7 @@ import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.*
 import cz.vutbr.fit.knot.enticing.eql.compiler.matching.DocumentMatch
 import cz.vutbr.fit.knot.enticing.eql.compiler.matching.EqlMatch
+import cz.vutbr.fit.knot.enticing.eql.compiler.matching.EqlMatchType
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import kotlin.math.abs
 
@@ -45,7 +46,7 @@ class DocumentMatchingVisitor(val document: IndexedDocument, val paragraphs: Set
         val elem = node.elem.accept(this)
         val identifierInterval = Interval.valueOf(node.location.from, node.location.from + node.identifier.length - 1)
         return elem.asSequence()
-                .map { DocumentMatch(it.interval, listOf(EqlMatch(identifierInterval, it.interval)), listOf(it)) }
+                .map { DocumentMatch(it.interval, listOf(EqlMatch(identifierInterval, it.interval, EqlMatchType.IDENTIFIER)), listOf(it)) }
     }
 
 

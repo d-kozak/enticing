@@ -19,5 +19,10 @@ data class EqlMatch(
         /**
          * Indexes in the document where the simple query was matched
          */
-        val match: Interval
+        val match: Interval,
+        val type: EqlMatchType = EqlMatchType.LEAF
 )
+
+enum class EqlMatchType {
+    LEAF, IDENTIFIER
+}

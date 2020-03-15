@@ -5,6 +5,7 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.EqlAstNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.QueryElemNode
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.RootNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.EqlListener
 import cz.vutbr.fit.knot.enticing.eql.compiler.matching.DocumentMatch
 import cz.vutbr.fit.knot.enticing.eql.compiler.matching.EqlMatch
@@ -38,6 +39,13 @@ fun Logger.dumpNodesByIndex(nodeByIndex: Array<List<QueryElemNode.SimpleNode>>, 
  */
 
 fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: String, metadataConfiguration: MetadataConfiguration, interval: Interval): MatchInfo {
+    val seq = evaluateQuery(ast, document, defaultIndex, metadataConfiguration, interval).filter {
+        ast.accept(GlobalConstraintEvaluationVisitor(ast as RootNode, metadataConfiguration, document, it))
+    }
+    return MatchInfo(seq.take(512).toList())
+}
+
+internal fun evaluateQuery(ast: EqlAstNode, document: IndexedDocument, defaultIndex: String, metadataConfiguration: MetadataConfiguration, interval: Interval): Sequence<DocumentMatch> {
     log.debug("Matching document '${document.title}' with query ${ast.toMgj4Query()}")
     val nodesByIndex = groupNodesByIndex(ast, metadataConfiguration, defaultIndex)
     log.dumpNodesByIndex(nodesByIndex, metadataConfiguration)
@@ -65,9 +73,7 @@ fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: Stri
         }
     }
 
-    val seq = ast.accept(DocumentMatchingVisitor(document, paragraphs, sentences)).take(512)
-
-    return MatchInfo(seq.toList())
+    return ast.accept(DocumentMatchingVisitor(document, paragraphs, sentences))
 }
 
 @WhatIf("make sure we are case insensitive - should happen before when transforming the AST")
