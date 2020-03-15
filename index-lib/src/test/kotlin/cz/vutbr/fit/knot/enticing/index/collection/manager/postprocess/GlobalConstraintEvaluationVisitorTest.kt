@@ -31,8 +31,8 @@ class GlobalConstraintEvaluationVisitorTest {
 
         for (match in seq) {
             val visitor = GlobalConstraintEvaluationVisitor(ast, metadata, document, match)
-            assertThat(visitor.identifiers.keys).contains("one", "two")
-            println(visitor.identifiers)
+            assertThat(visitor.indentifierMatch.keys).contains("one", "two")
+            println(visitor.indentifierMatch)
         }
     }
 
