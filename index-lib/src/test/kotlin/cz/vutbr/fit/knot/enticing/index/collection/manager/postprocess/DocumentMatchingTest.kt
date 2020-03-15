@@ -1,11 +1,9 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess
 
-import cz.vutbr.fit.knot.enticing.dto.annotation.Speed
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@Speed("optimize the algorithms so that these tests can be executed during CI")
 internal class DocumentMatchingTest : AbstractDocumentMatchingTest() {
 
     @DisplayName("food")

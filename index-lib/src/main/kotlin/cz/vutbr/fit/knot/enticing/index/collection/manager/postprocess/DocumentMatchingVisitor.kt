@@ -79,7 +79,7 @@ class DocumentMatchingVisitor(val document: IndexedDocument, val paragraphs: Set
         return when (node.operator) {
             BooleanOperator.AND -> handleAnd(children)
             BooleanOperator.OR -> handleOr(children)
-            else -> throw IllegalStateException("Unsupported operator ${node.operator}")
+            else -> error("Unsupported operator ${node.operator}")
         }.proximityRestriction(node.restriction)
     }
 
@@ -161,34 +161,34 @@ class DocumentMatchingVisitor(val document: IndexedDocument, val paragraphs: Set
     }
 
     override fun visitConstraintNode(node: ConstraintNode): Sequence<DocumentMatch> {
-        throw IllegalStateException("should never be called")
+        error("should never be called")
     }
 
     override fun visitConstraintBooleanExpressionNotNode(node: ConstraintNode.BooleanExpressionNode.NotNode): Sequence<DocumentMatch> {
-        throw IllegalStateException("should never be called")
+        error("should never be called")
     }
 
     override fun visitConstraintBooleanExpressionParenNode(node: ConstraintNode.BooleanExpressionNode.ParenNode): Sequence<DocumentMatch> {
-        throw IllegalStateException("should never be called")
+        error("should never be called")
     }
 
     override fun visitConstraintBooleanExpressionOperatorNode(node: ConstraintNode.BooleanExpressionNode.OperatorNode): Sequence<DocumentMatch> {
-        throw IllegalStateException("should never be called")
+        error("should never be called")
     }
 
     override fun visitConstraintBooleanExpressionComparisonNode(node: ConstraintNode.BooleanExpressionNode.ComparisonNode): Sequence<DocumentMatch> {
-        throw IllegalStateException("should never be called")
+        error("should never be called")
     }
 
     override fun visitSimpleReferenceNode(node: ReferenceNode.SimpleReferenceNode): Sequence<DocumentMatch> {
-        throw IllegalStateException("should never be called")
+        error("should never be called")
     }
 
     override fun visitNestedReferenceNode(node: ReferenceNode.NestedReferenceNode): Sequence<DocumentMatch> {
-        throw IllegalStateException("should never be called")
+        error("should never be called")
     }
 
     override fun visitProximityRestrictionNode(node: ProximityRestrictionNode): Sequence<DocumentMatch> {
-        throw IllegalStateException("should never be called")
+        error("should never be called")
     }
 }

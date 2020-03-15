@@ -11,7 +11,7 @@ import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 
 class GlobalConstraintEvaluationVisitor(val ast: RootNode, val metadataConfiguration: MetadataConfiguration, val document: IndexedDocument, val match: DocumentMatch) : QueryAgnosticVisitor<Boolean>() {
 
-    internal val indentifierMatch: Map<String, EqlMatch>
+    internal val identifierMatch: Map<String, EqlMatch>
 
     init {
         val nodesByInterval = mutableMapOf<Pair<Int, Int>, String>()
@@ -20,7 +20,7 @@ class GlobalConstraintEvaluationVisitor(val ast: RootNode, val metadataConfigura
                 nodesByInterval[node.location.from to node.identifier.length] = node.identifier
         }
 
-        indentifierMatch = match.eqlMatch.filter { it.type == EqlMatchType.IDENTIFIER }
+        identifierMatch = match.eqlMatch.filter { it.type == EqlMatchType.IDENTIFIER }
                 .associateBy { match ->
                     nodesByInterval[match.queryInterval.from to match.queryInterval.size]
                             ?: error("Name for match $match not found")
@@ -59,10 +59,10 @@ class GlobalConstraintEvaluationVisitor(val ast: RootNode, val metadataConfigura
     }
 
     private fun simpleReferenceCmp(operator: RelationalOperator, left: ReferenceNode.SimpleReferenceNode, right: ReferenceNode.SimpleReferenceNode): Boolean {
-        val leftMatch = indentifierMatch[left.identifier]
-                ?: error("Identifier ${left.identifier} should be found in $indentifierMatch")
-        val rightMatch = indentifierMatch[right.identifier]
-                ?: error("Identifier ${right.identifier} should be found in $indentifierMatch")
+        val leftMatch = identifierMatch[left.identifier]
+                ?: error("Identifier ${left.identifier} should be found in $identifierMatch")
+        val rightMatch = identifierMatch[right.identifier]
+                ?: error("Identifier ${right.identifier} should be found in $identifierMatch")
         return when (operator) {
             RelationalOperator.EQ -> leftMatch.match == rightMatch.match
             RelationalOperator.NE -> leftMatch.match != rightMatch.match
@@ -82,8 +82,8 @@ class GlobalConstraintEvaluationVisitor(val ast: RootNode, val metadataConfigura
     }
 
     private fun computeComparisonWord(node: ReferenceNode.NestedReferenceNode): String {
-        val match = indentifierMatch[node.identifier]
-                ?: error("Identifier ${node.identifier} should be found in $indentifierMatch")
+        val match = identifierMatch[node.identifier]
+                ?: error("Identifier ${node.identifier} should be found in $identifierMatch")
         val entity = identifyEntity(node, match)
                 ?: throw IllegalStateException("No entity found for node $node")
         val index = entity.attributes[node.attribute]?.index?.columnIndex
