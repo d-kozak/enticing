@@ -4,7 +4,8 @@ import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 
 data class DocumentMatch(
         val interval: Interval,
-        val eqlMatch: List<EqlMatch>
+        val eqlMatch: List<EqlMatch>,
+        val children: List<DocumentMatch>
 )
 
 /**

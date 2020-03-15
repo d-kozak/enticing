@@ -65,11 +65,9 @@ fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: Stri
         }
     }
 
-    ast.walk(DocumentMatchingListener(document, paragraphs, sentences))
+    val seq = ast.accept(DocumentMatchingVisitor(document, paragraphs, sentences)).take(512)
 
-    log.dumpAstMatch(ast)
-
-    return MatchInfo(ast.matchInfo.toList())
+    return MatchInfo(seq.toList())
 }
 
 @WhatIf("make sure we are case insensitive - should happen before when transforming the AST")
@@ -79,7 +77,7 @@ private fun QueryElemNode.SimpleNode.checkWord(index: Int, value: String) {
     } else {
         value == this.content
     }
-    if (match) matchInfo.add(DocumentMatch(Interval.valueOf(index), listOf(EqlMatch(this.location, Interval.valueOf(index)))))
+    if (match) matchInfo.add(DocumentMatch(Interval.valueOf(index), listOf(EqlMatch(this.location, Interval.valueOf(index))), emptyList()))
 }
 
 
