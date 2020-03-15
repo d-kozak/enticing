@@ -14,6 +14,8 @@ class DeepCopyVisitor : EqlVisitor<EqlAstNode> {
     ).also {
         it.symbolTable = newSymbolTable
         newSymbolTable.rootNode = it
+        it.contextRestriction = node.contextRestriction
+        it.documentRestriction = node.documentRestriction
     }
 
 
