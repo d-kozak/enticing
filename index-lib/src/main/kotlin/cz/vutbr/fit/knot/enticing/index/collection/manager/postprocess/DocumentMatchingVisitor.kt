@@ -43,8 +43,9 @@ class DocumentMatchingVisitor(val document: IndexedDocument, val paragraphs: Set
 
     override fun visitQueryElemAssignNode(node: QueryElemNode.AssignNode): Sequence<DocumentMatch> {
         val elem = node.elem.accept(this)
+        val identifierInterval = Interval.valueOf(node.location.from, node.location.from + node.identifier.length - 1)
         return elem.asSequence()
-                .map { DocumentMatch(it.interval, listOf(EqlMatch(node.elem.location, it.interval)), listOf(it)) }
+                .map { DocumentMatch(it.interval, listOf(EqlMatch(identifierInterval, it.interval)), listOf(it)) }
     }
 
 
