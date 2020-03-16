@@ -93,14 +93,14 @@ class MatchDocumentTest {
         fun `one match`() {
             val document = TestDocument(10_000)
             document["lemma"][10] = "go"
-            document["token"][75] = "statue"
-            document["position"][200] = "3"
+            document["token"][20] = "statue"
+            document["position"][30] = "3"
             val result = queryExecutor.doMatch(query, document)
             assertThat(result.intervals).hasSize(1)
             assertThat(result.intervals).allSatisfy { match ->
                 assertThat(10 in match.interval)
-                assertThat(75 in match.interval)
-                assertThat(200 in match.interval)
+                assertThat(20 in match.interval)
+                assertThat(30 in match.interval)
             }
         }
 
