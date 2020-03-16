@@ -4,7 +4,7 @@ import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.RootNode
 import cz.vutbr.fit.knot.enticing.index.collection.manager.TestDocument
-import cz.vutbr.fit.knot.enticing.index.collectionManagerConfiguration
+import cz.vutbr.fit.knot.enticing.index.integration.collectionManagerConfiguration
 import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

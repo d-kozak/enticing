@@ -49,3 +49,15 @@ sealed class TextUnit {
             @field:Valid
             val content: List<TextUnit>) : TextUnit()
 }
+
+fun List<TextUnit>.words(): Sequence<TextUnit.Word> = sequence<TextUnit.Word> {
+    for (unit in this@words) {
+        when (unit) {
+            is TextUnit.Word -> yield(unit)
+            is TextUnit.Entity -> yieldAll(unit.words)
+            is TextUnit.QueryMatch -> yieldAll(unit.content.words())
+        }
+    }
+}
+
+fun List<TextUnit>.matches() = this.filterIsInstance(TextUnit.QueryMatch::class.java)

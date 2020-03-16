@@ -1,11 +1,9 @@
-package cz.vutbr.fit.knot.enticing.index
+package cz.vutbr.fit.knot.enticing.index.integration
 
 import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.annotation.Warning
 import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.CollectionManagerConfiguration
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexBuilderConfig
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.format.text.StringWithMetadata
 import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnit
@@ -14,29 +12,13 @@ import cz.vutbr.fit.knot.enticing.dto.utils.toDto
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompilerException
 import cz.vutbr.fit.knot.enticing.index.collection.manager.computeExtensionIntervals
-import cz.vutbr.fit.knot.enticing.index.mg4j.fullTestMetadataConfig
 import cz.vutbr.fit.knot.enticing.index.mg4j.initMg4jCollectionManager
+import cz.vutbr.fit.knot.enticing.index.startIndexing
 import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.*
 import java.io.File
 
-val builderConfig = IndexBuilderConfig(
-        "CC",
-        "col1",
-        File("../data/mg4j"),
-        File("../data/indexed"),
-        fullTestMetadataConfig
-)
-
-
-val collectionManagerConfiguration = CollectionManagerConfiguration(
-        "CC",
-        "col1",
-        File("../data/mg4j"),
-        File("../data/indexed"),
-        fullTestMetadataConfig
-)
 
 @Incomplete("more complete test suite needed")
 class CollectionManagerTest {
