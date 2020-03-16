@@ -13,7 +13,6 @@ import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import cz.vutbr.fit.knot.enticing.index.boundary.MatchInfo
 import cz.vutbr.fit.knot.enticing.log.Logger
 import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
-import kotlin.math.max
 
 private val log = SimpleStdoutLoggerFactory.namedLogger("EqlDocumentMatching")
 
@@ -46,13 +45,13 @@ fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: Stri
 }
 
 internal fun evaluateQuery(ast: EqlAstNode, document: IndexedDocument, defaultIndex: String, metadataConfiguration: MetadataConfiguration, interval: Interval): Sequence<DocumentMatch> {
-    log.debug("Matching document '${document.title}' with query ${ast.toMgj4Query()}")
+    log.debug("Matching document '${document.title}' with query ${ast.toMgj4Query()} in interval $interval")
     val nodesByIndex = groupNodesByIndex(ast, metadataConfiguration, defaultIndex)
     log.dumpNodesByIndex(nodesByIndex, metadataConfiguration)
 
     ast.clearMatchInfo()
 
-    val words = document.drop(max(interval.from - 1, 0))
+    val words = document.drop(interval.from)
             .take(interval.size)
 
     val paragraph = "§"

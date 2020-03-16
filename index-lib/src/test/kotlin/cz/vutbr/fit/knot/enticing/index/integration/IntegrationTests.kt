@@ -143,7 +143,7 @@ fun List<TextUnit>.toRawText(): String = buildString {
 
 
 fun withRequirements(init: Requirements.() -> Unit, block: (Requirements) -> Unit) {
-    val requirements = Requirements().apply(block)
+    val requirements = Requirements().apply(init)
     try {
         block(requirements)
     } finally {
