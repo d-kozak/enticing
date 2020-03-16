@@ -5,6 +5,7 @@ import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.annotation.Speed
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.IndexConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
+import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import cz.vutbr.fit.knot.enticing.log.Logger
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
@@ -51,11 +52,11 @@ class Mg4jDocumentFactory(private val metadataConfiguration: MetadataConfigurati
                 line.isPage() -> logger.error("page tag should never be encountered at this context, only after the start of another document and the stream should not proceed that far")
                 line.isDoc() -> break@loop // reach the end of current document
                 line.isPar() -> {
-                    addSpecialToken("§", fields, lineIndex)
+                    addSpecialToken(IndexedDocument.PARAGRAPH_MARK, fields, lineIndex)
                     lineIndex++
                 }
                 line.isSent() -> {
-                    addSpecialToken("¶", fields, lineIndex)
+                    addSpecialToken(IndexedDocument.SENTENCE_MARK, fields, lineIndex)
                     lineIndex++
                 }
                 !line.isMetaInfo() -> {

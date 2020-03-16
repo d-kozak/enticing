@@ -6,6 +6,7 @@ import cz.vutbr.fit.knot.enticing.dto.TextFormat
 import cz.vutbr.fit.knot.enticing.dto.TextMetadata
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnit
+import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import cz.vutbr.fit.knot.enticing.index.mg4j.initMg4jCollectionManager
 import cz.vutbr.fit.knot.enticing.index.startIndexing
 import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
@@ -13,6 +14,8 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import java.util.*
+import kotlin.math.max
+import kotlin.math.min
 
 class IntegrationTests {
 
@@ -56,6 +59,15 @@ class IntegrationTests {
         }
     }
 
+    @Test
+    @DisplayName("is a ctx:sent")
+    fun `check sentence context`() {
+        val result = collectionManager.query(templateQuery.copy(query = "is a ctx:sent"))
+        result.checkContent {
+            highlights("is", "a", sentenceLimit = true)
+        }
+    }
+
 }
 
 
@@ -63,7 +75,12 @@ data class Requirements(
         val highlights: MutableList<String> = mutableListOf()
 ) {
 
-    fun highlights(vararg words: String) = this.highlights.addAll(words)
+    var sentenceLimit: Boolean = true
+
+    fun highlights(vararg words: String, sentenceLimit: Boolean = false) {
+        this.highlights.addAll(words)
+        this.sentenceLimit = sentenceLimit
+    }
 
     private val errors = mutableListOf<String>()
 
@@ -92,17 +109,31 @@ class DocumentChecker(val result: IndexServer.SearchResult, val requirements: Re
 
     private val highlights = requirements.highlights.toMutableSet()
 
+    private val sentenceLimit = requirements.sentenceLimit
+
+    private val paragraphMarks = mutableSetOf<Int>()
+    private val sentenceMarks = mutableSetOf<Int>()
+
+    private var minHighlightIndex = Int.MAX_VALUE
+    private var maxHighlightIndex = Int.MIN_VALUE
+
     fun reportError(msg: String) {
         requirements.reportError("${result.documentTitle}: $msg")
         hasErrors = true
     }
 
-    fun checkWord(word: TextUnit.Word) {
-
+    fun checkWord(i: Int, word: TextUnit.Word) {
+        when (word.token) {
+            IndexedDocument.PARAGRAPH_MARK -> paragraphMarks.add(i)
+            IndexedDocument.SENTENCE_MARK -> sentenceMarks.add(i)
+        }
     }
 
-    fun checkQueryMatch(match: TextUnit.QueryMatch) {
+    fun checkQueryMatch(i: Int, match: TextUnit.QueryMatch) {
         val queue = ArrayDeque(match.content)
+
+        minHighlightIndex = min(minHighlightIndex, i)
+        maxHighlightIndex = max(maxHighlightIndex, i)
 
         for (unit in queue) {
             when (unit) {
@@ -115,12 +146,24 @@ class DocumentChecker(val result: IndexServer.SearchResult, val requirements: Re
         }
     }
 
-    fun checkEntity(unit: TextUnit.Entity) {
+    fun checkEntity(i: Int, unit: TextUnit.Entity) {
 
     }
 
     fun validate() {
         highlights.forEach { reportError("Word $it should be highlighted, but was not") }
+
+        if (sentenceLimit) {
+            if (minHighlightIndex == Int.MAX_VALUE) reportError("no match encountered")
+            if (maxHighlightIndex == Int.MIN_VALUE) reportError("no match encountered")
+
+            if (!hasErrors) {
+                val intersection = sentenceMarks.filter { it in minHighlightIndex..maxHighlightIndex }
+                if (intersection.isNotEmpty())
+                    reportError("Sentence marks were found on $intersection even though context was restricted to only one sentence")
+            }
+        }
+
         if (hasErrors) {
             val content = result.textUnitList.toRawText()
             reportError("\n\nText of the document is:\n$content\n")
@@ -158,16 +201,16 @@ private fun IndexServer.CollectionResultList.checkContent(init: Requirements.() 
         for (result in this.searchResults) {
             requirements.checkerFor(result) { checker ->
                 val deque = ArrayDeque(result.textUnitList)
-                for (unit in deque) {
+                for ((i, unit) in deque.withIndex()) {
                     when (unit) {
-                        is TextUnit.Word -> checker.checkWord(unit)
+                        is TextUnit.Word -> checker.checkWord(i, unit)
                         is TextUnit.Entity -> {
                             unit.words.reversed().forEach { deque.addFirst(it) }
-                            checker.checkEntity(unit)
+                            checker.checkEntity(i, unit)
                         }
                         is TextUnit.QueryMatch -> {
                             unit.content.reversed().forEach { deque.addFirst(it) }
-                            checker.checkQueryMatch(unit)
+                            checker.checkQueryMatch(i, unit)
                         }
                     }
                 }

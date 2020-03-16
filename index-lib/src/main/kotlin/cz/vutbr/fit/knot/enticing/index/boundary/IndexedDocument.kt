@@ -9,11 +9,18 @@ typealias Word = List<String>
  * Retrieved document from the indexed data
  */
 interface IndexedDocument : Iterable<Word> {
+
+    companion object {
+        val PARAGRAPH_MARK = "§"
+        val SENTENCE_MARK = "¶"
+    }
+
     val id: DocumentId
     val uuid: String
     val title: String
     val uri: String
     val size: Int
+
     @Speed("If necessary, char[] or MutableStrings or some else more low level abstraction can be used here")
     val content: List<List<String>>
 

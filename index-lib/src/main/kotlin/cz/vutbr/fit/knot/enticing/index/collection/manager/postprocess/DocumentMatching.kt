@@ -54,8 +54,6 @@ internal fun evaluateQuery(ast: EqlAstNode, document: IndexedDocument, defaultIn
     val words = document.drop(interval.from)
             .take(interval.size)
 
-    val paragraph = "§"
-    val sentence = "¶"
     val tokenIndex = metadataConfiguration.indexOf("token")
 
     val paragraphs = mutableSetOf<Int>()
@@ -67,8 +65,8 @@ internal fun evaluateQuery(ast: EqlAstNode, document: IndexedDocument, defaultIn
                 node.checkWord(interval.from + i, value)
             }
 
-            if (word[tokenIndex] == paragraph) paragraphs.add(i)
-            else if (word[tokenIndex] == sentence) sentences.add(i)
+            if (word[tokenIndex] == IndexedDocument.PARAGRAPH_MARK) paragraphs.add(interval.from + i)
+            else if (word[tokenIndex] == IndexedDocument.SENTENCE_MARK) sentences.add(interval.from + i)
         }
     }
 
