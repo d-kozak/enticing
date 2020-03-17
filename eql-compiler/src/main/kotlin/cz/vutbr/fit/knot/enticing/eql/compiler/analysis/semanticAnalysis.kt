@@ -14,7 +14,8 @@ val FIRST_PASS = listOf(
 )
 
 val SECOND_PASS: List<EqlAstCheck<*>> = listOf(
-        RewriteContextRestrictionCheck("CTX-1")
+        RewriteContextRestrictionCheck("CTX-1"),
+        RewriteDocumentRestrictionCheck("DOC-1")
 )
 
 val THIRD_PASS = listOf(

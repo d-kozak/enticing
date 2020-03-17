@@ -4,6 +4,7 @@ import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.eql.compiler.analysis.config
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.ContextRestriction
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.DocumentRestriction
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.RootNode
 import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import org.assertj.core.api.Assertions.assertThat
@@ -99,5 +100,17 @@ class ComplexTests {
         assertThat(errors).isEmpty()
         assertThat(ast.toMgj4Query()).isEqualTo("((((nertag:((person | artist)){{nertag->token}}) < (((lemma:((influence | impact)){{lemma->token}}) | ((lemma:(paid){{lemma->token}}) < (lemma:(tribute){{lemma->token}}))) < ((nertag:((person | artist)){{nertag->token}})))))  - §)")
         assertThat(ast.contextRestriction).isEqualTo(ContextRestriction.PARAGRAPH)
+    }
+
+
+    @Test
+    @DisplayName("person.name:Honz* lemma:(work  < ( from home ))  ctx:sent doc.url:'https://www.google.com'")
+    fun eleven() {
+        val (ast, errors) = compiler.parseAndAnalyzeQuery("person.name:Honz* lemma:(work  < ( from home ))  ctx:sent doc.url:'https://www.google.com'", config)
+        ast as RootNode
+        assertThat(errors).isEmpty()
+        assertThat(ast.toMgj4Query()).isEqualTo("(((((nertag:person{{nertag->token}}) ^ (param2:(Honz*){{param2->token}})) & (lemma:((work < (from & home))){{lemma->token}})))  - ¶)")
+        assertThat(ast.contextRestriction).isEqualTo(ContextRestriction.SENTENCE)
+        assertThat(ast.documentRestriction).isEqualTo(DocumentRestriction.Url("https://www.google.com"))
     }
 }
