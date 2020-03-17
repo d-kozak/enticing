@@ -10,6 +10,7 @@ import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import cz.vutbr.fit.knot.enticing.index.mg4j.initMg4jCollectionManager
 import cz.vutbr.fit.knot.enticing.index.startIndexing
 import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -91,6 +92,19 @@ class IntegrationTests {
                 highlights("water")
                 this.url = url
             }
+        }
+    }
+
+
+    @Nested
+    inner class RealExamples {
+
+        @Test
+        @DisplayName("(influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist)) ctx:sent doc.url:'http://en.wikipedia.org/wiki/1947–48_Civil_War_in_Mandatory_Palestine' && influencer.url != influencee.url")
+        fun first() {
+            val result = collectionManager.query(templateQuery.copy(query = "(influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist)) ctx:sent doc.url:'http://en.wikipedia.org/wiki/1947–48_Civil_War_in_Mandatory_Palestine' && influencer.url != influencee.url"))
+            assertThat(result.searchResults).isNotEmpty()
+            println(result)
         }
     }
 }

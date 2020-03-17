@@ -12,6 +12,8 @@ import cz.vutbr.fit.knot.enticing.index.boundary.DocumentId
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import cz.vutbr.fit.knot.enticing.index.boundary.MatchInfo
 import cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess.matchDocument
+import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jDocumentFactory
+import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jSingleFileDocumentCollection
 import cz.vutbr.fit.knot.enticing.index.testconfig.dummyMetadataConfiguration
 import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
@@ -20,12 +22,17 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import java.io.File
 import java.util.*
 
 
 class MatchDocumentTest {
 
     val queryExecutor = TestQueryExecutor(dummyMetadataConfiguration)
+
+    val nertagIndex = dummyMetadataConfiguration.entityIndex!!.columnIndex
+
+    val neridIndex = dummyMetadataConfiguration.indexOf("nerid")
 
     @Nested
     inner class Hello {
@@ -309,6 +316,36 @@ class MatchDocumentTest {
             assertThat(result.intervals[0].eqlMatch).isEqualTo(listOf(EqlMatch(Interval.valueOf(0, 15), Interval.valueOf(10, 20), EqlMatchType.ENTITY)))
         }
     }
+
+    @Nested
+    inner class RealExamples {
+
+        @Test
+        @DisplayName("(influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist)) ctx:sent doc.url:'http://en.wikipedia.org/wiki/1947–48_Civil_War_in_Mandatory_Palestine' && influencer.url != influencee.url")
+        fun first() {
+            val document = loadDocument("palestine_war.mg4j", 0)
+            val result = queryExecutor.doMatch("(influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist)) ctx:sent doc.url:'http://en.wikipedia.org/wiki/1947–48_Civil_War_in_Mandatory_Palestine' && influencer.url != influencee.url", document)
+
+            val errors = mutableListOf<String>()
+
+            for ((_, eqlMatch) in result.intervals) {
+                for ((_, matchInterval) in eqlMatch) {
+                    for (i in matchInterval) {
+                        val entity = document.content[nertagIndex][i]
+                        if (entity != "0") {
+                            if (i - 1 >= 0 && document.content[neridIndex][i] == document.content[neridIndex][i - 1] && i - 1 !in matchInterval) errors.add("Word at index [$i] contains entity $entity that should be extended backward, but was not")
+                            if (i + 1 < document.size && document.content[neridIndex][i] == document.content[neridIndex][i + 1] && i + 1 !in matchInterval) errors.add("Word at index [$i] contains entity $entity that should be extended forward, but was not")
+                        }
+                    }
+                }
+            }
+
+            if (errors.isNotEmpty()) {
+                println(errors.joinToString("\n"))
+                throw AssertionError()
+            }
+        }
+    }
 }
 
 class TestQueryExecutor(private val metadataConfiguration: MetadataConfiguration) {
@@ -317,12 +354,18 @@ class TestQueryExecutor(private val metadataConfiguration: MetadataConfiguration
 
     private val logger = SimpleStdoutLoggerFactory.logger { }
 
-    fun doMatch(query: String, document: TestDocument): MatchInfo = logger.measure("matchDocument", "$query='query',documentSize=${document.size}") {
+    fun doMatch(query: String, document: IndexedDocument): MatchInfo = logger.measure("matchDocument", "$query='query',documentSize=${document.size}") {
         matchDocument(eqlCompiler.parseOrFail(query, metadataConfiguration) as EqlAstNode, document, metadataConfiguration.defaultIndex, metadataConfiguration, Interval.valueOf(0, document.size))
     }
 
 }
 
+
+fun loadDocument(mg4jFile: String, index: Long): IndexedDocument {
+    val factory = Mg4jDocumentFactory(dummyMetadataConfiguration, SimpleStdoutLoggerFactory)
+    val collection = Mg4jSingleFileDocumentCollection(File("../data/mg4j/$mg4jFile"), factory, SimpleStdoutLoggerFactory)
+    return collection.document(index)
+}
 
 class TestDocument(documentSize: Int, val metadataConfiguration: MetadataConfiguration = dummyMetadataConfiguration) : IndexedDocument {
     override val id: DocumentId = 42

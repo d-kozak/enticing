@@ -10,7 +10,7 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.matching.EqlMatchType
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import kotlin.math.abs
 
-class DocumentMatchingVisitor(val document: IndexedDocument, metadataConfiguration: MetadataConfiguration, val paragraphs: Set<Int>, val sentences: Set<Int>) : EqlVisitor<Sequence<DocumentMatch>> {
+class DocumentMatchingVisitor(val document: IndexedDocument, val metadataConfiguration: MetadataConfiguration, val paragraphs: Set<Int>, val sentences: Set<Int>) : EqlVisitor<Sequence<DocumentMatch>> {
 
     private val neridIndex = metadataConfiguration.indexOf("nerid")
 
@@ -34,7 +34,21 @@ class DocumentMatchingVisitor(val document: IndexedDocument, metadataConfigurati
 
     override fun visitQueryElemSimpleNode(node: QueryElemNode.SimpleNode): Sequence<DocumentMatch> = node.matchInfo.asSequence()
 
-    override fun visitQueryElemIndexNode(node: QueryElemNode.IndexNode): Sequence<DocumentMatch> = node.elem.accept(this)
+    override fun visitQueryElemIndexNode(node: QueryElemNode.IndexNode): Sequence<DocumentMatch> {
+        val elem = node.elem.accept(this)
+        return if (node.index != metadataConfiguration.entityIndexName) elem
+        else sequence {
+            val used = mutableSetOf<Int>()
+            for (match in elem) {
+                if (match.interval.none { it in used }) {
+                    val interval = extendEntityInterval(match.interval)
+                    used.addAll(interval)
+                    yield(DocumentMatch(interval, listOf(EqlMatch(node.location, interval, EqlMatchType.ENTITY)), match.children))
+                }
+            }
+        }
+    }
+
 
     override fun visitQueryElemParenNode(node: QueryElemNode.ParenNode): Sequence<DocumentMatch> = node.query.accept(this).proximityRestriction(node.restriction)
 
@@ -77,17 +91,21 @@ class DocumentMatchingVisitor(val document: IndexedDocument, metadataConfigurati
             loop@ for (left in entityInfo) {
                 for (right in elem) {
                     if (left.interval == right.interval && left.interval.none { it in used }) {
-                        var from = left.interval.from
-                        while (from - 1 >= 0 && nerid[from - 1] == nerid[from]) from--
-                        var to = left.interval.to
-                        while (to + 1 < document.size && nerid[to + 1] == nerid[to]) to++
-                        val interval = Interval.valueOf(from, to)
-                        for (i in interval) used.add(i)
+                        val interval = extendEntityInterval(left.interval)
+                        used.addAll(interval)
                         yield(DocumentMatch(interval, listOf(EqlMatch(node.location, interval, EqlMatchType.ENTITY)), listOf(left, right)))
                     }
                 }
             }
         }
+    }
+
+    private fun extendEntityInterval(interval: Interval): Interval {
+        var from = interval.from
+        while (from - 1 >= 0 && nerid[from - 1] == nerid[from]) from--
+        var to = interval.to
+        while (to + 1 < document.size && nerid[to + 1] == nerid[to]) to++
+        return Interval.valueOf(from, to)
     }
 
     override fun visitQueryElemBooleanNode(node: QueryElemNode.BooleanNode): Sequence<DocumentMatch> {
