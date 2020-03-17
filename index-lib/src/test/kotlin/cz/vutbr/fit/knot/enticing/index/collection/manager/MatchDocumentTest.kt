@@ -6,6 +6,8 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.SENTENCE_MARK
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.EqlAstNode
+import cz.vutbr.fit.knot.enticing.eql.compiler.matching.EqlMatch
+import cz.vutbr.fit.knot.enticing.eql.compiler.matching.EqlMatchType
 import cz.vutbr.fit.knot.enticing.index.boundary.DocumentId
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import cz.vutbr.fit.knot.enticing.index.boundary.MatchInfo
@@ -287,6 +289,24 @@ class MatchDocumentTest {
             val result = queryExecutor.doMatch("1:=person.name:John 2:=person.name:Rupert 3:=location.name:Barcelona && (1.url != 2.url) | !(3.name = 1.name)", document)
             assertThat(result.intervals).isEmpty()
 
+        }
+    }
+
+    @Nested
+    inner class EntityExpansion {
+
+        @Test
+        fun `entity contains multiple words, but only one result should be returned, covering the whole entity`() {
+            val document = TestDocument(1000)
+            for (i in 10..20) {
+                document["nertag"][i] = "person"
+                document["param2"][i] = "John"
+                document["nerid"][i] = "foobar"
+            }
+            val result = queryExecutor.doMatch("person.name:John", document)
+            assertThat(result.intervals).hasSize(1)
+            assertThat(result.intervals[0].interval).isEqualTo(Interval.valueOf(10, 20))
+            assertThat(result.intervals[0].eqlMatch).isEqualTo(listOf(EqlMatch(Interval.valueOf(0, 15), Interval.valueOf(10, 20), EqlMatchType.ENTITY)))
         }
     }
 }

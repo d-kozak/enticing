@@ -1,5 +1,7 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.*
 import cz.vutbr.fit.knot.enticing.eql.compiler.matching.DocumentMatch
@@ -8,7 +10,12 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.matching.EqlMatchType
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import kotlin.math.abs
 
-class DocumentMatchingVisitor(val document: IndexedDocument, val paragraphs: Set<Int>, val sentences: Set<Int>) : EqlVisitor<Sequence<DocumentMatch>> {
+class DocumentMatchingVisitor(val document: IndexedDocument, metadataConfiguration: MetadataConfiguration, val paragraphs: Set<Int>, val sentences: Set<Int>) : EqlVisitor<Sequence<DocumentMatch>> {
+
+    private val neridIndex = metadataConfiguration.indexOf("nerid")
+
+    private val nerid = document.content[neridIndex]
+
     override fun visitRootNode(node: RootNode): Sequence<DocumentMatch> {
         val query = node.query.accept(this)
         val forbiddenMarks = when (node.contextRestriction) {
@@ -35,6 +42,7 @@ class DocumentMatchingVisitor(val document: IndexedDocument, val paragraphs: Set
         if (node == null) return this
         return this.filter {
             if (it.children.size != 2) {
+                @WhatIf("getting here is an implementation error, so should we throw exception?")
                 System.err.println("never ever ever ever!!!")
                 return@filter false
             }
@@ -65,10 +73,18 @@ class DocumentMatchingVisitor(val document: IndexedDocument, val paragraphs: Set
         val entityInfo = node.entityNode.accept(this)
         val elem = node.elem.accept(this)
         return sequence {
+            val used = mutableSetOf<Int>()
             loop@ for (left in entityInfo) {
                 for (right in elem) {
-                    if (left.interval == right.interval)
-                        yield(DocumentMatch(left.interval.combineWith(right.interval), left.eqlMatch + right.eqlMatch, listOf(left, right)))
+                    if (left.interval == right.interval && left.interval.none { it in used }) {
+                        var from = left.interval.from
+                        while (from - 1 >= 0 && nerid[from - 1] == nerid[from]) from--
+                        var to = left.interval.to
+                        while (to + 1 < document.size && nerid[to + 1] == nerid[to]) to++
+                        val interval = Interval.valueOf(from, to)
+                        for (i in interval) used.add(i)
+                        yield(DocumentMatch(interval, listOf(EqlMatch(node.location, interval, EqlMatchType.ENTITY)), listOf(left, right)))
+                    }
                 }
             }
         }

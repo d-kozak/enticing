@@ -24,5 +24,5 @@ data class EqlMatch(
 )
 
 enum class EqlMatchType {
-    LEAF, IDENTIFIER
+    LEAF, ENTITY, IDENTIFIER
 }

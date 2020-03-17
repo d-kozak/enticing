@@ -8,6 +8,7 @@ import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnit
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import cz.vutbr.fit.knot.enticing.index.mg4j.initMg4jCollectionManager
+import cz.vutbr.fit.knot.enticing.index.startIndexing
 import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.DisplayName
@@ -33,7 +34,7 @@ class IntegrationTests {
         @BeforeAll
         @JvmStatic
         internal fun beforeAll() {
-//            startIndexing(builderConfig, SimpleStdoutLoggerFactory)
+            startIndexing(builderConfig, SimpleStdoutLoggerFactory)
         }
 
     }

@@ -73,7 +73,7 @@ internal fun evaluateQuery(ast: EqlAstNode, document: IndexedDocument, defaultIn
         }
     }
 
-    return ast.accept(DocumentMatchingVisitor(document, paragraphs, sentences))
+    return ast.accept(DocumentMatchingVisitor(document, metadataConfiguration, paragraphs, sentences))
 }
 
 @WhatIf("make sure we are case insensitive - should happen before when transforming the AST")

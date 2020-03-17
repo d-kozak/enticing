@@ -49,7 +49,7 @@ internal class DocumentMatchingTest : AbstractDocumentMatchingTest() {
                 verify(nertag[i] == "person") { "entity at index $i should be of type person, was '${nertag[i]}'" }
                 verify(name[i].startsWith("mic")) { "person's name at index $i should start was mic , was '${name[i]}'" }
             }
-            verifyLeafCount(2)
+            verifyLeafCount(1)
         }
     }
 
