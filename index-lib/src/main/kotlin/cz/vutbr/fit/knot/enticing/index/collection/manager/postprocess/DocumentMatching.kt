@@ -38,9 +38,12 @@ fun Logger.dumpNodesByIndex(nodeByIndex: Array<List<QueryElemNode.SimpleNode>>, 
  */
 
 fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: String, metadataConfiguration: MetadataConfiguration, interval: Interval): MatchInfo {
+    ast as RootNode
+    if (!ast.documentRestriction.evaluate(document)) return MatchInfo.empty()
+
     val seq = evaluateQuery(ast, document, defaultIndex, metadataConfiguration, interval)
             .filter { it.interval.size < 50 }
-            .filter { ast.accept(GlobalConstraintEvaluationVisitor(ast as RootNode, metadataConfiguration, document, it)) }
+            .filter { ast.accept(GlobalConstraintEvaluationVisitor(ast, metadataConfiguration, document, it)) }
     return MatchInfo(seq.take(512).toList())
 }
 

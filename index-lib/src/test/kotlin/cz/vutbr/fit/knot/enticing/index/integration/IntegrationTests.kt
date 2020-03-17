@@ -8,10 +8,10 @@ import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnit
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import cz.vutbr.fit.knot.enticing.index.mg4j.initMg4jCollectionManager
-import cz.vutbr.fit.knot.enticing.index.startIndexing
 import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.util.*
 import kotlin.math.max
@@ -33,7 +33,7 @@ class IntegrationTests {
         @BeforeAll
         @JvmStatic
         internal fun beforeAll() {
-            startIndexing(builderConfig, SimpleStdoutLoggerFactory)
+//            startIndexing(builderConfig, SimpleStdoutLoggerFactory)
         }
 
     }
@@ -68,11 +68,37 @@ class IntegrationTests {
         }
     }
 
+    @Nested
+    inner class DocumentConstraints {
+        @Test
+        fun `by title`() {
+            for (title in setOf("x: New Fairy Tales Issue 6", "Health News - ABC News Radio", "Accommodation  Upper Kangaroo Valley - Accommodation Gold Coast")) {
+                val result = collectionManager.query(templateQuery.copy(query = "water document.title:'$title'"))
+                result.checkContent {
+                    highlights("water")
+                    this.title = title
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `by url`() {
+        for (url in setOf("http://annamckerrow.blogspot.com/2010/12/new-fairy-tales-issue-6.html", "http://abcnewsradioonline.com/health-news/tag/bvo", "http://accommodationgoldcoast.net/accommodation/upper-kangaroo-valley")) {
+            val result = collectionManager.query(templateQuery.copy(query = "water document.url:'$url'"))
+            result.checkContent {
+                highlights("water")
+                this.url = url
+            }
+        }
+    }
 }
 
 
 data class Requirements(
-        val highlights: MutableList<String> = mutableListOf()
+        val highlights: MutableList<String> = mutableListOf(),
+        var title: String? = null,
+        var url: String? = null
 ) {
 
     var sentenceLimit: Boolean = true
@@ -116,6 +142,13 @@ class DocumentChecker(val result: IndexServer.SearchResult, val requirements: Re
 
     private var minHighlightIndex = Int.MAX_VALUE
     private var maxHighlightIndex = Int.MIN_VALUE
+
+    init {
+        if (requirements.title != null && requirements.title != result.documentTitle)
+            reportError("Only documents with title '${requirements.title}' expected, this one had '${result.documentTitle}'")
+        if (requirements.url != null && requirements.url != result.url)
+            reportError("Only documents with url '${requirements.url}' expected, this one had '${result.url}'")
+    }
 
     fun reportError(msg: String) {
         requirements.reportError("${result.documentTitle}: $msg")

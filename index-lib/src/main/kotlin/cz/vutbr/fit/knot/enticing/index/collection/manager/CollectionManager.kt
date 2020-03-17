@@ -48,7 +48,7 @@ class CollectionManager internal constructor(
             val document = searchEngine.loadDocument(result.documentId)
             check(document.id == result.documentId) { "Invalid document id set in the search engine: ${result.documentId} vs ${document.id}" }
             val matchInfo = postProcessor.process(ast.deepCopy(), document, query.defaultIndex, metadataConfiguration, result.intervals)
-                    ?: continue
+            if (matchInfo == null || matchInfo.intervals.isEmpty()) continue
             val (results, hasMore) = resultCreator.multipleResults(document, matchInfo, query, if (document.id == documentOffset) resultOffset else 0, query.snippetCount, query.resultFormat)
             val searchResults = results.map {
                 IndexServer.SearchResult(
