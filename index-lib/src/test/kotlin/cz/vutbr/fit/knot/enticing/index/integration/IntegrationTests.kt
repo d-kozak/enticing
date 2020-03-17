@@ -82,19 +82,18 @@ class IntegrationTests {
                 }
             }
         }
-    }
 
-    @Test
-    fun `by url`() {
-        for (url in setOf("http://annamckerrow.blogspot.com/2010/12/new-fairy-tales-issue-6.html", "http://abcnewsradioonline.com/health-news/tag/bvo", "http://accommodationgoldcoast.net/accommodation/upper-kangaroo-valley")) {
-            val result = collectionManager.query(templateQuery.copy(query = "water document.url:'$url'"))
-            result.checkContent {
-                highlights("water")
-                this.url = url
+        @Test
+        fun `by url`() {
+            for (url in setOf("http://annamckerrow.blogspot.com/2010/12/new-fairy-tales-issue-6.html", "http://abcnewsradioonline.com/health-news/tag/bvo", "http://accommodationgoldcoast.net/accommodation/upper-kangaroo-valley")) {
+                val result = collectionManager.query(templateQuery.copy(query = "water document.url:'$url'"))
+                result.checkContent {
+                    highlights("water")
+                    this.url = url
+                }
             }
         }
     }
-
 
     @Nested
     inner class RealExamples {
