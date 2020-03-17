@@ -8,10 +8,12 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.EqlAstNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.matching.EqlMatch
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
+import cz.vutbr.fit.knot.enticing.index.integration.builderConfig
 import cz.vutbr.fit.knot.enticing.index.integration.collectionManagerConfiguration
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jCompositeDocumentCollection
 import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jSearchEngine
 import cz.vutbr.fit.knot.enticing.index.mg4j.initMg4jQueryEngine
+import cz.vutbr.fit.knot.enticing.index.startIndexing
 import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.BeforeAll
@@ -128,7 +130,7 @@ abstract class AbstractDocumentMatchingTest {
         @BeforeAll
         @JvmStatic
         internal fun beforeAll() {
-//            collectionManagerConfiguration.validate() todo fix
+            startIndexing(builderConfig, SimpleStdoutLoggerFactory)
         }
 
     }
