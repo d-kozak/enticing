@@ -28,9 +28,11 @@ data class QueryResult(
          */
         val results: List<DocumentResult>,
         /**
-         * Where to start next, for pagination
+         * How many documents in total are matching the query (includes really all the documents, even the ones that were skipped because of offset
+         * or the ones that were not used (yet) because of result size limit. MG4J gives this number even if we don't ask and it can at least be used to show
+         * back in the UI how many documents might satisfy the query (before evaluating global constraints).
          */
-        val nextOffset: Int
+        val relevantDocuments: Int
 )
 
 /**

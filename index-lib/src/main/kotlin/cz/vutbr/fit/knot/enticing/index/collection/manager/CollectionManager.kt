@@ -41,7 +41,7 @@ class CollectionManager internal constructor(
             query.eqlAst!!
         } else query.eqlAst!!
 
-        val (resultList, processed) = searchEngine.search(ast.toMgj4Query(), query.snippetCount, documentOffset - 1)
+        val (resultList, relevantDocuments) = searchEngine.search(ast.toMgj4Query(), query.snippetCount, documentOffset - 1)
 
         val matched = mutableListOf<IndexServer.SearchResult>()
         for ((i, result) in resultList.withIndex()) {

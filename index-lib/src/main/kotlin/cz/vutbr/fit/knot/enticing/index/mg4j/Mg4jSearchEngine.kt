@@ -33,14 +33,14 @@ class Mg4jSearchEngine(
         val engine = engineFactory.copy()
         logger.info("Executing query $query")
         val resultList = ObjectArrayList<Mg4jSearchResult>()
-        val processed = engine.process(query, offset, documentCount, resultList)
-        logger.info("Processed $processed documents")
+        val relevantDocuments = engine.process(query, offset, documentCount, resultList)
+        logger.info("Processed $relevantDocuments relevants documents")
 
         val documentResults = resultList.map {
             val intervals = it.info.values.map { it.map { it.toEnticingInterval() } }
             DocumentResult(it.document.toInt(), intervals)
         }
-        return QueryResult(documentResults, processed)
+        return QueryResult(documentResults, relevantDocuments)
     }
 
     override fun loadDocument(id: DocumentId): Mg4jDocument = collection.document(id.toLong())
