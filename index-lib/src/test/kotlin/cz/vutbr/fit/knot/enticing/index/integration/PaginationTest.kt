@@ -1,9 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.integration
 
-import cz.vutbr.fit.knot.enticing.dto.ResultFormat
-import cz.vutbr.fit.knot.enticing.dto.SearchQuery
-import cz.vutbr.fit.knot.enticing.dto.TextFormat
-import cz.vutbr.fit.knot.enticing.dto.TextMetadata
+import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CollectionManagerConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexBuilderConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.mg4jFiles
@@ -121,12 +118,18 @@ class PaginationTest {
         checkResult("nertag:(location | date)", 4000)
     }
 
-    fun checkResult(query: String, expectedResultCount: Int, snippetCount: Int = Int.MAX_VALUE) {
+    private fun checkResult(query: String, expectedResultCount: Int) {
         val eqlResults = getAllPossibleResults(query)
         assertThat(eqlResults.size)
                 .isEqualTo(expectedResultCount)
-        val (searchResults) = collectionManager.query(templateQuery.copy(query = query, snippetCount = snippetCount))
-        assertThat(searchResults.size)
+        val allResults = mutableListOf<IndexServer.SearchResult>()
+        var offset: Offset? = Offset(0, 0)
+        while (offset != null) {
+            val res = collectionManager.query(templateQuery.copy(query = query, snippetCount = 17), offset)
+            allResults.addAll(res.searchResults)
+            offset = res.offset
+        }
+        assertThat(allResults.size)
                 .isEqualTo(expectedResultCount)
     }
 
@@ -134,7 +137,7 @@ class PaginationTest {
         val ast = eqlCompiler.parseOrFail(query, metadata) as RootNode
         return (0 until paginationDocumentCollection.size())
                 .map { paginationDocumentCollection.document(it) }
-                .map { matchDocument(ast, it, "token", metadata, Interval.valueOf(0, it.size() - 1)) }
+                .map { matchDocument(ast, it, "token", 0, metadata, Interval.valueOf(0, it.size() - 1)) }
                 .flatMap { it.intervals }
 
     }
@@ -148,7 +151,7 @@ class PaginationTest {
             // 2 mythologies * 3 dates  == 6 results
             val ast = eqlCompiler.parseOrFail("nertag:(mythology date)", metadata) as RootNode
             val document = paginationDocumentCollection.document(0)
-            val result = matchDocument(ast, document, "token", metadata, Interval.valueOf(0, document.size() - 1))
+            val result = matchDocument(ast, document, "token", 0, metadata, Interval.valueOf(0, document.size() - 1))
             assertThat(result.intervals).hasSize(6)
         }
 
@@ -157,7 +160,7 @@ class PaginationTest {
             // 1 location * 3 dates  == 3 results
             val ast = eqlCompiler.parseOrFail("nertag:(location date)", metadata) as RootNode
             val document = paginationDocumentCollection.document(0)
-            val result = matchDocument(ast, document, "token", metadata, Interval.valueOf(0, document.size() - 1))
+            val result = matchDocument(ast, document, "token", 0, metadata, Interval.valueOf(0, document.size() - 1))
             assertThat(result.intervals).hasSize(3)
         }
     }

@@ -160,7 +160,7 @@ abstract class AbstractDocumentMatchingTest {
             val failedChecks = mutableListOf<String>()
             val doc = searchEngine.loadDocument(i.toInt())
             println("testing on document [$i] '${doc.title}'")
-            val match = matchDocument(ast.deepCopy() as EqlAstNode, doc, "token", collectionManagerConfiguration.metadataConfiguration, Interval.valueOf(0, doc.size() - 1))
+            val match = matchDocument(ast.deepCopy() as EqlAstNode, doc, "token", 0, collectionManagerConfiguration.metadataConfiguration, Interval.valueOf(0, doc.size() - 1))
             if (match.intervals.isNotEmpty()) {
                 matchCount++
             }

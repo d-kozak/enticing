@@ -17,12 +17,10 @@ import java.lang.Math.min
 
 @Incomplete("not finished yet")
 class EqlResultCreator(private val metadataConfiguration: MetadataConfiguration, val loggerFactory: LoggerFactory) : ResultCreator {
-    override fun multipleResults(document: IndexedDocument, matchInfo: MatchInfo, formatInfo: GeneralFormatInfo, resultOffset: Int, resultCount: Int, resultFormat: cz.vutbr.fit.knot.enticing.dto.ResultFormat): Pair<List<ResultFormat>, Boolean> {
+    override fun multipleResults(document: IndexedDocument, matchInfo: MatchInfo, formatInfo: GeneralFormatInfo, resultCount: Int, resultFormat: cz.vutbr.fit.knot.enticing.dto.ResultFormat): Pair<List<ResultFormat>, Boolean> {
         return when (resultFormat) {
             cz.vutbr.fit.knot.enticing.dto.ResultFormat.SNIPPET -> {
                 var intervals = matchInfo.intervals
-                if (intervals.size < resultOffset) return Pair(emptyList(), false)
-                intervals = intervals.subList(resultOffset, intervals.size)
                 val hasMore = intervals.size > resultCount
                 intervals = intervals.subList(0, min(resultCount, intervals.size))
                 val results = intervals.map { (interval, matchInfo) -> singleResult(document, formatInfo, matchInfo, interval) }

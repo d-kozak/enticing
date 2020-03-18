@@ -37,11 +37,12 @@ fun Logger.dumpNodesByIndex(nodeByIndex: Array<List<QueryElemNode.SimpleNode>>, 
  * http://vigna.di.unimi.it/ftp/papers/EfficientAlgorithmsMinimalIntervalSemantics.pdf
  */
 
-fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: String, metadataConfiguration: MetadataConfiguration, interval: Interval): MatchInfo {
+fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: String, resultOffset: Int, metadataConfiguration: MetadataConfiguration, interval: Interval): MatchInfo {
     ast as RootNode
     if (!ast.documentRestriction.evaluate(document)) return MatchInfo.empty()
 
     val seq = evaluateQuery(ast, document, defaultIndex, metadataConfiguration, interval)
+            .drop(resultOffset)
             .filter { it.interval.size < 50 }
             .filter { ast.accept(GlobalConstraintEvaluationVisitor(ast, metadataConfiguration, document, it)) }
     return MatchInfo(seq.take(512).toList())

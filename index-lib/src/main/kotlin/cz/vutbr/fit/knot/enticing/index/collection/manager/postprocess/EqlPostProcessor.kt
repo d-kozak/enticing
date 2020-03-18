@@ -11,15 +11,15 @@ import cz.vutbr.fit.knot.enticing.index.boundary.PostProcessor
 
 @Cleanup("put into eql-compiler?")
 class EqlPostProcessor : PostProcessor {
-    override fun process(ast: AstNode, document: IndexedDocument, defaultIndex: String, metadataConfiguration: MetadataConfiguration, enclosingInterval: Interval?): MatchInfo? {
-        return matchDocument(ast as EqlAstNode, document, defaultIndex, metadataConfiguration, enclosingInterval
+    override fun process(ast: AstNode, document: IndexedDocument, defaultIndex: String, resultOffset: Int, metadataConfiguration: MetadataConfiguration, enclosingInterval: Interval?): MatchInfo? {
+        return matchDocument(ast as EqlAstNode, document, defaultIndex, resultOffset, metadataConfiguration, enclosingInterval
                 ?: Interval.valueOf(0, document.size - 1))
     }
 
-    override fun process(ast: AstNode, document: IndexedDocument, defaultIndex: String, metadataConfiguration: MetadataConfiguration, matchedIntervals: List<List<Interval>>): MatchInfo? {
+    override fun process(ast: AstNode, document: IndexedDocument, defaultIndex: String, resultOffset: Int, metadataConfiguration: MetadataConfiguration, matchedIntervals: List<List<Interval>>): MatchInfo? {
         val flat = matchedIntervals.flatten()
         val min = flat.minBy { it.from }?.from ?: 0
         val max = flat.maxBy { it.to }?.to ?: document.size - 1
-        return matchDocument(ast as EqlAstNode, document, defaultIndex, metadataConfiguration, Interval.valueOf(min, max))
+        return matchDocument(ast as EqlAstNode, document, defaultIndex, resultOffset, metadataConfiguration, Interval.valueOf(min, max))
     }
 }

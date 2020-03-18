@@ -373,7 +373,7 @@ class TestQueryExecutor(private val metadataConfiguration: MetadataConfiguration
     private val logger = SimpleStdoutLoggerFactory.logger { }
 
     fun doMatch(query: String, document: IndexedDocument): MatchInfo = logger.measure("matchDocument", "$query='query',documentSize=${document.size}") {
-        matchDocument(eqlCompiler.parseOrFail(query, metadataConfiguration) as EqlAstNode, document, metadataConfiguration.defaultIndex, metadataConfiguration, Interval.valueOf(0, document.size))
+        matchDocument(eqlCompiler.parseOrFail(query, metadataConfiguration) as EqlAstNode, document, metadataConfiguration.defaultIndex, 0, metadataConfiguration, Interval.valueOf(0, document.size))
     }
 
 }

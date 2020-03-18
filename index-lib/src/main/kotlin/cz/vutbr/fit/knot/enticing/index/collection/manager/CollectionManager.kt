@@ -41,15 +41,16 @@ class CollectionManager internal constructor(
             query.eqlAst!!
         } else query.eqlAst!!
 
-        val (resultList, relevantDocuments) = searchEngine.search(ast.toMgj4Query(), query.snippetCount, documentOffset - 1)
+        val (resultList, relevantDocuments) = searchEngine.search(ast.toMgj4Query(), query.snippetCount, documentOffset)
+        if (resultList.isEmpty()) return IndexServer.CollectionResultList(emptyList(), null)
 
         val matched = mutableListOf<IndexServer.SearchResult>()
         for ((i, result) in resultList.withIndex()) {
             val document = searchEngine.loadDocument(result.documentId)
             check(document.id == result.documentId) { "Invalid document id set in the search engine: ${result.documentId} vs ${document.id}" }
-            val matchInfo = postProcessor.process(ast.deepCopy(), document, query.defaultIndex, metadataConfiguration, result.intervals)
+            val matchInfo = postProcessor.process(ast.deepCopy(), document, query.defaultIndex, if (i == 0) resultOffset else 0, metadataConfiguration, result.intervals)
             if (matchInfo == null || matchInfo.intervals.isEmpty()) continue
-            val (results, hasMore) = resultCreator.multipleResults(document, matchInfo, query, if (document.id == documentOffset) resultOffset else 0, query.snippetCount, query.resultFormat)
+            val (results, hasMore) = resultCreator.multipleResults(document, matchInfo, query, query.snippetCount, query.resultFormat)
             val searchResults = results.map {
                 IndexServer.SearchResult(
                         collectionName,
@@ -61,14 +62,14 @@ class CollectionManager internal constructor(
             matched.addAll(searchResults)
             if (matched.size >= query.snippetCount) {
                 val nextOffset = when {
-                    hasMore -> Offset(document.id, resultOffset + results.size)
-                    i != resultList.size - 1 -> Offset(resultList[i + 1].documentId, 0)
-                    else -> Offset(resultList.last().documentId + 1, 0)
+                    hasMore && i == 0 -> Offset(documentOffset + i, results.size + resultOffset)
+                    hasMore -> Offset(documentOffset + i, results.size)
+                    else -> Offset(documentOffset + i + 1, 0)
                 }
                 return IndexServer.CollectionResultList(matched, nextOffset)
             }
         }
-        return IndexServer.CollectionResultList(matched, if (resultList.isNotEmpty()) Offset(resultList.last().documentId, 0) else null)
+        return IndexServer.CollectionResultList(matched, Offset(documentOffset + resultList.size, 0))
     }
 
     /**
@@ -90,7 +91,7 @@ class CollectionManager internal constructor(
         val document = searchEngine.loadDocument(query.documentId)
         val matchInfo = if (query.query != null) {
             val ast = eqlCompiler.parseOrFail(query.query!!, metadataConfiguration)
-            postProcessor.process(ast, document, query.defaultIndex, metadataConfiguration) ?: MatchInfo.empty()
+            postProcessor.process(ast, document, query.defaultIndex, 0, metadataConfiguration) ?: MatchInfo.empty()
         } else MatchInfo.empty()
 
         val offset = query.offset

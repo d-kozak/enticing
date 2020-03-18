@@ -32,7 +32,7 @@ interface PostProcessor {
      * @return true if postprocessing was successful, false otherwise
      * when the method finishes, the ast is decorated with detailed match information
      */
-    fun process(ast: AstNode, document: IndexedDocument, defaultIndex: String, metadataConfiguration: MetadataConfiguration, enclosingInterval: Interval? = null): MatchInfo?
+    fun process(ast: AstNode, document: IndexedDocument, defaultIndex: String, resultOffset: Int, metadataConfiguration: MetadataConfiguration, enclosingInterval: Interval? = null): MatchInfo?
 
     /**
      * @param ast of the search query
@@ -41,5 +41,5 @@ interface PostProcessor {
      * @return true if postprocessing was successful, false otherwise
      * when the method finishes, the ast is decorated with detailed match information
      */
-    fun process(ast: AstNode, document: IndexedDocument, defaultIndex: String, metadataConfiguration: MetadataConfiguration, matchedIntervals: List<List<Interval>>): MatchInfo?
+    fun process(ast: AstNode, document: IndexedDocument, defaultIndex: String, resultOffset: Int, metadataConfiguration: MetadataConfiguration, matchedIntervals: List<List<Interval>>): MatchInfo?
 }
