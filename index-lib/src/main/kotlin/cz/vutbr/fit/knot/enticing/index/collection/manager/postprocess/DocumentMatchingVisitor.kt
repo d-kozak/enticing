@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
@@ -12,9 +13,12 @@ import kotlin.math.abs
 
 class DocumentMatchingVisitor(val document: IndexedDocument, val metadataConfiguration: MetadataConfiguration, val paragraphs: Set<Int>, val sentences: Set<Int>) : EqlVisitor<Sequence<DocumentMatch>> {
 
+    @Cleanup("too much dependent on the special index names?")
     private val neridIndex = metadataConfiguration.indexOf("nerid")
+    private val nerlenIndex = metadataConfiguration.indexOf("nerlength")
 
     private val nerid = document.content[neridIndex]
+    private val nerlen = document.content[nerlenIndex]
 
     override fun visitRootNode(node: RootNode): Sequence<DocumentMatch> {
         val query = node.query.accept(this)
@@ -38,11 +42,10 @@ class DocumentMatchingVisitor(val document: IndexedDocument, val metadataConfigu
         val elem = node.elem.accept(this)
         return if (node.index != metadataConfiguration.entityIndexName) elem
         else sequence {
-            val used = mutableSetOf<Int>()
             for (match in elem) {
-                if (match.interval.none { it in used }) {
+                // we have to check that all leaves are at 'entity start' position, e.g. their nerlen is set
+                if (match.eqlMatch.all { nerlen[it.match.from] != "-1" }) {
                     val interval = extendEntityInterval(match.interval)
-                    used.addAll(interval)
                     yield(DocumentMatch(interval, listOf(EqlMatch(node.location, interval, EqlMatchType.ENTITY)), match.children))
                 }
             }
@@ -72,6 +75,7 @@ class DocumentMatchingVisitor(val document: IndexedDocument, val metadataConfigu
     }
 
 
+    @WhatIf("what should be the match and children of not node? what if not node is followed by a proximity restriction? is that even semantically valid?")
     override fun visitQueryElemNotNode(node: QueryElemNode.NotNode): Sequence<DocumentMatch> {
         val elem = node.elem.accept(this)
         return sequence {
@@ -87,12 +91,10 @@ class DocumentMatchingVisitor(val document: IndexedDocument, val metadataConfigu
         val entityInfo = node.entityNode.accept(this)
         val elem = node.elem.accept(this)
         return sequence {
-            val used = mutableSetOf<Int>()
             loop@ for (left in entityInfo) {
                 for (right in elem) {
-                    if (left.interval == right.interval && left.interval.none { it in used }) {
+                    if (left.interval == right.interval && nerlen[left.interval.from] != "-1") {
                         val interval = extendEntityInterval(left.interval)
-                        used.addAll(interval)
                         yield(DocumentMatch(interval, listOf(EqlMatch(node.location, interval, EqlMatchType.ENTITY)), listOf(left, right)))
                     }
                 }

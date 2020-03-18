@@ -71,6 +71,7 @@ class Mg4jDocumentFactory(private val metadataConfiguration: MetadataConfigurati
                             fields[metadataConfiguration.entityIndex!!.columnIndex][i] = replicationInfo.entityType
                             fields[metadataConfiguration.lengthIndex!!.columnIndex][i] = "-1"  // hardwired constant to signal that this entity is replicated
                         }
+                        // put correct len to the first position
                         fields[metadataConfiguration.lengthIndex!!.columnIndex][lastParsedLineIndex - (replicationInfo.lineCount - 1)] = replicationInfo.lineCount.toString()
                         fields[metadataConfiguration.entityIndex!!.columnIndex][lastParsedLineIndex - (replicationInfo.lineCount - 1)] = replicationInfo.entityType
                     }

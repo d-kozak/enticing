@@ -26,7 +26,7 @@ object SimpleStdoutLoggerFactory : LoggerFactory {
     }
 
 
-    override fun namedLogger(name: String): Logger = NamedLogger(name, listOf(StdoutLoggerNode(config)))
+    override fun namedLogger(name: String): Logger = NamedLogger(name, listOf(FilteringLoggerNode(config.stdoutLogs, StdoutLoggerNode(config))))
 
     override fun addRemoteApi(remoteLoggingApi: RemoteLoggingApi) {
         throw UnsupportedOperationException("adding loggers not supported here")

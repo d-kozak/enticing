@@ -309,12 +309,30 @@ class MatchDocumentTest {
                 document["nertag"][i] = "person"
                 document["param2"][i] = "John"
                 document["nerid"][i] = "foobar"
+                document["nerlength"][i] = "-1"
             }
+            document["nerlength"][10] = "11"
             val result = queryExecutor.doMatch("person.name:John", document)
             assertThat(result.intervals).hasSize(1)
             assertThat(result.intervals[0].interval).isEqualTo(Interval.valueOf(10, 20))
             assertThat(result.intervals[0].eqlMatch).isEqualTo(listOf(EqlMatch(Interval.valueOf(0, 15), Interval.valueOf(10, 20), EqlMatchType.ENTITY)))
         }
+
+        @Test
+        fun `same as previous but using nertag index`() {
+            val document = TestDocument(1000)
+            for (i in 10..20) {
+                document["nertag"][i] = "person"
+                document["nerid"][i] = "foobar"
+                document["nerlength"][i] = "-1"
+            }
+            document["nerlength"][10] = "11"
+            val result = queryExecutor.doMatch("nertag:person", document)
+            assertThat(result.intervals).hasSize(1)
+            assertThat(result.intervals[0].interval).isEqualTo(Interval.valueOf(10, 20))
+            assertThat(result.intervals[0].eqlMatch).isEqualTo(listOf(EqlMatch(Interval.valueOf(0, 12), Interval.valueOf(10, 20), EqlMatchType.ENTITY)))
+        }
+
     }
 
     @Nested
