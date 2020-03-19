@@ -1,79 +1,21 @@
 package cz.vutbr.fit.knot.enticing.index.client
 
-import com.github.kittinunf.fuel.httpPost
-import cz.vutbr.fit.knot.enticing.dto.*
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
+import cz.vutbr.fit.knot.enticing.dto.IndexServer
+import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.format.result.toRawText
 import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnit
-import cz.vutbr.fit.knot.enticing.dto.utils.MResult
-import cz.vutbr.fit.knot.enticing.dto.utils.toDto
-import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
-import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
-import cz.vutbr.fit.knot.enticing.query.processor.FuelQueryExecutor
-import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
-import cz.vutbr.fit.knot.enticing.query.processor.flattenResults
-import cz.vutbr.fit.knot.enticing.query.processor.fuel.jsonBody
-import kotlinx.coroutines.runBlocking
+import java.io.File
 import java.io.FileWriter
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
-import kotlin.time.TimedValue
-import kotlin.time.measureTimedValue
 
-private val apiBasePath = "/api/v1"
-
-private val queryExecutor = FuelQueryExecutor("$apiBasePath/query")
-private val queryDispatcher = QueryDispatcher(queryExecutor, ComponentType.CONSOLE_CLIENT, SimpleStdoutLoggerFactory)
 
 val IndexServer.SearchResult.textUnitList: List<TextUnit>
     get() = ((this.payload as ResultFormat.Snippet) as ResultFormat.Snippet.TextUnitList).content.content
 
-@ExperimentalTime
-sealed class Target(val name: String) {
-    abstract fun query(query: SearchQuery): TimedValue<List<IndexServer.SearchResult>>
-
-    data class WebserverTarget(val address: String, val settingsId: Int) : Target("Webserver") {
-
-        override fun query(query: SearchQuery): TimedValue<List<IndexServer.SearchResult>> {
-            val address = "http://$address/api/v1/query?settings=$settingsId"
-            return measureTimedValue {
-                address.httpPost()
-                        .jsonBody(query)
-                        .responseString().third.get().toDto<WebServer.ResultList>()
-                        .searchResults.map { it.toIndexServerFormat() }
-            }
-        }
-    }
-
-    data class QueryDispatcherTarget(val corpus: CorpusConfiguration) : Target("Dispatcher") {
-        override fun query(query: SearchQuery): TimedValue<List<IndexServer.SearchResult>> {
-            val nodes = corpus.indexServers.map { IndexServerRequestData(it.fullAddress) }
-            val onResult: (RequestData<Map<CollectionName, Offset>>, MResult<IndexServer.IndexResultList>) -> Unit = { request, result ->
-                if (result.isSuccess)
-                    println("Request $request finished, got ${result.value.searchResults.size} results")
-                else println("Request $request failed")
-            }
-            return measureTimedValue {
-                queryDispatcher.dispatchQuery(query, nodes, onResult)
-                        .flattenResults(query.query, SimpleStdoutLoggerFactory.namedLogger("QueryDispatcherTarget"))
-                        .first.searchResults
-                        .map { it.toIndexServerFormat() }
-            }
-        }
-    }
-
-    class IndexServerTarget(val address: String) : Target("IndexServer") {
-        override fun query(query: SearchQuery): TimedValue<List<IndexServer.SearchResult>> =
-                runBlocking {
-                    measureTimedValue { queryExecutor.invoke(query, IndexServerRequestData(address)).value.searchResults }
-                }
-
-
-    }
-}
 
 @ExperimentalTime
 class ConsoleClient(val args: ConsoleClientArgs, loggerFactory: LoggerFactory) : AutoCloseable {
@@ -84,8 +26,8 @@ class ConsoleClient(val args: ConsoleClientArgs, loggerFactory: LoggerFactory) :
 
     private val logger = loggerFactory.logger { }
 
-    private var target = if (args.useWebserver) Target.WebserverTarget(enticingConf.webserverConfiguration.fullAddress, args.searchSettingsId)
-    else Target.QueryDispatcherTarget(corpusConf)
+    private var target = if (args.useWebserver) QueryTarget.WebserverTarget(enticingConf.webserverConfiguration.fullAddress, args.searchSettingsId)
+    else QueryTarget.QueryDispatcherTarget(corpusConf)
 
 
     private val resultWriter = FileWriter(args.resultFile, args.appendFiles)
@@ -107,8 +49,20 @@ class ConsoleClient(val args: ConsoleClientArgs, loggerFactory: LoggerFactory) :
     fun run() {
         when {
             args.query.isNotEmpty() -> runQuery(args.query)
+            args.queryFile.isNotEmpty() -> runFromFile(args.queryFile)
             args.shell -> runShell()
+            else -> {
+                logger.warn("No option specified, starting the shell as a default")
+                runShell()
+            }
         }
+    }
+
+    private fun runFromFile(queryFile: String) {
+        for (line in File(queryFile).readLines())
+            if (!line.startsWith("#"))
+                runQuery(line)
+
     }
 
     private fun runShell() {
@@ -135,11 +89,11 @@ class ConsoleClient(val args: ConsoleClientArgs, loggerFactory: LoggerFactory) :
         when (parts[0]) {
             "webserver", "w" -> {
                 logger.info("Using webserver")
-                target = Target.WebserverTarget(enticingConf.webserverConfiguration.fullAddress, args.searchSettingsId)
+                target = QueryTarget.WebserverTarget(enticingConf.webserverConfiguration.fullAddress, args.searchSettingsId)
             }
             "dispatch", "d" -> {
                 logger.info("Using query dispatcher")
-                target = Target.QueryDispatcherTarget(corpusConf)
+                target = QueryTarget.QueryDispatcherTarget(corpusConf)
             }
             "index", "i" -> {
                 if (parts.size != 2) {
@@ -148,13 +102,13 @@ class ConsoleClient(val args: ConsoleClientArgs, loggerFactory: LoggerFactory) :
                 }
                 val address = parts[1]
                 logger.info("Using index server $address")
-                target = Target.IndexServerTarget(address)
+                target = QueryTarget.IndexServerTarget(address)
             }
             else -> logger.warn("Unknown command $cmd")
         }
     }
 
-    fun runQuery(query: String) {
+    private fun runQuery(query: String) {
         logger.info("Running query '$query'")
         try {
             val (results, duration) = target.query(SearchQuery(query))

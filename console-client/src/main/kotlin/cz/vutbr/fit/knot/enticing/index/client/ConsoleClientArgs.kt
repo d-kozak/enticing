@@ -19,11 +19,12 @@ class ConsoleClientArgs(parser: ArgParser) {
      */
     val scriptPath by parser.positional("Enticing configuration script")
 
+    val queryFile by parser.storing("-f", "--query-file", help = "File with input queries").default("")
 
     /**
      * Where the results should be stored
      */
-    val resultFile by parser.storing("-f", "--result-file", help = "Where the results should be stored")
+    val resultFile by parser.storing("-r", "--result-file", help = "Where the results should be stored")
             .default("console-client.out")
 
 
