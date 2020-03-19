@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import cz.vutbr.fit.knot.enticing.dto.TextFormat
 import cz.vutbr.fit.knot.enticing.dto.format.text.StringWithMetadata
+import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnit
 import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnitList
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
@@ -85,3 +86,14 @@ data class Identifier(
         @field:Valid
         val snippet: ResultFormat.Snippet
 )
+
+fun List<TextUnit>.toRawText(tokenIndex: Int): String = buildString {
+    for ((i, unit) in this@toRawText.withIndex()) {
+        when (unit) {
+            is TextUnit.Word -> append(unit.indexes[tokenIndex])
+            is TextUnit.Entity -> append(unit.words.toRawText(tokenIndex))
+            is TextUnit.QueryMatch -> append("<b>${unit.content.toRawText(tokenIndex)}</b>")
+        }
+        if (i != this@toRawText.size - 1) append(' ')
+    }
+}

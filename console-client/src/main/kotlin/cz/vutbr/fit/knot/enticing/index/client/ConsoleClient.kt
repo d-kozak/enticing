@@ -3,6 +3,9 @@ package cz.vutbr.fit.knot.enticing.index.client
 import com.github.kittinunf.fuel.httpPost
 import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.WebServer
+import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
+import cz.vutbr.fit.knot.enticing.dto.format.result.toRawText
+import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnit
 import cz.vutbr.fit.knot.enticing.dto.utils.toDto
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
@@ -10,6 +13,9 @@ import cz.vutbr.fit.knot.enticing.query.processor.fuel.jsonBody
 import java.io.FileWriter
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
+
+val WebServer.SearchResult.textUnitList: List<TextUnit>
+    get() = ((this.payload as ResultFormat.Snippet) as ResultFormat.Snippet.TextUnitList).content.content
 
 @ExperimentalTime
 class ConsoleClient(val args: ConsoleClientArgs, loggerFactory: LoggerFactory) : AutoCloseable {
@@ -22,12 +28,18 @@ class ConsoleClient(val args: ConsoleClientArgs, loggerFactory: LoggerFactory) :
 
     private var settingsId = args.searchSettingsId
 
-    private val resultWriter = FileWriter(args.resultFile, true)
+    private val resultWriter = FileWriter(args.resultFile, args.appendFiles)
 
-    private val perfWriter = FileWriter(args.perfFile, true)
+    private val perfWriter = FileWriter(args.perfFile, args.appendFiles)
+
+    private val tokenIndex = args.corpusConfiguration.metadataConfiguration.indexOf("token")
 
     init {
         logger.info("Loaded with args $args")
+        if (!args.appendFiles) {
+            resultWriter.appendln("some header :) todo")
+            perfWriter.appendln("targetComponent,query,millis")
+        }
     }
 
 
@@ -93,12 +105,20 @@ class ConsoleClient(val args: ConsoleClientArgs, loggerFactory: LoggerFactory) :
         }
 
 
-        logger.info("Returned ${result.searchResults.size} snippets")
 
-        result.searchResults.forEach { resultWriter.appendln(it.toString()) }
+
+        resultWriter.appendln("Running query '$query' on webserver")
+        result.searchResults.forEach {
+            val text = it.textUnitList.toRawText(tokenIndex)
+            println(text)
+            resultWriter.appendln(text)
+        }
         resultWriter.flush()
+        resultWriter.appendln("Query finished, it took ${duration.inMilliseconds} ms")
         perfWriter.appendln("webserver,$query,${duration.inMilliseconds}")
         perfWriter.flush()
+
+        logger.info("Returned ${result.searchResults.size} snippets, took ${duration.inMilliseconds} ms")
     }
 
     override fun close() {

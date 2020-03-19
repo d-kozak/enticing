@@ -5,6 +5,7 @@ import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.TextFormat
 import cz.vutbr.fit.knot.enticing.dto.TextMetadata
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
+import cz.vutbr.fit.knot.enticing.dto.format.result.toRawText
 import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnit
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import cz.vutbr.fit.knot.enticing.index.mg4j.initMg4jCollectionManager
@@ -212,7 +213,7 @@ class DocumentChecker(val result: IndexServer.SearchResult, val requirements: Re
         }
 
         if (hasErrors) {
-            val content = result.textUnitList.toRawText()
+            val content = result.textUnitList.toRawText(tokenIndex)
             reportError("\n\nText of the document is:\n$content\n")
         }
     }
@@ -220,17 +221,6 @@ class DocumentChecker(val result: IndexServer.SearchResult, val requirements: Re
 
 val IndexServer.SearchResult.textUnitList: List<TextUnit>
     get() = ((this.payload as ResultFormat.Snippet) as ResultFormat.Snippet.TextUnitList).content.content
-
-fun List<TextUnit>.toRawText(): String = buildString {
-    for ((i, unit) in this@toRawText.withIndex()) {
-        when (unit) {
-            is TextUnit.Word -> append(unit.token)
-            is TextUnit.Entity -> append(unit.words.toRawText())
-            is TextUnit.QueryMatch -> append("<b>${unit.content.toRawText()}</b>")
-        }
-        if (i != this@toRawText.size - 1) append(' ')
-    }
-}
 
 
 fun withRequirements(init: Requirements.() -> Unit, block: (Requirements) -> Unit) {
