@@ -6,18 +6,26 @@ import cz.vutbr.fit.knot.enticing.log.measure
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import java.io.File
 
+private val rebootComponents = true
+private val fixture = EnticingTestFixture(SmallWiki2018Config, rebootComponents)
+
 @Disabled
 class SmallWikiEndToEndPerformanceTest {
 
-    val rebootComponents = true
+    private val logger = SimpleStdoutLoggerFactory.logger { }
 
-    val fixture = EnticingTestFixture(SmallWiki2018Config, rebootComponents)
-
-    val logger = SimpleStdoutLoggerFactory.logger { }
+    companion object {
+        @AfterAll
+        @JvmStatic
+        fun close() {
+            fixture.close()
+        }
+    }
 
     @Test
     fun killAll() {
