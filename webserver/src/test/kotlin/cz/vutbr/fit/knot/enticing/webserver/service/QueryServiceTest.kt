@@ -3,8 +3,10 @@ package cz.vutbr.fit.knot.enticing.webserver.service
 import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
+import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcherException
+import cz.vutbr.fit.knot.enticing.query.processor.flattenResults
 import cz.vutbr.fit.knot.enticing.webserver.dto.User
 import cz.vutbr.fit.knot.enticing.webserver.dto.UserSettings
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
@@ -237,6 +239,8 @@ internal class QueryServiceTest {
 
         val queryService = QueryService(dispatcher, searchSettingsRepository, userHolder, indexServerConnector, compilerService, corpusFormatService, SimpleStdoutLoggerFactory)
 
+        private val logger = SimpleStdoutLoggerFactory.logger { }
+
         @Test
         fun `no errors`() {
             val input = mapOf(
@@ -244,7 +248,7 @@ internal class QueryServiceTest {
                     "server2" to listOf(MResult.success(IndexServer.IndexResultList(listOf(secondResult.toIndexServerFormat())))),
                     "server3" to listOf(MResult.success(IndexServer.IndexResultList(listOf(thirdResult.toIndexServerFormat()))))
             )
-            val actual = queryService.flatten("dummy", input)
+            val actual = input.flattenResults("dummy", logger)
             assertThat(actual)
                     .isEqualTo(
                             WebServer.ResultList(listOf(firstResult, secondResult, thirdResult))
@@ -259,7 +263,7 @@ internal class QueryServiceTest {
                     "server2" to listOf(MResult.success(IndexServer.IndexResultList(listOf(secondResult.toIndexServerFormat())))),
                     "server3" to listOf(MResult.failure(QueryDispatcherException("my secret reason to fail")))
             )
-            val actual = queryService.flatten("dummy", input)
+            val actual = input.flattenResults("dummy", logger)
             assertThat(actual)
                     .isEqualTo(
                             WebServer.ResultList(listOf(firstResult, secondResult), mapOf("server3" to "QueryDispatcherException:my secret reason to fail"))
@@ -274,7 +278,7 @@ internal class QueryServiceTest {
                     "server2" to listOf(MResult.success(IndexServer.IndexResultList(listOf(secondResult.toIndexServerFormat())))),
                     "server3" to listOf(MResult.failure(QueryDispatcherException("my secret reason to fail")))
             )
-            val actual = queryService.flatten("dummy", input)
+            val actual = input.flattenResults("dummy", logger)
             assertThat(actual)
                     .isEqualTo(
                             WebServer.ResultList(listOf(firstResult, secondResult),

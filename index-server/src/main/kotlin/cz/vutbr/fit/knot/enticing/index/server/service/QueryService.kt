@@ -2,7 +2,6 @@ package cz.vutbr.fit.knot.enticing.index.server.service
 
 import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
-import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.index.collection.manager.CollectionManager
 import cz.vutbr.fit.knot.enticing.index.collection.manager.CollectionQueryExecutor
@@ -10,6 +9,7 @@ import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
+import cz.vutbr.fit.knot.enticing.query.processor.flattenResults
 import org.springframework.stereotype.Service
 
 
@@ -32,7 +32,8 @@ class QueryService(
         else collectionManagers.keys.map { CollectionRequestData(it, Offset(0, 0)) }
 
         logger.info("Executing query $query with requestData $requestData")
-        return flatten(queryDispatcher.dispatchQuery(query, requestData))
+        return queryDispatcher.dispatchQuery(query, requestData)
+                .flattenResults()
     }
 
     fun extendContext(query: IndexServer.ContextExtensionQuery) = collectionManagers[query.collection]?.extendSnippet(query)
@@ -48,25 +49,3 @@ class QueryService(
 
 }
 
-internal fun flatten(resultList: Map<String, List<MResult<IndexServer.CollectionResultList>>>): IndexServer.IndexResultList {
-    val matched = mutableListOf<IndexServer.SearchResult>()
-    val errors = mutableMapOf<CollectionName, ErrorMessage>()
-
-    for ((collectionName, collectionResults) in resultList) {
-        for (collectionResult in collectionResults) {
-            if (collectionResult.isSuccess) {
-                matched.addAll(collectionResult.value.searchResults)
-            } else {
-                errors[collectionName] = "${collectionResult.exception::class.simpleName}:${collectionResult.exception.message}"
-                collectionResult.exception.printStackTrace()
-            }
-        }
-    }
-
-    val offset: Map<CollectionName, Offset> =
-            resultList.map { (collectionName, collectionResults) -> collectionResults.findLast { it.isSuccess && it.value.offset != null }?.value?.offset?.let { collectionName to it } }
-                    .filterNotNull()
-                    .toMap()
-
-    return IndexServer.IndexResultList(matched, offset, errors)
-}

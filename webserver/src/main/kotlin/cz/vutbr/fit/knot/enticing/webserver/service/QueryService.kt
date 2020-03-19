@@ -1,13 +1,11 @@
 package cz.vutbr.fit.knot.enticing.webserver.service
 
 import cz.vutbr.fit.knot.enticing.dto.*
-import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
-import cz.vutbr.fit.knot.enticing.log.error
 import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.log.measure
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
-import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcherException
+import cz.vutbr.fit.knot.enticing.query.processor.flattenResults
 import cz.vutbr.fit.knot.enticing.webserver.dto.LastQuery
 import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.exception.InvalidSearchSettingsException
@@ -39,7 +37,8 @@ class QueryService(
         compilerService.validateOrFail(query.query, corpusFormatService.loadFormat(searchSettings).toMetadataConfiguration())
         val requestData = searchSettings.servers.map { IndexServerRequestData(it) }
         logger.info("Executing query $query with requestData $requestData")
-        val (result, offset) = flatten(query.query, dispatcher.dispatchQuery(query, requestData))
+        val (result, offset) = dispatcher.dispatchQuery(query, requestData)
+                .flattenResults(query.query, logger)
 
         session.setAttribute("lastQuery", LastQuery(query, selectedSettings, offset))
 
@@ -53,7 +52,8 @@ class QueryService(
                 .filter { it in offset && offset.getValue(it).isNotEmpty() }
                 .map { IndexServerRequestData(it, offset[it]) }
         logger.info("Executing query $offset with requestData $requestData")
-        val (result, newOffset) = flatten(query.query, dispatcher.dispatchQuery(query, requestData))
+        val (result, newOffset) = dispatcher.dispatchQuery(query, requestData)
+                .flattenResults(query.query, logger)
         session.setAttribute("lastQuery", LastQuery(query, selectedSettings, newOffset))
         return result
     }
@@ -79,36 +79,5 @@ class QueryService(
 
     fun getRawDocument(request: WebServer.RawDocumentRequest): String = indexServerConnector.getRawDocument(request)
 
-
-    internal fun flatten(query: String, result: Map<String, List<MResult<IndexServer.IndexResultList>>>): Pair<WebServer.ResultList, MutableMap<String, Map<String, Offset>>> {
-        val snippets = mutableListOf<WebServer.SearchResult>()
-        val errors = mutableMapOf<ServerId, ErrorMessage>()
-
-        val offset = mutableMapOf<String, Map<String, Offset>>()
-
-        for ((serverId, results) in result) {
-            for (serverResult in results) {
-                if (serverResult.isSuccess) {
-                    snippets.addAll(
-                            serverResult.value.searchResults.map { it.withHost(serverId) }
-                    )
-                    if (serverResult.value.offset.isNotEmpty())
-                        offset[serverId] = serverResult.value.offset
-                    if (serverResult.value.errors.isNotEmpty()) {
-                        val msg = serverResult.value.errors.toString()
-                        errors[serverId] = msg
-                        logger.warn("Server $serverId for query '$query' responded with $msg")
-                    }
-                } else {
-                    val exception = serverResult.exception as QueryDispatcherException
-                    errors[serverId] = "${exception::class.simpleName}:${exception.message}"
-                    offset.remove(serverId)
-                    logger.error(exception)
-                }
-            }
-        }
-
-        return WebServer.ResultList(snippets, errors) to offset
-    }
 }
 

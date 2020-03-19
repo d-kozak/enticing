@@ -34,5 +34,6 @@ data class LogDto(
 enum class ComponentType {
     WEBSERVER,
     INDEX_SERVER,
-    INDEX_BUILDER
+    INDEX_BUILDER,
+    CONSOLE_CLIENT
 }
