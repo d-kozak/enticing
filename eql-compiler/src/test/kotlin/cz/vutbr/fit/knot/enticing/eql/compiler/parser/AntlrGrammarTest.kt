@@ -147,6 +147,7 @@ class AntlrGrammarTest {
         }
 
     }
+
     @Nested
     @DisplayName("Queries from files")
     inner class QueriesFromFiles {
@@ -166,6 +167,15 @@ class AntlrGrammarTest {
             forEachQuery("syntactic_errors.eql") { parseWithAntlr(it).second.isNotEmpty() }
         }
 
+    }
 
+    @Nested
+    inner class ProblematicQueries {
+
+        @Test
+        @DisplayName("job !lemma:work")
+        fun `not with index`() {
+            assertParseWithAntlrWithoutErrors("job !lemma:work")
+        }
     }
 }

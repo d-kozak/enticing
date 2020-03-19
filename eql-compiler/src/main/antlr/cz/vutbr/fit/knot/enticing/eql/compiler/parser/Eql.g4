@@ -75,7 +75,7 @@ QUOTATION: '"';
 
 
 IDENTIFIER: [_]?[a-zA-Z0-9][a-zA-Z0-9_]*;
-ANY_TEXT: ~[ "'\u005B\u005D\t\r&|=<>:.()*^-]+[*]? ;
+ANY_TEXT: ~[ !"'\u005B\u005D\t\r&|=<>:.()*^-]+[*]? ;
 
 
 /** ignore whitespace */

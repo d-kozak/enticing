@@ -75,14 +75,13 @@ class DocumentMatchingVisitor(val document: IndexedDocument, val metadataConfigu
     }
 
 
-    @WhatIf("what should be the match and children of not node? what if not node is followed by a proximity restriction? is that even semantically valid?")
     override fun visitQueryElemNotNode(node: QueryElemNode.NotNode): Sequence<DocumentMatch> {
         val elem = node.elem.accept(this)
         return sequence {
-            for (match in elem) {
-                val (interval, subIntervals) = match
-                if (interval.from > 0) yield(DocumentMatch(Interval.valueOf(0, interval.from - 1), subIntervals, listOf(match)))
-                if (interval.to < document.size - 1) yield(DocumentMatch(Interval.valueOf(interval.to + 1, document.size - 1), subIntervals, listOf(match)))
+            val isEmpty = elem.count() == 0
+            if (isEmpty) {
+                // push an empty interval up
+                yield(DocumentMatch(Interval.empty(), emptyList<EqlMatch>(), emptyList<DocumentMatch>()))
             }
         }
     }

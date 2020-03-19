@@ -364,6 +364,84 @@ class MatchDocumentTest {
             }
         }
     }
+
+
+    @Nested
+    inner class Not {
+
+
+        @Test
+        @DisplayName("job lemma:work")
+        fun `not is not used, should match`() {
+            val document = TestDocument(50)
+            document["lemma"][30] = "work"
+            document["token"][10] = "job"
+
+            val result = queryExecutor.doMatch("job lemma:work", document)
+            assertThat(result.intervals).isNotEmpty()
+            assertThat(result.intervals[0].interval).isEqualTo(Interval.valueOf(10, 30))
+        }
+
+        @Test
+        @DisplayName("!job lemma:work")
+        fun `simple global not, should not match anything`() {
+            val document = TestDocument(50)
+            document["lemma"][30] = "work"
+            document["token"][10] = "job"
+
+            val result = queryExecutor.doMatch("!job lemma:work", document)
+            assertThat(result.intervals).isEmpty()
+        }
+
+        @Test
+        @DisplayName("job !lemma:work")
+        fun `not over index operator`() {
+            val document = TestDocument(50)
+            document["lemma"][30] = "work"
+            document["token"][10] = "job"
+
+            val result = queryExecutor.doMatch("job !lemma:work", document)
+            assertThat(result.intervals).isEmpty()
+        }
+
+
+        @Test
+        @DisplayName("(milk !water) | (rice !pasta)")
+        fun `nested not`() {
+            val document = TestDocument(50)
+            document["token"][10] = "milk"
+            document["token"][20] = "water"
+            document["token"][30] = "rice"
+
+            val result = queryExecutor.doMatch("(milk !water) | (rice !pasta)", document)
+            assertThat(result.intervals).hasSize(1)
+            assertThat(result.intervals[0].interval).isEqualTo(Interval.valueOf(30))
+        }
+
+        @Test
+        @DisplayName("!water | milk")
+        fun `not in or, when given word is really in the document`() {
+            val document = TestDocument(50)
+            document["token"][10] = "milk"
+            document["token"][20] = "water"
+
+            val result = queryExecutor.doMatch("!water | milk", document)
+            assertThat(result.intervals).hasSize(1)
+            assertThat(result.intervals[0].interval).isEqualTo(Interval.valueOf(10))
+        }
+
+        @Test
+        @DisplayName("!sand | milk")
+        fun `not in or, when given word is not in the document`() {
+            val document = TestDocument(50)
+            document["token"][10] = "milk"
+            document["token"][20] = "water"
+
+            val result = queryExecutor.doMatch("!water | milk", document)
+            assertThat(result.intervals).hasSize(1)
+            assertThat(result.intervals[0].interval).isEqualTo(Interval.valueOf(10))
+        }
+    }
 }
 
 class TestQueryExecutor(private val metadataConfiguration: MetadataConfiguration) {

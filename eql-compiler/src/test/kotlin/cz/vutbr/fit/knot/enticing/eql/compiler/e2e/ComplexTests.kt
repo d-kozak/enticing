@@ -79,7 +79,7 @@ class ComplexTests {
     fun eight() {
         val (ast, errors) = compiler.parseAndAnalyzeQuery("(a:=(horse !bread))|(b:=(house !wall))", config)
         assertThat(errors).isEmpty()
-        assertThat(ast.toMgj4Query()).isEqualTo("((horse & !bread) | (house & !wall))")
+        assertThat(ast.toMgj4Query()).isEqualTo("((horse & !(bread)) | (house & !(wall)))")
     }
 
 
