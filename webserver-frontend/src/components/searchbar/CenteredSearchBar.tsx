@@ -28,13 +28,11 @@ export interface CenteredSearchBar extends WithStyles<typeof styles> {
 const CenteredSearchBar = (props: CenteredSearchBar) => {
     const {classes, history} = props;
 
-    const initialQuery = '(influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist)) ctx:sent && influencer.url != influencee.url';
-
     return <div className={classes.mainDiv}>
         <Typography className={classes.title} variant="h3">
             Enticing
         </Typography>
-        <SearchInput history={history} initialQuery={initialQuery}/>
+        <SearchInput history={history}/>
     </div>
 };
 

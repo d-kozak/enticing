@@ -2,7 +2,7 @@ import createStyles from "@material-ui/core/es/styles/createStyles";
 import {WithStyles} from "@material-ui/core";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {connect} from "react-redux";
 import {ApplicationState} from "../../ApplicationState";
 
@@ -23,16 +23,24 @@ export type SearchInputProps =
     & {
     history?: H.History;
     className?: string;
-    initialQuery?: string;
 }
 
 const SearchInput = (props: SearchInputProps) => {
-    const {className = '', initialQuery = '', user, history, selectedSettings, startSearching: parentStartSearching, openSnackbar} = props;
+    const {className = '', initialQuery, user, history, selectedSettings, startSearching: parentStartSearching, openSnackbar} = props;
 
-    const [query, setQuery] = useState<string>(initialQuery);
+    const params = new URLSearchParams(location.search);
+
+    const [query, setQuery] = useState<string>(params.get('query') || initialQuery);
+
+    const [cnt, setCnt] = useState(0);
+
+    useEffect(() => {
+        setQuery(initialQuery);
+        setCnt(cnt + 1);
+    }, [initialQuery]);
 
     const startSearching = () => {
-        if (query.length == 0) return
+        if (query.length == 0) return;
         if (selectedSettings === null) {
             openSnackbar("no search settings selected");
             return
@@ -44,11 +52,12 @@ const SearchInput = (props: SearchInputProps) => {
 
 
     return <div className={className}>
-        <CMInputWrapper query={query} setQuery={setQuery} startSearching={startSearching}/>
+        <CMInputWrapper key={cnt} query={query} setQuery={setQuery} startSearching={startSearching}/>
     </div>
 };
 
 const mapStateToProps = (state: ApplicationState) => ({
+    initialQuery: state.searchResult.query,
     user: state.userState.user,
     selectedSettings: getSelectedSearchSettings(state)
 });

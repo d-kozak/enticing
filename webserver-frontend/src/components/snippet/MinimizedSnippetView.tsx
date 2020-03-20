@@ -16,6 +16,7 @@ import Grid from "@material-ui/core/es/Grid";
 import {parseSearchResultRequest} from "../../reducers/SearchResultReducer";
 import {getSelectedMetadataForCurrentSettings, isDebugMode} from "../../reducers/selectors";
 import ShowRawDocumentButton from "./snippetbuttons/ShowRawDocumentButton";
+import LimitSearchButton from "./snippetbuttons/LimitSearchButton";
 
 
 const styles = createStyles({
@@ -55,6 +56,7 @@ const MinimizedSnippetView = (props: MinimizedSnippetViewEnhancedProps) => {
         <EditAnnotationsButton/>
         <ShowDocumentButton openDocumentRequest={openDocumentRequest}/>
         <GotoSourceButton searchResult={snippet}/>
+        <LimitSearchButton snippet={snippet}/>
         <Grid className={classes.text}>
             <NewAnnotatedTextComponent text={snippet.payload.parsedContent} corpusFormat={corpusFormat}
                                        metadata={metadata}

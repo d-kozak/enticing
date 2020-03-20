@@ -105,7 +105,6 @@ const CMInputWrapper = (props: CMInputWrapperProps) => {
         }
     }, []);
 
-
     const queryChanged = (query: string) => {
         setQuery(query);
         if (!settings) {

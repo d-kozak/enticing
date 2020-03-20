@@ -17,7 +17,7 @@ export interface SearchResultBatch {
 const {reducer, actions} = createSlice({
     slice: 'searchResults',
     initialState: {
-        query: "",
+        query: "a:=nertag:person < lemma:(influence | impact | (paid < tribute) ) < b:=nertag:person ctx:sent && a.url != b.url",
         snippetIds: [],
         snippetsById: {},
         corpusFormat: null,

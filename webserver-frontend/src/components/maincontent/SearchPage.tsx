@@ -34,13 +34,11 @@ export type SearchPageProps =
 
 const SearchPage = (props: SearchPageProps) => {
     const {classes, hasSnippets, history, location} = props;
-    const params = new URLSearchParams(location.search);
-    const query = params.get('query') || '';
 
     // todo start search when this page is loaded somehow from an action
 
     return <div>
-        <SearchInput className={classes.searchInput} history={history} initialQuery={query}/>
+        <SearchInput className={classes.searchInput} history={history}/>
         {hasSnippets ? <SnippetList/> : <NoResultsFound/>}
     </div>
 };
