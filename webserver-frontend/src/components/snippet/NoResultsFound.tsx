@@ -24,16 +24,19 @@ const styles = createStyles({
 
 
 export interface NoResultsFoundProps extends WithStyles<typeof styles> {
-
+    loadingMore: boolean
 }
 
 const NoResultsFound = (props: NoResultsFoundProps) => {
-    const {classes} = props;
+    const {classes, loadingMore} = props;
+
+    const text = loadingMore ? 'Loading...' : 'No results were found';
+
     return <Paper className={classes.root}>
-        <Typography variant="h4">No results were found</Typography>
+        <Typography variant="h4">{text}</Typography>
     </Paper>
 };
 
 export default withStyles(styles, {
     withTheme: true
-})(NoResultsFound)
+})(NoResultsFound);
