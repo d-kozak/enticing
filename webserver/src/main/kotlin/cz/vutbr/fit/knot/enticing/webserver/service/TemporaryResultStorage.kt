@@ -21,6 +21,10 @@ class TemporaryResultStorage(loggerFactory: LoggerFactory) {
     private val logger = loggerFactory.logger { }
 
 
+    fun initEntry(id: String) {
+        memory[id] = StorageEntry(WebServer.ResultList(emptyList(), hasMore = true))
+    }
+
     fun addResult(id: String, resultList: List<WebServer.SearchResult>) {
         val entry = memory[id]
         if (entry != null) {
@@ -31,7 +35,15 @@ class TemporaryResultStorage(loggerFactory: LoggerFactory) {
         } else memory[id] = StorageEntry(WebServer.ResultList(resultList))
     }
 
-    fun getResults(id: String) = memory.remove(id)?.resultList
+    fun getResults(id: String): WebServer.ResultList {
+        val entry = memory[id] ?: return WebServer.ResultList(emptyList(), hasMore = false)
+        return synchronized(entry) {
+            val list = entry.resultList
+            entry.resultList = entry.resultList.copy(emptyList())
+            if (!list.hasMore) memory.remove(id)
+            list
+        }
+    }
 
     fun markDone(id: String) {
         val entry = memory[id]

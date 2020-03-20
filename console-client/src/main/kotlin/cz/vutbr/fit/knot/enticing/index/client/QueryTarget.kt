@@ -13,6 +13,7 @@ import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
 import cz.vutbr.fit.knot.enticing.query.processor.flattenResults
 import cz.vutbr.fit.knot.enticing.query.processor.fuel.jsonBody
 import kotlinx.coroutines.runBlocking
+import java.lang.Thread.sleep
 import java.util.*
 import kotlin.concurrent.thread
 import kotlin.time.ExperimentalTime
@@ -45,28 +46,23 @@ sealed class QueryTarget(val name: String) {
         private fun partialResultChecker(uuid: UUID) {
             val address = "http://$address/api/v1/query/storage/$uuid"
             thread {
+                sleep(500)
                 try {
                     var cnt = 0
                     var results = address.httpGet()
-                            .responseString().third.get().let {
-                                if (it.isEmpty()) "null" else it
-                            }
-                            .toDto<WebServer.ResultList?>()
-                    if (results != null) {
-                        println("retrieved ${results.searchResults.size} eager results")
-                        cnt += results.searchResults.size
-                    }
-                    while (results == null || results.hasMore) {
+                            .responseString().third.get()
+                            .toDto<WebServer.ResultList>()
+
+                    println("retrieved ${results.searchResults.size} eager results")
+                    cnt += results.searchResults.size
+
+                    while (results.hasMore) {
+                        sleep(500)
                         results = address.httpGet()
                                 .responseString().third.get()
-                                .let {
-                                    if (it.isEmpty()) "null" else it
-                                }
                                 .toDto()
-                        if (results != null) {
-                            println("retrieved ${results.searchResults.size} eager results")
-                            cnt += results.searchResults.size
-                        }
+                        println("retrieved ${results.searchResults.size} eager results")
+                        cnt += results.searchResults.size
                     }
 
                     println("No more results, done, total count is $cnt")

@@ -88,10 +88,13 @@ class QueryService(
 
     fun getRawDocument(request: WebServer.RawDocumentRequest): String = indexServerConnector.getRawDocument(request)
 
-    private fun UUID.createCallback(): ((RequestData<Map<CollectionName, Offset>>, MResult<IndexServer.IndexResultList>) -> Unit)? = { request, result ->
-        if (result.isSuccess) {
-            val data = result.value.searchResults.map { it.withHost(request.address) }
-            resultStorage.addResult(this.toString(), data)
+    private fun UUID.createCallback(): ((RequestData<Map<CollectionName, Offset>>, MResult<IndexServer.IndexResultList>) -> Unit)? {
+        resultStorage.initEntry(this.toString())
+        return { request, result ->
+            if (result.isSuccess) {
+                val data = result.value.searchResults.map { it.withHost(request.address) }
+                resultStorage.addResult(this.toString(), data)
+            }
         }
     }
 
