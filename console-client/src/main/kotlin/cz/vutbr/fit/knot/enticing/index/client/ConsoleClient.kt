@@ -31,6 +31,8 @@ class ConsoleClient(val args: ConsoleClientArgs, loggerFactory: LoggerFactory) :
     else QueryTarget.QueryDispatcherTarget(corpusConf)
 
 
+    private var resultFormat = cz.vutbr.fit.knot.enticing.dto.ResultFormat.SNIPPET
+
     private val resultWriter = FileWriter(args.resultFile, args.appendFiles)
 
     private val perfWriter = FileWriter(args.perfFile, args.appendFiles)
@@ -118,6 +120,18 @@ class ConsoleClient(val args: ConsoleClientArgs, loggerFactory: LoggerFactory) :
                 logger.info("Using index server $address")
                 target = QueryTarget.IndexServerTarget(address)
             }
+            "format", "f" -> {
+                if (parts.size != 2) {
+                    logger.warn("Result format expected (idlist vs snippet)")
+                    return
+                }
+                when (parts[1]) {
+                    "snippet" -> this.resultFormat = cz.vutbr.fit.knot.enticing.dto.ResultFormat.SNIPPET
+                    "idlist" -> this.resultFormat = cz.vutbr.fit.knot.enticing.dto.ResultFormat.IDENTIFIER_LIST
+                    else -> logger.warn("Unknown format ${parts[1]}")
+                }
+                logger.info("new format ${this.resultFormat}")
+            }
             else -> logger.warn("Unknown command $cmd")
         }
     }
@@ -125,7 +139,7 @@ class ConsoleClient(val args: ConsoleClientArgs, loggerFactory: LoggerFactory) :
     private fun runQuery(query: String) {
         logger.info("Running query '$query'")
         try {
-            val (results, duration) = target.query(SearchQuery(query, uuid = UUID.randomUUID()))
+            val (results, duration) = target.query(SearchQuery(query, resultFormat = resultFormat, uuid = UUID.randomUUID()))
             processResults(query, results, duration, target.name)
         } catch (ex: Exception) {
             ex.printStackTrace()
@@ -136,7 +150,12 @@ class ConsoleClient(val args: ConsoleClientArgs, loggerFactory: LoggerFactory) :
     private fun processResults(query: String, results: List<IndexServer.SearchResult>, duration: Duration, component: String) {
         resultWriter.appendln("Running query '$query' on $component")
         results.forEach {
-            val text = it.textUnitList.toRawText(tokenIndex)
+            val text = when (it.payload) {
+                is ResultFormat.Snippet -> it.textUnitList.toRawText(tokenIndex)
+                is ResultFormat.IdentifierList -> (it.payload as ResultFormat.IdentifierList).list.joinToString("\n") {
+                    it.identifier + " := " + (it.snippet as ResultFormat.Snippet.TextUnitList).content.content.toRawText(tokenIndex)
+                }
+            }
             resultWriter.appendln(text)
         }
         resultWriter.flush()
