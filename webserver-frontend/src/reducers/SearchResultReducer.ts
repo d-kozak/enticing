@@ -11,7 +11,7 @@ export interface SearchResultBatch {
     searchResults: Array<SearchResult>,
     corpusFormat: CorpusFormat,
     moreResultsAvailable: boolean,
-    statistics: SearchStatistics
+    statistics?: SearchStatistics
 }
 
 const {reducer, actions} = createSlice({
@@ -39,7 +39,7 @@ const {reducer, actions} = createSlice({
                 state.snippetIds.push(snippet.id);
             }
         },
-        appendMoreSearchResults: (state: SearchResultsState, {payload}: PayloadAction<{ searchResults: Array<SearchResult>, hasMore: boolean, statistics: SearchStatistics }>) => {
+        appendMoreSearchResults: (state: SearchResultsState, {payload}: PayloadAction<{ searchResults: Array<SearchResult>, hasMore: boolean, statistics?: SearchStatistics }>) => {
             state.moreResultsAvailable = payload.hasMore;
             state.statistics = payload.statistics;
             for (let snippet of payload.searchResults) {

@@ -5,8 +5,9 @@ import {mapValues} from 'lodash';
 import {validateOrNull} from "./validationUtils";
 
 export interface ResultList {
-    searchResults: Array<SearchResult>
-    errors: { [key: string]: string }
+    searchResults: Array<SearchResult>,
+    errors: { [key: string]: string },
+    hasMore: boolean
 }
 
 export const resultListSchema = yup.object({
@@ -14,6 +15,7 @@ export const resultListSchema = yup.object({
     errors: yup.lazy(obj => yup.object(
         mapValues(obj, () => yup.string().min(1).required())
     )),
+    hasMore: yup.boolean()
 });
 
 
