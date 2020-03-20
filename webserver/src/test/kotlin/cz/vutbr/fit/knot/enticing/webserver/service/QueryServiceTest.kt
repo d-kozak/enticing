@@ -28,6 +28,8 @@ import java.util.*
 
 internal class QueryServiceTest {
 
+    private val temporaryResultStorage = TemporaryResultStorage(SimpleStdoutLoggerFactory)
+
     @Nested
     inner class SearchQueryTest {
 
@@ -39,6 +41,7 @@ internal class QueryServiceTest {
         private val compilerService: EqlCompilerService = mockk()
         private val corpusFormatService: CorpusFormatService = mockk()
         private val mockSession = MockHttpSession()
+
 
         @Test
         fun `valid request`() {
@@ -58,7 +61,7 @@ internal class QueryServiceTest {
             val foo = mapOf("server1" to listOf(MResult.success(IndexServer.IndexResultList(listOf(firstResult.toIndexServerFormat())))))
             every { dispatcher.dispatchQuery(dummyQuery, dummyServers.map { IndexServerRequestData(it) }) } returns foo
 
-            val queryService = QueryService(dispatcher, searchSettingsRepository, userHolder, indexServerConnector, compilerService, corpusFormatService, SimpleStdoutLoggerFactory)
+            val queryService = QueryService(dispatcher, searchSettingsRepository, userHolder, indexServerConnector, compilerService, corpusFormatService, temporaryResultStorage, SimpleStdoutLoggerFactory)
 
             val result = queryService.query(SearchQuery("nertag:person", 33), 42, mockSession)
             assertThat(result)
@@ -87,7 +90,7 @@ internal class QueryServiceTest {
             val foo = mapOf("server1" to listOf(MResult.success(IndexServer.IndexResultList(listOf(firstResult.toIndexServerFormat())))))
             every { dispatcher.dispatchQuery(dummyQuery, dummyServers.map { IndexServerRequestData(it) }) } returns foo
 
-            val queryService = QueryService(dispatcher, searchSettingsRepository, userHolder, indexServerConnector, compilerService, corpusFormatService, SimpleStdoutLoggerFactory)
+            val queryService = QueryService(dispatcher, searchSettingsRepository, userHolder, indexServerConnector, compilerService, corpusFormatService, temporaryResultStorage, SimpleStdoutLoggerFactory)
 
             val result = queryService.query(SearchQuery("nertag:person", 33), 42, mockSession)
             assertThat(result)
@@ -107,7 +110,7 @@ internal class QueryServiceTest {
             val mockSearchSettings = SearchSettings(42, private = true, servers = dummyServers)
             every { searchSettingsRepository.findById(42) } returns Optional.of(mockSearchSettings)
 
-            val queryService = QueryService(dispatcher, searchSettingsRepository, userHolder, indexServerConnector, compilerService, corpusFormatService, SimpleStdoutLoggerFactory)
+            val queryService = QueryService(dispatcher, searchSettingsRepository, userHolder, indexServerConnector, compilerService, corpusFormatService, temporaryResultStorage, SimpleStdoutLoggerFactory)
 
             assertThrows<InvalidSearchSettingsException> {
                 queryService.query(SearchQuery("nertag:person", 33), 42, mockSession)
@@ -122,7 +125,7 @@ internal class QueryServiceTest {
             val mockSearchSettings = SearchSettings(42, private = true, servers = dummyServers)
             every { searchSettingsRepository.findById(42) } returns Optional.of(mockSearchSettings)
 
-            val queryService = QueryService(dispatcher, searchSettingsRepository, userHolder, indexServerConnector, compilerService, corpusFormatService, SimpleStdoutLoggerFactory)
+            val queryService = QueryService(dispatcher, searchSettingsRepository, userHolder, indexServerConnector, compilerService, corpusFormatService, temporaryResultStorage, SimpleStdoutLoggerFactory)
 
             assertThrows<InvalidSearchSettingsException> {
                 queryService.query(SearchQuery("nertag:person", 33), 42, mockSession)
@@ -134,7 +137,7 @@ internal class QueryServiceTest {
             every { userHolder.getCurrentUser() } returns null
             every { searchSettingsRepository.findById(42) } returns Optional.empty()
 
-            val queryService = QueryService(dispatcher, searchSettingsRepository, userHolder, indexServerConnector, compilerService, corpusFormatService, SimpleStdoutLoggerFactory)
+            val queryService = QueryService(dispatcher, searchSettingsRepository, userHolder, indexServerConnector, compilerService, corpusFormatService, temporaryResultStorage, SimpleStdoutLoggerFactory)
 
             assertThrows<InvalidSearchSettingsException> { queryService.query(SearchQuery("nertag:person", 33), 42, mockSession) }
         }
@@ -159,7 +162,7 @@ internal class QueryServiceTest {
 
         @Test
         fun `valid request`() {
-            val queryService = QueryService(dispatcher, searchSettingsRepository, userHolder, indexServerConnector, compilerService, corpusFormatService, SimpleStdoutLoggerFactory)
+            val queryService = QueryService(dispatcher, searchSettingsRepository, userHolder, indexServerConnector, compilerService, corpusFormatService, temporaryResultStorage, SimpleStdoutLoggerFactory)
             val query = WebServer.DocumentQuery("google", "col1", 21, query = "nertag:person")
             val expected = dummyDocument.copy(host = "google", collection = "col1", documentId = 21, query = "nertag:person")
 
@@ -172,7 +175,7 @@ internal class QueryServiceTest {
 
         @Test
         fun `exception propagated`() {
-            val queryService = QueryService(dispatcher, searchSettingsRepository, userHolder, indexServerConnector, compilerService, corpusFormatService, SimpleStdoutLoggerFactory)
+            val queryService = QueryService(dispatcher, searchSettingsRepository, userHolder, indexServerConnector, compilerService, corpusFormatService, temporaryResultStorage, SimpleStdoutLoggerFactory)
             val query = WebServer.DocumentQuery("google", "col1", 21)
 
             every { indexServerConnector.getDocument(any()) } throws IllegalArgumentException("booom!")
@@ -200,7 +203,7 @@ internal class QueryServiceTest {
 
         @Test
         fun `valid request`() {
-            val queryService = QueryService(dispatcher, searchSettingsRepository, userHolder, indexServerConnector, compilerService, corpusFormatService, SimpleStdoutLoggerFactory)
+            val queryService = QueryService(dispatcher, searchSettingsRepository, userHolder, indexServerConnector, compilerService, corpusFormatService, temporaryResultStorage, SimpleStdoutLoggerFactory)
             val query = WebServer.ContextExtensionQuery("google", "col1", 21, 30, 20, 40, query = "foo")
             every { indexServerConnector.contextExtension(query) } returns snippetExtension
             val actual = queryService.context(query)
@@ -211,7 +214,7 @@ internal class QueryServiceTest {
 
         @Test
         fun `exception propagated`() {
-            val queryService = QueryService(dispatcher, searchSettingsRepository, userHolder, indexServerConnector, compilerService, corpusFormatService, SimpleStdoutLoggerFactory)
+            val queryService = QueryService(dispatcher, searchSettingsRepository, userHolder, indexServerConnector, compilerService, corpusFormatService, temporaryResultStorage, SimpleStdoutLoggerFactory)
             val query = WebServer.ContextExtensionQuery("google", "col1", 21, 30, 20, 40, query = "foo")
 
             every { indexServerConnector.contextExtension(any()) } throws IllegalArgumentException("booom!")
@@ -237,7 +240,7 @@ internal class QueryServiceTest {
         private val compilerService: EqlCompilerService = mockk()
         private val corpusFormatService: CorpusFormatService = mockk()
 
-        val queryService = QueryService(dispatcher, searchSettingsRepository, userHolder, indexServerConnector, compilerService, corpusFormatService, SimpleStdoutLoggerFactory)
+        val queryService = QueryService(dispatcher, searchSettingsRepository, userHolder, indexServerConnector, compilerService, corpusFormatService, temporaryResultStorage, SimpleStdoutLoggerFactory)
 
         private val logger = SimpleStdoutLoggerFactory.logger { }
 

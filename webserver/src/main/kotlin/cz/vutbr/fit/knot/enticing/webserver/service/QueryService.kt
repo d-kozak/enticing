@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.service
 
 import cz.vutbr.fit.knot.enticing.dto.*
+import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.log.measure
@@ -11,6 +12,7 @@ import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.exception.InvalidSearchSettingsException
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import org.springframework.stereotype.Service
+import java.util.*
 import javax.servlet.http.HttpSession
 
 @Service
@@ -21,6 +23,7 @@ class QueryService(
         private val indexServerConnector: IndexServerConnector,
         private val compilerService: EqlCompilerService,
         private val corpusFormatService: CorpusFormatService,
+        private val resultStorage: TemporaryResultStorage,
         loggerFactory: LoggerFactory
 ) {
 
@@ -36,13 +39,7 @@ class QueryService(
         val searchSettings = checkUserCanAccessSettings(selectedSettings)
         compilerService.validateOrFail(query.query, corpusFormatService.loadFormat(searchSettings).toMetadataConfiguration())
         val requestData = searchSettings.servers.map { IndexServerRequestData(it) }
-        logger.info("Executing query $query with requestData $requestData")
-        val (result, offset) = dispatcher.dispatchQuery(query, requestData)
-                .flattenResults(query.query, logger)
-
-        session.setAttribute("lastQuery", LastQuery(query, selectedSettings, offset))
-
-        result
+        submitQuery(query, requestData, session, selectedSettings)
     }
 
     fun getMore(session: HttpSession): WebServer.ResultList? {
@@ -51,12 +48,24 @@ class QueryService(
         val requestData = searchSettings.servers
                 .filter { it in offset && offset.getValue(it).isNotEmpty() }
                 .map { IndexServerRequestData(it, offset[it]) }
-        logger.info("Executing query $offset with requestData $requestData")
-        val (result, newOffset) = dispatcher.dispatchQuery(query, requestData)
+        return submitQuery(query, requestData, session, selectedSettings)
+    }
+
+
+    private fun submitQuery(query: SearchQuery, requestData: List<IndexServerRequestData>, session: HttpSession, selectedSettings: Long): WebServer.ResultList {
+        logger.info("Executing query $query with requestData $requestData")
+        val onResult = query.uuid?.createCallback()
+        val (result, offset) = dispatcher.dispatchQuery(query, requestData, onResult)
                 .flattenResults(query.query, logger)
-        session.setAttribute("lastQuery", LastQuery(query, selectedSettings, newOffset))
+
+        session.setAttribute("lastQuery", LastQuery(query, selectedSettings, offset))
+
+        if (query.uuid != null)
+            resultStorage.markDone(query.uuid.toString())
+
         return result
     }
+
 
     fun context(query: WebServer.ContextExtensionQuery): SnippetExtension = indexServerConnector.contextExtension(query)
 
@@ -78,6 +87,13 @@ class QueryService(
     }
 
     fun getRawDocument(request: WebServer.RawDocumentRequest): String = indexServerConnector.getRawDocument(request)
+
+    private fun UUID.createCallback(): ((RequestData<Map<CollectionName, Offset>>, MResult<IndexServer.IndexResultList>) -> Unit)? = { request, result ->
+        if (result.isSuccess) {
+            val data = result.value.searchResults.map { it.withHost(request.address) }
+            resultStorage.addResult(this.toString(), data)
+        }
+    }
 
 }
 

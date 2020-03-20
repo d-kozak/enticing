@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
+import java.util.*
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Positive
@@ -52,7 +53,12 @@ data class SearchQuery(
          * the others are considered the metadata of the default index
          */
         @field:NotBlank
-        override val defaultIndex: String = Defaults.defaultIndex
+        override val defaultIndex: String = Defaults.defaultIndex,
+
+        /**
+         * Unique id generated for eager fetching
+         */
+        val uuid: UUID? = null
 ) : GeneralFormatInfo, Query<SearchQuery> {
 
     @JsonIgnore
@@ -159,6 +165,7 @@ enum class ResultFormat {
      * What was matched by the query and it's surroundings
      */
     SNIPPET,
+
     /**
      * Only return the values of identifiers used in the query
      *
@@ -175,6 +182,7 @@ enum class TextFormat {
      * Just the text from the default index
      */
     PLAIN_TEXT,
+
     /**
      * Response should be a single string containing html
      */

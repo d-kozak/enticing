@@ -5,16 +5,20 @@ import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.SnippetExtension
 import cz.vutbr.fit.knot.enticing.dto.WebServer
 import cz.vutbr.fit.knot.enticing.webserver.service.QueryService
+import cz.vutbr.fit.knot.enticing.webserver.service.TemporaryResultStorage
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpSession
 import javax.validation.Valid
 
 @RestController
 @RequestMapping("\${api.base.path}/query")
-class QueryController(private val queryService: QueryService) {
+class QueryController(private val queryService: QueryService, private val temporaryResultStorage: TemporaryResultStorage) {
 
     @PostMapping
     fun query(@RequestBody @Valid query: SearchQuery, @RequestParam settings: Long, session: HttpSession): WebServer.ResultList = queryService.query(query, settings, session)
+
+    @GetMapping("/storage/{uuid}")
+    fun storage(@PathVariable uuid: String) = temporaryResultStorage.getResults(uuid)
 
     @GetMapping("/get_more")
     fun getMore(session: HttpSession) = queryService.getMore(session)
