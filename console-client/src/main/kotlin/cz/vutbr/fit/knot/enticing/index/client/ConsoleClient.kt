@@ -9,6 +9,7 @@ import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import java.io.File
 import java.io.FileWriter
+import java.util.*
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 
@@ -111,7 +112,7 @@ class ConsoleClient(val args: ConsoleClientArgs, loggerFactory: LoggerFactory) :
     private fun runQuery(query: String) {
         logger.info("Running query '$query'")
         try {
-            val (results, duration) = target.query(SearchQuery(query))
+            val (results, duration) = target.query(SearchQuery(query, uuid = UUID.randomUUID()))
             processResults(query, results, duration, target.name)
         } catch (ex: Exception) {
             ex.printStackTrace()

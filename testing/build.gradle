@@ -14,6 +14,7 @@ dependencies {
     implementation(project(path: ":dto", configuration: 'default'))
     implementation(project(path: ":query-dispatcher", configuration: 'default'))
     implementation(project(path: ":management-core", configuration: 'default'))
+    implementation(project(path: ":console-client", configuration: 'default'))
 
     compile('org.springframework:spring-web:5.2.3.RELEASE')
 

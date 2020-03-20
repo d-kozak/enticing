@@ -13,7 +13,6 @@ class TemporaryResultStorage(loggerFactory: LoggerFactory) {
 
     private data class StorageEntry(
             var resultList: WebServer.ResultList,
-            var isDone: Boolean = false,
             var modifiedAt: Long = System.currentTimeMillis()
     )
 
@@ -39,9 +38,9 @@ class TemporaryResultStorage(loggerFactory: LoggerFactory) {
         if (entry != null) {
             synchronized(entry) {
                 entry.modifiedAt = System.currentTimeMillis()
-                entry.isDone = true
+                entry.resultList.hasMore = false
             }
-        } else memory[id] = StorageEntry(WebServer.ResultList(emptyList()), isDone = true)
+        } else memory[id] = StorageEntry(WebServer.ResultList(emptyList(), hasMore = false))
     }
 
 

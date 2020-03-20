@@ -22,7 +22,8 @@ object WebServer {
             /**
              * Any error messages that came from servers
              */
-            val errors: Map<ServerId, ErrorMessage> = emptyMap()
+            val errors: Map<ServerId, ErrorMessage> = emptyMap(),
+            var hasMore: Boolean = true
     )
 
     /**
