@@ -90,6 +90,24 @@ class ConsoleClient(val args: ConsoleClientArgs, loggerFactory: LoggerFactory) :
         when (parts[0]) {
             "webserver", "w" -> {
                 logger.info("Using webserver")
+
+                if (parts.size == 2) {
+                    val address = parts[1]
+                    val sep = address.indexOf(":")
+                    if (sep != -1) {
+                        enticingConf.webserverConfiguration.address = address.substring(0, sep)
+                        val port = address.substring(sep + 1).toIntOrNull()
+                        if (port != null)
+                            enticingConf.webserverConfiguration.port = port
+                        else logger.warn("Invalid port ${address.substring(sep + 1)}")
+                    } else {
+                        enticingConf.webserverConfiguration.address = address
+                        enticingConf.webserverConfiguration.port = 80
+                    }
+                    logger.info("setting webserver conf to ${enticingConf.webserverConfiguration}")
+
+                }
+
                 target = QueryTarget.WebserverTarget(enticingConf.webserverConfiguration.fullAddress, args.searchSettingsId)
             }
             "dispatch", "d" -> {

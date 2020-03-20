@@ -27,11 +27,11 @@ open class ServerMonitoringService(val fullAddress: String, val componentType: C
     private val mxBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean::class.java)
 
     fun getCurrentServerStatus() = ServerStatus(mxBean.freePhysicalMemorySize, mxBean.processCpuLoad, mxBean.systemCpuLoad).also {
-        logger.info("Current server status are $it")
+        logger.debug("Current server status are $it")
     }
 
     fun getServerInfo() = StaticServerInfo(fullAddress, componentType, Runtime.getRuntime().availableProcessors(), mxBean.totalPhysicalMemorySize)
             .also {
-                logger.info("Static server info requested $it")
+                logger.debug("Static server info requested $it")
             }
 }

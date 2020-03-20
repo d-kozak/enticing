@@ -46,7 +46,7 @@ class TemporaryResultStorage(loggerFactory: LoggerFactory) {
 
     @Scheduled(fixedDelay = 5000)
     fun clearOldEntries() {
-        logger.info("Removing old entries")
+        logger.debug("Removing old entries")
         var count = 0
         memory.values.removeIf {
             val old = System.currentTimeMillis() - it.modifiedAt > 30_000
@@ -54,7 +54,7 @@ class TemporaryResultStorage(loggerFactory: LoggerFactory) {
             old
         }
 
-        logger.info("Removed $count entries")
+        logger.debug("Removed $count entries")
     }
 
 }

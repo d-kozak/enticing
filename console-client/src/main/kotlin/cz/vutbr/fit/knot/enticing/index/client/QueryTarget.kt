@@ -48,7 +48,9 @@ sealed class QueryTarget(val name: String) {
                 try {
                     var cnt = 0
                     var results = address.httpGet()
-                            .responseString().third.get()
+                            .responseString().third.get().let {
+                                if (it.isEmpty()) "null" else it
+                            }
                             .toDto<WebServer.ResultList?>()
                     if (results != null) {
                         println("retrieved ${results.searchResults.size} eager results")
@@ -57,6 +59,9 @@ sealed class QueryTarget(val name: String) {
                     while (results == null || results.hasMore) {
                         results = address.httpGet()
                                 .responseString().third.get()
+                                .let {
+                                    if (it.isEmpty()) "null" else it
+                                }
                                 .toDto()
                         if (results != null) {
                             println("retrieved ${results.searchResults.size} eager results")
