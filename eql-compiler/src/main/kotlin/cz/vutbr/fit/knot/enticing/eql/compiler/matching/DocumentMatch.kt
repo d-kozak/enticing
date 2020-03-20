@@ -20,9 +20,11 @@ data class EqlMatch(
          * Indexes in the document where the simple query was matched
          */
         val match: Interval,
-        val type: EqlMatchType = EqlMatchType.LEAF
+        val type: EqlMatchType = EqlMatchType.Leaf
 )
 
-enum class EqlMatchType {
-    LEAF, ENTITY, IDENTIFIER
+sealed class EqlMatchType {
+    object Leaf : EqlMatchType()
+    object Entity : EqlMatchType()
+    data class Identifier(val name: String) : EqlMatchType()
 }

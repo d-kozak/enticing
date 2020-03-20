@@ -46,7 +46,7 @@ class DocumentMatchingVisitor(val document: IndexedDocument, val metadataConfigu
                 // we have to check that all leaves are at 'entity start' position, e.g. their nerlen is set
                 if (match.eqlMatch.all { nerlen[it.match.from] != "-1" }) {
                     val interval = extendEntityInterval(match.interval)
-                    yield(DocumentMatch(interval, listOf(EqlMatch(node.location, interval, EqlMatchType.ENTITY)), match.children))
+                    yield(DocumentMatch(interval, listOf(EqlMatch(node.location, interval, EqlMatchType.Entity)), match.children))
                 }
             }
         }
@@ -71,7 +71,7 @@ class DocumentMatchingVisitor(val document: IndexedDocument, val metadataConfigu
         val elem = node.elem.accept(this)
         val identifierInterval = Interval.valueOf(node.location.from, node.location.from + node.identifier.length - 1)
         return elem.asSequence()
-                .map { DocumentMatch(it.interval, listOf(EqlMatch(identifierInterval, it.interval, EqlMatchType.IDENTIFIER)), listOf(it)) }
+                .map { DocumentMatch(it.interval, listOf(EqlMatch(identifierInterval, it.interval, EqlMatchType.Identifier(node.identifier))), listOf(it)) }
     }
 
 
@@ -94,7 +94,7 @@ class DocumentMatchingVisitor(val document: IndexedDocument, val metadataConfigu
                 for (right in elem) {
                     if (left.interval == right.interval && nerlen[left.interval.from] != "-1") {
                         val interval = extendEntityInterval(left.interval)
-                        yield(DocumentMatch(interval, listOf(EqlMatch(node.location, interval, EqlMatchType.ENTITY)), listOf(left, right)))
+                        yield(DocumentMatch(interval, listOf(EqlMatch(node.location, interval, EqlMatchType.Entity)), listOf(left, right)))
                     }
                 }
             }

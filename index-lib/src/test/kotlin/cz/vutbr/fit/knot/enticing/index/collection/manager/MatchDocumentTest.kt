@@ -315,7 +315,7 @@ class MatchDocumentTest {
             val result = queryExecutor.doMatch("person.name:John", document)
             assertThat(result.intervals).hasSize(1)
             assertThat(result.intervals[0].interval).isEqualTo(Interval.valueOf(10, 20))
-            assertThat(result.intervals[0].eqlMatch).isEqualTo(listOf(EqlMatch(Interval.valueOf(0, 15), Interval.valueOf(10, 20), EqlMatchType.ENTITY)))
+            assertThat(result.intervals[0].eqlMatch).isEqualTo(listOf(EqlMatch(Interval.valueOf(0, 15), Interval.valueOf(10, 20), EqlMatchType.Entity)))
         }
 
         @Test
@@ -330,7 +330,7 @@ class MatchDocumentTest {
             val result = queryExecutor.doMatch("nertag:person", document)
             assertThat(result.intervals).hasSize(1)
             assertThat(result.intervals[0].interval).isEqualTo(Interval.valueOf(10, 20))
-            assertThat(result.intervals[0].eqlMatch).isEqualTo(listOf(EqlMatch(Interval.valueOf(0, 12), Interval.valueOf(10, 20), EqlMatchType.ENTITY)))
+            assertThat(result.intervals[0].eqlMatch).isEqualTo(listOf(EqlMatch(Interval.valueOf(0, 12), Interval.valueOf(10, 20), EqlMatchType.Entity)))
         }
 
     }

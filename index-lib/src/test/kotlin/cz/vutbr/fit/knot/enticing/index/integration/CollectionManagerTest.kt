@@ -45,17 +45,19 @@ class CollectionManagerTest {
     @Test
     fun `valid queries with all text formats`() {
         val queryEngine = initMg4jCollectionManager(collectionManagerConfiguration, SimpleStdoutLoggerFactory)
-        for (textFormat in TextFormat.values()) {
-            for (input in listOf(
-                    "hello",
-                    "john",
-                    "lemma:work",
-                    "nertag:person",
-                    "job work"
-            )) {
-                val query = templateQuery.copy(query = input, textFormat = textFormat)
-                query.eqlAst = EqlCompiler(SimpleStdoutLoggerFactory).parseOrFail(input, collectionManagerConfiguration.metadataConfiguration)
-                val result = queryEngine.query(query)
+        for (resultFormat in cz.vutbr.fit.knot.enticing.dto.ResultFormat.values()) {
+            for (textFormat in TextFormat.values()) {
+                for (input in listOf(
+                        "hello",
+                        "john",
+                        "lemma:work",
+                        "nertag:person",
+                        "job work"
+                )) {
+                    val query = templateQuery.copy(query = input, textFormat = textFormat, resultFormat = resultFormat)
+                    query.eqlAst = EqlCompiler(SimpleStdoutLoggerFactory).parseOrFail(input, collectionManagerConfiguration.metadataConfiguration)
+                    val result = queryEngine.query(query)
+                }
             }
         }
     }

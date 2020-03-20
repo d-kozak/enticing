@@ -11,21 +11,8 @@ import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 
 class GlobalConstraintEvaluationVisitor(val ast: RootNode, val metadataConfiguration: MetadataConfiguration, val document: IndexedDocument, val match: DocumentMatch) : QueryAgnosticVisitor<Boolean>() {
 
-    internal val identifierMatch: Map<String, EqlMatch>
-
-    init {
-        val nodesByInterval = mutableMapOf<Pair<Int, Int>, String>()
-        ast.forEachNode { node ->
-            if (node is QueryElemNode.AssignNode)
-                nodesByInterval[node.location.from to node.identifier.length] = node.identifier
-        }
-
-        identifierMatch = match.eqlMatch.filter { it.type == EqlMatchType.IDENTIFIER }
-                .associateBy { match ->
-                    nodesByInterval[match.queryInterval.from to match.queryInterval.size]
-                            ?: error("Name for match $match not found")
-                }
-    }
+    internal val identifierMatch: Map<String, EqlMatch> = match.eqlMatch.filter { it.type is EqlMatchType.Identifier }
+            .associateBy { match -> (match.type as EqlMatchType.Identifier).name }
 
 
     override fun visitRootNode(node: RootNode): Boolean {

@@ -3,7 +3,6 @@ package cz.vutbr.fit.knot.enticing.dto
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import java.util.*
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
@@ -57,6 +56,7 @@ data class SearchQuery(
 
         /**
          * Unique id generated for eager fetching
+         * https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
          */
         val uuid: UUID? = null
 ) : GeneralFormatInfo, Query<SearchQuery> {
@@ -170,7 +170,6 @@ enum class ResultFormat {
      * Only return the values of identifiers used in the query
      *
      */
-    @Incomplete("can only be used when EQL is in place")
     IDENTIFIER_LIST
 }
 
