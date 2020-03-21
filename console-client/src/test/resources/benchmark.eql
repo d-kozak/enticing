@@ -1,7 +1,7 @@
 # benchmark queries
 $i knot01.fit.vutbr.cz:5627
-$snippetCount 10000
-$benchmarkIterations 5
+#$snippetCount 10000
+$benchmarkIterations 100
 water
 nertag:person
 nertag:location

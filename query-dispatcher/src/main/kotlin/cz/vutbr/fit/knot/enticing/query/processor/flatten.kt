@@ -9,27 +9,25 @@ fun Map<String, List<MResult<IndexServer.CollectionResultList>>>.flattenResults(
     val matched = mutableListOf<IndexServer.SearchResult>()
     val errors = mutableMapOf<CollectionName, ErrorMessage>()
 
+    val offset = mutableMapOf<CollectionName, Offset>()
+
     for ((collectionName, collectionResults) in this) {
         for (collectionResult in collectionResults) {
             if (collectionResult.isSuccess) {
-                matched.addAll(collectionResult.value.searchResults)
+                val value = collectionResult.value
+                matched.addAll(value.searchResults)
+                if (value.offset != null)
+                    offset[collectionName] = value.offset!!
+                else offset.remove(collectionName)
             } else {
+                offset.remove(collectionName)
                 errors[collectionName] = "${collectionResult.exception::class.simpleName}:${collectionResult.exception.message}"
                 collectionResult.exception.printStackTrace()
             }
         }
     }
 
-    val offset: Map<CollectionName, Offset> =
-            this.map { (collectionName, collectionResults) ->
-                        val last = collectionResults.lastOrNull() ?: return@map null
-                        if (last.isSuccess)
-                            last.value.offset?.let { collectionName to it }
-                        else null
-                    }.filterNotNull()
-                    .toMap()
-
-    return IndexServer.IndexResultList(matched, offset, errors)
+    return IndexServer.IndexResultList(matched, if (offset.isNotEmpty()) offset else null, errors)
 }
 
 fun Map<String, List<MResult<IndexServer.IndexResultList>>>.flattenResults(query: String, logger: Logger): Pair<WebServer.ResultList, MutableMap<String, Map<String, Offset>>> {
@@ -41,11 +39,12 @@ fun Map<String, List<MResult<IndexServer.IndexResultList>>>.flattenResults(query
     for ((serverId, results) in this) {
         for (serverResult in results) {
             if (serverResult.isSuccess) {
-                snippets.addAll(
-                        serverResult.value.searchResults.map { it.withHost(serverId) }
-                )
-                if (serverResult.value.offset.isNotEmpty())
-                    offset[serverId] = serverResult.value.offset
+                snippets.addAll(serverResult.value.searchResults.map { it.withHost(serverId) })
+                val serverOffset = serverResult.value.offset
+                if (serverOffset != null && serverOffset.isNotEmpty())
+                    offset[serverId] = serverOffset
+                else offset.remove(serverId)
+
                 if (serverResult.value.errors.isNotEmpty()) {
                     val msg = serverResult.value.errors.toString()
                     errors[serverId] = msg

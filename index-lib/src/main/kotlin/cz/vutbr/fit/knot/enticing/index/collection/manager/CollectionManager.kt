@@ -34,42 +34,46 @@ class CollectionManager internal constructor(
 
     fun query(query: SearchQuery, offset: Offset = Offset(0, 0)): IndexServer.CollectionResultList {
         logger.info("Executing query $query")
-        val (documentOffset, resultOffset) = offset
+        var (documentOffset, resultOffset) = offset
 
         val ast = if (query.eqlAst == null) {
             query.eqlAst = eqlCompiler.parseOrFail(query.query, metadataConfiguration)
             query.eqlAst!!
         } else query.eqlAst!!
 
-        val (resultList, relevantDocuments) = searchEngine.search(ast.toMgj4Query(), query.snippetCount, documentOffset)
-        if (resultList.isEmpty()) return IndexServer.CollectionResultList(emptyList(), null)
-
         val matched = mutableListOf<IndexServer.SearchResult>()
-        for ((i, result) in resultList.withIndex()) {
-            val document = searchEngine.loadDocument(result.documentId)
-            check(document.id == result.documentId) { "Invalid document id set in the search engine: ${result.documentId} vs ${document.id}" }
-            val matchInfo = postProcessor.process(ast.deepCopy(), document, query.defaultIndex, if (i == 0) resultOffset else 0, metadataConfiguration)
-            if (matchInfo == null || matchInfo.intervals.isEmpty()) continue
-            val (results, hasMore) = resultCreator.multipleResults(document, matchInfo, query, query.snippetCount, query.resultFormat)
-            val searchResults = results.map {
-                IndexServer.SearchResult(
-                        collectionName,
-                        document.id,
-                        document.uri,
-                        document.title,
-                        it)
-            }
-            matched.addAll(searchResults)
-            if (matched.size >= query.snippetCount) {
-                val nextOffset = when {
-                    hasMore && i == 0 -> Offset(documentOffset + i, results.size + resultOffset)
-                    hasMore -> Offset(documentOffset + i, results.size)
-                    else -> Offset(documentOffset + i + 1, 0)
+        var firstDocument = true
+
+        while (true) {
+            val (resultList, relevantDocuments) = searchEngine.search(ast.toMgj4Query(), query.snippetCount, documentOffset)
+            if (resultList.isEmpty()) return IndexServer.CollectionResultList(matched, null)
+            for ((i, result) in resultList.withIndex()) {
+                val document = searchEngine.loadDocument(result.documentId)
+                check(document.id == result.documentId) { "Invalid document id set in the search engine: ${result.documentId} vs ${document.id}" }
+                val matchInfo = postProcessor.process(ast.deepCopy(), document, query.defaultIndex, if (firstDocument) resultOffset else 0, metadataConfiguration)
+                if (matchInfo == null || matchInfo.intervals.isEmpty()) continue
+                val (results, hasMore) = resultCreator.multipleResults(document, matchInfo, query, query.snippetCount, query.resultFormat)
+                val searchResults = results.map {
+                    IndexServer.SearchResult(
+                            collectionName,
+                            document.id,
+                            document.uri,
+                            document.title,
+                            it)
                 }
-                return IndexServer.CollectionResultList(matched, nextOffset)
+                matched.addAll(searchResults)
+                if (matched.size >= query.snippetCount) {
+                    val nextOffset = when {
+                        hasMore && firstDocument -> Offset(documentOffset, results.size + resultOffset)
+                        hasMore -> Offset(documentOffset + i, results.size)
+                        else -> Offset(documentOffset + i + 1, 0)
+                    }
+                    return IndexServer.CollectionResultList(matched, nextOffset)
+                }
+                firstDocument = false
             }
+            documentOffset += resultList.size
         }
-        return IndexServer.CollectionResultList(matched, Offset(documentOffset + resultList.size, 0))
     }
 
     /**

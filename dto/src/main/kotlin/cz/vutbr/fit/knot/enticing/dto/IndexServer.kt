@@ -139,7 +139,7 @@ object IndexServer {
              *
              */
             @field:Valid
-            override val offset: Map<CollectionName, Offset> = emptyMap(),
+            override val offset: Map<CollectionName, Offset>? = null,
 
             /**
              * Errors from collections, if any
