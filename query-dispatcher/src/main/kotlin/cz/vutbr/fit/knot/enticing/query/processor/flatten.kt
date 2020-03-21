@@ -21,8 +21,12 @@ fun Map<String, List<MResult<IndexServer.CollectionResultList>>>.flattenResults(
     }
 
     val offset: Map<CollectionName, Offset> =
-            this.map { (collectionName, collectionResults) -> collectionResults.findLast { it.isSuccess && it.value.offset != null }?.value?.offset?.let { collectionName to it } }
-                    .filterNotNull()
+            this.map { (collectionName, collectionResults) ->
+                        val last = collectionResults.lastOrNull() ?: return@map null
+                        if (last.isSuccess)
+                            last.value.offset?.let { collectionName to it }
+                        else null
+                    }.filterNotNull()
                     .toMap()
 
     return IndexServer.IndexResultList(matched, offset, errors)

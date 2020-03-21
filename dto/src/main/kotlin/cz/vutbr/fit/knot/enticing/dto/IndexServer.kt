@@ -167,7 +167,7 @@ object IndexServer {
             override val offset: Offset? = Offset(0, 0)
     ) : QueryResult<Offset> {
         override fun createRequest(address: String): RequestData<Offset> = CollectionRequestData(address, offset
-                ?: Offset(0, 0))
+                ?: error("Should never be called when offset is null"))
     }
 
     /**

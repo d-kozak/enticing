@@ -24,8 +24,8 @@ class GlobalConfig(
         log.info("Loading configuration from $configFile")
         val config = executeScript<EnticingConfiguration>(configFile)
         log.info("Loaded config")
-        log.info("\n${config.prettyPrint()}")
         config.validateOrFail()
+        config.prettyPrint()
         return config
     }
 

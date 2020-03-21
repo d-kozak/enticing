@@ -15,6 +15,7 @@ import {getMoreResults} from "../../actions/PaginationActions";
 import SearchStatistics from "./SearchStatistics";
 import SnippetViewSwitch from "./SnippetViewSwitch";
 import RawDocumentDialog from "./rawdocumentdialog/RawDocumentDialog";
+import * as H from "history";
 
 const styles = createStyles({
     root: {
@@ -35,10 +36,12 @@ export type SnippetListProps =
     WithStyles<typeof styles>
     & typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
-    & {}
+    & {
+    history: H.History
+}
 
 const SnippetList = (props: SnippetListProps) => {
-    const {snippetIds, corpusFormat, openDocumentDialog, classes, resultsPerPage, hasMore, getMoreResults} = props;
+    const {snippetIds, corpusFormat, history, openDocumentDialog, classes, resultsPerPage, hasMore, getMoreResults} = props;
 
     if (!corpusFormat) {
         return <p>Corpus format not set</p>
@@ -66,6 +69,7 @@ const SnippetList = (props: SnippetListProps) => {
                 (snippetId, index) => <React.Fragment key={index}>
                     {index > 0 && <Divider/>}
                     <SnippetViewSwitch openDocumentRequest={() => openDocumentDialog(snippetId, corpusFormat)}
+                                       history={history}
                                        snippetId={snippetId}/>
                 </React.Fragment>)
         }

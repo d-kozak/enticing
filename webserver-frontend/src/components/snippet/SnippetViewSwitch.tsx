@@ -8,6 +8,7 @@ import {ApplicationState} from "../../ApplicationState";
 import ComplexSnippetView from "./ComplexSnippetView";
 import MinimizedSnippetView from "./MinimizedSnippetView";
 import {isDebugMode} from "../../reducers/selectors";
+import * as H from "history";
 
 
 const styles = (theme: Theme) => createStyles({});
@@ -17,16 +18,18 @@ type SnippetViewSwitchEnhancedProps =
     & ReturnType<typeof mapStateToProps>
     & typeof mapDispatchToProps
     & {
+    history: H.History,
     snippetId: string,
     openDocumentRequest: () => void
 }
 
 const SnippetViewSwitch = (props: SnippetViewSwitchEnhancedProps) => {
-    const {debugMode, openDocumentRequest, snippetId} = props;
+    const {debugMode, openDocumentRequest, history, snippetId} = props;
     if (debugMode) {
-        return <ComplexSnippetView snippetId={snippetId} openDocumentRequest={openDocumentRequest}/>;
+        return <ComplexSnippetView snippetId={snippetId} history={history} openDocumentRequest={openDocumentRequest}/>;
     } else {
-        return <MinimizedSnippetView snippetId={snippetId} openDocumentRequest={openDocumentRequest}/>;
+        return <MinimizedSnippetView snippetId={snippetId} history={history}
+                                     openDocumentRequest={openDocumentRequest}/>;
     }
 };
 

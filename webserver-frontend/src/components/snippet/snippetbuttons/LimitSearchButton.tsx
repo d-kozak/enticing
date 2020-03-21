@@ -14,8 +14,6 @@ import RemoveIcon from "@material-ui/icons/Remove";
 import {User} from "../../../entities/User";
 import {SearchSettings} from "../../../entities/SearchSettings";
 import * as H from "history";
-// @ts-ignore
-import {useHistory} from "react-router-dom";
 import {SearchResult} from "../../../entities/SearchResult";
 
 
@@ -26,13 +24,12 @@ export type LimitSearchButtonProps =
     & typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
     & {
-    snippet: SearchResult
+    snippet: SearchResult,
+    history: H.History
 }
 
 const LimitSearchButton = (props: LimitSearchButtonProps) => {
-    const {query, snippet, user, startSearching, openSnackbar, selectedSettings} = props;
-
-    const history = useHistory();
+    const {query, snippet, history, user, startSearching, openSnackbar, selectedSettings} = props;
 
     const onClick = () => {
         if (selectedSettings === null) {

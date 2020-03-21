@@ -48,7 +48,7 @@ const SearchPage = (props: SearchPageProps) => {
 
     return <div>
         <SearchInput className={classes.searchInput} history={history}/>
-        {hasSnippets ? <SnippetList/> : <NoResultsFound loadingMore={loadingMore}/>}
+        {hasSnippets ? <SnippetList history={history}/> : <NoResultsFound loadingMore={loadingMore}/>}
     </div>
 };
 

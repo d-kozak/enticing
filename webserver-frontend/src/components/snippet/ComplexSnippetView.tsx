@@ -17,6 +17,7 @@ import {parseSearchResultRequest} from "../../reducers/SearchResultReducer";
 import {getSelectedMetadataForCurrentSettings, isDebugMode} from "../../reducers/selectors";
 import ShowRawDocumentButton from "./snippetbuttons/ShowRawDocumentButton";
 import LimitSearchButton from "./snippetbuttons/LimitSearchButton";
+import * as H from "history";
 
 
 const styles = createStyles({
@@ -27,6 +28,7 @@ const styles = createStyles({
 
 export interface ComplexSnippetViewProps {
     snippetId: string,
+    history: H.History,
     openDocumentRequest: () => void
 }
 
@@ -34,7 +36,7 @@ export type  ComplexSnippetViewEnhanedProps = WithStyles<typeof styles> & typeof
     & ReturnType<typeof mapStateToProps> & ComplexSnippetViewProps
 
 const ComplexSnippetView = (props: ComplexSnippetViewEnhanedProps) => {
-    const {snippet, snippetId, corpusFormat, query, debugMode, metadata, parseSearchResult, requestContextExtension, openDocumentRequest, classes} = props;
+    const {snippet, snippetId, corpusFormat, query, history, debugMode, metadata, parseSearchResult, requestContextExtension, openDocumentRequest, classes} = props;
     if (!snippet) {
         return <p>snippet with id {snippetId} not found</p>
     }
@@ -55,7 +57,7 @@ const ComplexSnippetView = (props: ComplexSnippetViewEnhanedProps) => {
                     <EditAnnotationsButton/>
                     <ShowDocumentButton openDocumentRequest={openDocumentRequest}/>
                     <GotoSourceButton searchResult={snippet}/>
-                    <LimitSearchButton snippet={snippet}/>
+                    <LimitSearchButton history={history} snippet={snippet}/>
                 </Grid>
                 <Grid item>
                     <b>{snippet.documentTitle}</b>
