@@ -41,6 +41,8 @@ class ConsoleClientArgs(parser: ArgParser) {
 
     val query by parser.storing("-q", "--query", help = "Query to execute").default("")
 
+    val benchmark by parser.storing("-b", "--benchmark", help = "benchmark to run").default("")
+
     val shell by parser.flagging("-s", "--shell", help = "Run interactive shell")
 
     val appendFiles by parser.flagging("-a", "--append", help = "Append to the output files instead of rewriting them")

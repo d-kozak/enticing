@@ -32,6 +32,11 @@ class IntegrationTests {
         fun `queries from file`() {
             runWithArguments("-f src/test/resources/queries.eql")
         }
+
+        @Test
+        fun `run benchmark`() {
+            runWithArguments("-b src/test/resources/benchmark.eql")
+        }
     }
 
 

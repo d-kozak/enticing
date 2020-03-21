@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.client
 
+import cz.vutbr.fit.knot.enticing.dto.Defaults
 import cz.vutbr.fit.knot.enticing.dto.IndexServer
 import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
@@ -27,7 +28,7 @@ class ConsoleClient(val args: ConsoleClientArgs, loggerFactory: LoggerFactory) :
 
     private val logger = loggerFactory.logger { }
 
-    private var target = if (args.useWebserver) QueryTarget.WebserverTarget(enticingConf.webserverConfiguration.fullAddress, args.searchSettingsId)
+    var target = if (args.useWebserver) QueryTarget.WebserverTarget(enticingConf.webserverConfiguration.fullAddress, args.searchSettingsId)
     else QueryTarget.QueryDispatcherTarget(corpusConf)
 
 
@@ -37,6 +38,9 @@ class ConsoleClient(val args: ConsoleClientArgs, loggerFactory: LoggerFactory) :
 
     private val perfWriter = FileWriter(args.perfFile, args.appendFiles)
 
+    var snippetCount = Defaults.snippetCount
+
+    var benchmarkIterations = 100
 
     private val tokenIndex = corpusConf.metadataConfiguration.indexOf("token")
 
@@ -53,6 +57,7 @@ class ConsoleClient(val args: ConsoleClientArgs, loggerFactory: LoggerFactory) :
         when {
             args.query.isNotEmpty() -> runQuery(args.query)
             args.queryFile.isNotEmpty() -> runFromFile(args.queryFile)
+            args.benchmark.isNotEmpty() -> runBenchmark(File(args.benchmark))
             args.shell -> runShell()
             else -> {
                 logger.warn("No option specified, starting the shell as a default")
@@ -77,10 +82,12 @@ class ConsoleClient(val args: ConsoleClientArgs, loggerFactory: LoggerFactory) :
 
 
     private fun Sequence<String>.withCommandHandler(): Sequence<String> = sequence {
-        for (line in this@withCommandHandler) {
-            if (line.startsWith("$"))
-                handleCommand(line.substring(1))
-            else yield(line)
+        loop@ for (line in this@withCommandHandler) {
+            when {
+                line.startsWith("#") -> continue@loop
+                line.startsWith("$") -> handleCommand(line.substring(1))
+                else -> yield(line)
+            }
         }
     }
 
@@ -132,14 +139,67 @@ class ConsoleClient(val args: ConsoleClientArgs, loggerFactory: LoggerFactory) :
                 }
                 logger.info("new format ${this.resultFormat}")
             }
+            "benchmark", "b" -> {
+                if (parts.size != 2) {
+                    logger.warn("Query file expected")
+                    return
+                }
+                runBenchmark(File(parts[1]))
+            }
+            "snippetCount" -> {
+                if (parts.size < 2) {
+                    logger.warn("limit expected")
+                    return
+                }
+                val num = parts[1].toIntOrNull()
+                if (num == null) {
+                    logger.warn("${parts[1]} is not a number")
+                    return
+                }
+                snippetCount = num
+                logger.info("Set snippet count to $num")
+            }
+            "benchmarkIterations" -> {
+                if (parts.size < 2) {
+                    logger.warn("one number expected")
+                    return
+                }
+                val num = parts[1].toIntOrNull()
+                if (num == null) {
+                    logger.warn("${parts[1]} is not a number")
+                    return
+                }
+                benchmarkIterations = num
+                logger.info("Set benchmark iterations to $benchmarkIterations")
+            }
             else -> logger.warn("Unknown command $cmd")
+        }
+    }
+
+    private fun runBenchmark(input: File) {
+        logger.info("Running benchmark from file ${input.absolutePath}")
+        if (!input.isFile || !input.canRead()) {
+            logger.warn("Invalid file ${input.absolutePath}")
+            return
+        }
+        val queries = input.readLines()
+                .asSequence()
+                .withCommandHandler()
+
+        val results = runBenchmark(queries, this, logger)
+        val resultFile = "${input.absolutePath}.out.csv"
+        FileWriter(resultFile).use {
+            it.appendln(BenchmarkResult.CSV_HEADER)
+            for (result in results) {
+                it.appendln(result.toCsv())
+            }
         }
     }
 
     private fun runQuery(query: String) {
         logger.info("Running query '$query'")
         try {
-            val (results, duration) = target.query(SearchQuery(query, resultFormat = resultFormat, uuid = UUID.randomUUID()))
+            val (results, duration) = target.query(SearchQuery(query, snippetCount = snippetCount, resultFormat = resultFormat, uuid = UUID.randomUUID()))
             processResults(query, results, duration, target.name)
         } catch (ex: Exception) {
             ex.printStackTrace()
