@@ -30,7 +30,10 @@ const SearchInput = (props: SearchInputProps) => {
 
     const params = new URLSearchParams(location.search);
 
-    const [query, setQuery] = useState<string>(params.get('query') || initialQuery);
+    let urlQuery = params.get('query');
+    if (urlQuery) urlQuery = urlQuery.replace("||", "&&");
+
+    const [query, setQuery] = useState<string>(urlQuery || initialQuery);
 
     const [cnt, setCnt] = useState(0);
 

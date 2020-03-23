@@ -155,7 +155,9 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
             }));
 
             if (history) {
-                history.push(`/search?query=${encodeURI(query)}`);
+                const encoded = encodeURI(query)
+                    .replace("&&", "||");
+                history.push(`/search?query=${encoded}`);
                 redirected = true;
             }
 

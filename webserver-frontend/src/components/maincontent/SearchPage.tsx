@@ -37,7 +37,8 @@ const SearchPage = (props: SearchPageProps) => {
     const {classes, hasSnippets, history, location, loadingMore, searchStarted, user, selectedSettings, startSearching} = props;
 
     const params = new URLSearchParams(location.search);
-    const query = params.get("query");
+    let query = params.get("query");
+    if (query) query = query.replace("||", "&&");
 
     useEffect(() => {
         if (query && !searchStarted && selectedSettings != null) {
