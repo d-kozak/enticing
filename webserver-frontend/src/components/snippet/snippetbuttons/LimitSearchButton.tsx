@@ -36,7 +36,7 @@ const LimitSearchButton = (props: LimitSearchButtonProps) => {
             openSnackbar("no search settings selected");
             return
         }
-        const constraint = `document.url:'${snippet.url}'`;
+        const constraint = `document.uuid:'${snippet.uuid}'`;
         startSearching(constraint + " " + query, user, selectedSettings, history);
     };
 

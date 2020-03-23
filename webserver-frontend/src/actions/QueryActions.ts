@@ -89,7 +89,7 @@ function mainRequest(searchSettings: SearchSettings, searchQuery: SearchQuery, t
         timer.finish();
     }).catch((error) => {
         console.error(error);
-        if (error.response.status == 400) {
+        if (error.status == 400) {
             let msg = `Cannot search, query '${query}' is not valid`;
             console.error(msg);
             dispatch(openSnackbar(msg));
@@ -97,6 +97,10 @@ function mainRequest(searchSettings: SearchSettings, searchQuery: SearchQuery, t
             dispatch(openSnackbar(`Could not load search results`));
         }
         dispatch(hideProgressbar());
+        dispatch(appendMoreSearchResults({
+            searchResults: [],
+            hasMore: false
+        }))
     })
 }
 

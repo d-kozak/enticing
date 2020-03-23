@@ -24,6 +24,7 @@ export function isPayload(obj: Object): obj is Payload {
 
 export interface SearchResult {
     id: string
+    uuid: string
     host: string
     collection: string
     documentId: number
@@ -35,6 +36,7 @@ export interface SearchResult {
 
 export const searchResultSchema = yup.object({
     host: yup.string().required(),
+    uuid: yup.string().required(),
     collection: yup.string().required(),
     documentId: yup.number().integer().required(),
     url: yup.string().url().required(),
