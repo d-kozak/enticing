@@ -45,7 +45,8 @@ const AnnotatedWord = (props: AnnotatedWordProps) => {
 
     return <React.Fragment>
         <Tooltip
-            enterDelay={750}
+            enterDelay={500}
+            leaveDelay={200}
             interactive={true}
             classes={{tooltip: classes.tooltip}}
             title={<AnnotationContent text={text} corpusFormat={corpusFormat} word={word} enclosingEntity={entity}
