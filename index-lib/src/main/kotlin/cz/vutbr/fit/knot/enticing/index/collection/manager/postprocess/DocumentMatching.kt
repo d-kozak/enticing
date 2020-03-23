@@ -1,14 +1,17 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
+import cz.vutbr.fit.knot.enticing.dto.interval.substring
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.EqlAstNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.QueryElemNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.RootNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.EqlListener
 import cz.vutbr.fit.knot.enticing.eql.compiler.matching.DocumentMatch
 import cz.vutbr.fit.knot.enticing.eql.compiler.matching.EqlMatch
+import cz.vutbr.fit.knot.enticing.eql.compiler.matching.EqlMatchType
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import cz.vutbr.fit.knot.enticing.index.boundary.MatchInfo
 import cz.vutbr.fit.knot.enticing.log.Logger
@@ -31,6 +34,22 @@ fun Logger.dumpNodesByIndex(nodeByIndex: Array<List<QueryElemNode.SimpleNode>>, 
     this.debug("Nodes by index mapping: \n$msg")
 }
 
+@Cleanup("this testing is very fragile, maybe compare the AST structure instead of text (to avoid problems with whitespaces), or even better, change somehow the algorithm, so that these redundancies do not occur")
+fun isRedundant(match: DocumentMatch, symbolTable: Map<String, QueryElemNode.AssignNode>, originalQuery: String): Boolean {
+    val lastOccurrence = mutableMapOf<String, Interval>()
+    for (eqlMatch in match.eqlMatch) {
+        var id = originalQuery.substring(eqlMatch.queryInterval)
+        val matchType = eqlMatch.type
+        if (matchType is EqlMatchType.Identifier) {
+            id = originalQuery.substring(symbolTable.getValue(matchType.name).elem.location)
+        }
+        val prev = lastOccurrence[id]
+        if (prev == null || prev == eqlMatch.match || prev.to <= eqlMatch.match.from) {
+            lastOccurrence[id] = eqlMatch.match
+        } else return true
+    }
+    return false
+}
 
 /**
  * This file contains all the logic which performs query to document matching, inspiration should be taken from
@@ -44,6 +63,7 @@ fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: Stri
     val seq = evaluateQuery(ast, document, defaultIndex, metadataConfiguration, interval)
             .drop(resultOffset)
             .filter { it.interval.size < 50 }
+            .filterNot { isRedundant(it, ast.symbolTable ?: emptyMap(), ast.originalQuery) }
             .filter { ast.accept(GlobalConstraintEvaluationVisitor(ast, metadataConfiguration, document, it)) }
     return MatchInfo(seq.take(512).toList())
 }

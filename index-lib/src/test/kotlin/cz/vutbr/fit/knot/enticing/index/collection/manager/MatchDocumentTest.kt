@@ -442,6 +442,71 @@ class MatchDocumentTest {
             assertThat(result.intervals[0].interval).isEqualTo(Interval.valueOf(10))
         }
     }
+
+    /**
+     * Query A & A currently returns the same interval twice. If one in on index X and the other on index Y, it returns both [X,Y] and [Y,X].
+     * This leads to duplication, it has to be corrected
+     *
+     */
+    @Nested
+    inner class NoDuplicitiesInAnd {
+
+
+        @Test
+        @DisplayName("person.name:John person.name:John")
+        fun `without global constraints`() {
+            val document = TestDocument(100)
+
+            document["nertag"][3] = "person"
+            document["param0"][3] = "google.com"
+            document["param2"][3] = "John"
+
+            document["nertag"][7] = "person"
+            document["param0"][7] = "yahoo.com"
+            document["param2"][7] = "John"
+
+            val result = queryExecutor.doMatch("person.name:John person.name:John", document)
+            assertThat(result.intervals).hasSize(3)
+        }
+
+
+        @Test
+        @DisplayName("a:=person.name:John b:=person.name:John && a.url != b.url")
+        fun `should return only one result`() {
+            val document = TestDocument(100)
+
+            document["nertag"][3] = "person"
+            document["param0"][3] = "google.com"
+            document["param2"][3] = "John"
+
+            document["nertag"][7] = "person"
+            document["param0"][7] = "yahoo.com"
+            document["param2"][7] = "John"
+
+            val result = queryExecutor.doMatch("a:=person.name:John b:=person.name:John && a.url != b.url", document)
+            assertThat(result.intervals).hasSize(1)
+        }
+
+        @Test
+        @DisplayName("a:=person.name:John b:=person.name:John && a.url != b.url")
+        fun `should return ten results`() {
+            val document = TestDocument(1000)
+
+            repeat(10) {
+                val offset = it * 100
+                document["nertag"][offset + 3] = "person"
+                document["param0"][offset + 3] = "google.com"
+                document["param2"][offset + 3] = "John"
+
+                document["nertag"][offset + 7] = "person"
+                document["param0"][offset + 7] = "yahoo.com"
+                document["param2"][offset + 7] = "John"
+            }
+
+            val result = queryExecutor.doMatch("a:=person.name:John b:=person.name:John && a.url != b.url", document)
+            assertThat(result.intervals).hasSize(10)
+        }
+    }
 }
 
 class TestQueryExecutor(private val metadataConfiguration: MetadataConfiguration) {

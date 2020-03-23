@@ -28,6 +28,7 @@ class EqlCompiler(loggerFactory: LoggerFactory) {
         val (parseTree, errors) = parseWithAntlr(input)
         if (errors.isNotEmpty()) throw EqlCompilerException(errors.toString())
         val ast = parseTree.toEqlAst()
+        ast.originalQuery = input
         val semanticErrors = analyzer.performAnalysis(ast)
         if (semanticErrors.isNotEmpty()) throw EqlCompilerException(semanticErrors.toString())
         ast
@@ -38,6 +39,7 @@ class EqlCompiler(loggerFactory: LoggerFactory) {
         val (parseTree, errors) = parseWithAntlr(input)
         if (errors.isEmpty()) {
             val ast = parseTree.toEqlAst()
+            ast.originalQuery = input
             val semanticErrors = analyzer.performAnalysis(ast)
             ParsedQuery(ast, semanticErrors)
         } else {

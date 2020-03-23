@@ -69,6 +69,8 @@ data class RootNode(val query: QueryElemNode, val constraint: ConstraintNode?, o
     var contextRestriction: ContextRestriction? = null
     var documentRestriction: DocumentRestriction? = null
 
+    lateinit var originalQuery: String
+
     override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitRootNode(this)
 }
 
