@@ -48,7 +48,7 @@ const AnnotatedWord = (props: AnnotatedWordProps) => {
             enterDelay={750}
             interactive={true}
             classes={{tooltip: classes.tooltip}}
-            title={<AnnotationContent corpusFormat={corpusFormat} word={word} enclosingEntity={entity}
+            title={<AnnotationContent text={text} corpusFormat={corpusFormat} word={word} enclosingEntity={entity}
                                       queryMatch={queryMatch}/>}>
             <span style={style}>{text}</span>
         </Tooltip>
