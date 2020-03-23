@@ -19,7 +19,7 @@ const styles = (theme: Theme) => createStyles({
 });
 
 type QueryMappingTooltipProps = WithStyles<typeof styles> & {
-    content: React.ReactNode
+    content: React.ReactNode,
     decoration: string,
 }
 
@@ -31,6 +31,8 @@ const QueryMappingTooltip = (props: QueryMappingTooltipProps) => {
     const tooltipContent = <Typography variant="h6">{decoration}</Typography>
 
     return <Tooltip
+        enterDelay={750}
+        interactive={true}
         title={tooltipContent}
         classes={{tooltip}}
         placement="top"
