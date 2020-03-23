@@ -22,6 +22,7 @@ class RewriteDocumentRestrictionCheck(id: String) : EqlAstCheck<QueryElemNode.At
             "id" -> DocumentRestriction.Id(value)
             "title" -> DocumentRestriction.Title(value)
             "url" -> DocumentRestriction.Url(value)
+            "uuid" -> DocumentRestriction.Uuid(value)
             else -> {
                 reporter.error("Unknown document restriction type ${node.attribute}", node.elem.location, id)
                 return

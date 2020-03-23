@@ -225,9 +225,16 @@ object WebServer {
 
             /**
              * What document the snippet came from
+             * The sequential index of that document
              */
             @field:Positive
             val documentId: Int,
+
+            /**
+             * Uuid of the document the snippet came from
+             */
+            @field:NotEmpty
+            val uuid: String,
 
             /**
              * Url of the original document
@@ -248,6 +255,6 @@ object WebServer {
             @field:Valid
             val payload: ResultFormat
     ) {
-        fun toIndexServerFormat() = IndexServer.SearchResult(collection, documentId, url, documentTitle, payload)
+        fun toIndexServerFormat() = IndexServer.SearchResult(collection, documentId, uuid, url, documentTitle, payload)
     }
 }

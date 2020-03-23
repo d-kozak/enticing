@@ -57,6 +57,7 @@ class CollectionManager internal constructor(
                     IndexServer.SearchResult(
                             collectionName,
                             document.id,
+                            document.uuid,
                             document.uri,
                             document.title,
                             it)

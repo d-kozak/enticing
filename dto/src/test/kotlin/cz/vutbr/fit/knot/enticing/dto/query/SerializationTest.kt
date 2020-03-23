@@ -78,6 +78,7 @@ class SerializationTest {
                             documentId = 23,
                             documentTitle = "title1",
                             url = "google.com",
+                            uuid = "c1be4c68-2e2a-4823-a8e3-0b52fc0e6a19",
                             payload = ResultFormat.Snippet.Html("hello html", 0, 0, false)
                     )),
                     offset = mapOf("one" to Offset(10, 20))
@@ -94,6 +95,7 @@ class SerializationTest {
                             documentId = 23,
                             documentTitle = "title1",
                             url = "google.com",
+                            uuid = "c1be4c68-2e2a-4823-a8e3-0b52fc0e6a19",
                             payload = ResultFormat.Snippet.StringWithMetadata(StringWithMetadata(
                                     "foo bar baz",
                                     emptyMap(),
@@ -115,6 +117,7 @@ class SerializationTest {
                             documentId = 23,
                             documentTitle = "title3",
                             url = "google.com",
+                            uuid = "c1be4c68-2e2a-4823-a8e3-0b52fc0e6a19",
                             payload = ResultFormat.IdentifierList(
                                     listOf(
                                             Identifier("x", ResultFormat.Snippet.StringWithMetadata(StringWithMetadata(

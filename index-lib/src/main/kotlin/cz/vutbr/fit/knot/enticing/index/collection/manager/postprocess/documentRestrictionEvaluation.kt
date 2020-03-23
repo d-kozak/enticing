@@ -7,5 +7,6 @@ fun DocumentRestriction?.evaluate(document: IndexedDocument): Boolean = when (th
     is DocumentRestriction.Id -> this.text == document.uuid
     is DocumentRestriction.Title -> this.text == document.title
     is DocumentRestriction.Url -> this.text == document.uri
+    is DocumentRestriction.Uuid -> this.text == document.uuid
     null -> true
 }

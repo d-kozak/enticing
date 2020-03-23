@@ -187,6 +187,12 @@ object IndexServer {
             val documentId: Int,
 
             /**
+             * Uuid of the document the snippet came from
+             */
+            @field:NotEmpty
+            val uuid: String,
+
+            /**
              * Url of the original document
              */
             @field:NotEmpty
@@ -206,7 +212,7 @@ object IndexServer {
             val payload: ResultFormat
     ) {
 
-        fun withHost(host: String): WebServer.SearchResult = WebServer.SearchResult(host, collection, documentId, url, documentTitle, payload)
+        fun withHost(host: String): WebServer.SearchResult = WebServer.SearchResult(host, collection, documentId, uuid, url, documentTitle, payload)
     }
 
 }

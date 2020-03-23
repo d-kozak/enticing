@@ -85,6 +85,7 @@ sealed class DocumentRestriction {
     data class Id(val text: String) : DocumentRestriction()
     data class Title(val text: String) : DocumentRestriction()
     data class Url(val text: String) : DocumentRestriction()
+    data class Uuid(val text: String) : DocumentRestriction()
 }
 
 sealed class QueryElemNode : EqlAstNode() {

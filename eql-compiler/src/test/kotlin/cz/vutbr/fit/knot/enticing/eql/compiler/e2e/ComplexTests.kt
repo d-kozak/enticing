@@ -96,8 +96,8 @@ class ComplexTests {
     @DisplayName("(influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist)) ctx:par && influencer.url != influencee.url")
     fun ten() {
         val (ast, errors) = compiler.parseAndAnalyzeQuery("nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < nertag:(person|artist) ctx:par", config)
-        ast as RootNode
         assertThat(errors).isEmpty()
+        ast as RootNode
         assertThat(ast.toMgj4Query()).isEqualTo("((((nertag:((person | artist)){{nertag->token}}) < (((lemma:((influence | impact)){{lemma->token}}) | ((lemma:(paid){{lemma->token}}) < (lemma:(tribute){{lemma->token}}))) < ((nertag:((person | artist)){{nertag->token}})))))  - §)")
         assertThat(ast.contextRestriction).isEqualTo(ContextRestriction.PARAGRAPH)
     }
@@ -107,10 +107,21 @@ class ComplexTests {
     @DisplayName("person.name:Honz* lemma:(work  < ( from home ))  ctx:sent doc.url:'https://www.google.com'")
     fun eleven() {
         val (ast, errors) = compiler.parseAndAnalyzeQuery("person.name:Honz* lemma:(work  < ( from home ))  ctx:sent doc.url:'https://www.google.com'", config)
-        ast as RootNode
         assertThat(errors).isEmpty()
+        ast as RootNode
         assertThat(ast.toMgj4Query()).isEqualTo("(((((nertag:person{{nertag->token}}) ^ (param2:(Honz*){{param2->token}})) & (lemma:((work < (from & home))){{lemma->token}})))  - ¶)")
         assertThat(ast.contextRestriction).isEqualTo(ContextRestriction.SENTENCE)
         assertThat(ast.documentRestriction).isEqualTo(DocumentRestriction.Url("https://www.google.com"))
+    }
+
+    @Test
+    @DisplayName("person.name:Honz* lemma:(work  < ( from home ))  ctx:sent doc.uuid:'1e07edd3-5042-5605-9d68-5b5eeafe1e40'")
+    fun twelve() {
+        val (ast, errors) = compiler.parseAndAnalyzeQuery("person.name:Honz* lemma:(work  < ( from home ))  ctx:sent doc.uuid:'1e07edd3-5042-5605-9d68-5b5eeafe1e40'", config)
+        assertThat(errors).isEmpty()
+        ast as RootNode
+        assertThat(ast.toMgj4Query()).isEqualTo("(((((nertag:person{{nertag->token}}) ^ (param2:(Honz*){{param2->token}})) & (lemma:((work < (from & home))){{lemma->token}})))  - ¶)")
+        assertThat(ast.contextRestriction).isEqualTo(ContextRestriction.SENTENCE)
+        assertThat(ast.documentRestriction).isEqualTo(DocumentRestriction.Uuid("1e07edd3-5042-5605-9d68-5b5eeafe1e40"))
     }
 }

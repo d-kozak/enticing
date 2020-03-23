@@ -20,6 +20,7 @@ internal val googleFirstResult = IndexServer.IndexResultList(
         listOf(IndexServer.SearchResult(
                 "col",
                 10,
+                "c1be4c68-2e2a-4823-a8e3-0b52fc0e6a19",
                 "google.com",
                 "title",
                 ResultFormat.Snippet.Html("texty text", 10, 5, false)

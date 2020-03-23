@@ -94,6 +94,31 @@ class IntegrationTests {
                 }
             }
         }
+
+        @Test
+        fun `by uuid`() {
+            val docUuids = setOf("1e07edd3-5042-5605-9d68-5b5eeafe1e40",
+                    "328a2ed3-ef05-5b06-8efc-5b8940ed30da",
+                    "328a2ed3-ef05-5b06-8efc-5b8940ed30da",
+                    "328a2ed3-ef05-5b06-8efc-5b8940ed30da",
+                    "c29969d4-2014-5c01-8448-06b1b054e25c",
+                    "78ae9e01-0ff7-548e-a3c8-051c6caff76b",
+                    "d1c42edb-ce79-5cdc-827d-0b392ccf8232",
+                    "2e581b65-1e18-54e2-a31b-9bb0964df978",
+                    "2e581b65-1e18-54e2-a31b-9bb0964df978",
+                    "2e581b65-1e18-54e2-a31b-9bb0964df978",
+                    "2e581b65-1e18-54e2-a31b-9bb0964df978",
+                    "d2850166-8864-5fe6-8cee-c010685effad",
+                    "d2850166-8864-5fe6-8cee-c010685effad")
+
+            for (uuid in docUuids) {
+                val result = collectionManager.query(templateQuery.copy(query = "water document.uuid:'$uuid'"))
+                result.checkContent {
+                    highlights("water")
+                    this.uuid = uuid
+                }
+            }
+        }
     }
 
     @Nested
@@ -113,7 +138,8 @@ class IntegrationTests {
 data class Requirements(
         val highlights: MutableList<String> = mutableListOf(),
         var title: String? = null,
-        var url: String? = null
+        var url: String? = null,
+        var uuid: String? = null
 ) {
 
     var sentenceLimit: Boolean = true
@@ -163,6 +189,9 @@ class DocumentChecker(val result: IndexServer.SearchResult, val requirements: Re
             reportError("Only documents with title '${requirements.title}' expected, this one had '${result.documentTitle}'")
         if (requirements.url != null && requirements.url != result.url)
             reportError("Only documents with url '${requirements.url}' expected, this one had '${result.url}'")
+
+        if (requirements.uuid != null && requirements.uuid != result.uuid)
+            reportError("Only documents with uuid ${requirements.uuid} expected, this one had '${result.uuid}'")
     }
 
     fun reportError(msg: String) {
