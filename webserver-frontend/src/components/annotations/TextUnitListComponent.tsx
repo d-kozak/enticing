@@ -28,9 +28,10 @@ const TextUnitListComponent = (props: AnnotatedTextComponentProps) => {
     let tokenIndex = Object.keys(corpusFormat.indexes).indexOf("token");
     try {
         return <div className={classes.root}>
-            {text.content.map((elem, index) => <React.Fragment key={index}>
-                {renderElement(elem, query, corpusFormat, metadata, tokenIndex, showParagraphs)}
-            </React.Fragment>)}
+            {text.content
+                .flatMap(elem => renderElements(elem, query, corpusFormat, metadata, tokenIndex, showParagraphs))
+                .map((elem, index) => <React.Fragment key={index}> {elem}</React.Fragment>)
+            }
         </div>
     } catch (e) {
         console.error(e.message);
@@ -50,39 +51,34 @@ function chooseColor(entity: Entity, metadata: SelectedMetadata | null): string 
     return "red";
 }
 
-export const renderElement = (text: TextUnit, query: string, corpusFormat: CorpusFormat, metadata: SelectedMetadata | null, tokenIndex: number, showParagraphs: boolean, enclosingEntity?: Entity, entityColor?: string, queryMatch?: string): React.ReactNode => {
+export const renderElements = (text: TextUnit, query: string, corpusFormat: CorpusFormat, metadata: SelectedMetadata | null, tokenIndex: number, showParagraphs: boolean, enclosingEntity?: Entity, entityColor?: string, queryMatch?: string): Array<React.ReactNode> => {
     if (text instanceof Word) {
         if (tokenIndex != -1) {
             if (text.indexes[tokenIndex] === "¶")
-                return <span/>;
+                return [<span/>];
             if (text.indexes[tokenIndex] === "§")
-                return <span>
+                return [<span>
                     {showParagraphs && <br/>}
                     {showParagraphs && <br/>}
-                </span>
+                </span>]
         }
-        if (text.indexes.length === 1) return text.indexes[0] + (text.indexes[text.indexes.length - 1] != 'N' ? ' ' : '');
-        return <AnnotatedWord word={text} corpusFormat={corpusFormat} enclosingEntity={enclosingEntity}
-                              color={entityColor} queryMatch={queryMatch}/>
+        if (text.indexes.length === 1) return [
+            <span>{text.indexes[0] + (text.indexes[text.indexes.length - 1] != 'N' ? ' ' : '')}</span>
+        ];
+        return [<AnnotatedWord word={text} corpusFormat={corpusFormat} enclosingEntity={enclosingEntity}
+                               color={entityColor} queryMatch={queryMatch}/>];
     } else if (text instanceof Entity) {
         const color = chooseColor(text, metadata);
-        return <React.Fragment>
-            {text.words.map((word, i) => <React.Fragment
-                key={i}> {renderElement(word, query, corpusFormat, metadata, tokenIndex, showParagraphs, text, color, queryMatch)} </React.Fragment>)}
-        </React.Fragment>
+        return text.words.flatMap((word, i) => renderElements(word, query, corpusFormat, metadata, tokenIndex, showParagraphs, text, color, queryMatch));
+
     } else if (text instanceof QueryMatch) {
         let decoration = "unknown";
         if (text.queryMatch.from >= 0 && text.queryMatch.from <= text.queryMatch.to && text.queryMatch.to < query.length) {
             decoration = query.substring(text.queryMatch.from, text.queryMatch.to + 1)
         }
-        return <React.Fragment>
-            {text.content.map((elem, index) => <React.Fragment key={index}>
-                    {renderElement(elem, query, corpusFormat, metadata, tokenIndex, showParagraphs, undefined, undefined, decoration)}
-                </React.Fragment>
-            )}
-        </React.Fragment>;
+        return text.content.flatMap((elem, index) => renderElements(elem, query, corpusFormat, metadata, tokenIndex, showParagraphs, undefined, undefined, decoration));
     } else {
         console.error(`unknown text unit type ${text}`);
-        return <span>err</span>
+        return [<span>err</span>];
     }
 };
