@@ -1,6 +1,5 @@
 import React from "react";
 import AnnotatedWord from "./AnnotatedWord";
-import QueryMappingTooltip from "./QueryMappingTooltip";
 import {Entity, QueryMatch, TextUnit, TextUnitList, Word} from "./TextUnitList";
 import {Theme, WithStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/es/styles/createStyles";
@@ -18,9 +17,9 @@ const styles = (theme: Theme) => createStyles({
 
 type AnnotatedTextComponentProps = WithStyles<typeof styles> & {
     text: TextUnitList,
-    query: string
+    query: string,
     corpusFormat: CorpusFormat,
-    metadata: SelectedMetadata | null
+    metadata: SelectedMetadata | null,
     showParagraphs: boolean
 }
 
@@ -51,7 +50,7 @@ function chooseColor(entity: Entity, metadata: SelectedMetadata | null): string 
     return "red";
 }
 
-export const renderElement = (text: TextUnit, query: string, corpusFormat: CorpusFormat, metadata: SelectedMetadata | null, tokenIndex: number, showParagraphs: boolean): React.ReactNode => {
+export const renderElement = (text: TextUnit, query: string, corpusFormat: CorpusFormat, metadata: SelectedMetadata | null, tokenIndex: number, showParagraphs: boolean, enclosingEntity?: Entity, entityColor?: string, queryMatch?: string): React.ReactNode => {
     if (text instanceof Word) {
         if (tokenIndex != -1) {
             if (text.indexes[tokenIndex] === "¶")
@@ -63,25 +62,25 @@ export const renderElement = (text: TextUnit, query: string, corpusFormat: Corpu
                 </span>
         }
         if (text.indexes.length === 1) return text.indexes[0] + (text.indexes[text.indexes.length - 1] != 'N' ? ' ' : '');
-        return <AnnotatedWord word={text} corpusFormat={corpusFormat}/>
+        return <AnnotatedWord word={text} corpusFormat={corpusFormat} enclosingEntity={enclosingEntity}
+                              color={entityColor} queryMatch={queryMatch}/>
     } else if (text instanceof Entity) {
         const color = chooseColor(text, metadata);
         return <React.Fragment>
-            {text.words.map((word, i) => <AnnotatedWord key={i} word={word} corpusFormat={corpusFormat}
-                                                        enclosingEntity={text} color={color}/>)}
+            {text.words.map((word, i) => <React.Fragment
+                key={i}> {renderElement(word, query, corpusFormat, metadata, tokenIndex, showParagraphs, text, color, queryMatch)} </React.Fragment>)}
         </React.Fragment>
     } else if (text instanceof QueryMatch) {
-        const content = <React.Fragment>
-            {text.content.map((elem, index) => <React.Fragment key={index}>
-                {renderElement(elem, query, corpusFormat, metadata, tokenIndex, showParagraphs)}
-                </React.Fragment>
-            )}
-        </React.Fragment>
         let decoration = "unknown";
         if (text.queryMatch.from >= 0 && text.queryMatch.from <= text.queryMatch.to && text.queryMatch.to < query.length) {
             decoration = query.substring(text.queryMatch.from, text.queryMatch.to + 1)
         }
-        return <QueryMappingTooltip content={content} decoration={decoration}/>
+        return <React.Fragment>
+            {text.content.map((elem, index) => <React.Fragment key={index}>
+                    {renderElement(elem, query, corpusFormat, metadata, tokenIndex, showParagraphs, undefined, undefined, decoration)}
+                </React.Fragment>
+            )}
+        </React.Fragment>;
     } else {
         console.error(`unknown text unit type ${text}`);
         return <span>err</span>

@@ -22,7 +22,8 @@ const styles = createStyles({
 export interface AnnotationContentProps extends WithStyles<typeof styles> {
     corpusFormat: CorpusFormat,
     word: Word,
-    enclosingEntity?: Entity
+    enclosingEntity?: Entity,
+    queryMatch?: string,
 }
 
 const splitUrls = (maybeMultipleUrls: string): Array<string> => {
@@ -30,11 +31,17 @@ const splitUrls = (maybeMultipleUrls: string): Array<string> => {
         return maybeMultipleUrls.split("|");
     }
     return [maybeMultipleUrls]
-}
+};
+
+const QueryMatchComponent = ({match}: { match: string }) => {
+    return <div>
+        <Typography variant="h6">Matches: {match}</Typography>
+    </div>;
+};
 
 const EntityComponent = ({data, entityInfo, classes}: { data: Entity, entityInfo: EntityInfo, classes: any }) => {
     const attributeNames = Object.keys(entityInfo.attributes);
-    const imageIndex = attributeNames.indexOf("image")
+    const imageIndex = attributeNames.indexOf("image");
     return <div>
         <Typography variant="h6">Entity info</Typography>
         {imageIndex >= 0 && imageIndex < data.attributes.length && splitUrls(data.attributes[imageIndex]).map((url, index) =>
@@ -73,7 +80,7 @@ export const WordComponent = ({word, indexNames, classes, defaultIndex}: { word:
 }
 
 const AnnotationContent = (props: AnnotationContentProps) => {
-    const {classes, word, enclosingEntity: entityData, corpusFormat} = props;
+    const {classes, word, enclosingEntity: entityData, queryMatch, corpusFormat} = props;
     const entityInfo = entityData && corpusFormat.entities[entityData.entityClass];
     if (entityData && !entityInfo) {
         console.warn("no entity info found for entity " + entityData.entityClass + ", skipping it's content")
@@ -82,6 +89,7 @@ const AnnotationContent = (props: AnnotationContentProps) => {
     const defaultIndex = corpusFormat.defaultIndex || "token";
 
     return <Grid direction="row" container>
+        {queryMatch && <Grid item> <QueryMatchComponent match={queryMatch}/> </Grid>}
         {entityInfo &&
         <Grid item> <EntityComponent data={entityData!} entityInfo={entityInfo} classes={classes}/> </Grid>}
         <Grid item> <WordComponent word={word} indexNames={indexNames} defaultIndex={defaultIndex} classes={classes}/>
