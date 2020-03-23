@@ -82,7 +82,7 @@ class Mg4jDocumentFactory(private val metadataConfiguration: MetadataConfigurati
             line = stream.readLine()
         }
         if (invalidLines.isNotEmpty())
-            logger.warn("Document ${metadata[DocumentMetadata.ID]}:${metadata[DocumentMetadata.TITLE]} has invalid lines: $invalidLines, they were skipped")
+            logger.info("Document ${metadata[DocumentMetadata.ID]}:${metadata[DocumentMetadata.TITLE]} has invalid lines: $invalidLines, they were skipped")
         metadata[DocumentMetadata.SIZE] = lineIndex
         return Mg4jDocument(metadataConfiguration, metadata, fields)
     }
