@@ -114,13 +114,6 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
     const timer = new PerfTimer('SearchQuery');
     timer.sample('before request');
 
-
-    if (history) {
-        setTimeout(() => {
-            history.push(`/search?query=${encodeURI(query)}`);
-        }, 500);
-    }
-
     dispatch(newSearchResults({
         query,
         searchResults: [],
@@ -129,6 +122,8 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
     }));
 
     mainRequest(searchSettings, searchQuery, timer, dispatch, resultsPerPage, query);
+
+    let redirected = false;
 
     try {
         await sleep(300);
@@ -159,6 +154,11 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
                 hasMore: response.data.hasMore
             }));
 
+            if (history) {
+                history.push(`/search?query=${encodeURI(query)}`);
+                redirected = true;
+            }
+
             if (!response.data.hasMore) break;
             await sleep(300);
         }
@@ -166,6 +166,10 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
     } catch (e) {
         console.error(e);
         dispatch(openSnackbar(`Failed to load results`));
+    }
+
+    if (history && !redirected) {
+        history.push(`/search?query=${encodeURI(query)}`);
     }
 };
 
