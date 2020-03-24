@@ -96,6 +96,8 @@ enticingConfiguration {
 
                     "film" with attributes("url", "image", "name")
 
+                    "astronomicalObject" with attributes("url", "image", "name")
+
                     "structure" with attributes("url", "image", "name")
 
                     "activity" with attributes("url", "image", "name")
