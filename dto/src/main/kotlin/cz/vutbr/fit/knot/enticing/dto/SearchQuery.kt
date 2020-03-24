@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import java.util.*
 import javax.validation.Valid
+import javax.validation.constraints.Max
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Positive
 import javax.validation.constraints.PositiveOrZero
@@ -24,6 +25,7 @@ data class SearchQuery(
          * Number of snippets to be returned
          */
         @field:Positive
+        @field:Max(10_000)
         override val snippetCount: Int = Defaults.snippetCount,
         /**
          * Offset at which to start, for pagination, null means start from the beginning

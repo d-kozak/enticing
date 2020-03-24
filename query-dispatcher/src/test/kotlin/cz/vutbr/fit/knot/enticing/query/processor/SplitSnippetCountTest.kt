@@ -10,13 +10,13 @@ class SplitSnippetCountTest {
     private val query = SearchQuery("abc")
 
     @Test
-    fun `100_000 even split between 5`() {
+    fun `100_000 even split between 5 but limited by 10000`() {
         val afterSplit = (0..4).map { i ->
             splitSnippetCount(i, 5, 100_000, query)
         }
         assertThat(afterSplit)
                 .allMatch {
-                    it.snippetCount == 20_000
+                    it.snippetCount == 10_000
                 }
     }
 

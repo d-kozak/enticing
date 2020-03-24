@@ -13,6 +13,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 import kotlin.math.max
+import kotlin.math.min
 
 
 /**
@@ -93,7 +94,7 @@ internal fun <QueryType : Query<QueryType>> splitSnippetCount(i: Int, serverCoun
     if (modulo != 0 && i < modulo) {
         newSnippetCount++
     }
-    return query.updateSnippetCount(max(3, newSnippetCount))
+    return query.updateSnippetCount(min(max(3, newSnippetCount), 10_000))
 }
 
 
