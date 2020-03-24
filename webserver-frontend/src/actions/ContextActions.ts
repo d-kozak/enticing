@@ -17,11 +17,13 @@ import {getSelectedSearchSettings} from "../reducers/selectors";
 function mergeSnippet(searchResult: SearchResult, data: SnippetExtension): SearchResult {
     const newLocation = data.prefix.location;
     const newSize = data.prefix.size + searchResult.payload.size + data.suffix.size;
-    const newText = new TextUnitList([
-        ...data.prefix.parsedContent!.content,
-        ...searchResult.payload.parsedContent!.content,
-        ...data.suffix.parsedContent!.content
-    ]);
+    const newText: TextUnitList = {
+        content: [
+            ...data.prefix.parsedContent!.content,
+            ...searchResult.payload.parsedContent!.content,
+            ...data.suffix.parsedContent!.content
+        ]
+    };
 
     return {
         ...searchResult,

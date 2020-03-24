@@ -1,19 +1,11 @@
-import {EnticingObject} from "./EnticingObject";
 import * as  yup from "yup";
 import {validateOrNull} from "../../entities/validationUtils";
 
-export interface TextUnit {
-    size(): number
-}
+export type TextUnit = Word | Entity | QueryMatch
 
-export class Interval extends EnticingObject {
-    constructor(public from: number, public to: number) {
-        super();
-    }
-
-    isEmpty() {
-        return this.from > this.to;
-    }
+export interface Interval {
+    from: number,
+    to: number
 }
 
 export const intervalSchema = yup.object({
@@ -26,11 +18,8 @@ export function isInterval(obj: Object): obj is Interval {
     return typeof maybeInterval.from === "number" && typeof maybeInterval.to === "number";
 }
 
-export class TextUnitList extends EnticingObject {
-
-    constructor(public content: Array<TextUnit>) {
-        super();
-    }
+export interface TextUnitList {
+    content: Array<TextUnit>
 }
 
 export const textUnitListSchema = yup.object({
@@ -41,18 +30,9 @@ export function isTextUnitList(obj: Object): obj is TextUnitList {
     return validateOrNull(textUnitListSchema, obj) !== null;
 }
 
-
-export class Word extends EnticingObject implements TextUnit {
-
-    constructor(public indexes: Array<string>) {
-        super();
-    }
-
-    size(): number {
-        return 1;
-    }
-
-
+export interface Word {
+    type: "word",
+    indexes: Array<string>
 }
 
 export const wordSchema = yup.object({
@@ -71,14 +51,11 @@ export function isWord(obj: Object): obj is Word {
     return isStringArray((obj as Word).indexes);
 }
 
-export class Entity extends EnticingObject implements TextUnit {
-    constructor(public attributes: Array<string>, public entityClass: string, public words: Array<Word>) {
-        super();
-    }
-
-    size(): number {
-        return this.words.map(word => word.size()).reduce((left, right) => left + right, 0)
-    }
+export interface Entity {
+    type: "entity",
+    attributes: Array<string>,
+    entityClass: string,
+    words: Array<Word>
 }
 
 export const entitySchema = yup.object({
@@ -95,14 +72,10 @@ export function isEntity(obj: Object): obj is Entity {
     return true;
 }
 
-export class QueryMatch extends EnticingObject implements TextUnit {
-    constructor(public queryMatch: Interval, public content: Array<Entity | Word>) {
-        super();
-    }
-
-    size(): number {
-        return this.content.map(elem => elem.size()).reduce((left, right) => left + right, 0)
-    }
+export interface QueryMatch {
+    type: "queryMatch",
+    queryMatch: Interval,
+    content: Array<Entity | Word>
 }
 
 export const queryMatchSchema = yup.object({
@@ -116,37 +89,12 @@ export function isQueryMatch(obj: Object): obj is QueryMatch {
 }
 
 export function parseNewAnnotatedText(input: object): TextUnitList | null {
-    const elements: Array<TextUnit> = [];
     if (!isTextUnitList(input)) {
         console.error("could not parse " + JSON.stringify(input));
         return null
     }
-    for (let elem of input.content) {
-        const parsed = parseElement(elem);
-        if (parsed != null)
-            elements.push(parsed)
-    }
-    return new TextUnitList(elements)
+    return input;
 }
 
-function parseElement(elem: TextUnit): TextUnit | null {
-    if (isWord(elem)) {
-        return new Word(elem.indexes)
-    } else if (isEntity(elem)) {
-        const words = elem.words.map(word => new Word(word.indexes))
-        return new Entity(elem.attributes, elem.entityClass, words)
-    } else if (isQueryMatch(elem)) {
-        const interval = new Interval(elem.queryMatch.from, elem.queryMatch.to);
 
-        // @ts-ignore incorrect stuff is filtered out, but typescript cannot see it :X
-        const content: Array<Word | Entity> = elem.content.map(elem => parseElement(elem))
-            .filter(elem => elem != null)
-            .filter(elem => isWord(elem!) || isEntity(elem!))
-        return new QueryMatch(interval, content)
-    } else {
-        console.error("could not parse " + JSON.stringify(elem) + ", skipping");
-        return null
-    }
-}
-
-export const emptyTextUnitList = new TextUnitList([]);
+export const emptyTextUnitList: TextUnitList = {content: []};

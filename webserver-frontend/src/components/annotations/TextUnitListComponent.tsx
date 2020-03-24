@@ -1,6 +1,6 @@
 import React from "react";
 import AnnotatedWord from "./AnnotatedWord";
-import {Entity, QueryMatch, TextUnit, TextUnitList, Word} from "./TextUnitList";
+import {Entity, TextUnit, TextUnitList} from "./TextUnitList";
 import {Theme, WithStyles} from "@material-ui/core";
 import createStyles from "@material-ui/core/es/styles/createStyles";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -52,33 +52,36 @@ function chooseColor(entity: Entity, metadata: SelectedMetadata | null): string 
 }
 
 export const renderElements = (text: TextUnit, query: string, corpusFormat: CorpusFormat, metadata: SelectedMetadata | null, tokenIndex: number, showParagraphs: boolean, enclosingEntity?: Entity, entityColor?: string, queryMatch?: string): Array<React.ReactNode> => {
-    if (text instanceof Word) {
-        if (tokenIndex != -1) {
-            if (text.indexes[tokenIndex] === "¶")
-                return [<span/>];
-            if (text.indexes[tokenIndex] === "§")
-                return [<span>
+    switch (text.type) {
+        case "word": {
+            if (tokenIndex != -1) {
+                if (text.indexes[tokenIndex] === "¶")
+                    return [<span/>];
+                if (text.indexes[tokenIndex] === "§")
+                    return [<span>
                     {showParagraphs && <br/>}
-                    {showParagraphs && <br/>}
+                        {showParagraphs && <br/>}
                 </span>]
+            }
+            if (text.indexes.length === 1) return [
+                <span>{text.indexes[0] + (text.indexes[text.indexes.length - 1] != 'N' ? ' ' : '')}</span>
+            ];
+            return [<AnnotatedWord word={text} corpusFormat={corpusFormat} enclosingEntity={enclosingEntity}
+                                   color={entityColor} queryMatch={queryMatch}/>];
         }
-        if (text.indexes.length === 1) return [
-            <span>{text.indexes[0] + (text.indexes[text.indexes.length - 1] != 'N' ? ' ' : '')}</span>
-        ];
-        return [<AnnotatedWord word={text} corpusFormat={corpusFormat} enclosingEntity={enclosingEntity}
-                               color={entityColor} queryMatch={queryMatch}/>];
-    } else if (text instanceof Entity) {
-        const color = chooseColor(text, metadata);
-        return text.words.flatMap((word, i) => renderElements(word, query, corpusFormat, metadata, tokenIndex, showParagraphs, text, color, queryMatch));
+        case "entity": {
+            const color = chooseColor(text, metadata);
+            return text.words.flatMap((word, i) => renderElements(word, query, corpusFormat, metadata, tokenIndex, showParagraphs, text, color, queryMatch));
+        }
+        case "queryMatch": {
+            let decoration = "unknown";
+            if (text.queryMatch.from >= 0 && text.queryMatch.from <= text.queryMatch.to && text.queryMatch.to < query.length) {
+                decoration = query.substring(text.queryMatch.from, text.queryMatch.to + 1)
+            }
+            return text.content.flatMap((elem, index) => renderElements(elem, query, corpusFormat, metadata, tokenIndex, showParagraphs, undefined, undefined, decoration));
+        }
 
-    } else if (text instanceof QueryMatch) {
-        let decoration = "unknown";
-        if (text.queryMatch.from >= 0 && text.queryMatch.from <= text.queryMatch.to && text.queryMatch.to < query.length) {
-            decoration = query.substring(text.queryMatch.from, text.queryMatch.to + 1)
-        }
-        return text.content.flatMap((elem, index) => renderElements(elem, query, corpusFormat, metadata, tokenIndex, showParagraphs, undefined, undefined, decoration));
-    } else {
-        console.error(`unknown text unit type ${text}`);
-        return [<span>err</span>];
     }
+    console.error(`unknown text unit type ${text}`);
+    return [<span>err</span>];
 };
