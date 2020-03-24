@@ -45,10 +45,10 @@ class WebserverApi(
         return performRequest("http://$address/api/v1/user", HttpMethod.GET, HttpHeaders())
     }
 
-    fun sendQuery(query: String): WebServer.ResultList {
+    fun sendQuery(query: SearchQuery): WebServer.ResultList {
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
-        return performRequest(queryEndpoint, HttpMethod.POST, headers, content = SearchQuery(query).toJson()).toDto()
+        return performRequest(queryEndpoint, HttpMethod.POST, headers, content = query.toJson()).toDto()
     }
 
     fun importSearchSettings(searchSettings: String) {
@@ -78,6 +78,12 @@ class WebserverApi(
         if (newJSession != null)
             sessionId = newJSession.substring(newJSession.indexOf('=') + 1).trim()
         return res.body ?: ""
+    }
+
+    fun getMore(): WebServer.ResultList {
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.APPLICATION_JSON
+        return performRequest("http://$address/api/v1/query/get_more", HttpMethod.GET, headers).toDto()
     }
 
 

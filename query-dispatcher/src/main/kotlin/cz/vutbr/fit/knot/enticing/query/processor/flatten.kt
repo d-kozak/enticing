@@ -59,5 +59,5 @@ fun Map<String, List<MResult<IndexServer.IndexResultList>>>.flattenResults(query
         }
     }
 
-    return WebServer.ResultList(snippets, errors) to offset
+    return WebServer.ResultList(snippets, errors, hasMore = offset.isNotEmpty()) to offset
 }

@@ -41,11 +41,14 @@ fun Logger.error(ex: Exception) {
     this.error("${ex::class} ${ex.message}")
 }
 
-inline fun <T> Logger.measure(operationId: String, arguments: String? = null, block: () -> T): T {
+data class PerformanceMeasurementInfo(var message: String = "SUCCESS")
+
+inline fun <T> Logger.measure(operationId: String, arguments: String? = null, block: PerformanceMeasurementInfo.() -> T): T {
+    val info = PerformanceMeasurementInfo()
     val start = System.currentTimeMillis()
     return try {
-        val res = block()
-        perf(operationId, arguments, System.currentTimeMillis() - start, "SUCCESS")
+        val res = info.block()
+        perf(operationId, arguments, System.currentTimeMillis() - start, info.message)
         res
     } catch (ex: Throwable) {
         perf(operationId, arguments, System.currentTimeMillis() - start, "FAILURE: ${ex::class} ${ex.message}")

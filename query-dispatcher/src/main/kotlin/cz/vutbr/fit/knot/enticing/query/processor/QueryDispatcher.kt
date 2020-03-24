@@ -43,7 +43,7 @@ class QueryDispatcher<QueryType : Query<QueryType>, OffsetType, Result : QueryRe
     /**
      * Dispatches query onto a list of node, collects the results and retries if necessary and possible.
      */
-    fun dispatchQuery(searchQuery: QueryType, nodes: List<RequestData<OffsetType>>, onResult: ((RequestData<OffsetType>, MResult<Result>) -> Unit)? = null): Map<String, List<MResult<Result>>> = logger.measure("DispatchQuery-$componentType", "query='${searchQuery.query}', nodes=${nodes.map { it.address }}") {
+    fun dispatchQuery(searchQuery: QueryType, nodes: List<RequestData<OffsetType>>, onResult: ((RequestData<OffsetType>, MResult<Result>) -> Unit)? = null): Map<String, List<MResult<Result>>> = logger.measure("DispatchQuery-$componentType", "query='${searchQuery.query}', snippetCount=${searchQuery.snippetCount}, nodes=${nodes.map { it.address }}") {
         runBlocking(context = Dispatchers.IO) {
             val serversToCall = nodes.toMutableList()
             var collectedSnippetsCount = 0
@@ -71,6 +71,7 @@ class QueryDispatcher<QueryType : Query<QueryType>, OffsetType, Result : QueryRe
                     serverResults[server] = resultsPerServer
                 }
             }
+            message = "Collected $collectedSnippetsCount snippets"
             serverResults
         }
     }

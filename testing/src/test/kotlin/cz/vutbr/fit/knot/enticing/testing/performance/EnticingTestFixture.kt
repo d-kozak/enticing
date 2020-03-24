@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.testing.performance
 
+import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.validateOrFail
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
@@ -47,7 +48,11 @@ class EnticingTestFixture(private val fixtureConfig: FixtureConfiguration, reboo
         println(webserverApi.userInfo())
     }
 
-    fun sendQuery(query: String) = webserverApi.sendQuery(query)
+    fun sendQuery(query: SearchQuery) = webserverApi.sendQuery(query)
+
+    fun sendQuery(query: String) = sendQuery(SearchQuery(query))
+
+    fun getMore() = webserverApi.getMore()
 
     fun buildLocally() {
         managementService.executeCommand(LocalBuildCommand)
@@ -69,4 +74,6 @@ class EnticingTestFixture(private val fixtureConfig: FixtureConfiguration, reboo
     override fun close() {
         managementService.close()
     }
+
+
 }

@@ -56,7 +56,7 @@ internal class QueryServiceTest {
             every { searchSettingsRepository.findById(42) } returns Optional.of(mockSearchSettings)
             every { corpusFormatService.loadFormat(mockSearchSettings) } returns CorpusFormat("mock", emptyMap(), emptyMap())
 
-            val expected = WebServer.ResultList(listOf(firstResult))
+            val expected = WebServer.ResultList(listOf(firstResult), hasMore = false)
             val dummyQuery = SearchQuery("nertag:person", snippetCount = 33)
             val foo = mapOf("server1" to listOf(MResult.success(IndexServer.IndexResultList(listOf(firstResult.toIndexServerFormat())))))
             every { dispatcher.dispatchQuery(dummyQuery, dummyServers.map { IndexServerRequestData(it) }) } returns foo
@@ -85,7 +85,7 @@ internal class QueryServiceTest {
 
             every { corpusFormatService.loadFormat(mockSearchSettings) } returns CorpusFormat("mock", emptyMap(), emptyMap())
 
-            val expected = WebServer.ResultList(listOf(firstResult))
+            val expected = WebServer.ResultList(listOf(firstResult), hasMore = false)
             val dummyQuery = SearchQuery("nertag:person", snippetCount = 33)
             val foo = mapOf("server1" to listOf(MResult.success(IndexServer.IndexResultList(listOf(firstResult.toIndexServerFormat())))))
             every { dispatcher.dispatchQuery(dummyQuery, dummyServers.map { IndexServerRequestData(it) }) } returns foo
@@ -254,7 +254,7 @@ internal class QueryServiceTest {
             val actual = input.flattenResults("dummy", logger)
             assertThat(actual)
                     .isEqualTo(
-                            WebServer.ResultList(listOf(firstResult, secondResult, thirdResult))
+                            WebServer.ResultList(listOf(firstResult, secondResult, thirdResult), hasMore = false)
                                     to emptyMap<String, Map<String, Offset>>()
                     )
         }
@@ -269,7 +269,7 @@ internal class QueryServiceTest {
             val actual = input.flattenResults("dummy", logger)
             assertThat(actual)
                     .isEqualTo(
-                            WebServer.ResultList(listOf(firstResult, secondResult), mapOf("server3" to "QueryDispatcherException:my secret reason to fail"))
+                            WebServer.ResultList(listOf(firstResult, secondResult), mapOf("server3" to "QueryDispatcherException:my secret reason to fail"), hasMore = false)
                                     to emptyMap<String, Map<String, Offset>>()
                     )
         }
@@ -286,7 +286,8 @@ internal class QueryServiceTest {
                     .isEqualTo(
                             WebServer.ResultList(listOf(firstResult, secondResult),
                                     mapOf("server1" to "QueryDispatcherException:oh no...again? :(",
-                                            "server3" to "QueryDispatcherException:my secret reason to fail")
+                                            "server3" to "QueryDispatcherException:my secret reason to fail"),
+                                    hasMore = false
                             ) to emptyMap<String, Map<String, Offset>>()
                     )
         }

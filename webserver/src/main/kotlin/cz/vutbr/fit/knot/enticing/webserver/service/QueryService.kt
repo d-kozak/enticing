@@ -29,17 +29,19 @@ class QueryService(
 
     val logger = loggerFactory.logger { }
 
-    fun validateQuery(query: String, settings: Long) = logger.measure("validateQuery", "query='$query',settingsId=$settings") {
+    fun validateQuery(query: String, settings: Long) = logger.measure("validateQuery", "query='$query', settingsId=$settings") {
         compilerService.validateQuery(query, format(settings).toMetadataConfiguration())
     }
 
     fun format(settings: Long) = corpusFormatService.loadFormat(checkUserCanAccessSettings(settings))
 
-    fun query(query: SearchQuery, selectedSettings: Long, session: HttpSession): WebServer.ResultList = logger.measure("query", "query='${query.query}',settingsId=$selectedSettings") {
+    fun query(query: SearchQuery, selectedSettings: Long, session: HttpSession): WebServer.ResultList = logger.measure("query", "query='${query.query}', snippetCount=${query.snippetCount}, settingsId=$selectedSettings") {
         val searchSettings = checkUserCanAccessSettings(selectedSettings)
         compilerService.validateOrFail(query.query, corpusFormatService.loadFormat(searchSettings).toMetadataConfiguration())
         val requestData = searchSettings.servers.map { IndexServerRequestData(it) }
-        submitQuery(query, requestData, session, selectedSettings)
+        val result = submitQuery(query, requestData, session, selectedSettings)
+        message = "Collected ${result.searchResults.size} snippets"
+        result
     }
 
     fun getMore(session: HttpSession): WebServer.ResultList? {
