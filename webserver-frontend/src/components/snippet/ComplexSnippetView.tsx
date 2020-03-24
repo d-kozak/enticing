@@ -13,7 +13,6 @@ import {EditAnnotationsButton} from "./snippetbuttons/EditAnnotationsButton";
 import {SearchResult} from "../../entities/SearchResult";
 import NewAnnotatedTextComponent from "../annotations/TextUnitListComponent";
 import Grid from "@material-ui/core/es/Grid";
-import {parseSearchResultRequest} from "../../reducers/SearchResultReducer";
 import {getSelectedMetadataForCurrentSettings, isDebugMode} from "../../reducers/selectors";
 import ShowRawDocumentButton from "./snippetbuttons/ShowRawDocumentButton";
 import LimitSearchButton from "./snippetbuttons/LimitSearchButton";
@@ -36,13 +35,9 @@ export type  ComplexSnippetViewEnhanedProps = WithStyles<typeof styles> & typeof
     & ReturnType<typeof mapStateToProps> & ComplexSnippetViewProps
 
 const ComplexSnippetView = (props: ComplexSnippetViewEnhanedProps) => {
-    const {snippet, snippetId, corpusFormat, query, history, debugMode, metadata, parseSearchResult, requestContextExtension, openDocumentRequest, classes} = props;
+    const {snippet, snippetId, corpusFormat, query, history, debugMode, metadata, requestContextExtension, openDocumentRequest, classes} = props;
     if (!snippet) {
         return <p>snippet with id {snippetId} not found</p>
-    }
-    if (!snippet.payload.parsedContent) {
-        parseSearchResult(snippet);
-        return <p>...parsing data...</p>
     }
     if (!corpusFormat) {
         return <p>Corpus format not loaded</p>;
@@ -66,7 +61,7 @@ const ComplexSnippetView = (props: ComplexSnippetViewEnhanedProps) => {
             </Grid>
         </Grid>
         <Grid item>
-            <NewAnnotatedTextComponent text={snippet.payload.parsedContent} corpusFormat={corpusFormat}
+            <NewAnnotatedTextComponent text={snippet.payload.content} corpusFormat={corpusFormat}
                                        metadata={metadata}
                                        query={query}
                                        showParagraphs={false}/>
@@ -84,8 +79,7 @@ const mapStateToProps = (state: ApplicationState, props: ComplexSnippetViewProps
 });
 
 const mapDispatchToProps = {
-    requestContextExtension: contextExtensionRequestAction as (searchResult: SearchResult) => void,
-    parseSearchResult: parseSearchResultRequest as (searchResult: SearchResult) => void
+    requestContextExtension: contextExtensionRequestAction as (searchResult: SearchResult) => void
 };
 
 

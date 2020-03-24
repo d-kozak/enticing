@@ -11,7 +11,6 @@ import {appendMoreSearchResults, newSearchResults} from "../reducers/SearchResul
 import {User} from "../entities/User";
 import {createMetadataRequest, filterCorpusFormat} from "./metadataFiltering";
 import {PerfTimer} from "../utils/perf";
-import {emptyTextUnitList, parseNewAnnotatedText} from "../components/annotations/TextUnitList";
 import {ApplicationState} from "../ApplicationState";
 import {ThunkDispatch} from "redux-thunk";
 import {AnyAction} from "redux";
@@ -143,13 +142,6 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
             for (let i in response.data.searchResults) {
                 const snippet = response.data.searchResults[i];
                 snippet.id = `${snippet.host}:${snippet.collection}:${snippet.documentId}:${resultCnt + i}`;
-                if (Number(i + resultCnt) < resultsPerPage) {
-                    const parsed = parseNewAnnotatedText(snippet.payload.content);
-                    if (parsed != null) {
-                        snippet.payload.parsedContent = parsed;
-                        snippet.payload.content = emptyTextUnitList
-                    }
-                }
             }
             resultCnt += response.data.searchResults.length;
 

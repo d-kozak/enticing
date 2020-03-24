@@ -6,7 +6,7 @@ import {hideProgressbar, showProgressbar} from "../reducers/ProgressBarReducer";
 import {SearchResult} from "../entities/SearchResult";
 import {isSnippetExtension, SnippetExtension} from "../entities/SnippetExtension";
 import {ContextExtensionQuery} from "../entities/ContextExtensionQuery";
-import {emptyTextUnitList, parseNewAnnotatedText, TextUnitList} from "../components/annotations/TextUnitList";
+import {TextUnitList} from "../components/annotations/TextUnitList";
 import {openSnackbar} from "../reducers/SnackBarReducer";
 
 import {updateSearchResult} from "../reducers/SearchResultReducer";
@@ -19,17 +19,16 @@ function mergeSnippet(searchResult: SearchResult, data: SnippetExtension): Searc
     const newSize = data.prefix.size + searchResult.payload.size + data.suffix.size;
     const newText: TextUnitList = {
         content: [
-            ...data.prefix.parsedContent!.content,
-            ...searchResult.payload.parsedContent!.content,
-            ...data.suffix.parsedContent!.content
+            ...data.prefix.content.content,
+            ...searchResult.payload.content.content,
+            ...data.suffix.content.content
         ]
     };
 
     return {
         ...searchResult,
         payload: {
-            content: emptyTextUnitList,
-            parsedContent: newText,
+            content: newText,
             location: newLocation,
             size: newSize,
             canExtend: data.canExtend
@@ -44,10 +43,7 @@ export const contextExtensionRequestAction = (searchResult: SearchResult): Thunk
         console.error('could not extend search result, no selected search settings');
         return;
     }
-    if (!searchResult.payload.parsedContent) {
-        console.error('could not extend search result which has not been parsed yet');
-        return;
-    }
+
     if (selectedSearchSettings.corpusFormat == null) {
         console.error('could not extend search result, no corpus format for selected search settings');
         return;
@@ -77,14 +73,6 @@ export const contextExtensionRequestAction = (searchResult: SearchResult): Thunk
         if (!isSnippetExtension(response.data)) {
             throw `Invalid document ${JSON.stringify(response.data, null, 2)}`;
         }
-
-        const parsedPrefix = parseNewAnnotatedText(response.data.prefix.content);
-        const parsedSuffix = parseNewAnnotatedText(response.data.suffix.content);
-        if (parsedPrefix === null || parsedSuffix === null) {
-            throw "could not parse"
-        }
-        response.data.prefix.parsedContent = parsedPrefix;
-        response.data.suffix.parsedContent = parsedSuffix;
 
         timer.sample('parsing done');
         const merged: SearchResult = mergeSnippet(searchResult, response.data);

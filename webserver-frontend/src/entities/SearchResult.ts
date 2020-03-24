@@ -5,7 +5,6 @@ import {TextUnitList, textUnitListSchema} from "../components/annotations/TextUn
 
 export interface Payload {
     content: TextUnitList,
-    parsedContent?: TextUnitList,
     location: number,
     size: number,
     canExtend: boolean

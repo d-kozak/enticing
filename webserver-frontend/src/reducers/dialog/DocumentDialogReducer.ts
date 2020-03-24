@@ -5,7 +5,6 @@ import {ThunkResult} from "../../actions/RootActions";
 import {DocumentQuery} from "../../entities/DocumentQuery";
 import {API_BASE_PATH} from "../../globals";
 import {isDocument} from "../../entities/FullDocument";
-import {emptyTextUnitList, parseNewAnnotatedText} from "../../components/annotations/TextUnitList";
 import {openSnackbar} from "../SnackBarReducer";
 import {hideProgressbar, showProgressbar} from "../ProgressBarReducer";
 import axios from "axios";
@@ -60,11 +59,6 @@ export const openDocumentDialogRequest = (searchResultId: string, corpusFormat: 
         if (!isDocument(response.data)) {
             throw `Invalid document ${JSON.stringify(response.data, null, 2)}`;
         }
-        const parsed = parseNewAnnotatedText(response.data.payload.content);
-        if (parsed == null)
-            throw "could not parse";
-        response.data.payload.content = emptyTextUnitList;
-        response.data.payload.parsedContent = parsed;
         timer.sample('dispatching result');
         dispatch(hideProgressbar());
         dispatch(actions.openDocumentDialog({

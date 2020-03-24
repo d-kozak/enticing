@@ -13,7 +13,6 @@ import {EditAnnotationsButton} from "./snippetbuttons/EditAnnotationsButton";
 import {SearchResult} from "../../entities/SearchResult";
 import NewAnnotatedTextComponent from "../annotations/TextUnitListComponent";
 import Grid from "@material-ui/core/es/Grid";
-import {parseSearchResultRequest} from "../../reducers/SearchResultReducer";
 import {getSelectedMetadataForCurrentSettings, isDebugMode} from "../../reducers/selectors";
 import ShowRawDocumentButton from "./snippetbuttons/ShowRawDocumentButton";
 import LimitSearchButton from "./snippetbuttons/LimitSearchButton";
@@ -40,14 +39,11 @@ export type  MinimizedSnippetViewEnhancedProps = WithStyles<typeof styles> & typ
     & ReturnType<typeof mapStateToProps> & MinimizedSnippetViewProps
 
 const MinimizedSnippetView = (props: MinimizedSnippetViewEnhancedProps) => {
-    const {snippet, query, history, snippetId, corpusFormat, metadata, debugMode, parseSearchResult, requestContextExtension, openDocumentRequest, classes} = props;
+    const {snippet, query, history, snippetId, corpusFormat, metadata, debugMode, requestContextExtension, openDocumentRequest, classes} = props;
     if (!snippet) {
         return <p>snippet with id {snippetId} not found</p>
     }
-    if (!snippet.payload.parsedContent) {
-        parseSearchResult(snippet);
-        return <p>...parsing data...</p>
-    }
+
     if (!corpusFormat) {
         return <p>Corpus format not loaded</p>;
     }
@@ -60,7 +56,7 @@ const MinimizedSnippetView = (props: MinimizedSnippetViewEnhancedProps) => {
         <GotoSourceButton searchResult={snippet}/>
         <LimitSearchButton history={history} snippet={snippet}/>
         <Grid className={classes.text}>
-            <NewAnnotatedTextComponent text={snippet.payload.parsedContent} corpusFormat={corpusFormat}
+            <NewAnnotatedTextComponent text={snippet.payload.content} corpusFormat={corpusFormat}
                                        metadata={metadata}
                                        query={query}
                                        showParagraphs={false}/>
@@ -78,8 +74,7 @@ const mapStateToProps = (state: ApplicationState, props: MinimizedSnippetViewPro
 });
 
 const mapDispatchToProps = {
-    requestContextExtension: contextExtensionRequestAction as (searchResult: SearchResult) => void,
-    parseSearchResult: parseSearchResultRequest as (searchResult: SearchResult) => void
+    requestContextExtension: contextExtensionRequestAction as (searchResult: SearchResult) => void
 };
 
 
