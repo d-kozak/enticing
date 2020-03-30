@@ -49,7 +49,9 @@ class TemporaryResultStorage(loggerFactory: LoggerFactory) {
         val entry = memory[id] ?: return WebServer.EagerSearchResult(WebServer.SearchingState.NONE)
         return entry.access { result ->
             if (result.state == WebServer.SearchingState.FINISHED) memory.remove(id)
-            result
+            val searchResults = result.searchResults.toMutableList()
+            result.searchResults.clear()
+            WebServer.EagerSearchResult(result.state, searchResults)
         }
     }
 
