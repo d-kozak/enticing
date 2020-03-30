@@ -67,6 +67,7 @@ class EntityList(val metadataConfiguration: MetadataConfiguration, val entities:
                 if (index.name !in entity.attributes) {
                     val attribute = AttributeConfiguration(index.name, index.description)
                     attribute.index = index
+                    attribute.attributeIndex = entity.attributes.size
                     entity.attributes[index.name] = attribute
                 }
             }
