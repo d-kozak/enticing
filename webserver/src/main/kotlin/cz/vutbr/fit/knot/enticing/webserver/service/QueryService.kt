@@ -56,7 +56,7 @@ class QueryService(
 
     private fun submitQuery(query: SearchQuery, requestData: List<IndexServerRequestData>, session: HttpSession, selectedSettings: Long): WebServer.ResultList {
         logger.info("Executing query $query with requestData $requestData")
-        val onResult = query.uuid?.createCallback()
+        val onResult = query.uuid?.setupStorageEntry()
         val (result, offset) = dispatcher.dispatchQuery(query, requestData, onResult)
                 .flattenResults(query.query, logger)
 
@@ -90,7 +90,7 @@ class QueryService(
 
     fun getRawDocument(request: WebServer.RawDocumentRequest): String = indexServerConnector.getRawDocument(request)
 
-    private fun UUID.createCallback(): ((RequestData<Map<CollectionName, Offset>>, MResult<IndexServer.IndexResultList>) -> Unit)? {
+    private fun UUID.setupStorageEntry(): ((RequestData<Map<CollectionName, Offset>>, MResult<IndexServer.IndexResultList>) -> Unit)? {
         resultStorage.initEntry(this.toString())
         return { request, result ->
             if (result.isSuccess) {

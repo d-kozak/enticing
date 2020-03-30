@@ -27,6 +27,24 @@ object WebServer {
     )
 
     /**
+     * Dto for eager result fetching
+     */
+    data class EagerSearchResult(
+            var state: SearchingState,
+            val searchResults: MutableList<SearchResult> = mutableListOf()
+    )
+
+    /**
+     * State of the searching
+     */
+    enum class SearchingState {
+        NONE,
+        RUNNING,
+        FINISHED
+    }
+
+
+    /**
      * Query to extend the context of the snippet
      */
     data class ContextExtensionQuery(

@@ -4,7 +4,7 @@ import {SearchQuery} from "../entities/SearchQuery";
 import {API_BASE_PATH} from "../globals";
 import axios, {AxiosResponse} from "axios";
 import {hideProgressbar, showProgressbar} from "../reducers/ProgressBarReducer";
-import {isResultList, ResultList} from "../entities/ResultList";
+import {isEagerResult, isResultList, ResultList} from "../entities/ResultList";
 import {SearchSettings} from "../entities/SearchSettings";
 import {openSnackbar} from "../reducers/SnackBarReducer";
 import {appendMoreSearchResults, newSearchResults} from "../reducers/SearchResultReducer";
@@ -136,7 +136,7 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
             let response = await axios.get(`${API_BASE_PATH}/query/storage/${searchQuery.uuid}`, {
                 withCredentials: true
             });
-            if (!isResultList(response.data))
+            if (!isEagerResult(response.data))
                 throw `Invalid search result ${JSON.stringify(response.data, null, 2)}`;
 
             for (let i in response.data.searchResults) {
@@ -147,17 +147,17 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
 
             dispatch(appendMoreSearchResults({
                 searchResults: response.data.searchResults,
-                hasMore: response.data.hasMore
+                hasMore: response.data.state != "FINISHED"
             }));
 
-            if (history) {
+            if (history && response.data.searchResults.length > 0 && !redirected) {
                 const encoded = encodeURI(query)
                     .replace("&&", "||");
                 history.push(`/search?query=${encoded}`);
                 redirected = true;
             }
 
-            if (!response.data.hasMore) break;
+            if (response.data.state === "FINISHED") break;
             await sleep(300);
         }
 
@@ -167,7 +167,9 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
     }
 
     if (history && !redirected) {
-        history.push(`/search?query=${encodeURI(query)}`);
+        const encoded = encodeURI(query)
+            .replace("&&", "||");
+        history.push(`/search?query=${encoded}`);
     }
 };
 

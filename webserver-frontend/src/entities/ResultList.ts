@@ -22,3 +22,17 @@ export const resultListSchema = yup.object({
 export function isResultList(obj: Object): obj is ResultList {
     return validateOrNull(resultListSchema, obj) !== null;
 }
+
+export interface EagerResult {
+    searchResults: Array<SearchResult>,
+    state: "NONE" | "RUNNING" | "FINISHED"
+}
+
+export const eagerResultSchema = yup.object({
+    searchResults: yup.array(searchResultSchema),
+    state: yup.mixed().oneOf(["NONE", "RUNNING", "FINISHED"])
+});
+
+export function isEagerResult(obj: Object): obj is EagerResult {
+    return validateOrNull(eagerResultSchema, obj) !== null;
+}
