@@ -38,7 +38,7 @@ const SearchPage = (props: SearchPageProps) => {
 
     const params = new URLSearchParams(location.search);
     let query = params.get("query");
-    if (query) query = query.replace("||", "&&");
+    if (query) query = query.replace(/::/g, "&");
 
     useEffect(() => {
         if (query && !searchStarted && selectedSettings != null) {

@@ -31,7 +31,7 @@ const SearchInput = (props: SearchInputProps) => {
     const params = new URLSearchParams(location.search);
 
     let urlQuery = params.get('query');
-    if (urlQuery) urlQuery = urlQuery.replace("||", "&&");
+    if (urlQuery) urlQuery = urlQuery.replace(/::/g, "&");
 
     const [query, setQuery] = useState<string>(urlQuery || initialQuery);
 

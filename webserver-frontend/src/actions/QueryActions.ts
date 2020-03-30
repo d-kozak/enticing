@@ -15,6 +15,7 @@ import {ApplicationState} from "../ApplicationState";
 import {ThunkDispatch} from "redux-thunk";
 import {AnyAction} from "redux";
 import {CorpusFormat} from "../entities/CorpusFormat";
+import {encodeQuery} from "../utils/queryEncoding";
 
 /**
  * generate uuid
@@ -151,9 +152,7 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
             }));
 
             if (history && response.data.searchResults.length > 0 && !redirected) {
-                const encoded = encodeURI(query)
-                    .replace("&&", "||");
-                history.push(`/search?query=${encoded}`);
+                history.push(`/search?query=${encodeQuery(query)}`);
                 redirected = true;
             }
 
@@ -167,9 +166,7 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
     }
 
     if (history && !redirected) {
-        const encoded = encodeURI(query)
-            .replace("&&", "||");
-        history.push(`/search?query=${encoded}`);
+        history.push(`/search?query=${encodeQuery(query)}`);
     }
 };
 
