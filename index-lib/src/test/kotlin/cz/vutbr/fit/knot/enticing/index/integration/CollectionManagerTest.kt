@@ -92,6 +92,16 @@ class CollectionManagerTest {
 
 
     @Test
+    fun `number of results is limited as expected`() {
+        val queryEngine = initMg4jCollectionManager(collectionManagerConfiguration, SimpleStdoutLoggerFactory)
+        val input = "nertag:person (killed|visited)"
+        val query = templateQuery.copy(query = input, textFormat = TextFormat.TEXT_UNIT_LIST, snippetCount = 23)
+        query.eqlAst = EqlCompiler(SimpleStdoutLoggerFactory).parseOrFail(input, collectionManagerConfiguration.metadataConfiguration)
+        val result = queryEngine.query(query)
+        assertThat(result.searchResults).hasSize(23)
+    }
+
+    @Test
     fun exampleQuery() {
         val queryEngine = initMg4jCollectionManager(collectionManagerConfiguration, SimpleStdoutLoggerFactory)
         val input = "nertag:person (killed|visited)"

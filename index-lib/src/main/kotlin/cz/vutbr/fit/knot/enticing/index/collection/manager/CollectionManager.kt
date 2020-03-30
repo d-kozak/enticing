@@ -45,14 +45,14 @@ class CollectionManager internal constructor(
         var firstDocument = true
 
         while (true) {
-            val (resultList, relevantDocuments) = searchEngine.search(ast.toMgj4Query(), query.snippetCount, documentOffset)
+            val (resultList, relevantDocuments) = searchEngine.search(ast.toMgj4Query(), query.snippetCount - matched.size, documentOffset)
             if (resultList.isEmpty()) return IndexServer.CollectionResultList(matched, null)
             for ((i, result) in resultList.withIndex()) {
                 val document = searchEngine.loadDocument(result.documentId)
                 check(document.id == result.documentId) { "Invalid document id set in the search engine: ${result.documentId} vs ${document.id}" }
                 val matchInfo = postProcessor.process(ast.deepCopy(), document, query.defaultIndex, if (firstDocument) resultOffset else 0, metadataConfiguration)
                 if (matchInfo == null || matchInfo.intervals.isEmpty()) continue
-                val (results, hasMore) = resultCreator.multipleResults(document, matchInfo, query, query.snippetCount, query.resultFormat)
+                val (results, hasMore) = resultCreator.multipleResults(document, matchInfo, query, query.snippetCount - matched.size, query.resultFormat)
                 val searchResults = results.map {
                     IndexServer.SearchResult(
                             collectionName,
