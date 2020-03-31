@@ -2,11 +2,17 @@ package cz.vutbr.fit.knot.enticing.index.client
 
 import com.xenomachina.argparser.ArgParser
 import com.xenomachina.argparser.default
+import cz.vutbr.fit.knot.enticing.dto.ResultFormat
+import cz.vutbr.fit.knot.enticing.dto.TextFormat
 
 fun parseCliArgs(args: Array<String>): ConsoleClientArgs = ArgParser(args)
         .parseInto(::ConsoleClientArgs)
         .validateOrFail()
 
+sealed class ResultSize {
+    data class Exact(val size: Int) : ResultSize()
+    object All : ResultSize()
+}
 
 class ConsoleClientArgs(parser: ArgParser) {
 
@@ -35,6 +41,29 @@ class ConsoleClientArgs(parser: ArgParser) {
     val queryDispatcher by parser.storing("-d", "--query-dispatcher", help = "Dispatch queries using local query dispatcher") { split(",") }
             .default<List<String>?>(null)
 
+    val resultFormat by parser.storing("--result-format", help = "Wanted result format") {
+        when (this) {
+            "snippet" -> ResultFormat.SNIPPET
+            "idlist" -> ResultFormat.IDENTIFIER_LIST
+            else -> throw IllegalArgumentException("Unknown result format '$this'")
+        }
+    }.default(ResultFormat.SNIPPET)
+
+    val textFormat by parser.storing("--text-format", help = "Wanted text format") {
+        when (this) {
+            "plain" -> TextFormat.PLAIN_TEXT
+            "html" -> TextFormat.HTML
+            else -> throw IllegalArgumentException("Unknown text format '$this'")
+        }
+    }.default(TextFormat.PLAIN_TEXT)
+
+    val resultSize by parser.storing("-s", "--size", help = "How many results are wanted") {
+        if (this.toLowerCase() == "all") ResultSize.All
+        else ResultSize.Exact(this.toInt())
+    }.default(ResultSize.Exact(20))
+            .addValidator {
+                if (this.value is ResultSize.Exact && (this.value as ResultSize.Exact).size > 10000) throw IllegalArgumentException("At most 10000 results allowed, or specify 'all' for everything")
+            }
 
     fun validateOrFail(): ConsoleClientArgs {
         val enabledOptions = listOf(indexServer, webserver, queryDispatcher).count { it != null }

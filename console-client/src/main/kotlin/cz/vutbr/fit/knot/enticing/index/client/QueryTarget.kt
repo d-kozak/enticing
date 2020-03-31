@@ -3,7 +3,6 @@ package cz.vutbr.fit.knot.enticing.index.client
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import cz.vutbr.fit.knot.enticing.dto.*
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.dto.utils.toDto
 import cz.vutbr.fit.knot.enticing.log.ComponentType
@@ -73,9 +72,9 @@ sealed class QueryTarget(val name: String) {
         }
     }
 
-    data class QueryDispatcherTarget(val corpus: CorpusConfiguration) : QueryTarget("Dispatcher") {
+    data class QueryDispatcherTarget(val servers: List<String>) : QueryTarget("Dispatcher") {
         override fun query(query: SearchQuery): TimedValue<List<IndexServer.SearchResult>> {
-            val nodes = corpus.indexServers.map { IndexServerRequestData(it.fullAddress) }
+            val nodes = servers.map { IndexServerRequestData(it) }
             val onResult: (RequestData<Map<CollectionName, Offset>>, MResult<IndexServer.IndexResultList>) -> Unit = { request, result ->
                 if (result.isSuccess)
                     println("Request $request finished, got ${result.value.searchResults.size} results")
@@ -90,7 +89,7 @@ sealed class QueryTarget(val name: String) {
         }
     }
 
-    class IndexServerTarget(val address: String) : QueryTarget("IndexServer") {
+    data class IndexServerTarget(val address: String) : QueryTarget("IndexServer") {
         override fun query(query: SearchQuery): TimedValue<List<IndexServer.SearchResult>> =
                 runBlocking {
                     measureTimedValue { queryExecutor.invoke(query, IndexServerRequestData(address)).value.searchResults }
