@@ -4,6 +4,8 @@ import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.validateOrFail
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
+import cz.vutbr.fit.knot.enticing.index.client.WebserverApi
+import cz.vutbr.fit.knot.enticing.index.client.webserverLogin
 import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import cz.vutbr.fit.knot.enticing.management.ManagementService
 import cz.vutbr.fit.knot.enticing.management.command.concrete.*

@@ -9,11 +9,6 @@ fun parseCliArgs(args: Array<String>): ConsoleClientArgs = ArgParser(args)
         .parseInto(::ConsoleClientArgs)
         .validateOrFail()
 
-sealed class ResultSize {
-    data class Exact(val size: Int) : ResultSize()
-    object All : ResultSize()
-}
-
 class ConsoleClientArgs(parser: ArgParser) {
 
     val query by parser.storing("-q", "--query", help = "Query to execute")
@@ -57,13 +52,13 @@ class ConsoleClientArgs(parser: ArgParser) {
         }
     }.default(TextFormat.PLAIN_TEXT)
 
-    val resultSize by parser.storing("-s", "--size", help = "How many results are wanted") {
-        if (this.toLowerCase() == "all") ResultSize.All
-        else ResultSize.Exact(this.toInt())
-    }.default(ResultSize.Exact(20))
+    val snippetCount by parser.storing("-c", "--snippet-count", help = "How many results are wanted") { toInt() }
+            .default(20)
             .addValidator {
-                if (this.value is ResultSize.Exact && (this.value as ResultSize.Exact).size > 10000) throw IllegalArgumentException("At most 10000 results allowed, or specify 'all' for everything")
+                if (this.value > 10000) throw IllegalArgumentException("At most 10000 results allowed, or specify 'all' for everything")
             }
+
+    val allResults by parser.flagging("-a", "--all", help = "Get all results for a given query")
 
     fun validateOrFail(): ConsoleClientArgs {
         val enabledOptions = listOf(indexServer, webserver, queryDispatcher).count { it != null }

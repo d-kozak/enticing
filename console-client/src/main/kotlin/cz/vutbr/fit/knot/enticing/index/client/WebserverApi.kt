@@ -1,4 +1,4 @@
-package cz.vutbr.fit.knot.enticing.testing.performance
+package cz.vutbr.fit.knot.enticing.index.client
 
 import com.github.kittinunf.fuel.httpGet
 import cz.vutbr.fit.knot.enticing.dto.SearchQuery
@@ -21,10 +21,9 @@ fun webserverLogin(address: String, username: String, password: String): Webserv
 }
 
 class WebserverApi(
-        var address: String
+        var address: String,
+        var settingsId: Int = 2
 ) {
-
-    var settingsId: Int = 2
 
     var sessionId: String? = null
 

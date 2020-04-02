@@ -1,20 +1,13 @@
 package cz.vutbr.fit.knot.enticing.index.client
 
-import com.github.kittinunf.fuel.httpGet
-import com.github.kittinunf.fuel.httpPost
 import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
-import cz.vutbr.fit.knot.enticing.dto.utils.toDto
 import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import cz.vutbr.fit.knot.enticing.query.processor.FuelQueryExecutor
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
 import cz.vutbr.fit.knot.enticing.query.processor.flattenResults
-import cz.vutbr.fit.knot.enticing.query.processor.fuel.jsonBody
 import kotlinx.coroutines.runBlocking
-import java.lang.Thread.sleep
-import java.util.*
-import kotlin.concurrent.thread
 import kotlin.time.ExperimentalTime
 import kotlin.time.TimedValue
 import kotlin.time.measureTimedValue
@@ -26,75 +19,84 @@ private val queryDispatcher = QueryDispatcher(queryExecutor, ComponentType.CONSO
 
 @ExperimentalTime
 sealed class QueryTarget(val name: String) {
-    abstract fun query(query: SearchQuery): TimedValue<List<IndexServer.SearchResult>>
+    abstract fun submit(query: SearchQuery): TimedValue<List<IndexServer.SearchResult>>
+    abstract fun getAll(query: SearchQuery): TimedValue<List<IndexServer.SearchResult>>
 
     data class WebserverTarget(val address: String, val settingsId: Int) : QueryTarget("Webserver") {
 
-        override fun query(query: SearchQuery): TimedValue<List<IndexServer.SearchResult>> {
-            if (query.uuid != null) partialResultChecker(query.uuid!!)
+        private val api = WebserverApi(address, settingsId)
 
-            val address = "http://$address/api/v1/query?settings=$settingsId"
-            return measureTimedValue {
-                address.httpPost()
-                        .jsonBody(query)
-                        .responseString().third.get().toDto<WebServer.ResultList>()
-                        .searchResults.map { it.toIndexServerFormat() }
-            }
+        override fun submit(query: SearchQuery): TimedValue<List<IndexServer.SearchResult>> = measureTimedValue {
+            api.sendQuery(query).searchResults.map { it.toIndexServerFormat() }
         }
 
-        private fun partialResultChecker(uuid: UUID) {
-            val address = "http://$address/api/v1/query/storage/$uuid"
-            thread {
-                sleep(500)
-                try {
-                    var cnt = 0
-                    var results = address.httpGet()
-                            .responseString().third.get()
-                            .toDto<WebServer.ResultList>()
+        override fun getAll(query: SearchQuery): TimedValue<List<IndexServer.SearchResult>> = measureTimedValue {
+            var currentResult = api.sendQuery(query)
+            val allResults = currentResult.searchResults.map { it.toIndexServerFormat() }.toMutableList()
 
-                    println("retrieved ${results.searchResults.size} eager results")
-                    cnt += results.searchResults.size
-
-                    while (results.hasMore) {
-                        sleep(500)
-                        results = address.httpGet()
-                                .responseString().third.get()
-                                .toDto()
-                        println("retrieved ${results.searchResults.size} eager results")
-                        cnt += results.searchResults.size
-                    }
-
-                    println("No more results, done, total count is $cnt")
-                } catch (ex: Exception) {
-                    ex.printStackTrace()
-                }
+            while (currentResult.hasMore) {
+                currentResult = api.getMore()
+                allResults.addAll(currentResult.searchResults.map { it.toIndexServerFormat() })
             }
+
+            allResults
         }
+
     }
 
     data class QueryDispatcherTarget(val servers: List<String>) : QueryTarget("Dispatcher") {
-        override fun query(query: SearchQuery): TimedValue<List<IndexServer.SearchResult>> {
+
+        private val onResult: (RequestData<Map<CollectionName, Offset>>, MResult<IndexServer.IndexResultList>) -> Unit = { request, result ->
+            if (result.isSuccess)
+                println("Request $request finished, got ${result.value.searchResults.size} results")
+            else println("Request $request failed")
+        }
+
+        override fun submit(query: SearchQuery): TimedValue<List<IndexServer.SearchResult>> {
             val nodes = servers.map { IndexServerRequestData(it) }
-            val onResult: (RequestData<Map<CollectionName, Offset>>, MResult<IndexServer.IndexResultList>) -> Unit = { request, result ->
-                if (result.isSuccess)
-                    println("Request $request finished, got ${result.value.searchResults.size} results")
-                else println("Request $request failed")
-            }
             return measureTimedValue {
-                queryDispatcher.dispatchQuery(query, nodes, onResult)
-                        .flattenResults(query.query, SimpleStdoutLoggerFactory.namedLogger("QueryDispatcherTarget"))
+                dispatch(query, nodes, onResult)
                         .first.searchResults
                         .map { it.toIndexServerFormat() }
             }
         }
+
+        override fun getAll(query: SearchQuery): TimedValue<List<IndexServer.SearchResult>> = measureTimedValue {
+            var nodes = servers.map { IndexServerRequestData(it) }
+            var result = dispatch(query, nodes, onResult)
+            val allResults = result.first.searchResults.map { it.toIndexServerFormat() }.toMutableList()
+
+            while (result.second.isNotEmpty()) {
+                nodes = result.second.map { (address, offset) -> IndexServerRequestData(address, offset) }
+                result = dispatch(query, nodes, onResult)
+                allResults.addAll(result.first.searchResults.map { it.toIndexServerFormat() })
+            }
+
+            allResults
+        }
+
+        private fun dispatch(query: SearchQuery, nodes: List<IndexServerRequestData>, onResult: (RequestData<Map<CollectionName, Offset>>, MResult<IndexServer.IndexResultList>) -> Unit) =
+                queryDispatcher.dispatchQuery(query, nodes, onResult)
+                        .flattenResults(query.query, SimpleStdoutLoggerFactory.namedLogger("QueryDispatcherTarget"))
     }
 
     data class IndexServerTarget(val address: String) : QueryTarget("IndexServer") {
-        override fun query(query: SearchQuery): TimedValue<List<IndexServer.SearchResult>> =
+        override fun submit(query: SearchQuery): TimedValue<List<IndexServer.SearchResult>> =
                 runBlocking {
                     measureTimedValue { queryExecutor.invoke(query, IndexServerRequestData(address)).value.searchResults }
                 }
 
 
+        override fun getAll(query: SearchQuery): TimedValue<List<IndexServer.SearchResult>> = measureTimedValue {
+            runBlocking {
+                var currentResult = queryExecutor.invoke(query, IndexServerRequestData(address)).value
+                val allResults = currentResult.searchResults.toMutableList()
+                while (currentResult.offset != null && currentResult.offset!!.isNotEmpty()) {
+                    currentResult = queryExecutor.invoke(query, IndexServerRequestData(address, currentResult.offset)).value
+                    allResults.addAll(currentResult.searchResults)
+                }
+                allResults
+            }
+        }
     }
 }

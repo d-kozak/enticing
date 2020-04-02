@@ -28,14 +28,10 @@ jar {
 
 dependencies {
     compile(project(path:":query-dispatcher",configuration:'default'))
-    compile(project(path:":index-lib",configuration:'default')){
-        // exclude mg4j, it makes the output jar too big, needs to be added externally
-        exclude group: "it.unimi.di"
-        exclude group: "it.unimi.dsi"
-    }
     compile(project(":dto"))
 
     compile("com.xenomachina:kotlin-argparser:2.0.7")
+    compile('org.springframework:spring-web:5.2.3.RELEASE')
 
     /**
      * Fuel - asynchronous coroutine compatible http requests

@@ -31,12 +31,32 @@ abstract class AbstractEnticingPlatformTest(
                 "nertag:person nertag:person"
         )
         for (query in queries) {
-            val result = fixture.sendQuery(SearchQuery(query, snippetCount = Int.MAX_VALUE))
+            val result = fixture.sendQuery(SearchQuery(query, snippetCount = 10_000))
             counts[query] = result.searchResults.size
         }
 
         for ((query, count) in counts)
             println("'$query' => $count")
+    }
+
+    @Test
+    fun `all results for example query`() {
+        val counts = mutableMapOf<String, Pair<Int, Int>>()
+        val query = "a:=nertag:person < lemma:(influence | impact | (paid < tribute) ) < b:=nertag:person ctx:sent && a.url != b.url"
+        var result = fixture.sendQuery(SearchQuery(query, snippetCount = 3_000))
+        var resultCount = result.searchResults.size
+        var paginationCount = 1
+        println("Round $paginationCount, got ${result.searchResults.size} new results")
+        while (result.hasMore) {
+            result = fixture.getMore()
+            paginationCount++
+            println("Round $paginationCount, got ${result.searchResults.size} new results")
+            resultCount += result.searchResults.size
+        }
+        println("Query '$query' => $resultCount in $paginationCount iterations")
+        // size 20 => 14901
+        // size 1000 => 10085
+        // size 10_000 => 1297
     }
 
 
