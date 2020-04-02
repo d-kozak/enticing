@@ -2,7 +2,6 @@ package cz.vutbr.fit.knot.enticing.index.client
 
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import runConsoleClient
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
