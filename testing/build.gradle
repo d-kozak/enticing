@@ -15,6 +15,8 @@ dependencies {
     implementation(project(path: ":query-dispatcher", configuration: 'default'))
     implementation(project(path: ":management-core", configuration: 'default'))
     implementation(project(path: ":console-client", configuration: 'default'))
+    implementation(project(path: ":index-lib", configuration: 'default'))
+    implementation(project(path: ":index-server", configuration: 'default'))
 
     compile('org.springframework:spring-web:5.2.3.RELEASE')
 

@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.enticing.index.client
 
 import cz.vutbr.fit.knot.enticing.dto.IndexServer
 import cz.vutbr.fit.knot.enticing.dto.SearchQuery
+import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import java.io.File
@@ -14,9 +15,9 @@ class ConsoleClient(val args: ConsoleClientArgs, loggerFactory: LoggerFactory) :
 
 
     private val target: QueryTarget = when {
-        args.indexServer != null -> QueryTarget.IndexServerTarget(args.indexServer!!)
-        args.webserver != null -> QueryTarget.WebserverTarget(args.webserver!!, args.searchSettingsId)
-        args.queryDispatcher != null -> QueryTarget.QueryDispatcherTarget(args.queryDispatcher!!)
+        args.indexServer != null -> QueryTarget.IndexServerTarget(args.indexServer!!, loggerFactory)
+        args.webserver != null -> QueryTarget.WebserverTarget(args.webserver!!, args.searchSettingsId, loggerFactory)
+        args.queryDispatcher != null -> QueryTarget.QueryDispatcherTarget(args.queryDispatcher!!, loggerFactory)
         else -> error("One of targets has to be enabled")
     }.also {
         logger.info("Targetting $it")
@@ -28,7 +29,7 @@ class ConsoleClient(val args: ConsoleClientArgs, loggerFactory: LoggerFactory) :
         else -> error("One of targets has to be enabled")
     }
 
-    private val resultStream = if (args.resultFile != null) {
+    private val outputStream = if (args.resultFile != null) {
         logger.info("Saving results to file ${args.resultFile}")
         PrintStream(args.resultFile!!)
     } else System.out
@@ -44,11 +45,32 @@ class ConsoleClient(val args: ConsoleClientArgs, loggerFactory: LoggerFactory) :
     }
 
     private fun processResults(query: SearchQuery, results: List<IndexServer.SearchResult>) {
-        results.forEach { println(it) }
+        logger.info("${results.size} results returned")
+        for (result in results) {
+            outputStream.println(result.documentTitle)
+            outputStream.println(result.url)
+            when (result.payload) {
+                is ResultFormat.Snippet -> outputStream.println(extractPayload(result.payload as ResultFormat.Snippet))
+                is ResultFormat.IdentifierList -> {
+                    (result.payload as ResultFormat.IdentifierList)
+                            .list
+                            .map { "${it.identifier} := ${extractPayload(it.snippet)}" }
+                            .forEach { outputStream.println(it) }
+                }
+            }
+            outputStream.println("=====")
+        }
+    }
+
+    private fun extractPayload(snippet: ResultFormat.Snippet): String = when (snippet) {
+        is ResultFormat.Snippet.PlainText -> snippet.content
+        is ResultFormat.Snippet.Html -> snippet.content
+        is ResultFormat.Snippet.StringWithMetadata -> snippet.content.toString()
+        is ResultFormat.Snippet.TextUnitList -> snippet.content.toString()
     }
 
 
     override fun close() {
-        if (args.resultFile != null) resultStream.close()
+        if (args.resultFile != null) outputStream.close()
     }
 }

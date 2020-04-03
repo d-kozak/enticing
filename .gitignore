@@ -1,5 +1,6 @@
 logs/**
 data/indexed/**
+data/integration/*/indexed/**
 data/pagination/indexed/**
 data/dummy_start_server_data/indexed/**
 lib/**

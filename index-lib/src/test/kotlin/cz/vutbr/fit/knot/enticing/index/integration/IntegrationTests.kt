@@ -1,9 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.integration
 
-import cz.vutbr.fit.knot.enticing.dto.IndexServer
-import cz.vutbr.fit.knot.enticing.dto.SearchQuery
-import cz.vutbr.fit.knot.enticing.dto.TextFormat
-import cz.vutbr.fit.knot.enticing.dto.TextMetadata
+import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.format.result.toRawText
 import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnit
@@ -43,6 +40,25 @@ class IntegrationTests {
 
     private val collectionManager = initMg4jCollectionManager(collectionManagerConfiguration, SimpleStdoutLoggerFactory)
 
+
+    @Test
+    fun `the same number of results is returned for various snippet size of all results are retrieved`() {
+        for (query in listOf("water", "is has")) {
+            val resultsCount = mutableSetOf<Int>()
+            for (snippetCount in listOf(75, 100, 200, 300, 500, 600, 700, 800, 1000, 10_000)) {
+                var offset: Offset? = Offset(0, 0)
+                var cnt = 0
+                while (offset != null) {
+                    val result = collectionManager.query(SearchQuery(query, snippetCount), offset)
+                    cnt += result.searchResults.size
+                    offset = result.offset
+                }
+                resultsCount.add(cnt)
+            }
+            assertThat(resultsCount)
+                    .hasSize(1)
+        }
+    }
 
     @Test
     @DisplayName("water")

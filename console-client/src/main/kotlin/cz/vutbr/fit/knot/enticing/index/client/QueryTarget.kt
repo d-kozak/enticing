@@ -3,7 +3,9 @@ package cz.vutbr.fit.knot.enticing.index.client
 import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.log.ComponentType
+import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
+import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.query.processor.FuelQueryExecutor
 import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
 import cz.vutbr.fit.knot.enticing.query.processor.flattenResults
@@ -22,7 +24,7 @@ sealed class QueryTarget(val name: String) {
     abstract fun submit(query: SearchQuery): TimedValue<List<IndexServer.SearchResult>>
     abstract fun getAll(query: SearchQuery): TimedValue<List<IndexServer.SearchResult>>
 
-    data class WebserverTarget(val address: String, val settingsId: Int) : QueryTarget("Webserver") {
+    class WebserverTarget(val address: String, val settingsId: Int, loggerFactory: LoggerFactory) : QueryTarget("Webserver") {
 
         private val api = WebserverApi(address, settingsId)
 
@@ -32,10 +34,12 @@ sealed class QueryTarget(val name: String) {
 
         override fun getAll(query: SearchQuery): TimedValue<List<IndexServer.SearchResult>> = measureTimedValue {
             var currentResult = api.sendQuery(query)
+            currentResult.errors.forEach { System.err.println(it) }
             val allResults = currentResult.searchResults.map { it.toIndexServerFormat() }.toMutableList()
 
             while (currentResult.hasMore) {
                 currentResult = api.getMore()
+                currentResult.errors.forEach { System.err.println(it) }
                 allResults.addAll(currentResult.searchResults.map { it.toIndexServerFormat() })
             }
 
@@ -44,7 +48,7 @@ sealed class QueryTarget(val name: String) {
 
     }
 
-    data class QueryDispatcherTarget(val servers: List<String>) : QueryTarget("Dispatcher") {
+    class QueryDispatcherTarget(val servers: List<String>, loggerFactory: LoggerFactory) : QueryTarget("Dispatcher") {
 
         private val onResult: (RequestData<Map<CollectionName, Offset>>, MResult<IndexServer.IndexResultList>) -> Unit = { request, result ->
             if (result.isSuccess)
@@ -64,11 +68,13 @@ sealed class QueryTarget(val name: String) {
         override fun getAll(query: SearchQuery): TimedValue<List<IndexServer.SearchResult>> = measureTimedValue {
             var nodes = servers.map { IndexServerRequestData(it) }
             var result = dispatch(query, nodes, onResult)
+            result.first.errors.forEach { System.err.println(it) }
             val allResults = result.first.searchResults.map { it.toIndexServerFormat() }.toMutableList()
 
             while (result.second.isNotEmpty()) {
                 nodes = result.second.map { (address, offset) -> IndexServerRequestData(address, offset) }
                 result = dispatch(query, nodes, onResult)
+                result.first.errors.forEach { System.err.println(it) }
                 allResults.addAll(result.first.searchResults.map { it.toIndexServerFormat() })
             }
 
@@ -80,19 +86,27 @@ sealed class QueryTarget(val name: String) {
                         .flattenResults(query.query, SimpleStdoutLoggerFactory.namedLogger("QueryDispatcherTarget"))
     }
 
-    data class IndexServerTarget(val address: String) : QueryTarget("IndexServer") {
+    class IndexServerTarget(val address: String, loggerFactory: LoggerFactory) : QueryTarget("IndexServer") {
+
+        private val logger = loggerFactory.logger { }
+
         override fun submit(query: SearchQuery): TimedValue<List<IndexServer.SearchResult>> =
                 runBlocking {
-                    measureTimedValue { queryExecutor.invoke(query, IndexServerRequestData(address)).value.searchResults }
+                    measureTimedValue { queryExecutor.invoke(query, IndexServerRequestData(address)).unwrap().searchResults }
                 }
 
 
         override fun getAll(query: SearchQuery): TimedValue<List<IndexServer.SearchResult>> = measureTimedValue {
             runBlocking {
-                var currentResult = queryExecutor.invoke(query, IndexServerRequestData(address)).value
+                var cnt = 1
+                var currentResult = queryExecutor.invoke(query, IndexServerRequestData(address)).unwrap()
+                currentResult.errors.forEach { System.err.println(it) }
                 val allResults = currentResult.searchResults.toMutableList()
+                logger.info("Iteration ${cnt++}: got ${currentResult.searchResults.size} results")
                 while (currentResult.offset != null && currentResult.offset!!.isNotEmpty()) {
-                    currentResult = queryExecutor.invoke(query, IndexServerRequestData(address, currentResult.offset)).value
+                    currentResult = queryExecutor.invoke(query, IndexServerRequestData(address, currentResult.offset)).unwrap()
+                    currentResult.errors.forEach { System.err.println(it) }
+                    logger.info("Iteration ${cnt++}: got ${currentResult.searchResults.size} results")
                     allResults.addAll(currentResult.searchResults)
                 }
                 allResults

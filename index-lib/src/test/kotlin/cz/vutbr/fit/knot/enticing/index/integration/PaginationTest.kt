@@ -97,39 +97,49 @@ class PaginationTest {
     @Test
     fun `mythology and date`() {
         // 2 mythologies * 3 dates * 1000 documents == 12000 results
-        checkResult("nertag:(mythology date)", 6000)
+        checkResultSize("nertag:(mythology date)", 6000)
     }
 
     @Test
     fun `only location`() {
         // 1 location * 1000 documents == 1000 results
-        checkResult("nertag:(location)", 1000)
+        checkResultSize("nertag:(location)", 1000)
     }
 
     @Test
     fun `location and date`() {
         // 1 location * 3 dates * 1000 documents == 3000 results
-        checkResult("nertag:(location date)", 3000)
+        checkResultSize("nertag:(location date)", 3000)
     }
 
     @Test
     fun `location or date`() {
         // (1 location + 3 dates) * 1000 documents == 4000 results
-        checkResult("nertag:(location | date)", 4000)
+        checkResultSize("nertag:(location | date)", 4000)
     }
 
-    private fun checkResult(query: String, expectedResultCount: Int) {
-        val eqlResults = getAllPossibleResults(query)
-        assertThat(eqlResults.size)
-                .isEqualTo(expectedResultCount)
-        val allResults = mutableListOf<IndexServer.SearchResult>()
-        var offset: Offset? = Offset(0, 0)
-        while (offset != null) {
-            val res = collectionManager.query(templateQuery.copy(query = query, snippetCount = 17), offset)
-            allResults.addAll(res.searchResults)
-            offset = res.offset
+    /**
+     * check that expected amount of results is returned
+     * tested on various snippetSize
+     */
+    private fun checkResultSize(query: String, expectedResultCount: Int, snippetSizeOptions: List<Int> = listOf(5, 10, 17, 20, 50, 75, 100, 200, 300, 500)) {
+        val results = mutableSetOf<Int>()
+        for (snippetCount in snippetSizeOptions) {
+            val eqlResults = getAllPossibleResults(query)
+            assertThat(eqlResults.size)
+                    .isEqualTo(expectedResultCount)
+            val allResults = mutableListOf<IndexServer.SearchResult>()
+            var offset: Offset? = Offset(0, 0)
+            while (offset != null) {
+                val res = collectionManager.query(templateQuery.copy(query = query, snippetCount = snippetCount), offset)
+                allResults.addAll(res.searchResults)
+                offset = res.offset
+            }
+            results.add(allResults.size)
         }
-        assertThat(allResults.size)
+        assertThat(results)
+                .hasSize(1)
+        assertThat(results.first())
                 .isEqualTo(expectedResultCount)
     }
 

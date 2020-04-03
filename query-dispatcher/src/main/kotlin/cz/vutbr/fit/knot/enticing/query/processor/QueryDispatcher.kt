@@ -64,9 +64,10 @@ class QueryDispatcher<QueryType : Query<QueryType>, OffsetType, Result : QueryRe
                 serversToCall.clear()
                 for ((server, result) in lastResults) {
                     val resultsPerServer = serverResults[server] ?: mutableListOf()
-                    if (result.isSuccess && result.value.offset != null) {
-                        serversToCall.add(result.value.createRequest(server))
+                    if (result.isSuccess) {
                         collectedSnippetsCount += result.value.searchResults.size
+                        if (result.value.offset != null)
+                            serversToCall.add(result.value.createRequest(server))
                     }
                     resultsPerServer.add(result)
                     serverResults[server] = resultsPerServer

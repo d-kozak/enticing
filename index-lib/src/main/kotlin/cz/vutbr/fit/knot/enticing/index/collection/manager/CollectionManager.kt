@@ -48,9 +48,11 @@ class CollectionManager internal constructor(
             val (resultList, relevantDocuments) = searchEngine.search(ast.toMgj4Query(), query.snippetCount - matched.size, documentOffset)
             if (resultList.isEmpty()) return IndexServer.CollectionResultList(matched, null)
             for ((i, result) in resultList.withIndex()) {
+                val thisWasFirstDocument = firstDocument
+                firstDocument = false
                 val document = searchEngine.loadDocument(result.documentId)
                 check(document.id == result.documentId) { "Invalid document id set in the search engine: ${result.documentId} vs ${document.id}" }
-                val matchInfo = postProcessor.process(ast.deepCopy(), document, query.defaultIndex, if (firstDocument) resultOffset else 0, metadataConfiguration)
+                val matchInfo = postProcessor.process(ast.deepCopy(), document, query.defaultIndex, if (thisWasFirstDocument) resultOffset else 0, metadataConfiguration)
                 if (matchInfo == null || matchInfo.intervals.isEmpty()) continue
                 val (results, hasMore) = resultCreator.multipleResults(document, matchInfo, query, query.snippetCount - matched.size, query.resultFormat)
                 val searchResults = results.map {
@@ -65,13 +67,12 @@ class CollectionManager internal constructor(
                 matched.addAll(searchResults)
                 if (matched.size >= query.snippetCount) {
                     val nextOffset = when {
-                        hasMore && firstDocument -> Offset(documentOffset, results.size + resultOffset)
+                        hasMore && thisWasFirstDocument -> Offset(documentOffset, results.size + resultOffset)
                         hasMore -> Offset(documentOffset + i, results.size)
                         else -> Offset(documentOffset + i + 1, 0)
                     }
                     return IndexServer.CollectionResultList(matched, nextOffset)
                 }
-                firstDocument = false
             }
             documentOffset += resultList.size
         }

@@ -61,10 +61,10 @@ fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: Stri
     if (!ast.documentRestriction.evaluate(document)) return MatchInfo.empty()
 
     val seq = evaluateQuery(ast, document, defaultIndex, metadataConfiguration, interval)
-            .drop(resultOffset)
             .filter { it.interval.size < 50 }
             .filterNot { isRedundant(it, ast.symbolTable ?: emptyMap(), ast.originalQuery) }
             .filter { ast.accept(GlobalConstraintEvaluationVisitor(ast, metadataConfiguration, document, it)) }
+            .drop(resultOffset)
     return MatchInfo(seq.take(512).toList())
 }
 
