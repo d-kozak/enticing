@@ -17,12 +17,11 @@ class IndexServerQueryIntegrationTests {
 
     @Test
     fun `consistent total amount of results is returned when processing all documents no matter the snippet size in queries`() {
-        val service = prepareIndexServerQueryService()
+        val service = prepareTestQueryService()
         val results = mutableMapOf<String, Map<Int, Int>>()
-        for (query in listOf("is has", "water", "is has")) {
+        for (query in listOf("water", "is has")) {
             val queryResult = mutableMapOf<Int, Int>()
-//            for (snippetCount in listOf(10, 20, 30, 100)) {
-            for (snippetCount in listOf(75, 100, 200, 300)) {
+            for (snippetCount in listOf(10, 20, 30, 75, 100, 200, 300)) {
                 val payloads = mutableListOf<IndexServer.SearchResult>()
                 var res = service.processQuery(SearchQuery(query, snippetCount))
                 assertThat(res.errors).isEmpty()

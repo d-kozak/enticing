@@ -1,14 +1,22 @@
 package cz.vutbr.fit.knot.enticing.testing.index.server
 
+import cz.vutbr.fit.knot.enticing.dto.CollectionRequestData
+import cz.vutbr.fit.knot.enticing.dto.IndexServer
+import cz.vutbr.fit.knot.enticing.dto.Offset
+import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.CollectionManagerConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexBuilderConfig
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.metadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.validateOrFail
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
+import cz.vutbr.fit.knot.enticing.index.collection.manager.CollectionQueryExecutor
 import cz.vutbr.fit.knot.enticing.index.mg4j.initMg4jCollectionManager
-import cz.vutbr.fit.knot.enticing.index.server.service.QueryService
 import cz.vutbr.fit.knot.enticing.index.startIndexing
+import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
+import cz.vutbr.fit.knot.enticing.log.logger
+import cz.vutbr.fit.knot.enticing.query.processor.QueryDispatcher
+import cz.vutbr.fit.knot.enticing.query.processor.flattenResults
 import java.io.File
 
 
@@ -99,10 +107,30 @@ fun indexAll() {
         startIndexing(templateBuilderConfig.copy(collectionName = col, mg4jDir = File("../data/integration/$col/mg4j"), indexDir = File("../data/integration/$col/indexed")), SimpleStdoutLoggerFactory)
 }
 
-fun prepareIndexServerQueryService(): QueryService {
-    val compiler = EqlCompiler(SimpleStdoutLoggerFactory)
+class TestQueryService {
     val collectionManagers = collections.map { templateCollectionManagerConfig.copy(collectionName = it, mg4jDir = File("../data/integration/$it/mg4j"), indexDir = File("../data/integration/$it/indexed")) }
             .map { initMg4jCollectionManager(it, SimpleStdoutLoggerFactory) }
             .associateBy { it.collectionName }
-    return QueryService(collectionManagers, metadata, compiler, SimpleStdoutLoggerFactory)
+
+    val queryDispatcher = QueryDispatcher(CollectionQueryExecutor(collectionManagers), ComponentType.INDEX_SERVER, SimpleStdoutLoggerFactory)
+
+    private val logger = SimpleStdoutLoggerFactory.logger { }
+
+    private val eqlCompiler = EqlCompiler(SimpleStdoutLoggerFactory)
+
+    fun processQuery(query: SearchQuery): IndexServer.IndexResultList {
+        query.eqlAst = eqlCompiler.parseOrFail(query.query, metadata)
+
+        val requestData = if (query.offset != null) query.offset!!.map { (collection, offset) -> CollectionRequestData(collection, offset) }
+        else collectionManagers.keys.map { CollectionRequestData(it, Offset(0, 0)) }
+
+        logger.info("Executing query $query with requestData $requestData")
+        return queryDispatcher.dispatchQuery(query, requestData)
+                .flattenResults()
+    }
+
 }
+
+fun prepareTestQueryService(): TestQueryService = TestQueryService()
+
+

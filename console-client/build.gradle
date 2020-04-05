@@ -7,7 +7,7 @@ plugins {
 
 group = "cz.vutbr.fit.knot.enticing"
 version = "0.0.1-SNAPSHOT"
-libsDirName= "../../lib"
+libsDirName = "../../lib"
 
 
 repositories {
@@ -27,8 +27,8 @@ jar {
 }
 
 dependencies {
-    compile(project(path:":query-dispatcher",configuration:'default'))
-    compile(project(":dto"))
+    compile(project(path: ":query-dispatcher", configuration: 'default'))
+    compile(project(path: ":dto", configuration: 'default'))
 
     compile("com.xenomachina:kotlin-argparser:2.0.7")
     compile('org.springframework:spring-web:5.2.3.RELEASE')
@@ -57,7 +57,7 @@ dependencies {
     }
     implementation("it.unimi.dsi:dsiutils:2.3.0")
     implementation("it.unimi.dsi:sux4j:4.0.0")
-    
+
     /**
      * Testing and mocking
      */
