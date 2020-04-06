@@ -99,11 +99,14 @@ const CMInputWrapper = (props: CMInputWrapperProps) => {
     useEffect(() => {
         if (codeMirrorRef.current) {
             const codeMirror = codeMirrorRef.current;
-            const editor: CodeMirror.Editor = codeMirror.getCodeMirror()
+            const editor: CodeMirror.Editor = codeMirror.getCodeMirror();
+            const doc = editor.getDoc();
+            if (query.length > 0 && settings)
+                analyzeQuery(query, settings, setMg4jQuery, doc)
         } else {
             console.error('code mirror ref not set');
         }
-    }, []);
+    }, [settings]);
 
     const queryChanged = (query: string) => {
         setQuery(query);
