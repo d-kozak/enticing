@@ -1,11 +1,13 @@
 package cz.vutbr.fit.knot.enticing.webserver.service
 
 
-import cz.vutbr.fit.knot.enticing.dto.WebServer
+import cz.vutbr.fit.knot.enticing.dto.*
+import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 
@@ -31,10 +33,26 @@ class TemporaryResultStorage(loggerFactory: LoggerFactory) {
 
     private val logger = loggerFactory.logger { }
 
-
-    fun initEntry(id: String) {
-        memory[id] = StorageEntry(WebServer.EagerSearchResult(WebServer.SearchingState.RUNNING))
+    fun <T> useEntryFor(uuid: UUID?, block: () -> T): T {
+        if (uuid == null) return block()
+        initEntry(uuid.toString())
+        return try {
+            block()
+        } finally {
+            markDone(uuid.toString())
+        }
     }
+
+    fun callbackFor(uuid: UUID?): ((RequestData<Map<CollectionName, Offset>>, MResult<IndexServer.IndexResultList>) -> Unit)? {
+        if (uuid == null) return null
+        return { request, result ->
+            if (result.isSuccess) {
+                val data = result.value.searchResults.map { it.withHost(request.address) }
+                this.addResult(uuid.toString(), data)
+            }
+        }
+    }
+
 
     fun addResult(id: String, resultList: List<WebServer.SearchResult>) {
         val entry = memory[id]
@@ -55,7 +73,11 @@ class TemporaryResultStorage(loggerFactory: LoggerFactory) {
         }
     }
 
-    fun markDone(id: String) {
+    private fun initEntry(id: String) {
+        memory[id] = StorageEntry(WebServer.EagerSearchResult(WebServer.SearchingState.RUNNING))
+    }
+
+    private fun markDone(id: String) {
         val entry = memory[id]
         if (entry != null) {
             entry.access { result ->

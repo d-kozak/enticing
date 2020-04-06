@@ -41,22 +41,30 @@ abstract class AbstractEnticingPlatformTest(
 
     @Test
     fun `all results for example query`() {
-        val counts = mutableMapOf<String, Pair<Int, Int>>()
+        val counts = mutableMapOf<Int, Pair<Int, Int>>()
         val query = "a:=nertag:person < lemma:(influence | impact | (paid < tribute) ) < b:=nertag:person ctx:sent && a.url != b.url"
-        var result = fixture.sendQuery(SearchQuery(query, snippetCount = 3_000))
-        var resultCount = result.searchResults.size
-        var paginationCount = 1
-        println("Round $paginationCount, got ${result.searchResults.size} new results")
-        while (result.hasMore) {
-            result = fixture.getMore()
-            paginationCount++
+        for (count in listOf(50, 100, 200, 500, 1_000, 3_000, 10_000)) {
+            var result = fixture.sendQuery(SearchQuery(query, snippetCount = count))
+            var resultCount = result.searchResults.size
+            var paginationCount = 1
             println("Round $paginationCount, got ${result.searchResults.size} new results")
-            resultCount += result.searchResults.size
+            while (result.hasMore) {
+                result = fixture.getMore()
+                paginationCount++
+                println("Round $paginationCount, got ${result.searchResults.size} new results")
+                resultCount += result.searchResults.size
+            }
+            counts[count] = paginationCount to resultCount
         }
-        println("Query '$query' => $resultCount in $paginationCount iterations")
-        // size 20 => 14901
-        // size 1000 => 10085
-        // size 10_000 => 1297
+        for ((snippetCount, pair) in counts) {
+            val (paginationCount, resultCount) = pair
+            println("Query '$query',snippetCount $snippetCount => $resultCount in $paginationCount iterations")
+        }
+        // size 2222 => 32298
+        // size 3333 => 32788
+        // size 5131 => 31874
+        // size 7342 => 31699
+        // size 10_000 => 31190
     }
 
 

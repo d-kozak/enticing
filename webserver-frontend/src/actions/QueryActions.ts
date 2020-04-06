@@ -63,7 +63,7 @@ function handleErrors(response: AxiosResponse<ResultList>, dispatch: ThunkDispat
     }
 }
 
-function mainRequest(searchSettings: SearchSettings, searchQuery: SearchQuery, timer: PerfTimer, dispatch: ThunkDispatch<ApplicationState, undefined, AnyAction>, resultsPerPage: number, query: string) {
+function mainRequest(searchSettings: SearchSettings, searchQuery: SearchQuery, timer: PerfTimer, dispatch: ThunkDispatch<ApplicationState, undefined, AnyAction>) {
     axios.post(`${API_BASE_PATH}/query?settings=${searchSettings.id}`, searchQuery, {
         withCredentials: true
     }).then(response => {
@@ -89,8 +89,8 @@ function mainRequest(searchSettings: SearchSettings, searchQuery: SearchQuery, t
         timer.finish();
     }).catch((error) => {
         console.error(error);
-        if (error.status == 400) {
-            let msg = `Cannot search, query '${query}' is not valid`;
+        if (error.response && error.response.status == 400) {
+            let msg = `Cannot search, query is not valid`;
             console.error(msg);
             dispatch(openSnackbar(msg));
         } else {
@@ -110,7 +110,6 @@ function sleep(ms: number) {
 
 export const startSearchingAction = (query: string, user: User, searchSettings: SearchSettings, history?: H.History): ThunkResult<void> => async (dispatch, getState) => {
     const state = getState();
-    const resultsPerPage = state.userState.user.userSettings.resultsPerPage;
     const res = prepareQuery(query, user, searchSettings, state, dispatch);
     if (res == null) return;
     const [searchQuery, filteredCorpusFormat] = res;
@@ -125,7 +124,7 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
         moreResultsAvailable: true
     }));
 
-    mainRequest(searchSettings, searchQuery, timer, dispatch, resultsPerPage, query);
+    mainRequest(searchSettings, searchQuery, timer, dispatch);
 
     let redirected = false;
 
@@ -157,7 +156,7 @@ export const startSearchingAction = (query: string, user: User, searchSettings: 
             }
 
             if (response.data.state === "FINISHED") break;
-            await sleep(300);
+            await sleep(500);
         }
 
     } catch (e) {

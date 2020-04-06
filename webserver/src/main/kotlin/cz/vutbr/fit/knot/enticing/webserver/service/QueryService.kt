@@ -1,7 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver.service
 
 import cz.vutbr.fit.knot.enticing.dto.*
-import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.log.measure
@@ -12,7 +11,6 @@ import cz.vutbr.fit.knot.enticing.webserver.entity.SearchSettings
 import cz.vutbr.fit.knot.enticing.webserver.exception.InvalidSearchSettingsException
 import cz.vutbr.fit.knot.enticing.webserver.repository.SearchSettingsRepository
 import org.springframework.stereotype.Service
-import java.util.*
 import javax.servlet.http.HttpSession
 
 @Service
@@ -36,34 +34,34 @@ class QueryService(
     fun format(settings: Long) = corpusFormatService.loadFormat(checkUserCanAccessSettings(settings))
 
     fun query(query: SearchQuery, selectedSettings: Long, session: HttpSession): WebServer.ResultList = logger.measure("query", "query='${query.query}', snippetCount=${query.snippetCount}, settingsId=$selectedSettings") {
-        val searchSettings = checkUserCanAccessSettings(selectedSettings)
-        compilerService.validateOrFail(query.query, corpusFormatService.loadFormat(searchSettings).toMetadataConfiguration())
-        val requestData = searchSettings.servers.map { IndexServerRequestData(it) }
-        val result = submitQuery(query, requestData, session, selectedSettings)
-        message = "Collected ${result.searchResults.size} snippets"
-        result
+        resultStorage.useEntryFor(query.uuid) {
+            val searchSettings = checkUserCanAccessSettings(selectedSettings)
+            compilerService.validateOrFail(query.query, corpusFormatService.loadFormat(searchSettings).toMetadataConfiguration())
+            val requestData = searchSettings.servers.map { IndexServerRequestData(it) }
+            val result = submitQuery(query, requestData, session, selectedSettings)
+            message = "Collected ${result.searchResults.size} snippets"
+            result
+        }
     }
 
     fun getMore(session: HttpSession): WebServer.ResultList? {
         val (query, selectedSettings, offset) = session.getAttribute("lastQuery") as? LastQuery ?: return null
-        val searchSettings = checkUserCanAccessSettings(selectedSettings)
-        val requestData = searchSettings.servers
-                .filter { it in offset && offset.getValue(it).isNotEmpty() }
-                .map { IndexServerRequestData(it, offset[it]) }
-        return submitQuery(query, requestData, session, selectedSettings)
+        return resultStorage.useEntryFor(query.uuid) {
+            val searchSettings = checkUserCanAccessSettings(selectedSettings)
+            val requestData = searchSettings.servers
+                    .filter { it in offset && offset.getValue(it).isNotEmpty() }
+                    .map { IndexServerRequestData(it, offset[it]) }
+            submitQuery(query, requestData, session, selectedSettings)
+        }
     }
 
 
     private fun submitQuery(query: SearchQuery, requestData: List<IndexServerRequestData>, session: HttpSession, selectedSettings: Long): WebServer.ResultList {
         logger.info("Executing query $query with requestData $requestData")
-        val onResult = query.uuid?.setupStorageEntry()
-        val (result, offset) = dispatcher.dispatchQuery(query, requestData, onResult)
+        val (result, offset) = dispatcher.dispatchQuery(query, requestData, resultStorage.callbackFor(query.uuid))
                 .flattenResults(query.query, logger)
 
         session.setAttribute("lastQuery", LastQuery(query, selectedSettings, offset))
-
-        if (query.uuid != null)
-            resultStorage.markDone(query.uuid.toString())
 
         return result
     }
@@ -89,16 +87,6 @@ class QueryService(
     }
 
     fun getRawDocument(request: WebServer.RawDocumentRequest): String = indexServerConnector.getRawDocument(request)
-
-    private fun UUID.setupStorageEntry(): ((RequestData<Map<CollectionName, Offset>>, MResult<IndexServer.IndexResultList>) -> Unit)? {
-        resultStorage.initEntry(this.toString())
-        return { request, result ->
-            if (result.isSuccess) {
-                val data = result.value.searchResults.map { it.withHost(request.address) }
-                resultStorage.addResult(this.toString(), data)
-            }
-        }
-    }
 
 }
 
