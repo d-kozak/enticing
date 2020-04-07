@@ -67,6 +67,8 @@ private fun readableTimestamp(timestamp: LocalDateTime, formatter: DateTimeForma
 
 inline fun LoggerFactory.logger(noinline func: () -> Unit): Logger = namedLogger(resolveName(func))
 
+inline fun stdoutLogger(noinline func: () -> Unit) = SimpleStdoutLoggerFactory.logger(func)
+
 interface LoggerFactory : AutoCloseable {
     fun namedLogger(name: String): Logger
 
