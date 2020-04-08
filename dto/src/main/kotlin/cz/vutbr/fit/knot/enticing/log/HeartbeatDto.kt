@@ -9,6 +9,5 @@ data class HeartbeatDto(
         val fullAddress: String,
         val componentType: ComponentType,
         val status: ServerStatus? = null,
-        var timestamp: LocalDateTime = LocalDateTime.now(),
-        var isAlive: Boolean = true
+        var timestamp: LocalDateTime = LocalDateTime.now()
 )

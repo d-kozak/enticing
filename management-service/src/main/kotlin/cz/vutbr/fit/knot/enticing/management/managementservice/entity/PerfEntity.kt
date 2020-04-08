@@ -1,19 +1,15 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.entity
 
 
-import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.PerfDto
 import java.time.LocalDateTime
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
+import javax.persistence.*
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.PositiveOrZero
 
-fun PerfDto.toEntity() = PerfEntity(0, className, operationId, arguments, duration, outcome, componentId, componentType, timestamp)
+fun PerfDto.toEntity(component: ComponentEntity) = PerfEntity(0, className, operationId, arguments, duration, result, component, timestamp)
 
-fun PerfEntity.toDto() = PerfDto(className, operationId, arguments, duration, outcome, componentId, componentType, timestamp)
+fun PerfEntity.toDto() = PerfDto(className, operationId, arguments, duration, outcome, component.fullAddress, component.type, timestamp)
 
 @Entity
 class PerfEntity(
@@ -31,9 +27,8 @@ class PerfEntity(
         val duration: Long,
         @field:NotEmpty
         val outcome: String,
-        @field:NotEmpty
-        val componentId: String,
-        val componentType: ComponentType,
+        @field:ManyToOne
+        val component: ComponentEntity,
         val timestamp: LocalDateTime
 ) {
 
@@ -51,8 +46,7 @@ class PerfEntity(
     }
 
     override fun toString(): String {
-        return "PerfEntity(id=$id, className='$className', operationId='$operationId', arguments=$arguments, duration=$duration, outcome='$outcome', componentId='$componentId', componentType=$componentType, timestamp=$timestamp)"
+        return "PerfEntity(id=$id, className='$className', operationId='$operationId', arguments=$arguments, duration=$duration, outcome='$outcome', timestamp=$timestamp)"
     }
-
 
 }

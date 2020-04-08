@@ -1,18 +1,14 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.entity
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.LogType
-import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.LogDto
 import java.time.LocalDateTime
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
+import javax.persistence.*
 import javax.validation.constraints.NotEmpty
 
-fun LogDto.toEntity() = LogEntity(0, className, message, logType, componentId, componentType, timestamp)
+fun LogDto.toEntity(component: ComponentEntity) = LogEntity(0, className, message, logType, component, timestamp)
 
-fun LogEntity.toDto() = LogDto(classname, message, logType, componentId, componentType, timestamp)
+fun LogEntity.toDto() = LogDto(classname, message, logType, component.fullAddress, component.type, timestamp)
 
 @Entity
 class LogEntity(
@@ -25,9 +21,8 @@ class LogEntity(
         @field:Column(length = 2048)
         var message: String = "",
         var logType: LogType = LogType.INFO,
-        @field:NotEmpty
-        val componentId: String,
-        val componentType: ComponentType,
+        @field:ManyToOne
+        val component: ComponentEntity,
         var timestamp: LocalDateTime
 ) {
 
@@ -45,7 +40,7 @@ class LogEntity(
     }
 
     override fun toString(): String {
-        return "LogEntity(id=$id, classname='$classname', message='$message', logType=$logType, componentId='$componentId', componentType=$componentType, timestamp=$timestamp)"
+        return "LogEntity(id=$id, classname='$classname', message='$message', logType=$logType, timestamp=$timestamp)"
     }
 
 

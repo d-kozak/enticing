@@ -58,7 +58,7 @@ inline fun <T> Logger.measure(operationId: String, arguments: String? = null, bl
 
 private fun LogMessage.toPrintableString(formatter: DateTimeFormatter) = "${readableTimestamp(timestamp, formatter)} : $className : $logType \n message:  $message"
 
-private fun PerfMessage.toPrintableString(formatter: DateTimeFormatter) = "${readableTimestamp(timestamp, formatter)} : $className : PERF : Operation '$operationId' : $outcome : ${readableDuration(duration)}  \n arguments $arguments"
+private fun PerfMessage.toPrintableString(formatter: DateTimeFormatter) = "${readableTimestamp(timestamp, formatter)} : $className : PERF : Operation '$operationId' : $result : ${readableDuration(duration)}  \n arguments $arguments"
 
 private fun readableDuration(millis: Long) = Duration.ofMillis(millis).toString().substring(2)
 
@@ -77,13 +77,13 @@ interface LoggerFactory : AutoCloseable {
 
 
 private class NamedLogger(val componentName: String, val pipelines: List<LoggerPipeLineNode>) : Logger {
-    override fun debug(message: String) = onLog(LogMessage(componentName, message, LogType.DEBUG))
+    override fun debug(message: String) = onLog(LogMessage(LogType.DEBUG, componentName, message))
 
-    override fun info(message: String) = onLog(LogMessage(componentName, message, LogType.INFO))
+    override fun info(message: String) = onLog(LogMessage(LogType.INFO, componentName, message))
 
-    override fun warn(message: String) = onLog(LogMessage(componentName, message, LogType.WARN))
+    override fun warn(message: String) = onLog(LogMessage(LogType.WARN, componentName, message))
 
-    override fun error(message: String) = onLog(LogMessage(componentName, message, LogType.ERROR))
+    override fun error(message: String) = onLog(LogMessage(LogType.ERROR, componentName, message))
 
     private fun onLog(logMessage: LogMessage) {
         pipelines.forEach { it.log(logMessage) }

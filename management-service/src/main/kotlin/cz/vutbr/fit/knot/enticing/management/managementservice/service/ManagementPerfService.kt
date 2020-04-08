@@ -14,14 +14,14 @@ import kotlin.math.sqrt
 @Service
 class ManagementPerfService(val perfRepository: PerfRepository) {
 
-    fun add(Perf: PerfDto) = perfRepository.save(Perf.toEntity()).toDto()
+    fun add(perf: PerfDto) = perfRepository.save(perf.toEntity()).toDto()
 
+    fun getAll(pageable: Pageable) = perfRepository.findAllByOrderByTimestampDesc(pageable).map { it.toDto() }
 
     fun computeOperationStatistics(): Map<String, GeneralOperationStatistics> = perfRepository.findAll()
             .groupBy { it.operationId }
             .map { (operationId, operations) -> singleOperationStats(operationId, operations) }
             .associateBy { it.operationId }
-
 
     internal fun singleOperationStats(operationId: String, operations: List<PerfEntity>): GeneralOperationStatistics {
         val stats = GeneralOperationStatistics(operationId)
@@ -35,6 +35,4 @@ class ManagementPerfService(val perfRepository: PerfRepository) {
         stats.averageDurationDeviation = sqrt(operations.fold(0.0) { acc, perf -> acc + abs(perf.duration - stats.averageDuration) } / operations.size)
         return stats
     }
-
-    fun getAll(pageable: Pageable) = perfRepository.findAllByOrderByTimestampDesc(pageable).map { it.toDto() }
 }

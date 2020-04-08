@@ -11,11 +11,11 @@ data class PerfMessage(
         val operationId: String,
         val arguments: String?,
         val duration: Long,
-        val outcome: String,
+        val result: String,
         val timestamp: LocalDateTime = LocalDateTime.now()
 )
 
-fun PerfMessage.toPerfDto(componentId: String, componentType: ComponentType) = PerfDto(className, operationId, arguments, duration, outcome, componentId, componentType, timestamp)
+fun PerfMessage.toPerfDto(componentId: String, componentType: ComponentType) = PerfDto(className, operationId, arguments, duration, result, componentId, componentType, timestamp)
 
 data class PerfDto(
         @field:NotBlank
@@ -28,7 +28,7 @@ data class PerfDto(
         @field:PositiveOrZero
         val duration: Long,
         @field:NotEmpty
-        val outcome: String,
+        val result: String,
         @field:NotBlank
         val componentId: String,
         val componentType: ComponentType,

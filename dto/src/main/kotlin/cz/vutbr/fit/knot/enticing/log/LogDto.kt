@@ -6,9 +6,9 @@ import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Size
 
 data class LogMessage(
+        val logType: LogType,
         val className: String,
         val message: String,
-        val logType: LogType,
         val timestamp: LocalDateTime = LocalDateTime.now()
 )
 
