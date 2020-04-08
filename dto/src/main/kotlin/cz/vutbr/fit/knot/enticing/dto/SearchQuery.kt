@@ -199,3 +199,21 @@ enum class TextFormat {
      */
     TEXT_UNIT_LIST;
 }
+
+
+/**
+ * Unique id for one search result
+ */
+val IndexServer.SearchResult.uniqueId: String
+    get() = "$collection-$documentId-${payload.uniqueId}"
+
+
+/**
+ * Unique id for one ResultFormat
+ */
+val cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat.uniqueId: String
+    get() = when (this) {
+        is cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat.Snippet -> "$location-$size"
+        is cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat.IdentifierList -> this.list.sortedBy { it.identifier }
+                .joinToString("-") { it.snippet.uniqueId }
+    }

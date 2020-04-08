@@ -34,7 +34,7 @@ fun QueryTarget.checkPagination(queries: List<String> = DEFAULT_QUERIES, snippet
             resultCountPerSnippetCount[snippetCount] = results.size
             cnt = results.size
         }
-        logger.info("Total results for query '$query':")
+        logger.info("Total results for the query '$query':")
         resultCountPerSnippetCount.forEach { println(it) }
         if (resultCountPerSnippetCount.values.toSet().size != 1) {
             errors.add("Query '$query' had different resultCount: $resultCountPerSnippetCount")

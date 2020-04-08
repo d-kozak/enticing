@@ -27,8 +27,8 @@ class FuelQueryExecutor(private val path: String = "/api/v1/query") : QueryExecu
         try {
             url.httpPost()
                     .jsonBody(searchQuery.copy(offset = requestData.offset))
-                    .timeoutRead(120_000)
-                    .timeout(120_000)
+                    .timeoutRead(180_000)
+                    .timeout(180_000)
                     .awaitDto<IndexServer.IndexResultList>()
         } catch (error: FuelError) {
             throw QueryDispatcherException("url $url, error ${error::class} ${error.message}")

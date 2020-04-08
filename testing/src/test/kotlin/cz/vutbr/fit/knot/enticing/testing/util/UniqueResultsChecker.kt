@@ -1,18 +1,16 @@
 package cz.vutbr.fit.knot.enticing.testing.util
 
 import cz.vutbr.fit.knot.enticing.dto.IndexServer
-import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
+import cz.vutbr.fit.knot.enticing.dto.uniqueId
+import org.junit.jupiter.api.fail
 
 fun assertUniqueResults(results: List<IndexServer.SearchResult>) {
-    val ids = mutableSetOf<String>()
-    val duplicities = mutableListOf<String>()
-    for (result in results) {
-        val snippet = result.payload as ResultFormat.Snippet
-        val id = "${result.collection}-${result.documentId}-${snippet.location}-${snippet.size}"
-        if (!ids.add(id)) {
-            duplicities.add(id)
-            System.err.println("Id '$id' is already present, possible duplicity")
+    val duplicities = results.groupBy { it.uniqueId }
+            .values
+            .filter { it.size > 1 }
+    fail {
+        duplicities.joinToString("\n", prefix = "Following documents contain duplicities") {
+            it.joinToString("\n", prefix = "<<Group start>>", postfix = "<<Group end>>")
         }
     }
-    System.err.println("Ids $duplicities not unique")
 }
