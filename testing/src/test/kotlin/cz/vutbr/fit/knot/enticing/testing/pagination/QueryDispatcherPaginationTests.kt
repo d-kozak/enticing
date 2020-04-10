@@ -27,11 +27,14 @@ abstract class QueryDispatcherPaginationTests(
 
     private val logger = stdoutLogger { }
 
+    @Disabled
     class FiveKnots : QueryDispatcherPaginationTests("knot01.fit.vutbr.cz:5627", "knot02.fit.vutbr.cz:5627",
             "knot03.fit.vutbr.cz:5627", "knot04.fit.vutbr.cz:5627", "knot05.fit.vutbr.cz:5627")
 
+    @Disabled
     class TwoKnots : QueryDispatcherPaginationTests("knot01.fit.vutbr.cz:5627", "knot02.fit.vutbr.cz:5627")
 
+    @Disabled
     class AllOfThem : QueryDispatcherPaginationTests(*File("../deploy/big-wiki/servers.txt").readLines()
             .filterNot { it.isBlank() }
             .map { "$it:5627" }

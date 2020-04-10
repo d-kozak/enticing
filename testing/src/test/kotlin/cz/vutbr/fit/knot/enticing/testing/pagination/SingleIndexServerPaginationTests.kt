@@ -13,8 +13,13 @@ import kotlin.time.ExperimentalTime
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 abstract class SingleIndexServerPaginationTests(private val target: QueryTarget) {
 
+    @Disabled
     class Knot01 : SingleIndexServerPaginationTests(QueryTarget.IndexServerTarget("knot01.fit.vutbr.cz:5627", SimpleStdoutLoggerFactory))
+
+    @Disabled
     class Knot25 : SingleIndexServerPaginationTests(QueryTarget.IndexServerTarget("knot25.fit.vutbr.cz:5627", SimpleStdoutLoggerFactory))
+
+    @Disabled
     class Athena12 : SingleIndexServerPaginationTests(QueryTarget.IndexServerTarget("athena12.fit.vutbr.cz:5627", SimpleStdoutLoggerFactory))
 
     private val queryResultCount = ConcurrentHashMap<String, Int>()

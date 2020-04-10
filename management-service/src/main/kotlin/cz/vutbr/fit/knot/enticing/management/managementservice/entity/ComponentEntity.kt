@@ -1,10 +1,13 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.entity
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import cz.vutbr.fit.knot.enticing.log.ComponentType
+import cz.vutbr.fit.knot.enticing.management.managementservice.dto.ComponentInfo
 import java.time.LocalDateTime
 import javax.persistence.*
 import javax.validation.constraints.Positive
+
+
+fun ComponentEntity.toComponentInfo() = ComponentInfo(id, server.id, port, type, lastHeartbeat)
 
 @Entity
 class ComponentEntity(
@@ -12,18 +15,14 @@ class ComponentEntity(
         @field:GeneratedValue
         var id: Long,
         @field:ManyToOne
-        var server: ServerEntity,
+        var server: ServerInfoEntity,
         @field:Positive
-        var port: Long,
+        var port: Int,
         var type: ComponentType,
-        @field:OneToMany(mappedBy = "component")
-        @field:JsonIgnore
         var lastHeartbeat: LocalDateTime,
         @field:OneToMany(mappedBy = "component")
-        @field:JsonIgnore
         var logs: List<LogEntity>,
         @field:OneToMany(mappedBy = "component")
-        @field:JsonIgnore
         var perfLog: List<PerfEntity>
 ) {
 

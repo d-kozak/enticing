@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 import javax.persistence.*
 
 
-fun ServerStatus.toEntity(server: ServerEntity, timestamp: LocalDateTime) = ServerStatusEntity(0, freePhysicalMemorySize, processCpuLoad, systemCpuLoad, timestamp, server)
+fun ServerStatus.toEntity(server: ServerInfoEntity, timestamp: LocalDateTime) = ServerStatusEntity(0, freePhysicalMemorySize, processCpuLoad, systemCpuLoad, timestamp, server)
 
 fun ServerStatusEntity.toDto() = ServerStatus(freePhysicalMemorySize, processCpuLoad, systemCpuLoad)
 
@@ -23,7 +23,7 @@ class ServerStatusEntity(
         val timestamp: LocalDateTime,
         @field:ManyToOne
         @field:JsonIgnore
-        val server: ServerEntity
+        val server: ServerInfoEntity
 ) {
 
 

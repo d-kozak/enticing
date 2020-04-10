@@ -10,12 +10,12 @@ import javax.persistence.Id
 import javax.persistence.OneToMany
 import javax.validation.constraints.NotEmpty
 
-fun StaticServerInfo.toEntity() = ServerEntity(0, fullAddress.split(":")[0], availableProcessors, totalPhysicalMemorySize, mutableListOf())
+fun StaticServerInfo.toEntity() = ServerInfoEntity(0, fullAddress.split(":")[0], availableProcessors, totalPhysicalMemorySize, mutableListOf(), mutableListOf())
 
-fun ServerEntity.toServerInfo(status: ServerStatus?) = ServerInfo(componentId, componentType, availableProcessors, totalPhysicalMemorySize, status)
+fun ServerInfoEntity.toServerInfo(status: ServerStatus?) = ServerInfo(id, address, availableProcessors, totalPhysicalMemorySize, status)
 
 @Entity
-class ServerEntity(
+class ServerInfoEntity(
         @field:Id
         @field:GeneratedValue
         var id: Long,
@@ -33,7 +33,7 @@ class ServerEntity(
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is ServerEntity) return false
+        if (other !is ServerInfoEntity) return false
 
         if (id != other.id) return false
 
@@ -45,6 +45,6 @@ class ServerEntity(
     }
 
     override fun toString(): String {
-        return "ServerEntity(componentId='$componentId', componentType=$componentType, availableProcessors=$availableProcessors, totalPhysicalMemorySize=$totalPhysicalMemorySize, status=$status)"
+        return "ServerEntity(address=$address, availableProcessors=$availableProcessors, totalPhysicalMemorySize=$totalPhysicalMemorySize, status=$status)"
     }
 }

@@ -4,7 +4,10 @@ import cz.vutbr.fit.knot.enticing.log.HeartbeatDto
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.management.managementservice.service.HeartbeatService
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import javax.validation.Valid
 
 @RestController
@@ -16,9 +19,6 @@ class HeartbeatController(loggerFactory: LoggerFactory, val heartbeatService: He
     @PostMapping
     fun add(@RequestBody @Valid dto: HeartbeatDto) {
         logger.debug("received heartbeat $dto")
-        heartbeatService.heartbeat(dto)
+        heartbeatService.heartbeatReceived(dto)
     }
-
-    @GetMapping
-    fun getAll() = heartbeatService.getAll()
 }

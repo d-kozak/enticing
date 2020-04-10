@@ -1,20 +1,37 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.service
 
+import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.PerfDto
+import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.GeneralOperationStatistics
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.PerfEntity
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toDto
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toEntity
+import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ComponentRepository
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.PerfRepository
+import cz.vutbr.fit.knot.enticing.management.managementservice.repository.findByFullAddress
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import kotlin.math.abs
 import kotlin.math.sqrt
 
 @Service
-class ManagementPerfService(val perfRepository: PerfRepository) {
+class ManagementPerfService(
+        val perfRepository: PerfRepository,
+        val componentRepository: ComponentRepository,
+        loggerFactory: LoggerFactory
+) {
 
-    fun add(perf: PerfDto) = perfRepository.save(perf.toEntity()).toDto()
+    private val logger = loggerFactory.logger { }
+
+    fun add(perf: PerfDto): PerfDto? {
+        val component = componentRepository.findByFullAddress(perf.componentAddress)
+        if (component == null) {
+            logger.warn("Received log from an unknown component at ${perf.componentAddress}")
+            return null
+        }
+        return perfRepository.save(perf.toEntity(component)).toDto()
+    }
 
     fun getAll(pageable: Pageable) = perfRepository.findAllByOrderByTimestampDesc(pageable).map { it.toDto() }
 

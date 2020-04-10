@@ -1,6 +1,5 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.service
 
-import cz.vutbr.fit.knot.enticing.log.HeartbeatDto
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toDto
@@ -10,9 +9,7 @@ import cz.vutbr.fit.knot.enticing.management.managementservice.repository.Server
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ServerStatusRepository
 import cz.vutbr.fit.knot.enticing.mx.StaticServerInfo
 import org.springframework.data.domain.Pageable
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import javax.transaction.Transactional
 
 @Service
 class ServerInfoService(
@@ -23,19 +20,10 @@ class ServerInfoService(
 
     private val logger = loggerFactory.logger { }
 
-    fun getServers(pageable: Pageable) = serverInfoRepository.findAll(pageable).map { it.toServerInfo(serverStatusRepository.findLastLastStatusFor(it.componentId)?.toDto()) }
+    fun getServers(pageable: Pageable) = serverInfoRepository.findAll(pageable).map { it.toServerInfo(serverStatusRepository.findLastStatusFor(it.id)?.toDto()) }
 
-    fun getServerStatus(componentId: String, pageable: Pageable) = serverStatusRepository.findByServerComponentIdOrderByTimestampDesc(componentId, pageable)
+    fun getServerStatus(serverId: Long, pageable: Pageable) = serverStatusRepository.findByServerIdOrderByTimestampDesc(serverId, pageable)
 
-    @Transactional
-    fun heartbeat(heartbeat: HeartbeatDto) {
-        val server = serverInfoRepository.findByIdOrNull(heartbeat.fullAddress)
-        if (server == null) {
-            logger.warn("Received heartbeat from an unknown component ${heartbeat.fullAddress}")
-            return
-        }
-        serverStatusRepository.save(heartbeat.status!!.toEntity(server, heartbeat.timestamp))
-    }
 
     fun addServer(serverInfo: StaticServerInfo) = serverInfoRepository.save(serverInfo.toEntity())
             .also { logger.info("Adding new server $it") }

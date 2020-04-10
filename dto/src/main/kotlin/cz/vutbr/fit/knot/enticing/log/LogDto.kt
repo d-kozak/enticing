@@ -25,7 +25,7 @@ data class LogDto(
         val message: String,
         val logType: LogType,
         @field:NotEmpty
-        val componentId: String,
+        val componentAddress: String,
         val componentType: ComponentType,
         val timestamp: LocalDateTime
 )

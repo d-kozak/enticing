@@ -30,7 +30,7 @@ data class PerfDto(
         @field:NotEmpty
         val result: String,
         @field:NotBlank
-        val componentId: String,
+        val componentAddress: String,
         val componentType: ComponentType,
         val timestamp: LocalDateTime
 )
