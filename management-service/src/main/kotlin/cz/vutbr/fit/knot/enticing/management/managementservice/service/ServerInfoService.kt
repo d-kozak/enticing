@@ -27,6 +27,7 @@ class ServerInfoService(
 
     fun addServer(serverInfo: StaticServerInfo) = serverInfoRepository.save(serverInfo.toEntity())
             .also { logger.info("Adding new server $it") }
+            .toServerInfo(null)
 
 }
 
