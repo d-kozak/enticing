@@ -6,6 +6,7 @@ import cz.vutbr.fit.knot.enticing.dto.*
 import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.query.processor.fuel.awaitDto
 import cz.vutbr.fit.knot.enticing.query.processor.fuel.jsonBody
+import cz.vutbr.fit.knot.enticing.utils.retry
 
 /**
  * Component of QueryDispatcher whose responsibility is to execute the query (which might actually mean sending a request to an index server and therefore delegating the execution further)
@@ -25,11 +26,13 @@ class FuelQueryExecutor(private val path: String = "/api/v1/query") : QueryExecu
     override suspend fun invoke(searchQuery: SearchQuery, requestData: RequestData<Map<CollectionName, Offset>>): MResult<IndexServer.IndexResultList> = MResult.runCatching {
         val url = "http://${requestData.address}$path"
         try {
-            url.httpPost()
-                    .jsonBody(searchQuery.copy(offset = requestData.offset))
-                    .timeoutRead(180_000)
-                    .timeout(180_000)
-                    .awaitDto<IndexServer.IndexResultList>()
+            retry(3) {
+                url.httpPost()
+                        .jsonBody(searchQuery.copy(offset = requestData.offset))
+                        .timeoutRead(180_000)
+                        .timeout(180_000)
+                        .awaitDto<IndexServer.IndexResultList>()
+            }
         } catch (error: FuelError) {
             throw QueryDispatcherException("url $url, error ${error::class} ${error.message}")
         }

@@ -102,11 +102,11 @@ sealed class QueryTarget(val name: String) {
                 var currentResult = queryExecutor.invoke(query, IndexServerRequestData(address)).unwrap()
                 currentResult.errors.forEach { System.err.println(it) }
                 val allResults = currentResult.searchResults.toMutableList()
-                logger.info("Iteration ${cnt++}: got ${currentResult.searchResults.size} results")
+                logger.info("Server $address , Iteration ${cnt++}: got ${currentResult.searchResults.size} results")
                 while (currentResult.offset != null && currentResult.offset!!.isNotEmpty()) {
                     currentResult = queryExecutor.invoke(query, IndexServerRequestData(address, currentResult.offset)).unwrap()
                     currentResult.errors.forEach { System.err.println(it) }
-                    logger.info("""Iteration ${cnt++}: got ${currentResult.searchResults.size} results
+                    logger.info("""Server $address , Iteration ${cnt++}: got ${currentResult.searchResults.size} results
                         | Last result id was ${currentResult.searchResults.lastOrNull()?.uniqueId}
                     """.trimMargin())
                     allResults.addAll(currentResult.searchResults)

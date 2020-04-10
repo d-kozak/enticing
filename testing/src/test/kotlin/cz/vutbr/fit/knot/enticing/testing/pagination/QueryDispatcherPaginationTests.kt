@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import java.io.File
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
@@ -18,6 +19,8 @@ import kotlin.time.ExperimentalTime
 abstract class QueryDispatcherPaginationTests(
         vararg servers: String
 ) {
+
+    private val servers = servers.toList()
 
     private val dispatcherTarget = QueryTarget.QueryDispatcherTarget(servers.toList(), SimpleStdoutLoggerFactory)
     private val serverTargets = servers.map { QueryTarget.IndexServerTarget(it, SimpleStdoutLoggerFactory) }
@@ -29,8 +32,15 @@ abstract class QueryDispatcherPaginationTests(
 
     class TwoKnots : QueryDispatcherPaginationTests("knot01.fit.vutbr.cz:5627", "knot02.fit.vutbr.cz:5627")
 
+    class AllOfThem : QueryDispatcherPaginationTests(*File("../deploy/big-wiki/servers.txt").readLines()
+            .filterNot { it.isBlank() }
+            .map { "$it:5627" }
+            .toTypedArray()
+    )
+
     private suspend fun executeTest(query: SearchQuery, scope: CoroutineScope) {
         logger.info("Executing query $query")
+        logger.info("Using servers $servers")
         val individualResults = serverTargets.map {
             scope.async {
                 it.getAll(query).value.size
@@ -60,6 +70,6 @@ abstract class QueryDispatcherPaginationTests(
     @Test
     @DisplayName("a:=nertag:person < lemma:(influence | impact | (paid < tribute) ) < b:=nertag:person ctx:sent && a.url != b.url")
     fun eight() = runBlocking(Dispatchers.IO) {
-        executeTest(SearchQuery("a:=nertag:person < lemma:(influence | impact | (paid < tribute) ) < b:=nertag:person ctx:sent && a.url != b.url", snippetCount = 137), this)
+        executeTest(SearchQuery("a:=nertag:person < lemma:(influence | impact | (paid < tribute) ) < b:=nertag:person ctx:sent && a.url != b.url", snippetCount = 300), this)
     }
 }
