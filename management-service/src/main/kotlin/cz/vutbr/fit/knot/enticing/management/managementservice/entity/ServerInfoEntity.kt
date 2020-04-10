@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.ServerInfo
 import cz.vutbr.fit.knot.enticing.mx.ServerStatus
 import cz.vutbr.fit.knot.enticing.mx.StaticServerInfo
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
-import javax.persistence.OneToMany
+import javax.persistence.*
 import javax.validation.constraints.NotEmpty
 
 fun StaticServerInfo.toEntity() = ServerInfoEntity(0, fullAddress.split(":")[0], availableProcessors, totalPhysicalMemorySize, mutableListOf(), mutableListOf())
@@ -20,6 +17,7 @@ class ServerInfoEntity(
         @field:GeneratedValue
         var id: Long,
         @field:NotEmpty
+        @field:Column(unique = true)
         var address: String,
         val availableProcessors: Int,
         val totalPhysicalMemorySize: Long,

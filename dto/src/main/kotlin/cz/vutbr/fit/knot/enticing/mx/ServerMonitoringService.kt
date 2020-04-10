@@ -5,13 +5,15 @@ import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import java.lang.management.ManagementFactory
+import java.time.LocalDateTime
 
 
 data class StaticServerInfo(
         val fullAddress: String,
         val componentType: ComponentType,
         val availableProcessors: Int,
-        val totalPhysicalMemorySize: Long
+        val totalPhysicalMemorySize: Long,
+        val timestamp: LocalDateTime = LocalDateTime.now()
 )
 
 data class ServerStatus(
