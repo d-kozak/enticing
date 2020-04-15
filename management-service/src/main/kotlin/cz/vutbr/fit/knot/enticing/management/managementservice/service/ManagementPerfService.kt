@@ -12,9 +12,11 @@ import cz.vutbr.fit.knot.enticing.management.managementservice.repository.PerfRe
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.findByFullAddress
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import kotlin.math.abs
 import kotlin.math.sqrt
 
+@Transactional
 @Service
 class ManagementPerfService(
         val perfRepository: PerfRepository,

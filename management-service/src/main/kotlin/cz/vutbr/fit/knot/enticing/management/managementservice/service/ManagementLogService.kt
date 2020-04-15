@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
+@Transactional
 @Service
 class ManagementLogService(
         val componentRepository: ComponentRepository,
@@ -21,7 +22,7 @@ class ManagementLogService(
 
     private val logger = loggerFactory.logger { }
 
-    @Transactional
+
     fun add(log: LogDto): LogDto? {
         val component = componentRepository.findByFullAddress(log.componentAddress)
         if (component == null) {

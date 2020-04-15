@@ -18,4 +18,7 @@ class ServerInfoController(val serverInfoService: ServerInfoService) {
 
     @PostMapping
     fun addNew(@Valid @RequestBody serverInfo: StaticServerInfo) = serverInfoService.addServer(serverInfo)
+
+    @DeleteMapping("/{serverId}")
+    fun deleteServer(@PathVariable serverId: Long) = serverInfoService.deleteServerById(serverId)
 }

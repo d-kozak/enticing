@@ -21,8 +21,7 @@ import org.springframework.http.MediaType
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.time.LocalDateTime
 
@@ -59,6 +58,11 @@ class HeartbeatTests {
         assertThat(componentRepository.findByFullAddress("athena10.fit.vutbr.cz:8080")?.toComponentInfo())
                 .isEqualTo(ComponentInfo(2, 1, 8080, ComponentType.WEBSERVER, timestamp))
 
+        mvc.perform(delete("$api/server/1"))
+                .andExpect(status().isOk)
+
+        assertThat(serverRepository.findByAddress("athena10.fit.vutbr.cz")).isNull()
+        assertThat(componentRepository.findByFullAddress("athena10.fit.vutbr.cz:8080")).isNull()
     }
 
     @Test

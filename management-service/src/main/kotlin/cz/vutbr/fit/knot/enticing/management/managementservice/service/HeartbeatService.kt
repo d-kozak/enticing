@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 
+@Transactional
 @Service
 class HeartbeatService(
         val componentRepository: ComponentRepository,
@@ -20,7 +21,7 @@ class HeartbeatService(
 
     private val logger = loggerFactory.logger { }
 
-    @Transactional
+
     fun heartbeatReceived(dto: HeartbeatDto) {
         val component = componentRepository.findByFullAddress(dto.fullAddress)
         if (component == null) {
