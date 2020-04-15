@@ -1,5 +1,7 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.controller
 
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.LogType
+import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.LogDto
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
@@ -21,5 +23,5 @@ class ManagementLogController(loggerFactory: LoggerFactory, val managementLogSer
     }
 
     @GetMapping
-    fun getAll(pageable: Pageable) = managementLogService.getAll(pageable)
+    fun getAll(@RequestParam logType: LogType?, @RequestParam componentType: ComponentType?, pageable: Pageable) = managementLogService.getLogs(logType, componentType, pageable)
 }

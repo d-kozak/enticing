@@ -81,25 +81,29 @@ All GET request returning lists will support pagination using parameters _page_ 
             * GET - last server statistics (ram and CPU)
         * /component
             * GET - list of components running on this server
-            * POST - start new component (or restart a dead one)
-                             
+            * POST - start new component (or restart a dead one) **TODO**
+                           
+* /heartbeat
+    * POST - for receiving heartbeats from components  
 * /component
     * GET - list of known components
         * param _component_type_ - only of specified component type (index-server,...)
     * /{component-id}
         * GET - details of this component
-        * DELETE - shutdown given component and remove it                 
+        * DELETE - shutdown given component and remove it **TODO**                 
 * /log 
     * GET - get logs from all components
         * param _level_ - only given level or higher
-        * param _component_type_ - only of specified component type (index-server,...) 
+        * param _component_type_ - only of specified component type (index-server,...)
+    * POST - submit a new log
+    * /{component-id} - logs of given component 
                       
 * /perf - performance info
     * GET - list of measured operations with aggregated values (min, max, avg)
     * /{operation-id} 
         * GET - detailed perf logs for given operation
        
-* /command 
+* /command **TODO**
     * GET - list of executed commands
         * param _type_ - only commands of given type
         * param _state_ - only commands with given state (running,finished,failed)

@@ -8,6 +8,8 @@ import cz.vutbr.fit.knot.enticing.management.managementservice.repository.Compon
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.LogRepository
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.PerfRepository
 import cz.vutbr.fit.knot.enticing.mx.StaticServerInfo
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -30,4 +32,8 @@ class ComponentService(
         perfRepository.deleteByComponent(component)
         componentRepository.delete(component)
     }
+
+    fun getComponentsOnServer(serverId: Long, pageable: Pageable): Page<ComponentInfo> = componentRepository.findByServerId(serverId, pageable).map { it.toComponentInfo() }
+
+    fun getComponents(pageable: Pageable): Page<ComponentInfo> = componentRepository.findAll(pageable).map { it.toComponentInfo() }
 }

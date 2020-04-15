@@ -8,7 +8,9 @@ import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toEntity
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toServerInfo
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ServerInfoRepository
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ServerStatusRepository
+import cz.vutbr.fit.knot.enticing.mx.ServerStatus
 import cz.vutbr.fit.knot.enticing.mx.StaticServerInfo
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -27,12 +29,13 @@ class ServerInfoService(
 
     fun getServers(pageable: Pageable) = serverInfoRepository.findAll(pageable).map { it.toServerInfo(serverStatusRepository.findLastStatusFor(it.id)?.toDto()) }
 
-    fun getServerStatus(serverId: Long, pageable: Pageable) = serverStatusRepository.findByServerIdOrderByTimestampDesc(serverId, pageable)
+    fun getServerDetails(serverId: Long) = serverInfoRepository.findByIdOrNull(serverId)?.toServerInfo(null)
 
 
-    fun addServer(serverInfo: StaticServerInfo): ServerInfo {
-        logger.info("Adding new server $serverInfo")
-        val server = serverInfoRepository.save(serverInfo.toEntity())
+    fun registerServer(serverInfo: StaticServerInfo): ServerInfo {
+        logger.info("Registering server $serverInfo")
+        val server = serverInfoRepository.findByAddress(serverInfo.fullAddress.split(":")[0])
+                ?: serverInfoRepository.save(serverInfo.toEntity())
         componentService.addComponent(serverInfo, server)
         return server.toServerInfo(null)
     }
@@ -48,6 +51,9 @@ class ServerInfoService(
         serverInfoRepository.delete(server)
         return server.toServerInfo(null)
     }
+
+    fun getLastStats(serverId: Long, pageable: Pageable): Page<ServerStatus> = serverStatusRepository.findByServerIdOrderByTimestampDesc(serverId, pageable)
+            .map { it.toDto() }
 
 }
 
