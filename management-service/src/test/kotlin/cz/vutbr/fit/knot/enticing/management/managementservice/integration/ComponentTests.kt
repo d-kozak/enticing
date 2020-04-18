@@ -4,8 +4,10 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.LogType
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.LogDto
+import cz.vutbr.fit.knot.enticing.log.PerfDto
 import cz.vutbr.fit.knot.enticing.management.managementservice.apiBasePath
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.ComponentInfo
+import cz.vutbr.fit.knot.enticing.management.managementservice.dto.GeneralOperationStatistics
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.ServerInfo
 import cz.vutbr.fit.knot.enticing.management.managementservice.extractPaginatedItems
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ComponentRepository
@@ -26,6 +28,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.LocalDateTime
 
@@ -129,5 +132,60 @@ class ComponentTests {
                 .andExpect(status().isOk)
                 .extractPaginatedItems<LogDto>()
         assertThat(webserverErrorLogs).containsExactlyInAnyOrder(logThree)
+    }
+
+
+    @Test
+    fun `perf logs`() {
+        val perfOne = PerfDto("classOne", "operationOne", "args",
+                100L, "SUCCESS", "athena10.fit.vutbr.cz:5627",
+                ComponentType.INDEX_SERVER, LocalDateTime.now())
+        val perfTwo = PerfDto("classOne", "operationOne", "args",
+                200L, "SUCCESS", "athena10.fit.vutbr.cz:5627",
+                ComponentType.INDEX_SERVER, LocalDateTime.now())
+        val perfThree = PerfDto("classOne", "operationTwo", "args",
+                300L, "SUCCESS", "athena10.fit.vutbr.cz:5627",
+                ComponentType.INDEX_SERVER, LocalDateTime.now())
+
+        val otherPerf = PerfDto("classTwo", "operationOne", "args",
+                300L, "SUCCESS", "athena10.fit.vutbr.cz:8080",
+                ComponentType.WEBSERVER, LocalDateTime.now())
+
+        for (log in listOf(perfOne, perfTwo, perfThree, otherPerf)) {
+            mvc.perform(post("$apiBasePath/perf")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(log.toJson()))
+                    .andExpect(status().isOk)
+        }
+
+        val allLogs = mvc.perform(get("$apiBasePath/perf"))
+                .andExpect(status().isOk)
+                .extractPaginatedItems<PerfDto>()
+        assertThat(allLogs).containsExactlyInAnyOrder(perfOne, perfTwo, perfThree, otherPerf)
+
+        val opOneLogs = mvc.perform(get("$apiBasePath/perf")
+                .param("operationId", "operationOne"))
+                .andExpect(status().isOk)
+                .extractPaginatedItems<PerfDto>()
+        assertThat(opOneLogs).containsExactlyInAnyOrder(perfOne, perfTwo, otherPerf)
+
+        val opOneStats = GeneralOperationStatistics("operationOne", 200.0, 8.16496580927726, 300, 100, 3)
+        val opTwoStats = GeneralOperationStatistics("operationTwo", 300.0, 0.0, 300, 300, 1)
+        mvc.perform(get("$apiBasePath/perf/stats"))
+                .andExpect(status().isOk)
+                .andExpect(content().json(mapOf(
+                        "operationOne" to opOneStats,
+                        "operationTwo" to opTwoStats
+                ).toJson()))
+
+        mvc.perform(get("$apiBasePath/perf/stats")
+                .param("operationId", "operationOne"))
+                .andExpect(status().isOk)
+                .andExpect(content().json(opOneStats.toJson()))
+        mvc.perform(get("$apiBasePath/perf/stats")
+                .param("operationId", "operationTwo"))
+                .andExpect(status().isOk)
+                .andExpect(content().json(opTwoStats.toJson()))
+
     }
 }

@@ -21,8 +21,9 @@ class ManagementPerfController(loggerFactory: LoggerFactory, val managementPerfS
     }
 
     @GetMapping
-    fun getAll(pageable: Pageable) = managementPerfService.getAll(pageable)
+    fun getAll(pageable: Pageable, @RequestParam(required = false) operationId: String?) = managementPerfService.getPerfLogs(operationId, pageable)
 
     @GetMapping("/stats")
-    fun stats() = managementPerfService.computeOperationStatistics()
+    fun stats(@RequestParam(required = false) operationId: String?): Any = if (operationId == null) managementPerfService.getAllOperationStats()
+    else managementPerfService.getSingleOperationStats(operationId)
 }

@@ -10,6 +10,7 @@ import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toEntity
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ComponentRepository
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.PerfRepository
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.findByFullAddress
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -35,14 +36,17 @@ class ManagementPerfService(
         return perfRepository.save(perf.toEntity(component)).toDto()
     }
 
-    fun getAll(pageable: Pageable) = perfRepository.findAllByOrderByTimestampDesc(pageable).map { it.toDto() }
+    fun getPerfLogs(operationId: String?, pageable: Pageable): Page<PerfDto> = if (operationId == null) perfRepository.findAllByOrderByTimestampDesc(pageable).map { it.toDto() }
+    else perfRepository.findByOperationIdOrderByTimestampDesc(operationId, pageable).map { it.toDto() }
 
-    fun computeOperationStatistics(): Map<String, GeneralOperationStatistics> = perfRepository.findAll()
+    fun getAllOperationStats(): Map<String, GeneralOperationStatistics> = perfRepository.findAll()
             .groupBy { it.operationId }
-            .map { (operationId, operations) -> singleOperationStats(operationId, operations) }
+            .map { (operationId, operations) -> computeSingleOperationStats(operationId, operations) }
             .associateBy { it.operationId }
 
-    internal fun singleOperationStats(operationId: String, operations: List<PerfEntity>): GeneralOperationStatistics {
+    fun getSingleOperationStats(operationId: String): GeneralOperationStatistics = computeSingleOperationStats(operationId, perfRepository.findByOperationId(operationId))
+
+    internal fun computeSingleOperationStats(operationId: String, operations: List<PerfEntity>): GeneralOperationStatistics {
         val stats = GeneralOperationStatistics(operationId)
         stats.invocationCount = operations.size
         val durationSum = operations.fold(0L) { acc, perf ->

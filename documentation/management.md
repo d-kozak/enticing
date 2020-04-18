@@ -99,9 +99,11 @@ All GET request returning lists will support pagination using parameters _page_ 
     * /{component-id} - logs of given component 
                       
 * /perf - performance info
-    * GET - list of measured operations with aggregated values (min, max, avg)
-    * /{operation-id} 
-        * GET - detailed perf logs for given operation
+    * GET - perf logs 
+        * param _operation_id_ - only logs for given operation
+    * /stats
+        * GET - list of measured operations with aggregated values (min, max, avg)
+        * param _operation_id_ - only stats for given operation
        
 * /command **TODO**
     * GET - list of executed commands
