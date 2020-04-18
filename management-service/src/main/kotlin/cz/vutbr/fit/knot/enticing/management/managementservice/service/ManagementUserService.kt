@@ -94,7 +94,14 @@ class ManagementUserService(
 
     private fun canEditUser(targetUser: User): Boolean = requireLoggedInUser().let { currentUser -> currentUser.isAdmin || currentUser.login == targetUser.login }
 
-    private fun requireLoggedInUser() = getCurrentUser()
+    fun requireMaintainerOrAdmin(): User {
+        val user = requireLoggedInUser()
+        if (!(user.roles.contains("PLATFORM_MAINTAINER") || user.roles.contains("ADMIN")))
+            throw InsufficientRoleException("User $user does not have sufficient role for this operation")
+        return user
+    }
+
+    fun requireLoggedInUser() = getCurrentUser()
             ?: throw IllegalStateException("This operation require user to be logged in")
 
     fun getCurrentUser(): User? {

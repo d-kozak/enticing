@@ -113,7 +113,7 @@ All GET request returning lists will support pagination using parameters _page_ 
        
 * /command **TODO**
     * GET - list of executed commands
-        * param _type_ - only commands of given type
+        * param _type_ - o  nly commands of given type
         * param _state_ - only commands with given state (running,finished,failed)
         * param _user_ - only commands of specified user
     * POST - submit a new command

@@ -7,11 +7,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.future.await
 import java.io.File
+import java.io.FileWriter
 import java.io.InputStream
 
-class ShellCommandExecutor(loggerFactory: LoggerFactory, val scope: CoroutineScope) {
+class ShellCommandExecutor(loggerFactory: LoggerFactory, val scope: CoroutineScope, logfile: String? = null) : AutoCloseable {
 
     private val logger = loggerFactory.logger { }
+
+    private val outputWriter = logfile?.let { FileWriter(it) }
 
     /**
      * @param checkReturnCode If true, 0 is required as return value
@@ -54,6 +57,7 @@ class ShellCommandExecutor(loggerFactory: LoggerFactory, val scope: CoroutineSco
         stream.bufferedReader().use {
             var line = it.readLine()
             while (line != null) {
+                outputWriter?.appendln(line)
                 if (printContent) println(if (logPrefix.isNotBlank()) "$logPrefix: $line" else line)
                 appendln(line)
                 line = it.readLine()
@@ -61,4 +65,7 @@ class ShellCommandExecutor(loggerFactory: LoggerFactory, val scope: CoroutineSco
         }
     }
 
+    override fun close() {
+        outputWriter?.close()
+    }
 }

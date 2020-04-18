@@ -31,6 +31,8 @@ class SecurityConfig(
                 .authenticationEntryPoint(authenticationEntryPoint())
                 .and()
                 .authorizeRequests()
+                .antMatchers(HttpMethod.POST, "$apiBasePath/command")
+                .hasRole("PLATFORM_MAINTAINER")
                 .antMatchers(HttpMethod.POST, "$apiBasePath/user")
                 .permitAll()
                 .antMatchers(HttpMethod.POST, "$apiBasePath/user/add")
@@ -42,7 +44,8 @@ class SecurityConfig(
                         "$apiBasePath/perf/**",
                         "$apiBasePath/heartbeat/**",
                         "$apiBasePath/server/**",
-                        "$apiBasePath/component/**"
+                        "$apiBasePath/component/**",
+                        "$apiBasePath/command/**"
                 )
                 .permitAll()
                 .anyRequest()
