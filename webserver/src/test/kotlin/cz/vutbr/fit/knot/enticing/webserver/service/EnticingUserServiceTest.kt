@@ -58,7 +58,7 @@ internal class EnticingUserServiceTest {
         every { userRepositoryMock.existsByLogin("cat123") } returns false
 
         val newUser = UserCredentials("cat123", "123")
-        userService.saveUser(newUser)
+        userService.signUp(newUser)
 
         verify(exactly = 1) { userRepositoryMock.save(UserEntity(login = "cat123")) }
         verify(exactly = 1) { userRepositoryMock.existsByLogin("cat123") }
@@ -72,7 +72,7 @@ internal class EnticingUserServiceTest {
         every { userRepositoryMock.existsByLogin("cat123") } returns true
 
         val newUser = UserCredentials("cat123", "123")
-        assertThrows<ValueNotUniqueException> { userService.saveUser(newUser) }
+        assertThrows<ValueNotUniqueException> { userService.signUp(newUser) }
 
         verify(exactly = 1) { userRepositoryMock.existsByLogin("cat123") }
     }
@@ -333,7 +333,7 @@ internal class EnticingUserServiceTest {
         every { userRepositoryMock.save(capture(userCapture)) } returns UserEntity(login = "foooo")
         every { userRepositoryMock.existsByLogin("john5") } returns false
 
-        userService.saveUser(user)
+        userService.createNewUser(user)
 
         verify(exactly = 1) { userRepositoryMock.save(UserEntity(login = "john5")) }
         verify(exactly = 1) { userRepositoryMock.existsByLogin("john5") }
@@ -347,7 +347,7 @@ internal class EnticingUserServiceTest {
         val user = CreateUserRequest("john5", "foo12", setOf("ADMIN"))
 
         every { userRepositoryMock.existsByLogin("john5") } returns true
-        assertThrows<ValueNotUniqueException> { userService.saveUser(user) }
+        assertThrows<ValueNotUniqueException> { userService.createNewUser(user) }
 
 
         verify(exactly = 1) { userRepositoryMock.existsByLogin("john5") }
@@ -361,7 +361,7 @@ internal class EnticingUserServiceTest {
         every { userRepositoryMock.save(capture(userCapture)) } returns UserEntity(login = "foooo")
         every { userRepositoryMock.existsByLogin("john5") } returns false
 
-        userService.saveUser(user)
+        userService.createNewUser(user)
 
         verify(exactly = 1) { userRepositoryMock.save(UserEntity(login = "john5")) }
         verify(exactly = 1) { userRepositoryMock.existsByLogin("john5") }

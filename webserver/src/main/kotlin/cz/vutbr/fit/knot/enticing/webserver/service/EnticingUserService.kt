@@ -25,14 +25,22 @@ import javax.transaction.Transactional
 @Service
 @Transactional
 @Incomplete("selected metadata from user and search settings is probably not deleted properly")
-class EnticingUserService(private val userRepository: UserRepository, private val selectedMetadataRepository: SelectedMetadataRepository, private val selectedEntityMetadataRepository: SelectedEntityMetadataRepository, private val encoder: PasswordEncoder, private val searchSettingsRepository: SearchSettingsRepository, val userHolder: CurrentUserHolder, loggerFactory: LoggerFactory) : UserDetailsService {
+class EnticingUserService(
+        private val userRepository: UserRepository,
+        private val selectedMetadataRepository: SelectedMetadataRepository,
+        private val selectedEntityMetadataRepository: SelectedEntityMetadataRepository,
+        private val encoder: PasswordEncoder,
+        private val searchSettingsRepository: SearchSettingsRepository,
+        private val userHolder: CurrentUserHolder,
+        loggerFactory: LoggerFactory
+) : UserDetailsService {
 
     private val logger = loggerFactory.logger { }
 
     override fun loadUserByUsername(username: String): UserDetails = userRepository.findByLogin(username)
             ?: throw UsernameNotFoundException("UserSpecification with login $username not found")
 
-    fun saveUser(newUser: UserCredentials) {
+    fun signUp(newUser: UserCredentials) {
         val (login, password) = newUser
         if (userRepository.existsByLogin(login))
             throw ValueNotUniqueException("login", "Login $login is already taken")
@@ -40,7 +48,7 @@ class EnticingUserService(private val userRepository: UserRepository, private va
         userRepository.save(UserEntity(login = login, encryptedPassword = encoder.encode(password)))
     }
 
-    fun saveUser(newUser: CreateUserRequest): User {
+    fun createNewUser(newUser: CreateUserRequest): User {
         val (login, password, roles) = newUser
         if (userRepository.existsByLogin(login))
             throw ValueNotUniqueException("login", "Login $login is already taken")

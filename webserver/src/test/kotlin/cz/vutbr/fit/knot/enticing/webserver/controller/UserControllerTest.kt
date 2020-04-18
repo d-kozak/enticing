@@ -61,7 +61,7 @@ internal class UserControllerTest(
                 .andExpect(status().isOk)
 
         Mockito.verify(userService)
-                .saveUser(user)
+                .signUp(user)
         Mockito.clearInvocations(userService)
     }
 
@@ -253,12 +253,12 @@ internal class UserControllerTest(
     fun `Create new user`() {
         val user = CreateUserRequest("john5", "foo12", setOf())
         val userDto = User(1, "john5", true, setOf())
-        Mockito.`when`(userService.saveUser(user)).thenReturn(userDto)
+        Mockito.`when`(userService.createNewUser(user)).thenReturn(userDto)
         mockMvc.perform(post("$apiBasePath/user/add").content(user.toJson())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk)
                 .andExpect(content().string(userDto.toJson()))
-        Mockito.verify(userService).saveUser(user)
+        Mockito.verify(userService).createNewUser(user)
         Mockito.clearInvocations(userService)
     }
 

@@ -15,7 +15,11 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping("\${api.base.path}/user")
-class UserController(private val userService: EnticingUserService, val userHolder: CurrentUserHolder, loggerFactory: LoggerFactory) {
+class UserController(
+        private val userService: EnticingUserService,
+        private val userHolder: CurrentUserHolder,
+        loggerFactory: LoggerFactory
+) {
 
     private val logger = loggerFactory.logger { }
 
@@ -28,7 +32,7 @@ class UserController(private val userService: EnticingUserService, val userHolde
 
     @PostMapping
     fun signup(@RequestBody @Valid user: UserCredentials) {
-        userService.saveUser(user)
+        userService.signUp(user)
     }
 
     @GetMapping("/default-metadata/{id}")
@@ -49,7 +53,7 @@ class UserController(private val userService: EnticingUserService, val userHolde
     }
 
     @PostMapping("/add")
-    fun create(@RequestBody @Valid createUserRequest: CreateUserRequest) = userService.saveUser(createUserRequest)
+    fun create(@RequestBody @Valid createUserRequest: CreateUserRequest) = userService.createNewUser(createUserRequest)
 
     @PutMapping
     fun update(@RequestBody @Valid user: User) {

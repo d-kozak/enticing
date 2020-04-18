@@ -11,9 +11,12 @@ import cz.vutbr.fit.knot.enticing.management.managementservice.dto.GeneralOperat
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.ServerInfo
 import cz.vutbr.fit.knot.enticing.management.managementservice.extractPaginatedItems
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ComponentRepository
+import cz.vutbr.fit.knot.enticing.management.managementservice.repository.LogRepository
+import cz.vutbr.fit.knot.enticing.management.managementservice.repository.PerfRepository
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ServerInfoRepository
 import cz.vutbr.fit.knot.enticing.mx.StaticServerInfo
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -27,7 +30,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.LocalDateTime
@@ -48,6 +50,12 @@ class ComponentTests {
     @Autowired
     lateinit var componentRepository: ComponentRepository
 
+    @Autowired
+    lateinit var logRepository: LogRepository
+
+    @Autowired
+    lateinit var perfRepository: PerfRepository
+
     private val timestamp1 = LocalDateTime.now().minusDays(1)
     private val serverOne = ServerInfo(1, "athena10.fit.vutbr.cz", 12, 6_000, null)
     private val componentOne = ComponentInfo(2, 1, 8080, ComponentType.WEBSERVER, timestamp1)
@@ -66,20 +74,28 @@ class ComponentTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(StaticServerInfo("athena10.fit.vutbr.cz:8080", ComponentType.WEBSERVER, 12, 6_000, timestamp1).toJson()))
                 .andExpect(status().isOk)
-                .andExpect(MockMvcResultMatchers.content().json(serverOne.toJson()))
+                .andExpect(content().json(serverOne.toJson()))
 
         mvc.perform(post("$apiBasePath/server")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(StaticServerInfo("athena10.fit.vutbr.cz:5627", ComponentType.INDEX_SERVER, 12, 6_000, timestamp2).toJson()))
                 .andExpect(status().isOk)
-                .andExpect(MockMvcResultMatchers.content().json(serverOne.toJson()))
+                .andExpect(content().json(serverOne.toJson()))
 
         mvc.perform(post("$apiBasePath/server")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(StaticServerInfo("knot01.fit.vutbr.cz:5627", ComponentType.INDEX_SERVER, 11, 5555, timestamp3).toJson()))
                 .andExpect(status().isOk)
-                .andExpect(MockMvcResultMatchers.content().json(serverTwo.toJson()))
+                .andExpect(content().json(serverTwo.toJson()))
 
+    }
+
+    @AfterAll
+    fun afterAll() {
+        logRepository.deleteAll()
+        perfRepository.deleteAll()
+        componentRepository.deleteAll()
+        serverRepository.deleteAll()
     }
 
     @Test

@@ -84,6 +84,12 @@ class ServerInfoTests {
     }
 
     @AfterAll
+    fun afterAll() {
+        componentRepository.deleteAll()
+        serverRepository.deleteAll()
+    }
+
+    @AfterAll
     fun `delete server`() {
         mvc.perform(delete("$apiBasePath/server/1"))
                 .andExpect(status().isOk)
@@ -98,7 +104,7 @@ class ServerInfoTests {
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.content", hasSize<ServerInfo>(1)))
                 .extractPaginatedItems<ServerInfo>()
-        assertThat(servers).contains(serverInfo)
+        assertThat(servers.map { it.id }).containsExactlyInAnyOrder(serverInfo.id)
     }
 
 
@@ -153,7 +159,7 @@ class ServerInfoTests {
         val components = mvc.perform(get("$apiBasePath/server/1/component"))
                 .andExpect(status().isOk)
                 .extractPaginatedItems<ComponentInfo>()
-        assertThat(components).contains(componentOne, componentTwo)
+        assertThat(components.map { it.id }).containsExactlyInAnyOrder(componentOne.id, componentTwo.id)
     }
 }
 

@@ -66,9 +66,15 @@ All GET request returning lists will support pagination using parameters _page_ 
 * /login, /logout - as expected
 * /user 
   * GET - current user info
+  * POST - signup
+  * PUT - update user info
+  * /add
+    * POST - create new user from admin account
+  * /all
+    * GET - get all users
+  * /password
+    * PUT - change password
   * /{login}
-    * PUT - update user data
-    * POST - register new user
     * DELETE - delete user
     
 * /server
