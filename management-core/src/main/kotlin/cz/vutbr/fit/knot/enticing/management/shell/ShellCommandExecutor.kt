@@ -22,6 +22,7 @@ class ShellCommandExecutor(loggerFactory: LoggerFactory, val scope: CoroutineSco
      * @param printStderr If true, stderr of the command will be printed to the console
      */
     suspend fun execute(command: ShellCommand, workingDirectory: String? = null, logPrefix: String = "", checkReturnCode: Boolean = true, printStdout: Boolean = true, printStderr: Boolean = true): String = logger.measure("command", command.value) {
+        outputWriter?.appendln("Executing command $command")
         val builder = ProcessBuilder(listOf("bash", "-c", command.value))
         if (printStdout)
             builder.redirectOutput(ProcessBuilder.Redirect.PIPE)
@@ -48,6 +49,7 @@ class ShellCommandExecutor(loggerFactory: LoggerFactory, val scope: CoroutineSco
         if (!printStderr && process.exitValue() != 0)
             println(stderr)
 
+        outputWriter?.appendln("Process returned with exit value ${process.exitValue()}")
         check((!checkReturnCode || process.exitValue() == 0)) { "Command ${command.value} exited with value ${process.exitValue()}" }
         stdout
     }

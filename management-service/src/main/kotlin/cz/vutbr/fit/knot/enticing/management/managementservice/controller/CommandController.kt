@@ -16,5 +16,5 @@ class CommandController(
     fun get(pageable: Pageable) = commandService.getCommands(pageable)
 
     @PostMapping
-    fun enqueCommand(@RequestBody @Valid commandRequest: CommandRequest) = commandService.enque(commandRequest)
+    fun enqueueCommand(@RequestBody @Valid commandRequest: CommandRequest) = commandService.enqueue(commandRequest)
 }

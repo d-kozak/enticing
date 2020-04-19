@@ -8,13 +8,15 @@ import javax.persistence.*
 data class CommandDto(
         var id: Long,
         var type: CommandType,
+        var state: CommandState,
         var arguments: String,
         var submittedBy: String,
         var submittedAt: LocalDateTime,
-        var startAt: LocalDateTime,
-        var finishedAt: LocalDateTime
+        var startAt: LocalDateTime?,
+        var finishedAt: LocalDateTime?
 )
 
+fun CommandEntity.toDto() = CommandDto(id, type, state, arguments, submittedBy.login, submittedAt, startAt, finishedAt)
 
 @Entity
 class CommandEntity(
@@ -44,5 +46,9 @@ class CommandEntity(
 
     override fun hashCode(): Int {
         return id.hashCode()
+    }
+
+    override fun toString(): String {
+        return "CommandEntity(id=$id, type=$type, state=$state, arguments='$arguments', submittedBy=${submittedBy.login}, submittedAt=$submittedAt, startAt=$startAt, finishedAt=$finishedAt)"
     }
 }

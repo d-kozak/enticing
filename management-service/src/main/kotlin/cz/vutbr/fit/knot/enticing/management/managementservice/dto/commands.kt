@@ -4,7 +4,7 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.ManagementCommand.ServerGroupCommand.*
 import cz.vutbr.fit.knot.enticing.management.shell.*
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import javax.validation.constraints.NotEmpty
 
@@ -50,14 +50,10 @@ sealed class ManagementCommand(val configuration: EnticingConfiguration) {
         }
 
         override suspend fun execute(scope: CoroutineScope, shellCommandExecutor: ShellCommandExecutor) {
-            coroutineScope {
-                for (address in addresses) {
-                    val (ip, port) = address.split(":")
-                    scope.launch {
-                        executeForServer(shellCommandExecutor, ip, port.toInt())
-                    }
-                }
-            }
+            addresses.map { it.split(":") }
+                    .map { (ip, port) -> scope.launch { executeForServer(shellCommandExecutor, ip, port.toInt()) } }
+                    .joinAll()
+
         }
 
         abstract suspend fun executeForServer(shellCommandExecutor: ShellCommandExecutor, ip: String, port: Int)
