@@ -8,7 +8,7 @@ import {GeneralOperationStatistics} from "./entities/GeneralOperationStatistics"
 import {CommandDto} from "./entities/CommandDto";
 
 export interface ApplicationState {
-    currentUser: User | null
+    userState: UserState
     users: PaginatedCollection<User>
     servers: PaginatedCollection<ServerInfo>
     components: PaginatedCollection<ComponentInfo>
@@ -16,5 +16,14 @@ export interface ApplicationState {
     logs: PaginatedCollection<LogDto>
     perfLogs: PaginatedCollection<PerfDto>
     operationStats: Map<string, GeneralOperationStatistics>
+    snackbar: SnackbarState
 }
 
+export interface UserState {
+    currentUser: User | null
+}
+
+export interface SnackbarState {
+    isOpen: boolean,
+    message: string
+}

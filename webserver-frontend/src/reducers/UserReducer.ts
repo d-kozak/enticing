@@ -120,7 +120,8 @@ export const doLoadSelectedMetadata = async (searchSettings: SearchSettings, isL
     return data;
 };
 
-export const loadSelectedMetadataRequest = (searchSettingsId: string): ThunkResult<void> => async (dispatch, getState) => {
+export const loadSelectedMetadataRequest = (searchSettingsId: string):
+    ThunkResult<void> => async (dispatch, getState) => {
     const searchSettings = getState().searchSettings.settings[searchSettingsId];
     if (!searchSettings) {
         dispatch(openSnackbar(`Cannot load metadata for search settings ${searchSettingsId}, which is  unknown`));
