@@ -13,5 +13,5 @@ data class ServerInfo(
         val availableProcessors: Int,
         @field:Positive
         val totalPhysicalMemorySize: Long,
-        val status: ServerStatus?
+        val lastStatus: ServerStatus?
 )
