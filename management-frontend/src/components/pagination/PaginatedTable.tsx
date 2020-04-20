@@ -81,7 +81,7 @@ export default function PaginatedTable(props: PaginatedTableProps) {
                 <TableBody>
                     {
                         items.map(item =>
-                            <TableRow key={item.id}>
+                            <TableRow hover key={item.id}>
                                 {columns.map(col =>
                                     <TableCell key={col.id} align={col.align}>
                                         {col.renderContent(item[col.id], item)}
