@@ -12,6 +12,8 @@ export interface ServerInfo {
 }
 
 export interface ServerStatus {
+    // todo id
+    id: string
     freePhysicalMemorySize: number
     processCpuLoad: number
     systemCpuLoad: number

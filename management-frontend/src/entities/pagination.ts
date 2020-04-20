@@ -1,12 +1,21 @@
+export interface WithId {
+    /**
+     * unique resource identifier that can be used to as a React key when rendering
+     */
+    id: any
+}
+
 export interface PaginatedResult<ContentType> {
     content: Array<ContentType>,
-    pageable: {
-        pageNumber: number
-    }
     /**
      * size of the page
      */
     size: number,
+    /**
+     * page number
+     */
+    number: number,
+
     totalPages: number,
     /**
      * total number of items
@@ -14,9 +23,17 @@ export interface PaginatedResult<ContentType> {
     totalElements: number
 }
 
-export interface PaginatedCollection<ContentType> {
-    content: Array<ContentType>
-    pageSize: number,
+export interface PaginatedCollection<ContentType extends WithId> {
+    content: {
+        [index: number]: ContentType
+    }
     totalElements: number
-    currentPage: number
+}
+
+
+export function emptyPaginatedCollection<T extends WithId>(): PaginatedCollection<T> {
+    return {
+        content: [],
+        totalElements: 1e10
+    };
 }

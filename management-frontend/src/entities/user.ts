@@ -1,4 +1,6 @@
 export interface User {
+    // todo id
+    id: string
     login: string,
     active: boolean,
     roles: Array<string>

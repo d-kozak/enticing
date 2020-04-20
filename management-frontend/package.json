@@ -20,6 +20,7 @@
     "@types/react-router-dom": "^4.3.1",
     "@types/react-tooltip": "^3.9.2",
     "@types/redux-logger": "^3.0.7",
+    "@types/shortid": "0.0.29",
     "@types/yup": "^0.26.37",
     "axios": "^0.18.1",
     "debounce": "^1.2.0",
@@ -39,6 +40,7 @@
     "redux-starter-kit": "^0.6.3",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
+    "shortid": "^2.2.15",
     "typescript": "^3.8.3",
     "yup": "^0.27.0"
   },

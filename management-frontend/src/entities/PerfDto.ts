@@ -1,6 +1,8 @@
 import {ComponentType} from "./ComponentInfo";
 
 export interface PerfDto {
+    // todo id
+    id: string,
     className: string,
     operationId: string,
     arguments: string | null,

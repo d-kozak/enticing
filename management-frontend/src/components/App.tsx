@@ -1,11 +1,12 @@
-import {CssBaseline, Theme} from "@material-ui/core";
+import {CssBaseline} from "@material-ui/core";
 import {connect} from "react-redux";
 import React from 'react';
 import {ApplicationState} from "../ApplicationState";
 import {makeStyles} from '@material-ui/core/styles';
 import DummyTable from "./DummyTable";
+import LogTable from "./LogTable";
 
-const useStyles = (theme: Theme) => makeStyles({});
+const useStyles = makeStyles({});
 
 type AppProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {}
 
@@ -15,6 +16,7 @@ const App = (props: AppProps) => {
         <CssBaseline/>
         Hello
         <DummyTable/>
+        <LogTable/>
     </div>
 };
 
