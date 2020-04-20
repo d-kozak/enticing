@@ -27,10 +27,11 @@ const App = (props: AppProps) => {
     const {openSnackbarAction} = props;
     return <div className={classes.root}>
         <CssBaseline/>
-        <EnticingAppBar/>
-        <EnticingDrawer/>
-        <main className={classes.content}>
-            <Router>
+        <Router>
+            <EnticingAppBar/>
+            <EnticingDrawer/>
+            <main className={classes.content}>
+
                 <Switch>
                     {/*<Route path="/" exact*/}
                     {/*       render={({history}) => <React.Fragment>*/}
@@ -39,8 +40,8 @@ const App = (props: AppProps) => {
                 </Switch>
                 <Button onClick={() => openSnackbarAction("Booo!")}>Booo!</Button>
                 <LogTable/>
-            </Router>
-        </main>
+            </main>
+        </Router>
         <EnticingSnackbar/>
     </div>
 };
