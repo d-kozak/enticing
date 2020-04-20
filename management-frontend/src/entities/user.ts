@@ -6,14 +6,6 @@ export interface User {
     roles: Array<string>
 }
 
-export function isMaintainer(user: User): boolean {
-    return user.roles.indexOf("PLATFORM_MAINTAINER") != -1
-}
-
-export function isAdmin(user: User): boolean {
-    return user.roles.indexOf("ADMIN") != -1
-}
-
 export interface UserCredentials {
     login: string
     password: string

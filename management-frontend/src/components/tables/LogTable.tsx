@@ -1,13 +1,13 @@
 import {makeStyles} from "@material-ui/core/styles";
-import {ApplicationState} from "../ApplicationState";
+import {ApplicationState} from "../../ApplicationState";
 import {connect} from "react-redux";
 import React from "react";
-import PaginatedTable from "./pagination/PaginatedTable";
-import {ActionColumn, PaginatedTableColumn, StringColumn} from "./pagination/PaginatedTableColumn"
-import {addNewItems} from "../reducers/logReducer";
-import {getRequest} from "../network/requests";
-import {LogDto} from "../entities/LogDto";
-import {PaginatedResult} from "../entities/pagination";
+import PaginatedTable from "../pagination/PaginatedTable";
+import {ActionColumn, PaginatedTableColumn, StringColumn} from "../pagination/PaginatedTableColumn"
+import {addNewItems} from "../../reducers/logReducer";
+import {getRequest} from "../../network/requests";
+import {LogDto} from "../../entities/LogDto";
+import {PaginatedResult} from "../../entities/pagination";
 import {Button} from "@material-ui/core";
 
 

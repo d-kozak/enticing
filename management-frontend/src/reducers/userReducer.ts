@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "redux-starter-kit";
-import {UserState} from "../ApplicationState";
+import {ApplicationState, UserState} from "../ApplicationState";
 import {User} from "../entities/user";
 
 const {reducer, actions} = createSlice({
@@ -14,6 +14,11 @@ const {reducer, actions} = createSlice({
         }
     }
 });
+
+export const isAdmin = (state: ApplicationState) => state.userState.currentUser && state.userState.currentUser.roles.indexOf("ADMIN") !== -1
+export const isMaintainer = (state: ApplicationState) => state.userState.currentUser && state.userState.currentUser.roles.indexOf("PLATFORM_MAINTAINER") !== -1
+export const isLoggedIn = (state: ApplicationState) => state.userState.currentUser !== null;
+export const getUser = (state: ApplicationState) => state.userState.currentUser;
 
 export const {loginSuccessAction, logoutSuccessAction} = actions;
 

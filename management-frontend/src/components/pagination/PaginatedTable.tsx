@@ -94,6 +94,7 @@ export default function PaginatedTable(props: PaginatedTableProps) {
             </Table>
         </TableContainer>
         <TablePagination
+            component="div"
             rowsPerPageOptions={pageSizeOptions}
             count={data.totalElements}
             rowsPerPage={pageSize}
