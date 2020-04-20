@@ -10,20 +10,13 @@ import {
     TablePagination,
     TableRow
 } from "@material-ui/core";
-import {PaginatedCollection, WithId} from "../entities/pagination";
+import {PaginatedCollection, WithId} from "../../entities/pagination";
+import {PaginatedTableColumn} from "./PaginatedTableColumn";
 
-export interface Column<T> {
-    id: string,
-    label: string,
-    align?: 'inherit' | 'left' | 'center' | 'right' | 'justify'
-
-    format(input: T): string
-}
 
 export interface TableData<ContentType extends WithId> {
-    columns: Array<Column<any>>
+    columns: Array<PaginatedTableColumn<any, any>>
     data: PaginatedCollection<ContentType>
-    extraColumns?: (input: ContentType) => any
     pageSizeOptions?: Array<number>
 }
 
@@ -35,7 +28,7 @@ export type PaginatedTableProps = TableData<any> & {
 
 
 export default function PaginatedTable(props: PaginatedTableProps) {
-    const {columns, data, requestPage, extraColumns} = props;
+    const {columns, data, requestPage} = props;
     const classes = useStyles();
 
     const pageSizeOptions = props.pageSizeOptions || [10, 25, 100]
@@ -78,7 +71,7 @@ export default function PaginatedTable(props: PaginatedTableProps) {
                         {columns.map(col =>
                             <TableCell
                                 key={col.id}
-                                align={col.align || "right"}
+                                align={col.align}
                             >
                                 {col.label}
                             </TableCell>
@@ -90,11 +83,10 @@ export default function PaginatedTable(props: PaginatedTableProps) {
                         items.map(item =>
                             <TableRow key={item.id}>
                                 {columns.map(col =>
-                                    <TableCell key={col.id} align={col.align || "right"}>
-                                        {col.format(item[col.id])}
+                                    <TableCell key={col.id} align={col.align}>
+                                        {col.renderContent(item[col.id], item)}
                                     </TableCell>
                                 )}
-                                {extraColumns && extraColumns(item)}
                             </TableRow>
                         )
                     }
