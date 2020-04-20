@@ -22,6 +22,11 @@ class ManagementLogController(loggerFactory: LoggerFactory, val managementLogSer
         managementLogService.add(log)
     }
 
+
+    @GetMapping("/{componentId}")
+    fun forComponent(@PathVariable componentId: Long, @RequestParam logType: LogType?, pageable: Pageable) =
+            managementLogService.getLogsForComponent(componentId, logType, pageable)
+
     @GetMapping
     fun getAll(@RequestParam logType: LogType?, @RequestParam componentType: ComponentType?, pageable: Pageable) = managementLogService.getLogs(logType, componentType, pageable)
 }

@@ -41,4 +41,10 @@ class ManagementLogService(
         componentType != null -> logRepository.findByComponentTypeOrderByTimestampDesc(componentType, pageable)
         else -> logRepository.findAllByOrderByTimestampDesc(pageable)
     }.map { it.toDto() }
+
+    fun getLogsForComponent(componentId: Long, logType: LogType?, pageable: Pageable): Page<LogDto> {
+        val entities = if (logType != null) logRepository.findByComponentIdAndLogType(componentId, logType, pageable)
+        else logRepository.findByComponentId(componentId, pageable)
+        return entities.map { it.toDto() }
+    }
 }
