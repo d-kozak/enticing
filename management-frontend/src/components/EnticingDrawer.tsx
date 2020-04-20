@@ -85,7 +85,7 @@ export default function EnticingDrawer() {
                     <ListItemIcon><MessageIcon/></ListItemIcon>
                     <ListItemText primary="Logs"/>
                 </ListItem>
-                <ListItem button onClick={() => history.push("/performance")}>
+                <ListItem button onClick={() => history.push("/perf")}>
                     <ListItemIcon><SpeedIcon/></ListItemIcon>
                     <ListItemText primary="Performance"/>
                 </ListItem>

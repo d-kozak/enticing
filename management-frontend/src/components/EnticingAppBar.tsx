@@ -74,7 +74,5 @@ export default function EnticingAppBar() {
                 </div>
             )}
         </Toolbar>
-    </AppBar>
-
-        ;
+    </AppBar>;
 }

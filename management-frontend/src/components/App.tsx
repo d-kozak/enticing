@@ -6,9 +6,17 @@ import {makeStyles} from '@material-ui/core/styles';
 import LogTable from "./tables/LogTable";
 import {openSnackbarAction} from "../reducers/snackbarReducer";
 import EnticingSnackbar from "./snackbar/EnticingSnackbar";
-import {BrowserRouter as Router, Switch} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import EnticingAppBar from "./EnticingAppBar";
 import EnticingDrawer from "./EnticingDrawer";
+import Dashboard from "./maincontent/Dashboard";
+import Users from "./maincontent/Users";
+import Servers from "./maincontent/Servers";
+import Components from "./maincontent/Components";
+import Logs from "./maincontent/Logs";
+import Perf from "./maincontent/Perf";
+import Commands from "./maincontent/Commands";
+import Builds from "./maincontent/Builds";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
@@ -16,7 +24,10 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     },
     content: {
         flexGrow: 1,
-        padding: theme.spacing(3)
+        paddingTop: theme.spacing(10),
+        paddingLeft: theme.spacing(3),
+        paddingRight: theme.spacing(3),
+        paddingBottom: theme.spacing(3)
     }
 }));
 
@@ -31,12 +42,15 @@ const App = (props: AppProps) => {
             <EnticingAppBar/>
             <EnticingDrawer/>
             <main className={classes.content}>
-
                 <Switch>
-                    {/*<Route path="/" exact*/}
-                    {/*       render={({history}) => <React.Fragment>*/}
-                    {/*           <MainPage history={history}/>*/}
-                    {/*       </React.Fragment>}/>*/}
+                    <Route path={"/"} exact render={() => <Dashboard/>}/>
+                    <Route path={"/user-management"} exact render={() => <Users/>}/>
+                    <Route path={"/server"} exact render={() => <Servers/>}/>
+                    <Route path={"/component"} exact render={() => <Components/>}/>
+                    <Route path={"/log"} exact render={() => <Logs/>}/>
+                    <Route path={"/perf"} exact render={() => <Perf/>}/>
+                    <Route path={"/command"} exact render={() => <Commands/>}/>
+                    <Route path={"/build"} exact render={() => <Builds/>}/>
                 </Switch>
                 <Button onClick={() => openSnackbarAction("Booo!")}>Booo!</Button>
                 <LogTable/>

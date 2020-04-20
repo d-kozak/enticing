@@ -14,7 +14,6 @@ const AdminOnly: FunctionComponent<AdminRouteProps> = (props) => {
     return <React.Fragment>
         {isAdmin && children}
     </React.Fragment>
-
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
