@@ -24,7 +24,7 @@ const LogTable = (props: LogTableProps) => {
     const history = useHistory();
 
     const requestPage = (page: number, size: number) => {
-        getRequest<PaginatedResult<User>>("/admin/user", [["page", page], ["size", size]])
+        getRequest<PaginatedResult<User>>("/user/all", [["page", page], ["size", size]])
             .then(res => {
                 addNewItems(res)
             })
@@ -36,10 +36,12 @@ const LogTable = (props: LogTableProps) => {
     const columns: Array<PaginatedTableColumn<any, any>> = [
         StringColumn("login", "Login"),
         StringColumn("active", "Active"),
-        StringColumn("roles", "Roles"),
-        CustomColumn<User, undefined>("componentDetails", "Component Details",
+        CustomColumn<User, Array<string>>("roles", "Roles",
+            (roles) => roles.join(", ")
+        ),
+        CustomColumn<User, undefined>("userDetails", "User details",
             (prop, user) => <Tooltip title="User details">
-                <IconButton onClick={() => history.push(`/component/${user.id}`)}>
+                <IconButton onClick={() => history.push(`/user-management/${user.id}`)}>
                     <InfoIcon/>
                 </IconButton>
             </Tooltip>
