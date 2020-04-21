@@ -5,6 +5,7 @@ import {useParams} from "react-router";
 import {CircularProgress, Divider, List, ListItem, ListItemText, Paper, Typography} from "@material-ui/core";
 import {requestServerInfo} from "../../../reducers/serversReducer";
 import ServerComponentsTable from "./ServerComponentsTable";
+import ServerStatus from "./ServerStatus";
 
 export type ServerDetailsProps = typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
@@ -27,13 +28,23 @@ const ServerDetails = (props: ServerDetailsProps) => {
     return <Paper>
         <Typography variant="h3">Server {server.address}</Typography>
         <Divider/>
-        <List component="nav" aria-label="main mailbox folders">
+        <List component="nav">
             <ListItem>
                 <ListItemText primary={`Processors: ${server.availableProcessors}`}/>
             </ListItem>
             <ListItem>
                 <ListItemText primary={`Ram size: ${server.totalPhysicalMemorySize}`}/>
             </ListItem>
+        </List>
+        <Divider/>
+        <List component="nav">
+            <ListItem>
+                <ListItemText primary={`Status`}/>
+            </ListItem>
+        </List>
+        <ServerStatus/>
+        <Divider/>
+        <List component="nav">
             <ListItem>
                 <ListItemText primary={`Components`}/>
             </ListItem>

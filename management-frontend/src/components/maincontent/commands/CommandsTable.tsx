@@ -7,9 +7,10 @@ import {CustomColumn, PaginatedTableColumn, StringColumn} from "../../pagination
 import {addNewItems} from "../../../reducers/commandsReducer";
 import {getRequest} from "../../../network/requests";
 import {PaginatedResult} from "../../../entities/pagination";
-import {Button} from "@material-ui/core";
+import {Button, IconButton, Tooltip} from "@material-ui/core";
 import {useHistory} from "react-router";
 import {CommandDto} from "../../../entities/CommandDto";
+import InfoIcon from "@material-ui/icons/Info";
 
 const useStyles = makeStyles({});
 
@@ -43,6 +44,13 @@ const CommandsTable = (props: CommandsTableProps) => {
                 <Button onClick={() => history.push(`/user-management/${command.submittedBy}`)}>
                     {command.submittedBy}
                 </Button>
+        ),
+        CustomColumn<CommandDto, undefined>("commandDetails", "Command details",
+            (prop, command) => <Tooltip title="Command details">
+                <IconButton onClick={() => history.push(`/command/${command.id}`)}>
+                    <InfoIcon/>
+                </IconButton>
+            </Tooltip>
         )
     ];
 
