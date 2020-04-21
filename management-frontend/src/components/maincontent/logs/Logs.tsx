@@ -1,7 +1,8 @@
-import {ApplicationState} from "../../ApplicationState";
+import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import React from 'react';
-import {closeSnackbarAction} from "../../reducers/snackbarReducer";
+import {closeSnackbarAction} from "../../../reducers/snackbarReducer";
+import LogTable from "./LogTable";
 
 
 export type LogsProps = typeof mapDispatchToProps
@@ -11,7 +12,7 @@ const Logs = (props: LogsProps) => {
     const {} = props;
 
     return <div>
-        log
+        <LogTable/>
     </div>
 };
 

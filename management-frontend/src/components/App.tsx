@@ -1,9 +1,8 @@
-import {Button, createStyles, CssBaseline, Theme} from "@material-ui/core";
+import {createStyles, CssBaseline, Theme} from "@material-ui/core";
 import {connect} from "react-redux";
 import React from 'react';
 import {ApplicationState} from "../ApplicationState";
 import {makeStyles} from '@material-ui/core/styles';
-import LogTable from "./tables/LogTable";
 import {openSnackbarAction} from "../reducers/snackbarReducer";
 import EnticingSnackbar from "./snackbar/EnticingSnackbar";
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
@@ -11,9 +10,9 @@ import EnticingAppBar from "./EnticingAppBar";
 import EnticingDrawer from "./EnticingDrawer";
 import Dashboard from "./maincontent/Dashboard";
 import Users from "./maincontent/Users";
-import Servers from "./maincontent/Servers";
+import Servers from "./maincontent/servers/Servers";
 import Components from "./maincontent/Components";
-import Logs from "./maincontent/Logs";
+import Logs from "./maincontent/logs/Logs";
 import Perf from "./maincontent/Perf";
 import Commands from "./maincontent/Commands";
 import Builds from "./maincontent/Builds";
@@ -44,16 +43,14 @@ const App = (props: AppProps) => {
             <main className={classes.content}>
                 <Switch>
                     <Route path={"/"} exact render={() => <Dashboard/>}/>
-                    <Route path={"/user-management"} exact render={() => <Users/>}/>
-                    <Route path={"/server"} exact render={() => <Servers/>}/>
-                    <Route path={"/component"} exact render={() => <Components/>}/>
-                    <Route path={"/log"} exact render={() => <Logs/>}/>
-                    <Route path={"/perf"} exact render={() => <Perf/>}/>
-                    <Route path={"/command"} exact render={() => <Commands/>}/>
-                    <Route path={"/build"} exact render={() => <Builds/>}/>
+                    <Route path={"/user-management"} render={() => <Users/>}/>
+                    <Route path={"/server"} render={() => <Servers/>}/>
+                    <Route path={"/component"} render={() => <Components/>}/>
+                    <Route path={"/log"} render={() => <Logs/>}/>
+                    <Route path={"/perf"} render={() => <Perf/>}/>
+                    <Route path={"/command"} render={() => <Commands/>}/>
+                    <Route path={"/build"} render={() => <Builds/>}/>
                 </Switch>
-                <Button onClick={() => openSnackbarAction("Booo!")}>Booo!</Button>
-                <LogTable/>
             </main>
         </Router>
         <EnticingSnackbar/>
