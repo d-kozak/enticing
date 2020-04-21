@@ -1,7 +1,7 @@
 export type AlignOptions = 'inherit' | 'left' | 'center' | 'right' | 'justify'
 
 export interface PaginatedTableColumn<ItemType, ColType> {
-    type: "string" | "float" | "int" | "action"
+    type: "string" | "float" | "int" | "custom"
     id: string,
     label: string,
     align: AlignOptions
@@ -9,9 +9,9 @@ export interface PaginatedTableColumn<ItemType, ColType> {
     renderContent(property: ColType, item: ItemType): string
 }
 
-export function ActionColumn<ItemType, ColType>(id: string, label: string, renderContent: (property: ColType, item: ItemType) => any, align: AlignOptions = "right"): PaginatedTableColumn<ItemType, ColType> {
+export function CustomColumn<ItemType, ColType>(id: string, label: string, renderContent: (property: ColType, item: ItemType) => any, align: AlignOptions = "right"): PaginatedTableColumn<ItemType, ColType> {
     return {
-        type: "action",
+        type: "custom",
         id,
         label,
         align,

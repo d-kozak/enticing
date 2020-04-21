@@ -11,7 +11,7 @@ import EnticingDrawer from "./EnticingDrawer";
 import Dashboard from "./maincontent/Dashboard";
 import Users from "./maincontent/Users";
 import Servers from "./maincontent/servers/Servers";
-import Components from "./maincontent/Components";
+import Components from "./maincontent/components/Components";
 import Logs from "./maincontent/logs/Logs";
 import Perf from "./maincontent/Perf";
 import Commands from "./maincontent/Commands";

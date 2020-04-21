@@ -3,7 +3,7 @@ import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import React from "react";
 import PaginatedTable from "../../pagination/PaginatedTable";
-import {ActionColumn, PaginatedTableColumn, StringColumn} from "../../pagination/PaginatedTableColumn"
+import {CustomColumn, PaginatedTableColumn, StringColumn} from "../../pagination/PaginatedTableColumn"
 import {addNewItems} from "../../../reducers/logsReducer";
 import {getRequest} from "../../../network/requests";
 import {LogDto} from "../../../entities/LogDto";
@@ -36,7 +36,7 @@ const LogTable = (props: LogTableProps) => {
         StringColumn("message", "Message"),
         StringColumn("componentType", "ComponentType"),
         StringColumn("timestamp", "Timestamp"),
-        ActionColumn<LogDto, undefined>("log", "log it", (prop, item) => <Button>{item.message}</Button>)
+        CustomColumn<LogDto, undefined>("log", "log it", (prop, item) => <Button>{item.message}</Button>)
     ];
 
 

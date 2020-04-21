@@ -1,6 +1,6 @@
 // todo dates have to be parsed manually
 export interface CommandDto {
-    id: number
+    id: string
     type: CommandType,
     state: CommandState,
     arguments: string,

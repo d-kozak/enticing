@@ -2,8 +2,8 @@ import {PaginatedCollection} from "./pagination";
 import {LogDto} from "./LogDto";
 
 export interface ComponentInfo {
-    id: number,
-    serverId: number,
+    id: string,
+    serverId: string,
     port: number,
     type: ComponentType,
     lastHeartbeat: Date

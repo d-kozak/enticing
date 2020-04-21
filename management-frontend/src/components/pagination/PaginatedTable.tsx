@@ -38,7 +38,7 @@ export default function PaginatedTable(props: PaginatedTableProps) {
 
     const anyDataMissing = (page: number, size: number): boolean => {
         for (let i = page * size; i < page * size + size; i++)
-            if (!data.content[i]) return true;
+            if (!data.index[i]) return true;
         return false;
     }
 
@@ -59,13 +59,13 @@ export default function PaginatedTable(props: PaginatedTableProps) {
 
     const items = [];
     for (let i = currentPage * pageSize; i < currentPage * pageSize + pageSize; i++) {
-        let item = data.content[i];
+        let item = data.elements[data.index[i]];
         if (item) items.push(item);
     }
 
     return <Paper>
         <TableContainer>
-            <Table stickyHeader={true}>
+            <Table stickyHeader>
                 <TableHead>
                     <TableRow>
                         {columns.map(col =>

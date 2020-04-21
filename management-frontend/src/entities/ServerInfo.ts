@@ -1,7 +1,7 @@
 import {PaginatedCollection} from "./pagination";
 
 export interface ServerInfo {
-    id: number,
+    id: string,
     address: string,
     availableProcessors: number,
     totalPhysicalMemorySize: number,

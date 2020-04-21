@@ -1,23 +1,22 @@
 import {createSlice, PayloadAction} from "redux-starter-kit";
 import {emptyPaginatedCollection, PaginatedCollection, PaginatedResult} from "../entities/pagination";
-import {LogDto} from "../entities/LogDto";
-import {generate} from "shortid";
-
+import {ComponentInfo} from "../entities/ComponentInfo";
 
 const {reducer, actions} = createSlice({
-    slice: 'logs',
-    initialState: emptyPaginatedCollection<LogDto>(),
+    slice: 'components',
+    initialState: emptyPaginatedCollection<ComponentInfo>(),
     reducers: {
-        addNewItems: (state: PaginatedCollection<LogDto>, actions: PayloadAction<PaginatedResult<LogDto>>) => {
+        addNewItems: (state: PaginatedCollection<ComponentInfo>, actions: PayloadAction<PaginatedResult<ComponentInfo>>) => {
             const payload = actions.payload;
             const offset = payload.number * payload.size;
             for (let i = 0; i < payload.content.length; i++) {
                 const elem = payload.content[i];
-                elem.id = generate();
+                elem.id = elem.id.toString(); // (in case it was parsed as a number, transform it back to string)
+                elem.serverId = elem.serverId.toString();
                 state.index[offset + i] = elem.id;
                 state.elements[elem.id] = elem;
             }
-            state.totalElements = payload.totalElements
+            state.totalElements = payload.totalElements;
         }
     }
 });

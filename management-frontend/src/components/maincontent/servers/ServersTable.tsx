@@ -3,7 +3,7 @@ import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import React from "react";
 import PaginatedTable from "../../pagination/PaginatedTable";
-import {ActionColumn, IntColumn, PaginatedTableColumn, StringColumn} from "../../pagination/PaginatedTableColumn"
+import {CustomColumn, IntColumn, PaginatedTableColumn, StringColumn} from "../../pagination/PaginatedTableColumn"
 import {addNewItems} from "../../../reducers/serversReducer";
 import {getRequest} from "../../../network/requests";
 import {PaginatedResult} from "../../../entities/pagination";
@@ -36,7 +36,7 @@ const ServersTable = (props: ServersTableProps) => {
         StringColumn("address", "Address"),
         IntColumn("availableProcessors", "Component Address"),
         IntColumn("totalPhysicalMemorySize", "Ram size"),
-        ActionColumn<ServerInfo, undefined>("serverDetails", "Server Details",
+        CustomColumn<ServerInfo, undefined>("serverDetails", "Server Details",
             (prop, server) => <Tooltip title="Server details">
                 <IconButton onClick={() => history.push(`/server/${server.id}`)}>
                     <InfoIcon/>
