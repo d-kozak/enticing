@@ -30,12 +30,16 @@ function OperationsTable(props: PaginatedTableProps) {
     const [pageSize, setPageSize] = useState(pageSizeOptions[0]);
     const [currentPage, setCurrentPage] = useState(0);
 
+    const refreshOperations = () => {
+        getRequest<OperationsStatsState>("/perf/stats")
+            .then((stats) => refreshStats(stats))
+            .catch(err => console.error(err))
+    }
+
+
     useEffect(() => {
-        const interval = setInterval(() => {
-            getRequest<OperationsStatsState>("/perf/stats")
-                .then((stats) => refreshStats(stats))
-                .catch(err => console.error(err))
-        }, 5000);
+        refreshOperations();
+        const interval = setInterval(refreshOperations, 5000);
         return () => clearInterval(interval);
     });
 
