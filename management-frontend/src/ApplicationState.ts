@@ -15,8 +15,12 @@ export interface ApplicationState {
     commands: PaginatedCollection<CommandDto>
     logs: PaginatedCollection<LogDto>
     perfLogs: PaginatedCollection<PerfDto>
-    operationStats: Map<string, GeneralOperationStatistics>
+    operationStats: OperationsStatsState
     snackbar: SnackbarState
+}
+
+export interface OperationsStatsState {
+    [id: string]: GeneralOperationStatistics
 }
 
 export interface UserState {

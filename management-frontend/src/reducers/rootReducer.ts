@@ -5,6 +5,8 @@ import logsReducer from "./logsReducer";
 import serversReducer from "./serversReducer";
 import componentsReducer from "./componentsReducer";
 import usersReducer from "./usersReducer";
+import perfsReducer from "./perfsReducer";
+import operationStatsReducer from "./operationStatsReducer";
 
 const reducers = {
     userDetails: userDetailsReducer,
@@ -13,6 +15,8 @@ const reducers = {
     logs: logsReducer,
     servers: serversReducer,
     components: componentsReducer,
+    operationStats: operationStatsReducer,
+    perfLogs: perfsReducer,
 };
 
 

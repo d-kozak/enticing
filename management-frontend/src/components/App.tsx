@@ -13,7 +13,7 @@ import Users from "./maincontent/users/Users";
 import Servers from "./maincontent/servers/Servers";
 import Components from "./maincontent/components/Components";
 import Logs from "./maincontent/logs/Logs";
-import Perf from "./maincontent/Perf";
+import Perf from "./maincontent/perf/Perf";
 import Commands from "./maincontent/Commands";
 import Builds from "./maincontent/Builds";
 
