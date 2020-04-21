@@ -15,9 +15,9 @@ import {requestServerInfo} from "../../../reducers/serversReducer";
 
 const useStyles = makeStyles({});
 
-type ServersTableProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {}
+type ComponentsTableProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {}
 
-const ServersTable = (props: ServersTableProps) => {
+const ComponentsTable = (props: ComponentsTableProps) => {
     const classes = useStyles();
     const {components, servers, addNewItems, requestServerInfo} = props;
 
@@ -77,6 +77,6 @@ const mapDispatchToProps = {
     requestServerInfo: requestServerInfo as (id: string) => void
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ServersTable);
+export default connect(mapStateToProps, mapDispatchToProps)(ComponentsTable);
 
 

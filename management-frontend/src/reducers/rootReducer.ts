@@ -6,6 +6,7 @@ import serversReducer from "./serversReducer";
 import componentsReducer from "./componentsReducer";
 import usersReducer from "./usersReducer";
 import perfsReducer from "./perfsReducer";
+import commandsReducer from "./commandsReducer";
 import operationStatsReducer from "./operationStatsReducer";
 
 const reducers = {
@@ -17,6 +18,7 @@ const reducers = {
     components: componentsReducer,
     operationStats: operationStatsReducer,
     perfLogs: perfsReducer,
+    commands: commandsReducer
 };
 
 

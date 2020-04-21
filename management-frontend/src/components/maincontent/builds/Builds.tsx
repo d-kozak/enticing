@@ -1,7 +1,7 @@
-import {ApplicationState} from "../../ApplicationState";
+import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import React from 'react';
-import {closeSnackbarAction} from "../../reducers/snackbarReducer";
+import {closeSnackbarAction} from "../../../reducers/snackbarReducer";
 
 
 export type BuildsProps = typeof mapDispatchToProps
