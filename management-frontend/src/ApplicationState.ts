@@ -8,7 +8,7 @@ import {GeneralOperationStatistics} from "./entities/GeneralOperationStatistics"
 import {CommandDto} from "./entities/CommandDto";
 
 export interface ApplicationState {
-    userState: UserState
+    userDetails: UserState
     users: PaginatedCollection<User>
     servers: PaginatedCollection<ServerInfo>
     components: PaginatedCollection<ComponentInfo>

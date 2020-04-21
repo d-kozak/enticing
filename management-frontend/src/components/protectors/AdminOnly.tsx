@@ -2,7 +2,7 @@ import {RouteComponentProps} from "react-router";
 import React, {FunctionComponent, ReactNode} from 'react';
 import {connect} from "react-redux";
 import {ApplicationState} from "../../ApplicationState";
-import {isAdmin} from "../../reducers/userReducer";
+import {isAdmin} from "../../reducers/userDetailsReducer";
 
 
 type AdminRouteProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {

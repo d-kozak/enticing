@@ -1,7 +1,8 @@
-import {ApplicationState} from "../../ApplicationState";
+import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import React from 'react';
-import {closeSnackbarAction} from "../../reducers/snackbarReducer";
+import {closeSnackbarAction} from "../../../reducers/snackbarReducer";
+import UsersTable from "./UsersTable";
 
 
 export type UsersProps = typeof mapDispatchToProps
@@ -11,7 +12,7 @@ const Users = (props: UsersProps) => {
     const {} = props;
 
     return <div>
-        users
+        <UsersTable/>
     </div>
 };
 

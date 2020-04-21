@@ -1,7 +1,7 @@
 import React, {FunctionComponent} from 'react';
 import {connect} from "react-redux";
 import {ApplicationState} from "../../ApplicationState";
-import {isMaintainer} from "../../reducers/userReducer";
+import {isMaintainer} from "../../reducers/userDetailsReducer";
 
 
 type MaintainerOnlyProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {}

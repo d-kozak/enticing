@@ -9,7 +9,7 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import EnticingAppBar from "./EnticingAppBar";
 import EnticingDrawer from "./EnticingDrawer";
 import Dashboard from "./maincontent/Dashboard";
-import Users from "./maincontent/Users";
+import Users from "./maincontent/users/Users";
 import Servers from "./maincontent/servers/Servers";
 import Components from "./maincontent/components/Components";
 import Logs from "./maincontent/logs/Logs";

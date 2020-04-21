@@ -1,12 +1,14 @@
 import {combineReducers} from "redux";
 import snackbarReducer from "./snackbarReducer";
-import userReducer from "./userReducer";
+import userDetailsReducer from "./userDetailsReducer";
 import logsReducer from "./logsReducer";
 import serversReducer from "./serversReducer";
 import componentsReducer from "./componentsReducer";
+import usersReducer from "./usersReducer";
 
 const reducers = {
-    user: userReducer,
+    userDetails: userDetailsReducer,
+    users: usersReducer,
     snackbar: snackbarReducer,
     logs: logsReducer,
     servers: serversReducer,

@@ -5,7 +5,7 @@ import {ThunkDispatch} from "redux-thunk";
 import {ApplicationState} from "../ApplicationState";
 import {AnyAction} from "redux";
 import {openSnackbarAction} from "../reducers/snackbarReducer";
-import {loginSuccessAction, logoutSuccessAction} from "../reducers/userReducer";
+import {loginSuccessAction, logoutSuccessAction} from "../reducers/userDetailsReducer";
 
 async function snackbarOnError(dispatch: ThunkDispatch<ApplicationState, undefined, AnyAction>, message: string, block: () => Promise<void>) {
     try {

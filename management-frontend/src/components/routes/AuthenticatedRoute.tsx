@@ -1,7 +1,7 @@
 import {ApplicationState} from "../../ApplicationState";
 import {connect} from "react-redux";
 import React, {ReactNode} from 'react';
-import {isLoggedIn} from "../../reducers/userReducer";
+import {isLoggedIn} from "../../reducers/userDetailsReducer";
 
 import {Redirect, Route, RouteComponentProps} from "react-router";
 import {openSnackbarAction} from "../../reducers/snackbarReducer";

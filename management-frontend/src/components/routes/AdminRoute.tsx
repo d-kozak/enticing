@@ -2,7 +2,7 @@ import {Redirect, Route, RouteComponentProps} from "react-router";
 import React, {ReactNode} from 'react';
 import {connect} from "react-redux";
 import {ApplicationState} from "../../ApplicationState";
-import {isAdmin} from "../../reducers/userReducer";
+import {isAdmin} from "../../reducers/userDetailsReducer";
 import {openSnackbarAction} from "../../reducers/snackbarReducer";
 
 
