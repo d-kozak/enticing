@@ -40,7 +40,7 @@ const AddNewServerDialog = (props: ServerComponentsTableProps) => {
 
     return (
         <div>
-            <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+            <Button color="primary" variant="contained" onClick={handleClickOpen}>
                 Add new server
             </Button>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">

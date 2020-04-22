@@ -17,11 +17,12 @@ async function snackbarOnError(dispatch: ThunkDispatch<ApplicationState, undefin
 
 }
 
-export const loginRequest = (credentials: UserCredentials): ThunkResult<void> => async (dispatch) => {
+export const loginRequest = (credentials: UserCredentials, onDone?: () => void): ThunkResult<void> => async (dispatch) => {
     await snackbarOnError(dispatch, "Failed to log in, please check your credentials", async () => {
         const user = await postRequest<User>("/login", credentials);
         dispatch(loginSuccessAction(user))
     });
+    if (onDone) onDone();
 }
 
 export const logoutRequest = (): ThunkResult<void> => async (dispatch) => {
