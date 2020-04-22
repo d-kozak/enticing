@@ -6,6 +6,7 @@ import {CircularProgress, Divider, List, ListItem, ListItemText, Paper, Typograp
 import {requestServerInfo} from "../../../reducers/serversReducer";
 import ServerComponentsTable from "./ServerComponentsTable";
 import ServerStatusChart from "./ServerStatusChart";
+import {BackButton} from "../../button/BackButton";
 
 export type ServerDetailsProps = typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
@@ -24,6 +25,7 @@ const ServerDetails = (props: ServerDetailsProps) => {
         </div>
     }
     return <Paper>
+        <BackButton/>
         <Typography variant="h3">Server {server.address}</Typography>
         <Divider/>
         <List component="nav">

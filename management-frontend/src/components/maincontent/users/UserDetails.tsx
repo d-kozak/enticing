@@ -2,6 +2,7 @@ import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import React from 'react';
 import {useParams} from "react-router";
+import {BackButton} from "../../button/BackButton";
 
 
 export type ComponentDetailsProps = typeof mapDispatchToProps
@@ -11,6 +12,7 @@ const ComponentDetails = (props: ComponentDetailsProps) => {
     const {} = props;
     const {userId} = useParams();
     return <div>
+        <BackButton/>
         User with login {userId}
     </div>
 };

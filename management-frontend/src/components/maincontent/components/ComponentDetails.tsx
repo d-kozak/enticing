@@ -6,6 +6,7 @@ import {CircularProgress, Divider, List, ListItem, ListItemText, Paper, Typograp
 import {requestComponentInfo} from "../../../reducers/componentsReducer";
 import {requestServerInfo} from "../../../reducers/serversReducer";
 import ComponentLogsTable from "./ComponentLogsTable";
+import {BackButton} from "../../button/BackButton";
 
 
 export type ComponentDetailsProps = typeof mapDispatchToProps
@@ -35,6 +36,7 @@ const ComponentDetails = (props: ComponentDetailsProps) => {
     }
 
     return <Paper>
+        <BackButton/>
         <Typography variant="h3">Component details</Typography>
         <Divider/>
         <List component="nav">
