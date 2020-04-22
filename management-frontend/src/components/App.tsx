@@ -16,6 +16,7 @@ import Logs from "./maincontent/logs/Logs";
 import Perf from "./maincontent/perf/Perf";
 import Commands from "./maincontent/commands/Commands";
 import Builds from "./maincontent/builds/Builds";
+import Login from "./login/Login";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
@@ -43,6 +44,7 @@ const App = (props: AppProps) => {
             <main className={classes.content}>
                 <Switch>
                     <Route path={"/"} exact render={() => <Dashboard/>}/>
+                    <Route path={"/login"} render={() => <Login/>}/>
                     <Route path={"/user-management"} render={() => <Users/>}/>
                     <Route path={"/server"} render={() => <Servers/>}/>
                     <Route path={"/component"} render={() => <Components/>}/>
