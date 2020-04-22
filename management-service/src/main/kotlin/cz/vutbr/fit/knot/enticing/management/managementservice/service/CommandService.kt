@@ -5,6 +5,7 @@ import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.CommandRequest
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.CommandState
+import cz.vutbr.fit.knot.enticing.management.managementservice.dto.CommandType
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.CommandDto
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.CommandEntity
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toDto
@@ -101,5 +102,9 @@ class CommandService(
         scope.cancel()
     }
 
-    fun getCommands(pageable: Pageable): Page<CommandDto> = commandRepository.findAll(pageable).map { it.toDto() }
+    fun getCommands(type: CommandType?, pageable: Pageable): Page<CommandDto> {
+        val entities = if (type == null) commandRepository.findAll(pageable)
+        else commandRepository.findByType(type, pageable)
+        return entities.map { it.toDto() }
+    }
 }

@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.controller
 
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.CommandRequest
+import cz.vutbr.fit.knot.enticing.management.managementservice.dto.CommandType
 import cz.vutbr.fit.knot.enticing.management.managementservice.service.CommandService
 import org.springframework.data.domain.Pageable
 import org.springframework.web.bind.annotation.*
@@ -13,7 +14,7 @@ class CommandController(
 ) {
 
     @GetMapping
-    fun get(pageable: Pageable) = commandService.getCommands(pageable)
+    fun get(pageable: Pageable, @RequestParam type: CommandType?) = commandService.getCommands(type, pageable)
 
     @PostMapping
     fun enqueueCommand(@RequestBody @Valid commandRequest: CommandRequest) = commandService.enqueue(commandRequest)

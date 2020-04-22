@@ -5,8 +5,14 @@ import cz.vutbr.fit.knot.enticing.management.model.Mg4jFile
 
 suspend fun ShellCommandExecutor.localBuild(enticingHome: String): String {
     @Incomplete("find a way to just use 'gradle'")
-    val localGradleBin = "/home/dkozak/.sdkman/candidates/gradle/current/bin/gradle buildAll"
-    return this.execute(SimpleCommand(localGradleBin), workingDirectory = enticingHome)
+    val cmd = "/home/dkozak/.sdkman/candidates/gradle/current/bin/gradle buildAll"
+    return this.execute(SimpleCommand(cmd), workingDirectory = enticingHome)
+}
+
+suspend fun ShellCommandExecutor.localTest(enticingHome: String): String {
+    @Incomplete("find a way to just use 'gradle'")
+    val cmd = "/home/dkozak/.sdkman/candidates/gradle/current/bin/gradle clean test --info"
+    return this.execute(SimpleCommand(cmd), workingDirectory = enticingHome)
 }
 
 suspend fun ShellCommandExecutor.copyJars(username: String, server: String, localRepository: String, remoteRepository: String) = this.execute(SimpleCommand("scp $localRepository/lib/*.jar $username@$server:$remoteRepository/lib"))

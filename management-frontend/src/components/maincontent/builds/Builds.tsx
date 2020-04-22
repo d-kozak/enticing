@@ -2,6 +2,9 @@ import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import React from 'react';
 import {closeSnackbarAction} from "../../../reducers/snackbarReducer";
+import {Route, Switch, useRouteMatch} from "react-router";
+import CommandDetails from "../commands/CommandDetails";
+import BuildsTable from "./BuildsTable";
 
 
 export type BuildsProps = typeof mapDispatchToProps
@@ -10,9 +13,15 @@ export type BuildsProps = typeof mapDispatchToProps
 const Builds = (props: BuildsProps) => {
     const {} = props;
 
-    return <div>
-        builds
-    </div>
+    const match = useRouteMatch();
+    return <Switch>
+        <Route path={`${match.path}/:commandId`}>
+            <CommandDetails/>
+        </Route>
+        <Route path={`${match.path}`}>
+            <BuildsTable/>
+        </Route>
+    </Switch>
 };
 
 

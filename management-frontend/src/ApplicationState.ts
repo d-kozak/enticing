@@ -13,6 +13,7 @@ export interface ApplicationState {
     servers: PaginatedCollection<ServerInfo>
     components: PaginatedCollection<ComponentInfo>
     commands: PaginatedCollection<CommandDto>
+    builds: PaginatedCollection<CommandDto>
     logs: PaginatedCollection<LogDto>
     perfLogs: PaginatedCollection<PerfDto>
     operationStats: OperationsStatsState
