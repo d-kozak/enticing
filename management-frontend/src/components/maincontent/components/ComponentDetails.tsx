@@ -2,7 +2,7 @@ import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import React from 'react';
 import {useHistory, useParams} from "react-router";
-import {CircularProgress, Divider, List, ListItem, ListItemText, Paper, Typography} from "@material-ui/core";
+import {CircularProgress, Divider, List, ListItem, ListItemText, Typography} from "@material-ui/core";
 import {requestComponentInfo} from "../../../reducers/componentsReducer";
 import {requestServerInfo} from "../../../reducers/serversReducer";
 import ComponentLogsTable from "./ComponentLogsTable";
@@ -35,7 +35,7 @@ const ComponentDetails = (props: ComponentDetailsProps) => {
         </div>
     }
 
-    return <Paper>
+    return <div>
         <BackButton/>
         <Typography variant="h3">Component details</Typography>
         <Divider/>
@@ -63,7 +63,7 @@ const ComponentDetails = (props: ComponentDetailsProps) => {
             </ListItem>
         </List>
         <ComponentLogsTable componentId={componentId}/>
-    </Paper>
+    </div>
 };
 
 

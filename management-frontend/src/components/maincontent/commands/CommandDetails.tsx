@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import React from 'react';
 import {useHistory, useParams} from "react-router";
 import {BackButton} from "../../button/BackButton";
-import {CircularProgress, Divider, List, ListItem, ListItemText, Paper, Typography} from "@material-ui/core";
+import {CircularProgress, Divider, List, ListItem, ListItemText, Typography} from "@material-ui/core";
 import {requestCommandInfo} from "../../../reducers/commandsReducer";
 
 
@@ -25,7 +25,7 @@ const CommandDetails = (props: CommandDetailsProps) => {
         </div>
     }
 
-    return <Paper>
+    return <div>
         <BackButton/>
         <Typography variant="h3">Command details</Typography>
         <Divider/>
@@ -52,7 +52,7 @@ const CommandDetails = (props: CommandDetailsProps) => {
                 <ListItemText primary={`Finished at: ${command.finishedAt}`}/>
             </ListItem>
         </List>
-    </Paper>
+    </div>
 };
 
 

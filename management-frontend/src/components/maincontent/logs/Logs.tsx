@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import React from 'react';
 import {closeSnackbarAction} from "../../../reducers/snackbarReducer";
 import LogTable from "./LogTable";
+import {Paper} from "@material-ui/core";
 
 
 export type LogsProps = typeof mapDispatchToProps
@@ -11,9 +12,9 @@ export type LogsProps = typeof mapDispatchToProps
 const Logs = (props: LogsProps) => {
     const {} = props;
 
-    return <div>
+    return <Paper>
         <LogTable/>
-    </div>
+    </Paper>
 };
 
 

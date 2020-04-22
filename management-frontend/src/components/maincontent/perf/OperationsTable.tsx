@@ -1,15 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {makeStyles} from "@material-ui/core/styles";
-import {
-    Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TablePagination,
-    TableRow
-} from "@material-ui/core";
+import {Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow} from "@material-ui/core";
 import {ApplicationState, OperationsStatsState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import {getRequest} from "../../../network/requests";
@@ -54,7 +45,7 @@ function OperationsTable(props: PaginatedTableProps) {
 
     const items = Object.values(stats).slice(currentPage * pageSize, currentPage * pageSize + pageSize)
 
-    return <Paper>
+    return <div>
         <TableContainer>
             <Table stickyHeader>
                 <TableHead>
@@ -116,7 +107,7 @@ function OperationsTable(props: PaginatedTableProps) {
             onChangePage={handleChangePage}
             onChangeRowsPerPage={handleChangeRowsPerPage}
         />
-    </Paper>
+    </div>
 }
 
 const mapStateToProps = (state: ApplicationState) => ({

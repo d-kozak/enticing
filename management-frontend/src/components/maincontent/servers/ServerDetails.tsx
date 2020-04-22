@@ -2,7 +2,7 @@ import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import React from 'react';
 import {useParams} from "react-router";
-import {CircularProgress, Divider, List, ListItem, ListItemText, Paper, Typography} from "@material-ui/core";
+import {CircularProgress, Divider, List, ListItem, ListItemText, Typography} from "@material-ui/core";
 import {requestServerInfo} from "../../../reducers/serversReducer";
 import ServerComponentsTable from "./ServerComponentsTable";
 import ServerStatusChart from "./ServerStatusChart";
@@ -24,7 +24,7 @@ const ServerDetails = (props: ServerDetailsProps) => {
             <CircularProgress color="inherit"/>
         </div>
     }
-    return <Paper>
+    return <div>
         <BackButton/>
         <Typography variant="h3">Server {server.address}</Typography>
         <Divider/>
@@ -50,7 +50,7 @@ const ServerDetails = (props: ServerDetailsProps) => {
             </ListItem>
         </List>
         <ServerComponentsTable serverId={serverId}/>
-    </Paper>
+    </div>
 };
 
 

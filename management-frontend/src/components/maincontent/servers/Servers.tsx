@@ -4,6 +4,7 @@ import React from 'react';
 import {Route, Switch, useRouteMatch} from "react-router";
 import ServerDetails from "./ServerDetails";
 import ServersTable from "./ServersTable";
+import {Paper} from "@material-ui/core";
 
 
 export type ServersProps = typeof mapDispatchToProps
@@ -12,14 +13,16 @@ export type ServersProps = typeof mapDispatchToProps
 const Servers = (props: ServersProps) => {
     const {} = props;
     const match = useRouteMatch();
-    return <Switch>
-        <Route path={`${match.path}/:serverId`}>
-            <ServerDetails/>
-        </Route>
-        <Route path={`${match.path}`}>
-            <ServersTable/>
-        </Route>
-    </Switch>
+    return <Paper>
+        <Switch>
+            <Route path={`${match.path}/:serverId`}>
+                <ServerDetails/>
+            </Route>
+            <Route path={`${match.path}`}>
+                <ServersTable/>
+            </Route>
+        </Switch>
+    </Paper>
 };
 
 

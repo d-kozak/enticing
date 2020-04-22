@@ -2,7 +2,7 @@ import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import React, {useState} from 'react';
 import {closeSnackbarAction} from "../../../reducers/snackbarReducer";
-import {Tab, Tabs} from "@material-ui/core";
+import {Paper, Tab, Tabs} from "@material-ui/core";
 import OperationsTable from "./OperationsTable";
 import PerfTable from "./PerfTable";
 
@@ -15,7 +15,7 @@ const Perf = (props: PerfProps) => {
 
     const [tab, setTab] = useState(0);
 
-    return <div>
+    return <Paper>
         <Tabs
             value={tab}
             onChange={(e, v) => setTab(v)}
@@ -28,7 +28,7 @@ const Perf = (props: PerfProps) => {
         </Tabs>
         {tab === 0 && <OperationsTable/>}
         {tab === 1 && <PerfTable/>}
-    </div>
+    </Paper>
 };
 
 

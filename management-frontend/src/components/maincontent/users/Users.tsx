@@ -5,6 +5,7 @@ import {closeSnackbarAction} from "../../../reducers/snackbarReducer";
 import UsersTable from "./UsersTable";
 import {Route, Switch, useRouteMatch} from "react-router";
 import UserDetails from "./UserDetails";
+import {Paper} from "@material-ui/core";
 
 
 export type UsersProps = typeof mapDispatchToProps
@@ -13,14 +14,16 @@ export type UsersProps = typeof mapDispatchToProps
 const Users = (props: UsersProps) => {
     const {} = props;
     const match = useRouteMatch();
-    return <Switch>
-        <Route path={`${match.path}/:userId`}>
-            <UserDetails/>
-        </Route>
-        <Route path={`${match.path}`}>
-            <UsersTable/>
-        </Route>
-    </Switch>
+    return <Paper>
+        <Switch>
+            <Route path={`${match.path}/:userId`}>
+                <UserDetails/>
+            </Route>
+            <Route path={`${match.path}`}>
+                <UsersTable/>
+            </Route>
+        </Switch>
+    </Paper>
 };
 
 
