@@ -65,7 +65,8 @@ const Login = (props: LoginProps) => {
                 {({isSubmitting}) => <Form>
                     <Field variant="outlined" type="text" name="login" label="Login" className={classes.formField}
                            component={TextField}/>
-                    <Field variant="outlined" type="text" name="password" label="Password" className={classes.formField}
+                    <Field variant="outlined" type="password" name="password" label="Password"
+                           className={classes.formField}
                            component={TextField}/>
                     <DialogActions>
                         <Button disabled={isSubmitting} type="submit" color="primary" variant="contained">

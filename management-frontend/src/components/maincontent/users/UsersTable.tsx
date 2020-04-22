@@ -11,6 +11,7 @@ import {IconButton, Tooltip} from "@material-ui/core";
 import {User} from "../../../entities/user";
 import InfoIcon from "@material-ui/icons/Info";
 import {useHistory} from "react-router";
+import AddNewUserDialog from "./AddNewUserDialog";
 
 
 const useStyles = makeStyles({});
@@ -49,11 +50,14 @@ const LogTable = (props: LogTableProps) => {
     ];
 
 
-    return <PaginatedTable
-        data={users}
-        columns={columns}
-        requestPage={requestPage}
-    />
+    return <div>
+        <PaginatedTable
+            data={users}
+            columns={columns}
+            requestPage={requestPage}
+        />
+        <AddNewUserDialog/>
+    </div>
 };
 
 
