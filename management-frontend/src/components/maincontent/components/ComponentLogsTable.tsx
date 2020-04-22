@@ -4,24 +4,37 @@ import {connect} from "react-redux";
 import React from "react";
 import PaginatedTable from "../../pagination/PaginatedTable";
 import {PaginatedTableColumn, StringColumn} from "../../pagination/PaginatedTableColumn"
-import {addNewItems} from "../../../reducers/logsReducer";
+import {addLogsToComponent} from "../../../reducers/componentsReducer";
 import {getRequest} from "../../../network/requests";
-import {LogDto} from "../../../entities/LogDto";
 import {PaginatedResult} from "../../../entities/pagination";
-
+import {useHistory} from "react-router";
+import {LogDto} from "../../../entities/LogDto";
 
 const useStyles = makeStyles({});
 
-type LogTableProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {}
+type ComponentLogsTableSimpleProps = {
+    componentId: string
+};
 
-const LogTable = (props: LogTableProps) => {
+type ComponentLogsTableProps =
+    ReturnType<typeof mapStateToProps>
+    & typeof mapDispatchToProps
+    & ComponentLogsTableSimpleProps
+
+const ComponentLogsTable = (props: ComponentLogsTableProps) => {
     const classes = useStyles();
-    const {logs, addNewItems} = props;
+    const {component, addLogsToComponent} = props;
+
+    const history = useHistory();
+
+    if (!component) {
+        return <div>no data</div>;
+    }
 
     const requestPage = (page: number, size: number) => {
-        getRequest<PaginatedResult<LogDto>>("/log", [["page", page], ["size", size]])
+        getRequest<PaginatedResult<LogDto>>(`/log/${component.id}`, [["page", page], ["size", size]])
             .then(res => {
-                addNewItems(res)
+                addLogsToComponent({...res, componentId: component.id});
             })
             .catch(err => {
                 console.error(err);
@@ -31,28 +44,25 @@ const LogTable = (props: LogTableProps) => {
     const columns: Array<PaginatedTableColumn<any, any>> = [
         StringColumn("logType", "Log Type"),
         StringColumn("className", "Classname"),
-        StringColumn("componentAddress", "Component Address"),
         StringColumn("message", "Message"),
-        StringColumn("componentType", "ComponentType"),
         StringColumn("timestamp", "Timestamp")
     ];
 
-
     return <PaginatedTable
-        data={logs}
+        data={component.logs}
         columns={columns}
         requestPage={requestPage}
     />
 };
 
 
-const mapStateToProps = (state: ApplicationState) => ({
-    logs: state.logs
+const mapStateToProps = (state: ApplicationState, props: ComponentLogsTableSimpleProps) => ({
+    component: state.components.elements[props.componentId],
 });
 const mapDispatchToProps = {
-    addNewItems
+    addLogsToComponent
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LogTable);
+export default connect(mapStateToProps, mapDispatchToProps)(ComponentLogsTable);
 
 

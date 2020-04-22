@@ -14,9 +14,7 @@ const ServerDetails = (props: ServerDetailsProps) => {
     const {servers, requestServerInfo} = props;
     const {serverId} = useParams();
     if (!serverId) {
-        return <div>
-            Invalid serverId {serverId}
-        </div>
+        return <div> No serverId </div>
     }
     const server = servers.elements[serverId]
     if (!server) {

@@ -10,6 +10,7 @@ import cz.vutbr.fit.knot.enticing.management.managementservice.repository.PerfRe
 import cz.vutbr.fit.knot.enticing.mx.StaticServerInfo
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -36,4 +37,6 @@ class ComponentService(
     fun getComponentsOnServer(serverId: Long, pageable: Pageable): Page<ComponentInfo> = componentRepository.findByServerId(serverId, pageable).map { it.toComponentInfo() }
 
     fun getComponents(pageable: Pageable): Page<ComponentInfo> = componentRepository.findAll(pageable).map { it.toComponentInfo() }
+
+    fun getComponent(componentId: Long) = componentRepository.findByIdOrNull(componentId)?.toComponentInfo()
 }
