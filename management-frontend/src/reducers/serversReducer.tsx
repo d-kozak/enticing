@@ -5,7 +5,6 @@ import {ThunkResult} from "../utils/ThunkResult";
 import {getRequest} from "../network/requests";
 import {ComponentInfo} from "../entities/ComponentInfo";
 
-
 const {reducer, actions} = createSlice({
     slice: 'servers',
     initialState: emptyPaginatedCollection<ServerInfo>(),

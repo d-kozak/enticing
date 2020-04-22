@@ -41,7 +41,7 @@ function OperationsTable(props: PaginatedTableProps) {
         refreshOperations();
         const interval = setInterval(refreshOperations, 5000);
         return () => clearInterval(interval);
-    });
+    }, []);
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setCurrentPage(newPage);

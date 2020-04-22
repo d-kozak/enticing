@@ -6,9 +6,9 @@ import java.time.LocalDateTime
 import javax.persistence.*
 
 
-fun ServerStatus.toEntity(server: ServerInfoEntity, timestamp: LocalDateTime) = ServerStatusEntity(0, freePhysicalMemorySize, processCpuLoad, systemCpuLoad, timestamp, server)
+fun ServerStatus.toEntity(server: ServerInfoEntity) = ServerStatusEntity(0, freePhysicalMemorySize, processCpuLoad, systemCpuLoad, timestamp, server)
 
-fun ServerStatusEntity.toDto() = ServerStatus(freePhysicalMemorySize, processCpuLoad, systemCpuLoad)
+fun ServerStatusEntity.toDto() = ServerStatus(freePhysicalMemorySize, processCpuLoad, systemCpuLoad, timestamp)
 
 @Entity
 @Table(indexes = [Index(name = "timestampIndex", columnList = "timestamp", unique = false)])

@@ -19,7 +19,8 @@ data class StaticServerInfo(
 data class ServerStatus(
         val freePhysicalMemorySize: Long,
         val processCpuLoad: Double,
-        val systemCpuLoad: Double
+        val systemCpuLoad: Double,
+        val timestamp: LocalDateTime = LocalDateTime.now()
 )
 
 open class ServerMonitoringService(val fullAddress: String, val componentType: ComponentType, loggerFactory: LoggerFactory) {

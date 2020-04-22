@@ -37,7 +37,7 @@ export default function PaginatedTable(props: PaginatedTableProps) {
     const [currentPage, setCurrentPage] = useState(0);
 
     const anyDataMissing = (page: number, size: number): boolean => {
-        for (let i = page * size; i < page * size + size; i++)
+        for (let i = page * size; i < Math.min(data.totalElements, page * size + size); i++)
             if (!data.index[i]) return true;
         return false;
     }

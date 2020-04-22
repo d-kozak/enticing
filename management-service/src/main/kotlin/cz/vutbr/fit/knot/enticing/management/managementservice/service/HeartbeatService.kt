@@ -28,8 +28,8 @@ class HeartbeatService(
             logger.warn("Received heartbeat from an unknown component ${dto.fullAddress}")
             return
         }
-        component.lastHeartbeat = dto.timestamp
-        serverStatusRepository.save(dto.status!!.toEntity(component.server, dto.timestamp))
+        component.lastHeartbeat = dto.status.timestamp
+        serverStatusRepository.save(dto.status.toEntity(component.server))
     }
 
 }

@@ -9,14 +9,12 @@ export interface ServerInfo {
     lastStatus: ServerStatus,
 
     // this HAS to be initialized in the frontend
-    status: PaginatedCollection<ServerStatus>
     components: PaginatedCollection<ComponentInfo>
 }
 
 export interface ServerStatus {
-    // todo id
-    id: string
     freePhysicalMemorySize: number
     processCpuLoad: number
     systemCpuLoad: number
+    timestamp: string
 }
