@@ -34,6 +34,12 @@ export interface PaginatedCollection<Element extends WithId> {
 }
 
 
+export function clearCollection<T extends WithId>(collection: PaginatedCollection<T>) {
+    collection.index = {}
+    collection.elements = {}
+    collection.totalElements = 1e10;
+}
+
 export function emptyPaginatedCollection<Element extends WithId>(): PaginatedCollection<Element> {
     return {
         index: {},

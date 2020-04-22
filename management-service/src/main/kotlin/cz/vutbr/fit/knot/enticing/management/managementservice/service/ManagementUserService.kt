@@ -110,4 +110,6 @@ class ManagementUserService(
         val roles = authentication.authorities.map { it.authority.split("_")[1] }.toSet()
         return User(login, true, roles)
     }
+
+    fun getUser(login: String): User? = userRepository.findByIdOrNull(login)?.toUser()
 }

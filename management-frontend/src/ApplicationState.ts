@@ -25,7 +25,7 @@ export interface OperationsStatsState {
 }
 
 export interface UserState {
-    currentUser: User | null
+    currentUserLogin: string | null
 }
 
 export interface SnackbarState {

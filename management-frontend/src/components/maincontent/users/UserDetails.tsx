@@ -3,23 +3,57 @@ import {connect} from "react-redux";
 import React from 'react';
 import {useParams} from "react-router";
 import {BackButton} from "../../button/BackButton";
+import {getCurrentUserDetails, isAdmin} from "../../../reducers/userDetailsReducer";
+import {CircularProgress, Divider, List, ListItem, ListItemText, Paper, Typography} from "@material-ui/core";
+import {requestUserInfo} from "../../../reducers/usersReducer";
 
 
-export type ComponentDetailsProps = typeof mapDispatchToProps
+export type UserDetailsProps = typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
 
-const ComponentDetails = (props: ComponentDetailsProps) => {
-    const {} = props;
+const UserDetails = (props: UserDetailsProps) => {
+    const {currentUser, isAdmin, allUsers, requestUserInfo} = props;
     const {userId} = useParams();
-    return <div>
+    // if (!currentUser) {
+    //     return <div>not logged in</div>
+    // }
+    if (!userId) {
+        return <div>no user id</div>
+    }
+    const viewedUser = allUsers.elements[userId];
+    if (!viewedUser) {
+        requestUserInfo(userId);
+        return <div>
+            <CircularProgress color="inherit"/>
+        </div>
+    }
+
+    // const viewingMyself = currentUser.id === userId;
+
+    return <Paper>
         <BackButton/>
-        User with login {userId}
-    </div>
+        <Typography variant="h3">User details</Typography>
+        <Divider/>
+        <List component="nav">
+            <ListItem>
+                <ListItemText primary={`Login: ${viewedUser.login}`}/>
+            </ListItem>
+            <ListItem>
+                <ListItemText primary={`Roles: ${viewedUser.roles.join(", ")}`}/>
+            </ListItem>
+        </List>
+    </Paper>
 };
 
 
-const mapStateToProps = (state: ApplicationState) => ({});
+const mapStateToProps = (state: ApplicationState) => ({
+    currentUser: getCurrentUserDetails(state),
+    isAdmin: isAdmin(state),
+    allUsers: state.users
+});
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+    requestUserInfo: requestUserInfo as (id: string) => void
+};
 
-export default (connect(mapStateToProps, mapDispatchToProps)(ComponentDetails));
+export default (connect(mapStateToProps, mapDispatchToProps)(UserDetails));

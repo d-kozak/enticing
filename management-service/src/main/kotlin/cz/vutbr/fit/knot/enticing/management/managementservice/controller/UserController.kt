@@ -24,6 +24,9 @@ class UserController(
     @GetMapping
     fun get(): User? = userService.getCurrentUser()
 
+    @GetMapping("/details/{login}")
+    fun getUserDetails(@PathVariable login: String): User? = userService.getUser(login)
+
     @GetMapping("/all")
     fun getAll(pageable: Pageable): Page<User> = userService.getUsers(pageable)
 

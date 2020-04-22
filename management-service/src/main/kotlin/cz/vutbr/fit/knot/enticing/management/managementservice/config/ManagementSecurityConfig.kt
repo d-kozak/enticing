@@ -37,6 +37,8 @@ class SecurityConfig(
                 .permitAll()
                 .antMatchers(HttpMethod.GET, "$apiBasePath/user/all")
                 .permitAll()
+                .antMatchers(HttpMethod.GET, "$apiBasePath/user/details/**")
+                .permitAll()
                 .antMatchers(HttpMethod.POST, "$apiBasePath/user/add")
                 .hasRole("ADMIN")
                 .antMatchers("/*",
