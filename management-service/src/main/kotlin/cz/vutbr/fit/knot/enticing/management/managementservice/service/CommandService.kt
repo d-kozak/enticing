@@ -107,4 +107,6 @@ class CommandService(
         else commandRepository.findByType(type, pageable)
         return entities.map { it.toDto() }
     }
+
+    fun getCommand(commandId: Long) = commandRepository.findByIdOrNull(commandId)?.toDto()
 }

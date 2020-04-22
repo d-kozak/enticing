@@ -1,6 +1,8 @@
 import {createSlice, PayloadAction} from "redux-starter-kit";
 import {emptyPaginatedCollection, PaginatedCollection, PaginatedResult} from "../entities/pagination";
 import {CommandDto} from "../entities/CommandDto";
+import {ThunkResult} from "../utils/ThunkResult";
+import {getRequest} from "../network/requests";
 
 const {reducer, actions} = createSlice({
     slice: 'commands',
@@ -16,10 +18,24 @@ const {reducer, actions} = createSlice({
                 state.elements[elem.id] = elem;
             }
             state.totalElements = payload.totalElements;
-        }
+        },
+        addCommand: (state: PaginatedCollection<CommandDto>, action: PayloadAction<CommandDto>) => {
+            const command = action.payload;
+            command.id = command.id.toString();
+            state.elements[command.id] = command;
+        },
     }
 });
 
-export const {addNewItems} = actions;
+export const {addNewItems, addCommand} = actions;
 
 export default reducer;
+
+export const requestCommandInfo = (id: string): ThunkResult<void> => async (dispatch) => {
+    try {
+        const command = await getRequest<CommandDto>(`/command/${id}`);
+        dispatch(addCommand(command));
+    } catch (e) {
+        console.error(e);
+    }
+}
