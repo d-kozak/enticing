@@ -1,15 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {makeStyles} from "@material-ui/core/styles";
-import {
-    Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TablePagination,
-    TableRow
-} from "@material-ui/core";
+import {Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow} from "@material-ui/core";
 import {PaginatedCollection, WithId} from "../../entities/pagination";
 import {PaginatedTableColumn} from "./PaginatedTableColumn";
 
@@ -63,7 +54,7 @@ export default function PaginatedTable(props: PaginatedTableProps) {
         if (item) items.push(item);
     }
 
-    return <Paper>
+    return <div>
         <TableContainer>
             <Table stickyHeader>
                 <TableHead>
@@ -102,5 +93,5 @@ export default function PaginatedTable(props: PaginatedTableProps) {
             onChangePage={handleChangePage}
             onChangeRowsPerPage={handleChangeRowsPerPage}
         />
-    </Paper>
+    </div>
 }
