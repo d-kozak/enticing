@@ -8,6 +8,7 @@ import ServerComponentsTable from "./ServerComponentsTable";
 import ServerStatusChart from "./ServerStatusChart";
 import {BackButton} from "../../button/BackButton";
 import AddNewComponentDialog from "../components/AddNewComponentDialog";
+import {Centered} from "../../Centered";
 
 export type ServerDetailsProps = typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
@@ -21,9 +22,9 @@ const ServerDetails = (props: ServerDetailsProps) => {
     const server = servers.elements[serverId]
     if (!server) {
         requestServerInfo(serverId);
-        return <div>
+        return <Centered>
             <CircularProgress color="inherit"/>
-        </div>
+        </Centered>
     }
     return <div>
         <BackButton/>

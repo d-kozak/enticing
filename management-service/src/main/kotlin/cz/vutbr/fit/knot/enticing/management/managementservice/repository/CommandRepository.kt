@@ -10,4 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface CommandRepository : JpaRepository<CommandEntity, Long> {
     fun findFirstByStateOrderBySubmittedAtAsc(state: CommandState): CommandEntity?
     fun findByType(type: CommandType, pageable: Pageable): Page<CommandEntity>
+    fun findByState(state: CommandState, pageable: Pageable): Page<CommandEntity>
+    fun findByTypeAndState(type: CommandType, state: CommandState, pageable: Pageable): Page<CommandEntity>
 }

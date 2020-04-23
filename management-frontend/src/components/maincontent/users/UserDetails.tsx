@@ -6,6 +6,7 @@ import {BackButton} from "../../button/BackButton";
 import {getCurrentUserDetails, isAdmin} from "../../../reducers/userDetailsReducer";
 import {CircularProgress, Divider, List, ListItem, ListItemText, Typography} from "@material-ui/core";
 import {requestUserInfo} from "../../../reducers/usersReducer";
+import {Centered} from "../../Centered";
 
 
 export type UserDetailsProps = typeof mapDispatchToProps
@@ -23,9 +24,9 @@ const UserDetails = (props: UserDetailsProps) => {
     const viewedUser = allUsers.elements[userId];
     if (!viewedUser) {
         requestUserInfo(userId);
-        return <div>
+        return <Centered>
             <CircularProgress color="inherit"/>
-        </div>
+        </Centered>
     }
 
     // const viewingMyself = currentUser.id === userId;

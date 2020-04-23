@@ -14,16 +14,18 @@ import InfoIcon from "@material-ui/icons/Info";
 
 const useStyles = makeStyles({});
 
-type BuildsTableProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {}
+type BuildsTableProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {
+    restrictions?: Array<[string, string | number]>
+}
 
 const BuildsTable = (props: BuildsTableProps) => {
     const classes = useStyles();
-    const {builds, addNewItems} = props;
+    let {builds, addNewItems, restrictions} = props;
 
     const history = useHistory();
 
     const requestPage = (page: number, size: number) => {
-        getRequest<PaginatedResult<CommandDto>>("/command", [["type", "LOCAL_TEST"], ["page", page], ["size", size]])
+        getRequest<PaginatedResult<CommandDto>>("/command", [["type", "LOCAL_TEST"], ["page", page], ["size", size], ...(restrictions || [])])
             .then(res => {
                 addNewItems(res)
             })

@@ -5,6 +5,7 @@ import {useHistory, useParams} from "react-router";
 import {BackButton} from "../../button/BackButton";
 import {CircularProgress, Divider, List, ListItem, ListItemText, Typography} from "@material-ui/core";
 import {requestCommandInfo} from "../../../reducers/commandsReducer";
+import {Centered} from "../../Centered";
 
 
 export type CommandDetailsProps = typeof mapDispatchToProps
@@ -20,9 +21,9 @@ const CommandDetails = (props: CommandDetailsProps) => {
     const command = commands.elements[commandId];
     if (!command) {
         requestCommandInfo(commandId);
-        return <div>
+        return <Centered>
             <CircularProgress color="inherit"/>
-        </div>
+        </Centered>
     }
 
     return <div>

@@ -8,7 +8,7 @@ import EnticingSnackbar from "./snackbar/EnticingSnackbar";
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import EnticingAppBar from "./EnticingAppBar";
 import EnticingDrawer from "./EnticingDrawer";
-import Dashboard from "./maincontent/Dashboard";
+import Dashboard from "./maincontent/dashboard/Dashboard";
 import Users from "./maincontent/users/Users";
 import Servers from "./maincontent/servers/Servers";
 import Components from "./maincontent/components/Components";

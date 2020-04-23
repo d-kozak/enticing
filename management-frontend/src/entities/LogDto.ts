@@ -10,7 +10,7 @@ export interface LogDto {
     timestamp: Date
 }
 
-enum LogType {
+export enum LogType {
     /**
      * low level information tracing the execution
      */

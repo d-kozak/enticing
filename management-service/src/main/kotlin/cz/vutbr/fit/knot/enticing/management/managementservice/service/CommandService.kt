@@ -102,9 +102,13 @@ class CommandService(
         scope.cancel()
     }
 
-    fun getCommands(type: CommandType?, pageable: Pageable): Page<CommandDto> {
-        val entities = if (type == null) commandRepository.findAll(pageable)
-        else commandRepository.findByType(type, pageable)
+    fun getCommands(type: CommandType?, state: CommandState?, pageable: Pageable): Page<CommandDto> {
+        val entities = when {
+            state != null && type != null -> commandRepository.findByTypeAndState(type, state, pageable)
+            state != null -> commandRepository.findByState(state, pageable)
+            type != null -> commandRepository.findByType(type, pageable)
+            else -> commandRepository.findAll(pageable)
+        }
         return entities.map { it.toDto() }
     }
 

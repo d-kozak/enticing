@@ -7,6 +7,7 @@ import {requestComponentInfo} from "../../../reducers/componentsReducer";
 import {requestServerInfo} from "../../../reducers/serversReducer";
 import ComponentLogsTable from "./ComponentLogsTable";
 import {BackButton} from "../../button/BackButton";
+import {Centered} from "../../Centered";
 
 
 export type ComponentDetailsProps = typeof mapDispatchToProps
@@ -30,9 +31,9 @@ const ComponentDetails = (props: ComponentDetailsProps) => {
     const server = servers.elements[component.serverId];
     if (!server) {
         requestServerInfo(component.serverId);
-        return <div>
+        return <Centered>
             <CircularProgress color="inherit"/>
-        </div>
+        </Centered>
     }
 
     return <div>
