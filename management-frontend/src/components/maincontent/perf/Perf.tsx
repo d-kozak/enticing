@@ -2,7 +2,7 @@ import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import React, {useState} from 'react';
 import {closeSnackbarAction} from "../../../reducers/snackbarReducer";
-import {Paper, Tab, Tabs} from "@material-ui/core";
+import {Paper, Tab, Tabs, Typography} from "@material-ui/core";
 import OperationsTable from "./OperationsTable";
 import PerfTable from "./PerfTable";
 
@@ -16,6 +16,7 @@ const Perf = (props: PerfProps) => {
     const [tab, setTab] = useState(0);
 
     return <Paper>
+        <Typography variant="h3">Performance</Typography>
         <Tabs
             value={tab}
             onChange={(e, v) => setTab(v)}

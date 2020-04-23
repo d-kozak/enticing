@@ -7,7 +7,7 @@ import {CustomColumn, PaginatedTableColumn, StringColumn} from "../../pagination
 import {addNewItems} from "../../../reducers/buildsReducer";
 import {getRequest} from "../../../network/requests";
 import {PaginatedResult} from "../../../entities/pagination";
-import {Button, IconButton, Tooltip} from "@material-ui/core";
+import {Button, IconButton, Tooltip, Typography} from "@material-ui/core";
 import {useHistory} from "react-router";
 import {CommandDto} from "../../../entities/CommandDto";
 import InfoIcon from "@material-ui/icons/Info";
@@ -52,11 +52,14 @@ const BuildsTable = (props: BuildsTableProps) => {
         )
     ];
 
-    return <PaginatedTable
-        data={builds}
-        columns={columns}
-        requestPage={requestPage}
-    />
+    return <div>
+        <Typography variant="h3">Builds</Typography>
+        <PaginatedTable
+            data={builds}
+            columns={columns}
+            requestPage={requestPage}
+        />
+    </div>
 };
 
 

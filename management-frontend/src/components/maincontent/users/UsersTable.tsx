@@ -7,7 +7,7 @@ import {CustomColumn, PaginatedTableColumn, StringColumn} from "../../pagination
 import {addNewItems} from "../../../reducers/usersReducer";
 import {getRequest} from "../../../network/requests";
 import {PaginatedResult} from "../../../entities/pagination";
-import {IconButton, Tooltip} from "@material-ui/core";
+import {IconButton, Tooltip, Typography} from "@material-ui/core";
 import {User} from "../../../entities/user";
 import InfoIcon from "@material-ui/icons/Info";
 import {useHistory} from "react-router";
@@ -51,6 +51,7 @@ const LogTable = (props: LogTableProps) => {
 
 
     return <div>
+        <Typography variant="h3">Users</Typography>
         <PaginatedTable
             data={users}
             columns={columns}

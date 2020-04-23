@@ -7,7 +7,7 @@ import {CustomColumn, PaginatedTableColumn, StringColumn} from "../../pagination
 import {addNewItems} from "../../../reducers/commandsReducer";
 import {getRequest} from "../../../network/requests";
 import {PaginatedResult} from "../../../entities/pagination";
-import {Button, IconButton, Tooltip} from "@material-ui/core";
+import {Button, IconButton, Tooltip, Typography} from "@material-ui/core";
 import {useHistory} from "react-router";
 import {CommandDto} from "../../../entities/CommandDto";
 import InfoIcon from "@material-ui/icons/Info";
@@ -54,11 +54,13 @@ const CommandsTable = (props: CommandsTableProps) => {
         )
     ];
 
-    return <PaginatedTable
-        data={commands}
-        columns={columns}
-        requestPage={requestPage}
-    />
+    return <div>
+        <Typography variant="h3">Commands</Typography>
+        <PaginatedTable
+            data={commands}
+            columns={columns}
+            requestPage={requestPage}/>
+    </div>
 };
 
 

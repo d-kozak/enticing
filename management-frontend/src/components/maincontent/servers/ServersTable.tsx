@@ -8,7 +8,7 @@ import {addNewItems} from "../../../reducers/serversReducer";
 import {getRequest} from "../../../network/requests";
 import {PaginatedResult} from "../../../entities/pagination";
 import {ServerInfo} from "../../../entities/ServerInfo";
-import {IconButton, Tooltip} from "@material-ui/core";
+import {IconButton, Tooltip, Typography} from "@material-ui/core";
 import {useHistory} from "react-router";
 import InfoIcon from "@material-ui/icons/Info";
 import AddNewServerDialog from "./AddNewServerDialog";
@@ -47,6 +47,7 @@ const ServersTable = (props: ServersTableProps) => {
     ];
 
     return <div>
+        <Typography variant="h3">Servers</Typography>
         <PaginatedTable
             data={servers}
             columns={columns}

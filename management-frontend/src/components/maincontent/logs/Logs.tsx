@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import React from 'react';
 import {closeSnackbarAction} from "../../../reducers/snackbarReducer";
 import LogTable from "./LogTable";
-import {Paper} from "@material-ui/core";
+import {Paper, Typography} from "@material-ui/core";
 
 
 export type LogsProps = typeof mapDispatchToProps
@@ -13,6 +13,7 @@ const Logs = (props: LogsProps) => {
     const {} = props;
 
     return <Paper>
+        <Typography variant="h3">Logs</Typography>
         <LogTable/>
     </Paper>
 };

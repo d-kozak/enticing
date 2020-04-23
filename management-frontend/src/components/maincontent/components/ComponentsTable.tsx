@@ -7,7 +7,7 @@ import {CustomColumn, IntColumn, PaginatedTableColumn, StringColumn} from "../..
 import {addNewItems} from "../../../reducers/componentsReducer";
 import {getRequest} from "../../../network/requests";
 import {PaginatedResult} from "../../../entities/pagination";
-import {Button, IconButton, Tooltip} from "@material-ui/core";
+import {Button, IconButton, Tooltip, Typography} from "@material-ui/core";
 import {useHistory} from "react-router";
 import InfoIcon from "@material-ui/icons/Info";
 import {ComponentInfo} from "../../../entities/ComponentInfo";
@@ -62,6 +62,7 @@ const ComponentsTable = (props: ComponentsTableProps) => {
     ];
 
     return <div>
+        <Typography variant="h3">Components</Typography>
         <PaginatedTable
             data={components}
             columns={columns}
