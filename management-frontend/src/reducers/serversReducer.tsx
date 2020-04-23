@@ -1,16 +1,17 @@
 import {createSlice, PayloadAction} from "redux-starter-kit";
-import {emptyPaginatedCollection, PaginatedCollection, PaginatedResult} from "../entities/pagination";
+import {clearCollection, emptyPaginatedCollection, PaginatedCollection, PaginatedResult} from "../entities/pagination";
 import {ServerInfo} from "../entities/ServerInfo";
 import {ThunkResult} from "../utils/ThunkResult";
 import {getRequest} from "../network/requests";
 import {ComponentInfo} from "../entities/ComponentInfo";
+import {snackbarOnError} from "../request/userRequests";
 
 const {reducer, actions} = createSlice({
     slice: 'servers',
     initialState: emptyPaginatedCollection<ServerInfo>(),
     reducers: {
-        addNewItems: (state: PaginatedCollection<ServerInfo>, actions: PayloadAction<PaginatedResult<ServerInfo>>) => {
-            const payload = actions.payload;
+        addNewItems: (state: PaginatedCollection<ServerInfo>, action: PayloadAction<PaginatedResult<ServerInfo>>) => {
+            const payload = action.payload;
             const offset = payload.number * payload.size;
             for (let i = 0; i < payload.content.length; i++) {
                 const elem = payload.content[i];
@@ -42,13 +43,36 @@ const {reducer, actions} = createSlice({
                 server.components.elements[elem.id] = elem;
             }
             server.components.totalElements = payload.totalElements
+        },
+        refresh: (state: PaginatedCollection<ServerInfo>, action: PayloadAction<Array<ServerInfo>>) => {
+            clearCollection(state)
+            for (let i = 0; i < action.payload.length; i++) {
+                const server = action.payload[i];
+                server.id = server.id.toString();
+                state.elements[server.id] = server
+                state.index[i] = server.id
+            }
         }
     }
 });
 
-export const {addNewItems, addServer, addComponentsToServer} = actions;
+export const {addNewItems, addServer, addComponentsToServer, refresh} = actions;
 
 export default reducer;
+
+export const requestAllServers = (): ThunkResult<void> => async (dispatch) => {
+    await snackbarOnError(dispatch, 'Failed to load servers', async () => {
+        let page = 0
+        const pageSize = 100
+        let res = await getRequest<PaginatedResult<ServerInfo>>(`/server/`, [["page", page], ["size", pageSize]])
+        const results = res.content
+        while (res.totalElements > results.length) {
+            res = await getRequest<PaginatedResult<ServerInfo>>(`/server/`, [["page", ++page], ["size", pageSize]])
+            results.push(...res.content)
+        }
+        dispatch(refresh(results))
+    });
+}
 
 export const requestServerInfo = (id: string): ThunkResult<void> => async (dispatch) => {
     try {

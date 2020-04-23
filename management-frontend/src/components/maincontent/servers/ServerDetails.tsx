@@ -7,6 +7,7 @@ import {requestServerInfo} from "../../../reducers/serversReducer";
 import ServerComponentsTable from "./ServerComponentsTable";
 import ServerStatusChart from "./ServerStatusChart";
 import {BackButton} from "../../button/BackButton";
+import AddNewComponentDialog from "../components/AddNewComponentDialog";
 
 export type ServerDetailsProps = typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
@@ -26,9 +27,12 @@ const ServerDetails = (props: ServerDetailsProps) => {
     }
     return <div>
         <BackButton/>
-        <Typography variant="h3">Server {server.address}</Typography>
+        <Typography variant="h3">Server details</Typography>
         <Divider/>
         <List component="nav">
+            <ListItem button onClick={() => window.open(`http://${server.address}`, "_blank")}>
+                <ListItemText primary={`Address: ${server.address}`}/>
+            </ListItem>
             <ListItem>
                 <ListItemText primary={`Processors: ${server.availableProcessors}`}/>
             </ListItem>
@@ -50,6 +54,7 @@ const ServerDetails = (props: ServerDetailsProps) => {
             </ListItem>
         </List>
         <ServerComponentsTable serverId={serverId}/>
+        <AddNewComponentDialog predefinedServer={server}/>
     </div>
 };
 

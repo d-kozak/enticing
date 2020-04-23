@@ -12,6 +12,7 @@ import {useHistory} from "react-router";
 import InfoIcon from "@material-ui/icons/Info";
 import {ComponentInfo} from "../../../entities/ComponentInfo";
 import {requestServerInfo} from "../../../reducers/serversReducer";
+import AddNewComponentDialog from "./AddNewComponentDialog";
 
 const useStyles = makeStyles({});
 
@@ -60,11 +61,14 @@ const ComponentsTable = (props: ComponentsTableProps) => {
         )
     ];
 
-    return <PaginatedTable
-        data={components}
-        columns={columns}
-        requestPage={requestPage}
-    />
+    return <div>
+        <PaginatedTable
+            data={components}
+            columns={columns}
+            requestPage={requestPage}
+        />
+        <AddNewComponentDialog/>
+    </div>
 };
 
 
