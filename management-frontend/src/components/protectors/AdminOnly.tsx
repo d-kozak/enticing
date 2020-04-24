@@ -1,15 +1,12 @@
-import {RouteComponentProps} from "react-router";
-import React, {FunctionComponent, ReactNode} from 'react';
+import React, {FunctionComponent} from 'react';
 import {connect} from "react-redux";
 import {ApplicationState} from "../../ApplicationState";
 import {isAdmin} from "../../reducers/userDetailsReducer";
 
 
-type AdminRouteProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {
-    render: (props: RouteComponentProps<any>) => ReactNode,
-}
+type AdminOnlyProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {}
 
-const AdminOnly: FunctionComponent<AdminRouteProps> = (props) => {
+const AdminOnly: FunctionComponent<AdminOnlyProps> = (props) => {
     const {isAdmin, children} = props;
     return <React.Fragment>
         {isAdmin && children}

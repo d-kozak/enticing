@@ -15,6 +15,7 @@ import Drawer from "@material-ui/core/Drawer";
 import React from "react";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {useHistory} from "react-router";
+import AdminOnly from "./protectors/AdminOnly";
 
 
 const drawerWidth = 240;
@@ -62,13 +63,15 @@ export default function EnticingDrawer() {
                 </ListItem>
             </List>
             <Divider/>
-            <List>
-                <ListItem button onClick={() => history.push("/user-management")}>
-                    <ListItemIcon><PersonIcon/></ListItemIcon>
-                    <ListItemText primary="User management"/>
-                </ListItem>
-            </List>
-            <Divider/>
+            <AdminOnly>
+                <List>
+                    <ListItem button onClick={() => history.push("/user-management")}>
+                        <ListItemIcon><PersonIcon/></ListItemIcon>
+                        <ListItemText primary="User management"/>
+                    </ListItem>
+                </List>
+                <Divider/>
+            </AdminOnly>
             <List>
                 <ListItem button onClick={() => history.push("/server")}>
                     <ListItemIcon><ComputerIcon/></ListItemIcon>

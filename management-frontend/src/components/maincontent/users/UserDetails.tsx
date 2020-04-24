@@ -4,7 +4,7 @@ import React from 'react';
 import {useParams} from "react-router";
 import {BackButton} from "../../button/BackButton";
 import {getCurrentUserDetails, isAdmin} from "../../../reducers/userDetailsReducer";
-import {CircularProgress, Divider, List, ListItem, ListItemText, Typography} from "@material-ui/core";
+import {CircularProgress, Divider, List, ListItem, ListItemText, Paper, Typography} from "@material-ui/core";
 import {requestUserInfo} from "../../../reducers/usersReducer";
 import {Centered} from "../../Centered";
 
@@ -28,7 +28,7 @@ const UserDetails = (props: UserDetailsProps) => {
 
     // const viewingMyself = currentUser.id === userId;
 
-    return <div>
+    return <Paper>
         <BackButton/>
         <Typography variant="h3">User details</Typography>
         <Divider/>
@@ -40,7 +40,7 @@ const UserDetails = (props: UserDetailsProps) => {
                 <ListItemText primary={`Roles: ${viewedUser.roles.join(", ")}`}/>
             </ListItem>
         </List>
-    </div>
+    </Paper>
 };
 
 

@@ -68,4 +68,4 @@ const mapDispatchToProps = {
     requestServerInfo: requestServerInfo as (id: string) => void
 };
 
-export default (connect(mapStateToProps, mapDispatchToProps)(ServerDetails));
+export default connect(mapStateToProps, mapDispatchToProps)(ServerDetails);

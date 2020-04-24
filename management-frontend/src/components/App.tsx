@@ -8,15 +8,20 @@ import EnticingSnackbar from "./snackbar/EnticingSnackbar";
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import EnticingAppBar from "./EnticingAppBar";
 import EnticingDrawer from "./EnticingDrawer";
-import Dashboard from "./maincontent/dashboard/Dashboard";
-import Users from "./maincontent/users/Users";
 import Servers from "./maincontent/servers/Servers";
+import Login from "./login/Login";
+import {isLoggedIn} from "../reducers/userDetailsReducer";
+import AuthenticatedRoute from "./routes/AuthenticatedRoute";
 import Components from "./maincontent/components/Components";
+import Dashboard from "./maincontent/dashboard/Dashboard";
+import AdminRoute from "./routes/AdminRoute";
+import Users from "./maincontent/users/Users";
+import UserDetails from "./maincontent/users/UserDetails";
 import Logs from "./maincontent/logs/Logs";
 import Perf from "./maincontent/perf/Perf";
 import Commands from "./maincontent/commands/Commands";
 import Builds from "./maincontent/builds/Builds";
-import Login from "./login/Login";
+import AuthenticatedOnly from "./protectors/AuthenticatedOnly";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
@@ -39,18 +44,21 @@ const App = (props: AppProps) => {
         <CssBaseline/>
         <Router>
             <EnticingAppBar/>
-            <EnticingDrawer/>
+            <AuthenticatedOnly>
+                <EnticingDrawer/>
+            </AuthenticatedOnly>
             <main className={classes.content}>
                 <Switch>
-                    <Route path={"/"} exact render={() => <Dashboard/>}/>
+                    <AuthenticatedRoute path={"/"} exact={true}> <Dashboard/> </AuthenticatedRoute>
                     <Route path={"/login"} render={() => <Login/>}/>
-                    <Route path={"/user-management"} render={() => <Users/>}/>
-                    <Route path={"/server"} render={() => <Servers/>}/>
-                    <Route path={"/component"} render={() => <Components/>}/>
-                    <Route path={"/log"} render={() => <Logs/>}/>
-                    <Route path={"/perf"} render={() => <Perf/>}/>
-                    <Route path={"/command"} render={() => <Commands/>}/>
-                    <Route path={"/build"} render={() => <Builds/>}/>
+                    <AdminRoute path={"/user-management"}> <Users/> </AdminRoute>
+                    <AuthenticatedRoute path={"/user-details/:userId"}> <UserDetails/> </AuthenticatedRoute>
+                    <AuthenticatedRoute path={"/server"} exact={false}> <Servers/> </AuthenticatedRoute>
+                    <AuthenticatedRoute path={"/component"} exact={false}> <Components/> </AuthenticatedRoute>
+                    <AuthenticatedRoute path={"/log"} exact={false}> <Logs/> </AuthenticatedRoute>
+                    <AuthenticatedRoute path={"/perf"} exact={false}> <Perf/> </AuthenticatedRoute>
+                    <AuthenticatedRoute path={"/command"} exact={false}> <Commands/> </AuthenticatedRoute>
+                    <AuthenticatedRoute path={"/build"} exact={false}> <Builds/> </AuthenticatedRoute>
                 </Switch>
             </main>
         </Router>
@@ -59,7 +67,9 @@ const App = (props: AppProps) => {
 };
 
 
-const mapStateToProps = (state: ApplicationState) => ({});
+const mapStateToProps = (state: ApplicationState) => ({
+    isLoggedIn: isLoggedIn(state)
+});
 const mapDispatchToProps = {
     openSnackbarAction
 };

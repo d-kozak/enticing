@@ -1,8 +1,7 @@
-import {Redirect} from "react-router";
+import {useHistory} from "react-router";
 import React, {useState} from 'react';
 import {connect} from "react-redux";
 import {ApplicationState} from "../../ApplicationState";
-import {isLoggedIn} from "../../reducers/userDetailsReducer";
 import {LinearProgress, Paper, Typography} from "@material-ui/core";
 import {Centered} from "../Centered";
 import {Field, Form, Formik} from "formik";
@@ -38,14 +37,12 @@ const LoginSchema = Yup.object().shape({
 });
 
 const Login = (props: LoginProps) => {
-    const {isLoggedIn, loginRequest} = props;
+    const {loginRequest} = props;
     const [progress, setProgress] = useState(false);
 
     const classes = useStyles();
 
-    if (isLoggedIn) {
-        return <Redirect to="/"/>
-    }
+    const history = useHistory();
 
     return <Centered>
         <Paper className={classes.root}>
@@ -56,9 +53,13 @@ const Login = (props: LoginProps) => {
                 validationSchema={LoginSchema}
                 onSubmit={(credentials, actions) => {
                     setProgress(true)
-                    loginRequest(credentials, () => {
-                        setProgress(false)
-                        actions.setSubmitting(false)
+                    loginRequest(credentials, (success) => {
+                        if (success) {
+                            history.push("/");
+                        } else {
+                            setProgress(false)
+                            actions.setSubmitting(false)
+                        }
                     })
                 }}
             >
@@ -79,11 +80,9 @@ const Login = (props: LoginProps) => {
     </Centered>
 }
 
-const mapStateToProps = (state: ApplicationState) => ({
-    isLoggedIn: isLoggedIn(state)
-});
+const mapStateToProps = (state: ApplicationState) => ({});
 const mapDispatchToProps = {
-    loginRequest: loginRequest as (credentials: UserCredentials, onDone?: () => void) => void
+    loginRequest: loginRequest as (credentials: UserCredentials, onDone?: (success: boolean) => void) => void
 };
 
 

@@ -10,7 +10,10 @@ import Menu from '@material-ui/core/Menu';
 import {ApplicationState} from "../ApplicationState";
 import {closeSnackbarAction} from "../reducers/snackbarReducer";
 import {connect} from "react-redux";
-import {isLoggedIn} from "../reducers/userDetailsReducer";
+import {getCurrentUserDetails} from "../reducers/userDetailsReducer";
+import {logoutRequest} from "../request/userRequests";
+import {useHistory} from "react-router";
+import * as H from 'history';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -30,11 +33,12 @@ export type EnticingAppBarProps = typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
 
 const EnticingAppBar = (props: EnticingAppBarProps) => {
-    const {isLoggedIn} = props;
+    const {userDetails, logoutRequest} = props;
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
 
+    const history = useHistory();
 
     const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -49,7 +53,7 @@ const EnticingAppBar = (props: EnticingAppBarProps) => {
             <Typography variant="h6" className={classes.title}>
                 Enticing Management
             </Typography>
-            {isLoggedIn && (
+            {userDetails && (
                 <div>
                     <IconButton
                         aria-label="account of current user"
@@ -75,8 +79,14 @@ const EnticingAppBar = (props: EnticingAppBarProps) => {
                         open={open}
                         onClose={handleClose}
                     >
-                        <MenuItem onClick={handleClose}>Profile</MenuItem>
-                        <MenuItem onClick={handleClose}>My account</MenuItem>
+                        <MenuItem onClick={() => {
+                            history.push(`/user-details/${userDetails.login}`);
+                            handleClose()
+                        }}>Profile</MenuItem>
+                        <MenuItem onClick={() => {
+                            logoutRequest(history);
+                            handleClose();
+                        }}>Logout</MenuItem>
                     </Menu>
                 </div>
             )}
@@ -85,11 +95,12 @@ const EnticingAppBar = (props: EnticingAppBarProps) => {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-    isLoggedIn: isLoggedIn(state)
+    userDetails: getCurrentUserDetails(state)
 });
 
 const mapDispatchToProps = {
-    closeSnackbarAction
+    closeSnackbarAction,
+    logoutRequest: logoutRequest as (history: H.History) => void
 };
 
 export default (connect(mapStateToProps, mapDispatchToProps)(EnticingAppBar));
