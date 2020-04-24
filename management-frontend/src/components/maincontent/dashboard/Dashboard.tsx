@@ -34,7 +34,6 @@ export interface DashboardState {
     builds: {
         running: CommandDto | null
         last: CommandDto | null
-        lastSuccess: CommandDto | null
     }
 }
 
@@ -53,6 +52,7 @@ const Dashboard = (props: DashboardProps) => {
     };
 
     useEffect(() => {
+        refreshState()
         const interval = setInterval(refreshState, 2000)
         return () => clearInterval(interval);
     }, []);

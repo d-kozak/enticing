@@ -1,9 +1,9 @@
 import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import React from 'react';
-import {List, ListItem, ListItemText, Paper, Typography} from "@material-ui/core";
+import {List, ListItem, ListItemIcon, ListItemText, Paper, Typography} from "@material-ui/core";
 import {DashboardState} from "./Dashboard";
-
+import ErrorIcon from "@material-ui/icons/Error";
 
 export type ComponentsDashboardProps = typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps> & { state: DashboardState }
@@ -18,9 +18,17 @@ const ComponentsDashboard = (props: ComponentsDashboardProps) => {
             <ListItem>
                 <ListItemText primary={`All components: ${components.total}`}/>
             </ListItem>
-            <ListItem>
+            {components.unresponsive.length > 0 && <ListItem>
+                <ListItemIcon>
+                    <ErrorIcon/>
+                </ListItemIcon>
                 <ListItemText primary={`Unresponsive: ${components.unresponsive.length}`}/>
             </ListItem>
+            }
+            {components.unresponsive.length == 0 && <ListItem>
+                <ListItemText primary="All components are active"/>
+            </ListItem>
+            }
         </List>
     </Paper>
 };
