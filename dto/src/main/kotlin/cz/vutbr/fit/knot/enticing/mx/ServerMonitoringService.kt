@@ -17,7 +17,7 @@ data class StaticServerInfo(
 )
 
 data class ServerStatus(
-        val freePhysicalMemorySize: Long,
+        val freePhysicalMemorySize: Double,
         val processCpuLoad: Double,
         val systemCpuLoad: Double,
         val timestamp: LocalDateTime = LocalDateTime.now()
@@ -29,7 +29,10 @@ open class ServerMonitoringService(val fullAddress: String, val componentType: C
 
     private val mxBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean::class.java)
 
-    fun getCurrentServerStatus() = ServerStatus(mxBean.freePhysicalMemorySize, mxBean.processCpuLoad, mxBean.systemCpuLoad).also {
+    private val info = getServerInfo()
+
+    fun getCurrentServerStatus() = ServerStatus(mxBean.freePhysicalMemorySize.toDouble() / info.totalPhysicalMemorySize
+            , mxBean.processCpuLoad, mxBean.systemCpuLoad).also {
         logger.debug("Current server status are $it")
     }
 

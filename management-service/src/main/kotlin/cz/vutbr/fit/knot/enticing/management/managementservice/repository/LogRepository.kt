@@ -12,6 +12,8 @@ interface LogRepository : JpaRepository<LogEntity, Long> {
 
     fun deleteByComponent(component: ComponentEntity)
 
+    fun findTop5ByLogTypeInOrderByTimestampDesc(opts: List<LogType>): List<LogEntity>
+
     fun findAllByOrderByTimestampDesc(pageable: Pageable): Page<LogEntity>
     fun findByLogTypeOrderByTimestampDesc(logType: LogType, pageable: Pageable): Page<LogEntity>
     fun findByComponentTypeOrderByTimestampDesc(componentType: ComponentType, pageable: Pageable): Page<LogEntity>

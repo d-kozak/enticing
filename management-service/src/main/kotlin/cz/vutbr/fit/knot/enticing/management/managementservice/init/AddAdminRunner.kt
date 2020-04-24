@@ -4,6 +4,7 @@ import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.UserEntity
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.UserRepository
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -13,12 +14,18 @@ import org.springframework.stereotype.Component
 class AddAdminRunner(
         val userRepository: UserRepository,
         val encoder: PasswordEncoder,
+        @Value("\${debug.runner.start}")
+        private val runDebug: Boolean,
         loggerFactory: LoggerFactory
 ) : ApplicationRunner {
 
     private val logger = loggerFactory.logger { }
 
     override fun run(args: ApplicationArguments?) {
+        if (!runDebug) {
+            logger.info("Disabled")
+            return
+        }
         val admins = userRepository.findByRolesContains("ADMIN")
         if (admins.isEmpty()) {
             val rawPassword = "knot12"

@@ -17,7 +17,7 @@ class ServerStatusEntity(
         @field:Id
         @field:JsonIgnore
         val id: Long,
-        val freePhysicalMemorySize: Long,
+        val freePhysicalMemorySize: Double,
         val processCpuLoad: Double,
         val systemCpuLoad: Double,
         val timestamp: LocalDateTime,

@@ -111,11 +111,11 @@ class ServerInfoTests {
     @Test
     fun `submit some heartbeats and view stats`() {
         val hb1 = HeartbeatDto("athena10.fit.vutbr.cz:8080", ComponentType.WEBSERVER,
-                ServerStatus(123, 0.5, 0.8, LocalDateTime.now().minusSeconds(2)))
+                ServerStatus(0.7, 0.5, 0.8, LocalDateTime.now().minusSeconds(2)))
         val hb2 = HeartbeatDto("athena10.fit.vutbr.cz:8080", ComponentType.WEBSERVER,
-                ServerStatus(125, 0.4, 0.7, LocalDateTime.now().minusSeconds(1)))
+                ServerStatus(0.6, 0.4, 0.7, LocalDateTime.now().minusSeconds(1)))
         val hb3 = HeartbeatDto("athena10.fit.vutbr.cz:5627", ComponentType.INDEX_SERVER,
-                ServerStatus(250, 0.2, 0.1))
+                ServerStatus(0.5, 0.2, 0.1))
         val firstItems = mvc.perform(get("$apiBasePath/server/1/stats"))
                 .andExpect(status().isOk)
                 .extractPaginatedItems<ServerStatus>()

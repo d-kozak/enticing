@@ -14,6 +14,6 @@ class ServerMonitoringServiceTest {
     fun `get current info`() {
         val status = service.getCurrentServerStatus()
         assertThat(status.freePhysicalMemorySize)
-                .isGreaterThan(0)
+                .isGreaterThan(0.0)
     }
 }

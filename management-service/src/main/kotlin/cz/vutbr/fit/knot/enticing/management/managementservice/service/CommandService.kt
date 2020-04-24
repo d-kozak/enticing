@@ -13,6 +13,7 @@ import cz.vutbr.fit.knot.enticing.management.managementservice.repository.Comman
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.UserRepository
 import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
 import kotlinx.coroutines.*
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
@@ -27,7 +28,9 @@ class CommandService(
         private val commandRepository: CommandRepository,
         private val userService: ManagementUserService,
         private val userRepository: UserRepository,
-        private val loggerFactory: LoggerFactory
+        private val loggerFactory: LoggerFactory,
+        @Value("\${command.runner.start}")
+        private val runExecutor: Boolean
 ) : AutoCloseable {
 
     private val logger = loggerFactory.logger { }
@@ -42,10 +45,12 @@ class CommandService(
             check(commandLogDirectory.toFile().mkdirs()) { "failed to create directory for command log files at $commandLogDirectory" }
         check(file.isDirectory) { "$commandLogDirectory is not a directory" }
 
-        scope.launch {
-            delay(2_000)
-            commandExecutionLoop()
-        }
+        if (runExecutor) {
+            scope.launch {
+                delay(2_000)
+                commandExecutionLoop()
+            }
+        } else logger.warn("Executor NOT started")
     }
 
     @Transactional

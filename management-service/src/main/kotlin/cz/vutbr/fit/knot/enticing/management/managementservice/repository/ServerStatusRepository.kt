@@ -9,6 +9,15 @@ import org.springframework.data.jpa.repository.Query
 
 interface ServerStatusRepository : JpaRepository<ServerStatusEntity, Long> {
 
+
+    // SELECT * FROM tablename
+    //WHERE id IN
+    //(SELECT MIN(id) FROM tablename GROUP BY EmailAddress)
+
+    //    @Query("select min(s.freePhysicalMemorySize),s.systemCpuLoad, distinct server  from ServerStatusEntity s")
+    @Query("select s from ServerStatusEntity s where s.id in (select min(id) from ServerStatusEntity s1 where s1.timestamp in (select max(timestamp) from ServerStatusEntity group by server) group by s1.server)")
+    fun findLastKnownStatusOfEachServer(): List<ServerStatusEntity>
+
     fun findByServerIdOrderByTimestampDesc(id: Long, pageable: Pageable): Page<ServerStatusEntity>
 
     @Query("select s from ServerStatusEntity s where s.server.id=:serverId and s.timestamp=(select max(s2.timestamp) from ServerStatusEntity s2 where s2.server.id=:serverId)")

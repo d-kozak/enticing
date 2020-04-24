@@ -43,6 +43,7 @@ class SecurityConfig(
                 .hasRole("ADMIN")
                 .antMatchers("/*",
                         "/static/**",
+                        "$apiBasePath/dashboard/**",
                         "$apiBasePath/login/**",
                         "$apiBasePath/log/**",
                         "$apiBasePath/perf/**",

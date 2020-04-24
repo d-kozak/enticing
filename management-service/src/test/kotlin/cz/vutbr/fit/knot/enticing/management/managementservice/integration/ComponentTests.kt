@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.integration
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.LogType
+import cz.vutbr.fit.knot.enticing.dto.utils.toDto
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.LogDto
@@ -57,24 +58,28 @@ class ComponentTests {
     lateinit var perfRepository: PerfRepository
 
     private val timestamp1 = LocalDateTime.now().minusDays(1)
-    private val serverOne = ServerInfo(1, "athena10.fit.vutbr.cz", 12, 6_000, null)
-    private val componentOne = ComponentInfo(2, 1, 8080, ComponentType.WEBSERVER, timestamp1)
+    private var serverOne = ServerInfo(1, "athena10.fit.vutbr.cz", 12, 6_000, null)
+    private var componentOne = ComponentInfo(2, 1, 8080, ComponentType.WEBSERVER, timestamp1)
 
     private val timestamp2 = LocalDateTime.now()
-    private val componentTwo = ComponentInfo(3, 1, 5627, ComponentType.INDEX_SERVER, timestamp2)
+    private var componentTwo = ComponentInfo(3, 1, 5627, ComponentType.INDEX_SERVER, timestamp2)
 
     private val timestamp3 = LocalDateTime.now()
-    private val serverTwo = ServerInfo(4, "knot01.fit.vutbr.cz", 11, 5555, null)
-    private val componentThree = ComponentInfo(5, 4, 5627, ComponentType.INDEX_SERVER, timestamp3)
+    private var serverTwo = ServerInfo(4, "knot01.fit.vutbr.cz", 11, 5555, null)
+    private var componentThree = ComponentInfo(5, 4, 5627, ComponentType.INDEX_SERVER, timestamp3)
 
 
     @BeforeAll
     fun `three components on two servers`() {
-        mvc.perform(post("$apiBasePath/server")
+        var res = mvc.perform(post("$apiBasePath/server")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(StaticServerInfo("athena10.fit.vutbr.cz:8080", ComponentType.WEBSERVER, 12, 6_000, timestamp1).toJson()))
                 .andExpect(status().isOk)
-                .andExpect(content().json(serverOne.toJson()))
+                .andReturn().response.contentAsString.toDto<ServerInfo>()
+        serverOne = serverOne.copy(res.id)
+        componentOne = componentOne.copy(id = res.id + 1, serverId = res.id)
+        componentTwo = componentTwo.copy(id = res.id + 2, serverId = res.id)
+        assertThat(res).isEqualTo(serverOne)
 
         mvc.perform(post("$apiBasePath/server")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -82,12 +87,14 @@ class ComponentTests {
                 .andExpect(status().isOk)
                 .andExpect(content().json(serverOne.toJson()))
 
-        mvc.perform(post("$apiBasePath/server")
+        res = mvc.perform(post("$apiBasePath/server")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(StaticServerInfo("knot01.fit.vutbr.cz:5627", ComponentType.INDEX_SERVER, 11, 5555, timestamp3).toJson()))
                 .andExpect(status().isOk)
-                .andExpect(content().json(serverTwo.toJson()))
-
+                .andReturn().response.contentAsString.toDto<ServerInfo>()
+        serverTwo = serverTwo.copy(res.id)
+        componentThree = componentThree.copy(id = res.id + 1, serverId = res.id)
+        assertThat(res).isEqualTo(serverTwo)
     }
 
     @AfterAll

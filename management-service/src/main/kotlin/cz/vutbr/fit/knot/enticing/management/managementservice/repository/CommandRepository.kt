@@ -11,5 +11,8 @@ interface CommandRepository : JpaRepository<CommandEntity, Long> {
     fun findFirstByStateOrderBySubmittedAtAsc(state: CommandState): CommandEntity?
     fun findByType(type: CommandType, pageable: Pageable): Page<CommandEntity>
     fun findByState(state: CommandState, pageable: Pageable): Page<CommandEntity>
+    fun findByState(state: CommandState): List<CommandEntity>
     fun findByTypeAndState(type: CommandType, state: CommandState, pageable: Pageable): Page<CommandEntity>
+    fun findTopByTypeAndStateOrderBySubmittedAtDesc(type: CommandType, state: CommandState): CommandEntity?
+    fun findTopByTypeAndStateInOrderBySubmittedAtDesc(type: CommandType, state: List<CommandState>): CommandEntity?
 }

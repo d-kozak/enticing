@@ -8,6 +8,7 @@ import cz.vutbr.fit.knot.enticing.management.managementservice.dto.CommandState
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.CommandType
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.*
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.*
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -20,11 +21,14 @@ class DebugInitRunner(
         private val serverInfoRepository: ServerInfoRepository,
         private val componentRepository: ComponentRepository,
         private val serverStatusRepository: ServerStatusRepository,
+        private val lastServerStatusRepository: LastServerStatusRepository,
         private val logRepository: LogRepository,
         private val perfRepository: PerfRepository,
         private val userRepository: UserRepository,
         private val commandRepository: CommandRepository,
         private val encoder: PasswordEncoder,
+        @Value("\${debug.runner.start}")
+        private val runDebug: Boolean,
         loggerFactory: LoggerFactory
 ) : ApplicationRunner {
 
@@ -58,7 +62,7 @@ class DebugInitRunner(
 
     private val serverStatus = servers.flatMap { server ->
         (1..1000).map { i ->
-            ServerStatusEntity(0, (i % 10) * 1000L, (i % 10) * 0.1, (i % 10) * 0.1, LocalDateTime.now().minusHours(i.toLong()), server)
+            ServerStatusEntity(0, (i % 10) * 0.1, (i % 10) * 0.1, (i % 10) * 0.1, LocalDateTime.now().minusHours(i.toLong()), server)
         }
     }
 
@@ -74,11 +78,17 @@ class DebugInitRunner(
     }
 
     override fun run(args: ApplicationArguments) {
+        if (!runDebug) {
+            logger.info("Debug runner disabled")
+            return
+        }
         logger.info("Inserting dummy data")
         userRepository.saveAll(users)
         commandRepository.saveAll(commands)
         serverInfoRepository.saveAll(servers)
         serverStatusRepository.saveAll(serverStatus)
+        for (status in serverStatus)
+            lastServerStatusRepository.save(LastServerStatusEntity(status.server.id, status.freePhysicalMemorySize, status.processCpuLoad, status.systemCpuLoad, status.timestamp))
         componentRepository.saveAll(components)
         logRepository.saveAll(logs)
         perfRepository.saveAll(perfLogs)
