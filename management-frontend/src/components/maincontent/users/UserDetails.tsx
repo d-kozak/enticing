@@ -13,11 +13,8 @@ export type UserDetailsProps = typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
 
 const UserDetails = (props: UserDetailsProps) => {
-    const {currentUser, isAdmin, allUsers, requestUserInfo} = props;
+    const {allUsers, requestUserInfo} = props;
     const {userId} = useParams();
-    // if (!currentUser) {
-    //     return <div>not logged in</div>
-    // }
     if (!userId) {
         return <div>no user id</div>
     }

@@ -1,12 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {makeStyles} from "@material-ui/core/styles";
 import {Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow} from "@material-ui/core";
 import {ApplicationState, OperationsStatsState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import {getRequest} from "../../../network/requests";
 import {refreshStats} from "../../../reducers/operationStatsReducer";
-
-const useStyles = makeStyles({});
 
 export type PaginatedTableProps = typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
@@ -14,25 +11,23 @@ export type PaginatedTableProps = typeof mapDispatchToProps
 
 function OperationsTable(props: PaginatedTableProps) {
     const {stats, refreshStats} = props;
-    const classes = useStyles();
 
     const pageSizeOptions = [10, 25]
 
     const [pageSize, setPageSize] = useState(pageSizeOptions[0]);
     const [currentPage, setCurrentPage] = useState(0);
 
-    const refreshOperations = () => {
-        getRequest<OperationsStatsState>("/perf/stats")
-            .then((stats) => refreshStats(stats))
-            .catch(err => console.error(err))
-    }
-
 
     useEffect(() => {
+        const refreshOperations = () => {
+            getRequest<OperationsStatsState>("/perf/stats")
+                .then((stats) => refreshStats(stats))
+                .catch(err => console.error(err))
+        }
         refreshOperations();
         const interval = setInterval(refreshOperations, 5000);
         return () => clearInterval(interval);
-    }, []);
+    }, [refreshStats]);
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setCurrentPage(newPage);

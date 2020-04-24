@@ -119,7 +119,7 @@ const AddNewUserDialog = (props: AddNewUserDialogProps) => {
                                 <Button onClick={handleClose} color="primary">
                                     Cancel
                                 </Button>
-                                <Button disabled={isSubmitting} type="submit" color="primary">
+                                <Button disabled={isSubmitting} type="submit" color="primary" variant="contained">
                                     Add
                                 </Button>
                             </DialogActions>

@@ -7,6 +7,10 @@ import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import {ApplicationState} from "../ApplicationState";
+import {closeSnackbarAction} from "../reducers/snackbarReducer";
+import {connect} from "react-redux";
+import {isLoggedIn} from "../reducers/userDetailsReducer";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -22,9 +26,12 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function EnticingAppBar() {
+export type EnticingAppBarProps = typeof mapDispatchToProps
+    & ReturnType<typeof mapStateToProps>
+
+const EnticingAppBar = (props: EnticingAppBarProps) => {
+    const {isLoggedIn} = props;
     const classes = useStyles();
-    const [auth, setAuth] = React.useState(true);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
 
@@ -42,7 +49,7 @@ export default function EnticingAppBar() {
             <Typography variant="h6" className={classes.title}>
                 Enticing Management
             </Typography>
-            {auth && (
+            {isLoggedIn && (
                 <div>
                     <IconButton
                         aria-label="account of current user"
@@ -76,3 +83,13 @@ export default function EnticingAppBar() {
         </Toolbar>
     </AppBar>;
 }
+
+const mapStateToProps = (state: ApplicationState) => ({
+    isLoggedIn: isLoggedIn(state)
+});
+
+const mapDispatchToProps = {
+    closeSnackbarAction
+};
+
+export default (connect(mapStateToProps, mapDispatchToProps)(EnticingAppBar));

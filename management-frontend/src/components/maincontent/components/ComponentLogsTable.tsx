@@ -1,4 +1,3 @@
-import {makeStyles} from "@material-ui/core/styles";
 import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import React from "react";
@@ -7,10 +6,7 @@ import {PaginatedTableColumn, StringColumn} from "../../pagination/PaginatedTabl
 import {addLogsToComponent} from "../../../reducers/componentsReducer";
 import {getRequest} from "../../../network/requests";
 import {PaginatedResult} from "../../../entities/pagination";
-import {useHistory} from "react-router";
 import {LogDto} from "../../../entities/LogDto";
-
-const useStyles = makeStyles({});
 
 type ComponentLogsTableSimpleProps = {
     componentId: string
@@ -22,10 +18,7 @@ type ComponentLogsTableProps =
     & ComponentLogsTableSimpleProps
 
 const ComponentLogsTable = (props: ComponentLogsTableProps) => {
-    const classes = useStyles();
     const {component, addLogsToComponent} = props;
-
-    const history = useHistory();
 
     if (!component) {
         return <div>no data</div>;

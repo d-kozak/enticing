@@ -20,13 +20,12 @@ const ServerStatusChart = (props: ServerStatusChartProps) => {
 
     const [data, setData] = useState<Array<ServerStatus>>()
 
-    const refresh = () => {
-        getRequest<PaginatedResult<ServerStatus>>(`/server/${server.id}/stats`, [["page", 0], ["size", 100]])
-            .then(res => setData(res.content))
-            .catch(err => console.error(err))
-    };
-
     useEffect(() => {
+        const refresh = () => {
+            getRequest<PaginatedResult<ServerStatus>>(`/server/${server.id}/stats`, [["page", 0], ["size", 100]])
+                .then(res => setData(res.content))
+                .catch(err => console.error(err))
+        };
         refresh()
         const interval = setInterval(refresh, 3000)
         return () => clearInterval(interval)

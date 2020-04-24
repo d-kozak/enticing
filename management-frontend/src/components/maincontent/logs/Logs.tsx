@@ -10,8 +10,6 @@ export type LogsProps = typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
 
 const Logs = (props: LogsProps) => {
-    const {} = props;
-
     return <Paper>
         <Typography variant="h3">Logs</Typography>
         <LogTable/>

@@ -11,10 +11,7 @@ export type PerfProps = typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
 
 const Perf = (props: PerfProps) => {
-    const {} = props;
-
     const [tab, setTab] = useState(0);
-
     return <Paper>
         <Typography variant="h3">Performance</Typography>
         <Tabs

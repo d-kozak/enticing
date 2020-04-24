@@ -1,4 +1,3 @@
-import {makeStyles} from "@material-ui/core/styles";
 import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import React from "react";
@@ -10,12 +9,9 @@ import {LogDto} from "../../../entities/LogDto";
 import {PaginatedResult} from "../../../entities/pagination";
 
 
-const useStyles = makeStyles({});
-
 type LogTableProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {}
 
 const LogTable = (props: LogTableProps) => {
-    const classes = useStyles();
     const {logs, addNewItems} = props;
 
     const requestPage = (page: number, size: number) => {

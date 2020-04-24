@@ -25,7 +25,7 @@ const ComponentsDashboard = (props: ComponentsDashboardProps) => {
                 <ListItemText primary={`Unresponsive: ${components.unresponsive.length}`}/>
             </ListItem>
             }
-            {components.unresponsive.length == 0 && <ListItem>
+            {components.unresponsive.length === 0 && <ListItem>
                 <ListItemText primary="All components are active"/>
             </ListItem>
             }

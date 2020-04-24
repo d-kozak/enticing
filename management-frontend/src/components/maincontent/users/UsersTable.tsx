@@ -1,4 +1,3 @@
-import {makeStyles} from "@material-ui/core/styles";
 import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import React from "react";
@@ -13,13 +12,9 @@ import InfoIcon from "@material-ui/icons/Info";
 import {useHistory} from "react-router";
 import AddNewUserDialog from "./AddNewUserDialog";
 
+type UsersTableProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {}
 
-const useStyles = makeStyles({});
-
-type LogTableProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {}
-
-const LogTable = (props: LogTableProps) => {
-    const classes = useStyles();
+const UsersTable = (props: UsersTableProps) => {
     const {users, addNewItems} = props;
 
     const history = useHistory();
@@ -69,6 +64,6 @@ const mapDispatchToProps = {
     addNewItems
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LogTable);
+export default connect(mapStateToProps, mapDispatchToProps)(UsersTable);
 
 

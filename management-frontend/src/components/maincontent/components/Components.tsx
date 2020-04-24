@@ -12,7 +12,6 @@ export type ComponentsProps = typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
 
 const Components = (props: ComponentsProps) => {
-    const {} = props;
     const match = useRouteMatch();
     return <Paper>
         <Switch>

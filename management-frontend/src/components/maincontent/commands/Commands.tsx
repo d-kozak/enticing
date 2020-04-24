@@ -12,8 +12,6 @@ export type CommandsProps = typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
 
 const Commands = (props: CommandsProps) => {
-    const {} = props;
-
     const match = useRouteMatch();
     return <Paper>
         <Switch>

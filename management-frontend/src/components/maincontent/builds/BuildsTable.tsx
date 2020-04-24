@@ -1,4 +1,3 @@
-import {makeStyles} from "@material-ui/core/styles";
 import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import React from "react";
@@ -12,14 +11,12 @@ import {useHistory} from "react-router";
 import {CommandDto} from "../../../entities/CommandDto";
 import InfoIcon from "@material-ui/icons/Info";
 
-const useStyles = makeStyles({});
 
 type BuildsTableProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {
     restrictions?: Array<[string, string | number]>
 }
 
 const BuildsTable = (props: BuildsTableProps) => {
-    const classes = useStyles();
     let {builds, addNewItems, restrictions} = props;
 
     const history = useHistory();

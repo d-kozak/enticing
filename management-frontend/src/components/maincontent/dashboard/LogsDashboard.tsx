@@ -23,8 +23,8 @@ const LogsDashboard = (props: LogsDashboardProps) => {
         <List component="nav">
             {importantLogs.map(log => <ListItem key={generate()}>
                     <ListItemIcon>
-                        {log.logType.toString() == LogType[LogType.ERROR] && <ErrorIcon/>}
-                        {log.logType.toString() == LogType[LogType.WARN] && <NotificationImportantIcon/>}
+                        {log.logType.toString() === LogType[LogType.ERROR] && <ErrorIcon/>}
+                        {log.logType.toString() === LogType[LogType.WARN] && <NotificationImportantIcon/>}
                     </ListItemIcon>
                 <ListItemText primary={displayLog(log)}/>
                 </ListItem>

@@ -11,7 +11,6 @@ export type ServersProps = typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
 
 const Servers = (props: ServersProps) => {
-    const {} = props;
     const match = useRouteMatch();
     return <Paper>
         <Switch>

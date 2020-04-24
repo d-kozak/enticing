@@ -1,4 +1,3 @@
-import {makeStyles} from "@material-ui/core/styles";
 import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import React from "react";
@@ -14,12 +13,9 @@ import {ComponentInfo} from "../../../entities/ComponentInfo";
 import {requestServerInfo} from "../../../reducers/serversReducer";
 import AddNewComponentDialog from "./AddNewComponentDialog";
 
-const useStyles = makeStyles({});
-
 type ComponentsTableProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {}
 
 const ComponentsTable = (props: ComponentsTableProps) => {
-    const classes = useStyles();
     const {components, servers, addNewItems, requestServerInfo} = props;
 
     const history = useHistory();

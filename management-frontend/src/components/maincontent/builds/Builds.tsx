@@ -12,8 +12,6 @@ export type BuildsProps = typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
 
 const Builds = (props: BuildsProps) => {
-    const {} = props;
-
     const match = useRouteMatch();
     return <Paper>
         <Switch>

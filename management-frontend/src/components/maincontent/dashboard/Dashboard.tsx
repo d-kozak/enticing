@@ -41,8 +41,6 @@ export type DashboardProps = typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
 
 const Dashboard = (props: DashboardProps) => {
-    const {} = props;
-
     const [dashboardState, setDashboardState] = useState<DashboardState | undefined>();
 
     const refreshState = () => {

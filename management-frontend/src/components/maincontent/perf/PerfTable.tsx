@@ -1,4 +1,3 @@
-import {makeStyles} from "@material-ui/core/styles";
 import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import React from "react";
@@ -10,12 +9,9 @@ import {PaginatedResult} from "../../../entities/pagination";
 import {PerfDto} from "../../../entities/PerfDto";
 
 
-const useStyles = makeStyles({});
-
 type PerfTableProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {}
 
 const PerfTable = (props: PerfTableProps) => {
-    const classes = useStyles();
     const {perfLogs, addNewItems} = props;
 
     const requestPage = (page: number, size: number) => {

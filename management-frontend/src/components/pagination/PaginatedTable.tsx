@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {makeStyles} from "@material-ui/core/styles";
 import {Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow} from "@material-ui/core";
 import {PaginatedCollection, WithId} from "../../entities/pagination";
 import {PaginatedTableColumn} from "./PaginatedTableColumn";
@@ -11,8 +10,6 @@ export interface TableData<ContentType extends WithId> {
     pageSizeOptions?: Array<number>
 }
 
-const useStyles = makeStyles({});
-
 export type PaginatedTableProps = TableData<any> & {
     requestPage(page: number, size: number): void
 }
@@ -20,7 +17,6 @@ export type PaginatedTableProps = TableData<any> & {
 
 export default function PaginatedTable(props: PaginatedTableProps) {
     const {columns, data, requestPage} = props;
-    const classes = useStyles();
 
     const pageSizeOptions = props.pageSizeOptions || [10, 25, 100]
 

@@ -1,4 +1,3 @@
-import {makeStyles} from "@material-ui/core/styles";
 import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import React from "react";
@@ -12,8 +11,6 @@ import {useHistory} from "react-router";
 import InfoIcon from "@material-ui/icons/Info";
 import {ComponentInfo} from "../../../entities/ComponentInfo";
 
-const useStyles = makeStyles({});
-
 type SimpleProps = {
     serverId: string
 };
@@ -21,7 +18,6 @@ type SimpleProps = {
 type ServerComponentsTableProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & SimpleProps
 
 const ServerComponentsTable = (props: ServerComponentsTableProps) => {
-    const classes = useStyles();
     const {server, addComponentsToServer} = props;
 
     const history = useHistory();

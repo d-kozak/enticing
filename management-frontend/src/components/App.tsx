@@ -35,7 +35,6 @@ type AppProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps &
 
 const App = (props: AppProps) => {
     const classes = useStyles();
-    const {openSnackbarAction} = props;
     return <div className={classes.root}>
         <CssBaseline/>
         <Router>
