@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "redux-starter-kit";
-import {emptyPaginatedCollection, PaginatedCollection, PaginatedResult} from "../entities/pagination";
+import {clearCollection, emptyPaginatedCollection, PaginatedCollection, PaginatedResult} from "../entities/pagination";
 import {generate} from "shortid";
 import {PerfDto} from "../entities/PerfDto";
 
@@ -18,10 +18,13 @@ const {reducer, actions} = createSlice({
                 state.elements[elem.id] = elem;
             }
             state.totalElements = payload.totalElements
+        },
+        clearAll: (state: PaginatedCollection<PerfDto>) => {
+            clearCollection(state);
         }
     }
 });
 
-export const {addNewItems} = actions;
+export const {addNewItems, clearAll} = actions;
 
 export default reducer;

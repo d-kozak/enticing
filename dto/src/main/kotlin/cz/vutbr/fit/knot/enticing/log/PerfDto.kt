@@ -19,7 +19,7 @@ fun PerfMessage.toPerfDto(componentId: String, componentType: ComponentType) = P
 
 data class PerfDto(
         @field:NotBlank
-        val className: String,
+        val sourceClass: String,
         @field:NotBlank
         @field:Size(max = 512)
         val operationId: String,

@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import React from "react";
 import PaginatedTable from "../../pagination/PaginatedTable";
 import {CustomColumn, PaginatedTableColumn, StringColumn} from "../../pagination/PaginatedTableColumn"
-import {addNewItems} from "../../../reducers/usersReducer";
+import {addNewItems, clearAll} from "../../../reducers/usersReducer";
 import {getRequest} from "../../../network/requests";
 import {PaginatedResult} from "../../../entities/pagination";
 import {IconButton, Tooltip, Typography} from "@material-ui/core";
@@ -15,12 +15,12 @@ import AddNewUserDialog from "./AddNewUserDialog";
 type UsersTableProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {}
 
 const UsersTable = (props: UsersTableProps) => {
-    const {users, addNewItems} = props;
+    const {users, addNewItems, clearAll} = props;
 
     const history = useHistory();
 
-    const requestPage = (page: number, size: number) => {
-        getRequest<PaginatedResult<User>>("/user/all", [["page", page], ["size", size]])
+    const requestPage = (page: number, size: number, requirements: Array<[string, string | number]>) => {
+        getRequest<PaginatedResult<User>>("/user/all", [["page", page], ["size", size], ...requirements])
             .then(res => {
                 addNewItems(res)
             })
@@ -30,8 +30,8 @@ const UsersTable = (props: UsersTableProps) => {
     }
 
     const columns: Array<PaginatedTableColumn<any, any>> = [
-        StringColumn("login", "Login"),
-        StringColumn("active", "Active"),
+        StringColumn("login", "Login", {sortId: "login"}),
+        StringColumn("active", "Active", {sortId: "login"}),
         CustomColumn<User, Array<string>>("roles", "Roles",
             (roles) => roles.join(", ")
         ),
@@ -49,6 +49,7 @@ const UsersTable = (props: UsersTableProps) => {
         <Typography variant="h3">Users</Typography>
         <PaginatedTable
             data={users}
+            clearData={clearAll}
             columns={columns}
             requestPage={requestPage}
         />
@@ -61,7 +62,8 @@ const mapStateToProps = (state: ApplicationState) => ({
     users: state.users
 });
 const mapDispatchToProps = {
-    addNewItems
+    addNewItems,
+    clearAll
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UsersTable);

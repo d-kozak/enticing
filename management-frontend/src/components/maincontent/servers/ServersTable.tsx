@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import React from "react";
 import PaginatedTable from "../../pagination/PaginatedTable";
 import {CustomColumn, IntColumn, PaginatedTableColumn, StringColumn} from "../../pagination/PaginatedTableColumn"
-import {addNewItems} from "../../../reducers/serversReducer";
+import {addNewItems, clearAll} from "../../../reducers/serversReducer";
 import {getRequest} from "../../../network/requests";
 import {PaginatedResult} from "../../../entities/pagination";
 import {ServerInfo} from "../../../entities/ServerInfo";
@@ -16,12 +16,12 @@ import AddNewServerDialog from "./AddNewServerDialog";
 type ServersTableProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {}
 
 const ServersTable = (props: ServersTableProps) => {
-    const {servers, addNewItems} = props;
+    const {servers, addNewItems, clearAll} = props;
 
     const history = useHistory();
 
-    const requestPage = (page: number, size: number) => {
-        getRequest<PaginatedResult<ServerInfo>>("/server", [["page", page], ["size", size]])
+    const requestPage = (page: number, size: number, requirements: Array<[string, string | number]>) => {
+        getRequest<PaginatedResult<ServerInfo>>("/server", [["page", page], ["size", size], ...requirements])
             .then(res => {
                 addNewItems(res)
             })
@@ -31,9 +31,9 @@ const ServersTable = (props: ServersTableProps) => {
     }
 
     const columns: Array<PaginatedTableColumn<any, any>> = [
-        StringColumn("address", "Address"),
-        IntColumn("availableProcessors", "Component Address"),
-        IntColumn("totalPhysicalMemorySize", "Ram size"),
+        StringColumn("address", "Address", {sortId: "address"}),
+        IntColumn("availableProcessors", "Available processors", {sortId: "availableProcessors"}),
+        IntColumn("totalPhysicalMemorySize", "Ram size", {sortId: "totalPhysicalMemorySize"}),
         CustomColumn<ServerInfo, undefined>("serverDetails", "Server Details",
             (prop, server) => <Tooltip title="Server details">
                 <IconButton onClick={() => history.push(`/server/${server.id}`)}>
@@ -47,6 +47,7 @@ const ServersTable = (props: ServersTableProps) => {
         <Typography variant="h3">Servers</Typography>
         <PaginatedTable
             data={servers}
+            clearData={clearAll}
             columns={columns}
             requestPage={requestPage}/>
         <AddNewServerDialog/>
@@ -58,7 +59,8 @@ const mapStateToProps = (state: ApplicationState) => ({
     servers: state.servers
 });
 const mapDispatchToProps = {
-    addNewItems
+    addNewItems,
+    clearAll
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ServersTable);

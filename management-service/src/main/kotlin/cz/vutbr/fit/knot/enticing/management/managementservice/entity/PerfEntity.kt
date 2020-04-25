@@ -7,9 +7,9 @@ import javax.persistence.*
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.PositiveOrZero
 
-fun PerfDto.toEntity(component: ComponentEntity) = PerfEntity(0, className, operationId, arguments, duration, result, component, timestamp)
+fun PerfDto.toEntity(component: ComponentEntity) = PerfEntity(0, sourceClass, operationId, arguments, duration, result, component, timestamp)
 
-fun PerfEntity.toDto() = PerfDto(className, operationId, arguments, duration, outcome, component.fullAddress, component.type, timestamp)
+fun PerfEntity.toDto() = PerfDto(sourceClass, operationId, arguments, duration, result, component.fullAddress, component.type, timestamp)
 
 @Entity
 class PerfEntity(
@@ -17,7 +17,7 @@ class PerfEntity(
         @field:GeneratedValue
         var id: Long = 0,
         @field:NotEmpty
-        val className: String,
+        val sourceClass: String,
         @field:NotEmpty
         @field:Column(length = 512)
         val operationId: String,
@@ -26,7 +26,7 @@ class PerfEntity(
         @field:PositiveOrZero
         val duration: Long,
         @field:NotEmpty
-        val outcome: String,
+        val result: String,
         @field:ManyToOne
         val component: ComponentEntity,
         val timestamp: LocalDateTime
@@ -46,7 +46,7 @@ class PerfEntity(
     }
 
     override fun toString(): String {
-        return "PerfEntity(id=$id, className='$className', operationId='$operationId', arguments=$arguments, duration=$duration, outcome='$outcome', timestamp=$timestamp)"
+        return "PerfEntity(id=$id, className='$sourceClass', operationId='$operationId', arguments=$arguments, duration=$duration, outcome='$result', timestamp=$timestamp)"
     }
 
 }

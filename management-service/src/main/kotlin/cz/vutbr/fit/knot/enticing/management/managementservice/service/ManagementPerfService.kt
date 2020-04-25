@@ -36,8 +36,8 @@ class ManagementPerfService(
         return perfRepository.save(perf.toEntity(component)).toDto()
     }
 
-    fun getPerfLogs(operationId: String?, pageable: Pageable): Page<PerfDto> = if (operationId == null) perfRepository.findAllByOrderByTimestampDesc(pageable).map { it.toDto() }
-    else perfRepository.findByOperationIdOrderByTimestampDesc(operationId, pageable).map { it.toDto() }
+    fun getPerfLogs(operationId: String?, pageable: Pageable): Page<PerfDto> = if (operationId == null) perfRepository.findAll(pageable).map { it.toDto() }
+    else perfRepository.findByOperationId(operationId, pageable).map { it.toDto() }
 
     fun getAllOperationStats(): Map<String, GeneralOperationStatistics> = perfRepository.findAll()
             .groupBy { it.operationId }

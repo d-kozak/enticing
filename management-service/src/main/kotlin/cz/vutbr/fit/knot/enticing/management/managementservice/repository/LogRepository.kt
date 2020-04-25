@@ -14,10 +14,9 @@ interface LogRepository : JpaRepository<LogEntity, Long> {
 
     fun findTop5ByLogTypeInOrderByTimestampDesc(opts: List<LogType>): List<LogEntity>
 
-    fun findAllByOrderByTimestampDesc(pageable: Pageable): Page<LogEntity>
-    fun findByLogTypeOrderByTimestampDesc(logType: LogType, pageable: Pageable): Page<LogEntity>
-    fun findByComponentTypeOrderByTimestampDesc(componentType: ComponentType, pageable: Pageable): Page<LogEntity>
-    fun findByLogTypeAndComponentTypeOrderByTimestampDesc(logType: LogType, componentType: ComponentType, pageable: Pageable): Page<LogEntity>
+    fun findByLogType(logType: LogType, pageable: Pageable): Page<LogEntity>
+    fun findByComponentType(componentType: ComponentType, pageable: Pageable): Page<LogEntity>
+    fun findByLogTypeAndComponentType(logType: LogType, componentType: ComponentType, pageable: Pageable): Page<LogEntity>
     fun findByComponentId(componentId: Long, pageable: Pageable): Page<LogEntity>
     fun findByComponentIdAndLogType(componentId: Long, logType: LogType, pageable: Pageable): Page<LogEntity>
 }

@@ -3,7 +3,7 @@ import {ComponentType} from "./ComponentInfo";
 export interface LogDto {
     id: string,
     logType: LogType
-    className: string,
+    sourceClass: string,
     message: string,
     componentAddress: string,
     componentType: ComponentType,

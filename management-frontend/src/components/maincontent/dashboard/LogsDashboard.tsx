@@ -12,7 +12,7 @@ import NotificationImportantIcon from "@material-ui/icons/NotificationImportant"
 export type LogsDashboardProps = typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps> & { state: DashboardState }
 
-const displayLog = (log: LogDto) => `${log.componentAddress} : ${log.componentType} : ${log.className} : ${log.message}`
+const displayLog = (log: LogDto) => `${log.componentAddress} : ${log.componentType} : ${log.sourceClass} : ${log.message}`
 
 const LogsDashboard = (props: LogsDashboardProps) => {
     const {state} = props;

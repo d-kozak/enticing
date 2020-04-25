@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "redux-starter-kit";
-import {emptyPaginatedCollection, PaginatedCollection, PaginatedResult} from "../entities/pagination";
+import {clearCollection, emptyPaginatedCollection, PaginatedCollection, PaginatedResult} from "../entities/pagination";
 import {ComponentInfo} from "../entities/ComponentInfo";
 import {ThunkResult} from "../utils/ThunkResult";
 import {getRequest} from "../network/requests";
@@ -29,6 +29,9 @@ const {reducer, actions} = createSlice({
             component.logs = emptyPaginatedCollection();
             state.elements[component.id] = component;
         },
+        clearAll: (state: PaginatedCollection<ComponentInfo>) => {
+            clearCollection(state);
+        },
         addLogsToComponent: (state: PaginatedCollection<ComponentInfo>, action: PayloadAction<PaginatedResult<LogDto> & { componentId: string }>) => {
             const payload = action.payload;
             const component = state.elements[payload.componentId];
@@ -44,11 +47,20 @@ const {reducer, actions} = createSlice({
                 component.logs.elements[elem.id] = elem;
             }
             component.logs.totalElements = payload.totalElements
+        },
+        clearComponentLogs: (state: PaginatedCollection<ComponentInfo>, action: PayloadAction<string>) => {
+            const id = action.payload;
+            const component = state.elements[id];
+            if (!component) {
+                console.error(`unknown component ${id}`)
+                return;
+            }
+            clearCollection(component.logs);
         }
     }
 });
 
-export const {addNewItems, addComponent, addLogsToComponent} = actions;
+export const {addNewItems, addComponent, clearAll, addLogsToComponent, clearComponentLogs} = actions;
 
 export const requestComponentInfo = (id: string): ThunkResult<void> => async (dispatch) => {
     try {

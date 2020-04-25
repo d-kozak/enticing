@@ -19,7 +19,7 @@ fun LogMessage.toLogDto(componentId: String, componentType: ComponentType) = Log
  */
 data class LogDto(
         @field:NotEmpty
-        val className: String,
+        val sourceClass: String,
         @field:NotEmpty
         @field:Size(max = 2048)
         val message: String,

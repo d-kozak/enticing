@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "redux-starter-kit";
-import {emptyPaginatedCollection, PaginatedCollection, PaginatedResult} from "../entities/pagination";
+import {clearCollection, emptyPaginatedCollection, PaginatedCollection, PaginatedResult} from "../entities/pagination";
 import {CommandDto} from "../entities/CommandDto";
 import {ThunkResult} from "../utils/ThunkResult";
 import {getRequest} from "../network/requests";
@@ -24,10 +24,13 @@ const {reducer, actions} = createSlice({
             command.id = command.id.toString();
             state.elements[command.id] = command;
         },
+        clearAll: (state: PaginatedCollection<CommandDto>) => {
+            clearCollection(state);
+        }
     }
 });
 
-export const {addNewItems, addCommand} = actions;
+export const {addNewItems, addCommand, clearAll} = actions;
 
 export default reducer;
 

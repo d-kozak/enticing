@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
 import java.io.File
 import java.time.LocalDateTime
+import kotlin.random.Random
 
 @Component
 class DebugInitRunner(
@@ -51,7 +52,7 @@ class DebugInitRunner(
     private val servers = File("../deploy/big-wiki/servers.txt")
             .readLines()
             .filter { it.isNotEmpty() }
-            .map { address -> ServerInfoEntity(0, address, 12, 12_000, mutableListOf(), mutableListOf()) }
+            .mapIndexed { i, address -> ServerInfoEntity(0, address, Random.nextInt(15), Random.nextLong(20_000), mutableListOf(), mutableListOf()) }
 
     private val indexServers = servers.map { ComponentEntity(0, it, 5627, ComponentType.INDEX_SERVER, LocalDateTime.now(), mutableListOf(), mutableListOf()) }
 

@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import React from "react";
 import PaginatedTable from "../../pagination/PaginatedTable";
 import {CustomColumn, IntColumn, PaginatedTableColumn, StringColumn} from "../../pagination/PaginatedTableColumn"
-import {addNewItems} from "../../../reducers/componentsReducer";
+import {addNewItems, clearAll} from "../../../reducers/componentsReducer";
 import {getRequest} from "../../../network/requests";
 import {PaginatedResult} from "../../../entities/pagination";
 import {Button, IconButton, Tooltip, Typography} from "@material-ui/core";
@@ -16,12 +16,12 @@ import AddNewComponentDialog from "./AddNewComponentDialog";
 type ComponentsTableProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {}
 
 const ComponentsTable = (props: ComponentsTableProps) => {
-    const {components, servers, addNewItems, requestServerInfo} = props;
+    const {components, servers, addNewItems, clearAll, requestServerInfo} = props;
 
     const history = useHistory();
 
-    const requestPage = (page: number, size: number) => {
-        getRequest<PaginatedResult<ComponentInfo>>("/component", [["page", page], ["size", size]])
+    const requestPage = (page: number, size: number, requirements: Array<[string, string | number]>) => {
+        getRequest<PaginatedResult<ComponentInfo>>("/component", [["page", page], ["size", size], ...requirements])
             .then(res => {
                 addNewItems(res)
             })
@@ -44,10 +44,10 @@ const ComponentsTable = (props: ComponentsTableProps) => {
                 return <Button
                     onClick={() => history.push(`/server/${serverId}`)}>{label}</Button>
             }
-        ),
-        IntColumn("port", "Port"),
-        StringColumn("type", "Component Type"),
-        StringColumn("lastHeartbeat", "Last heartbeat"),
+            , {sortId: "server.address"}),
+        IntColumn("port", "Port", {sortId: "port"}),
+        StringColumn("type", "Component Type", {sortId: "type"}),
+        StringColumn("lastHeartbeat", "Last heartbeat", {sortId: "lastHeartbeat"}),
         CustomColumn<ComponentInfo, undefined>("componentDetails", "Component Details",
             (prop, component) => <Tooltip title="Component details">
                 <IconButton onClick={() => history.push(`/component/${component.id}`)}>
@@ -61,6 +61,7 @@ const ComponentsTable = (props: ComponentsTableProps) => {
         <Typography variant="h3">Components</Typography>
         <PaginatedTable
             data={components}
+            clearData={clearAll}
             columns={columns}
             requestPage={requestPage}
         />
@@ -75,6 +76,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 });
 const mapDispatchToProps = {
     addNewItems,
+    clearAll,
     requestServerInfo: requestServerInfo as (id: string) => void
 };
 

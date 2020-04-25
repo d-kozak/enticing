@@ -6,9 +6,9 @@ import java.time.LocalDateTime
 import javax.persistence.*
 import javax.validation.constraints.NotEmpty
 
-fun LogDto.toEntity(component: ComponentEntity) = LogEntity(0, className, message, logType, component, timestamp)
+fun LogDto.toEntity(component: ComponentEntity) = LogEntity(0, sourceClass, message, logType, component, timestamp)
 
-fun LogEntity.toDto() = LogDto(classname, message, logType, component.fullAddress, component.type, timestamp)
+fun LogEntity.toDto() = LogDto(sourceClass, message, logType, component.fullAddress, component.type, timestamp)
 
 @Entity
 class LogEntity(
@@ -16,7 +16,7 @@ class LogEntity(
         @field:GeneratedValue
         var id: Long = 0,
         @field:NotEmpty
-        var classname: String,
+        var sourceClass: String,
         @field:NotEmpty
         @field:Column(length = 2048)
         var message: String = "",
@@ -40,7 +40,7 @@ class LogEntity(
     }
 
     override fun toString(): String {
-        return "LogEntity(id=$id, classname='$classname', message='$message', logType=$logType, timestamp=$timestamp)"
+        return "LogEntity(id=$id, classname='$sourceClass', message='$message', logType=$logType, timestamp=$timestamp)"
     }
 
 

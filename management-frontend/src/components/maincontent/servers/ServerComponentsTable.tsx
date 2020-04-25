@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import React from "react";
 import PaginatedTable from "../../pagination/PaginatedTable";
 import {CustomColumn, IntColumn, PaginatedTableColumn, StringColumn} from "../../pagination/PaginatedTableColumn"
-import {addComponentsToServer} from "../../../reducers/serversReducer";
+import {addComponentsToServer, clearComponentsFromServer} from "../../../reducers/serversReducer";
 import {getRequest} from "../../../network/requests";
 import {PaginatedResult} from "../../../entities/pagination";
 import {IconButton, Tooltip} from "@material-ui/core";
@@ -18,7 +18,7 @@ type SimpleProps = {
 type ServerComponentsTableProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & SimpleProps
 
 const ServerComponentsTable = (props: ServerComponentsTableProps) => {
-    const {server, addComponentsToServer} = props;
+    const {server, addComponentsToServer, clearComponentsFromServer} = props;
 
     const history = useHistory();
 
@@ -26,8 +26,8 @@ const ServerComponentsTable = (props: ServerComponentsTableProps) => {
         return <div>no data</div>;
     }
 
-    const requestPage = (page: number, size: number) => {
-        getRequest<PaginatedResult<ComponentInfo>>(`/server/${server.id}/component`, [["page", page], ["size", size]])
+    const requestPage = (page: number, size: number, requirements: Array<[string, string | number]>) => {
+        getRequest<PaginatedResult<ComponentInfo>>(`/server/${server.id}/component`, [["page", page], ["size", size], ...requirements])
             .then(res => {
                 addComponentsToServer({...res, serverId: server.id});
             })
@@ -37,9 +37,9 @@ const ServerComponentsTable = (props: ServerComponentsTableProps) => {
     }
 
     const columns: Array<PaginatedTableColumn<any, any>> = [
-        IntColumn("port", "Port"),
-        StringColumn("type", "Component Type"),
-        StringColumn("lastHeartbeat", "Last heartbeat"),
+        IntColumn("port", "Port", {sortId: "port"}),
+        StringColumn("type", "Component Type", {sortId: "type"}),
+        StringColumn("lastHeartbeat", "Last heartbeat", {sortId: "lastHeartbeat"}),
         CustomColumn<ComponentInfo, undefined>("componentDetails", "Component Details",
             (prop, component) => <Tooltip title="Component details">
                 <IconButton onClick={() => history.push(`/component/${component.id}`)}>
@@ -51,6 +51,7 @@ const ServerComponentsTable = (props: ServerComponentsTableProps) => {
 
     return <PaginatedTable
         data={server.components}
+        clearData={() => clearComponentsFromServer(server.id)}
         columns={columns}
         requestPage={requestPage}
     />
@@ -61,7 +62,8 @@ const mapStateToProps = (state: ApplicationState, props: SimpleProps) => ({
     server: state.servers.elements[props.serverId],
 });
 const mapDispatchToProps = {
-    addComponentsToServer
+    addComponentsToServer,
+    clearComponentsFromServer
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ServerComponentsTable);

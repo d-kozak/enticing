@@ -44,6 +44,15 @@ const {reducer, actions} = createSlice({
             }
             server.components.totalElements = payload.totalElements
         },
+        clearComponentsFromServer: (state: PaginatedCollection<ServerInfo>, action: PayloadAction<string>) => {
+            const id = action.payload;
+            const server = state.elements[id];
+            if (!server) {
+                console.error(`unknown server ${id}`)
+                return;
+            }
+            clearCollection(server.components);
+        },
         refresh: (state: PaginatedCollection<ServerInfo>, action: PayloadAction<Array<ServerInfo>>) => {
             clearCollection(state)
             for (let i = 0; i < action.payload.length; i++) {
@@ -52,11 +61,14 @@ const {reducer, actions} = createSlice({
                 state.elements[server.id] = server
                 state.index[i] = server.id
             }
+        },
+        clearAll: (state: PaginatedCollection<ServerInfo>) => {
+            clearCollection(state);
         }
     }
 });
 
-export const {addNewItems, addServer, addComponentsToServer, refresh} = actions;
+export const {addNewItems, addServer, addComponentsToServer, clearComponentsFromServer, refresh, clearAll} = actions;
 
 export default reducer;
 

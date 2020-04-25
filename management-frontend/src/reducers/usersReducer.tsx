@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "redux-starter-kit";
-import {emptyPaginatedCollection, PaginatedCollection, PaginatedResult} from "../entities/pagination";
+import {clearCollection, emptyPaginatedCollection, PaginatedCollection, PaginatedResult} from "../entities/pagination";
 import {User} from "../entities/user";
 import {loginSuccessAction} from "./userDetailsReducer";
 import {ThunkResult} from "../utils/ThunkResult";
@@ -25,7 +25,11 @@ const {reducer, actions} = createSlice({
             const user = action.payload;
             user.id = user.login
             state.elements[user.id] = user;
-        },
+        }
+        ,
+        clearAll: (state: PaginatedCollection<User>) => {
+            clearCollection(state);
+        }
     },
     extraReducers: {
         [loginSuccessAction.type]: (state: PaginatedCollection<User>, action: PayloadAction<User>) => {
@@ -36,7 +40,7 @@ const {reducer, actions} = createSlice({
     }
 });
 
-export const {addNewItems, addUser} = actions;
+export const {addNewItems, addUser, clearAll} = actions;
 
 export default reducer;
 

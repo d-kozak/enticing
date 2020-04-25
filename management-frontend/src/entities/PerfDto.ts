@@ -3,7 +3,7 @@ import {ComponentType} from "./ComponentInfo";
 export interface PerfDto {
     // todo id
     id: string,
-    className: string,
+    sourceClass: string,
     operationId: string,
     arguments: string | null,
     duration: number,
