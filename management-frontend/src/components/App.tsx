@@ -1,16 +1,16 @@
 import {createStyles, CssBaseline, Theme} from "@material-ui/core";
 import {connect} from "react-redux";
-import React from 'react';
+import React, {useEffect} from 'react';
 import {ApplicationState} from "../ApplicationState";
 import {makeStyles} from '@material-ui/core/styles';
 import {openSnackbarAction} from "../reducers/snackbarReducer";
+import {isLoggedIn, loginSuccessAction} from "../reducers/userDetailsReducer";
 import EnticingSnackbar from "./snackbar/EnticingSnackbar";
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import EnticingAppBar from "./EnticingAppBar";
 import EnticingDrawer from "./EnticingDrawer";
 import Servers from "./maincontent/servers/Servers";
 import Login from "./login/Login";
-import {isLoggedIn} from "../reducers/userDetailsReducer";
 import AuthenticatedRoute from "./routes/AuthenticatedRoute";
 import Components from "./maincontent/components/Components";
 import Dashboard from "./maincontent/dashboard/Dashboard";
@@ -22,6 +22,8 @@ import Perf from "./maincontent/perf/Perf";
 import Commands from "./maincontent/commands/Commands";
 import Builds from "./maincontent/builds/Builds";
 import AuthenticatedOnly from "./protectors/AuthenticatedOnly";
+import {getRequest} from "../network/requests";
+import {User} from "../entities/user";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
@@ -39,7 +41,15 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 type AppProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {}
 
 const App = (props: AppProps) => {
+    const {isLoggedIn, loginSuccessAction} = props;
     const classes = useStyles();
+
+    useEffect(() => {
+        if (!isLoggedIn)
+            getRequest<User>("/user")
+                .then(loginSuccessAction)
+    }, [isLoggedIn, loginSuccessAction]);
+
     return <div className={classes.root}>
         <CssBaseline/>
         <Router>
@@ -68,10 +78,11 @@ const App = (props: AppProps) => {
 
 
 const mapStateToProps = (state: ApplicationState) => ({
-    isLoggedIn: isLoggedIn(state)
+    isLoggedIn: isLoggedIn(state),
 });
 const mapDispatchToProps = {
-    openSnackbarAction
+    openSnackbarAction,
+    loginSuccessAction
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

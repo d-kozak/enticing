@@ -10,6 +10,7 @@ import {Button, IconButton, Tooltip, Typography} from "@material-ui/core";
 import {useHistory} from "react-router";
 import {CommandDto} from "../../../entities/CommandDto";
 import InfoIcon from "@material-ui/icons/Info";
+import StartNewBuildDialog from "./StartNewBuildDialog";
 
 
 type BuildsTableProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {
@@ -56,8 +57,8 @@ const BuildsTable = (props: BuildsTableProps) => {
         <PaginatedTable
             data={builds}
             columns={columns}
-            requestPage={requestPage}
-        />
+            requestPage={requestPage}/>
+        <StartNewBuildDialog/>
     </div>
 };
 

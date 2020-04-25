@@ -10,8 +10,10 @@ export interface CommandDto {
     finishedAt: Date | null
 }
 
+type CommandKeys = keyof typeof CommandType;
+
 export interface CommandRequest {
-    type: CommandType,
+    type: CommandKeys,
     arguments: string
 }
 
@@ -21,7 +23,8 @@ export enum CommandType {
     START_WEBSERVER,
     KILL_WEBSERVER,
     START_MANAGEMENT_SERVER,
-    KILL_MANAGEMENT_SERVER
+    KILL_MANAGEMENT_SERVER,
+    LOCAL_TEST
 }
 
 export enum CommandState {

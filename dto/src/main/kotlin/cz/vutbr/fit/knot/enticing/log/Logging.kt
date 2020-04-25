@@ -75,7 +75,6 @@ interface LoggerFactory : AutoCloseable {
     fun addRemoteApi(remoteLoggingApi: RemoteLoggingApi)
 }
 
-
 private class NamedLogger(val componentName: String, val pipelines: List<LoggerPipeLineNode>) : Logger {
     override fun debug(message: String) = onLog(LogMessage(LogType.DEBUG, componentName, message))
 

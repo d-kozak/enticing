@@ -6,6 +6,9 @@ import {BackButton} from "../../button/BackButton";
 import {CircularProgress, Divider, List, ListItem, ListItemText, Typography} from "@material-ui/core";
 import {requestCommandInfo} from "../../../reducers/commandsReducer";
 import {Centered} from "../../Centered";
+// @ts-ignore
+import {LazyLog, ScrollFollow} from "react-lazylog";
+import {API_BASE_PATH} from "../../../globals";
 
 
 export type CommandDetailsProps = typeof mapDispatchToProps
@@ -25,6 +28,7 @@ const CommandDetails = (props: CommandDetailsProps) => {
             <CircularProgress color="inherit"/>
         </Centered>
     }
+
 
     return <div>
         <BackButton/>
@@ -53,6 +57,15 @@ const CommandDetails = (props: CommandDetailsProps) => {
                 <ListItemText primary={`Finished at: ${command.finishedAt}`}/>
             </ListItem>
         </List>
+        <ScrollFollow
+            startFollowing={true}
+            render={({follow, onScroll}: any) => (
+                <LazyLog url={`${API_BASE_PATH}/command/${commandId}/log`} fetchOptions={{credentials: 'include'}}
+                         stream
+                         follow={follow}
+                         onScroll={onScroll}/>
+            )}
+        />
     </div>
 };
 

@@ -20,6 +20,9 @@ class CommandController(
     @GetMapping("/{commandId}")
     fun details(@PathVariable commandId: Long) = commandService.getCommand(commandId)
 
+    @GetMapping("/{commandId}/log")
+    fun commandLogs(@PathVariable commandId: Long, @RequestParam(defaultValue = "0") startLine: Int) = commandService.getCommandLogs(commandId, startLine)
+
     @PostMapping
     fun enqueueCommand(@RequestBody @Valid commandRequest: CommandRequest) = commandService.enqueue(commandRequest)
 }

@@ -6,11 +6,9 @@ import cz.vutbr.fit.knot.enticing.management.shell.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
-import javax.validation.constraints.NotEmpty
 
 data class CommandRequest(
         val type: CommandType,
-        @field:NotEmpty
         val arguments: String
 )
 

@@ -118,4 +118,12 @@ class CommandService(
     }
 
     fun getCommand(commandId: Long) = commandRepository.findByIdOrNull(commandId)?.toDto()
+
+    fun getCommandLogs(commandId: Long, startLine: Int): String {
+        commandRepository.existsById(commandId) || throw IllegalArgumentException("Uknown command id $commandId")
+        return commandLogDirectory.resolve("${commandId}.log").toFile()
+                .readLines()
+                .drop(startLine)
+                .joinToString("\n")
+    }
 }
