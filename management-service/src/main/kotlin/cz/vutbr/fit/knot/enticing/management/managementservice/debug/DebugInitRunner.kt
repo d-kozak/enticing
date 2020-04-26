@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.debug
 
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.LogType
 import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
@@ -30,7 +31,8 @@ class DebugInitRunner(
         private val encoder: PasswordEncoder,
         @Value("\${debug.runner.start}")
         private val runDebug: Boolean,
-        loggerFactory: LoggerFactory
+        loggerFactory: LoggerFactory,
+        configuration: EnticingConfiguration
 ) : ApplicationRunner {
 
     private val logger = loggerFactory.logger {}
@@ -49,7 +51,7 @@ class DebugInitRunner(
         )
     }
 
-    private val servers = File("../deploy/big-wiki/servers.txt")
+    private val servers = File("${configuration.localHome}/deploy/big-wiki/servers.txt")
             .readLines()
             .filter { it.isNotEmpty() }
             .mapIndexed { i, address -> ServerInfoEntity(0, address, Random.nextInt(15), Random.nextLong(20_000), mutableListOf(), mutableListOf()) }

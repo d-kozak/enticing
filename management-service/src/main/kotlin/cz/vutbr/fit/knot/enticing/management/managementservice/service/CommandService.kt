@@ -74,7 +74,15 @@ class CommandService(
                 delay(2_000)
                 commandEntity = commandRepository.findFirstByStateOrderBySubmittedAtAsc(CommandState.ENQUED)
             }
-            execute(commandEntity)
+            try {
+                withTimeout(20 * 60 * 1000L) {
+                    execute(commandEntity)
+                }
+            } catch (ex: TimeoutCancellationException) {
+                logger.error("Command $commandEntity was timeouted")
+            } catch (ex: Exception) {
+                logger.error("Command $commandEntity failed: ${ex::class} ${ex.message}")
+            }
         }
     }
 
