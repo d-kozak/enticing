@@ -11,6 +11,7 @@ import {useHistory} from "react-router";
 import {CommandDto} from "../../../entities/CommandDto";
 import InfoIcon from "@material-ui/icons/Info";
 import StartNewBuildDialog from "./StartNewBuildDialog";
+import MaintainerOnly from "../../protectors/MaintainerOnly";
 
 
 type BuildsTableProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {
@@ -62,7 +63,9 @@ const BuildsTable = (props: BuildsTableProps) => {
             clearData={clearAll}
             columns={columns}
             requestPage={requestPage}/>
-        <StartNewBuildDialog/>
+        <MaintainerOnly>
+            <StartNewBuildDialog/>
+        </MaintainerOnly>
     </div>
 };
 

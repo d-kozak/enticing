@@ -11,6 +11,7 @@ import {useHistory} from "react-router";
 import InfoIcon from "@material-ui/icons/Info";
 import {ComponentInfo} from "../../../entities/ComponentInfo";
 import AddNewComponentDialog from "./AddNewComponentDialog";
+import MaintainerOnly from "../../protectors/MaintainerOnly";
 
 type ComponentsTableProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {}
 
@@ -59,7 +60,9 @@ const ComponentsTable = (props: ComponentsTableProps) => {
             columns={columns}
             requestPage={requestPage}
         />
-        <AddNewComponentDialog/>
+        <MaintainerOnly>
+            <AddNewComponentDialog/>
+        </MaintainerOnly>
     </div>
 };
 

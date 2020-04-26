@@ -11,6 +11,7 @@ import {IconButton, Tooltip, Typography} from "@material-ui/core";
 import {useHistory} from "react-router";
 import InfoIcon from "@material-ui/icons/Info";
 import AddNewServerDialog from "./AddNewServerDialog";
+import MaintainerOnly from "../../protectors/MaintainerOnly";
 
 
 type ServersTableProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {}
@@ -50,7 +51,9 @@ const ServersTable = (props: ServersTableProps) => {
             clearData={clearAll}
             columns={columns}
             requestPage={requestPage}/>
-        <AddNewServerDialog/>
+        <MaintainerOnly>
+            <AddNewServerDialog/>
+        </MaintainerOnly>
     </div>
 };
 
