@@ -6,9 +6,7 @@ import {BackButton} from "../../button/BackButton";
 import {CircularProgress, Divider, List, ListItem, ListItemText, Typography} from "@material-ui/core";
 import {requestCommandInfo} from "../../../reducers/commandsReducer";
 import {Centered} from "../../Centered";
-// @ts-ignore
-import {LazyLog, ScrollFollow} from "react-lazylog";
-import {API_BASE_PATH} from "../../../globals";
+import LogViewer from "../../LogViewer";
 
 
 export type CommandDetailsProps = typeof mapDispatchToProps
@@ -56,16 +54,11 @@ const CommandDetails = (props: CommandDetailsProps) => {
             <ListItem>
                 <ListItemText primary={`Finished at: ${command.finishedAt}`}/>
             </ListItem>
+            <ListItem>
+                <ListItemText primary="Logs:"/>
+            </ListItem>
         </List>
-        <ScrollFollow
-            startFollowing={true}
-            render={({follow, onScroll}: any) => (
-                <LazyLog url={`${API_BASE_PATH}/command/${commandId}/log`} fetchOptions={{credentials: 'include'}}
-                         stream
-                         follow={follow}
-                         onScroll={onScroll}/>
-            )}
-        />
+        <LogViewer url={`/command/${commandId}/log`}/>
     </div>
 };
 
