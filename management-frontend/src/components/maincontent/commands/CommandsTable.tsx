@@ -32,8 +32,14 @@ const CommandsTable = (props: CommandsTableProps) => {
     }
 
     const columns: Array<PaginatedTableColumn<any, any>> = [
-        StringColumn("type", "Command Type", {sortId: "type"}),
-        StringColumn("state", "Command State", {sortId: "state"}),
+        StringColumn("type", "Command Type", {
+            sortId: "type",
+            filterOptions: ["START_INDEX_SERVER", "KILL_INDEX_SERVER", "START_WEBSERVER", "KILL_WEBSERVER", "START_MANAGEMENT_SERVER", "KILL_MANAGEMENT_SERVER", "LOCAL_TEST"]
+        }),
+        StringColumn("state", "Command State", {
+            sortId: "state",
+            filterOptions: ["ENQUED", "RUNNING", "FINISHED", "FAILED"]
+        }),
         StringColumn("arguments", "Arguments", {sortId: "arguments"}),
         StringColumn("submittedAt", "Submitted at", {sortId: "submittedAt"}),
         StringColumn("startAt", "Start at", {sortId: "startAt"}),

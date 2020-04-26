@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.controller
 
+import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.PerfDto
 import cz.vutbr.fit.knot.enticing.log.logger
@@ -21,7 +22,7 @@ class ManagementPerfController(loggerFactory: LoggerFactory, val managementPerfS
     }
 
     @GetMapping
-    fun getAll(pageable: Pageable, @RequestParam(required = false) operationId: String?) = managementPerfService.getPerfLogs(operationId, pageable)
+    fun getAll(pageable: Pageable, @RequestParam componentType: ComponentType?, @RequestParam(required = false) operationId: String?) = managementPerfService.getPerfLogs(operationId, componentType, pageable)
 
     @GetMapping("/stats")
     fun stats(@RequestParam(required = false) operationId: String?): Any = if (operationId == null) managementPerfService.getAllOperationStats()

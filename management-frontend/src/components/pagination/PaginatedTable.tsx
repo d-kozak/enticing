@@ -1,5 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import {Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow} from "@material-ui/core";
+import {
+    MenuItem,
+    Select,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TablePagination,
+    TableRow
+} from "@material-ui/core";
 import {PaginatedCollection, WithId} from "../../entities/pagination";
 import {PaginatedTableColumn, SimpleColumnHeader, SortableColumnHeader} from "./PaginatedTableColumn";
 
@@ -21,10 +31,30 @@ interface TableSortState {
     [columnId: string]: Sort
 }
 
+interface TableFilterState {
+    [columnId: string]: string
+}
+
 function sortRequirements(tableSort: TableSortState): Array<[string, string]> {
     return Object.entries(tableSort)
         .map(([id, sort]) => ["sort", `${id},${sort}`] as [string, string])
         .reverse()
+}
+
+function filterRequirements(tablefilter: TableFilterState): Array<[string, string]> {
+    return Object.entries(tablefilter)
+        .filter(([id, condition]) => condition !== "all")
+}
+
+function gatherRequirements(tableFilter: TableFilterState, tableSort: TableSortState) {
+    return [...filterRequirements(tableFilter), ...sortRequirements(tableSort)];
+}
+
+function defaultFilter(columns: Array<PaginatedTableColumn<any, any>>): TableFilterState {
+    const res: TableFilterState = {}
+    for (let col of columns)
+        if (col.filterOptions) res[col.id] = "all";
+    return res
 }
 
 export default function PaginatedTable(props: PaginatedTableProps) {
@@ -36,6 +66,7 @@ export default function PaginatedTable(props: PaginatedTableProps) {
     const [currentPage, setCurrentPage] = useState(0);
 
     const [tableSort, setTableSort] = useState<TableSortState>({});
+    const [tableFilter, setTableFilter] = useState<TableFilterState>(defaultFilter(columns));
 
     const anyDataMissing = (page: number, size: number): boolean => {
         for (let i = page * size; i < Math.min(data.totalElements, page * size + size); i++)
@@ -45,7 +76,7 @@ export default function PaginatedTable(props: PaginatedTableProps) {
 
     useEffect(() => {
         if (anyDataMissing(currentPage, pageSize)) {
-            requestPage(currentPage, pageSize, sortRequirements(tableSort));
+            requestPage(currentPage, pageSize, gatherRequirements(tableFilter, tableSort));
         }
     });
 
@@ -69,7 +100,21 @@ export default function PaginatedTable(props: PaginatedTableProps) {
         else if (sort === false) next[col.sortId] = "asc";
         setTableSort(next);
         clearData();
-        requestPage(currentPage, pageSize, sortRequirements(next))
+        requestPage(currentPage, pageSize, gatherRequirements(tableFilter, next))
+    };
+
+    const filterRequested = (col: PaginatedTableColumn<any, any>, value: string) => {
+        if (!col.filterOptions) {
+            console.error(`this column has not filter options: ${col.id}`);
+            return
+        }
+        const next = {
+            ...tableFilter,
+            [col.id]: value
+        };
+        setTableFilter(next);
+        clearData();
+        requestPage(currentPage, pageSize, gatherRequirements(next, tableSort));
     };
 
     const items = [];
@@ -77,6 +122,8 @@ export default function PaginatedTable(props: PaginatedTableProps) {
         let item = data.elements[data.index[i]];
         if (item) items.push(item);
     }
+
+    const containsFilters = columns.findIndex((column) => typeof column.filterOptions !== "undefined") !== -1;
 
     return <div>
         <TableContainer>
@@ -91,6 +138,23 @@ export default function PaginatedTable(props: PaginatedTableProps) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
+                    {containsFilters && <TableRow>
+                        {
+                            columns.map(col => <TableCell key={col.id} align={col.align}>
+                                {!col.filterOptions ? <React.Fragment/> :
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={tableFilter[col.id] || "all"}
+                                        onChange={(e) => filterRequested(col, e.target.value as string)}
+                                    >
+                                        <MenuItem value="all">all</MenuItem>
+                                        {col.filterOptions.map(opt => <MenuItem key={opt} value={opt}>{opt}</MenuItem>)}
+                                    </Select>
+                                }
+                            </TableCell>)
+                        }
+                    </TableRow>}
                     {
                         items.map(item =>
                             <TableRow hover key={item.id}>

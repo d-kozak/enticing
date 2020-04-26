@@ -31,7 +31,10 @@ const PerfTable = (props: PerfTableProps) => {
         IntColumn("duration", "Duration", {sortId: "duration"}),
         StringColumn("result", "Result", {sortId: "result"}),
         StringColumn("componentAddress", "Component Address", {sortId: "component.server.address"}),
-        StringColumn("componentType", "ComponentType", {sortId: "componentType"}),
+        StringColumn("componentType", "ComponentType", {
+            sortId: "componentType",
+            filterOptions: ["WEBSERVER", "INDEX_SERVER", "INDEX_BUILDER", "CONSOLE_CLIENT"]
+        }),
         StringColumn("timestamp", "Timestamp", {sortId: "timestamp"})
     ];
 

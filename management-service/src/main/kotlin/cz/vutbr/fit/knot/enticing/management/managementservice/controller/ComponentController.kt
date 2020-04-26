@@ -1,11 +1,9 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.controller
 
+import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.management.managementservice.service.ComponentService
 import org.springframework.data.domain.Pageable
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("\${api.base.path}/component")
@@ -14,7 +12,7 @@ class ComponentController(
 ) {
 
     @GetMapping
-    fun getComponents(pageable: Pageable) = componentService.getComponents(pageable)
+    fun getComponents(pageable: Pageable, @RequestParam type: ComponentType?) = componentService.getComponents(type, pageable)
 
     @GetMapping("/{componentId}")
     fun getComponent(@PathVariable componentId: Long) = componentService.getComponent(componentId)

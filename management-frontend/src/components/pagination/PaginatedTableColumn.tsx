@@ -10,6 +10,7 @@ export interface PaginatedTableColumn<ItemType, ColType> {
     label: string,
     align: AlignOptions,
     sortId?: string,
+    filterOptions?: Array<string>,
 
     renderContent(property: ColType, item: ItemType): string
 }
@@ -17,6 +18,7 @@ export interface PaginatedTableColumn<ItemType, ColType> {
 interface ExtraParams {
     align: AlignOptions
     sortId: string
+    filterOptions: Array<string>
 }
 
 const defaults = {

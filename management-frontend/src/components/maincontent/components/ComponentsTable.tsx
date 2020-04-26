@@ -46,7 +46,10 @@ const ComponentsTable = (props: ComponentsTableProps) => {
             }
             , {sortId: "server.address"}),
         IntColumn("port", "Port", {sortId: "port"}),
-        StringColumn("type", "Component Type", {sortId: "type"}),
+        StringColumn("type", "Component Type", {
+            sortId: "type",
+            filterOptions: ["WEBSERVER", "INDEX_SERVER", "INDEX_BUILDER", "CONSOLE_CLIENT"]
+        }),
         StringColumn("lastHeartbeat", "Last heartbeat", {sortId: "lastHeartbeat"}),
         CustomColumn<ComponentInfo, undefined>("componentDetails", "Component Details",
             (prop, component) => <Tooltip title="Component details">

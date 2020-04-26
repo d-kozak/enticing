@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.repository
 
+import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.ComponentEntity
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -11,6 +12,7 @@ interface ComponentRepository : JpaRepository<ComponentEntity, Long> {
     fun findByLastHeartbeatBefore(limit: LocalDateTime): List<ComponentEntity>
     fun findByServerId(id: Long, pageable: Pageable): Page<ComponentEntity>
     fun findByServerAddressAndPort(serverAddress: String, port: Int): ComponentEntity?
+    fun findByType(componentType: ComponentType, pageable: Pageable): Page<ComponentEntity>
 }
 
 

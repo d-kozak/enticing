@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.service
 
+import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.PerfDto
 import cz.vutbr.fit.knot.enticing.log.logger
@@ -36,8 +37,15 @@ class ManagementPerfService(
         return perfRepository.save(perf.toEntity(component)).toDto()
     }
 
-    fun getPerfLogs(operationId: String?, pageable: Pageable): Page<PerfDto> = if (operationId == null) perfRepository.findAll(pageable).map { it.toDto() }
-    else perfRepository.findByOperationId(operationId, pageable).map { it.toDto() }
+    fun getPerfLogs(operationId: String?, componentType: ComponentType?, pageable: Pageable): Page<PerfDto> {
+        val entities = when {
+            operationId != null && componentType != null -> perfRepository.findByOperationIdAndComponentType(operationId, componentType, pageable)
+            operationId != null -> perfRepository.findByOperationId(operationId, pageable)
+            componentType != null -> perfRepository.findByComponentType(componentType, pageable)
+            else -> perfRepository.findAll(pageable)
+        }
+        return entities.map { it.toDto() }
+    }
 
     fun getAllOperationStats(): Map<String, GeneralOperationStatistics> = perfRepository.findAll()
             .groupBy { it.operationId }

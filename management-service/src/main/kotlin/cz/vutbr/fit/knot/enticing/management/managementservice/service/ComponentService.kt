@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.service
 
+import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.ComponentInfo
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.ComponentEntity
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.ServerInfoEntity
@@ -36,7 +37,13 @@ class ComponentService(
 
     fun getComponentsOnServer(serverId: Long, pageable: Pageable): Page<ComponentInfo> = componentRepository.findByServerId(serverId, pageable).map { it.toComponentInfo() }
 
-    fun getComponents(pageable: Pageable): Page<ComponentInfo> = componentRepository.findAll(pageable).map { it.toComponentInfo() }
+    fun getComponents(componentType: ComponentType?, pageable: Pageable): Page<ComponentInfo> {
+        val entities = when {
+            componentType != null -> componentRepository.findByType(componentType, pageable)
+            else -> componentRepository.findAll(pageable)
+        }
+        return entities.map { it.toComponentInfo() }
+    }
 
     fun getComponent(componentId: Long) = componentRepository.findByIdOrNull(componentId)?.toComponentInfo()
 }
