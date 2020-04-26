@@ -10,13 +10,12 @@ import {Button, IconButton, Tooltip, Typography} from "@material-ui/core";
 import {useHistory} from "react-router";
 import InfoIcon from "@material-ui/icons/Info";
 import {ComponentInfo} from "../../../entities/ComponentInfo";
-import {requestServerInfo} from "../../../reducers/serversReducer";
 import AddNewComponentDialog from "./AddNewComponentDialog";
 
 type ComponentsTableProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {}
 
 const ComponentsTable = (props: ComponentsTableProps) => {
-    const {components, servers, addNewItems, clearAll, requestServerInfo} = props;
+    const {components, addNewItems, clearAll} = props;
 
     const history = useHistory();
 
@@ -31,18 +30,10 @@ const ComponentsTable = (props: ComponentsTableProps) => {
     }
 
     const columns: Array<PaginatedTableColumn<any, any>> = [
-        CustomColumn("serverId", "Server",
-            (serverId: string, component) => {
-                let server = servers.elements[serverId];
-                let label = '';
-                if (server) {
-                    label = server.address;
-                } else {
-                    label = serverId;
-                    requestServerInfo(serverId);
-                }
+        CustomColumn<ComponentInfo, string>("serverAddress", "Server",
+            (address, component) => {
                 return <Button
-                    onClick={() => history.push(`/server/${serverId}`)}>{label}</Button>
+                    onClick={() => history.push(`/server/${component.serverId}`)}>{address}</Button>
             }
             , {sortId: "server.address"}),
         IntColumn("port", "Port", {sortId: "port"}),
@@ -74,13 +65,11 @@ const ComponentsTable = (props: ComponentsTableProps) => {
 
 
 const mapStateToProps = (state: ApplicationState) => ({
-    servers: state.servers,
     components: state.components
 });
 const mapDispatchToProps = {
     addNewItems,
-    clearAll,
-    requestServerInfo: requestServerInfo as (id: string) => void
+    clearAll
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ComponentsTable);

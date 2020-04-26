@@ -35,7 +35,10 @@ const ComponentLogsTable = (props: ComponentLogsTableProps) => {
     }
 
     const columns: Array<PaginatedTableColumn<any, any>> = [
-        StringColumn("logType", "Log Type", {sortId: "logType"}),
+        StringColumn("logType", "Log Type", {
+            sortId: "logType",
+            filterOptions: ["DEBUG", "INFO", "PERF", "WARN", "ERROR"]
+        }),
         StringColumn("className", "Classname", {sortId: "className"}),
         StringColumn("message", "Message", {sortId: "message"}),
         StringColumn("timestamp", "Timestamp", {sortId: "timestamp"})

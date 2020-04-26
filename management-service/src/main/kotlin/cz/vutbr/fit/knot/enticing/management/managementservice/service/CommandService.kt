@@ -121,7 +121,9 @@ class CommandService(
 
     fun getCommandLogs(commandId: Long, startLine: Int): String {
         commandRepository.existsById(commandId) || throw IllegalArgumentException("Uknown command id $commandId")
-        return commandLogDirectory.resolve("${commandId}.log").toFile()
+        val logFile = commandLogDirectory.resolve("${commandId}.log").toFile()
+        if (!logFile.exists()) return "Log data not found..."
+        return logFile
                 .readLines()
                 .drop(startLine)
                 .joinToString("\n")

@@ -9,6 +9,7 @@ data class ComponentInfo(
         val id: Long,
         @field:Positive
         val serverId: Long,
+        val serverAddress: String,
         @field:Positive
         val port: Int,
         val type: ComponentType,

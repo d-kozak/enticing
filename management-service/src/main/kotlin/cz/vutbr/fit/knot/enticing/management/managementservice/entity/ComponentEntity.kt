@@ -7,7 +7,7 @@ import javax.persistence.*
 import javax.validation.constraints.Positive
 
 
-fun ComponentEntity.toComponentInfo() = ComponentInfo(id, server.id, port, type, lastHeartbeat)
+fun ComponentEntity.toComponentInfo() = ComponentInfo(id, server.id, server.address, port, type, lastHeartbeat)
 
 @Entity
 class ComponentEntity(

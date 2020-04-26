@@ -4,6 +4,7 @@ import {LogDto} from "./LogDto";
 export interface ComponentInfo {
     id: string,
     serverId: string,
+    serverAddress: string,
     port: number,
     type: ComponentType,
     lastHeartbeat: Date
