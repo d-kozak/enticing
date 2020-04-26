@@ -54,7 +54,7 @@ class UserTests {
     fun `user info returned for logged in user`() {
         mvc.perform(get("$apiBasePath/user"))
                 .andExpect(status().isOk)
-                .andExpect(content().json(User("honza", true, roles = setOf("USER")).toJson()))
+                .andExpect(content().json(User("honza", roles = setOf("USER")).toJson()))
     }
 
     @Test
@@ -181,7 +181,7 @@ class UserTests {
         userRepository.save(adam)
         mvc.perform(put("$apiBasePath/user")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(User("adam01", true, setOf("BIG_BOSS")).toJson()))
+                .content(User("adam01", setOf("BIG_BOSS")).toJson()))
                 .andExpect(status().isOk)
         val updatedAdam = userRepository.findByIdOrNull("adam01") ?: fail("user should still be in the database")
         assertThat(updatedAdam.roles).containsExactlyInAnyOrder("BIG_BOSS")
@@ -195,7 +195,7 @@ class UserTests {
         userRepository.save(adam)
         mvc.perform(put("$apiBasePath/user")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(User("adam01", true, setOf("BIG_BOSS")).toJson()))
+                .content(User("adam01", setOf("BIG_BOSS")).toJson()))
                 .andExpect(status().isOk)
         val updatedAdam = userRepository.findByIdOrNull("adam01") ?: fail("user should still be in the database")
         assertThat(updatedAdam.roles).isEmpty()

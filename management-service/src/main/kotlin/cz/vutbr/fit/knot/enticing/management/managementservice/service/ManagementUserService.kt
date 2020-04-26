@@ -108,7 +108,7 @@ class ManagementUserService(
         val authentication = SecurityContextHolder.getContext().authentication ?: return null
         val login = authentication.name
         val roles = authentication.authorities.map { it.authority.split("_")[1] }.toSet()
-        return User(login, true, roles)
+        return User(login, roles)
     }
 
     fun getUser(login: String): User? = userRepository.findByIdOrNull(login)?.toUser()

@@ -31,7 +31,6 @@ const UsersTable = (props: UsersTableProps) => {
 
     const columns: Array<PaginatedTableColumn<any, any>> = [
         StringColumn("login", "Login", {sortId: "login"}),
-        StringColumn("active", "Active", {sortId: "login"}),
         CustomColumn<User, Array<string>>("roles", "Roles",
             (roles) => roles.join(", ")
         ),
@@ -43,7 +42,6 @@ const UsersTable = (props: UsersTableProps) => {
             </Tooltip>
         )
     ];
-
 
     return <div>
         <Typography variant="h3">Users</Typography>

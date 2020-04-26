@@ -31,7 +31,6 @@ data class CreateUserRequest(
 data class User(
         @field:Size(min = 5, max = 64)
         val login: String,
-        val active: Boolean = true,
         val roles: Set<String> = emptySet()
 ) {
     val isAdmin: Boolean
@@ -41,6 +40,6 @@ data class User(
 /**
  * Selected settings not handled by this conversion, database access is necessary
  */
-fun User.toEntity(): UserEntity = UserEntity(login, "", active, roles.toMutableSet())
+fun User.toEntity(): UserEntity = UserEntity(login, "", true, roles.toMutableSet())
 
-fun UserEntity.toUser(): User = User(login, active, roles)
+fun UserEntity.toUser(): User = User(login, roles)
