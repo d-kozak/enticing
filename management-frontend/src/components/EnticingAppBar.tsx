@@ -63,6 +63,8 @@ const EnticingAppBar = (props: EnticingAppBarProps) => {
                         color="inherit"
                     >
                         <AccountCircle/>
+                        <Typography style={{display: "inline", paddingLeft: '5px'}}
+                                    variant="body1">{userDetails.login}</Typography>
                     </IconButton>
                     <Menu
                         id="menu-appbar"

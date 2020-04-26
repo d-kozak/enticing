@@ -52,7 +52,7 @@ class ManagementUserService(
     /**
      * Updates everything except from the password. Password is updated separately
      */
-    fun updateUser(user: User) {
+    fun updateUser(user: User): User {
         requireCanEditUser(user)
         val originalEntity = userRepository.findById(user.login).orElseThrow { IllegalArgumentException("No user with login ${user.login}") }
         val updatedEntity = user.toEntity()
@@ -63,7 +63,7 @@ class ManagementUserService(
             updatedEntity.roles.addAll(originalEntity.roles)
         }
         updatedEntity.encryptedPassword = originalEntity.encryptedPassword
-        userRepository.save(updatedEntity)
+        return userRepository.save(updatedEntity).toUser()
     }
 
     fun deleteUser(login: String) {

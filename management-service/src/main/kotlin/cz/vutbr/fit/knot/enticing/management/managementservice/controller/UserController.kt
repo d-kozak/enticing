@@ -39,9 +39,8 @@ class UserController(
     fun create(@RequestBody @Valid createUserRequest: CreateUserRequest) = userService.createNewUser(createUserRequest)
 
     @PutMapping
-    fun update(@RequestBody @Valid user: User) {
-        userService.updateUser(user)
-    }
+    fun update(@RequestBody @Valid user: User) = userService.updateUser(user)
+
 
     @PutMapping("/password")
     fun changePassword(@RequestBody @Valid changePasswordCredentials: ChangePasswordCredentials) {

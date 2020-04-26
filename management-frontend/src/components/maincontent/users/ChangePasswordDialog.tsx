@@ -1,20 +1,20 @@
 import * as Yup from 'yup';
 import React, {useState} from 'react';
 import Button from '@material-ui/core/Button';
-import {Checkbox, TextField} from 'formik-material-ui';
+import {TextField} from 'formik-material-ui';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {ApplicationState} from "../../../ApplicationState";
-import {addUser} from "../../../reducers/usersReducer";
 import {openSnackbarAction} from "../../../reducers/snackbarReducer";
 import {connect} from "react-redux";
 import {Field, Form, Formik} from "formik";
-import {postRequest} from "../../../network/requests";
-import {FormControlLabel, LinearProgress} from "@material-ui/core";
-import {CreateUserRequest, User} from "../../../entities/user";
+import {putRequest} from "../../../network/requests";
+import {LinearProgress} from "@material-ui/core";
+import {ChangePasswordCredentials, User} from "../../../entities/user";
 import {makeStyles} from "@material-ui/core/styles";
+import {getCurrentUserDetails} from "../../../reducers/userDetailsReducer";
 
 const useStyles = makeStyles({
     formField: {
@@ -26,13 +26,12 @@ const useStyles = makeStyles({
     }
 })
 
-type AddNewUserDialogProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps
+type ChangePasswordDialogProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & { editedUser: User }
 
-const AddNewUserSchema = Yup.object().shape({
-    'login': Yup.string()
+const ChangePasswordSchema = Yup.object().shape({
+    'oldPassword': Yup.string()
         .min(5)
-        .max(64)
-        .required('Login is required'),
+        .max(64),
     'password1': Yup.string()
         .min(5)
         .max(64),
@@ -42,12 +41,15 @@ const AddNewUserSchema = Yup.object().shape({
         .oneOf([Yup.ref('password1'), null], 'Passwords do not match')
 });
 
-const AddNewUserDialog = (props: AddNewUserDialogProps) => {
-    const {addUser, openSnackbarAction} = props;
+const ChangePasswordDialog = (props: ChangePasswordDialogProps) => {
+    const {openSnackbarAction, editedUser, currentUser} = props;
     const [open, setOpen] = useState(false);
     const [progress, setProgress] = useState(false);
-
     const classes = useStyles();
+
+    if (!currentUser) {
+        return <div/>
+    }
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -57,31 +59,36 @@ const AddNewUserDialog = (props: AddNewUserDialogProps) => {
         setOpen(false);
     };
 
+    const editingMyself = currentUser.id === editedUser.id;
+
+    if (open && !(editingMyself || currentUser.roles.includes("ADMIN"))) {
+        openSnackbarAction("You can't edit other people's password")
+        return <div/>
+    }
+
     return (
         <div>
             <Button color="primary" variant="contained" onClick={handleClickOpen}>
-                Add new user
+                Change password
             </Button>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" className={classes.root}>
-                <DialogTitle id="form-dialog-title">Add new user</DialogTitle>
+                <DialogTitle id="form-dialog-title">Change password</DialogTitle>
                 {progress && <LinearProgress/>}
                 <DialogContent>
                     <Formik
-                        initialValues={{login: '', password1: '', password2: '', isAdmin: false, isMaintainer: false}}
-                        validationSchema={AddNewUserSchema}
-                        onSubmit={({login, password1, isAdmin, isMaintainer}, actions) => {
-                            const request: CreateUserRequest = {
-                                login,
-                                password: password1,
-                                roles: []
+                        initialValues={{password1: '', password2: '', oldPassword: editingMyself ? '' : 'abcdef'}}
+                        validationSchema={ChangePasswordSchema}
+                        onSubmit={({password1, oldPassword}, actions) => {
+                            const request: ChangePasswordCredentials = {
+                                login: editedUser.login,
+                                oldPassword: oldPassword,
+                                newPassword: password1
                             };
-                            if (isAdmin) request.roles.push("ADMIN")
-                            if (isMaintainer) request.roles.push("PLATFORM_MAINTAINER")
                             setProgress(true)
-                            postRequest<User>("/user/add", request)
-                                .then(user => {
+                            putRequest<void>("/user/password", request)
+                                .then(() => {
+                                    openSnackbarAction("Password updated")
                                     setProgress(false)
-                                    addUser(user)
                                     setOpen(false)
                                     actions.setSubmitting(false)
                                 })
@@ -89,40 +96,28 @@ const AddNewUserDialog = (props: AddNewUserDialogProps) => {
                                     setProgress(false)
                                     console.error(err)
                                     actions.setSubmitting(false)
-                                    openSnackbarAction("Failed to create new user")
+                                    openSnackbarAction("Failed to update password")
                                 })
                         }}
                     >
                         {({isSubmitting}) => <Form>
-                            <Field variant="outlined" type="text" name="login" label="Login"
+                            {editingMyself &&
+                            <Field variant="outlined" type="password" name="oldPassword" label="Old password"
+                                   className={classes.formField}
+                                   component={TextField}/>}
+                            <Field variant="outlined" type="password" name="password1" label="New password"
                                    className={classes.formField}
                                    component={TextField}/>
-                            <Field variant="outlined" type="password" name="password1" label="Password"
+                            <Field variant="outlined" type="password" name="password2" label="New password again"
                                    className={classes.formField}
                                    component={TextField}/>
-                            <Field variant="outlined" type="password" name="password2" label="Password again"
-                                   className={classes.formField}
-                                   component={TextField}/>
-
-                            <FormControlLabel
-                                control={<Field variant="outlined" name="isMaintainer" label="Platform Maintainer"
-                                                component={Checkbox}/>}
-                                label="Platform Maintainer"
-                                className={classes.formField}
-                            />
-
-                            <FormControlLabel
-                                control={<Field variant="outlined" name="isAdmin" label="Admin" component={Checkbox}/>}
-                                label="Admin"
-                                className={classes.formField}
-                            />
 
                             <DialogActions>
                                 <Button onClick={handleClose} color="primary">
                                     Cancel
                                 </Button>
                                 <Button disabled={isSubmitting} type="submit" color="primary" variant="contained">
-                                    Add
+                                    Confirm
                                 </Button>
                             </DialogActions>
                         </Form>}
@@ -133,10 +128,11 @@ const AddNewUserDialog = (props: AddNewUserDialogProps) => {
     );
 }
 
-const mapStateToProps = (state: ApplicationState) => ({});
+const mapStateToProps = (state: ApplicationState) => ({
+    currentUser: getCurrentUserDetails(state)
+});
 const mapDispatchToProps = {
-    addUser,
     openSnackbarAction,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddNewUserDialog);
+export default connect(mapStateToProps, mapDispatchToProps)(ChangePasswordDialog);

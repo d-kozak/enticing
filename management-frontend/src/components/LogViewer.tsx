@@ -10,7 +10,7 @@ export interface BuildsProps {
 
 const LogViewer = (props: BuildsProps) => {
     const {url} = props;
-    const [text, setText] = useState("Loading the logs...");
+    const [text, setText] = useState("Loading the logs...\n");
     const [startLine, setStartLine] = useState(0);
 
     useEffect(() => {
