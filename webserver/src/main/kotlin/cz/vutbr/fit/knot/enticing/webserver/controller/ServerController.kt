@@ -12,5 +12,5 @@ class ServerController(
 ) {
 
     @GetMapping
-    fun getServerStatus() = monitoringService.getServerInfo()
+    fun getServerStatus() = monitoringService.getStaticServerInfo()
 }

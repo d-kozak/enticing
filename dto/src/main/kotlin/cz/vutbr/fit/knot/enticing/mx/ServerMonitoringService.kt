@@ -27,17 +27,42 @@ open class ServerMonitoringService(val fullAddress: String, val componentType: C
 
     private val logger = loggerFactory.logger { }
 
-    private val mxBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean::class.java)
+    private val probe = ServerProbe()
 
-    private val info = getServerInfo()
-
-    fun getCurrentServerStatus() = ServerStatus(mxBean.freePhysicalMemorySize.toDouble() / info.totalPhysicalMemorySize
-            , mxBean.processCpuLoad, mxBean.systemCpuLoad).also {
-        logger.debug("Current server status are $it")
+    fun getCurrentServerStatus(): ServerStatus {
+        val info = probe.scan()
+        val status = ServerStatus(info.ramSize.toDouble() / info.freeRam.toDouble(), info.processCpuLoad, info.systemCpuLoad)
+        logger.debug("Current server status are $status")
+        return status
     }
 
-    fun getServerInfo() = StaticServerInfo(fullAddress, componentType, Runtime.getRuntime().availableProcessors(), mxBean.totalPhysicalMemorySize)
-            .also {
-                logger.debug("Static server info requested $it")
-            }
+    fun getStaticServerInfo(): StaticServerInfo {
+        val info = probe.scan()
+        val dto = StaticServerInfo(fullAddress, componentType, info.processorCount, info.ramSize)
+        logger.debug("Static server info requested $dto")
+        return dto
+    }
+}
+
+
+class ServerProbe {
+
+    data class Info(
+            val processorCount: Int,
+            val ramSize: Long,
+            val freeRam: Long,
+            val processCpuLoad: Double,
+            val systemCpuLoad: Double
+    )
+
+    private val mxBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean::class.java)
+
+    fun scan() = Info(
+            processorCount = Runtime.getRuntime().availableProcessors(),
+            ramSize = mxBean.totalPhysicalMemorySize,
+            freeRam = mxBean.freePhysicalMemorySize,
+            systemCpuLoad = mxBean.systemCpuLoad,
+            processCpuLoad = mxBean.processCpuLoad
+    )
+
 }

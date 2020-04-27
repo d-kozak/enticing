@@ -28,7 +28,7 @@ class HeartbeatService(val scheduler: TaskScheduler, val configuration: Enticing
 
     fun enableHeartbeat(heartbeatConfiguration: HeartbeatConfiguration) {
         logger.info("Setting up heartbeat with period ${heartbeatConfiguration.period}")
-        val info = monitoringService.getServerInfo()
+        val info = monitoringService.getStaticServerInfo()
         var i = 1
         val limit = 10
         var success = false
