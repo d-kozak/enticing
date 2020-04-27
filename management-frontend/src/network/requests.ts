@@ -28,7 +28,7 @@ export async function putRequest<T>(endpoint: string, content: any, params?: Arr
     return (await axios.put<T>(API_BASE_PATH + endpoint + encoded, content, {withCredentials: true})).data
 }
 
-export async function deleteRequest(endpoint: string, content: any, params?: Array<[string, string | number]>) {
+export async function deleteRequest(endpoint: string, params?: Array<[string, string | number]>) {
     const encoded = encodeParams(params);
     await axios.delete(API_BASE_PATH + endpoint + encoded, {withCredentials: true})
 }

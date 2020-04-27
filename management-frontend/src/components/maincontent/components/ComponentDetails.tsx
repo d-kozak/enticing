@@ -8,6 +8,8 @@ import {requestServerInfo} from "../../../reducers/serversReducer";
 import ComponentLogsTable from "./ComponentLogsTable";
 import {BackButton} from "../../button/BackButton";
 import {Centered} from "../../Centered";
+import KillComponentDialog from "./KillComponentDialog";
+import MaintainerOnly from "../../protectors/MaintainerOnly";
 
 
 export type ComponentDetailsProps = typeof mapDispatchToProps
@@ -58,6 +60,14 @@ const ComponentDetails = (props: ComponentDetailsProps) => {
             </ListItem>
         </List>
         <Divider/>
+        <MaintainerOnly>
+            <List component="nav">
+                <ListItem>
+                    <KillComponentDialog component={component}/>
+                </ListItem>
+            </List>
+            <Divider/>
+        </MaintainerOnly>
         <List component="nav">
             <ListItem>
                 <ListItemText primary={`Logs`}/>

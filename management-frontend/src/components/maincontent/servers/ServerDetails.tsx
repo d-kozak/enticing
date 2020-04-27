@@ -9,6 +9,8 @@ import ServerStatusChart from "./ServerStatusChart";
 import {BackButton} from "../../button/BackButton";
 import AddNewComponentDialog from "../components/AddNewComponentDialog";
 import {Centered} from "../../Centered";
+import MaintainerOnly from "../../protectors/MaintainerOnly";
+import RemoveServerDialog from "./RemoveServerDialog";
 
 export type ServerDetailsProps = typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps>
@@ -42,6 +44,14 @@ const ServerDetails = (props: ServerDetailsProps) => {
             </ListItem>
         </List>
         <Divider/>
+        <MaintainerOnly>
+            <List component="nav">
+                <ListItem>
+                    <RemoveServerDialog server={server}/>
+                </ListItem>
+            </List>
+            <Divider/>
+        </MaintainerOnly>
         <List component="nav">
             <ListItem>
                 <ListItemText primary={`Status`}/>

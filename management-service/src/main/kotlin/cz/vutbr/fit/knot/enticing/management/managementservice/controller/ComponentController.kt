@@ -16,4 +16,7 @@ class ComponentController(
 
     @GetMapping("/{componentId}")
     fun getComponent(@PathVariable componentId: Long) = componentService.getComponent(componentId)
+
+    @DeleteMapping("/{componentId}")
+    fun deleteComponent(@PathVariable componentId: Long) = componentService.deleteComponent(componentId)
 }
