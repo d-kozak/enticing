@@ -58,6 +58,7 @@ const {reducer, actions} = createSlice({
             for (let i = 0; i < action.payload.length; i++) {
                 const server = action.payload[i];
                 server.id = server.id.toString();
+                server.components = emptyPaginatedCollection();
                 state.elements[server.id] = server
                 state.index[i] = server.id
             }

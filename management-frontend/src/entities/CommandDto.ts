@@ -10,7 +10,7 @@ export interface CommandDto {
     finishedAt: Date | null
 }
 
-type CommandKeys = keyof typeof CommandType;
+export type CommandKeys = keyof typeof CommandType;
 
 export interface CommandRequest {
     type: CommandKeys,

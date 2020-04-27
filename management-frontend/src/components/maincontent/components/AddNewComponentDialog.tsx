@@ -7,15 +7,15 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {ApplicationState} from "../../../ApplicationState";
-import {addComponent} from "../../../reducers/componentsReducer";
 import {openSnackbarAction} from "../../../reducers/snackbarReducer";
 import {connect} from "react-redux";
 import {Field, Form, Formik} from "formik";
 import {ServerInfo} from "../../../entities/ServerInfo";
 import {FormControl, InputLabel, LinearProgress, MenuItem, Select} from "@material-ui/core";
-import {ComponentInfo, ComponentType} from "../../../entities/ComponentInfo";
 import {makeStyles} from "@material-ui/core/styles";
 import {postRequest} from "../../../network/requests";
+import {requestAllServers} from "../../../reducers/serversReducer";
+import {CommandDto, CommandKeys, CommandRequest, CommandType} from "../../../entities/CommandDto";
 
 type AddNewComponentDialogProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {
     predefinedServer?: ServerInfo
@@ -38,15 +38,20 @@ const AddNewComponentSchema = Yup.object().shape({
 });
 
 const AddNewComponentDialog = (props: AddNewComponentDialogProps) => {
-    const {addComponent, servers, predefinedServer, openSnackbarAction} = props;
+    const {requestAllServers, servers, predefinedServer, openSnackbarAction} = props;
     const [open, setOpen] = useState(false);
     const [progress, setProgress] = useState(false);
 
     const classes = useStyles();
 
-    const [componentType, setComponentType] = useState(ComponentType.INDEX_SERVER);
+    const [commandType, setCommandType] = useState<CommandType>(CommandType.START_INDEX_SERVER);
 
     const [server, setServer] = useState(predefinedServer)
+
+    useEffect(() => {
+        if (open && Object.keys(servers.elements).length < servers.totalElements)
+            requestAllServers();
+    }, [open, requestAllServers])
 
     useEffect(() => {
         if (!server) {
@@ -83,15 +88,13 @@ const AddNewComponentDialog = (props: AddNewComponentDialogProps) => {
                                 return
                             }
                             setProgress(true)
-                            const req = {
-                                serverId: server.id,
-                                componentType: ComponentType[componentType],
-                                port
+                            const req: CommandRequest = {
+                                type: CommandType[commandType] as CommandKeys,
+                                arguments: `${server.address}:${port}`
                             }
-                            postRequest<ComponentInfo>("/component", req)
+                            postRequest<CommandDto>("/command", req)
                                 .then(server => {
                                     setProgress(false)
-                                    addComponent(server)
                                     setOpen(false)
                                     actions.setSubmitting(false)
                                 })
@@ -123,13 +126,11 @@ const AddNewComponentDialog = (props: AddNewComponentDialogProps) => {
                                 <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
-                                    value={componentType}
-                                    onChange={(e) => setComponentType(e.target.value as number)}
+                                    value={commandType}
+                                    onChange={(e) => setCommandType(e.target.value as number)}
                                 >
-                                    {Object.keys(ComponentType)
-                                        .filter(it => !isNaN(+it))
-                                        .map(typeId => <MenuItem key={typeId}
-                                                                 value={typeId}>{ComponentType[+typeId]}</MenuItem>)}
+                                    <MenuItem value={CommandType.START_INDEX_SERVER}>INDEX_SERVER</MenuItem>
+                                    <MenuItem value={CommandType.START_WEBSERVER}>WEBSERVER</MenuItem>
                                 </Select>
                             </FormControl>
 
@@ -157,8 +158,8 @@ const mapStateToProps = (state: ApplicationState) => ({
     servers: state.servers
 });
 const mapDispatchToProps = {
-    addComponent,
-    openSnackbarAction
+    openSnackbarAction,
+    requestAllServers: requestAllServers as () => void
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNewComponentDialog);
