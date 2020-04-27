@@ -25,7 +25,7 @@ suspend fun ShellCommandExecutor.killWebserver(username: String, server: String)
         this.execute(SshCommand(username, server, KillScreenCommand("enticing-webserver")), checkReturnCode = false)
 
 suspend fun ShellCommandExecutor.startManagementService(username: String, server: String, enticingHome: String, configFile: String, port: Int) = this.execute(SshCommand(username, server,
-        StartScreenCommand("enticing-management", SimpleCommand("$enticingHome/bin/management-service $configFile $server --server.port=$port"))))
+        StartScreenCommand("enticing-management", SimpleCommand("$enticingHome/bin/management-service $configFile $server --debug.runner.start=false --server.port=$port"))))
 
 suspend fun ShellCommandExecutor.killManagementService(username: String, server: String) =
         this.execute(SshCommand(username, server, KillScreenCommand("enticing-management")), checkReturnCode = false)

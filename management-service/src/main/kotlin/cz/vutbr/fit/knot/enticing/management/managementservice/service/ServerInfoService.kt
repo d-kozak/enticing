@@ -3,9 +3,11 @@ package cz.vutbr.fit.knot.enticing.management.managementservice.service
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.ServerInfo
+import cz.vutbr.fit.knot.enticing.management.managementservice.entity.ComponentEntity
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toDto
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toEntity
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toServerInfo
+import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ComponentRepository
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ServerInfoRepository
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ServerStatusRepository
 import cz.vutbr.fit.knot.enticing.mx.ServerStatus
@@ -19,9 +21,10 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 @Service
 class ServerInfoService(
-        val serverInfoRepository: ServerInfoRepository,
-        val serverStatusRepository: ServerStatusRepository,
-        val componentService: ComponentService,
+        private val serverInfoRepository: ServerInfoRepository,
+        private val serverStatusRepository: ServerStatusRepository,
+        private val componentService: ComponentService,
+        private val componentRepository: ComponentRepository,
         loggerFactory: LoggerFactory
 ) {
 
@@ -33,11 +36,19 @@ class ServerInfoService(
 
 
     fun registerServer(serverInfo: StaticServerInfo): ServerInfo {
+        val (address, port) = serverInfo.fullAddress.split(":")
         logger.info("Registering server $serverInfo")
-        val server = serverInfoRepository.findByAddress(serverInfo.fullAddress.split(":")[0])
+        val serverEntity = serverInfoRepository.findByAddress(address)
                 ?: serverInfoRepository.save(serverInfo.toEntity())
-        componentService.addComponent(serverInfo, server)
-        return server.toServerInfo(null)
+        serverEntity.availableProcessors = serverInfo.availableProcessors
+        serverEntity.totalPhysicalMemorySize = serverInfo.totalPhysicalMemorySize
+        val previous = serverEntity.components.find { it.fullAddress == serverInfo.fullAddress }
+        if (previous == null) {
+            componentRepository.save(ComponentEntity(0, serverEntity, port.toInt(), serverInfo.componentType, serverInfo.timestamp, listOf(), listOf()))
+        } else {
+            previous.lastHeartbeat = serverInfo.timestamp
+        }
+        return serverEntity.toServerInfo(null)
     }
 
 

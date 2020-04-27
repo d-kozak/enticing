@@ -21,7 +21,6 @@ class HeartbeatService(val scheduler: TaskScheduler, val configuration: Enticing
         val heartbeatConfiguration = configuration.managementServiceConfiguration.heartbeatConfiguration
         if (heartbeatConfiguration.isEnabled) {
             scheduler.schedule({ enableHeartbeat(heartbeatConfiguration) }, Instant.now().plusMillis(500))
-            enableHeartbeat(heartbeatConfiguration)
         } else {
             logger.info("heartbeat not scheduled")
         }

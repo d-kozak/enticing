@@ -19,8 +19,8 @@ class ServerInfoEntity(
         @field:NotEmpty
         @field:Column(unique = true)
         var address: String,
-        val availableProcessors: Int,
-        val totalPhysicalMemorySize: Long,
+        var availableProcessors: Int,
+        var totalPhysicalMemorySize: Long,
         @field:OneToMany(mappedBy = "server")
         @field:JsonIgnore
         var components: List<ComponentEntity>,

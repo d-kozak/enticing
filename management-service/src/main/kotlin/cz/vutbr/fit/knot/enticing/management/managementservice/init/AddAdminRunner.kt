@@ -14,15 +14,15 @@ import org.springframework.stereotype.Component
 class AddAdminRunner(
         val userRepository: UserRepository,
         val encoder: PasswordEncoder,
-        @Value("\${debug.runner.start}")
-        private val runDebug: Boolean,
+        @Value("\${debug.admin.insert}")
+        private val insertAdmin: Boolean,
         loggerFactory: LoggerFactory
 ) : ApplicationRunner {
 
     private val logger = loggerFactory.logger { }
 
     override fun run(args: ApplicationArguments?) {
-        if (!runDebug) {
+        if (!insertAdmin) {
             logger.info("Disabled")
             return
         }

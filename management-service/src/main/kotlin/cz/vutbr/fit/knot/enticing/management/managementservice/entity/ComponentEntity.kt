@@ -10,6 +10,7 @@ import javax.validation.constraints.Positive
 fun ComponentEntity.toComponentInfo() = ComponentInfo(id, server.id, server.address, port, type, lastHeartbeat)
 
 @Entity
+@Table(uniqueConstraints = [UniqueConstraint(name = "one component at one address", columnNames = ["server_id", "port"])])
 class ComponentEntity(
         @field:Id
         @field:GeneratedValue
