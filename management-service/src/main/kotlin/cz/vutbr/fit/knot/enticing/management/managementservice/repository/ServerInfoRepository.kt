@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface ServerInfoRepository : JpaRepository<ServerInfoEntity, Long> {
     fun findByAddress(address: String): ServerInfoEntity?
+    fun existsByAddress(address: String): Boolean
 }

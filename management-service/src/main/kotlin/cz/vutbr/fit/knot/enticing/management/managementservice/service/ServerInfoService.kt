@@ -5,6 +5,7 @@ import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.AddServerRequest
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.ServerInfo
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.*
+import cz.vutbr.fit.knot.enticing.management.managementservice.exception.ValueNotUniqueException
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ComponentRepository
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ServerInfoRepository
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ServerStatusRepository
@@ -66,6 +67,7 @@ class ServerInfoService(
             .map { it.toDto() }
 
     fun addServerRequest(request: AddServerRequest): ServerInfo {
+        if (serverInfoRepository.existsByAddress(request.url)) throw ValueNotUniqueException("url", "Server ${request.url} already exists")
         val info = serverProbeApi.request(request)
         val entity = serverInfoRepository.save(ServerInfoEntity(0, request.url, info.processorCount, info.ramSize, listOf(), mutableListOf()))
         return entity.toServerInfo(ServerStatus(info.freeRam.toDouble() / info.ramSize, info.processCpuLoad, info.systemCpuLoad))

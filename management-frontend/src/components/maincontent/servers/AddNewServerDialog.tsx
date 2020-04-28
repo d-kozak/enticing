@@ -30,7 +30,7 @@ const AddNewServerDialog = (props: ServerComponentsTableProps) => {
     const {addServer, openSnackbarAction} = props;
     const [open, setOpen] = useState(false);
     const [progress, setProgress] = useState(false);
-
+    const history = useHistory();
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -60,6 +60,7 @@ const AddNewServerDialog = (props: ServerComponentsTableProps) => {
                                     setOpen(false)
                                     actions.setSubmitting(false)
                                     openSnackbarAction("Server added")
+                                    history.push(`/server/${server.id}`);
                                 })
                                 .catch(err => {
                                     setProgress(false)
