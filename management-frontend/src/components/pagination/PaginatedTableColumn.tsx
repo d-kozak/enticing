@@ -1,11 +1,12 @@
 import React from "react";
 import {TableCell, TableSortLabel} from "@material-ui/core";
 import {Sort} from "./PaginatedTable";
+import {dateTimeToString} from "../utils/dateUtils";
 
 export type AlignOptions = 'inherit' | 'left' | 'center' | 'right' | 'justify'
 
 export interface PaginatedTableColumn<ItemType, ColType> {
-    type: "string" | "float" | "int" | "custom"
+    type: "string" | "float" | "int" | "custom" | "date"
     id: string,
     label: string,
     align: AlignOptions,
@@ -66,6 +67,18 @@ export function StringColumn(id: string, label: string, extra?: Partial<ExtraPar
     const renderContent = (input: string) => input;
     return {
         type: "string",
+        id,
+        label,
+        renderContent,
+        ...defaults,
+        ...extra,
+    }
+}
+
+export function DateTimeColumn(id: string, label: string, extra?: Partial<ExtraParams>): PaginatedTableColumn<any, Date | null> {
+    const renderContent = (date: Date | null) => date != null ? dateTimeToString(new Date(date)) : "";
+    return {
+        type: "date",
         id,
         label,
         renderContent,

@@ -14,6 +14,7 @@ import {Field, Form, Formik} from "formik";
 import {postRequest} from "../../../network/requests";
 import {ServerInfo} from "../../../entities/ServerInfo";
 import {LinearProgress} from "@material-ui/core";
+import {useHistory} from 'react-router';
 
 type ServerComponentsTableProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps
 

@@ -7,6 +7,7 @@ import {CircularProgress, Divider, List, ListItem, ListItemText, Typography} fro
 import {requestCommandInfo} from "../../../reducers/commandsReducer";
 import {Centered} from "../../Centered";
 import LogViewer from "../../LogViewer";
+import {dateTimeToString} from "../../utils/dateUtils";
 
 
 export type CommandDetailsProps = typeof mapDispatchToProps
@@ -46,13 +47,13 @@ const CommandDetails = (props: CommandDetailsProps) => {
                 <ListItemText primary={`Submitted by: ${command.submittedBy}`}/>
             </ListItem>
             <ListItem>
-                <ListItemText primary={`Submitted at: ${command.submittedAt}`}/>
+                <ListItemText primary={`Submitted at: ${dateTimeToString(command.submittedAt)}`}/>
             </ListItem>
             <ListItem>
-                <ListItemText primary={`Start at: ${command.startAt}`}/>
+                <ListItemText primary={`Start at: ${dateTimeToString(command.startAt)}`}/>
             </ListItem>
             <ListItem>
-                <ListItemText primary={`Finished at: ${command.finishedAt}`}/>
+                <ListItemText primary={`Finished at: ${dateTimeToString(command.finishedAt)}`}/>
             </ListItem>
             <ListItem>
                 <ListItemText primary="Logs:"/>

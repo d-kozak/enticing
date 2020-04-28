@@ -2,7 +2,13 @@ import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import React from "react";
 import PaginatedTable from "../../pagination/PaginatedTable";
-import {CustomColumn, IntColumn, PaginatedTableColumn, StringColumn} from "../../pagination/PaginatedTableColumn"
+import {
+    CustomColumn,
+    DateTimeColumn,
+    IntColumn,
+    PaginatedTableColumn,
+    StringColumn
+} from "../../pagination/PaginatedTableColumn"
 import {addNewItems, clearAll} from "../../../reducers/componentsReducer";
 import {getRequest} from "../../../network/requests";
 import {PaginatedResult} from "../../../entities/pagination";
@@ -42,7 +48,7 @@ const ComponentsTable = (props: ComponentsTableProps) => {
             sortId: "type",
             filterOptions: ["WEBSERVER", "INDEX_SERVER", "INDEX_BUILDER", "CONSOLE_CLIENT"]
         }),
-        StringColumn("lastHeartbeat", "Last heartbeat", {sortId: "lastHeartbeat"}),
+        DateTimeColumn("lastHeartbeat", "Last heartbeat", {sortId: "lastHeartbeat"}),
         CustomColumn<ComponentInfo, undefined>("componentDetails", "Component Details",
             (prop, component) => <Tooltip title="Component details">
                 <IconButton onClick={() => history.push(`/component/${component.id}`)}>

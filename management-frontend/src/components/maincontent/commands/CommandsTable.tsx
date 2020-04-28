@@ -2,7 +2,7 @@ import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import React from "react";
 import PaginatedTable from "../../pagination/PaginatedTable";
-import {CustomColumn, PaginatedTableColumn, StringColumn} from "../../pagination/PaginatedTableColumn"
+import {CustomColumn, DateTimeColumn, PaginatedTableColumn, StringColumn} from "../../pagination/PaginatedTableColumn"
 import {addNewItems, clearAll} from "../../../reducers/commandsReducer";
 import {getRequest} from "../../../network/requests";
 import {PaginatedResult} from "../../../entities/pagination";
@@ -41,9 +41,9 @@ const CommandsTable = (props: CommandsTableProps) => {
             filterOptions: ["ENQUED", "RUNNING", "FINISHED", "FAILED"]
         }),
         StringColumn("arguments", "Arguments", {sortId: "arguments"}),
-        StringColumn("submittedAt", "Submitted at", {sortId: "submittedAt"}),
-        StringColumn("startAt", "Start at", {sortId: "startAt"}),
-        StringColumn("finishedAt", "Finished at", {sortId: "finishedAt"}),
+        DateTimeColumn("submittedAt", "Submitted at", {sortId: "submittedAt"}),
+        DateTimeColumn("startAt", "Start at", {sortId: "startAt"}),
+        DateTimeColumn("finishedAt", "Finished at", {sortId: "finishedAt"}),
         CustomColumn<CommandDto, undefined>("submittedBy", "Submitted by",
             (prop, command) =>
                 <Button onClick={() => history.push(`/user-management/${command.submittedBy}`)}>

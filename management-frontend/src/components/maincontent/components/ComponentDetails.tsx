@@ -10,6 +10,7 @@ import {BackButton} from "../../button/BackButton";
 import {Centered} from "../../Centered";
 import KillComponentDialog from "./KillComponentDialog";
 import MaintainerOnly from "../../protectors/MaintainerOnly";
+import {dateTimeToString} from "../../utils/dateUtils";
 
 
 export type ComponentDetailsProps = typeof mapDispatchToProps
@@ -56,7 +57,7 @@ const ComponentDetails = (props: ComponentDetailsProps) => {
         <Divider/>
         <List component="nav">
             <ListItem>
-                <ListItemText primary={`Last heartbeat: ${component.lastHeartbeat}`}/>
+                <ListItemText primary={`Last heartbeat: ${dateTimeToString(component.lastHeartbeat)}`}/>
             </ListItem>
         </List>
         <Divider/>

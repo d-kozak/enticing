@@ -7,6 +7,7 @@ import {ServerStatus} from "../../../entities/ServerInfo";
 import {getRequest} from "../../../network/requests";
 import {PaginatedResult} from "../../../entities/pagination";
 import {Grid} from "@material-ui/core";
+import {dateTimeToString} from "../../utils/dateUtils";
 
 type ServerStatusChartSimpleProps = {
     serverId: string
@@ -23,7 +24,11 @@ const ServerStatusChart = (props: ServerStatusChartProps) => {
     useEffect(() => {
         const refresh = () => {
             getRequest<PaginatedResult<ServerStatus>>(`/server/${server.id}/stats`, [["page", 0], ["size", 100]])
-                .then(res => setData(res.content))
+                .then(res => {
+                    for (let item of res.content)
+                        item.timestamp = dateTimeToString(item.timestamp);
+                    setData(res.content)
+                })
                 .catch(err => console.error(err))
         };
         refresh()
