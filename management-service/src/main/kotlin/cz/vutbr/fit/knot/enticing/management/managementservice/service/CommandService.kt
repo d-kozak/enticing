@@ -95,7 +95,7 @@ class CommandService(
             val logFile = commandLogDirectory.resolve("${entity.id}.log").toString()
             val executor = ShellCommandExecutor(loggerFactory, scope, logFile)
             executor.use {
-                val commandDto = entity.type.init(configuration, entity.arguments)
+                val commandDto = entity.type.init(configuration, entity.id.toString())
                 commandDto.execute(scope, executor)
             }
             entity.finishedAt = LocalDateTime.now()

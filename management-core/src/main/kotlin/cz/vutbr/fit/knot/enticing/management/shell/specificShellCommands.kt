@@ -5,12 +5,8 @@ import cz.vutbr.fit.knot.enticing.dto.utils.toDto
 import cz.vutbr.fit.knot.enticing.management.model.Mg4jFile
 import cz.vutbr.fit.knot.enticing.mx.ServerProbe
 
-suspend fun ShellCommandExecutor.localBuild(enticingHome: String): String {
-    return this.execute(SimpleCommand("/usr/bin/gradle buildAll"), workingDirectory = enticingHome)
-}
-
-suspend fun ShellCommandExecutor.localTest(enticingHome: String): String {
-    return this.execute(SimpleCommand("/usr/bin/gradle clean test --info"), workingDirectory = enticingHome)
+suspend fun ShellCommandExecutor.localBuild(buildId: String, enticingHome: String): String {
+    return this.execute(SimpleCommand("$enticingHome/bin/local-build $buildId"), workingDirectory = enticingHome)
 }
 
 suspend fun ShellCommandExecutor.copyJars(username: String, server: String, localRepository: String, remoteRepository: String) = this.execute(SimpleCommand("scp $localRepository/lib/*.jar $username@$server:$remoteRepository/lib"))

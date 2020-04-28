@@ -22,7 +22,7 @@ export enum CommandType {
     KILL_WEBSERVER,
     START_MANAGEMENT_SERVER,
     KILL_MANAGEMENT_SERVER,
-    LOCAL_TEST
+    BUILD
 }
 
 export type CommandKeys = keyof typeof CommandType;

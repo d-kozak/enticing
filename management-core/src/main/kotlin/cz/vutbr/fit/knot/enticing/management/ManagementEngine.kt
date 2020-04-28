@@ -24,8 +24,6 @@ class ManagementEngine(val configuration: EnticingConfiguration, val loggerFacto
     private val executor = ShellCommandExecutor(loggerFactory, scope)
 
     fun execute(args: ManagementCliArguments) = with(args) {
-        if (localBuild)
-            executeCommand(LocalBuildCommand)
         if (remoteBuild)
             executeCommand(RemoteBuildCommand)
         if (copyJars)

@@ -57,7 +57,8 @@ class EnticingTestFixture(private val fixtureConfig: FixtureConfiguration, reboo
     fun getMore() = webserverApi.getMore()
 
     fun buildLocally() {
-        managementService.executeCommand(LocalBuildCommand)
+        // todo fix local build
+//        managementService.executeCommand(LocalBuildCommand)
         managementService.executeCommand(CopyJarsCommand)
     }
 

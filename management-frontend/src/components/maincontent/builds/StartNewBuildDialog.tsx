@@ -17,7 +17,7 @@ const StartNewBuildDialog = (props: StartNewBuildDialogProps) => {
 
     const requestNewBuild = () => {
         const req: CommandRequest = {
-            type: "LOCAL_TEST",
+            type: "BUILD",
             arguments: ""
         }
         postRequest<CommandDto>("/command", req)

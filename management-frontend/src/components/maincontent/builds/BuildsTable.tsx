@@ -24,7 +24,7 @@ const BuildsTable = (props: BuildsTableProps) => {
     const history = useHistory();
 
     const requestPage = (page: number, size: number, requirements: Array<[string, string | number]>) => {
-        getRequest<PaginatedResult<CommandDto>>("/command", [["type", "LOCAL_TEST"], ["page", page], ["size", size], ...(restrictions || []), ...requirements])
+        getRequest<PaginatedResult<CommandDto>>("/command", [["type", "BUILD"], ["page", page], ["size", size], ...(restrictions || []), ...requirements])
             .then(res => {
                 addNewItems(res)
             })

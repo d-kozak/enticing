@@ -1,0 +1,45 @@
+#!/bin/bash
+
+error () {
+    echo $1 >&2
+    exit 1
+}
+
+export ENTICING_HOME=$("$(dirname "$BASH_SOURCE")"/../scripts/utils/get_enticing_home.sh)
+retval=$?
+if [[ "$retval" -ne "0" ]] ; then
+  exit $retval
+fi
+echo "repository found at: $ENTICING_HOME"
+build_id=$1
+if [ -z "$build_id" ]
+then
+    error "No build id specified"
+fi
+echo "Running build with id '$build_id'"
+
+build_dir="$HOME/builds"
+mkdir -p $build_dir || error "Could not create directory for builds: $build_dir"
+cd $build_dir || error "Could not change directory to $build_dir"
+if [[ -f $build_id || -d $build_id ]]
+then
+    echo "Directory for build $build_dir/$build_id already exists, it will be overwritten"
+    rm -rf $build_id || error "Failed to remove previous directory content"
+fi
+mkdir $build_id && cd $build_id || error "Failed to setup the build directory"
+
+build_dir="$build_dir/$build_id"
+echo "Build will be triggered from $build_dir"
+echo "Preparing to clone the repository"
+git clone "xkozak15@minerva3.fit.vutbr.cz:/mnt/minerva1/nlp/projects/corpproc_search/corpproc_search.git/" || error "Failed to clone the release repository"
+cd corpproc_search || error "Failed to enter the project repository root"
+echo "Triggering local build"
+./gradlew buildAll || error "Build failed..."
+echo "Triggering tests"
+./gradlew test --info || error "Tests failed"
+echo "Tests passed"
+echo "Build was successful, resulting jars are available at $build_dir/libs"
+ls libs
+
+
+

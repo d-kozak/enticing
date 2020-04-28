@@ -20,8 +20,7 @@ enum class CommandState {
 }
 
 enum class CommandType(private val factory: (EnticingConfiguration, String) -> ManagementCommand) {
-    LOCAL_TEST(::LocalTestCommand),
-    LOCAL_BUILD(::LocalBuildCommand),
+    BUILD(::BuildCommand),
     START_INDEX_SERVER(::StartIndexServerCommand),
     KILL_INDEX_SERVER(::KillIndexServerCommand),
     START_WEBSERVER(::StartWebserver),
@@ -58,15 +57,10 @@ sealed class ManagementCommand(val configuration: EnticingConfiguration) {
 
         abstract suspend fun executeForServer(shellCommandExecutor: ShellCommandExecutor, ip: String, port: Int)
 
-        class LocalTestCommand(configuration: EnticingConfiguration, args: String) : ManagementCommand(configuration) {
-            override suspend fun execute(scope: CoroutineScope, shellCommandExecutor: ShellCommandExecutor) {
-                shellCommandExecutor.localTest(configuration.localHome)
-            }
-        }
 
-        class LocalBuildCommand(configuration: EnticingConfiguration, args: String) : ManagementCommand(configuration) {
+        class BuildCommand(configuration: EnticingConfiguration, val args: String) : ManagementCommand(configuration) {
             override suspend fun execute(scope: CoroutineScope, shellCommandExecutor: ShellCommandExecutor) {
-                shellCommandExecutor.localBuild(configuration.localHome)
+                shellCommandExecutor.localBuild(args, configuration.localHome)
             }
         }
 

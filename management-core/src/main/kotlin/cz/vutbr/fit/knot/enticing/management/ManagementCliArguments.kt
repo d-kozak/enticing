@@ -78,8 +78,6 @@ class ManagementCliArguments(parser: ArgParser) : Validator by ValidatorImpl() {
      */
     val removeFiles by parser.flagging("--remove", help = "Remove mg4j directories on the servers")
 
-    val localBuild by parser.flagging("--local-build", help = "Locally build the project, copy resulting jars to the deployment server")
-
 
     lateinit var configuration: EnticingConfiguration
 
@@ -103,7 +101,6 @@ class ManagementCliArguments(parser: ArgParser) : Validator by ValidatorImpl() {
         append(corpuses)
         append(',')
 
-        if (localBuild) append("localBuild,")
         if (remoteBuild) append("remoteBuild,")
         if (copyJars) append("copyJars,")
         if (distribute) append("distribute,")

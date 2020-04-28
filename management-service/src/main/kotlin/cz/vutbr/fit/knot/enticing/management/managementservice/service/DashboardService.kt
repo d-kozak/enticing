@@ -30,8 +30,8 @@ class DashboardService(
     }
 
     private fun buildsInfo(): DashboardBuildsInfo {
-        val running = commandRepository.findTopByTypeAndStateOrderBySubmittedAtDesc(CommandType.LOCAL_TEST, CommandState.RUNNING)?.toDto()
-        val last = commandRepository.findTopByTypeAndStateInOrderBySubmittedAtDesc(CommandType.LOCAL_TEST, listOf(CommandState.FINISHED, CommandState.FAILED))?.toDto()
+        val running = commandRepository.findTopByTypeAndStateOrderBySubmittedAtDesc(CommandType.BUILD, CommandState.RUNNING)?.toDto()
+        val last = commandRepository.findTopByTypeAndStateInOrderBySubmittedAtDesc(CommandType.BUILD, listOf(CommandState.FINISHED, CommandState.FAILED))?.toDto()
         return DashboardBuildsInfo(running, last)
     }
 
