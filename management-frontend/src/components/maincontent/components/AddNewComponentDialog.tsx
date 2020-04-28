@@ -51,7 +51,7 @@ const AddNewComponentDialog = (props: AddNewComponentDialogProps) => {
     useEffect(() => {
         if (open && Object.keys(servers.elements).length < servers.totalElements)
             requestAllServers();
-    }, [open, requestAllServers])
+    }, [open, servers.elements, servers.totalElements, requestAllServers])
 
     useEffect(() => {
         if (!server) {

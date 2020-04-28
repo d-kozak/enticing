@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.controller
 
+import cz.vutbr.fit.knot.enticing.management.managementservice.dto.AddServerRequest
 import cz.vutbr.fit.knot.enticing.management.managementservice.service.ComponentService
 import cz.vutbr.fit.knot.enticing.management.managementservice.service.ServerInfoService
 import cz.vutbr.fit.knot.enticing.mx.StaticServerInfo
@@ -28,6 +29,9 @@ class ServerInfoController(
 
     @PostMapping
     fun registerServer(@Valid @RequestBody serverInfo: StaticServerInfo) = serverInfoService.registerServer(serverInfo)
+
+    @PostMapping("/add")
+    fun addServerRequest(@Valid @RequestBody request: AddServerRequest) = serverInfoService.addServerRequest(request)
 
     @DeleteMapping("/{serverId}")
     fun deleteServer(@PathVariable serverId: Long) = serverInfoService.deleteServerById(serverId)

@@ -10,8 +10,6 @@ export interface CommandDto {
     finishedAt: Date | null
 }
 
-export type CommandKeys = keyof typeof CommandType;
-
 export interface CommandRequest {
     type: CommandKeys,
     arguments: string
@@ -26,6 +24,8 @@ export enum CommandType {
     KILL_MANAGEMENT_SERVER,
     LOCAL_TEST
 }
+
+export type CommandKeys = keyof typeof CommandType;
 
 export enum CommandState {
     ENQUED,

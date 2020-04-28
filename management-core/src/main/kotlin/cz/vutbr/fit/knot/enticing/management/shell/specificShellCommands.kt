@@ -1,7 +1,9 @@
 package cz.vutbr.fit.knot.enticing.management.shell
 
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
+import cz.vutbr.fit.knot.enticing.dto.utils.toDto
 import cz.vutbr.fit.knot.enticing.management.model.Mg4jFile
+import cz.vutbr.fit.knot.enticing.mx.ServerProbe
 
 suspend fun ShellCommandExecutor.localBuild(enticingHome: String): String {
     @Incomplete("find a way to just use 'gradle'")
@@ -40,6 +42,10 @@ suspend fun ShellCommandExecutor.preprocessCollections(username: String, server:
         SshCommand(username, server,
 //                SimpleCommand("screen -S index-builder $enticingHome/bin/index-builder $configFile $server"), forcePseudoTerminal = true), logPrefix = server)
                 SimpleCommand("$enticingHome/bin/index-builder $configFile $server")), logPrefix = server)
+
+suspend fun ShellCommandExecutor.probeServer(username: String, server: String, enticingHome: String) = this.execute(
+        SshCommand(username, server, SimpleCommand("$enticingHome/bin/server-probe"), forcePseudoTerminal = true)
+).toDto<ServerProbe.Info>()
 
 /**
  * connects to the given server, git pulls for new changes and builds the project

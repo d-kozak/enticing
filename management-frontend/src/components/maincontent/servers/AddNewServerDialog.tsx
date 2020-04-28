@@ -8,6 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {ApplicationState} from "../../../ApplicationState";
 import {addServer} from "../../../reducers/serversReducer";
+import {openSnackbarAction} from "../../../reducers/snackbarReducer";
 import {connect} from "react-redux";
 import {Field, Form, Formik} from "formik";
 import {postRequest} from "../../../network/requests";
@@ -26,7 +27,7 @@ const AddNewsServerSchema = Yup.object().shape({
 });
 
 const AddNewServerDialog = (props: ServerComponentsTableProps) => {
-    const {addServer} = props;
+    const {addServer, openSnackbarAction} = props;
     const [open, setOpen] = useState(false);
     const [progress, setProgress] = useState(false);
 
@@ -52,17 +53,19 @@ const AddNewServerDialog = (props: ServerComponentsTableProps) => {
                         validationSchema={AddNewsServerSchema}
                         onSubmit={({url}, actions) => {
                             setProgress(true)
-                            postRequest<ServerInfo>("/server", {url})
+                            postRequest<ServerInfo>("/server/add", {url})
                                 .then(server => {
                                     setProgress(false)
                                     addServer(server)
                                     setOpen(false)
                                     actions.setSubmitting(false)
+                                    openSnackbarAction("Server added")
                                 })
                                 .catch(err => {
                                     setProgress(false)
                                     console.error(err)
                                     actions.setSubmitting(false)
+                                    openSnackbarAction("Failed to add server")
                                 })
                         }}
                     >
@@ -87,7 +90,8 @@ const AddNewServerDialog = (props: ServerComponentsTableProps) => {
 
 const mapStateToProps = (state: ApplicationState) => ({});
 const mapDispatchToProps = {
-    addServer
+    addServer,
+    openSnackbarAction
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNewServerDialog);

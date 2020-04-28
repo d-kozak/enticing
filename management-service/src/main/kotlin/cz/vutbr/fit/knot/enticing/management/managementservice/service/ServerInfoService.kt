@@ -2,11 +2,9 @@ package cz.vutbr.fit.knot.enticing.management.managementservice.service
 
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
+import cz.vutbr.fit.knot.enticing.management.managementservice.dto.AddServerRequest
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.ServerInfo
-import cz.vutbr.fit.knot.enticing.management.managementservice.entity.ComponentEntity
-import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toDto
-import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toEntity
-import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toServerInfo
+import cz.vutbr.fit.knot.enticing.management.managementservice.entity.*
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ComponentRepository
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ServerInfoRepository
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ServerStatusRepository
@@ -25,6 +23,7 @@ class ServerInfoService(
         private val serverStatusRepository: ServerStatusRepository,
         private val componentService: ComponentService,
         private val componentRepository: ComponentRepository,
+        private val serverProbeApi: ServerProbeApi,
         loggerFactory: LoggerFactory
 ) {
 
@@ -65,6 +64,12 @@ class ServerInfoService(
 
     fun getLastStats(serverId: Long, pageable: Pageable): Page<ServerStatus> = serverStatusRepository.findByServerIdOrderByTimestampDesc(serverId, pageable)
             .map { it.toDto() }
+
+    fun addServerRequest(request: AddServerRequest): ServerInfo {
+        val info = serverProbeApi.request(request)
+        val entity = serverInfoRepository.save(ServerInfoEntity(0, request.url, info.processorCount, info.ramSize, listOf(), mutableListOf()))
+        return entity.toServerInfo(ServerStatus(info.freeRam.toDouble() / info.ramSize, info.processCpuLoad, info.systemCpuLoad))
+    }
 
 }
 
