@@ -10,6 +10,9 @@ retval=$?
 if [[ "$retval" -ne "0" ]] ; then
   exit $retval
 fi
+export CI=true
+export GRADLE_USER_HOME=/tmp/xkozak15/gradle
+export DOWNLOAD_NODE=true
 echo "repository found at: $ENTICING_HOME"
 build_id=$1
 if [ -z "$build_id" ]
@@ -18,7 +21,7 @@ then
 fi
 echo "Running build with id '$build_id'"
 
-build_dir="$HOME/builds"
+build_dir="/tmp/xkozak15/builds"
 mkdir -p $build_dir || error "Could not create directory for builds: $build_dir"
 cd $build_dir || error "Could not change directory to $build_dir"
 if [[ -f $build_id || -d $build_id ]]

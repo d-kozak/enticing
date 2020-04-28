@@ -9,9 +9,7 @@ import cz.vutbr.fit.knot.enticing.management.managementservice.dto.ServerInfo
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toComponentInfo
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toServerInfo
 import cz.vutbr.fit.knot.enticing.management.managementservice.extractPaginatedItems
-import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ComponentRepository
-import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ServerInfoRepository
-import cz.vutbr.fit.knot.enticing.management.managementservice.repository.findByFullAddress
+import cz.vutbr.fit.knot.enticing.management.managementservice.repository.*
 import cz.vutbr.fit.knot.enticing.mx.ServerStatus
 import cz.vutbr.fit.knot.enticing.mx.StaticServerInfo
 import org.assertj.core.api.Assertions.assertThat
@@ -28,7 +26,8 @@ import org.springframework.http.MediaType
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.time.LocalDateTime
 
@@ -47,7 +46,13 @@ class ServerInfoTests {
     lateinit var serverRepository: ServerInfoRepository
 
     @Autowired
+    lateinit var serverStatusRepository: ServerStatusRepository
+
+    @Autowired
     lateinit var componentRepository: ComponentRepository
+
+    @Autowired
+    lateinit var userRepository: UserRepository
 
     private val serverInfo = ServerInfo(1, "athena10.fit.vutbr.cz", 12, 6_000, null)
 
@@ -83,19 +88,13 @@ class ServerInfoTests {
                 .isEqualTo(componentTwo)
     }
 
+
     @AfterAll
-    fun afterAll() {
+    fun `cleanup`() {
+        serverStatusRepository.deleteAll()
         componentRepository.deleteAll()
         serverRepository.deleteAll()
-    }
-
-    @AfterAll
-    fun `delete server`() {
-        mvc.perform(delete("$apiBasePath/server/1"))
-                .andExpect(status().isOk)
-
-        assertThat(serverRepository.findByAddress("athena10.fit.vutbr.cz")).isNull()
-        assertThat(componentRepository.findByFullAddress("athena10.fit.vutbr.cz:8080")).isNull()
+        userRepository.deleteAll()
     }
 
     @Test
