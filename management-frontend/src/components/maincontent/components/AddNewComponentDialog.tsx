@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Button from '@material-ui/core/Button';
 import {TextField} from 'formik-material-ui';
 import Dialog from '@material-ui/core/Dialog';
@@ -48,10 +48,15 @@ const AddNewComponentDialog = (props: AddNewComponentDialogProps) => {
 
     const [server, setServer] = useState(predefinedServer)
 
-    useEffect(() => {
-        if (open && Object.keys(servers.elements).length < servers.totalElements)
+    const updateServers = useCallback(() => {
+        if (open)
             requestAllServers();
-    }, [open, servers.elements, servers.totalElements, requestAllServers])
+    }, [open, requestAllServers])
+
+    useEffect(() => {
+        const interval = setInterval(updateServers, 500);
+        return () => clearInterval(interval)
+    }, [updateServers])
 
     useEffect(() => {
         if (!server) {

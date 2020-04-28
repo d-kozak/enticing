@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
     MenuItem,
     Select,
@@ -70,25 +70,26 @@ export default function PaginatedTable(props: PaginatedTableProps) {
 
     const [lastRequestTime, setLastRequestTime] = useState(new Date());
 
-    useEffect(() => {
-        const anyDataMissing = (page: number, size: number): boolean => {
-            for (let i = page * size; i < Math.min(data.totalElements, page * size + size); i++)
-                if (!data.index[i]) return true;
-            return false;
-        }
 
-        const refresh = () => {
-            const timeToRefresh = new Date().getTime() - lastRequestTime.getTime() > 2_000
-            console.log(timeToRefresh);
-            if (timeToRefresh || anyDataMissing(currentPage, pageSize)) {
-                setLastRequestTime(new Date());
-                requestPage(currentPage, pageSize, gatherRequirements(tableFilter, tableSort));
-            }
+    const anyDataMissing = useCallback((page: number, size: number): boolean => {
+        for (let i = page * size; i < Math.min(data.totalElements, page * size + size); i++)
+            if (!data.index[i]) return true;
+        return false;
+    }, [data])
+
+    const refresh = useCallback(() => {
+        const timeToRefresh = new Date().getTime() - lastRequestTime.getTime() > 2_000
+        console.log(timeToRefresh);
+        if (timeToRefresh || anyDataMissing(currentPage, pageSize)) {
+            setLastRequestTime(new Date());
+            requestPage(currentPage, pageSize, gatherRequirements(tableFilter, tableSort));
         }
-        refresh();
-        const interval = setInterval(refresh, 1_000);
+    }, [requestPage, currentPage, pageSize, tableFilter, tableSort, lastRequestTime, anyDataMissing])
+
+    useEffect(() => {
+        const interval = setInterval(refresh, 500);
         return () => clearInterval(interval);
-    }, [lastRequestTime, requestPage, currentPage, pageSize, setLastRequestTime, tableFilter, tableSort, data.index, data.totalElements]);
+    }, [refresh]);
 
 
     const handleChangePage = (event: unknown, newPage: number) => {
