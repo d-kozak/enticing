@@ -8,28 +8,27 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
-private const val API_BASE_PATH = "/api/v1"
 
 /**
  * Wrapper around the api of the management service
  */
-class ManagementServiceApi(remoteAddress: String, componentType: ComponentType, localAddress: String, loggerFactory: LoggerFactory)
-    : EnticingComponentApi(remoteAddress, componentType, localAddress, loggerFactory), RemoteLoggingApi, AutoCloseable {
+class ManagementServiceApi(private val remoteAddress: String, private val componentType: ComponentType, private val localAddress: String, loggerFactory: LoggerFactory)
+    : EnticingComponentApi(loggerFactory), RemoteLoggingApi, AutoCloseable {
 
     private val scope = CoroutineScope(Dispatchers.IO)
 
     override fun log(logMessage: LogMessage) {
-        scope.launch { httpPost("$API_BASE_PATH/log", logMessage.toLogDto(localAddress, componentType)) }
+        scope.launch { httpPost<Unit>(remoteAddress, "/log", logMessage.toLogDto(localAddress, componentType)) }
     }
 
     override fun perf(perfMessage: PerfMessage) {
-        scope.launch { httpPost("$API_BASE_PATH/perf", perfMessage.toPerfDto(localAddress, componentType)) }
+        scope.launch { httpPost<Unit>(remoteAddress, "/perf", perfMessage.toPerfDto(localAddress, componentType)) }
     }
 
-    fun register(info: StaticServerInfo): Boolean = httpPost("$API_BASE_PATH/server", info)
+    fun register(info: StaticServerInfo): Boolean = httpPost<Any>(remoteAddress, "/server", info) != null
 
     fun heartbeat(status: ServerStatus) {
-        httpPost("$API_BASE_PATH/heartbeat", HeartbeatDto(localAddress, componentType, status))
+        httpPost<Unit>(remoteAddress, "/heartbeat", HeartbeatDto(localAddress, componentType, status))
     }
 
     override fun close() {

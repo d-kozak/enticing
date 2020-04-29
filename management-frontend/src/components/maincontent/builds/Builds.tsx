@@ -15,9 +15,8 @@ const Builds = (props: BuildsProps) => {
     const match = useRouteMatch();
     return <Paper>
         <Switch>
-            <Route path={`${match.path}/:commandId`}>
-                <CommandDetails/>
-            </Route>
+            <Route path={`${match.path}/:commandId`}
+                   render={({match}) => <CommandDetails commandId={match.params['commandId']}/>}/>
             <Route path={`${match.path}`}>
                 <BuildsTable/>
             </Route>

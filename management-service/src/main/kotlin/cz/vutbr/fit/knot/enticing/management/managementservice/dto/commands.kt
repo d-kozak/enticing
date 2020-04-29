@@ -1,6 +1,8 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.dto
 
+import cz.vutbr.fit.knot.enticing.dto.ComponentAddress
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
+import cz.vutbr.fit.knot.enticing.dto.toComponentAddress
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.ManagementCommand.ServerGroupCommand.*
 import cz.vutbr.fit.knot.enticing.management.shell.*
 import kotlinx.coroutines.CoroutineScope
@@ -19,7 +21,7 @@ enum class CommandState {
     FAILED
 }
 
-enum class CommandType(private val factory: (EnticingConfiguration, String) -> ManagementCommand) {
+enum class CommandType(private val factory: (EnticingConfiguration, String, String) -> ManagementCommand) {
     BUILD(::BuildCommand),
     START_INDEX_SERVER(::StartIndexServerCommand),
     KILL_INDEX_SERVER(::KillIndexServerCommand),
@@ -28,11 +30,11 @@ enum class CommandType(private val factory: (EnticingConfiguration, String) -> M
     START_MANAGEMENT_SERVER(::StartManagementServer),
     KILL_MANAGEMENT_SERVER(::KillManagementServer);
 
-    fun init(configuration: EnticingConfiguration, args: String): ManagementCommand = factory(configuration, args)
+    fun init(configuration: EnticingConfiguration, id: String, args: String): ManagementCommand = factory(configuration, id, args)
 }
 
 
-sealed class ManagementCommand(val configuration: EnticingConfiguration) {
+sealed class ManagementCommand(val configuration: EnticingConfiguration, val commandId: String) {
 
     val username = configuration.authentication.username
     val enticingHome = configuration.deploymentConfiguration.repository
@@ -40,17 +42,13 @@ sealed class ManagementCommand(val configuration: EnticingConfiguration) {
 
     abstract suspend fun execute(scope: CoroutineScope, shellCommandExecutor: ShellCommandExecutor)
 
-    sealed class ServerGroupCommand(configuration: EnticingConfiguration, val addresses: List<String>) : ManagementCommand(configuration) {
+    sealed class ServerGroupCommand(configuration: EnticingConfiguration, id: String, val addresses: List<ComponentAddress>) : ManagementCommand(configuration, id) {
 
-        constructor(configuration: EnticingConfiguration, args: String) : this(configuration, args.split(","))
+        constructor(configuration: EnticingConfiguration, id: String, args: String) : this(configuration, id, args.split(",").map { it.toComponentAddress() })
 
-        init {
-            // todo verify valid addresses?
-        }
 
         override suspend fun execute(scope: CoroutineScope, shellCommandExecutor: ShellCommandExecutor) {
-            addresses.map { it.split(":") }
-                    .map { (ip, port) -> scope.launch { executeForServer(shellCommandExecutor, ip, port.toInt()) } }
+            addresses.map { (ip, port) -> scope.launch { executeForServer(shellCommandExecutor, ip, port) } }
                     .joinAll()
 
         }
@@ -58,44 +56,44 @@ sealed class ManagementCommand(val configuration: EnticingConfiguration) {
         abstract suspend fun executeForServer(shellCommandExecutor: ShellCommandExecutor, ip: String, port: Int)
 
 
-        class BuildCommand(configuration: EnticingConfiguration, val args: String) : ManagementCommand(configuration) {
+        class BuildCommand(configuration: EnticingConfiguration, id: String, val args: String) : ManagementCommand(configuration, id) {
             override suspend fun execute(scope: CoroutineScope, shellCommandExecutor: ShellCommandExecutor) {
-                shellCommandExecutor.localBuild(args, configuration.localHome)
+                shellCommandExecutor.localBuild(commandId, configuration.localHome)
             }
         }
 
-        class StartIndexServerCommand(configuration: EnticingConfiguration, args: String) : ManagementCommand.ServerGroupCommand(configuration, args) {
+        class StartIndexServerCommand(configuration: EnticingConfiguration, id: String, args: String) : ManagementCommand.ServerGroupCommand(configuration, id, args) {
 
             override suspend fun executeForServer(shellCommandExecutor: ShellCommandExecutor, ip: String, port: Int) {
                 shellCommandExecutor.startIndexServer(username, ip, enticingHome, configFile, port)
             }
         }
 
-        class KillIndexServerCommand(configuration: EnticingConfiguration, args: String) : ManagementCommand.ServerGroupCommand(configuration, args) {
+        class KillIndexServerCommand(configuration: EnticingConfiguration, id: String, args: String) : ManagementCommand.ServerGroupCommand(configuration, id, args) {
             override suspend fun executeForServer(shellCommandExecutor: ShellCommandExecutor, ip: String, port: Int) {
                 shellCommandExecutor.killIndexServer(username, ip)
             }
         }
 
-        class StartWebserver(configuration: EnticingConfiguration, args: String) : ManagementCommand.ServerGroupCommand(configuration, args) {
+        class StartWebserver(configuration: EnticingConfiguration, id: String, args: String) : ManagementCommand.ServerGroupCommand(configuration, id, args) {
             override suspend fun executeForServer(shellCommandExecutor: ShellCommandExecutor, ip: String, port: Int) {
                 shellCommandExecutor.startWebserver(username, ip, enticingHome, configFile, port)
             }
         }
 
-        class KillWebserver(configuration: EnticingConfiguration, args: String) : ManagementCommand.ServerGroupCommand(configuration, args) {
+        class KillWebserver(configuration: EnticingConfiguration, id: String, args: String) : ManagementCommand.ServerGroupCommand(configuration, id, args) {
             override suspend fun executeForServer(shellCommandExecutor: ShellCommandExecutor, ip: String, port: Int) {
                 shellCommandExecutor.killWebserver(username, ip)
             }
         }
 
-        class StartManagementServer(configuration: EnticingConfiguration, args: String) : ManagementCommand.ServerGroupCommand(configuration, args) {
+        class StartManagementServer(configuration: EnticingConfiguration, id: String, args: String) : ManagementCommand.ServerGroupCommand(configuration, id, args) {
             override suspend fun executeForServer(shellCommandExecutor: ShellCommandExecutor, ip: String, port: Int) {
                 shellCommandExecutor.startManagementService(username, ip, enticingHome, configFile, port)
             }
         }
 
-        class KillManagementServer(configuration: EnticingConfiguration, args: String) : ManagementCommand.ServerGroupCommand(configuration, args) {
+        class KillManagementServer(configuration: EnticingConfiguration, id: String, args: String) : ManagementCommand.ServerGroupCommand(configuration, id, args) {
             override suspend fun executeForServer(shellCommandExecutor: ShellCommandExecutor, ip: String, port: Int) {
                 shellCommandExecutor.killManagementService(username, ip)
             }

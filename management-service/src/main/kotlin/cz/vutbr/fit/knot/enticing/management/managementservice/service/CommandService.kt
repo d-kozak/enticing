@@ -82,6 +82,7 @@ class CommandService(
                 logger.error("Command $commandEntity was timeouted")
             } catch (ex: Exception) {
                 logger.error("Command $commandEntity failed: ${ex::class} ${ex.message}")
+                ex.printStackTrace()
             }
         }
     }
@@ -95,7 +96,7 @@ class CommandService(
             val logFile = commandLogDirectory.resolve("${entity.id}.log").toString()
             val executor = ShellCommandExecutor(loggerFactory, scope, logFile)
             executor.use {
-                val commandDto = entity.type.init(configuration, entity.id.toString())
+                val commandDto = entity.type.init(configuration, entity.id.toString(), entity.arguments)
                 commandDto.execute(scope, executor)
             }
             entity.finishedAt = LocalDateTime.now()
@@ -105,6 +106,7 @@ class CommandService(
             entity.finishedAt = LocalDateTime.now()
             entity.state = CommandState.FAILED
             logger.info("Command $entity failed: ${ex::class} ${ex.message}")
+            ex.printStackTrace()
         } finally {
             commandRepository.save(entity)
         }

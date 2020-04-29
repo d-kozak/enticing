@@ -1,33 +1,31 @@
 import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
-import React from 'react';
-import {useHistory, useParams} from "react-router";
+import React, {useCallback} from 'react';
+import {useHistory} from "react-router";
 import {BackButton} from "../../button/BackButton";
 import {CircularProgress, Divider, List, ListItem, ListItemText, Typography} from "@material-ui/core";
 import {requestCommandInfo} from "../../../reducers/commandsReducer";
 import {Centered} from "../../Centered";
 import LogViewer from "../../LogViewer";
 import {dateTimeToString} from "../../utils/dateUtils";
+import {useInterval} from "../../../utils/useInterval";
 
 
 export type CommandDetailsProps = typeof mapDispatchToProps
-    & ReturnType<typeof mapStateToProps>
+    & ReturnType<typeof mapStateToProps> & { commandId: string }
 
 const CommandDetails = (props: CommandDetailsProps) => {
-    const {commands, requestCommandInfo} = props;
-    const {commandId} = useParams();
+    const {commands, requestCommandInfo, commandId} = props;
     const history = useHistory();
-    if (!commandId) {
-        return <div> No command id </div>
-    }
+    const refresh = useCallback(() => requestCommandInfo(commandId!), [requestCommandInfo, commandId])
     const command = commands.elements[commandId];
+    useInterval(refresh);
     if (!command) {
-        requestCommandInfo(commandId);
+        refresh();
         return <Centered>
             <CircularProgress color="inherit"/>
         </Centered>
     }
-
 
     return <div>
         <BackButton/>

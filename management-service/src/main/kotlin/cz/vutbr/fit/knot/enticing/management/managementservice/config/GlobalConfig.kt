@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.config
 
+import cz.vutbr.fit.knot.enticing.api.EnticingComponentApi
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.validateOrFail
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.visitor.prettyPrint
@@ -31,5 +32,8 @@ class GlobalConfig(
 
     @Bean
     fun loggerFactory(enticingConfiguration: EnticingConfiguration) = enticingConfiguration.loggingConfiguration.loggerFactoryFor("$address-management")
+
+    @Bean
+    fun componentApi(loggerFactory: cz.vutbr.fit.knot.enticing.log.LoggerFactory) = EnticingComponentApi(loggerFactory)
 
 }
