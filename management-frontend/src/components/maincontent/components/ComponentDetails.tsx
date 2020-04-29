@@ -1,7 +1,7 @@
 import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
-import React from 'react';
-import {useHistory, useParams} from "react-router";
+import React, {useCallback} from 'react';
+import {useHistory} from "react-router";
 import {CircularProgress, Divider, List, ListItem, ListItemText, Typography} from "@material-ui/core";
 import {requestComponentInfo} from "../../../reducers/componentsReducer";
 import {requestServerInfo} from "../../../reducers/serversReducer";
@@ -11,22 +11,20 @@ import {Centered} from "../../Centered";
 import KillComponentDialog from "./KillComponentDialog";
 import MaintainerOnly from "../../protectors/MaintainerOnly";
 import {dateTimeToString} from "../../utils/dateUtils";
+import {useInterval} from "../../../utils/useInterval";
 
 
 export type ComponentDetailsProps = typeof mapDispatchToProps
-    & ReturnType<typeof mapStateToProps>
+    & ReturnType<typeof mapStateToProps> & { componentId: string }
 
 const ComponentDetails = (props: ComponentDetailsProps) => {
-    const {components, servers, requestComponentInfo, requestServerInfo} = props;
-    const {componentId} = useParams();
+    const {components, componentId, servers, requestComponentInfo, requestServerInfo} = props;
     const history = useHistory();
-    if (!componentId) {
-        return <div> No component id </div>
-    }
-
+    const refresh = useCallback(() => requestComponentInfo(componentId), [requestComponentInfo, componentId]);
+    useInterval(refresh, 1_000);
     const component = components.elements[componentId];
     if (!component) {
-        requestComponentInfo(componentId);
+        refresh();
         return <div>
             <CircularProgress color="inherit"/>
         </div>

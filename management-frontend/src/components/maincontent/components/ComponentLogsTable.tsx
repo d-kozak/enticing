@@ -39,7 +39,7 @@ const ComponentLogsTable = (props: ComponentLogsTableProps) => {
             sortId: "logType",
             filterOptions: ["DEBUG", "INFO", "PERF", "WARN", "ERROR"]
         }),
-        StringColumn("className", "Classname", {sortId: "className"}),
+        StringColumn("sourceClass", "Classname", {sortId: "sourceClass"}),
         StringColumn("message", "Message", {sortId: "message"}),
         StringColumn("timestamp", "Timestamp", {sortId: "timestamp"})
     ];

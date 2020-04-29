@@ -1,7 +1,7 @@
 import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
-import React from 'react';
-import {Redirect, useParams} from "react-router";
+import React, {useCallback} from 'react';
+import {Redirect} from "react-router";
 import {BackButton} from "../../button/BackButton";
 import {getCurrentUserDetails, isAdmin} from "../../../reducers/userDetailsReducer";
 import {
@@ -21,23 +21,22 @@ import {Centered} from "../../Centered";
 import {User} from "../../../entities/user";
 import {putRequest} from "../../../network/requests";
 import ChangePasswordDialog from "./ChangePasswordDialog";
+import {useInterval} from "../../../utils/useInterval";
 
 
 export type UserDetailsProps = typeof mapDispatchToProps
-    & ReturnType<typeof mapStateToProps>
+    & ReturnType<typeof mapStateToProps> & { userId: string }
 
 const UserDetails = (props: UserDetailsProps) => {
-    const {allUsers, addUser, openSnackbarAction, currentUser, isAdmin, requestUserInfo} = props;
-    const {userId} = useParams();
-    if (!userId) {
-        return <div>no user id</div>
-    }
+    const {allUsers, userId, addUser, openSnackbarAction, currentUser, isAdmin, requestUserInfo} = props;
+    const refresh = useCallback(() => requestUserInfo(userId), [requestUserInfo, userId])
+    useInterval(refresh, 1_000);
     if (!currentUser) {
         return <Redirect to="/login"/>
     }
     const viewedUser = allUsers.elements[userId];
     if (!viewedUser) {
-        requestUserInfo(userId);
+        refresh();
         return <Centered>
             <CircularProgress color="inherit"/>
         </Centered>

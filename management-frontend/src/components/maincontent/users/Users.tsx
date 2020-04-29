@@ -15,9 +15,7 @@ const Users = (props: UsersProps) => {
     const match = useRouteMatch();
     return <Paper>
         <Switch>
-            <Route path={`${match.path}/:userId`}>
-                <UserDetails/>
-            </Route>
+            <Route path={`${match.path}/:userId`} render={({match}) => <UserDetails userId={match.params['userId']}/>}/>
             <Route path={`${match.path}`}>
                 <UsersTable/>
             </Route>

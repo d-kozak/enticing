@@ -25,8 +25,9 @@ const {reducer, actions} = createSlice({
         },
         addComponent: (state: PaginatedCollection<ComponentInfo>, action: PayloadAction<ComponentInfo>) => {
             const component = action.payload;
+            const prev = state.elements[component.id];
             component.id = component.id.toString();
-            component.logs = emptyPaginatedCollection();
+            component.logs = prev?.logs || emptyPaginatedCollection();
             state.elements[component.id] = component;
         },
         clearAll: (state: PaginatedCollection<ComponentInfo>) => {

@@ -24,8 +24,9 @@ const {reducer, actions} = createSlice({
         },
         addServer: (state: PaginatedCollection<ServerInfo>, action: PayloadAction<ServerInfo>) => {
             const server = action.payload;
+            const prev = state.elements[server.id];
             server.id = server.id.toString();
-            server.components = emptyPaginatedCollection();
+            server.components = prev?.components || emptyPaginatedCollection();
             state.elements[server.id] = server;
         },
         addComponentsToServer: (state: PaginatedCollection<ServerInfo>, action: PayloadAction<PaginatedResult<ComponentInfo> & { serverId: string }>) => {

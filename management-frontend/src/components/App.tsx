@@ -62,7 +62,8 @@ const App = (props: AppProps) => {
                     <AuthenticatedRoute path={"/"} exact={true}> <Dashboard/> </AuthenticatedRoute>
                     <Route path={"/login"} render={() => <Login/>}/>
                     <AdminRoute path={"/user-management"}> <Users/> </AdminRoute>
-                    <AuthenticatedRoute path={"/user-details/:userId"}> <UserDetails/> </AuthenticatedRoute>
+                    <AuthenticatedRoute path={"/user-details/:userId"}
+                                        render={({match}) => <UserDetails userId={match.params['userId']}/>}/>
                     <AuthenticatedRoute path={"/server"} exact={false}> <Servers/> </AuthenticatedRoute>
                     <AuthenticatedRoute path={"/component"} exact={false}> <Components/> </AuthenticatedRoute>
                     <AuthenticatedRoute path={"/log"} exact={false}> <Logs/> </AuthenticatedRoute>

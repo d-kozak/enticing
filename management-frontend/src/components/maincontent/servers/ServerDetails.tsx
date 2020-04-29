@@ -1,7 +1,6 @@
 import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
-import React from 'react';
-import {useParams} from "react-router";
+import React, {useCallback} from 'react';
 import {CircularProgress, Divider, List, ListItem, ListItemText, Typography} from "@material-ui/core";
 import {requestServerInfo} from "../../../reducers/serversReducer";
 import ServerComponentsTable from "./ServerComponentsTable";
@@ -11,19 +10,18 @@ import AddNewComponentDialog from "../components/AddNewComponentDialog";
 import {Centered} from "../../Centered";
 import MaintainerOnly from "../../protectors/MaintainerOnly";
 import RemoveServerDialog from "./RemoveServerDialog";
+import {useInterval} from "../../../utils/useInterval";
 
 export type ServerDetailsProps = typeof mapDispatchToProps
-    & ReturnType<typeof mapStateToProps>
+    & ReturnType<typeof mapStateToProps> & { serverId: string }
 
 const ServerDetails = (props: ServerDetailsProps) => {
-    const {servers, requestServerInfo} = props;
-    const {serverId} = useParams();
-    if (!serverId) {
-        return <div> No serverId </div>
-    }
+    const {serverId, servers, requestServerInfo} = props;
+    const refresh = useCallback(() => requestServerInfo(serverId), [requestServerInfo, serverId])
+    useInterval(refresh, 2_000)
     const server = servers.elements[serverId]
     if (!server) {
-        requestServerInfo(serverId);
+        refresh();
         return <Centered>
             <CircularProgress color="inherit"/>
         </Centered>

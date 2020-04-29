@@ -10,15 +10,21 @@ import {openSnackbarAction} from "../../reducers/snackbarReducer";
 type AuthenticatedRouteProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & RouteComponentProps & {
     path: string,
     exact?: boolean,
-    children: React.ReactNode
+    children?: React.ReactNode,
+    render?: (routeProps: RouteComponentProps<any>) => React.ReactNode
 }
 
 const AuthenticatedRoute = (props: AuthenticatedRouteProps) => {
-    const {isLoggedIn, path, children, exact, openSnackbarAction, ...rest} = props;
+    const {isLoggedIn, path, children, render, exact, openSnackbarAction, ...rest} = props;
     if (!isLoggedIn) {
         openSnackbarAction(`You have to be logged in to visit this page`);
+        return <Redirect to={"/login"}/>
     }
-    return <Route {...rest} exact={exact} to={path} render={() => isLoggedIn ? children : <Redirect to="/login"/>}/>
+    if (children) {
+        return <Route {...rest} exact={exact} to={path}>
+            {children}
+        </Route>
+    } else return <Route {...rest} exact={exact} to={path} render={render}/>
 };
 
 const mapStateToProps = (state: ApplicationState) => ({
