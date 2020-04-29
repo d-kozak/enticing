@@ -11,6 +11,8 @@ import cz.vutbr.fit.knot.enticing.management.managementservice.repository.UserRe
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -61,6 +63,12 @@ class ManagementUserService(
             // if not admin, not not change roles
             updatedEntity.roles.clear()
             updatedEntity.roles.addAll(originalEntity.roles)
+        } else if (currentUser.login == updatedEntity.login) {
+            // update my roles - they will be updated in the db, but they also have to be updated in the SecurityContextHolder,
+            // otherwise Spring will not notice the change until logout
+            val oldAuth = SecurityContextHolder.getContext().authentication
+            val roles = user.roles.map { SimpleGrantedAuthority("ROLE_$it") }
+            SecurityContextHolder.getContext().authentication = UsernamePasswordAuthenticationToken(oldAuth.principal, oldAuth.credentials, roles)
         }
         updatedEntity.encryptedPassword = originalEntity.encryptedPassword
         return userRepository.save(updatedEntity).toUser()
@@ -107,7 +115,10 @@ class ManagementUserService(
     fun getCurrentUser(): User? {
         val authentication = SecurityContextHolder.getContext().authentication ?: return null
         val login = authentication.name
-        val roles = authentication.authorities.map { it.authority.split("_")[1] }.toSet()
+        authentication.authorities
+        val roles = authentication.authorities.map {
+            it.authority.replace("ROLE_", "")
+        }.toSet()
         return User(login, roles)
     }
 

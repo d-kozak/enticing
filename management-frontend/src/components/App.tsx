@@ -42,18 +42,20 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 type AppProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {}
 
 const App = (props: AppProps) => {
-    const {loginSuccessAction, logoutSuccessAction, openSnackbarAction} = props;
+    const {isLoggedIn, loginSuccessAction, logoutSuccessAction, openSnackbarAction} = props;
     const classes = useStyles();
 
     const checkLoggedIn = useCallback(() => {
         getRequest<User>("/user")
             .then(loginSuccessAction)
             .catch(err => {
-                logoutSuccessAction();
-                openSnackbarAction("You've been logged out");
-                console.error(err);
+                if (isLoggedIn) {
+                    logoutSuccessAction();
+                    openSnackbarAction("You've been logged out");
+                    console.error(err);
+                }
             })
-    }, [loginSuccessAction, logoutSuccessAction, openSnackbarAction])
+    }, [loginSuccessAction, logoutSuccessAction, openSnackbarAction, isLoggedIn])
     useInterval(checkLoggedIn, 2_000);
     useEffect(() => checkLoggedIn(), [checkLoggedIn]);
 
