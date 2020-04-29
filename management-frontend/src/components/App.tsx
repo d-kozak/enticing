@@ -1,10 +1,10 @@
 import {createStyles, CssBaseline, Theme} from "@material-ui/core";
 import {connect} from "react-redux";
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {ApplicationState} from "../ApplicationState";
 import {makeStyles} from '@material-ui/core/styles';
 import {openSnackbarAction} from "../reducers/snackbarReducer";
-import {isLoggedIn, loginSuccessAction} from "../reducers/userDetailsReducer";
+import {isLoggedIn, loginSuccessAction, logoutSuccessAction} from "../reducers/userDetailsReducer";
 import EnticingSnackbar from "./snackbar/EnticingSnackbar";
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import EnticingAppBar from "./EnticingAppBar";
@@ -24,6 +24,7 @@ import Builds from "./maincontent/builds/Builds";
 import AuthenticatedOnly from "./protectors/AuthenticatedOnly";
 import {getRequest} from "../network/requests";
 import {User} from "../entities/user";
+import {useInterval} from "../utils/useInterval";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
@@ -41,14 +42,20 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 type AppProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {}
 
 const App = (props: AppProps) => {
-    const {isLoggedIn, loginSuccessAction} = props;
+    const {loginSuccessAction, logoutSuccessAction, openSnackbarAction} = props;
     const classes = useStyles();
 
-    useEffect(() => {
-        if (!isLoggedIn)
-            getRequest<User>("/user")
-                .then(loginSuccessAction)
-    }, [isLoggedIn, loginSuccessAction]);
+    const checkLoggedIn = useCallback(() => {
+        getRequest<User>("/user")
+            .then(loginSuccessAction)
+            .catch(err => {
+                logoutSuccessAction();
+                openSnackbarAction("You've been logged out");
+                console.error(err);
+            })
+    }, [loginSuccessAction, logoutSuccessAction, openSnackbarAction])
+    useInterval(checkLoggedIn, 2_000);
+    useEffect(() => checkLoggedIn(), [checkLoggedIn]);
 
     return <div className={classes.root}>
         <CssBaseline/>
@@ -83,7 +90,8 @@ const mapStateToProps = (state: ApplicationState) => ({
 });
 const mapDispatchToProps = {
     openSnackbarAction,
-    loginSuccessAction
+    loginSuccessAction,
+    logoutSuccessAction
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
