@@ -16,6 +16,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import {postRequest} from "../../../network/requests";
 import {requestAllServers} from "../../../reducers/serversReducer";
 import {CommandDto, CommandKeys, CommandRequest, CommandType} from "../../../entities/CommandDto";
+import {useInterval} from "../../../utils/useInterval";
 
 type AddNewComponentDialogProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {
     predefinedServer?: ServerInfo
@@ -53,10 +54,7 @@ const AddNewComponentDialog = (props: AddNewComponentDialogProps) => {
             requestAllServers();
     }, [open, requestAllServers])
 
-    useEffect(() => {
-        const interval = setInterval(updateServers, 500);
-        return () => clearInterval(interval)
-    }, [updateServers])
+    useInterval(updateServers, 1_000);
 
     useEffect(() => {
         if (!server) {

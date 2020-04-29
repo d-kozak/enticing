@@ -71,7 +71,7 @@ const Login = (props: LoginProps) => {
                            component={TextField}/>
                     <DialogActions>
                         <Button disabled={isSubmitting} type="submit" color="primary" variant="contained">
-                            Add
+                            Login
                         </Button>
                     </DialogActions>
                 </Form>}

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {
     MenuItem,
     Select,
@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core";
 import {PaginatedCollection, WithId} from "../../entities/pagination";
 import {PaginatedTableColumn, SimpleColumnHeader, SortableColumnHeader} from "./PaginatedTableColumn";
+import {useInterval} from "../../utils/useInterval";
 
 
 export interface TableData<ContentType extends WithId> {
@@ -68,29 +69,11 @@ export default function PaginatedTable(props: PaginatedTableProps) {
     const [tableSort, setTableSort] = useState<TableSortState>({});
     const [tableFilter, setTableFilter] = useState<TableFilterState>(defaultFilter(columns));
 
-    const [lastRequestTime, setLastRequestTime] = useState(new Date());
-
-
-    const anyDataMissing = useCallback((page: number, size: number): boolean => {
-        for (let i = page * size; i < Math.min(data.totalElements, page * size + size); i++)
-            if (!data.index[i]) return true;
-        return false;
-    }, [data])
-
     const refresh = useCallback(() => {
-        const timeToRefresh = new Date().getTime() - lastRequestTime.getTime() > 2_000
-        console.log(timeToRefresh);
-        if (timeToRefresh || anyDataMissing(currentPage, pageSize)) {
-            setLastRequestTime(new Date());
-            requestPage(currentPage, pageSize, gatherRequirements(tableFilter, tableSort));
-        }
-    }, [requestPage, currentPage, pageSize, tableFilter, tableSort, lastRequestTime, anyDataMissing])
+        requestPage(currentPage, pageSize, gatherRequirements(tableFilter, tableSort));
+    }, [requestPage, currentPage, pageSize, tableFilter, tableSort])
 
-    useEffect(() => {
-        const interval = setInterval(refresh, 500);
-        return () => clearInterval(interval);
-    }, [refresh]);
-
+    useInterval(refresh, 1_000);
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setCurrentPage(newPage);
@@ -112,7 +95,6 @@ export default function PaginatedTable(props: PaginatedTableProps) {
         else if (sort === false) next[col.sortId] = "asc";
         setTableSort(next);
         clearData();
-        setLastRequestTime(new Date());
         requestPage(currentPage, pageSize, gatherRequirements(tableFilter, next))
     };
 
@@ -127,7 +109,6 @@ export default function PaginatedTable(props: PaginatedTableProps) {
         };
         setTableFilter(next);
         clearData();
-        setLastRequestTime(new Date());
         requestPage(currentPage, pageSize, gatherRequirements(next, tableSort));
     };
 
