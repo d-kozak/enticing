@@ -13,14 +13,14 @@ export interface ComponentInfo {
     logs: PaginatedCollection<LogDto>
 }
 
-export type ComponentKeys = keyof typeof ComponentType;
-
 export enum ComponentType {
     WEBSERVER,
     INDEX_SERVER,
     INDEX_BUILDER,
     CONSOLE_CLIENT
 }
+
+export type ComponentKeys = keyof typeof ComponentType;
 
 export function isComponentProbablyDead(component: ComponentInfo, limitSecond: number = 30): boolean {
     const prev = new Date(Date.now() - limitSecond * 1000);
