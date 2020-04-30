@@ -1,3 +1,7 @@
+function withLeadingZero(x: number): string {
+    return x < 10 ? '0' + x : x.toString();
+}
+
 function parseDate(date: Date | string | null): Date | null {
     if (!date) return null;
     if (typeof date === "string")
@@ -14,8 +18,7 @@ export function dateTimeToString(date: Date | string | null): string {
 export function timeToString(date: Date | string | null): string {
     date = parseDate(date);
     if (!date) return "";
-    const minutes = date.getMinutes();
-    return `${date.getHours()}:${minutes < 10 ? '0' + minutes : minutes}:${date.getSeconds()}`;
+    return `${date.getHours()}:${withLeadingZero(date.getMinutes())}:${withLeadingZero(date.getSeconds())}`;
 }
 
 export function dateToString(date: Date | string | null): string {
