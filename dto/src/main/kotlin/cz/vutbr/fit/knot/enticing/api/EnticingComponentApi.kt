@@ -32,7 +32,7 @@ open class EnticingComponentApi(loggerFactory: LoggerFactory) {
             logger.error("Failed to submit message ${result.error.exception::class} ${result.error.exception.message}")
             result.error.exception.printStackTrace()
             null
-        } else result.component1()?.toDto<T>()
+        } else result.component1()?.toDto<T>() // todo do not parse Unit
     }
 
     fun ping(address: ComponentAddress): StaticServerInfo? {

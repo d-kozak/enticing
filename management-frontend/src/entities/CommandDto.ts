@@ -1,4 +1,6 @@
 // todo dates have to be parsed manually
+import {ComponentKeys} from "./ComponentInfo";
+
 export interface CommandDto {
     id: string
     type: CommandType,
@@ -26,6 +28,18 @@ export enum CommandType {
 }
 
 export type CommandKeys = keyof typeof CommandType;
+
+export function startCommandFor(type: ComponentKeys): CommandKeys {
+    switch (type) {
+        case "WEBSERVER":
+            return CommandType[CommandType.START_WEBSERVER] as CommandKeys;
+        case "INDEX_SERVER":
+            return CommandType[CommandType.START_INDEX_SERVER] as CommandKeys;
+        default:
+            throw new Error(`wrong component type ${type}`);
+    }
+}
+
 
 export enum CommandState {
     ENQUED,

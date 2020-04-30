@@ -24,6 +24,9 @@ class ServerInfoController(
     @GetMapping("/{serverId}/component")
     fun getComponents(@PathVariable serverId: Long, pageable: Pageable) = componentService.getComponentsOnServer(serverId, pageable)
 
+    @GetMapping("/{serverId}/component/{componentId}/ping")
+    fun pingComponent(@PathVariable componentId: Long) = componentService.pingComponent(componentId)
+
     @GetMapping("/{serverId}/stats")
     fun getStats(@PathVariable serverId: Long, pageable: Pageable) = serverInfoService.getLastStats(serverId, pageable)
 

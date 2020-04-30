@@ -41,7 +41,7 @@ class DashboardService(
 
     private fun componentInfo(): DashboardComponentsInfo {
         val total = componentRepository.count().toInt()
-        val unresponsive = componentRepository.findByLastHeartbeatBefore(LocalDateTime.now().minusMinutes(2)).map { it.toComponentInfo() }
+        val unresponsive = componentRepository.findByLastHeartbeatBefore(LocalDateTime.now().minusSeconds(30)).map { it.toComponentInfo() }
         return DashboardComponentsInfo(total, unresponsive)
     }
 

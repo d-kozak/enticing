@@ -1,5 +1,7 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.service
 
+import cz.vutbr.fit.knot.enticing.api.EnticingComponentApi
+import cz.vutbr.fit.knot.enticing.dto.toComponentAddress
 import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.CommandRequest
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.CommandType
@@ -9,6 +11,7 @@ import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toComponen
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ComponentRepository
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.LogRepository
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.PerfRepository
+import cz.vutbr.fit.knot.enticing.mx.StaticServerInfo
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
@@ -21,7 +24,8 @@ class ComponentService(
         private val commandService: CommandService,
         private val componentRepository: ComponentRepository,
         private val logRepository: LogRepository,
-        private val perfRepository: PerfRepository
+        private val perfRepository: PerfRepository,
+        private val componentApi: EnticingComponentApi
 ) {
 
     fun deleteComponent(component: ComponentEntity): ComponentInfo {
@@ -53,5 +57,10 @@ class ComponentService(
         val component = componentRepository.findByIdOrNull(componentId)
                 ?: throw IllegalArgumentException("No component with id $componentId")
         return deleteComponent(component)
+    }
+
+    fun pingComponent(componentId: Long): StaticServerInfo? {
+        val component = requireNotNull(componentRepository.findByIdOrNull(componentId)) { "component with id $componentId not found" }
+        return componentApi.ping(component.fullAddress.toComponentAddress())
     }
 }

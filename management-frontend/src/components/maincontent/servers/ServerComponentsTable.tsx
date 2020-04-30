@@ -2,13 +2,7 @@ import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import React from "react";
 import PaginatedTable from "../../pagination/PaginatedTable";
-import {
-    CustomColumn,
-    DateTimeColumn,
-    IntColumn,
-    PaginatedTableColumn,
-    StringColumn
-} from "../../pagination/PaginatedTableColumn"
+import {CustomColumn, IntColumn, PaginatedTableColumn, StringColumn} from "../../pagination/PaginatedTableColumn"
 import {addComponentsToServer, clearComponentsFromServer} from "../../../reducers/serversReducer";
 import {getRequest} from "../../../network/requests";
 import {PaginatedResult} from "../../../entities/pagination";
@@ -16,6 +10,7 @@ import {IconButton, Tooltip} from "@material-ui/core";
 import {useHistory} from "react-router";
 import InfoIcon from "@material-ui/icons/Info";
 import {ComponentInfo} from "../../../entities/ComponentInfo";
+import {LastHeartbeatColumn} from "../components/LastHeartbeatColumn";
 
 type SimpleProps = {
     serverId: string
@@ -45,7 +40,7 @@ const ServerComponentsTable = (props: ServerComponentsTableProps) => {
     const columns: Array<PaginatedTableColumn<any, any>> = [
         IntColumn("port", "Port", {sortId: "port"}),
         StringColumn("type", "Component Type", {sortId: "type"}),
-        DateTimeColumn("lastHeartbeat", "Last heartbeat", {sortId: "lastHeartbeat"}),
+        LastHeartbeatColumn("lastHeartbeat", "Last heartbeat", {sortId: "lastHeartbeat"}),
         CustomColumn<ComponentInfo, undefined>("componentDetails", "Component Details",
             (prop, component) => <Tooltip title="Component details">
                 <IconButton onClick={() => history.push(`/component/${component.id}`)}>

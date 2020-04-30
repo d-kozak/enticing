@@ -2,7 +2,7 @@ import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import React, {useCallback} from 'react';
 import {useHistory} from "react-router";
-import {CircularProgress, Divider, List, ListItem, ListItemText, Typography} from "@material-ui/core";
+import {CircularProgress, Divider, List, ListItem, ListItemText, ListSubheader, Typography} from "@material-ui/core";
 import {requestComponentInfo} from "../../../reducers/componentsReducer";
 import {requestServerInfo} from "../../../reducers/serversReducer";
 import ComponentLogsTable from "./ComponentLogsTable";
@@ -10,8 +10,8 @@ import {BackButton} from "../../button/BackButton";
 import {Centered} from "../../Centered";
 import KillComponentDialog from "./KillComponentDialog";
 import MaintainerOnly from "../../protectors/MaintainerOnly";
-import {dateTimeToString} from "../../utils/dateUtils";
 import {useInterval} from "../../../utils/useInterval";
+import LastheartbeatInfo from "./LastheartbeatInfo";
 
 
 export type ComponentDetailsProps = typeof mapDispatchToProps
@@ -41,7 +41,7 @@ const ComponentDetails = (props: ComponentDetailsProps) => {
         <BackButton/>
         <Typography variant="h3">Component details</Typography>
         <Divider/>
-        <List component="nav">
+        <List component="nav" subheader={<ListSubheader component="div">General info</ListSubheader>}>
             <ListItem button onClick={() => history.push(`/server/${server.id}`)}>
                 <ListItemText primary={`Server: ${server.address}`}/>
             </ListItem>
@@ -53,24 +53,22 @@ const ComponentDetails = (props: ComponentDetailsProps) => {
             </ListItem>
         </List>
         <Divider/>
-        <List component="nav">
+        <List component="nav" subheader={<ListSubheader component="div">Last heartbeat</ListSubheader>}>
             <ListItem>
-                <ListItemText primary={`Last heartbeat: ${dateTimeToString(component.lastHeartbeat)}`}/>
+                <LastheartbeatInfo component={component}/>
             </ListItem>
         </List>
         <Divider/>
         <MaintainerOnly>
-            <List component="nav">
+            <List component="nav" subheader={<ListSubheader component="div">Actions</ListSubheader>}>
                 <ListItem>
                     <KillComponentDialog component={component}/>
                 </ListItem>
             </List>
             <Divider/>
         </MaintainerOnly>
-        <List component="nav">
-            <ListItem>
-                <ListItemText primary={`Logs`}/>
-            </ListItem>
+        <List component="nav" subheader={<ListSubheader component="div">Logs</ListSubheader>}>
+
         </List>
         <ComponentLogsTable componentId={componentId}/>
     </div>

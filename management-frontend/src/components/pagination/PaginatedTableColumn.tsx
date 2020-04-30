@@ -13,76 +13,76 @@ export interface PaginatedTableColumn<ItemType, ColType> {
     sortId?: string,
     filterOptions?: Array<string>,
 
-    renderContent(property: ColType, item: ItemType): string
+    renderContent(property: ColType, item: ItemType): any
 }
 
-interface ExtraParams {
+export interface ExtraColumnParams {
     align: AlignOptions
     sortId: string
     filterOptions: Array<string>
 }
 
-const defaults = {
+export const ExtraColumnParamsDefaults = {
     align: "right" as AlignOptions
 }
 
 
-export function CustomColumn<ItemType, ColType>(id: string, label: string, renderContent: (property: ColType, item: ItemType) => any, extra?: Partial<ExtraParams>): PaginatedTableColumn<ItemType, ColType> {
+export function CustomColumn<ItemType, ColType>(id: string, label: string, renderContent: (property: ColType, item: ItemType) => any, extra?: Partial<ExtraColumnParams>): PaginatedTableColumn<ItemType, ColType> {
     return {
         type: "custom",
         id,
         label,
         renderContent,
-        ...defaults,
+        ...ExtraColumnParamsDefaults,
         ...extra,
     }
 }
 
-export function IntColumn(id: string, label: string, extra?: Partial<ExtraParams>): PaginatedTableColumn<any, number> {
+export function IntColumn(id: string, label: string, extra?: Partial<ExtraColumnParams>): PaginatedTableColumn<any, number> {
     const renderContent = (input: number) => input.toString()
     return {
         type: "int",
         id,
         label,
         renderContent,
-        ...defaults,
+        ...ExtraColumnParamsDefaults,
         ...extra,
     }
 }
 
 
-export function FloatColumn(id: string, label: string, extra?: Partial<ExtraParams>): PaginatedTableColumn<any, number> {
+export function FloatColumn(id: string, label: string, extra?: Partial<ExtraColumnParams>): PaginatedTableColumn<any, number> {
     const renderContent = (input: number) => input.toFixed(2);
     return {
         type: "float",
         id,
         label,
         renderContent,
-        ...defaults,
+        ...ExtraColumnParamsDefaults,
         ...extra,
     }
 }
 
-export function StringColumn(id: string, label: string, extra?: Partial<ExtraParams>): PaginatedTableColumn<any, string> {
+export function StringColumn(id: string, label: string, extra?: Partial<ExtraColumnParams>): PaginatedTableColumn<any, string> {
     const renderContent = (input: string) => input;
     return {
         type: "string",
         id,
         label,
         renderContent,
-        ...defaults,
+        ...ExtraColumnParamsDefaults,
         ...extra,
     }
 }
 
-export function DateTimeColumn(id: string, label: string, extra?: Partial<ExtraParams>): PaginatedTableColumn<any, Date | null> {
+export function DateTimeColumn(id: string, label: string, extra?: Partial<ExtraColumnParams>): PaginatedTableColumn<any, Date | null> {
     const renderContent = (date: Date | null) => date != null ? dateTimeToString(new Date(date)) : "";
     return {
         type: "date",
         id,
         label,
         renderContent,
-        ...defaults,
+        ...ExtraColumnParamsDefaults,
         ...extra,
     }
 }
