@@ -1,0 +1,1 @@
+zip -r xkozak15.zip doc.html management-core/src management-core/build.gradle management-service/src management-service/build.gradle management-frontend/src management-frontend/build.gradle build.gradle settings.gradle bin/management-service
