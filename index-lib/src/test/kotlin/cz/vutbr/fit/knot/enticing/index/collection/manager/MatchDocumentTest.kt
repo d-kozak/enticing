@@ -469,6 +469,19 @@ class MatchDocumentTest {
             assertThat(result.intervals).hasSize(3)
         }
 
+        @Test
+        @DisplayName("person.name:John person.name:John")
+        fun `without global constraints using nertag column`() {
+            val document = TestDocument(100)
+
+            document["nertag"][3] = "person"
+            document["nertag"][7] = "person"
+
+
+            val result = queryExecutor.doMatch("nertag:person nertag:person", document)
+            assertThat(result.intervals).hasSize(3)
+        }
+
 
         @Test
         @DisplayName("a:=person.name:John b:=person.name:John && a.url != b.url")
