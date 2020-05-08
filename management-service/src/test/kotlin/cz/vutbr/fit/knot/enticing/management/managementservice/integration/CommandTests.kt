@@ -27,7 +27,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import java.lang.Thread.sleep
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
@@ -73,7 +72,6 @@ class CommandTests {
                 .toDto<CommandDto>()
         println(command)
 
-        sleep(5_000)
         commandRepository.deleteAll()
     }
 }
