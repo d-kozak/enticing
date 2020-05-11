@@ -3,19 +3,19 @@ Picasso < visited < Paris
 "Picasso visited Paris"
 Picasso visited Paris ctx:par
 Picasso visited Paris ctx:sent
-Picasso ( visited | explored )  Paris ctx:sent
-Picasso ( lemma:visit | lemma:explore )  Paris ctx:sent
-Picasso lemma:(visit|explore) Paris ctx:sent
-nertag:person^(person.name:Picasso) lemma:(visit|explore) Paris ctx:sent
-nertag:person^(person.name:Picasso) lemma:(visit|explore)  nertag:location^(location.name:Paris) ctx:sent
-nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < nertag:(person|artist) ctx:par
-influencer:=nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < influencee:=nertag:(person|artist) ctx:par && influencer.url != influencee.url
-a:=nertag:(person|artist) < lemma:visit < b:=nertag:(person|artist) nertag:location^location.name:Barcelona nertag:event^event.startdate:1/1/1960 ctx:par && a.url != b.url
+Picasso (visited | explored) Paris ctx:sent
+Picasso (lemma:visit | lemma:explore) Paris ctx:sent
+Picasso lemma:(visit | explore) Paris ctx:sent
+nertag:person ^ (person.name:Picasso) lemma:(visit | explore) Paris ctx:sent
+nertag:person ^ (person.name:Picasso) lemma:(visit | explore) nertag:location ^ (location.name:Paris) ctx:sent
+nertag:(person | artist) < (lemma:(influence | impact) | (lemma:paid < lemma:tribute)) < nertag:(person | artist) ctx:par
+influencer:=nertag:(person | artist) < (lemma:(influence | impact) | (lemma:paid < lemma:tribute)) < influencee:=nertag:(person | artist) ctx:par && influencer.url != influencee.url
+a:=nertag:(person | artist) < lemma:visit < b:=nertag:(person | artist) nertag:location ^ location.name:Barcelona nertag:event ^ event.startdate:1/1/1960 ctx:par && a.url != b.url
 (A B) ~ 5
-(A | B) & C
+(A | B) C
 nertag:person ^ person.birthplace:Brno
-Picasso visited | explored  Paris ctx:sent
-(Picasso visited) | (explored  Paris) ctx:sent
+Picasso visited | explored Paris ctx:sent
+(Picasso visited) | (explored Paris) ctx:sent
 
 # Valid EQL queries that should be parsed without problems
 
@@ -26,10 +26,10 @@ nertag:person
 your mum
 New York
 Donald Trump
-nertag:person (visited|entered)
+nertag:person (visited | entered)
 person.name:John
-person & name
-person name !(age|birthdate)
+person name
+person name !(age | birthdate)
 
 
 
@@ -40,8 +40,8 @@ john:=person.name:John rupert:=person.name:Rupert && john.birthdate != rupert.bi
 1:=person.name:John 2:=person.name:Rupert && 1.url != 2.url
 
 ## Align
-(one ^ two ) | (three ^ four)
-(one ^ two ) | three ^ four
+(one ^ two) | (three ^ four)
+(one ^ two) | three ^ four
 one ^ two < three ^ four
 (one ^ two) < (three ^ four)
 
@@ -54,7 +54,7 @@ pepa:=nertag:person ^ person.name:pepa
 
 1:=person.name:John 2:=person.name:Rupert 3:=location.name:Barcelona && (1.url != 2.url) | !(3.name = 1.name)
 
-(happy < cow & milk) | meat
+(happy < cow milk) | meat
 
 (letter ink) ~ 3
 letter ink

@@ -6,3 +6,5 @@ import cz.vutbr.fit.knot.enticing.dto.config.executeScript
 
 val loadedConfiguration = executeScript<EnticingConfiguration>("../dto/src/test/resources/config.kts")
         .validateOrFail()
+
+val metadataConfiguration = loadedConfiguration.corpuses.getValue("wiki-2018").metadataConfiguration

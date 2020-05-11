@@ -74,8 +74,8 @@ internal val config = metadataConfiguration {
         extraAttributes("nertype", "nerlength")
     }
 }.also {
-            it.validateOrFail()
-        }.toCorpusFormat()
+    it.validateOrFail()
+}.toCorpusFormat()
         .toMetadataConfiguration() // "double transform" it to ensure all important data is still there
 
 fun assertHasError(errors: List<CompilerError>, id: String, count: Int = 1, location: Interval? = null) {
@@ -126,7 +126,37 @@ class AllChecksTest {
         fun `more complex`() {
             val (tree, errors) = compiler.parseAndAnalyzeQuery("nertag:person (visited|entered) context:sentence", config)
             assertThat(errors).isEmpty()
+            assertThat(tree).isEqualTo(RootNode(
+                    QueryElemNode.BooleanNode(
+                            mutableListOf(
+                                    QueryElemNode.IndexNode("nertag", QueryElemNode.SimpleNode("person", SimpleQueryType.STRING, Interval.valueOf(7, 12)), Interval.valueOf(0, 12)),
+                                    QueryElemNode.ParenNode(
+                                            QueryElemNode.BooleanNode(mutableListOf(
+                                                    QueryElemNode.SimpleNode("visited", SimpleQueryType.STRING, Interval.valueOf(15, 21)),
+                                                    QueryElemNode.SimpleNode("entered", SimpleQueryType.STRING, Interval.valueOf(23, 29))), BooleanOperator.OR, null, Interval.valueOf(15, 29)), null, Interval.valueOf(14, 30)))
+                            , BooleanOperator.AND, null, Interval.valueOf(0, 47)), null, Interval.valueOf(0, 47)))
+        }
+
+        @Test
+        @DisplayName("not_related letter ink ~ 3")
+        fun `with inner proximity restriction`() {
+            val (tree, errors) = compiler.parseAndAnalyzeQuery("not_related letter ink ~ 3", config)
+            assertThat(errors).isEmpty()
             println((tree as EqlAstNode).accept(AstDefinitionsGeneratingVisitor()))
+            assertThat(tree).isEqualTo(
+                    RootNode(
+                            QueryElemNode.BooleanNode(
+                                    mutableListOf(
+                                            QueryElemNode.SimpleNode("not_related", SimpleQueryType.STRING, Interval.valueOf(0, 10)),
+                                            QueryElemNode.BooleanNode(mutableListOf(
+                                                    QueryElemNode.SimpleNode("letter", SimpleQueryType.STRING, Interval.valueOf(12, 17)),
+                                                    QueryElemNode.SimpleNode("ink", SimpleQueryType.STRING, Interval.valueOf(19, 21))),
+                                                    BooleanOperator.AND,
+                                                    ProximityRestrictionNode("3", Interval.valueOf(23, 25)),
+                                                    Interval.valueOf(12, 25)
+                                            )),
+                                    BooleanOperator.AND, null, Interval.valueOf(0, 25)
+                            ), null, Interval.valueOf(0, 25)))
         }
     }
 

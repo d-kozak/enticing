@@ -14,7 +14,7 @@ class FlattenBooleanOperationsCheck(id: String) : EqlAstCheck<QueryElemNode.Bool
         fun flatten(node: QueryElemNode.BooleanNode) {
             for (i in node.children.indices.reversed()) {
                 val child = node.children[i]
-                if (child is QueryElemNode.BooleanNode && child.operator == operator) {
+                if (child is QueryElemNode.BooleanNode && child.operator == operator && child.restriction == null) {
                     flatten(child)
                     node.children.removeAt(i)
                     node.children.addAll(i, child.children)

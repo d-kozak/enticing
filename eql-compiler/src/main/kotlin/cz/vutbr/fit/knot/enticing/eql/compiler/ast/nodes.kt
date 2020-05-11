@@ -190,8 +190,8 @@ enum class SimpleQueryType {
 }
 
 @Cleanup("actually only EQ and NE should be enough")
-enum class RelationalOperator {
-    EQ, NE, LT, LE, GT, GE;
+enum class RelationalOperator(val mg4jValue: String) {
+    EQ("="), NE("!="), LT("<"), LE("<="), GT(">"), GE(">=");
 }
 
 enum class BooleanOperator(val mg4jValue: String) {
