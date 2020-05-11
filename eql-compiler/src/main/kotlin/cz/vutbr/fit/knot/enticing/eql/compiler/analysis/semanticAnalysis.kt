@@ -10,15 +10,20 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.AgregatingListener
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.CompilerError
 
 val FIRST_PASS = listOf(
+        RemoveRedundantBracketsCheck("RBRAC-1")
+)
+
+val SECOND_PASS = listOf(
         FlattenBooleanOperationsCheck("BOOL-1")
 )
 
-val SECOND_PASS: List<EqlAstCheck<*>> = listOf(
+val THIRD_PASS: List<EqlAstCheck<*>> = listOf(
         RewriteContextRestrictionCheck("CTX-1"),
-        RewriteDocumentRestrictionCheck("DOC-1")
+        RewriteDocumentRestrictionCheck("DOC-1"),
+        RemoveRedundantOrBranchesCheck("ROR-1")
 )
 
-val THIRD_PASS = listOf(
+val FOURTH_PASS = listOf(
         ProximityNumberCheck("PROX-1"),
         BasicIndexCheck("IND-1"),
         NestedIndexCheck("IND-2"),
@@ -31,7 +36,7 @@ val THIRD_PASS = listOf(
 )
 
 
-class SemanticAnalyzer(private val config: MetadataConfiguration, checks: List<List<EqlAstCheck<*>>> = listOf(FIRST_PASS, SECOND_PASS, THIRD_PASS)) {
+class SemanticAnalyzer(private val config: MetadataConfiguration, checks: List<List<EqlAstCheck<*>>> = listOf(FIRST_PASS, SECOND_PASS, THIRD_PASS, FOURTH_PASS)) {
 
     private val checksByType = checks.map { it.groupBy { it.clazz } }
 

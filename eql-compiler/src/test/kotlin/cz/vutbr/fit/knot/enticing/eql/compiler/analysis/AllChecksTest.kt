@@ -8,6 +8,7 @@ import cz.vutbr.fit.knot.enticing.dto.toMetadataConfiguration
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.*
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor.AstDefinitionsGeneratingVisitor
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor.toEqlQuery
 import cz.vutbr.fit.knot.enticing.eql.compiler.forEachQuery
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.CompilerError
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.SemanticError
@@ -351,4 +352,95 @@ class AllChecksTest {
         }
     }
 
+    @Nested
+    inner class RemoveRedundantBrackets {
+
+        @Test
+        @DisplayName("(a)")
+        fun t1() {
+            assertTransformation("(a)", "a")
+        }
+
+        @Test
+        @DisplayName("(a b c)")
+        fun t2() {
+            assertTransformation("(a b c)", "a b c")
+        }
+
+        @Test
+        @DisplayName("((a b) c)")
+        fun t3() {
+            assertTransformation("((a b) c)", "a b c")
+        }
+
+        @Test
+        @DisplayName("(a b c)")
+        fun t4() {
+            assertTransformation("(a b c)", "a b c")
+        }
+
+        @Test
+        @DisplayName("((((((a) (b))) ((c)))))")
+        fun t5() {
+            assertTransformation("((((((a) (b))) ((c)))))", "a b c")
+        }
+
+        @Test
+        @DisplayName("(a b c) | (d e f)")
+        fun t6() {
+            assertTransformation("(a b c) | (d e f)", "(a b c) | (d e f)")
+        }
+
+        @Test
+        @DisplayName("((a c) < (b))")
+        fun t7() {
+            assertTransformation("((a c) < (b))", "(a c) < b")
+        }
+
+        @Test
+        @DisplayName("(((a)))")
+        fun t8() {
+            assertTransformation("(((a)))", "a")
+        }
+
+
+        @Test
+        @DisplayName("((a b) ~ 3 c)")
+        fun t9() {
+            assertTransformation("((a b) ~ 3 c)", "(a b) ~ 3 c")
+        }
+
+        @Test
+        @DisplayName("(((a b) < (c)) < (d (e)))")
+        fun t10() {
+            assertTransformation("(((a b) < (c)) < (d (e)))", "(a b) < c < (d e)")
+        }
+    }
+
+    @Nested
+    inner class OrSimplification {
+
+
+        @Test
+        @DisplayName("dog | dog | dog")
+        fun t1() {
+            assertTransformation("dog | dog | dog", "dog")
+        }
+
+        @Test
+        @DisplayName("((a | b < c & d) | (alpha beta) | aplha | (b | b) | ((a | b < c & d)) )")
+        fun t2() {
+            assertTransformation("((a | b < c & d) | (alpha beta) | alpha | (b | b) | ((a | b < c & d)) )",
+                    "a | b < c d | (alpha beta) | alpha | b"
+            )
+        }
+
+
+    }
+
+    private fun assertTransformation(input: String, target: String) {
+        val ast = compiler.parseOrFail(input, config) as EqlAstNode
+        println(ast.toMgj4Query())
+        assertThat(ast.toEqlQuery()).isEqualTo(target)
+    }
 }

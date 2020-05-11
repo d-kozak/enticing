@@ -64,7 +64,7 @@ interface EqlVisitor<T> {
 
 }
 
-data class RootNode(val query: QueryElemNode, val constraint: ConstraintNode?, override val location: Interval) : EqlAstNode() {
+data class RootNode(var query: QueryElemNode, val constraint: ConstraintNode?, override val location: Interval) : EqlAstNode() {
     var symbolTable: MutableMap<String, QueryElemNode.AssignNode>? = null
     var contextRestriction: ContextRestriction? = null
     var documentRestriction: DocumentRestriction? = null
@@ -123,7 +123,7 @@ sealed class QueryElemNode : EqlAstNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemAttributeNode(this)
     }
 
-    data class ParenNode(val query: QueryElemNode, val restriction: ProximityRestrictionNode?, override val location: Interval) : QueryElemNode() {
+    data class ParenNode(var query: QueryElemNode, val restriction: ProximityRestrictionNode?, override val location: Interval) : QueryElemNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemParenNode(this)
     }
 
@@ -131,7 +131,7 @@ sealed class QueryElemNode : EqlAstNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemBooleanNode(this)
     }
 
-    data class OrderNode(val left: QueryElemNode, val right: QueryElemNode, val restriction: ProximityRestrictionNode?, override val location: Interval) : QueryElemNode() {
+    data class OrderNode(var left: QueryElemNode, var right: QueryElemNode, val restriction: ProximityRestrictionNode?, override val location: Interval) : QueryElemNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemOrderNode(this)
     }
 
