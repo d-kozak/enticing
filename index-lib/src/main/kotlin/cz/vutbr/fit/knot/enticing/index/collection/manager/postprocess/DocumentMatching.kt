@@ -1,7 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess
 
 import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
-import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.dto.interval.substring
@@ -81,13 +80,13 @@ internal fun evaluateQuery(ast: EqlAstNode, document: IndexedDocument, defaultIn
 
     val tokenIndex = metadataConfiguration.indexOf("token")
 
-    val paragraphs = mutableSetOf<Int>()
-    val sentences = mutableSetOf<Int>()
+    val paragraphs = mutableListOf<Int>()
+    val sentences = mutableListOf<Int>()
 
     for ((i, word) in words.withIndex()) {
         for ((j, value) in word.withIndex()) {
             for (node in nodesByIndex[j]) {
-                node.checkWord(interval.from + i, value)
+                node.checkWord(interval.from + i, value.toLowerCase())
             }
 
             if (word[tokenIndex] == IndexedDocument.PARAGRAPH_MARK) paragraphs.add(interval.from + i)
@@ -98,7 +97,6 @@ internal fun evaluateQuery(ast: EqlAstNode, document: IndexedDocument, defaultIn
     return ast.accept(DocumentMatchingVisitor(document, metadataConfiguration, paragraphs, sentences))
 }
 
-@WhatIf("make sure we are case insensitive - should happen before when transforming the AST")
 private fun QueryElemNode.SimpleNode.checkWord(index: Int, value: String) {
     val match = if (this.content.endsWith("*")) {
         value.startsWith(this.content.substring(0, this.content.length - 1))

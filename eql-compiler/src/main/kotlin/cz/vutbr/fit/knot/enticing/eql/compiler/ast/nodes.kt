@@ -105,7 +105,7 @@ sealed class QueryElemNode : EqlAstNode() {
         var matchInfoIndex: Int = -1
     }
 
-    data class SimpleNode(val content: String, val type: SimpleQueryType, override val location: Interval) : QueryElemNode() {
+    data class SimpleNode(var content: String, val type: SimpleQueryType, override val location: Interval) : QueryElemNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemSimpleNode(this)
     }
 

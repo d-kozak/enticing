@@ -22,7 +22,7 @@ class EqlQueryGeneratingVisitorTest {
         val transformed = queries.map { compiler.parseOrFail(it, metadataConfiguration) as EqlAstNode }
                 .map { it.toEqlQuery() }
 
-        assertThat(transformed).isEqualTo(queries)
+        assertThat(transformed).isEqualTo(queries.map { it.toLowerCase() })
     }
 
     private fun assertTransformation(query: String) {

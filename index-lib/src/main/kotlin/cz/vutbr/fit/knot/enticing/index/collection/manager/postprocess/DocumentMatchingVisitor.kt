@@ -11,7 +11,11 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.matching.EqlMatchType
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import kotlin.math.abs
 
-class DocumentMatchingVisitor(val document: IndexedDocument, val metadataConfiguration: MetadataConfiguration, val paragraphs: Set<Int>, val sentences: Set<Int>) : EqlVisitor<Sequence<DocumentMatch>> {
+class DocumentMatchingVisitor(
+        val document: IndexedDocument,
+        val metadataConfiguration: MetadataConfiguration,
+        val paragraphs: List<Int>,
+        val sentences: List<Int>) : EqlVisitor<Sequence<DocumentMatch>> {
 
     @Cleanup("too much dependent on the special index names?")
     private val neridIndex = metadataConfiguration.indexOf("nerid")
@@ -29,9 +33,10 @@ class DocumentMatchingVisitor(val document: IndexedDocument, val metadataConfigu
         }
         return sequence {
             loop@ for (match in query) {
-                for (i in match.interval)
-                    if (i in forbiddenMarks) continue@loop
-                yield(match)
+                val left = forbiddenMarks.binarySearch(match.interval.from)
+                val right = forbiddenMarks.binarySearch(match.interval.to)
+                if(left < 0 && left == right)
+                    yield(match)
             }
         }
     }

@@ -32,7 +32,7 @@ internal class Mgj4QueryGeneratingVisitorTest {
         fun url() {
             val (ast, errors) = compiler.parseAndAnalyzeQuery("person.url:'https://en.wikipedia.org/wiki/Bertrand_de_Turre'", config)
             assertThat(errors).isEmpty()
-            assertThat(ast.toMgj4Query()).isEqualTo("""((nertag:person{{nertag->token}}) ^ (param0:(https\://en.wikipedia.org/wiki/Bertrand_de_Turre){{param0->token}}))""")
+            assertThat(ast.toMgj4Query()).isEqualTo("""((nertag:person{{nertag->token}}) ^ (param0:(https\://en.wikipedia.org/wiki/bertrand_de_turre){{param0->token}}))""")
         }
     }
 
@@ -45,7 +45,7 @@ internal class Mgj4QueryGeneratingVisitorTest {
         fun `Query 1`() {
             val (ast, errors) = compiler.parseAndAnalyzeQuery("Picasso visited Paris", config)
             assertThat(errors).isEmpty()
-            assertThat(ast.toMgj4Query()).isEqualTo("(Picasso & visited & Paris)")
+            assertThat(ast.toMgj4Query()).isEqualTo("(picasso & visited & paris)")
 
         }
 
@@ -54,7 +54,7 @@ internal class Mgj4QueryGeneratingVisitorTest {
         fun `Query 2`() {
             val (ast, errors) = compiler.parseAndAnalyzeQuery("Picasso < visited < Paris", config)
             assertThat(errors).isEmpty()
-            assertThat(ast.toMgj4Query()).isEqualTo("(Picasso < (visited < Paris))")
+            assertThat(ast.toMgj4Query()).isEqualTo("(picasso < (visited < paris))")
         }
 
         @Test
@@ -62,7 +62,7 @@ internal class Mgj4QueryGeneratingVisitorTest {
         fun `Query 4`() {
             val (ast, errors) = compiler.parseAndAnalyzeQuery("(Picasso visited Paris) ctx:par", config)
             assertThat(errors).isEmpty()
-            assertThat(ast.toMgj4Query()).isEqualTo("((((Picasso & visited & Paris)))  - §)")
+            assertThat(ast.toMgj4Query()).isEqualTo("(((picasso & visited & paris))  - §)")
         }
 
 
@@ -71,7 +71,7 @@ internal class Mgj4QueryGeneratingVisitorTest {
         fun `Query 5`() {
             val (ast, errors) = compiler.parseAndAnalyzeQuery("(Picasso visited Paris) ctx:sent", config)
             assertThat(errors).isEmpty()
-            assertThat(ast.toMgj4Query()).isEqualTo("((((Picasso & visited & Paris)))  - ¶)")
+            assertThat(ast.toMgj4Query()).isEqualTo("(((picasso & visited & paris))  - ¶)")
         }
 
         @Test
@@ -79,7 +79,7 @@ internal class Mgj4QueryGeneratingVisitorTest {
         fun `Query 9`() {
             val (ast, errors) = compiler.parseAndAnalyzeQuery("(person.name:Picasso lemma:(visit|explore) Paris) ctx:sent", config)
             assertThat(errors).isEmpty()
-            assertThat(ast.toMgj4Query()).isEqualTo("((((((nertag:person{{nertag->token}}) ^ (param2:(Picasso){{param2->token}})) & (lemma:((visit | explore)){{lemma->token}}) & Paris)))  - ¶)")
+            assertThat(ast.toMgj4Query()).isEqualTo("(((((nertag:person{{nertag->token}}) ^ (param2:(picasso){{param2->token}})) & (lemma:((visit | explore)){{lemma->token}}) & paris))  - ¶)")
         }
 
         @Test
@@ -87,7 +87,7 @@ internal class Mgj4QueryGeneratingVisitorTest {
         fun `Query 10`() {
             val (ast, errors) = compiler.parseAndAnalyzeQuery("(person.name:Picasso lemma:(visit|explore)  location.name:Paris) context:sentence", config)
             assertThat(errors).isEmpty()
-            assertThat(ast.toMgj4Query()).isEqualTo("((((((nertag:person{{nertag->token}}) ^ (param2:(Picasso){{param2->token}})) & (lemma:((visit | explore)){{lemma->token}}) & ((nertag:location{{nertag->token}}) ^ (param2:(Paris){{param2->token}})))))  - ¶)")
+            assertThat(ast.toMgj4Query()).isEqualTo("(((((nertag:person{{nertag->token}}) ^ (param2:(picasso){{param2->token}})) & (lemma:((visit | explore)){{lemma->token}}) & ((nertag:location{{nertag->token}}) ^ (param2:(paris){{param2->token}}))))  - ¶)")
         }
 
 

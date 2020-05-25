@@ -9,7 +9,13 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.ast.RootNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.AgregatingListener
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.CompilerError
 
+val REWRITES = listOf(
+        RewriteContextRestrictionCheck("CTX-1"),
+        RewriteDocumentRestrictionCheck("DOC-1")
+)
+
 val FIRST_PASS = listOf(
+        SimpleNodeCheck("SN-1"),
         RemoveRedundantBracketsCheck("RBRAC-1")
 )
 
@@ -35,8 +41,11 @@ val FOURTH_PASS = listOf(
         ComparisonCheck("COP-1")
 )
 
+val CLEANUP = listOf(
+        AddNecessaryBracketsToBooleanNodeCheck("BRAC_CLEAN-1")
+)
 
-class SemanticAnalyzer(private val config: MetadataConfiguration, checks: List<List<EqlAstCheck<*>>> = listOf(FIRST_PASS, SECOND_PASS, THIRD_PASS, FOURTH_PASS)) {
+class SemanticAnalyzer(private val config: MetadataConfiguration, checks: List<List<EqlAstCheck<*>>> = listOf(REWRITES, FIRST_PASS, SECOND_PASS, THIRD_PASS, FOURTH_PASS, CLEANUP)) {
 
     private val checksByType = checks.map { it.groupBy { it.clazz } }
 
