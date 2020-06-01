@@ -161,7 +161,7 @@ data class Requirements(
     var sentenceLimit: Boolean = true
 
     fun highlights(vararg words: String, sentenceLimit: Boolean = false) {
-        this.highlights.addAll(words)
+        this.highlights.addAll(words.map { it.toLowerCase() })
         this.sentenceLimit = sentenceLimit
     }
 
@@ -228,10 +228,12 @@ class DocumentChecker(val result: IndexServer.SearchResult, val requirements: Re
         minHighlightIndex = min(minHighlightIndex, i)
         maxHighlightIndex = max(maxHighlightIndex, i)
 
-        for (unit in queue) {
-            when (unit) {
+        while (queue.isNotEmpty()) {
+            when (val unit = queue.removeFirst()) {
                 is TextUnit.Word -> {
-                    if (!highlights.remove(unit.token)) reportError("Word '${unit.token}' was highlighted, but it shouldn't")
+                    if (!highlights.remove(unit.token.toLowerCase())) {
+                        reportError("Word '${unit.token}' was highlighted, but it shouldn't")
+                    }
                 }
                 is TextUnit.Entity -> unit.words.reversed().forEach { queue.addFirst(it) }
                 else -> error("Other types than word and entity should not be encountered here")
