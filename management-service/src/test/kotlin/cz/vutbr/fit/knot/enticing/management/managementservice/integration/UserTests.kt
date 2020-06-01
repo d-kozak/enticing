@@ -10,6 +10,7 @@ import cz.vutbr.fit.knot.enticing.management.managementservice.entity.UserEntity
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.UserRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
@@ -121,6 +122,7 @@ class UserTests {
         userRepository.deleteAll()
     }
 
+    @Disabled
     @Test
     @WithMockUser("admin", roles = ["ADMIN"])
     fun `admin can delete others`() {
