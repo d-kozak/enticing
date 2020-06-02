@@ -10,6 +10,7 @@ import cz.vutbr.fit.knot.enticing.management.managementservice.entity.UserEntity
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.UserRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -30,6 +31,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @SpringBootTest
 @TestPropertySource(locations = ["/config.properties"])
 @AutoConfigureMockMvc
+@Disabled
 class UserTests {
 
     @Autowired
