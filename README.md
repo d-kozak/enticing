@@ -6,6 +6,9 @@ App deployed at [enticing.herokuapp.com](https://enticing.herokuapp.com/)
 
 All source code related to the Enticing project. 
 
+## Thesis
+Enticing was developed by David Kozak in his [master's thesis](./documentation/thesis.pdf).
+
 ## Documentation
 Documentation can be found [here](./documentation/README.md).
 
