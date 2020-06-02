@@ -1,0 +1,19 @@
+query,results,avg,deviation,min,max
+water,21,711.4,65843.11999999997,337,1823
+nertag:person,20,155.4,2263.7599999999998,104,421
+nertag:location,20,177.73,24321.477099999996,93,835
+water nertag:person,23,503.0,35445.24,355,1259
+water nertag:person ctx:sent,21,423.15,8891.107500000002,321,771
+nertag:person nertag:location,21,130.24,1919.3224000000002,96,433
+nertag:person nertag:location ctx:sent,27,287.09,2490.7219000000005,220,463
+water nertag:person nertag:location,22,453.82,14603.4676,331,1056
+water nertag:person nertag:location ctx:sent,23,4317.23,16767.157099999993,4071,4828
+nertag:person nertag:person,20,119.28,1071.4016000000001,96,403
+nertag:person nertag:person ctx:sent,20,124.48,828.0895999999995,100,330
+a:=nertag:person b:=nertag:person,20,117.31,699.0739000000001,97,287
+a:=nertag:person b:=nertag:person ctx:sent,20,130.61,667.6379,104,247
+a:=nertag:person b:=nertag:person && a.url != b.url,22,126.33,801.4810999999999,98,263
+a:=nertag:person b:=nertag:person ctx:sent && a.url != b.url,28,353.91,10034.461900000002,250,801
+
+
+
