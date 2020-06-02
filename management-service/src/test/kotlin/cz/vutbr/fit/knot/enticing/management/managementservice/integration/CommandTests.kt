@@ -11,10 +11,9 @@ import cz.vutbr.fit.knot.enticing.management.managementservice.entity.UserEntity
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.CommandRepository
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.UserRepository
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -32,7 +31,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @SpringBootTest
 @TestPropertySource(locations = ["/config.properties"])
 @AutoConfigureMockMvc
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @WhatIf("integration tests here trigger")
 class CommandTests {
 
@@ -48,12 +46,12 @@ class CommandTests {
     @Autowired
     lateinit var commandRepository: CommandRepository
 
-    @BeforeAll
+    @BeforeEach
     fun `add admin`() {
         userRepository.save(UserEntity("admin", encoder.encode("admin12"), true, mutableSetOf("PLATFORM_MAINTAINER", "ADMIN")))
     }
 
-    @AfterAll
+    @AfterEach
     fun `delete admin`() {
         userRepository.deleteById("admin")
     }
