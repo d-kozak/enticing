@@ -60,10 +60,6 @@ pepa:=nertag:person ^ person.name:pepa
 letter ink
 not_related letter ink ~ 3
 
-## semantic errors
-## the following is invalid (in sequence, all elems should be on the same index, but syntactically correct
-"ahoj lemma:cau"
-
 one two three ~ 5 ~ 5
 
 # how len(two < three) > 1, so how can you align it on one index

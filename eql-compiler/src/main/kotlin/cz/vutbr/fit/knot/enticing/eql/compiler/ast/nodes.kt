@@ -90,6 +90,10 @@ sealed class DocumentRestriction {
     data class Uuid(val text: String) : DocumentRestriction()
 }
 
+interface WithProximityRestriction {
+    var restriction: ProximityRestrictionNode?
+}
+
 sealed class QueryElemNode : EqlAstNode() {
     data class NotNode(val elem: QueryElemNode, override val location: Interval) : QueryElemNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemNotNode(this)
@@ -123,19 +127,19 @@ sealed class QueryElemNode : EqlAstNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemAttributeNode(this)
     }
 
-    data class ParenNode(var query: QueryElemNode, val restriction: ProximityRestrictionNode?, override val location: Interval) : QueryElemNode() {
+    data class ParenNode(var query: QueryElemNode, override var restriction: ProximityRestrictionNode? = null, override val location: Interval) : QueryElemNode(), WithProximityRestriction {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemParenNode(this)
     }
 
-    data class BooleanNode(val children: MutableList<QueryElemNode>, val operator: BooleanOperator, val restriction: ProximityRestrictionNode?, override val location: Interval) : QueryElemNode() {
+    data class BooleanNode(val children: MutableList<QueryElemNode>, val operator: BooleanOperator, override var restriction: ProximityRestrictionNode? = null, override val location: Interval) : QueryElemNode(), WithProximityRestriction {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemBooleanNode(this)
     }
 
-    data class OrderNode(var left: QueryElemNode, var right: QueryElemNode, val restriction: ProximityRestrictionNode?, override val location: Interval) : QueryElemNode() {
+    data class OrderNode(var left: QueryElemNode, var right: QueryElemNode, override var restriction: ProximityRestrictionNode? = null, override val location: Interval) : QueryElemNode(), WithProximityRestriction {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemOrderNode(this)
     }
 
-    data class SequenceNode(val elems: List<QueryElemNode>, override val location: Interval) : QueryElemNode() {
+    data class SequenceNode(val elems: List<SimpleNode>, override val location: Interval) : QueryElemNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemSequenceNode(this)
     }
 }

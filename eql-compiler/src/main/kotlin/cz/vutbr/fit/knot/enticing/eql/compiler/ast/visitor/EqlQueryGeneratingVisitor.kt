@@ -45,7 +45,7 @@ class EqlQueryGeneratingVisitor : EqlVisitor<String> {
     override fun visitQueryElemParenNode(node: QueryElemNode.ParenNode): String {
         val left = "(${node.query.accept(this)})"
         return if (node.restriction != null) {
-            "$left ${node.restriction.accept(this)}"
+            "$left ${node.restriction!!.accept(this)}"
         } else left
     }
 
@@ -56,14 +56,14 @@ class EqlQueryGeneratingVisitor : EqlVisitor<String> {
         }
         val left = node.children.joinToString(op) { it.accept(this) }
         return if (node.restriction != null) {
-            "$left ${node.restriction.accept(this)}"
+            "$left ${node.restriction!!.accept(this)}"
         } else left
     }
 
     override fun visitQueryElemOrderNode(node: QueryElemNode.OrderNode): String {
         val left = "${node.left.accept(this)} < ${node.right.accept(this)}"
         return if (node.restriction != null) {
-            "$left ${node.restriction.accept(this)}"
+            "$left ${node.restriction!!.accept(this)}"
         } else left
     }
 

@@ -45,7 +45,7 @@ class DeepCopyVisitor : EqlVisitor<EqlAstNode> {
             node.left.accept(this) as QueryElemNode, node.right.accept(this) as QueryElemNode, node.restriction?.accept(this) as? ProximityRestrictionNode, node.location)
 
     override fun visitQueryElemSequenceNode(node: QueryElemNode.SequenceNode): EqlAstNode = QueryElemNode.SequenceNode(
-            node.elems.map { it.accept(this) as QueryElemNode }, node.location
+            node.elems.map { it.accept(this) as QueryElemNode.SimpleNode }, node.location
     )
 
     override fun visitConstraintNode(node: ConstraintNode): EqlAstNode = ConstraintNode(node.expression.accept(this) as ConstraintNode.BooleanExpressionNode, node.location)

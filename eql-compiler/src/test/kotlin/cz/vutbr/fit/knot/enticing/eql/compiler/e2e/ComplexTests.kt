@@ -143,6 +143,6 @@ class ComplexTests {
         val (ast, errors) = compiler.parseAndAnalyzeQuery("picasso visited | explored paris ctx:sent", config)
         assertThat(errors).isEmpty()
         ast as RootNode
-        assertThat(ast.toEqlQuery()).isEqualTo("picasso (visited | (explored paris)) ctx:sent")
+        assertThat(ast.toEqlQuery()).isEqualTo("picasso (visited | explored) paris ctx:sent")
     }
 }

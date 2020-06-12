@@ -3,6 +3,7 @@ package cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor
 import cz.vutbr.fit.knot.enticing.dto.AstNode
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
+import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompilerException
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.*
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.EqlParser
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.EqlVisitor
@@ -36,16 +37,14 @@ class EqlAstGeneratingVisitor : EqlVisitor<AstNode> {
                 }
     }
 
-    override fun visitTuple(ctx: EqlParser.TupleContext): AstNode {
-        val left = ctx.queryElem(0).accept(this) as QueryElemNode
-        val right = ctx.queryElem(1).accept(this) as QueryElemNode
-        val proximity = ctx.proximity()?.accept(this) as? ProximityRestrictionNode
-        return QueryElemNode.BooleanNode(mutableListOf(left, right), BooleanOperator.AND, proximity, ctx.location)
-                .also {
-                    left.parent = it
-                    right.parent = it
-                    if (proximity != null) proximity.parent = it
-                }
+    override fun visitProx(ctx: EqlParser.ProxContext): AstNode {
+        val node = ctx.queryElem().accept(this) as EqlAstNode
+        val proximity = ctx.proximity().accept(this) as ProximityRestrictionNode
+        if (node is WithProximityRestriction) {
+            node.restriction = proximity
+            proximity.parent = node
+            return node
+        } else throw EqlCompilerException("Proximity cannot be applied to this node")
     }
 
     override fun visitProximity(ctx: EqlParser.ProximityContext): AstNode {
@@ -63,7 +62,7 @@ class EqlAstGeneratingVisitor : EqlVisitor<AstNode> {
     }
 
     override fun visitSequence(ctx: EqlParser.SequenceContext): AstNode {
-        val elems = ctx.queryElem().map { it.accept(this) as QueryElemNode }
+        val elems = ctx.simpleQuery().map { it.accept(this) as QueryElemNode.SimpleNode }
         return QueryElemNode.SequenceNode(elems, ctx.location)
                 .also { sequence ->
                     elems.forEach { it.parent = sequence }
@@ -72,12 +71,8 @@ class EqlAstGeneratingVisitor : EqlVisitor<AstNode> {
 
     override fun visitParenQuery(ctx: EqlParser.ParenQueryContext): AstNode {
         val query = ctx.queryElem().accept(this) as QueryElemNode
-        val proximity = ctx.proximity()?.accept(this) as? ProximityRestrictionNode
-        return QueryElemNode.ParenNode(query, proximity, ctx.location)
-                .also {
-                    query.parent = it
-                    if (proximity != null) proximity.parent = it
-                }
+        return QueryElemNode.ParenNode(query, null, ctx.location)
+                .also { query.parent = it }
     }
 
     override fun visitNotQuery(ctx: EqlParser.NotQueryContext): AstNode {
@@ -87,21 +82,32 @@ class EqlAstGeneratingVisitor : EqlVisitor<AstNode> {
         }
     }
 
-    override fun visitBooleanQuery(ctx: EqlParser.BooleanQueryContext): AstNode {
-        val operator = when {
-            ctx.booleanOperator().AND() != null -> BooleanOperator.AND
-            ctx.booleanOperator().OR() != null -> BooleanOperator.OR
-            else -> throw IllegalStateException("should never happen")
-        }
+    override fun visitAnd(ctx: EqlParser.AndContext): AstNode {
         val left = ctx.queryElem(0).accept(this) as QueryElemNode
         val right = ctx.queryElem(1).accept(this) as QueryElemNode
-        val proximity = ctx.proximity()?.accept(this) as? ProximityRestrictionNode
-        return QueryElemNode.BooleanNode(mutableListOf(left, right), operator, proximity, ctx.location)
+        return QueryElemNode.BooleanNode(mutableListOf(left, right), BooleanOperator.AND, null, ctx.location)
                 .also {
                     left.parent = it
                     right.parent = it
-                    if (proximity != null) proximity.parent = it
                 }
+    }
+
+    override fun visitOr(ctx: EqlParser.OrContext): AstNode {
+        val left = ctx.queryElem(0).accept(this) as QueryElemNode
+        val right = ctx.queryElem(1).accept(this) as QueryElemNode
+        return QueryElemNode.BooleanNode(mutableListOf(left, right), BooleanOperator.OR, null, ctx.location)
+                .also {
+                    left.parent = it
+                    right.parent = it
+                }
+    }
+
+    override fun visitSimple(ctx: EqlParser.SimpleContext): AstNode = ctx.simpleQuery().accept(this)
+
+    override fun visitNext(ctx: EqlParser.NextContext): AstNode {
+        val left = ctx.simpleQuery(0).accept(this) as QueryElemNode.SimpleNode
+        val right = ctx.simpleQuery(1).accept(this) as QueryElemNode.SimpleNode
+        return QueryElemNode.SequenceNode(listOf(left, right), ctx.location)
     }
 
     override fun visitIndex(ctx: EqlParser.IndexContext): AstNode {
@@ -153,11 +159,9 @@ class EqlAstGeneratingVisitor : EqlVisitor<AstNode> {
     override fun visitOrder(ctx: EqlParser.OrderContext): AstNode {
         val left = ctx.queryElem(0).accept(this) as QueryElemNode
         val right = ctx.queryElem(1).accept(this) as QueryElemNode
-        val proximity = ctx.proximity()?.accept(this) as? ProximityRestrictionNode
-        return QueryElemNode.OrderNode(left, right, proximity, ctx.location).also {
+        return QueryElemNode.OrderNode(left, right, null, ctx.location).also {
             left.parent = it
             right.parent = it
-            if (proximity != null) proximity.parent = it
         }
     }
 
