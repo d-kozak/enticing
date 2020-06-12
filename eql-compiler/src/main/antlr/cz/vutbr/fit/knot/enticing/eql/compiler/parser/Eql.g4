@@ -7,20 +7,24 @@ grammar Eql;
 root: queryElem (CONSTRAINT_SEPARATOR constraint)? EOF;
 
 queryElem:
-    IDENTIFIER COLON EQ queryElem #assign
-    | NOT queryElem #notQuery
-    |(RAW |IDENTIFIER | ANY_TEXT | interval) #simpleQuery
+     NOT queryElem #notQuery
+    | queryElem PLUS queryElem #next
     | IDENTIFIER COLON queryElem #index
     | IDENTIFIER DOT IDENTIFIER COLON queryElem #attribute
+    | IDENTIFIER COLON EQ queryElem #assign
+    | simpleQuery #simple
     | queryElem EXPONENT queryElem #align
-    | PAREN_OPEN queryElem PAREN_CLOSE proximity? #parenQuery
-    | queryElem booleanOperator queryElem proximity? #booleanQuery
-    | queryElem LT queryElem proximity? #order
-    | QUOTATION queryElem+ QUOTATION #sequence
-    | queryElem queryElem proximity? #tuple
+    | PAREN_OPEN queryElem PAREN_CLOSE #parenQuery
+    | queryElem LT queryElem  #order
+    | queryElem OR queryElem  #or
+    | queryElem AND? queryElem #and
+    | QUOTATION simpleQuery+ QUOTATION #sequence
+    | queryElem proximity #prox
     ;
 
-proximity : SIMILARITY IDENTIFIER ; // don't forget that it actually has to be a number!
+simpleQuery: (RAW |IDENTIFIER | ANY_TEXT | interval) ;
+
+proximity : SIMILARITY IDENTIFIER ; // it actually has to be a number!
 
 interval: BRACKET_OPEN (ANY_TEXT|IDENTIFIER) DOUBLE_DOT (ANY_TEXT|IDENTIFIER) BRACKET_CLOSE; // don't forget that it actually has to be a number or date!
 
@@ -49,6 +53,7 @@ RAW: [']~[']+['];
 
 CONSTRAINT_SEPARATOR: '&&';
 
+PLUS:'+';
 COLON:':';
 DOUBLE_DOT:'..';
 DOT: '.';
@@ -75,7 +80,7 @@ QUOTATION: '"';
 
 
 IDENTIFIER: [_]?[a-zA-Z0-9][a-zA-Z0-9_]*;
-ANY_TEXT: ~[ !"'\u005B\u005D\t\r&|=<>:.()*^-]+[*]? ;
+ANY_TEXT: ~[ +!"'\u005B\u005D\t\r&|=<>:.()*^-]+[*]? ;
 
 
 /** ignore whitespace */

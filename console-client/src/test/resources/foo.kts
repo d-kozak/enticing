@@ -2,7 +2,7 @@ import java.io.File
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-File("./knot01.benchmark5.csv")
+File("second_experiment.csv")
         .readLines()
         .drop(1)
         .map { it.split(",") }

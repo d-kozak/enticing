@@ -17,7 +17,7 @@ import it.unimi.dsi.fastutil.objects.Reference2ObjectMap
 
 fun SelectedInterval.toEnticingInterval() = Interval.valueOf(this.interval.left, this.interval.right)
 
-private typealias Mg4jSearchResult = DocumentScoreInfo<Reference2ObjectMap<Index, Array<SelectedInterval>>>
+typealias Mg4jSearchResult = DocumentScoreInfo<Reference2ObjectMap<Index, Array<SelectedInterval>>>
 
 class Mg4jSearchEngine(
         private val collection: Mg4jCompositeDocumentCollection,
