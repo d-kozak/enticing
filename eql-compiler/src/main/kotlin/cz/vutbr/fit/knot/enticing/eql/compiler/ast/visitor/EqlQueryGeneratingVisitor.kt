@@ -55,9 +55,10 @@ class EqlQueryGeneratingVisitor : EqlVisitor<String> {
             BooleanOperator.OR -> " | "
         }
         val left = node.children.joinToString(op) { it.accept(this) }
+        val addBrackets = !(node.parent is QueryElemNode.ParenNode || node.parent is RootNode)
         return if (node.restriction != null) {
-            "$left ${node.restriction!!.accept(this)}"
-        } else left
+            if (addBrackets) "($left ${node.restriction!!.accept(this)})" else "$left ${node.restriction!!.accept(this)}"
+        } else if (addBrackets) "($left)" else left
     }
 
     override fun visitQueryElemOrderNode(node: QueryElemNode.OrderNode): String {

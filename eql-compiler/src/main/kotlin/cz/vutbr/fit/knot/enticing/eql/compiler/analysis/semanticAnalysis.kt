@@ -41,11 +41,7 @@ val FOURTH_PASS = listOf(
         ComparisonCheck("COP-1")
 )
 
-val CLEANUP = listOf(
-        AddNecessaryBracketsToBooleanNodeCheck("BRAC_CLEAN-1")
-)
-
-class SemanticAnalyzer(private val config: MetadataConfiguration, checks: List<List<EqlAstCheck<*>>> = listOf(REWRITES, FIRST_PASS, SECOND_PASS, THIRD_PASS, FOURTH_PASS, CLEANUP)) {
+class SemanticAnalyzer(private val config: MetadataConfiguration, checks: List<List<EqlAstCheck<*>>> = listOf(REWRITES, FIRST_PASS, SECOND_PASS, THIRD_PASS, FOURTH_PASS)) {
 
     private val checksByType = checks.map { it.groupBy { it.clazz } }
 

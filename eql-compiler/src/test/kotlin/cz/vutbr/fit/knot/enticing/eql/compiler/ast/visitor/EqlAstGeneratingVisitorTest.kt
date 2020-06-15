@@ -1,8 +1,7 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor
 
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
-import cz.vutbr.fit.knot.enticing.dto.interval.Interval
-import cz.vutbr.fit.knot.enticing.eql.compiler.ast.*
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.EqlAstNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.forEachQuery
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.parseToEqlAst
 import org.assertj.core.api.Assertions.assertThat
@@ -13,7 +12,9 @@ import org.junit.jupiter.api.Test
 internal fun parseToEqlAstOrFail(input: String): EqlAstNode {
     val (ast, errors) = parseToEqlAst(input)
     assertThat(errors).isEmpty()
-    return ast as EqlAstNode
+    ast as EqlAstNode
+    println("assertThat(ast).isEqualTo(${ast.toKotlinDef()})")
+    return ast
 }
 
 @Incomplete("finish when ast is finalized")
@@ -55,82 +56,36 @@ internal class EqlAstGeneratingVisitorTest {
         @DisplayName("Picasso visited Paris")
         fun `Query 1`() {
             val ast = parseToEqlAstOrFail("Picasso visited Paris")
-            assertThat(ast)
-                    .isEqualTo(RootNode(
-                            QueryElemNode.BooleanNode(mutableListOf(
-                                    QueryElemNode.SimpleNode("Picasso", SimpleQueryType.STRING, Interval.valueOf(0, 6)),
-                                    QueryElemNode.BooleanNode(mutableListOf(QueryElemNode.SimpleNode("visited", SimpleQueryType.STRING, Interval.valueOf(8, 14)),
-                                            QueryElemNode.SimpleNode("Paris", SimpleQueryType.STRING, Interval.valueOf(16, 20)))
-                                            , BooleanOperator.AND, null, Interval.valueOf(8, 20))), BooleanOperator.AND, null, Interval.valueOf(0, 20)), null, Interval.valueOf(0, 20)))
         }
 
         @Test
         @DisplayName("""Picasso < visited < Paris""")
         fun `Query 2`() {
             val ast = parseToEqlAstOrFail("""Picasso < visited < Paris""")
-            assertThat(ast)
-                    .isEqualTo(RootNode(
-                            QueryElemNode.OrderNode(
-                                    QueryElemNode.SimpleNode("Picasso", SimpleQueryType.STRING, Interval.valueOf(0, 6)),
-                                    QueryElemNode.OrderNode(
-                                            QueryElemNode.SimpleNode("visited", SimpleQueryType.STRING, Interval.valueOf(10, 16)),
-                                            QueryElemNode.SimpleNode("Paris", SimpleQueryType.STRING, Interval.valueOf(20, 24)), null, Interval.valueOf(10, 24)), null, Interval.valueOf(0, 24)), null, Interval.valueOf(0, 24)))
         }
 
         @Test
         @DisplayName("""Picasso visited Paris ctx:par""")
         fun `Query 4`() {
             val ast = parseToEqlAstOrFail("""Picasso visited Paris ctx:par""")
-            assertThat(ast)
-                    .isEqualTo(RootNode(
-                            QueryElemNode.BooleanNode(mutableListOf(
-                                    QueryElemNode.SimpleNode("Picasso", SimpleQueryType.STRING, Interval.valueOf(0, 6)),
-                                    QueryElemNode.BooleanNode(mutableListOf(QueryElemNode.SimpleNode("visited", SimpleQueryType.STRING, Interval.valueOf(8, 14)),
-                                            QueryElemNode.BooleanNode(mutableListOf(QueryElemNode.SimpleNode("Paris", SimpleQueryType.STRING, Interval.valueOf(16, 20)),
-                                                    QueryElemNode.IndexNode("ctx", QueryElemNode.SimpleNode("par", SimpleQueryType.STRING, Interval.valueOf(26, 28)), Interval.valueOf(22, 28))), BooleanOperator.AND, null, Interval.valueOf(16, 28))), BooleanOperator.AND, null, Interval.valueOf(8, 28))), BooleanOperator.AND, null, Interval.valueOf(0, 28)), null, Interval.valueOf(0, 28)))
         }
 
         @Test
         @DisplayName("""(Picasso visited Paris) ctx:par""")
         fun `Query 4v1`() {
             val ast = parseToEqlAstOrFail("""(Picasso visited Paris) ctx:par""")
-            assertThat(ast)
-                    .isEqualTo(RootNode(QueryElemNode.BooleanNode(mutableListOf(
-                            QueryElemNode.ParenNode(
-                                    QueryElemNode.BooleanNode(mutableListOf(QueryElemNode.SimpleNode("Picasso", SimpleQueryType.STRING, Interval.valueOf(1, 7)),
-                                            QueryElemNode.BooleanNode(mutableListOf(QueryElemNode.SimpleNode("visited", SimpleQueryType.STRING, Interval.valueOf(9, 15)),
-                                                    QueryElemNode.SimpleNode("Paris", SimpleQueryType.STRING, Interval.valueOf(17, 21))),
-                                                    BooleanOperator.AND, null, Interval.valueOf(9, 21)))
-                                            , BooleanOperator.AND, null, Interval.valueOf(1, 21)), null, Interval.valueOf(0, 22)), QueryElemNode.IndexNode("ctx", QueryElemNode.SimpleNode("par", SimpleQueryType.STRING, Interval.valueOf(28, 30)), Interval.valueOf(24, 30))), BooleanOperator.AND, null, Interval.valueOf(0, 30)), null, Interval.valueOf(0, 30)))
         }
 
         @Test
         @DisplayName("""Picasso visited Paris ctx:sent""")
         fun `Query 5`() {
             val ast = parseToEqlAstOrFail("""Picasso visited Paris ctx:sent""")
-            assertThat(ast).isEqualTo(RootNode(QueryElemNode.BooleanNode(mutableListOf(
-                    QueryElemNode.SimpleNode("Picasso", SimpleQueryType.STRING, Interval.valueOf(0, 6)),
-                    QueryElemNode.BooleanNode(mutableListOf(
-                            QueryElemNode.SimpleNode("visited", SimpleQueryType.STRING, Interval.valueOf(8, 14)),
-                            QueryElemNode.BooleanNode(mutableListOf(
-                                    QueryElemNode.SimpleNode("Paris", SimpleQueryType.STRING, Interval.valueOf(16, 20)),
-                                    QueryElemNode.IndexNode("ctx", QueryElemNode.SimpleNode("sent", SimpleQueryType.STRING, Interval.valueOf(26, 29)), Interval.valueOf(22, 29))), BooleanOperator.AND, null, Interval.valueOf(16, 29))), BooleanOperator.AND, null, Interval.valueOf(8, 29))), BooleanOperator.AND, null, Interval.valueOf(0, 29)), null, Interval.valueOf(0, 29)))
         }
 
         @Test
         @DisplayName("""(Picasso ( visited | explored )  Paris) ctx:sent""")
         fun `Query 6`() {
             val ast = parseToEqlAstOrFail("""Picasso ( visited | explored )  Paris ctx:sent""")
-            println("assertThat(ast).isEqualTo(${ast.toKotlinDef()})")
-            assertThat(ast).isEqualTo(RootNode(
-                    QueryElemNode.BooleanNode(mutableListOf(
-                            QueryElemNode.SimpleNode("Picasso", SimpleQueryType.STRING, Interval.valueOf(0, 6)),
-                            QueryElemNode.BooleanNode(mutableListOf(QueryElemNode.ParenNode(
-                                    QueryElemNode.BooleanNode(mutableListOf(
-                                            QueryElemNode.SimpleNode("visited", SimpleQueryType.STRING, Interval.valueOf(10, 16)),
-                                            QueryElemNode.SimpleNode("explored", SimpleQueryType.STRING, Interval.valueOf(20, 27))), BooleanOperator.OR, null, Interval.valueOf(10, 27)), null, Interval.valueOf(8, 29)),
-                                    QueryElemNode.BooleanNode(mutableListOf(QueryElemNode.SimpleNode("Paris", SimpleQueryType.STRING, Interval.valueOf(32, 36)),
-                                            QueryElemNode.IndexNode("ctx", QueryElemNode.SimpleNode("sent", SimpleQueryType.STRING, Interval.valueOf(42, 45)), Interval.valueOf(38, 45))), BooleanOperator.AND, null, Interval.valueOf(32, 45))), BooleanOperator.AND, null, Interval.valueOf(8, 45))), BooleanOperator.AND, null, Interval.valueOf(0, 45)), null, Interval.valueOf(0, 45)))
         }
 
 

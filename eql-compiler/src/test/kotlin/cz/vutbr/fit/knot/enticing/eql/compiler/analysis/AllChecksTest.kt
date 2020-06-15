@@ -145,19 +145,13 @@ class AllChecksTest {
             assertThat(errors).isEmpty()
             println((tree as EqlAstNode).accept(AstDefinitionsGeneratingVisitor()))
             assertThat(tree).isEqualTo(
-                    RootNode(
-                            QueryElemNode.BooleanNode(
-                                    mutableListOf(
-                                            QueryElemNode.SimpleNode("not_related", SimpleQueryType.STRING, Interval.valueOf(0, 10)),
-                                            QueryElemNode.BooleanNode(mutableListOf(
-                                                    QueryElemNode.SimpleNode("letter", SimpleQueryType.STRING, Interval.valueOf(12, 17)),
-                                                    QueryElemNode.SimpleNode("ink", SimpleQueryType.STRING, Interval.valueOf(19, 21))),
-                                                    BooleanOperator.AND,
-                                                    ProximityRestrictionNode("3", Interval.valueOf(23, 25)),
-                                                    Interval.valueOf(12, 25)
-                                            )),
-                                    BooleanOperator.AND, null, Interval.valueOf(0, 25)
-                            ), null, Interval.valueOf(0, 25)))
+                    RootNode(QueryElemNode.BooleanNode(mutableListOf(
+                            QueryElemNode.BooleanNode(mutableListOf(
+                                    QueryElemNode.SimpleNode("not_related", SimpleQueryType.STRING, Interval.valueOf(0, 10)),
+                                    QueryElemNode.SimpleNode("letter", SimpleQueryType.STRING, Interval.valueOf(12, 17))), BooleanOperator.AND, null, Interval.valueOf(0, 17))
+                            , QueryElemNode.SimpleNode("ink", SimpleQueryType.STRING, Interval.valueOf(19, 21)))
+                            , BooleanOperator.AND, ProximityRestrictionNode("3", Interval.valueOf(23, 25)), Interval.valueOf(0, 21))
+                            , null, Interval.valueOf(0, 25)))
         }
     }
 
@@ -431,7 +425,7 @@ class AllChecksTest {
         @DisplayName("((a | b < c & d) | (alpha beta) | aplha | (b | b) | ((a | b < c & d)) )")
         fun t2() {
             assertTransformation("((a | b < c & d) | (alpha beta) | alpha | (b | b) | ((a | b < c & d)) )",
-                    "a | b < c d | (alpha beta) | alpha | b"
+                    "((a | b < c) d) | (alpha beta) | alpha | b"
             )
         }
 

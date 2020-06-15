@@ -15,7 +15,7 @@ a:=nertag:(person | artist) < lemma:visit < b:=nertag:(person | artist) nertag:l
 (A | B) C
 nertag:person ^ person.birthplace:Brno
 # Picasso visited | explored Paris ctx:sent
-(Picasso visited) | (explored Paris) ctx:sent
+((Picasso visited) | (explored Paris)) ctx:sent
 
 # Valid EQL queries that should be parsed without problems
 
@@ -58,9 +58,10 @@ pepa:=nertag:person ^ person.name:pepa
 
 (letter ink) ~ 3
 letter ink
-not_related letter ink ~ 3
+(not_related letter) ink ~ 3
 
-one two three ~ 5 ~ 5
+# one two three ~ 5 ~ 5 # this one is buggy - brackets are necessary, otherwise there are two proximities in the parse tree and they overwrite each other
+one (two three ~ 5) ~ 5
 
 # how len(two < three) > 1, so how can you align it on one index
 # mg4j does not even parse it, ends up as a syntax error

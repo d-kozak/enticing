@@ -22,6 +22,13 @@ class EqlQueryGeneratingVisitorTest {
         val transformed = queries.map { compiler.parseOrFail(it, metadataConfiguration) as EqlAstNode }
                 .map { it.toEqlQuery() }
 
+        for (i in queries.indices) {
+            if (queries[i].toLowerCase() != transformed[i]) {
+                System.err.println("Collision queries vs transformed at: ")
+                System.err.println("\t ${queries[i]} vs ${transformed[i]}")
+            }
+        }
+
         assertThat(transformed).isEqualTo(queries.map { it.toLowerCase() })
     }
 
@@ -31,9 +38,24 @@ class EqlQueryGeneratingVisitorTest {
         assertThat(serialized).isEqualTo(query)
     }
 
+
     @Test
     @DisplayName("not_related letter ink ~ 3")
     fun t1() {
-        assertTransformation("not_related letter ink ~ 3")
+        assertTransformation("(not_related letter) ink ~ 3")
     }
+
+    @Test
+    @DisplayName("(Picasso visited) | (explored Paris)")
+    fun t2() {
+        assertTransformation("(picasso visited) | (explored paris)")
+    }
+
+    @Test
+    @DisplayName("(Picasso visited) | (explored Paris) ctx:sent")
+    fun t3() {
+        assertTransformation("((picasso visited) | (explored paris)) ctx:sent")
+    }
+
+
 }

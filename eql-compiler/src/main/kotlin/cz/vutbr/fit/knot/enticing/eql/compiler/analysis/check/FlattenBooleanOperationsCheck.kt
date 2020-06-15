@@ -9,6 +9,7 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.ast.QueryElemNode
 class FlattenBooleanOperationsCheck(id: String) : EqlAstCheck<QueryElemNode.BooleanNode>(id, QueryElemNode.BooleanNode::class) {
 
     override fun analyze(node: QueryElemNode.BooleanNode, symbolTable: SymbolTable, metadataConfiguration: MetadataConfiguration, reporter: Reporter) {
+        if (node.restriction != null) return
         val operator = node.operator
 
         fun flatten(node: QueryElemNode.BooleanNode) {

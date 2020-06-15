@@ -89,7 +89,7 @@ class ComplexTests {
     fun nine() {
         val (ast, errors) = compiler.parseAndAnalyzeQuery("nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < nertag:(person|artist) ctx:par", config)
         assertThat(errors).isEmpty()
-        assertThat(ast.toMgj4Query()).isEqualTo("((((nertag:((person | artist)){{nertag->token}}) < (((lemma:((influence | impact)){{lemma->token}}) | ((lemma:(paid){{lemma->token}}) < (lemma:(tribute){{lemma->token}}))) < ((nertag:((person | artist)){{nertag->token}})))))  - §)")
+        assertThat(ast.toMgj4Query()).isEqualTo("((((((nertag:((person | artist)){{nertag->token}}) < ((lemma:((influence | impact)){{lemma->token}}) | ((lemma:(paid){{lemma->token}}) < (lemma:(tribute){{lemma->token}})))) < (nertag:((person | artist)){{nertag->token}}))))  - §)")
     }
 
 
@@ -99,7 +99,7 @@ class ComplexTests {
         val (ast, errors) = compiler.parseAndAnalyzeQuery("nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < nertag:(person|artist) ctx:par", config)
         assertThat(errors).isEmpty()
         ast as RootNode
-        assertThat(ast.toMgj4Query()).isEqualTo("((((nertag:((person | artist)){{nertag->token}}) < (((lemma:((influence | impact)){{lemma->token}}) | ((lemma:(paid){{lemma->token}}) < (lemma:(tribute){{lemma->token}}))) < ((nertag:((person | artist)){{nertag->token}})))))  - §)")
+        assertThat(ast.toMgj4Query()).isEqualTo("((((((nertag:((person | artist)){{nertag->token}}) < ((lemma:((influence | impact)){{lemma->token}}) | ((lemma:(paid){{lemma->token}}) < (lemma:(tribute){{lemma->token}})))) < (nertag:((person | artist)){{nertag->token}}))))  - §)")
         assertThat(ast.contextRestriction).isEqualTo(ContextRestriction.PARAGRAPH)
     }
 
@@ -133,8 +133,8 @@ class ComplexTests {
         val (ast, errors) = compiler.parseAndAnalyzeQuery("(Picasso visited) | (explored Paris) ctx:sent", config)
         assertThat(errors).isEmpty()
         ast as RootNode
-        assertThat(ast.toEqlQuery()).isEqualTo("(picasso visited) | (explored paris) ctx:sent")
-        assertThat(ast.toMgj4Query()).isEqualTo("((((picasso & visited) | (explored & paris)))  - ¶)")
+        assertThat(ast.toEqlQuery()).isEqualTo("((picasso visited) | (explored paris)) ctx:sent")
+        assertThat(ast.toMgj4Query()).isEqualTo("(((((picasso & visited) | (explored & paris))))  - ¶)")
     }
 
     @Test
