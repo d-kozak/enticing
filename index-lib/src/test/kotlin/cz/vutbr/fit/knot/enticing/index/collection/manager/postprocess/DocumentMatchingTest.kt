@@ -54,6 +54,26 @@ internal class DocumentMatchingTest : AbstractDocumentMatchingTest() {
     }
 
     @Test
+    @DisplayName(""""is a"""")
+    fun seq1() = forEachMatch(""""is a"""") {
+        forEachInterval("contains 'is a'") {
+            val text = textAt("token", interval)
+            verify(text == "is a") { "interval should contain text 'is a', but is was '$text'" }
+            verifyLeafCount(2)
+        }
+    }
+
+    @Test
+    @DisplayName("""lemma:"to be"""")
+    fun seq2() = forEachMatch("""lemma:"to be"""") {
+        forEachInterval("contains 'is a'") {
+            val text = textAt("lemma", interval)
+            verify(text == "to be") { "interval should contain text 'to be', but is was '$text'" }
+            verifyLeafCount(2)
+        }
+    }
+
+    @Test
     @DisplayName("That < Motion")
     fun next() = forEachMatch("That < Motion") {
         forEachInterval("that should be before motion") {
