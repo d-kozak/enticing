@@ -35,7 +35,7 @@ class DocumentMatchingVisitor(
             loop@ for (match in query) {
                 val left = forbiddenMarks.binarySearch(match.interval.from)
                 val right = forbiddenMarks.binarySearch(match.interval.to)
-                if(left < 0 && left == right)
+                if (left < 0 && left == right)
                     yield(match)
             }
         }
@@ -194,6 +194,20 @@ class DocumentMatchingVisitor(
                 for (rightMatch in right) {
                     if (leftMatch.interval == rightMatch.interval) {
                         yield(DocumentMatch(leftMatch.interval, leftMatch.eqlMatch + rightMatch.eqlMatch, listOf(leftMatch, rightMatch)))
+                    }
+                }
+            }
+        }
+    }
+
+    override fun visitQueryElemNextNode(node: QueryElemNode.NextNode): Sequence<DocumentMatch> {
+        val left = node.left.accept(this)
+        val right = node.right.accept(this)
+        return sequence {
+            for (leftMatch in left) {
+                for (rightMatch in right) {
+                    if (leftMatch.interval.to + 1 == rightMatch.interval.from) {
+                        yield(DocumentMatch(leftMatch.interval.combineWith(rightMatch.interval), leftMatch.eqlMatch + rightMatch.eqlMatch, listOf(leftMatch, rightMatch)))
                     }
                 }
             }

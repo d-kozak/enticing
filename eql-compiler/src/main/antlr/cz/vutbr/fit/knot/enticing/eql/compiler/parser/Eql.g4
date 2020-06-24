@@ -8,7 +8,7 @@ root: queryElem (CONSTRAINT_SEPARATOR constraint)? EOF;
 
 queryElem:
      NOT queryElem #notQuery
-    | simpleQuery PLUS simpleQuery #next
+    | simpleQuery PLUS queryElem #next
     | IDENTIFIER COLON queryElem #index
     | IDENTIFIER DOT IDENTIFIER COLON queryElem #attribute
     | IDENTIFIER COLON EQ queryElem #assign

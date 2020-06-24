@@ -5,13 +5,16 @@ import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.eql.compiler.SymbolTable
 import cz.vutbr.fit.knot.enticing.eql.compiler.analysis.check.*
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.EqlAstNode
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.QueryElemNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.RootNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.AgregatingListener
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.CompilerError
 
 val REWRITES = listOf(
         RewriteContextRestrictionCheck("CTX-1"),
-        RewriteDocumentRestrictionCheck("DOC-1")
+        RewriteDocumentRestrictionCheck("DOC-1"),
+        QueryElemNextNodeCheck("NXT-1")
 )
 
 val FIRST_PASS = listOf(
@@ -45,17 +48,21 @@ class SemanticAnalyzer(private val config: MetadataConfiguration, checks: List<L
 
     private val checksByType = checks.map { it.groupBy { it.clazz } }
 
-    fun performAnalysis(node: RootNode): List<CompilerError> {
-        checkParentRefs(node)
-        val symbolTable = SymbolTable(node)
+    fun performAnalysis(root: RootNode): List<CompilerError> {
+        checkParentRefs(root)
+        val symbolTable = SymbolTable(root)
         val reporter = SimpleAgregatingReporter()
-        node.symbolTable = symbolTable
+        root.symbolTable = symbolTable
 
         for (pass in checksByType) {
-            node.walk(AgregatingListener({ currentNode ->
+            val runChecks: (EqlAstNode) -> Unit = { currentNode ->
                 val checks = pass[currentNode::class]
                 checks?.forEach { it.doAnalyze(currentNode, symbolTable, reporter, config) }
-            }))
+            }
+            val shouldContinue: (EqlAstNode) -> Boolean = { node ->
+                node !is QueryElemNode.NextNode // don't go deeper into the NextNode subtree, because it will be transformed in the QueryElemNextNodeCheck
+            }
+            root.walk(AgregatingListener(runChecks, shouldContinue))
             if (reporter.reports.isNotEmpty()) break
         }
 

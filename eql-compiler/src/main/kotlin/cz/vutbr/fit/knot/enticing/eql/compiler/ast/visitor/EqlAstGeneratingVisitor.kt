@@ -105,9 +105,13 @@ class EqlAstGeneratingVisitor : EqlVisitor<AstNode> {
     override fun visitSimple(ctx: EqlParser.SimpleContext): AstNode = ctx.simpleQuery().accept(this)
 
     override fun visitNext(ctx: EqlParser.NextContext): AstNode {
-        val left = ctx.simpleQuery(0).accept(this) as QueryElemNode.SimpleNode
-        val right = ctx.simpleQuery(1).accept(this) as QueryElemNode.SimpleNode
-        return QueryElemNode.SequenceNode(listOf(left, right), ctx.location)
+        val left = ctx.simpleQuery().accept(this) as QueryElemNode.SimpleNode
+        val right = ctx.queryElem().accept(this) as QueryElemNode
+        return QueryElemNode.NextNode(left, right, ctx.location)
+                .also {
+                    left.parent = it
+                    right.parent = it
+                }
     }
 
     override fun visitIndex(ctx: EqlParser.IndexContext): AstNode {

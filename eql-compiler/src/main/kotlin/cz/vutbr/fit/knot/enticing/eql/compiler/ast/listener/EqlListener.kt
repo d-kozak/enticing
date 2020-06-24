@@ -43,6 +43,8 @@ interface EqlListener {
     fun exitSimpleReferenceNode(node: ReferenceNode.SimpleReferenceNode) {}
     fun exitNestedReferenceNode(node: ReferenceNode.NestedReferenceNode) {}
     fun exitProximityRestrictionNode(node: ProximityRestrictionNode) {}
+    fun enterQueryElemNextNode(node: QueryElemNode.NextNode) {}
+    fun exitQueryElemNextNode(node: QueryElemNode.NextNode) {}
 }
 
 

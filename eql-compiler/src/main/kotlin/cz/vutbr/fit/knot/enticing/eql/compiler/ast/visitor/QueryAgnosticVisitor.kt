@@ -33,4 +33,6 @@ abstract class QueryAgnosticVisitor<T> : EqlVisitor<T> {
     override fun visitSimpleReferenceNode(node: ReferenceNode.SimpleReferenceNode): T = failInternal()
 
     override fun visitNestedReferenceNode(node: ReferenceNode.NestedReferenceNode): T = failInternal()
+
+    override fun visitQueryElemNextNode(node: QueryElemNode.NextNode): T = failInternal()
 }

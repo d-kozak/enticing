@@ -61,6 +61,7 @@ interface EqlVisitor<T> {
     fun visitSimpleReferenceNode(node: ReferenceNode.SimpleReferenceNode): T
     fun visitNestedReferenceNode(node: ReferenceNode.NestedReferenceNode): T
     fun visitProximityRestrictionNode(node: ProximityRestrictionNode): T
+    fun visitQueryElemNextNode(node: QueryElemNode.NextNode): T
 
 }
 
@@ -101,6 +102,10 @@ sealed class QueryElemNode : EqlAstNode() {
 
     data class AlignNode(val left: QueryElemNode, val right: QueryElemNode, override val location: Interval) : QueryElemNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemAlignNode(this)
+    }
+
+    data class NextNode(val left: SimpleNode, val right: QueryElemNode, override val location: Interval) : QueryElemNode() {
+        override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemNextNode(this)
     }
 
     data class AssignNode(val identifier: String, val elem: QueryElemNode, override val location: Interval) : QueryElemNode() {

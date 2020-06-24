@@ -68,6 +68,8 @@ class EqlQueryGeneratingVisitor : EqlVisitor<String> {
         } else left
     }
 
+    override fun visitQueryElemNextNode(node: QueryElemNode.NextNode): String = "${node.left}+${node.right}"
+
     override fun visitQueryElemSequenceNode(node: QueryElemNode.SequenceNode): String = "\"${node.elems.joinToString(" ") { it.accept(this) }}\""
 
     override fun visitQueryElemAlignNode(node: QueryElemNode.AlignNode): String = "${node.left.accept(this)} ^ ${node.right.accept(this)}"
@@ -87,4 +89,6 @@ class EqlQueryGeneratingVisitor : EqlVisitor<String> {
     override fun visitSimpleReferenceNode(node: ReferenceNode.SimpleReferenceNode): String = node.identifier
 
     override fun visitNestedReferenceNode(node: ReferenceNode.NestedReferenceNode): String = "${node.identifier}.${node.attribute}"
+
+
 }

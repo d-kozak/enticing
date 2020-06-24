@@ -153,10 +153,17 @@ class AstWalker(protected val listener: EqlListener) : EqlVisitor<Unit> {
     }
 
 
-
     override fun visitProximityRestrictionNode(node: ProximityRestrictionNode) {
         listener.enterProximityRestrictionNode(node)
         listener.exitProximityRestrictionNode(node)
     }
 
+    override fun visitQueryElemNextNode(node: QueryElemNode.NextNode) {
+        listener.enterQueryElemNextNode(node)
+        if (shouldContinue(node)) {
+            node.left.accept(this)
+            node.right.accept(this)
+        }
+        listener.exitQueryElemNextNode(node)
+    }
 }
