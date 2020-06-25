@@ -71,6 +71,8 @@ class AgregatingListener(private val check: (node: EqlAstNode) -> Unit, val shou
 
     override fun enterQueryElemSequenceNode(node: QueryElemNode.SequenceNode) = check(node)
 
+    override fun enterQueryElemNextNode(node: QueryElemNode.NextNode) = check(node)
+
     override fun enterConstraintNode(node: ConstraintNode) = check(node)
 
     override fun enterConstraintBooleanExpressionNotNode(node: ConstraintNode.BooleanExpressionNode.NotNode) = check(node)

@@ -166,14 +166,24 @@ class DocumentMatchingVisitor(
         }.proximityRestriction(node.restriction)
     }
 
-    override fun visitQueryElemSequenceNode(node: QueryElemNode.SequenceNode): Sequence<DocumentMatch> {
-        val seq = node.elems.map { it.accept(this) }
+    override fun visitQueryElemSequenceNode(node: QueryElemNode.SequenceNode): Sequence<DocumentMatch> = evaluateSequence(node, node.elems)
+
+    override fun visitQueryElemNextNode(node: QueryElemNode.NextNode): Sequence<DocumentMatch> = evaluateSequence(node, node.simpleNodes)
+
+    private fun evaluateSequence(parentNode: EqlAstNode, simpleNodes: List<QueryElemNode.SimpleNode>): Sequence<DocumentMatch> {
+        val firstMatch = simpleNodes[0].accept(this)
         return sequence {
-            for (match in seq[0]) {
-                traverseSeq(1, seq, match.interval, match.eqlMatch, listOf(match))
+            loop@ for (match in firstMatch) {
+                for (i in 1 until simpleNodes.size) {
+                    val nextNode = simpleNodes[i]
+                    if (document.content[nextNode.index][match.interval.to + i].toLowerCase() != nextNode.content) continue@loop
+                }
+                val interval = Interval.valueOf(match.interval.from, match.interval.from + simpleNodes.size - 1)
+                yield(DocumentMatch(interval, listOf(EqlMatch(parentNode.location, interval)), emptyList<DocumentMatch>()))
             }
         }
     }
+
 
     private suspend fun SequenceScope<DocumentMatch>.traverseSeq(i: Int, node: List<Sequence<DocumentMatch>>, interval: Interval, eqlMatch: List<EqlMatch>, children: List<DocumentMatch>) {
         if (i >= node.size) {
@@ -200,19 +210,6 @@ class DocumentMatchingVisitor(
         }
     }
 
-    override fun visitQueryElemNextNode(node: QueryElemNode.NextNode): Sequence<DocumentMatch> {
-        val left = node.left.accept(this)
-        val right = node.right.accept(this)
-        return sequence {
-            for (leftMatch in left) {
-                for (rightMatch in right) {
-                    if (leftMatch.interval.to + 1 == rightMatch.interval.from) {
-                        yield(DocumentMatch(leftMatch.interval.combineWith(rightMatch.interval), leftMatch.eqlMatch + rightMatch.eqlMatch, listOf(leftMatch, rightMatch)))
-                    }
-                }
-            }
-        }
-    }
 
     override fun visitConstraintNode(node: ConstraintNode): Sequence<DocumentMatch> {
         error("should never be called")

@@ -1,8 +1,10 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.eql.compiler.SymbolTable
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.*
 
+@WhatIf("The parent pointers are not set for the new AST, are they?")
 class DeepCopyVisitor : EqlVisitor<EqlAstNode> {
 
     private val newSymbolTable: SymbolTable = SymbolTable()
@@ -51,7 +53,9 @@ class DeepCopyVisitor : EqlVisitor<EqlAstNode> {
     override fun visitQueryElemNextNode(node: QueryElemNode.NextNode): EqlAstNode {
         val left = node.left.accept(this) as QueryElemNode.SimpleNode
         val right = node.right.accept(this) as QueryElemNode
-        return QueryElemNode.NextNode(left, right, node.location)
+        return QueryElemNode.NextNode(left, right, node.location).also {
+            it.simpleNodes = node.simpleNodes.map { it.accept(this) as QueryElemNode.SimpleNode }
+        }
     }
 
     override fun visitConstraintNode(node: ConstraintNode): EqlAstNode = ConstraintNode(node.expression.accept(this) as ConstraintNode.BooleanExpressionNode, node.location)

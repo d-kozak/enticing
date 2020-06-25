@@ -520,6 +520,42 @@ class MatchDocumentTest {
             assertThat(result.intervals).hasSize(10)
         }
     }
+
+    @DisplayName("\"one two three\"")
+    @Nested
+    inner class SequenceOperator1 {
+
+        @Test
+        fun `no match, space in the middle`() {
+            val document = TestDocument(100)
+            document["token"][25] = "one"
+            document["token"][26] = "two"
+            document["token"][28] = "three"
+            val res = queryExecutor.doMatch("\"one two three\"", document)
+            assertThat(res.intervals).isEmpty()
+        }
+
+        @Test
+        fun `no match, missing second`() {
+            val document = TestDocument(100)
+            document["token"][53] = "one"
+            document["token"][55] = "three"
+            val res = queryExecutor.doMatch("\"one two three\"", document)
+            assertThat(res.intervals).isEmpty()
+        }
+
+        @Test
+        fun `one match`() {
+            val document = TestDocument(100)
+            document["token"][37] = "one"
+            document["token"][38] = "two"
+            document["token"][39] = "three"
+            val res = queryExecutor.doMatch("\"one two three\"", document)
+            assertThat(res.intervals).hasSize(1)
+            val match = res.intervals[0]
+            assertThat(match.interval).isEqualTo(Interval.valueOf(37, 39))
+        }
+    }
 }
 
 class TestQueryExecutor(private val metadataConfiguration: MetadataConfiguration) {

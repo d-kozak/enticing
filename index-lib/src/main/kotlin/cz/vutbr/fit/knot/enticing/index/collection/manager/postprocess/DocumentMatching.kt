@@ -121,7 +121,9 @@ class GroupNodesByIndexListener(val metadataConfiguration: MetadataConfiguration
 
     override fun enterQueryElemSimpleNode(node: QueryElemNode.SimpleNode) {
         if (node.isEntityNameNode()) return
-        nodesByIndex[metadataConfiguration.indexOf(indexStack.last())].add(node)
+        val lastIndex = indexStack.last()
+        node.index = metadataConfiguration.indexes.getValue(lastIndex).columnIndex
+        nodesByIndex[metadataConfiguration.indexOf(lastIndex)].add(node)
     }
 
     override fun enterQueryElemIndexNode(node: QueryElemNode.IndexNode) {
