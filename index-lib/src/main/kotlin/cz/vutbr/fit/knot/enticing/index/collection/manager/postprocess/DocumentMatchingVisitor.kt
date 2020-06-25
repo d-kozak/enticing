@@ -168,7 +168,7 @@ class DocumentMatchingVisitor(
 
     override fun visitQueryElemSequenceNode(node: QueryElemNode.SequenceNode): Sequence<DocumentMatch> = evaluateSequence(node, node.elems)
 
-    override fun visitQueryElemNextNode(node: QueryElemNode.NextNode): Sequence<DocumentMatch> = evaluateSequence(node, node.simpleNodes)
+    override fun visitQueryElemNextNode(node: QueryElemNode.NextNode): Sequence<DocumentMatch> = evaluateSequence(node, node.collectSimpleNodes())
 
     private fun evaluateSequence(parentNode: EqlAstNode, simpleNodes: List<QueryElemNode.SimpleNode>): Sequence<DocumentMatch> {
         val firstMatch = simpleNodes[0].accept(this)
@@ -242,4 +242,16 @@ class DocumentMatchingVisitor(
     override fun visitProximityRestrictionNode(node: ProximityRestrictionNode): Sequence<DocumentMatch> {
         error("should never be called")
     }
+}
+
+fun QueryElemNode.NextNode.collectSimpleNodes(): List<QueryElemNode.SimpleNode> {
+    var node = this
+    val res = mutableListOf<QueryElemNode.SimpleNode>()
+    while (node.right !is QueryElemNode.SimpleNode) {
+        res.add(node.left)
+        node = node.right as QueryElemNode.NextNode
+    }
+    res.add(node.left)
+    res.add(node.right as QueryElemNode.SimpleNode)
+    return res
 }

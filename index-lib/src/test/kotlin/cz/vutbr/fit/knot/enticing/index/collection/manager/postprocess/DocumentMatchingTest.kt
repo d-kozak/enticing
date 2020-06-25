@@ -89,7 +89,7 @@ internal class DocumentMatchingTest : AbstractDocumentMatchingTest() {
         forEachInterval("contains 'is a'") {
             val text = textAt("token", interval)
             verify(text == "is a") { "interval should contain text 'is a', but is was '$text'" }
-            verifyLeafCount(2)
+            verifyLeafCount(1)
         }
     }
 
@@ -99,7 +99,17 @@ internal class DocumentMatchingTest : AbstractDocumentMatchingTest() {
         forEachInterval("contains 'is a big'") {
             val text = textAt("token", interval)
             verify(text == "is a big") { "interval should contain text 'is a big', but is was '$text'" }
-            verifyLeafCount(3)
+            verifyLeafCount(1)
+        }
+    }
+
+    @Test
+    @DisplayName("""lemma:to+be""")
+    fun next3() = forEachMatch("""lemma:"to be"""") {
+        forEachInterval("contains 'is a'") {
+            val text = textAt("lemma", interval)
+            verify(text == "to be") { "interval should contain text 'to be', but is was '$text'" }
+            verifyLeafCount(1)
         }
     }
 

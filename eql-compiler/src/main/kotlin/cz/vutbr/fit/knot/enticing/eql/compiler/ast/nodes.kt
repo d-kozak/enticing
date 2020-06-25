@@ -106,12 +106,6 @@ sealed class QueryElemNode : EqlAstNode() {
 
     data class NextNode(val left: SimpleNode, val right: QueryElemNode, override val location: Interval) : QueryElemNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemNextNode(this)
-
-        /**
-         * List of simple nodes below this node
-         * initialized in @see QueryElemNodeCheck but only for the highest next node in the tree
-         */
-        var simpleNodes = emptyList<SimpleNode>()
     }
 
     data class AssignNode(val identifier: String, val elem: QueryElemNode, override val location: Interval) : QueryElemNode() {
