@@ -160,10 +160,8 @@ class AstWalker(protected val listener: EqlListener) : EqlVisitor<Unit> {
 
     override fun visitQueryElemNextNode(node: QueryElemNode.NextNode) {
         listener.enterQueryElemNextNode(node)
-        if (shouldContinue(node)) {
-            node.left.accept(this)
-            node.right.accept(this)
-        }
+        if (shouldContinue(node))
+            node.elems.forEach { it.accept(this) }
         listener.exitQueryElemNextNode(node)
     }
 }

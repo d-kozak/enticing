@@ -104,7 +104,7 @@ sealed class QueryElemNode : EqlAstNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemAlignNode(this)
     }
 
-    data class NextNode(val left: SimpleNode, val right: QueryElemNode, override val location: Interval) : QueryElemNode() {
+    data class NextNode(var elems: List<QueryElemNode>, override val location: Interval) : QueryElemNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemNextNode(this)
     }
 

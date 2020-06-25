@@ -34,17 +34,7 @@ class Mgj4QueryGeneratingVisitor : EqlVisitor<String> {
 
     override fun visitQueryElemAlignNode(node: QueryElemNode.AlignNode): String = "(${node.left.accept(this)} ^ ${node.right.accept(this)})"
 
-    override fun visitQueryElemNextNode(node: QueryElemNode.NextNode): String {
-        val nodes = mutableListOf<QueryElemNode.SimpleNode>()
-        var current = node
-        while (current.right is QueryElemNode.NextNode) {
-            nodes.add(current.left)
-            current = current.right as QueryElemNode.NextNode
-        }
-        nodes.add(current.left)
-        nodes.add(current.right as QueryElemNode.SimpleNode)
-        return nodes.joinToString(separator = " ", prefix = "\"", postfix = "\"") { it.content }
-    }
+    override fun visitQueryElemNextNode(node: QueryElemNode.NextNode): String = node.elems.joinToString(" ", prefix = "\"", postfix = "\"") { it.accept(this) }
 
     override fun visitProximityRestrictionNode(node: ProximityRestrictionNode): String = "~ ${node.distance}"
 

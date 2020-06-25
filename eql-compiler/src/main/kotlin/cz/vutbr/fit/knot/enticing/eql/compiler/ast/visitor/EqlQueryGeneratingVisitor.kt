@@ -68,7 +68,7 @@ class EqlQueryGeneratingVisitor : EqlVisitor<String> {
         } else left
     }
 
-    override fun visitQueryElemNextNode(node: QueryElemNode.NextNode): String = "${node.left}+${node.right}"
+    override fun visitQueryElemNextNode(node: QueryElemNode.NextNode): String = node.elems.joinToString("+", prefix = "(", postfix = ")") { it.accept(this) }
 
     override fun visitQueryElemSequenceNode(node: QueryElemNode.SequenceNode): String = "\"${node.elems.joinToString(" ") { it.accept(this) }}\""
 

@@ -76,10 +76,9 @@ class AstDefinitionsGeneratingVisitor : EqlVisitor<String> {
     }
 
     override fun visitQueryElemNextNode(node: QueryElemNode.NextNode): String {
-        val left = node.left.accept(this)
-        val right = node.right.accept(this)
+        val elems = node.elems.joinToString(",") { it.accept(this) }
         val location = node.location.toKotlinDef()
-        return "QueryElemNode.NextNode($left,$right,$location)"
+        return "QueryElemNode.NextNode(listOf($elems),$location)"
     }
 
     override fun visitProximityRestrictionNode(node: ProximityRestrictionNode): String {
