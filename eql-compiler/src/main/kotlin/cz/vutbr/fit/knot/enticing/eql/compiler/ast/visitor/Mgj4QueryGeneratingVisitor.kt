@@ -26,7 +26,10 @@ class Mgj4QueryGeneratingVisitor : EqlVisitor<String> {
 
     override fun visitQueryElemParenNode(node: QueryElemNode.ParenNode): String = if (node.restriction != null) "(${node.query.accept(this)}) ${node.restriction!!.accept(this)}" else node.query.accept(this)
 
-    override fun visitQueryElemBooleanNode(node: QueryElemNode.BooleanNode): String = node.children.joinToString(" ${node.operator.mg4jValue} ", "(", ")") { it.accept(this) }
+    override fun visitQueryElemBooleanNode(node: QueryElemNode.BooleanNode): String {
+        val content = node.children.joinToString(" ${node.operator.mg4jValue} ", "(", ")") { it.accept(this) }
+        return if (node.restriction != null) "($content ${node.restriction!!.accept(this)})" else content
+    }
 
     override fun visitQueryElemOrderNode(node: QueryElemNode.OrderNode): String = "(${node.left.accept(this)} < ${node.right.accept(this)})"
 

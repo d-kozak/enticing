@@ -139,10 +139,40 @@ class ComplexTests {
 
     @Test
     @DisplayName("picasso visited | explored paris ctx:sent")
-    fun fourteen(){
+    fun fourteen() {
         val (ast, errors) = compiler.parseAndAnalyzeQuery("picasso visited | explored paris ctx:sent", config)
         assertThat(errors).isEmpty()
         ast as RootNode
         assertThat(ast.toEqlQuery()).isEqualTo("picasso (visited | explored) paris ctx:sent")
+    }
+
+    @Test
+    @DisplayName("hello hi ~ 3")
+    fun fifteen() {
+        val (ast, errors) = compiler.parseAndAnalyzeQuery("hello hi ~ 3", config)
+        assertThat(errors).isEmpty()
+        ast as RootNode
+        assertThat(ast.toEqlQuery()).isEqualTo("hello hi ~ 3")
+        assertThat(ast.toMgj4Query()).isEqualTo("((hello & hi) ~ 3)")
+    }
+
+    @Test
+    @DisplayName("hello hi howdy ~ 3")
+    fun sixteen() {
+        val (ast, errors) = compiler.parseAndAnalyzeQuery("hello hi howdy ~ 3", config)
+        assertThat(errors).isEmpty()
+        ast as RootNode
+        assertThat(ast.toEqlQuery()).isEqualTo("(hello hi) howdy ~ 3")
+        assertThat(ast.toMgj4Query()).isEqualTo("(((hello & hi) & howdy) ~ 3)")
+    }
+
+    @Test
+    @DisplayName("lemma:(is a ~ 10)")
+    fun seventeen() {
+        val (ast, errors) = compiler.parseAndAnalyzeQuery("lemma:(is a ~ 10)", config)
+        assertThat(errors).isEmpty()
+        ast as RootNode
+        assertThat(ast.toEqlQuery()).isEqualTo("lemma:(is a ~ 10)")
+        assertThat(ast.toMgj4Query()).isEqualTo("(lemma:(((is & a) ~ 10)){{lemma->token}})")
     }
 }
