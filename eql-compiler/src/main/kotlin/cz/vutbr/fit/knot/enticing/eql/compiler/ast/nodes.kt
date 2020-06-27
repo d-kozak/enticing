@@ -12,7 +12,7 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor.Mgj4QueryGeneratingVi
 import cz.vutbr.fit.knot.enticing.eql.compiler.matching.DocumentMatch
 
 @WhatIf("""
-    this way creating ids prevents use from making the code parallel, but otherwise local ids shoudl be unique, 
+    this way creating ids prevents use from making the code parallel, but otherwise local ids should be unique, 
     because the ast should never have more than LONG.MAX_VALUE nodes at once, so overflow should not be a problem
     """)
 var counter = 0L

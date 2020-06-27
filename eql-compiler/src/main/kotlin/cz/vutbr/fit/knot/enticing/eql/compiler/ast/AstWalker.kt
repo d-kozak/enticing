@@ -5,7 +5,7 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.EqlListener
 /**
  * Encapsulates the core ast walking logic that can be reused by multiple more specific walkers
  */
-class AstWalker(protected val listener: EqlListener) : EqlVisitor<Unit> {
+class AstWalker(private val listener: EqlListener) : EqlVisitor<Unit> {
 
     private fun <T : EqlAstNode> shouldContinue(node: T): Boolean = listener.shouldContinue(node)
 

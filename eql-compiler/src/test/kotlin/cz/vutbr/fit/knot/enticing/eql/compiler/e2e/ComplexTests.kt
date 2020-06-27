@@ -175,4 +175,14 @@ class ComplexTests {
         assertThat(ast.toEqlQuery()).isEqualTo("lemma:(is a ~ 10)")
         assertThat(ast.toMgj4Query()).isEqualTo("(lemma:(((is & a) ~ 10)){{lemma->token}})")
     }
+
+    @Test
+    @DisplayName("a b !(c < d)")
+    fun eighteen() {
+        val (ast, errors) = compiler.parseAndAnalyzeQuery("a b !(c < d)", config)
+        assertThat(errors).isEmpty()
+        ast as RootNode
+        assertThat(ast.toEqlQuery()).isEqualTo("a b !(c < d)")
+        assertThat(ast.toMgj4Query()).isEqualTo("(a & b & !((c < d)))")
+    }
 }
