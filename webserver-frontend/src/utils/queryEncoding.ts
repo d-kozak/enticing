@@ -1,7 +1,8 @@
 export function encodeQuery(query: string): string {
-    return encodeURI(query.replace(/&/g, "::"))
+    return encodeURI(query).replace(/&/g, "%26")
+        .replace(/\+/g, "%2B")
 }
 
 export function decodeQuery(query: string): string {
-    return decodeURI(query).replace(/::/g, "&")
+    return new URLSearchParams(query).get('query')!
 }

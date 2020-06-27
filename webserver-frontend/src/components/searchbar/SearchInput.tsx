@@ -13,6 +13,7 @@ import {getSelectedSearchSettings} from "../../reducers/selectors";
 import {SearchSettings} from "../../entities/SearchSettings";
 import {openSnackbar} from "../../reducers/SnackBarReducer";
 import {User} from "../../entities/User";
+import {decodeQuery} from "../../utils/queryEncoding";
 
 const styles = createStyles({});
 
@@ -27,12 +28,7 @@ export type SearchInputProps =
 
 const SearchInput = (props: SearchInputProps) => {
     const {className = '', initialQuery, user, history, selectedSettings, startSearching: parentStartSearching, openSnackbar} = props;
-
-    const params = new URLSearchParams(location.search);
-
-    let urlQuery = params.get('query');
-    if (urlQuery) urlQuery = urlQuery.replace(/::/g, "&");
-
+    const urlQuery = decodeQuery(location.search);
     const [query, setQuery] = useState<string>(urlQuery || initialQuery);
 
     const [cnt, setCnt] = useState(0);
