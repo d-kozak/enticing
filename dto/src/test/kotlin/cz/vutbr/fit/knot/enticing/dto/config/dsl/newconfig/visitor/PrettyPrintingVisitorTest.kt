@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test
 
 class PrettyPrintingVisitorTest {
 
-
     @Test
     fun `print full config`() {
         loadedConfiguration.prettyPrint()

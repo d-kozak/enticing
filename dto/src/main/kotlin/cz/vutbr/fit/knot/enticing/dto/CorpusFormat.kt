@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.dto
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.AttributeConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.EntityConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.IndexConfiguration
@@ -34,10 +35,11 @@ data class CorpusFormat(
     /**
      * Just for testing
      */
+    @WhatIf("there is no way to specify parent entity here")
     internal constructor(name: String, indexes: List<String>, entities: Map<String, List<String>>)
             : this(name,
             indexes.associateWith { it },
-            entities.mapValues { EntityFormat(it.key, it.value.associateWith { AttributeInfo(it, it) }) }
+            entities.mapValues { EntityFormat(it.key, null, it.value.associateWith { AttributeInfo(it, it) }) }
     )
 }
 
@@ -52,6 +54,7 @@ fun CorpusFormat.toMetadataConfiguration(): MetadataConfiguration {
     for ((name, format) in entities) {
         entityMetadata[name] = EntityConfiguration(
                 name,
+                format.parentEntityName,
                 format.description,
                 format.attributes.mapValues { (attributeName, attributeInfo) ->
                     AttributeConfiguration(attributeName, attributeInfo.description)
@@ -73,6 +76,7 @@ fun CorpusFormat.toMetadataConfiguration(): MetadataConfiguration {
  */
 data class EntityFormat(
         val description: Description,
+        val parentEntityName: String?,
         val attributes: Map<Attribute, AttributeInfo>
 )
 
@@ -89,7 +93,7 @@ fun MetadataConfiguration.toCorpusFormat() =
                 "unknown",
                 indexes.mapValues { (_, index) -> index.description },
                 entities.mapValues { (_, entity) ->
-                    EntityFormat(entity.description,
+                    EntityFormat(entity.description, entity.parentEntityName,
                             entity.attributes.mapValues { (_, attribute) -> AttributeInfo(attribute.index.name, attribute.description) })
                 }
         )
@@ -115,7 +119,7 @@ fun mergeCorpusFormats(formats: List<CorpusFormat>): CorpusFormat {
                     attributes[attribute] = attributeInfo
                 }
             }
-            newEntities[entityName] = EntityFormat(entityFormat.description, attributes)
+            newEntities[entityName] = EntityFormat(entityFormat.description,entityFormat.parentEntityName, attributes)
         }
     }
     val newName = formats.map { it.corpusName }.distinct().joinToString("-")

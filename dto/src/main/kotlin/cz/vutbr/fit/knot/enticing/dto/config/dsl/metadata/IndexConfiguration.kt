@@ -19,6 +19,7 @@ data class IndexConfiguration(
         var columnIndex: Int = 0
 ) : EnticingConfigurationUnit {
 
+    internal lateinit var metadata: MetadataConfiguration
     val isSynthetic: Boolean
         get() = name.startsWith('_')
 

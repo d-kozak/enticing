@@ -8,7 +8,7 @@ data class EntityConfiguration(
          * name of the index
          */
         var name: String,
-
+        var parentEntityName: String? = null,
         /**
          * details about that index
          */
@@ -17,6 +17,7 @@ data class EntityConfiguration(
         var attributes: MutableMap<String, AttributeConfiguration> = mutableMapOf()
 ) : EnticingConfigurationUnit {
 
+    internal lateinit var metadata: MetadataConfiguration
     internal lateinit var metadataConfiguration: MetadataConfiguration
 
     fun attributes(block: AttributeList.() -> Unit) {

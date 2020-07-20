@@ -35,13 +35,20 @@ class EnticingConfigurationWalker(val listener: EnticingConfigurationListener) :
         listener.enterCorpusConfiguration(configuration)
         configuration.indexServers.forEach { it.accept(this) }
         listener.enterMetadataConfiguration(configuration.metadataConfiguration)
+        configuration.metadataConfiguration.accept(this)
         configuration.corpusSourceConfiguration.accept(this)
     }
 
     override fun visitMetadataConfiguration(configuration: MetadataConfiguration) {
         listener.enterMetadataConfiguration(configuration)
-        configuration.indexes.values.forEach { it.accept(this) }
-        configuration.entities.values.forEach { it.accept(this) }
+        configuration.indexes.values.forEach {
+            it.metadata = configuration
+            it.accept(this)
+        }
+        configuration.entities.values.forEach {
+            it.metadata = configuration
+            it.accept(this)
+        }
     }
 
     override fun visitIndexConfiguration(configuration: IndexConfiguration) {
