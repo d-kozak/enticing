@@ -1,8 +1,10 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfigurationUnit
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.visitor.EnticingConfigurationVisitor
 
+@Incomplete("inherit attributes...")
 data class EntityConfiguration(
         /**
          * name of the index

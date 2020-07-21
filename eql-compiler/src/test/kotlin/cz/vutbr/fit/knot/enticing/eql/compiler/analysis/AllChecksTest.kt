@@ -42,6 +42,11 @@ internal val config = metadataConfiguration {
     entities {
         "person" with attributes("url", "image", "name", "gender", "birthplace", "birthdate", "deathplace", "deathdate", "profession", "nationality")
 
+        entity("superperson") {
+            parentEntityName = "person"
+            attributes("superpower")
+        }
+
         "artist" with attributes("url", "image", "name", "gender", "birthplace", "birthdate", "deathplace", "deathdate", "role", "nationality")
 
         "location" with attributes("url", "image", "name", "country")

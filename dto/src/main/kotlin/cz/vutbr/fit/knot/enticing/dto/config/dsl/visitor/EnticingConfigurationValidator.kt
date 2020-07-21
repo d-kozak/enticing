@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl.visitor
 
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.*
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.EntityConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.util.Validator
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.util.ValidatorImpl
 import java.io.File
@@ -36,12 +36,7 @@ class EnticingConfigurationValidator(validator: Validator) : EnticingConfigurati
         checkNotEmpty(deploymentConfiguration.configurationScript, "configuration script")
     }
 
-    override fun enterEntityConfiguration(configuration: EntityConfiguration) {
-        val parent = configuration.parentEntityName
-        if (parent != null) {
-            this.check(configuration.metadata.entities[parent] != null) { "Entity '${configuration.name}' has invalid parent entity '$parent'" }
-        }
-    }
+    override fun enterMetadataConfiguration(configuration: MetadataConfiguration) = validateMetadataConfiguration(configuration)
 }
 
 

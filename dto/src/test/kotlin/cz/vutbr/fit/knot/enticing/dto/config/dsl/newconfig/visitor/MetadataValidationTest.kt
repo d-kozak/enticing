@@ -20,4 +20,20 @@ class MetadataValidationTest {
             metadata.entities.getValue("date").parentEntityName = null
         }
     }
+
+    @Test
+    fun `with cycle`() {
+        try {
+            metadata.entities.getValue("date").parentEntityName = "person"
+            metadata.entities.getValue("person").parentEntityName = "artist"
+            metadata.entities.getValue("artist").parentEntityName = "date"
+            assertThrows<IllegalStateException> {
+                loadedConfiguration.validateOrFail()
+            }
+        } finally {
+            metadata.entities.getValue("date").parentEntityName = null
+            metadata.entities.getValue("person").parentEntityName = null
+            metadata.entities.getValue("artist").parentEntityName = null
+        }
+    }
 }

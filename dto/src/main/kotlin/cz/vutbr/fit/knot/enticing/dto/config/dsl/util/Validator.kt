@@ -20,6 +20,10 @@ interface Validator {
     } else true
 
 
+    fun report(error: String) {
+        errors.add(error)
+    }
+
     fun checkNotEmpty(string: String, name: String): Boolean {
         val isEmpty = string.isEmpty()
         if (isEmpty) errors.add("$name should not be empty")
