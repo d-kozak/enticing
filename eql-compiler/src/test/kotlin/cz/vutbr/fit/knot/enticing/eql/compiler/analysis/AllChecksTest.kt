@@ -83,6 +83,9 @@ internal val config = metadataConfiguration {
     it.validateOrFail()
 }.toCorpusFormat()
         .toMetadataConfiguration() // "double transform" it to ensure all important data is still there
+        .also {
+            it.validateOrFail()
+        }
 
 fun assertHasError(errors: List<CompilerError>, id: String, count: Int = 1, location: Interval? = null) {
     assertThat(errors).hasSize(count)

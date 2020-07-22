@@ -22,6 +22,8 @@ data class EntityConfiguration(
     internal lateinit var metadata: MetadataConfiguration
     internal lateinit var metadataConfiguration: MetadataConfiguration
 
+    lateinit var fullName: String
+
     fun attributes(block: AttributeList.() -> Unit) {
         val attributeList = AttributeList(metadataConfiguration).apply(block).attributes
         for (attribute in attributeList)

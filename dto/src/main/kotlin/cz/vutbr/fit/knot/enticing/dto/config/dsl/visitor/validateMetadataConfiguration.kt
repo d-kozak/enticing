@@ -1,10 +1,30 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl.visitor
 
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.EntityConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 
 fun EnticingConfigurationValidator.validateMetadataConfiguration(metadataConfiguration: MetadataConfiguration) {
     val cycleDetected = checkForCycle(metadataConfiguration)
-    if (cycleDetected) return
+    if (cycleDetected || errorsDetected()) return
+    resolveFullNames(metadataConfiguration)
+}
+
+fun EnticingConfigurationValidator.resolveFullNames(metadataConfiguration: MetadataConfiguration) {
+    val seen = mutableSetOf<String>()
+
+    fun resolve(entity: EntityConfiguration): String {
+        if (entity.name in seen) return entity.fullName
+        entity.fullName = if (entity.parentEntityName != null) resolve(metadataConfiguration.entities.getValue(entity.parentEntityName!!)) + "->" else ""
+        entity.fullName += entity.name
+        seen.add(entity.name)
+        return entity.fullName
+    }
+
+    for (entity in metadataConfiguration.entities.values) {
+        if (entity.name !in seen) {
+            entity.fullName = resolve(entity)
+        }
+    }
 }
 
 fun EnticingConfigurationValidator.checkForCycle(metadataConfiguration: MetadataConfiguration): Boolean {

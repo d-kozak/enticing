@@ -9,7 +9,10 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.ast.QueryElemNode
 
 class EntityCheck(id: String) : EqlAstCheck<QueryElemNode.AttributeNode>(id, QueryElemNode.AttributeNode::class) {
     override fun analyze(node: QueryElemNode.AttributeNode, symbolTable: SymbolTable, metadataConfiguration: MetadataConfiguration, reporter: Reporter) {
-        if (node.entity !in metadataConfiguration.entities) {
+        val entity = metadataConfiguration.entities[node.entity]
+        if (entity != null) {
+            node.entityNode.content = entity.fullName
+        } else {
             val entityLocation = Interval.valueOf(node.location.from, node.location.from + node.entity.length - 1)
             reporter.error("Entity '${node.entity}' is not available", entityLocation, id)
         }

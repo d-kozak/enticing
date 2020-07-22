@@ -86,6 +86,8 @@ interface Validator {
         return isValid
     }
 
+    fun errorsDetected() = errors.isNotEmpty()
+
     fun requireNoErrors() {
         if (errors.isNotEmpty())
             throw IllegalStateException(errors.joinToString("\n"))

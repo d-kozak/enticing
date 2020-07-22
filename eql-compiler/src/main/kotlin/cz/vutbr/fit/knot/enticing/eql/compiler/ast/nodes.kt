@@ -129,8 +129,11 @@ sealed class QueryElemNode : EqlAstNode() {
 
     data class AttributeNode(val entityNode: SimpleNode, val attribute: String, val elem: QueryElemNode, override val location: Interval) : QueryElemNode() {
 
-        val entity: String
+        var entity: String
             get() = entityNode.content
+            set(value) {
+                entityNode.content = value
+            }
 
         var correspondingIndex: String = "<<<Unknown>>>"
 
