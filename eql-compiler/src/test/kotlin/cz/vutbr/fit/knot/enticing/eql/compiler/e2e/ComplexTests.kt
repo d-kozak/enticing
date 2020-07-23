@@ -10,6 +10,7 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor.toEqlQuery
 import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class ComplexTests {
@@ -21,7 +22,7 @@ class ComplexTests {
     fun one() {
         val (ast, errors) = compiler.parseAndAnalyzeQuery("person.name:And* lemma:go", config)
         assertThat(errors).isEmpty()
-        assertThat(ast.toMgj4Query()).isEqualTo("(((nertag:person{{nertag->token}}) ^ (param2:(and*){{param2->token}})) & (lemma:(go){{lemma->token}}))")
+        assertThat(ast.toMgj4Query()).isEqualTo("(((nertag:person*{{nertag->token}}) ^ (param2:(and*){{param2->token}})) & (lemma:(go){{lemma->token}}))")
     }
 
     @Test
@@ -54,7 +55,7 @@ class ComplexTests {
     fun five() {
         val (ast, errors) = compiler.parseAndAnalyzeQuery("person.name:Pablo_Picasso | person.name:Benjamin_Franklin", config)
         assertThat(errors).isEmpty()
-        assertThat(ast.toMgj4Query()).isEqualTo("(((nertag:person{{nertag->token}}) ^ (param2:(pablo_picasso){{param2->token}})) | ((nertag:person{{nertag->token}}) ^ (param2:(benjamin_franklin){{param2->token}})))")
+        assertThat(ast.toMgj4Query()).isEqualTo("(((nertag:person*{{nertag->token}}) ^ (param2:(pablo_picasso){{param2->token}})) | ((nertag:person*{{nertag->token}}) ^ (param2:(benjamin_franklin){{param2->token}})))")
     }
 
 
@@ -63,7 +64,7 @@ class ComplexTests {
     fun six() {
         val (ast, errors) = compiler.parseAndAnalyzeQuery("person.name:(pepa | honza)", config)
         assertThat(errors).isEmpty()
-        assertThat(ast.toMgj4Query()).isEqualTo("((nertag:person{{nertag->token}}) ^ (param2:((pepa | honza)){{param2->token}}))")
+        assertThat(ast.toMgj4Query()).isEqualTo("((nertag:person*{{nertag->token}}) ^ (param2:((pepa | honza)){{param2->token}}))")
     }
 
     @Test
@@ -71,7 +72,7 @@ class ComplexTests {
     fun seven() {
         val (ast, errors) = compiler.parseAndAnalyzeQuery("person.name:pepa | location.name:new_york", config)
         assertThat(errors).isEmpty()
-        assertThat(ast.toMgj4Query()).isEqualTo("(((nertag:person{{nertag->token}}) ^ (param2:(pepa){{param2->token}})) | ((nertag:location{{nertag->token}}) ^ (param2:(new_york){{param2->token}})))")
+        assertThat(ast.toMgj4Query()).isEqualTo("(((nertag:person*{{nertag->token}}) ^ (param2:(pepa){{param2->token}})) | ((nertag:location*{{nertag->token}}) ^ (param2:(new_york){{param2->token}})))")
     }
 
     @Test
@@ -110,7 +111,7 @@ class ComplexTests {
         val (ast, errors) = compiler.parseAndAnalyzeQuery("person.name:Honz* lemma:(work  < ( from home ))  ctx:sent doc.url:'https://www.google.com'", config)
         assertThat(errors).isEmpty()
         ast as RootNode
-        assertThat(ast.toMgj4Query()).isEqualTo("(((((nertag:person{{nertag->token}}) ^ (param2:(honz*){{param2->token}})) & (lemma:((work < (from & home))){{lemma->token}})))  - ¶)")
+        assertThat(ast.toMgj4Query()).isEqualTo("(((((nertag:person*{{nertag->token}}) ^ (param2:(honz*){{param2->token}})) & (lemma:((work < (from & home))){{lemma->token}})))  - ¶)")
         assertThat(ast.contextRestriction).isEqualTo(ContextRestriction.SENTENCE)
         assertThat(ast.documentRestriction).isEqualTo(DocumentRestriction.Url("https://www.google.com"))
     }
@@ -121,7 +122,7 @@ class ComplexTests {
         val (ast, errors) = compiler.parseAndAnalyzeQuery("person.name:Honz* lemma:(work  < ( from home ))  ctx:sent doc.uuid:'1e07edd3-5042-5605-9d68-5b5eeafe1e40'", config)
         assertThat(errors).isEmpty()
         ast as RootNode
-        assertThat(ast.toMgj4Query()).isEqualTo("(((((nertag:person{{nertag->token}}) ^ (param2:(honz*){{param2->token}})) & (lemma:((work < (from & home))){{lemma->token}})))  - ¶)")
+        assertThat(ast.toMgj4Query()).isEqualTo("(((((nertag:person*{{nertag->token}}) ^ (param2:(honz*){{param2->token}})) & (lemma:((work < (from & home))){{lemma->token}})))  - ¶)")
         assertThat(ast.contextRestriction).isEqualTo(ContextRestriction.SENTENCE)
         assertThat(ast.documentRestriction).isEqualTo(DocumentRestriction.Uuid("1e07edd3-5042-5605-9d68-5b5eeafe1e40"))
     }
@@ -184,5 +185,18 @@ class ComplexTests {
         ast as RootNode
         assertThat(ast.toEqlQuery()).isEqualTo("a b !(c < d)")
         assertThat(ast.toMgj4Query()).isEqualTo("(a & b & !((c < d)))")
+    }
+
+    @Nested
+    inner class Inheritance {
+        @Test
+        @DisplayName("child.name:John")
+        fun one() {
+            val (ast, errors) = compiler.parseAndAnalyzeQuery("child.name:John", config)
+            assertThat(errors).isEmpty()
+            ast as RootNode
+            assertThat(ast.toEqlQuery()).isEqualTo("child.name:john")
+            assertThat(ast.toMgj4Query()).isEqualTo("((nertag:person->child*{{nertag->token}}) ^ (param2:(john){{param2->token}}))")
+        }
     }
 }

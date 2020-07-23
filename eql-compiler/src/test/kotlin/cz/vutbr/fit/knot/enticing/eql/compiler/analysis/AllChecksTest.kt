@@ -42,9 +42,8 @@ internal val config = metadataConfiguration {
     entities {
         "person" with attributes("url", "image", "name", "gender", "birthplace", "birthdate", "deathplace", "deathdate", "profession", "nationality")
 
-        entity("superperson") {
+        entity("child") {
             parentEntityName = "person"
-            attributes("superpower")
         }
 
         "artist" with attributes("url", "image", "name", "gender", "birthplace", "birthdate", "deathplace", "deathdate", "role", "nationality")
@@ -254,13 +253,13 @@ class AllChecksTest {
         @Test
         fun `simple query`() {
             val (_, errors) = compiler.parseAndAnalyzeQuery("personek.name:honza", config) // should be person
-            assertHasError(errors, "ENT-1", location = Interval.valueOf(0, 7))
+            assertHasError(errors, "ENT-1", count = 2, location = Interval.valueOf(0, 7))
         }
 
         @Test
         fun `more complex query`() {
             val (_, errors) = compiler.parseAndAnalyzeQuery("nertag:person^(person1.name:Picasso) lemma:(visit|explore) Paris ctx:sent", config)
-            assertHasError(errors, "ENT-1", location = Interval.valueOf(15, 21))
+            assertHasError(errors, "ENT-1", count = 2, location = Interval.valueOf(15, 21))
         }
     }
 
