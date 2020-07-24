@@ -39,7 +39,7 @@ enticingConfiguration {
     corpusConfig {
         corpus("wiki-2018") {
             collectionsDir = "/mnt/data/indexes/xkozak15/wiki-2020-inheritance-small"
-            serverFile("$ENTICING_HOME/deploy/big-wiki/servers.txt")
+            serverFile("$ENTICING_HOME/deploy/3.0_inheritance_small/servers.txt")
 
             corpusSource {
                 server = "minerva3.fit.vutbr.cz"
