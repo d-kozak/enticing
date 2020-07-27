@@ -37,7 +37,7 @@ class TextUnitListGeneratingVisitor(config: MetadataConfiguration, defaultIndexN
             logger.warn("entityStart called while some entity metadata are still present inside the listener, they will be overwritten")
         }
         if (entityClass in config.entities) {
-            this.attributes = config.entities.getValue(entityClass).attributes.values.map { attributes[it.attributeIndex] }
+            this.attributes = config.entities.getValue(entityClass).ownAttributes.values.map { attributes[it.attributeIndex] }
             this.entityClass = entityClass
             this.wordsForEntity = mutableListOf()
         }

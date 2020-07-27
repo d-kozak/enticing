@@ -1,10 +1,8 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata
 
-import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfigurationUnit
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.visitor.EnticingConfigurationVisitor
 
-@Incomplete("inherit attributes...")
 data class EntityConfiguration(
         /**
          * name of the index
@@ -16,18 +14,22 @@ data class EntityConfiguration(
          */
         var description: String = "",
 
-        var attributes: MutableMap<String, AttributeConfiguration> = mutableMapOf()
+        var ownAttributes: MutableMap<String, AttributeConfiguration> = mutableMapOf()
 ) : EnticingConfigurationUnit {
 
     internal lateinit var metadata: MetadataConfiguration
     internal lateinit var metadataConfiguration: MetadataConfiguration
+
+    lateinit var allAttributes: MutableMap<String, AttributeConfiguration>
+
+    internal fun attributesResolved() = ::allAttributes.isInitialized
 
     lateinit var fullName: String
 
     fun attributes(block: AttributeList.() -> Unit) {
         val attributeList = AttributeList(metadataConfiguration).apply(block).attributes
         for (attribute in attributeList)
-            attributes[attribute.name] = attribute
+            ownAttributes[attribute.name] = attribute
     }
 
     fun attributes(vararg names: String) {
@@ -69,11 +71,11 @@ class EntityList(val metadataConfiguration: MetadataConfiguration, val entities:
 
         for (entity in entities) {
             for (index in indexes) {
-                if (index.name !in entity.attributes) {
+                if (index.name !in entity.ownAttributes) {
                     val attribute = AttributeConfiguration(index.name, index.description)
                     attribute.index = index
-                    attribute.attributeIndex = entity.attributes.size
-                    entity.attributes[index.name] = attribute
+                    attribute.attributeIndex = entity.ownAttributes.size
+                    entity.ownAttributes[index.name] = attribute
                 }
             }
         }

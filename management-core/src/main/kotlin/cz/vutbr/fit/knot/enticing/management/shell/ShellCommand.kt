@@ -38,7 +38,7 @@ data class SshCommand(
         val command: ShellCommand,
         val forcePseudoTerminal: Boolean = false
 ) : ShellCommand {
-    override val value: String = "ssh ${if (forcePseudoTerminal) "-T " else ""}$username@$server ${command.value}"
+    override val value: String = "ssh ${if (forcePseudoTerminal) "-T " else ""}$username@$server '${command.value}'"
 }
 
 /**

@@ -40,7 +40,7 @@ private fun MetadataConfiguration.filterEntities(entities: Entities): LinkedHash
                 is Indexes.Predefined -> {
                     when (indexes.value) {
                         "all" -> getEntityOrDie(name)
-                        "none" -> getEntityOrDie(name).copy(attributes = mutableMapOf())
+                        "none" -> getEntityOrDie(name).copy(ownAttributes = mutableMapOf())
                         else -> throw IllegalArgumentException("Unknown entity attribute format ${indexes.value}")
                     }
                 }
@@ -48,12 +48,12 @@ private fun MetadataConfiguration.filterEntities(entities: Entities): LinkedHash
                     val entity = getEntityOrDie(name)
                     val attributes = indexes.names
                             .map {
-                                it to (entity.attributes[it]
+                                it to (entity.ownAttributes[it]
                                         ?: throw IllegalArgumentException("Unknown attribute $it of entity $name"))
                             }
                             .toMap()
                             .toMutableMap()
-                    entity.copy(attributes = attributes)
+                    entity.copy(ownAttributes = attributes)
                 }
             }
         }

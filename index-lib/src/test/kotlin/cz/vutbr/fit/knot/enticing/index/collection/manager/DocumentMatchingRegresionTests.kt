@@ -40,4 +40,20 @@ class DocumentMatchingRegresionTests {
         val singleMatch = matchInfo.intervals[0]
         assertThat(singleMatch.interval).isEqualTo(Interval.valueOf(4420, 4438))
     }
+
+    @Test
+    fun `1922 in literature`(){
+        val query = "nertag:artist"
+        val doc = loadDocument("../data/regres/1922inLiterature.mg4j")
+        val matchInfo = query(query, doc)
+        println(matchInfo)
+    }
+
+    @Test
+    fun `1922 in literature with global contraints`(){
+        val query = "a:=nertag:person b:=nertag:person ctx:sent && a.url != b.url"
+        val doc = loadDocument("../data/regres/1922inLiterature.mg4j")
+        val matchInfo = query(query, doc)
+        println(matchInfo)
+    }
 }

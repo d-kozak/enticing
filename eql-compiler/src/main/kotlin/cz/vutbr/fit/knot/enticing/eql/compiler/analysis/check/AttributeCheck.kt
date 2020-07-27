@@ -13,14 +13,14 @@ class AttributeCheck(id: String) : EqlAstCheck<QueryElemNode.AttributeNode>(id, 
         var entity: EntityConfiguration? = metadataConfiguration.entities[node.entity]
         var found = false
         while (entity != null) {
-            if (node.attribute in entity.attributes) {
+            if (node.attribute in entity.ownAttributes) {
                 found = true
                 break
             }
             entity = metadataConfiguration.entities[entity.parentEntityName]
         }
         if (found) {
-            val attribute = entity!!.attributes.getValue(node.attribute)
+            val attribute = entity!!.ownAttributes.getValue(node.attribute)
             node.correspondingIndex = attribute.index.name
         } else {
             val attributeLocation = Interval.valueOf(

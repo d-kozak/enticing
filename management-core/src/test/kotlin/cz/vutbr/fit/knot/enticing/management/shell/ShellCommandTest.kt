@@ -58,7 +58,7 @@ class ShellCommandTest {
         fun `ssh command`() {
             val cmd = SshCommand("xkozak15", "Simplehost", SimpleCommand("ls -l"))
             assertThat(cmd.value)
-                    .isEqualTo("ssh xkozak15@Simplehost ls -l")
+                    .isEqualTo("ssh xkozak15@Simplehost 'ls -l'")
         }
 
         @Test
@@ -94,6 +94,18 @@ class ShellCommandTest {
                     StartScreenCommand("screen1", SimpleCommand("run-run-long"))
             )
             assertThat(cmd.value).isEqualTo("parallel-ssh -l xkozak15 -H 123 -H 456 -H 789 -i screen -S screen1 -d -m run-run-long")
+        }
+    }
+
+    @Nested
+    inner class DumpMg4jFilesTest{
+
+        @Test
+        fun `dump new wiki limited`() = runBlocking{
+            // ssh xkozak15@minerva3.fit.vutbr.cz ls -l /var/xdolez52/Zpracovani_Wikipedie/html_from_wikipedia_en_all_nopic_2019-10.zim/6-mg4j/old-2020-01-03/*.mg4j | head -n 50
+            val files = executor.loadMg4jFiles("xkozak15","minerva3.fit.vutbr.cz",
+                    "/var/xdolez52/Zpracovani_Wikipedie/html_from_wikipedia_en_all_nopic_2019-10.zim/6-mg4j/old-2020-01-03",50)
+            println(files)
         }
     }
 }

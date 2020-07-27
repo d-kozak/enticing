@@ -53,7 +53,7 @@ class StringWithAnnotationsGeneratingVisitor(config: MetadataConfiguration, defa
         if (attributes != null && entityClass != null && entityStartPosition != -1) {
             val entityDescription = config.entities[entityClass!!]
             if (entityDescription != null) {
-                val annotationContent = entityDescription.attributes.values.asSequence()
+                val annotationContent = entityDescription.ownAttributes.values.asSequence()
                         .mapIndexed { i, attribute -> attribute.name to attributes!![i] }
                         .toMap()
                         .toMutableMap()

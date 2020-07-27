@@ -19,7 +19,10 @@ class BasicIndexCheck(id: String) : EqlAstCheck<QueryElemNode.IndexNode>(id, Que
             val nodes = mutableListOf<QueryElemNode.SimpleNode>()
             if (node.elem.collectAllSimpleNodesInExpression(nodes)) {
                 for (simpleNode in nodes) {
-                    if (simpleNode.content !in metadataConfiguration.entities) {
+                    val entity = metadataConfiguration.entities[simpleNode.content]
+                    if (entity != null) {
+                        simpleNode.content = entity.fullName + "*"
+                    } else {
                         reporter.error("Entity ${simpleNode.content} is not available", simpleNode.location, id)
                     }
                 }

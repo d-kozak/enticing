@@ -96,9 +96,9 @@ class PrettyPrintingVisitor : EnticingConfigurationVisitor {
         withIndent("entity") {
             appendProperty("name", configuration.name)
             appendProperty("description", configuration.description)
-            if (configuration.attributes.isNotEmpty())
+            if (configuration.ownAttributes.isNotEmpty())
                 withIndent("attributes") {
-                    for (attribute in configuration.attributes.values)
+                    for (attribute in configuration.ownAttributes.values)
                         attribute.accept(this)
                 }
         }

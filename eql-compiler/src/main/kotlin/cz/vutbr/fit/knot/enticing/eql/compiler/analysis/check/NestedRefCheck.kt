@@ -25,11 +25,14 @@ class NestedRefCheck(id: String) : EqlAstCheck<ReferenceNode.NestedReferenceNode
              * overlapping is also possible -> "person.name:york | nertag:location"
              */
             val entities = collectAllEntities(source.elem, metadataConfiguration)
+                    ?.map { it.replace("*", "") }
+                    ?.map { metadataConfiguration.resolveEntity(it) }
+
             if (entities != null) {
-                val validEntities = entities.mapNotNull { metadataConfiguration.entities[it] }.toSet()
-                if (!validEntities.all { node.attribute in it.attributes }) {
+                val validEntities = entities.filterNotNull().toSet()
+                if (!validEntities.all { node.attribute in it.allAttributes }) {
                     val all = validEntities.map { it.name }
-                    val missingIn = validEntities.filter { node.attribute !in it.attributes }
+                    val missingIn = validEntities.filter { node.attribute !in it.ownAttributes }
                             .map { it.name }
                     reporter.error("Attribute ${node.attribute} is not a common attribute of entities $all, it is missing in $missingIn", attrLocation, id)
                 } else {
@@ -53,7 +56,7 @@ class NestedRefCheck(id: String) : EqlAstCheck<ReferenceNode.NestedReferenceNode
                 true
             }
             is QueryElemNode.IndexNode -> if (node.index == metadataConfiguration.entityIndexName) collect(node.elem) else false
-            is QueryElemNode.AttributeNode -> if (node.entity in metadataConfiguration.entities && node.attribute in metadataConfiguration.entities.getValue(node.entity).attributes) {
+            is QueryElemNode.AttributeNode -> if (node.entity in metadataConfiguration.entities && node.attribute in metadataConfiguration.entities.getValue(node.entity).ownAttributes) {
                 nodes.add(node.entity)
             } else false
             is QueryElemNode.ParenNode -> collect(node.query)

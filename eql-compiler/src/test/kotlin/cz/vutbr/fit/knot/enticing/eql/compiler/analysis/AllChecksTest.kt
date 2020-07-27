@@ -137,7 +137,7 @@ class AllChecksTest {
             assertThat(tree).isEqualTo(RootNode(
                     QueryElemNode.BooleanNode(
                             mutableListOf(
-                                    QueryElemNode.IndexNode("nertag", QueryElemNode.SimpleNode("person", SimpleQueryType.STRING, Interval.valueOf(7, 12)), Interval.valueOf(0, 12)),
+                                    QueryElemNode.IndexNode("nertag", QueryElemNode.SimpleNode("person*", SimpleQueryType.STRING, Interval.valueOf(7, 12)), Interval.valueOf(0, 12)),
                                     QueryElemNode.ParenNode(
                                             QueryElemNode.BooleanNode(mutableListOf(
                                                     QueryElemNode.SimpleNode("visited", SimpleQueryType.STRING, Interval.valueOf(15, 21)),

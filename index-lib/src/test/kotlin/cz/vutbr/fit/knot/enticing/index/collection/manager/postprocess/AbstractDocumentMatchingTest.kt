@@ -51,7 +51,7 @@ abstract class Check(val name: String, val document: IndexedDocument, val metada
     }
 
     fun attributeCellsAt(entity: String, attribute: String, interval: Interval? = null): List<String> {
-        val content = document.content[metadataConfiguration.entities.getValue(entity).attributes.getValue(attribute).index.columnIndex]
+        val content = document.content[metadataConfiguration.entities.getValue(entity).ownAttributes.getValue(attribute).index.columnIndex]
         return (if (interval != null) content.subList(interval.from, interval.to + 1) else content).map { it.toLowerCase() }
     }
 

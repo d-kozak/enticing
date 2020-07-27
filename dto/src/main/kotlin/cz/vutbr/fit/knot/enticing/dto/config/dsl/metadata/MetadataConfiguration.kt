@@ -72,5 +72,11 @@ data class MetadataConfiguration(
     }
 
     fun indexOf(name: String): Int = indexes.getValue(name).columnIndex
+
+    fun resolveEntity(entityClass: String): EntityConfiguration? {
+        val split = entityClass.lastIndexOf("->")
+        val entityName = if (split != -1) entityClass.substring(split + 2) else entityClass
+        return entities[entityName]
+    }
 }
 

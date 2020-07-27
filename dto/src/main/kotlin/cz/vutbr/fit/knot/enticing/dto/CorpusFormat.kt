@@ -5,6 +5,7 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.AttributeConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.EntityConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.IndexConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.visitor.validateOrFail
 import javax.validation.constraints.NotBlank
 
 
@@ -67,6 +68,7 @@ fun CorpusFormat.toMetadataConfiguration(): MetadataConfiguration {
     }
 
     return MetadataConfiguration(indexMetadata, entityMetadata)
+            .validateOrFail()
 }
 
 /**
@@ -94,7 +96,7 @@ fun MetadataConfiguration.toCorpusFormat() =
                 indexes.mapValues { (_, index) -> index.description },
                 entities.mapValues { (_, entity) ->
                     EntityFormat(entity.description, entity.parentEntityName,
-                            entity.attributes.mapValues { (_, attribute) -> AttributeInfo(attribute.index.name, attribute.description) })
+                            entity.ownAttributes.mapValues { (_, attribute) -> AttributeInfo(attribute.index.name, attribute.description) })
                 }
         )
 
@@ -119,7 +121,7 @@ fun mergeCorpusFormats(formats: List<CorpusFormat>): CorpusFormat {
                     attributes[attribute] = attributeInfo
                 }
             }
-            newEntities[entityName] = EntityFormat(entityFormat.description,entityFormat.parentEntityName, attributes)
+            newEntities[entityName] = EntityFormat(entityFormat.description, entityFormat.parentEntityName, attributes)
         }
     }
     val newName = formats.map { it.corpusName }.distinct().joinToString("-")

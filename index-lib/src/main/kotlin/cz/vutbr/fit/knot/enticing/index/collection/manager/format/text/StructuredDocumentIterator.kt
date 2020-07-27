@@ -86,12 +86,12 @@ class StructuredDocumentIterator(private val corpusConfiguration: MetadataConfig
                     }()
                     val isReplicated = len == -1
                     if (!isReplicated) {
-                        val attributeInfo = corpusConfiguration.entities[entityClass]
-                        startedEntity = if (attributeInfo != null) {
-                            val attributes = attributeInfo.attributes.values.map { it.index.columnIndex }.map { word[it] }
+                        val entity = corpusConfiguration.resolveEntity(entityClass)
+                        startedEntity = if (entity != null) {
+                            val attributes = entity.allAttributes.values.map { it.index.columnIndex }.map { word[it] }
 
-                            visitor.visitEntityStart(attributes, entityClass)
-                            Triple(attributes, entityClass, i + len - 1)
+                            visitor.visitEntityStart(attributes, entity.name)
+                            Triple(attributes, entity.name, i + len - 1)
                         } else {
                             logger.warn("${document.title}:${document.id}:[$i]:encountered entity $entityClass for which there is no known format, attributes will be empty")
                             visitor.visitEntityStart(emptyList(), entityClass)

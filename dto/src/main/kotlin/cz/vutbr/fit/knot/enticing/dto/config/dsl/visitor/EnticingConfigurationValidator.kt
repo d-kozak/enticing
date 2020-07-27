@@ -40,6 +40,14 @@ class EnticingConfigurationValidator(validator: Validator) : EnticingConfigurati
 }
 
 
+fun MetadataConfiguration.validateOrFail():MetadataConfiguration{
+    val validator = EnticingConfigurationValidator(ValidatorImpl())
+    validator.enterMetadataConfiguration(this)
+    if (validator.errors.isNotEmpty())
+        throw IllegalStateException(validator.errors.joinToString("\n"))
+    return this
+}
+
 fun EnticingConfiguration.validateOrFail(): EnticingConfiguration {
     val validator = EnticingConfigurationValidator(ValidatorImpl())
     this.walk(validator)

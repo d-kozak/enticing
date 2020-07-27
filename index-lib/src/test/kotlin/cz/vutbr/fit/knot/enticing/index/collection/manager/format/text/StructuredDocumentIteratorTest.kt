@@ -6,6 +6,7 @@ import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.index.utils.testDocument
 import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 
@@ -177,6 +178,57 @@ internal class StructuredDocumentIteratorTest {
                         "w" to listOf("home", "3", "0", "0", "0"),
                         "w" to listOf("foo", "4", "0", "0", "0")
                 ))
+    }
+
+    @Nested
+    inner class WithInheritance {
+
+        private val withEntities = metadataConfiguration {
+            indexes {
+                index("token")
+                index("pos")
+                index("nertag")
+                attributeIndexes(1)
+                index("len")
+            }
+            entities {
+                "person" with attributes("name")
+                entity("artist") {
+                    parentEntityName = "person"
+                }
+            }
+            lengthIndexName = "len"
+        }.also { it.validateOrFail() }
+
+        @Test
+        fun `with artist`() {
+            val iterator = StructuredDocumentIterator(withEntities, SimpleStdoutLoggerFactory)
+            val document = testDocument(4,
+                    "Jan Novak home foo",
+                    "1 2 3 4",
+                    "person->artist 0 0 0",
+                    "Jan_Novak 0 0 0",
+                    "2 0 0 0"
+            )
+            val visitor = TestVisitor()
+            iterator.iterateDocument(document,
+                    matchStarts = mapOf(0 to Interval.valueOf(42)),
+                    matchEnds = setOf(0),
+                    visitor = visitor)
+            assertThat(visitor.content)
+                    .isEqualTo(listOf(
+                            "ms" to Interval.valueOf(from = 42, to = 42),
+                            "es" to (listOf("Jan_Novak") to "artist"),
+                            "w" to listOf("Jan", "1", "person->artist", "Jan_Novak", "2"),
+                            "ee" to null,
+                            "me" to null,
+                            "es" to (listOf("Jan_Novak") to "artist"),
+                            "w" to listOf("Novak", "2", "0", "0", "0"),
+                            "ee" to null,
+                            "w" to listOf("home", "3", "0", "0", "0"),
+                            "w" to listOf("foo", "4", "0", "0", "0")
+                    ))
+        }
     }
 
 }

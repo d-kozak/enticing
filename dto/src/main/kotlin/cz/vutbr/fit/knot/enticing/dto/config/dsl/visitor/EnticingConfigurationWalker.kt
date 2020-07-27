@@ -57,7 +57,7 @@ class EnticingConfigurationWalker(val listener: EnticingConfigurationListener) :
 
     override fun visitEntityConfiguration(configuration: EntityConfiguration) {
         listener.enterEntityConfiguration(configuration)
-        configuration.attributes.values.forEach { it.accept(this) }
+        configuration.ownAttributes.values.forEach { it.accept(this) }
     }
 
     override fun visitAttributeConfiguration(configuration: AttributeConfiguration) {

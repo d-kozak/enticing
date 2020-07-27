@@ -72,8 +72,8 @@ class GlobalConstraintEvaluationVisitor(val ast: RootNode, val metadataConfigura
         val match = identifierMatch[node.identifier]
                 ?: error("Identifier ${node.identifier} should be found in $identifierMatch")
         val entity = identifyEntity(node, match)
-                ?: throw IllegalStateException("No entity found for node $node")
-        val index = entity.attributes[node.attribute]?.index?.columnIndex
+                ?: throw IllegalStateException("No entity found for node $node, document content: ${document.content[metadataConfiguration.entityIndex!!.columnIndex].subList(match.match.from, match.match.to + 1)}")
+        val index = entity.ownAttributes[node.attribute]?.index?.columnIndex
                 ?: error("Attribute ${node.attribute} not found in $entity, should be caught earlier")
         return document.content[index][match.match.from]
     }
@@ -83,7 +83,7 @@ class GlobalConstraintEvaluationVisitor(val ast: RootNode, val metadataConfigura
         loop@ for (entity in node.correspondingEntities) {
             for (i in eqlMatch.match) {
                 val word = entityIndex[i]
-                if (word != entity.name) continue@loop
+                if (!word.startsWith(entity.fullName)) continue@loop
             }
             return entity
         }

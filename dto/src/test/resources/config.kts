@@ -69,11 +69,15 @@ enticingConfiguration {
                     "_glue" whichIs "glue"
                 }
                 entities {
-                    "person+artist" with attributes("url", "image", "name", "gender", "birthplace", "birthdate", "deathplace", "deathdate")
+//                    "person+artist" with attributes("url", "image", "name", "gender", "birthplace", "birthdate", "deathplace", "deathdate")
 
                     "person" with attributes("url", "image", "name", "gender", "birthplace", "birthdate", "deathplace", "deathdate", "profession", "nationality")
 
-                    "artist" with attributes("url", "image", "name", "gender", "birthplace", "birthdate", "deathplace", "deathdate", "role", "nationality")
+                    entity("artist") {
+                        parentEntityName = "person"
+                    }
+
+//                    "artist" with attributes("url", "image", "name", "gender", "birthplace", "birthdate", "deathplace", "deathdate", "role", "nationality")
 
                     "location" with attributes("url", "image", "name", "country")
 

@@ -86,7 +86,7 @@ interface Validator {
         return isValid
     }
 
-    fun errorsDetected() = errors.isNotEmpty()
+    fun hasErrors() = errors.isNotEmpty()
 
     fun requireNoErrors() {
         if (errors.isNotEmpty())

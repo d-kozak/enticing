@@ -1,12 +1,34 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl.visitor
 
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.AttributeConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.EntityConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 
 fun EnticingConfigurationValidator.validateMetadataConfiguration(metadataConfiguration: MetadataConfiguration) {
     val cycleDetected = checkForCycle(metadataConfiguration)
-    if (cycleDetected || errorsDetected()) return
+    if (cycleDetected || this.hasErrors()) return
     resolveFullNames(metadataConfiguration)
+    resolveAttributes(metadataConfiguration)
+}
+
+fun EnticingConfigurationValidator.resolveAttributes(metadataConfiguration: MetadataConfiguration) {
+
+    fun resolve(entity: EntityConfiguration) {
+        val attributes = mutableMapOf<String, AttributeConfiguration>()
+        if (entity.parentEntityName != null) {
+            val parent = metadataConfiguration.entities.getValue(entity.parentEntityName!!)
+            if (!parent.attributesResolved())
+                resolve(parent)
+            attributes.putAll(parent.allAttributes)
+        }
+        attributes.putAll(entity.ownAttributes)
+        entity.allAttributes = attributes
+    }
+
+    for (entity in metadataConfiguration.entities.values) {
+        if (!entity.attributesResolved())
+            resolve(entity)
+    }
 }
 
 fun EnticingConfigurationValidator.resolveFullNames(metadataConfiguration: MetadataConfiguration) {
@@ -16,6 +38,7 @@ fun EnticingConfigurationValidator.resolveFullNames(metadataConfiguration: Metad
         if (entity.name in seen) return entity.fullName
         entity.fullName = if (entity.parentEntityName != null) resolve(metadataConfiguration.entities.getValue(entity.parentEntityName!!)) + "->" else ""
         entity.fullName += entity.name
+
         seen.add(entity.name)
         return entity.fullName
     }

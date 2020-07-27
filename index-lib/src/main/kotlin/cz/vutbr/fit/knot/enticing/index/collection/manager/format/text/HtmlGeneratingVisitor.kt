@@ -41,7 +41,7 @@ class HtmlGeneratingVisitor(config: MetadataConfiguration, defaultIndexName: Str
             if (entity != null) {
                 entityStarted = true
                 append("<span eql-entity")
-                for (attribute in entity.attributes.values) {
+                for (attribute in entity.ownAttributes.values) {
                     append(" eql-")
                     append(attribute.name)
                     append("=\"")

@@ -30,7 +30,7 @@ class ComplexTests {
     fun two() {
         val (ast, errors) = compiler.parseAndAnalyzeQuery("nertag:person (visited|entered) context:sentence", config)
         assertThat(errors).isEmpty()
-        assertThat(ast.toMgj4Query()).isEqualTo("((((nertag:(person){{nertag->token}}) & (visited | entered)))  - ¶)")
+        assertThat(ast.toMgj4Query()).isEqualTo("((((nertag:(person*){{nertag->token}}) & (visited | entered)))  - ¶)")
     }
 
     @Test
@@ -38,7 +38,7 @@ class ComplexTests {
     fun three() {
         val (ast, errors) = compiler.parseAndAnalyzeQuery("nertag:person (visited|entered) ctx:sent", config)
         assertThat(errors).isEmpty()
-        assertThat(ast.toMgj4Query()).isEqualTo("((((nertag:(person){{nertag->token}}) & (visited | entered)))  - ¶)")
+        assertThat(ast.toMgj4Query()).isEqualTo("((((nertag:(person*){{nertag->token}}) & (visited | entered)))  - ¶)")
     }
 
     @Test
@@ -46,7 +46,7 @@ class ComplexTests {
     fun four() {
         val (ast, errors) = compiler.parseAndAnalyzeQuery("(nertag:person (visited|entered)) ctx:par", config)
         assertThat(errors).isEmpty()
-        assertThat(ast.toMgj4Query()).isEqualTo("((((nertag:(person){{nertag->token}}) & (visited | entered)))  - §)")
+        assertThat(ast.toMgj4Query()).isEqualTo("((((nertag:(person*){{nertag->token}}) & (visited | entered)))  - §)")
     }
 
 
@@ -90,7 +90,7 @@ class ComplexTests {
     fun nine() {
         val (ast, errors) = compiler.parseAndAnalyzeQuery("nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < nertag:(person|artist) ctx:par", config)
         assertThat(errors).isEmpty()
-        assertThat(ast.toMgj4Query()).isEqualTo("((((((nertag:((person | artist)){{nertag->token}}) < ((lemma:((influence | impact)){{lemma->token}}) | ((lemma:(paid){{lemma->token}}) < (lemma:(tribute){{lemma->token}})))) < (nertag:((person | artist)){{nertag->token}}))))  - §)")
+        assertThat(ast.toMgj4Query()).isEqualTo("((((((nertag:((person* | artist*)){{nertag->token}}) < ((lemma:((influence | impact)){{lemma->token}}) | ((lemma:(paid){{lemma->token}}) < (lemma:(tribute){{lemma->token}})))) < (nertag:((person* | artist*)){{nertag->token}}))))  - §)")
     }
 
 
@@ -100,7 +100,7 @@ class ComplexTests {
         val (ast, errors) = compiler.parseAndAnalyzeQuery("nertag:(person|artist) < ( lemma:(influence|impact) | (lemma:paid < lemma:tribute) )  < nertag:(person|artist) ctx:par", config)
         assertThat(errors).isEmpty()
         ast as RootNode
-        assertThat(ast.toMgj4Query()).isEqualTo("((((((nertag:((person | artist)){{nertag->token}}) < ((lemma:((influence | impact)){{lemma->token}}) | ((lemma:(paid){{lemma->token}}) < (lemma:(tribute){{lemma->token}})))) < (nertag:((person | artist)){{nertag->token}}))))  - §)")
+        assertThat(ast.toMgj4Query()).isEqualTo("((((((nertag:((person* | artist*)){{nertag->token}}) < ((lemma:((influence | impact)){{lemma->token}}) | ((lemma:(paid){{lemma->token}}) < (lemma:(tribute){{lemma->token}})))) < (nertag:((person* | artist*)){{nertag->token}}))))  - §)")
         assertThat(ast.contextRestriction).isEqualTo(ContextRestriction.PARAGRAPH)
     }
 
