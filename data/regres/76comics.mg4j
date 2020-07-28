@@ -1,0 +1,1369 @@
+%%#DOC	c9338c23-4580-5ab4-9d86-96de0c0dd15b
+%%#PAGE '76 (comics)	http://en.wikipedia.org/wiki/'76_(comics)
+1	'76	JJ	'76	3	NMOD	comics	comic	+2	0	0	0	'76	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	(	(	(	3	P	comics	comic	+1	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	comics|G__	NNS	comic	0	ROOT	0	0	0	0	0	0	comics	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	)|G__	)	)	3	P	comics	comic	-1	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	;	:	;	3	P	comics	comic	-2	0	0	0	;	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 1 wx1
+%%#SEN 1 wx1
+1	'76	JJ	'76	3	NMOD	comics	comic	+2	0	0	0	'76	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	(	(	(	3	P	comics	comic	+1	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	comics|G__	NNS	comic	0	ROOT	0	0	0	0	0	0	comics	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	)|G__	)	)	3	P	comics	comic	-1	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 2 wx2
+%%#SEN 2 wx2
+1	'76	NN	'76	2	SBJ	is	be	+1	0	0	0	'76	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	is	VBZ	be	0	ROOT	0	0	0	0	0	0	is	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	an	DT	an	9	NMOD	series	series	+6	0	0	0	an	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	eight-issue	JJ	eight-issue	9	NMOD	series	series	+5	0	0	0	eight-issue	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	2007	CD	@card@	7	NMOD	book	book	+2	https://en.wikipedia.org/wiki/2007_in_comics	1	4.2	2007	t:538cee3743	date	0	0	2007	0	0	0	0	0	0	0	date	1
+6	comic	JJ	comic	7	NMOD	book	book	+1	0	0	0	comic	m:01vnb	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	book	NN	book	9	NMOD	series	series	+2	https://en.wikipedia.org/wiki/Comic_book	2	4.1	book	m:01vnb	movement	https://en.wikipedia.org/wiki/Comic_book	http://athena3.fit.vutbr.cz/kb/images/freebase/02cmrb1.jpg	Comic_book	0	0	0	0	0	0	0	kb	2
+8	limited	JJ	limited	9	NMOD	series	series	+1	0	0	0	limited	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	series	NN	series	2	PRD	is	be	-7	0	0	0	series	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	published	VVN	publish	9	SUFFIX	series	series	-1	0	0	0	published	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	by	IN	by	9	NMOD	series	series	-2	0	0	0	by	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	Image	NP	Image	9	SUFFIX	series	series	-3	0	0	0	image	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	Comics	NP	Comics	9	SUFFIX	series	series	-4	https://en.wikipedia.org/wiki/Image_Comics	2	4.2	comics	g:012h24	genre	https://en.wikipedia.org/wiki/Comics	http://athena3.fit.vutbr.cz/kb/images/freebase/04pwv5c.jpg|http://athena3.fit.vutbr.cz/kb/images/freebase/02bzgq0.jpg	Comics	0	0	0	0	0	0	0	kb	1
+14	,|G__	,	,	2	P	is	be	-12	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	and	CC	and	2	COORD	is	be	-13	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	written	VVN	write	2	SUFFIX	is	be	-14	0	0	0	written	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	by	IN	by	2	PRD	is	be	-15	0	0	0	by	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	B.	NP	B.	2	SUFFIX	is	be	-16	0	0	0	b.	a:Q3631684	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	Clay	NP	Clay	2	SUFFIX	is	be	-17	0	0	0	clay	a:Q3631684	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	Moore	NP	Moore	2	SUFFIX	is	be	-18	https://en.wikipedia.org/wiki/B._Clay_Moore	3	4.1	moore	a:Q3631684	person->artist	https://en.wikipedia.org/wiki/B._Clay_Moore	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/8/87/Bclaymooreatomik.jpg	B__Clay_Moore	Male	0	1950_01_01	0	0	comics_artist	American	kb	3
+21	[	SYM	[	25	NMOD	series	series	+4	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	1|G__	CD	1	25	NMOD	series	series	+3	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	]|G__	SYM	]	25	NMOD	series	series	+2	0	0	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	The	DT	the	25	NMOD	series	series	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	series	NN	series	37	NMOD	2	2	+12	0	0	0	series	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	has	VHZ	have	25	SUFFIX	series	series	-1	0	0	0	has	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	been	VBN	be	25	APPO	series	series	-2	0	0	0	been	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	reviewed	VVN	review	25	SUFFIX	series	series	-3	0	0	0	reviewed	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	as	RB	as	25	NMOD	series	series	-4	0	0	0	as	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+30	not	RB	not	25	NMOD	series	series	-5	0	0	0	not	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+31	so	RB	so	25	NMOD	series	series	-6	0	0	0	so	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+32	much	RB	much	31	AMOD	so	so	-1	0	0	0	much	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+33	``	``	``	37	P	2	2	+4	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+34	a	DT	a	35	NMOD	flip-book	flip-book	+1	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+35	flip-book	NN	flip-book	36	AMOD	[	[	+1	https://en.wikipedia.org/wiki/Flip_book	1	0	flip-book	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+36	[	SYM	[	37	NMOD	2	2	+1	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+37	2	CD	2	2	PRD	is	be	-35	0	0	0	2	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+38	]|G__	SYM	]	2	TMP	is	be	-36	0	0	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 3 wx3
+%%#SEN 3 wx3
+1	This	DT	this	2	NMOD	article	article	+1	0	0	0	this	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	article	NN	article	3	SBJ	is	be	+1	0	0	0	article	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	is	VBZ	be	0	ROOT	0	0	0	0	0	0	is	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	about	RB	about	7	NMOD	set	set	+3	0	0	0	about	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	the	DT	the	7	NMOD	set	set	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	comic	JJ	comic	7	NMOD	set	set	+1	0	0	0	comic	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	set	NN	set	3	PRD	is	be	-4	0	0	0	set	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	in	IN	in	3	TMP	is	be	-5	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	1976	CD	@card@	8	PMOD	in	in	-1	0	0	4.0	1976	t:f508bf22f5	date	0	0	1976	0	0	0	0	0	0	0	date	1
+10	.|G__	SENT	.	8	SUFFIX	in	in	-2	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 4 wx4
+1	For	IN	for	9	LOC	film	film	+8	0	0	0	for	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	the	DT	the	4	NMOD	film	film	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	2016	CD	@card@	4	NMOD	film	film	+1	0	0	4.0	2016	t:ec3ca9ce48	date	0	0	2016	0	0	0	0	0	0	0	date	1
+4	film	NN	film	1	PMOD	For	for	-3	0	0	0	film	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	,|G__	,	,	7	P	'76	'76	+2	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	see	VVP	see	5	SUFFIX	,	,	-1	0	0	0	see	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	'76	NN	'76	9	NMOD	film	film	+2	0	0	0	'76	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	(	(	(	9	P	film	film	+1	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	film|G__	NN	film	0	ROOT	0	0	0	0	0	0	film	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	)|G__	)	)	9	P	film	film	-1	https://en.wikipedia.org/wiki/'76_(film)	4	film	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	.|G__	SENT	.	9	SUFFIX	film	film	-2	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 5 wx5
+1	For	IN	for	9	NMOD	Spirit	spirit	+8	0	0	0	for	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	the	DT	the	6	NMOD	characters	character	+4	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	unrelated	JJ	unrelated	6	NMOD	characters	character	+3	0	0	0	unrelated	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	comic	JJ	comic	6	NMOD	characters	character	+2	0	0	0	comic	m:01vnb	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	book	NN	book	6	NMOD	characters	character	+1	0	0	4.0	book	m:01vnb	movement	https://en.wikipedia.org/wiki/Comic_book	http://athena3.fit.vutbr.cz/kb/images/freebase/02cmrb1.jpg	Comic_book	0	0	0	0	0	0	0	kb	2
+6	characters	NNS	character	1	PMOD	For	for	-5	0	0	0	characters	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	,|G__	,	,	9	P	Spirit	spirit	+2	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	see	VV	see	7	SUFFIX	,	,	-1	0	0	0	see	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	Spirit	NN	spirit	0	ROOT	0	0	0	0	0	0	spirit	f:Q3791412	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	of	IN	of	9	NMOD	Spirit	spirit	-1	0	0	0	of	f:Q3791412	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	'76	NN	'76	10	PMOD	of	of	-1	0	0	4.0	'76	f:Q3791412	film	https://en.wikipedia.org/wiki/The_Spirit_of_'76_(1990_film)	0	The_Spirit_of__76	0	0	0	0	0	0	0	kb	3
+12	(	(	(	13	P	disambiguation	disambiguation	+1	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	disambiguation|G__	NN	disambiguation	11	APPO	'76	'76	-2	0	0	0	disambiguation	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	)|G__	)	)	13	P	disambiguation	disambiguation	-1	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	.|G__	SENT	.	11	P	'76	'76	-4	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 6 wx6
+1	For	IN	for	0	ROOT	0	0	0	0	0	0	for	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	the	DT	the	3	NMOD	year	year	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	year	NN	year	1	PMOD	For	for	-2	0	0	0	year	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	,|G__	,	,	6	HMOD	1976	@card@	+2	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	see	VVP	see	4	SUFFIX	,	,	-1	0	0	0	see	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	1976	CD	@card@	3	NMOD	year	year	-3	https://en.wikipedia.org/wiki/1976	1	4.2	1976	t:d37cd568d4	date	0	0	1976	0	0	0	0	0	0	0	date	1
+7	.|G__	SENT	.	3	SUFFIX	year	year	-4	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 7 wx7
+1	For	IN	for	0	ROOT	0	0	0	0	0	0	for	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	the	DT	the	3	NMOD	number	number	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	number	NN	number	1	PMOD	For	for	-2	0	0	0	number	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	,|G__	,	,	1	NMOD	For	for	-3	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	see	VVP	see	4	SUFFIX	,	,	-1	0	0	0	see	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	76	CD	@card@	8	NMOD	number	number	+2	0	0	0	76	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	(	(	(	8	P	number	number	+1	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	number|G__	NN	number	1	NMOD	For	for	-7	0	0	0	number	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	)|G__	)	)	8	P	number	number	-1	https://en.wikipedia.org/wiki/76_(number)	4	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	.|G__	SENT	.	8	SUFFIX	number	number	-2	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 4 wx4
+%%#SEN 8 wx8
+1	'76	NN	'76	0	ROOT	0	0	0	0	0	0	'76	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 5 wx5
+%%#SEN 9 wx9
+1	Cover	VV	cover	0	ROOT	0	0	0	0	0	0	cover	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	to	TO	to	9	NMOD	2007	@card@	+7	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	issue	VV	issue	2	SUFFIX	to	to	-1	0	0	0	issue	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	#	#	#	3	OBJ	issue	issue	-1	0	0	0	#	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	1|G__	CD	1	4	NMOD	#	#	-1	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	of	IN	of	4	NMOD	#	#	-2	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	'76	NN	'76	6	PMOD	of	of	-1	0	0	0	'76	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	(	(	(	9	P	2007	@card@	+1	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	2007|GGG	CD	@card@	0	ROOT	0	0	0	0	0	4.0	2007	t:5a69ddb4e8	date	0	0	2007	0	0	0	0	0	0	0	date	1
+10	)|G__	)	)	9	P	2007	@card@	-1	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 6 wx6
+%%#SEN 10 wx10
+1	Art	NN	art	0	ROOT	0	0	0	0	0	0	art	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	by	IN	by	1	NMOD	Art	art	-1	0	0	0	by	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	Ed	NP	Ed	1	SUFFIX	Art	art	-2	0	0	0	ed	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	Tadem	NP	Tadem	1	SUFFIX	Art	art	-3	0	0	0	tadem	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	,|G__	,	,	1	P	Art	art	-4	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	cover	NN	cover	7	NMOD	logo	logo	+1	0	0	0	cover	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	logo	NN	logo	1	APPO	Art	art	-6	0	0	0	logo	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	by	IN	by	7	NMOD	logo	logo	-1	0	0	0	by	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	Steve	NP	Steve	1	SUFFIX	Art	art	-8	0	0	0	steve	p:Q17612357	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	Griffin	NP	Griffin	1	SUFFIX	Art	art	-9	0	0	4.0	griffin	p:Q17612357	person	https://en.wikipedia.org/wiki/Steve_Griffin	0	Steve_Griffin	Male	Miami	1964_12_24	0	0	American_football_player	0	kb	2
+11	.|G__	SENT	.	1	SUFFIX	Art	art	-10	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 7 wx7
+%%#SEN 11 wx11
+1	Publication	NN	publication	2	NMOD	information	information	+1	0	0	0	publication	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	information	NN	information	0	ROOT	0	0	0	0	0	0	information	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 8 wx8
+%%#SEN 12 wx12
+1	Publisher	NN	publisher	0	ROOT	0	0	0	0	0	0	publisher	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 9 wx9
+%%#SEN 13 wx13
+1	Image	NN	image	0	ROOT	0	0	0	0	0	0	image	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Comics	NP	Comics	1	SUFFIX	Image	image	-1	https://en.wikipedia.org/wiki/Image_Comics	2	4.2	comics	g:012h24	genre	https://en.wikipedia.org/wiki/Comics	http://athena3.fit.vutbr.cz/kb/images/freebase/04pwv5c.jpg|http://athena3.fit.vutbr.cz/kb/images/freebase/02bzgq0.jpg	Comics	0	0	0	0	0	0	0	kb	1
+%%#PAR 10 wx10
+%%#SEN 14 wx14
+1	Schedule	NN	schedule	0	ROOT	0	0	0	0	0	0	schedule	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 11 wx11
+%%#SEN 15 wx15
+1	Monthly	JJ	monthly	0	ROOT	0	0	0	0	0	0	monthly	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 12 wx12
+%%#SEN 16 wx16
+1	Format	NN	format	0	ROOT	0	0	0	0	0	0	format	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 13 wx13
+%%#SEN 17 wx17
+1	Limited	JJ	limited	2	NMOD	series	series	+1	0	0	0	limited	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	series	NN	series	0	ROOT	0	0	0	0	0	0	series	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 14 wx14
+%%#SEN 18 wx18
+1	Genre	NN	genre	0	ROOT	0	0	0	0	0	0	genre	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 15 wx15
+%%#SEN 19 wx19
+1	Crime	NN	crime	0	ROOT	0	0	0	https://en.wikipedia.org/wiki/Crime_fiction	1	0	crime	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 16 wx16
+%%#SEN 20 wx20
+1	Publication	NN	publication	2	NMOD	date	date	+1	0	0	0	publication	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	date	NN	date	0	ROOT	0	0	0	0	0	0	date	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 17 wx17
+%%#SEN 21 wx21
+1	January2008	NP	January2008	0	ROOT	0	0	0	0	0	0	january2008	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 18 wx18
+%%#SEN 22 wx22
+1	No	UH	No	0	ROOT	0	0	0	0	0	0	no	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	.|G__	SENT	.	1	SUFFIX	No	No	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 23 wx23
+1	of	IN	of	0	ROOT	0	0	0	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	issues	NNS	issue	1	PMOD	of	of	-1	0	0	0	issues	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 19 wx19
+%%#SEN 24 wx24
+1	8	CD	8	3	NMOD	5	5	+2	0	0	0	8	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	(	(	(	3	P	5	5	+1	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	5|G__	CD	5	7	DEP	2009	@card@	+4	0	0	0	5	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	as	RB	as	5	DEP	of	of	+1	0	0	0	as	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	of	IN	of	3	NMOD	5	5	-2	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	September	NP	September	3	SUFFIX	5	5	-3	0	0	0	september	t:31b867ce0d	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	2009	CD	@card@	0	ROOT	0	0	0	0	0	4.0	2009	t:31b867ce0d	date	0	0	2009	9	0	0	0	0	0	0	date	2
+8	)|G__	)	)	7	P	2009	@card@	-1	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 20 wx20
+%%#SEN 25 wx25
+1	Creative	JJ	creative	2	NMOD	team	team	+1	0	0	0	creative	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	team	NN	team	0	ROOT	0	0	0	0	0	0	team	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 21 wx21
+%%#SEN 26 wx26
+1	Created	VVN	create	0	ROOT	0	0	0	0	0	0	created	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	by	IN	by	1	DEP	Created	create	-1	0	0	0	by	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 22 wx22
+%%#SEN 27 wx27
+1	B.	NP	B.	0	ROOT	0	0	0	0	0	0	b.	a:Q3631684	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Clay	NP	Clay	1	SUFFIX	B.	B.	-1	0	0	0	clay	a:Q3631684	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	Moore	NP	Moore	1	SUFFIX	B.	B.	-2	https://en.wikipedia.org/wiki/B._Clay_Moore	3	4.1	moore	a:Q3631684	person->artist	https://en.wikipedia.org/wiki/B._Clay_Moore	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/8/87/Bclaymooreatomik.jpg	B__Clay_Moore	Male	0	1950_01_01	0	0	comics_artist	American	kb	3
+%%#PAR 23 wx23
+%%#SEN 28 wx28
+1	Written	VVN	write	0	ROOT	0	0	0	0	0	0	written	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	by	IN	by	1	DEP	Written	write	-1	0	0	0	by	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 24 wx24
+%%#SEN 29 wx29
+1	B.	NP	B.	0	ROOT	0	0	0	0	0	0	b.	a:Q3631684	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Clay	NP	Clay	1	SUFFIX	B.	B.	-1	0	0	0	clay	a:Q3631684	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	Moore	NP	Moore	1	SUFFIX	B.	B.	-2	https://en.wikipedia.org/wiki/B._Clay_Moore	3	4.1	moore	a:Q3631684	person->artist	https://en.wikipedia.org/wiki/B._Clay_Moore	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/8/87/Bclaymooreatomik.jpg	B__Clay_Moore	Male	0	1950_01_01	0	0	comics_artist	American	kb	3
+%%#PAR 25 wx25
+%%#SEN 30 wx30
+1	Seth	NP	Seth	0	ROOT	0	0	0	0	0	4.0	seth	f:Q12335067	film	https://www.wikidata.org/wiki/Q12335067	0	Seth	0	0	0	0	0	0	0	kb	1
+2	Peck	NP	Peck	1	SUFFIX	Seth	Seth	-1	0	0	0	peck	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 26 wx26
+%%#SEN 31 wx31
+1	Artist	NP	Artist	0	ROOT	0	0	0	0	0	0	artist	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	(|G__	(	(	3	P	s	S	+1	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	s|G__	NN	S	1	PRN	Artist	Artist	-2	0	0	0	s	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	)|G__	)	)	3	P	s	S	-1	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 27 wx27
+%%#SEN 32 wx32
+1	Ed	NP	Ed	0	ROOT	0	0	0	0	0	0	ed	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Tadem	NP	Tadem	1	SUFFIX	Ed	Ed	-1	0	0	0	tadem	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 28 wx28
+%%#SEN 33 wx33
+1	Tigh	NP	Tigh	0	ROOT	0	0	0	0	0	0	tigh	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Walker	NP	Walker	1	SUFFIX	Tigh	Tigh	-1	0	0	0	walker	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 29 wx29
+%%#SEN 34 wx34
+1	Steve	NP	Steve	0	ROOT	0	0	0	0	0	0	steve	p:Q17612357	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Griffin	NP	Griffin	1	SUFFIX	Steve	Steve	-1	0	0	4.0	griffin	p:Q17612357	person	https://en.wikipedia.org/wiki/Steve_Griffin	0	Steve_Griffin	Male	Miami	1964_12_24	0	0	American_football_player	0	kb	2
+3	(	(	(	5	P	design	design	+2	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	logo|G__	NN	logo	5	NMOD	design	design	+1	0	0	0	logo	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	design	NN	design	0	ROOT	0	0	0	0	0	0	design	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	)|G__	)	)	5	P	design	design	-1	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 30 wx30
+%%#SEN 35 wx35
+1	Plot	NN	plot	0	ROOT	0	0	0	0	0	0	plot	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 31 wx31
+%%#SEN 36 wx36
+1	As	IN	as	2	AMOD	previously	previously	+1	0	0	0	as	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	previously	RB	previously	10	PMOD	on	on	+8	0	0	0	previously	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	mentioned	VVN	mention	2	SUFFIX	previously	previously	-1	0	0	0	mentioned	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	,|G__	,	,	2	P	previously	previously	-2	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	both	CC	both	2	COORD	previously	previously	-3	0	0	0	both	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	stories	NNS	storey	5	CONJ	both	both	-1	0	0	0	stories	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	,|G__	,	,	2	P	previously	previously	-5	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	while	IN	while	2	COORD	previously	previously	-6	0	0	0	while	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	set	VVN	set	2	SUFFIX	previously	previously	-7	0	0	0	set	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	on	IN	on	15	SBJ	are	be	+5	0	0	0	on	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	opposing	VVG	oppose	10	SUFFIX	on	on	-1	0	0	0	opposing	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	US	NP	US	10	SUFFIX	on	on	-2	0	0	0	us	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	coasts	NNS	coast	10	PMOD	on	on	-3	0	0	0	coasts	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	,|G__	,	,	10	P	on	on	-4	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	are	VBP	be	0	ROOT	0	0	0	0	0	0	are	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	both	DT	both	18	NMOD	dramas	dramas	+2	0	0	0	both	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	crime	NN	crime	18	NMOD	dramas	dramas	+1	0	0	0	crime	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	dramas	NN	dramas	15	PRD	are	be	-3	0	0	0	dramas	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	set	VVN	set	18	SUFFIX	dramas	dramas	-1	0	0	0	set	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	in	IN	in	18	LOC	dramas	dramas	-2	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	the	DT	the	22	NMOD	1970s	1970s	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	1970s	NNS	1970s	20	PMOD	in	in	-2	0	0	4.0	1970s	t:d3425174a1	date	0	0	1970	0	0	0	0	0	0	0	date	1
+23	.|G__	SENT	.	22	SUFFIX	1970s	1970s	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 37 wx37
+1	While	IN	while	16	ADV	are	be	+15	0	0	0	while	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	the	DT	the	4	NMOD	art	art	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	cover	NN	cover	4	NMOD	art	art	+1	0	0	0	cover	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	art	NN	art	8	SBJ	is	be	+4	0	0	0	art	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	for	IN	for	4	NMOD	art	art	-1	0	0	0	for	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	each	DT	each	7	NMOD	issue	issue	+1	0	0	0	each	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	issue	NN	issue	5	PMOD	for	for	-2	0	0	0	issue	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	is	VBZ	be	1	SUB	While	while	-7	0	0	0	is	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	in	IN	in	8	PRD	is	be	-1	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	full	JJ	full	11	NMOD	color	color	+1	0	0	0	full	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	color	NN	color	9	PMOD	in	in	-2	0	0	0	color	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	,|G__	,	,	16	P	are	be	+4	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	the	DT	the	15	NMOD	stories	storey	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	actual	JJ	actual	15	NMOD	stories	storey	+1	0	0	0	actual	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	stories	NNS	storey	16	SBJ	are	be	+1	0	0	0	stories	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	are	VBP	be	0	ROOT	0	0	0	0	0	0	are	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	in	IN	in	16	LOC-PRD	are	be	-1	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	monochrome	JJ	monochrome	16	NMOD	are	be	-2	0	0	0	monochrome	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	(	(	(	20	P	black	black	+1	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	black|G__	JJ	black	16	NMOD	are	be	-4	0	0	0	black	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	and	CC	and	20	COORD	black	black	-1	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	white	JJ	white	21	CONJ	and	and	-1	0	0	0	white	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	)|G__	)	)	20	P	black	black	-3	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	.|G__	SENT	.	20	SUFFIX	black	black	-4	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 32 wx32
+%%#SEN 38 wx38
+1	New	NP	New	0	ROOT	0	0	0	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	York	NP	York	1	SUFFIX	New	New	-1	0	0	0	york	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	City	NP	City	1	SUFFIX	New	New	-2	0	0	0	city	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	:|G__	:	:	1	P	New	New	-3	0	0	0	:	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	``	``	``	1	P	New	New	-4	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	Jackie	NP	Jackie	1	SUFFIX	New	New	-5	0	0	4.0	jackie	f:Q22350767	film	https://en.wikipedia.org/wiki/Jackie_(2016_film)	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/7/74/Jackie_2016_Film.svg	Jackie	0	0	0	0	0	0	0	kb	1
+7	Karma	NP	Karma	1	SUFFIX	New	New	-6	0	0	4.0	karma	y:4aa26de83b	mythology	https://en.wikipedia.org/wiki/Karma	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/0/03/It_Shoots_Further_Than_He_Dreams.jpg	Karma	0	0	0	0	0	0	0	kb	1
+8	''	''	''	1	P	New	New	-7	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 33 wx33
+%%#SEN 39 wx39
+1	Jackie	NP	Jackie	0	ROOT	0	0	0	0	0	4.0	jackie	f:Q22350767	film	https://en.wikipedia.org/wiki/Jackie_(2016_film)	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/7/74/Jackie_2016_Film.svg	Jackie	0	0	0	0	0	0	0	kb	1
+2	Karma	NP	Karma	1	SUFFIX	Jackie	Jackie	-1	0	0	4.0	karma	y:4aa26de83b	mythology	https://en.wikipedia.org/wiki/Karma	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/0/03/It_Shoots_Further_Than_He_Dreams.jpg	Karma	0	0	0	0	0	0	0	kb	1
+3	tells	VVZ	tell	1	SUFFIX	Jackie	Jackie	-2	0	0	0	tells	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	the	DT	the	5	NMOD	tale	tale	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	tale	NN	tale	0	ROOT	0	0	0	0	0	0	tale	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	of	IN	of	5	NMOD	tale	tale	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	1960s-era	NP	1960s-era	5	SUFFIX	tale	tale	-2	0	0	4.0	1960s-era	t:f1adfa630f	date	0	0	1960	0	0	0	0	0	0	0	date	1
+8	street	NN	street	9	NMOD	fighters	fighter	+1	0	0	0	street	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	fighters	NNS	fighter	5	APPO	tale	tale	-4	0	0	0	fighters	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	Jackie	NP	Jackie	5	SUFFIX	tale	tale	-5	0	0	4.0	jackie	f:Q22350767	film	https://en.wikipedia.org/wiki/Jackie_(2016_film)	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/7/74/Jackie_2016_Film.svg	Jackie	0	0	0	0	0	0	0	kb	1
+11	Karma	NP	Karma	5	SUFFIX	tale	tale	-6	0	0	4.0	karma	y:4aa26de83b	mythology	https://en.wikipedia.org/wiki/Karma	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/0/03/It_Shoots_Further_Than_He_Dreams.jpg	Karma	0	0	0	0	0	0	0	kb	1
+12	and	CC	and	5	COORD	tale	tale	-7	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	Marcus	NP	Marcus	5	SUFFIX	tale	tale	-8	0	0	0	marcus	a:Q27924119	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	King	NP	King	13	SUFFIX	Marcus	Marcus	-1	0	0	4.0	king	a:Q27924119	person->artist	https://www.wikidata.org/wiki/Q27924119	0	Marcus_King	Male	Manaia__Taranaki	1891_05_15	Levin	1983_08_22	painter	0	kb	2
+15	,|G__	,	,	5	P	tale	tale	-10	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	as	IN	as	5	NMOD	tale	tale	-11	0	0	0	as	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	they	PP	they	5	SUFFIX	tale	tale	-12	0	0	0	they	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	come	VVP	come	5	SUFFIX	tale	tale	-13	0	0	0	come	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	out	RP	out	18	PRT	come	come	-1	0	0	0	out	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	of	IN	of	18	NMOD	come	come	-2	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	retirement	NN	retirement	20	PMOD	of	of	-1	0	0	0	retirement	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	in	IN	in	5	TMP	tale	tale	-17	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	1976	CD	@card@	22	PMOD	in	in	-1	0	0	4.0	1976	t:78a8deb85e	date	0	0	1976	0	0	0	0	0	0	0	date	1
+24	New	NP	New	5	SUFFIX	tale	tale	-19	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	York	NP	York	5	SUFFIX	tale	tale	-20	0	0	0	york	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	City	NP	City	5	SUFFIX	tale	tale	-21	0	0	0	city	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	,|G__	,	,	5	P	tale	tale	-22	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	to	TO	to	5	NMOD	tale	tale	-23	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	tackle	VV	tackle	5	SUFFIX	tale	tale	-24	0	0	0	tackle	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+30	the	DT	the	31	NMOD	threat	threat	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+31	threat	NN	threat	0	ROOT	0	0	0	0	0	0	threat	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+32	of	IN	of	31	NMOD	threat	threat	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+33	an	DT	an	35	NMOD	enemy	enemy	+2	0	0	0	an	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+34	old	JJ	old	35	NMOD	enemy	enemy	+1	0	0	0	old	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+35	enemy	NN	enemy	32	PMOD	of	of	-3	0	0	0	enemy	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+36	who	WP	who	37	SBJ	's	be	+1	0	0	2	who	a:Q27924119	person->artist	https://www.wikidata.org/wiki/Q27924119	0	Marcus_King	Male	Manaia__Taranaki	1891_05_15	Levin	1983_08_22	painter	0	coref	1
+37	's|G__	VBZ	be	35	NMOD	enemy	enemy	-2	0	0	0	's	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+38	returned	VVN	return	35	SUFFIX	enemy	enemy	-3	0	0	4.0	returned	s:a07a071e41	activity	0	0	0	0	0	0	0	0	0	0	activity	1
+39	to	TO	to	31	NMOD	threat	threat	-8	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+40	the	DT	the	41	NMOD	scene	scene	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+41	scene	NN	scene	39	PMOD	to	to	-2	0	0	0	scene	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+42	.|G__	SENT	.	41	SUFFIX	scene	scene	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 40 wx40
+1	``	``	``	4	SBJ	will	will	+3	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Jackie|GGG	NP	Jackie	1	SUFFIX	``	``	-1	0	0	4.0	jackie	f:Q22350767	film	https://en.wikipedia.org/wiki/Jackie_(2016_film)	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/7/74/Jackie_2016_Film.svg	Jackie	0	0	0	0	0	0	0	kb	1
+3	Karma	NP	Karma	1	SUFFIX	``	``	-2	0	0	4.0	karma	y:4aa26de83b	mythology	https://en.wikipedia.org/wiki/Karma	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/0/03/It_Shoots_Further_Than_He_Dreams.jpg	Karma	0	0	0	0	0	0	0	kb	1
+4	will	MD	will	0	ROOT	0	0	0	0	0	0	will	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	probably	RB	probably	4	ADV	will	will	-1	0	0	0	probably	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	read	VV	read	4	SUFFIX	will	will	-2	0	0	0	read	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	more	RBR	more	8	PMOD	like	like	+1	0	0	0	more	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	like	IN	like	4	ADV	will	will	-4	0	0	0	like	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	a	DT	a	12	NMOD	flick	flick	+3	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	smarter	JJR	smart	12	NMOD	flick	flick	+2	0	0	0	smarter	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	exploitation	NN	exploitation	12	NMOD	flick	flick	+1	0	0	0	exploitation	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	flick	NN	flick	8	PMOD	like	like	-4	https://en.wikipedia.org/wiki/Exploitation_film	2	0	flick	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	,|G__	,	,	4	NMOD	will	will	-9	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	''	''	''	4	NMOD	will	will	-10	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	says	VVZ	say	14	SUFFIX	''	''	-1	0	0	0	says	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	Moore	NP	Moore	14	SUFFIX	''	''	-2	0	0	2	moore	a:Q3631684	person->artist	https://en.wikipedia.org/wiki/B._Clay_Moore	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/8/87/Bclaymooreatomik.jpg	B__Clay_Moore	Male	0	1950_01_01	0	0	comics_artist	American	coref	1
+17	.|G__	SENT	.	14	SUFFIX	''	''	-3	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 41 wx41
+1	``	``	``	0	ROOT	0	0	0	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Although|G__	IN	although	1	NMOD	``	``	-1	0	0	0	although	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	the	DT	the	4	NMOD	climax	climax	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	climax	NN	climax	8	SBJ	would	would	+4	0	0	0	climax	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	of	IN	of	4	NMOD	climax	climax	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	the	DT	the	7	NMOD	story	story	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	story	NN	story	5	PMOD	of	of	-2	0	0	0	story	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	would	MD	would	2	SUB	Although	although	-6	0	0	0	would	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	probably	RB	probably	8	ADV	would	would	-1	0	0	0	probably	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	be	VB	be	8	VC	would	would	-2	0	0	0	be	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	beyond	IN	beyond	10	PRD	be	be	-1	0	0	0	beyond	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	most	JJS	most	13	NMOD	B-movie	B-movie	+1	0	0	0	most	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	B-movie	NN	B-movie	11	PMOD	beyond	beyond	-2	https://en.wikipedia.org/wiki/B_movie	1	0	b-movie	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	[	SYM	[	10	ADV	be	be	-4	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	2|G__	CD	2	16	AMOD	]	]	+1	0	0	0	2	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	]|G__	SYM	]	10	ADV	be	be	-6	0	0	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 34 wx34
+%%#SEN 42 wx42
+1	[	SYM	[	3	AMOD	]	]	+2	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	1|G__	CD	1	3	AMOD	]	]	+1	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	]|G__	SYM	]	0	ROOT	0	0	0	0	0	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	``	``	``	3	NMOD	]	]	-1	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	The	DT	the	6	NMOD	idea	idea	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	idea	NN	idea	12	NMOD	observation	observation	+6	0	0	0	idea	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	of	IN	of	6	NMOD	idea	idea	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	Jackie	NP	Jackie	6	SUFFIX	idea	idea	-2	0	0	4.0	jackie	f:Q22350767	film	https://en.wikipedia.org/wiki/Jackie_(2016_film)	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/7/74/Jackie_2016_Film.svg	Jackie	0	0	0	0	0	0	0	kb	1
+9	came	VVD	come	6	SUFFIX	idea	idea	-3	0	0	0	came	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	from	IN	from	6	NMOD	idea	idea	-4	0	0	0	from	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	my	PP$	my	6	SUFFIX	idea	idea	-5	0	0	0	my	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	observation	NN	observation	15	NMOD	lot	lot	+3	0	0	0	observation	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	that	IN/that	that	12	SUFFIX	observation	observation	-1	0	0	0	that	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	a	DT	a	15	NMOD	lot	lot	+1	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	lot	NN	lot	19	NMOD	heroes	hero	+4	0	0	0	lot	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	of	IN	of	15	NMOD	lot	lot	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	kung	NP	kung	15	SUFFIX	lot	lot	-2	0	0	0	kung	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	fu	NP	fu	15	SUFFIX	lot	lot	-3	0	0	0	fu	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	heroes	NNS	hero	23	SBJ	were	be	+4	0	0	0	heroes	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	in	IN	in	19	LOC	heroes	hero	-1	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	the	DT	the	22	NMOD	1970s	1970s	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	1970s	NNS	1970s	20	PMOD	in	in	-2	0	0	4.0	1970s	t:8b84be58e0	date	0	0	1970	0	0	0	0	0	0	0	date	1
+23	were	VBD	be	3	NMOD	]	]	-20	0	0	0	were	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	anything	NN	anything	23	PRD	were	be	-1	0	0	0	anything	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	but	CC	but	24	COORD	anything	anything	-1	0	0	0	but	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	Asian	JJ	Asian	25	CONJ	but	but	-1	https://en.wikipedia.org/wiki/Asian_people	1	4.2	asian	n:0j0k	nationality	https://en.wikipedia.org/wiki/Asia	http://athena3.fit.vutbr.cz/kb/images/freebase/02f3bn_.jpg|http://athena3.fit.vutbr.cz/kb/images/freebase/02fyndl.jpg|http://athena3.fit.vutbr.cz/kb/images/freebase/01z0kdq.jpg	Asian	Asia	0	0	0	0	0	0	kb	1
+27	,|G__	,	,	3	NMOD	]	]	-24	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	''	''	''	3	NMOD	]	]	-25	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	Moore	NP	Moore	28	SUFFIX	''	''	-1	0	0	2	moore	a:Q3631684	person->artist	https://en.wikipedia.org/wiki/B._Clay_Moore	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/8/87/Bclaymooreatomik.jpg	B__Clay_Moore	Male	0	1950_01_01	0	0	comics_artist	American	coref	1
+30	said	VVD	say	28	SUFFIX	''	''	-2	0	0	0	said	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+31	.|G__	SENT	.	28	SUFFIX	''	''	-3	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 43 wx43
+1	Enter	VV	enter	0	ROOT	0	0	0	0	0	0	enter	f:Q331617	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	the	DT	the	5	NMOD	1	1	+3	0	0	0	the	f:Q331617	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	Dragon	NP	Dragon	2	SUFFIX	the	the	-1	https://en.wikipedia.org/wiki/Enter_the_Dragon	3	4.1	dragon	f:Q331617	film	https://en.wikipedia.org/wiki/Enter_the_Dragon	0	Enter_the_Dragon	0	0	0	0	0	0	0	kb	3
+4	[	SYM	[	5	NMOD	1	1	+1	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	1|G__	CD	1	0	ROOT	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	]|G__	SYM	]	0	ROOT	0	0	0	0	0	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 35 wx35
+%%#SEN 44 wx44
+1	In	IN	in	0	ROOT	0	0	0	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	an	DT	an	3	NMOD	interview	interview	+1	0	0	0	an	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	interview	NN	interview	1	PMOD	In	in	-2	0	0	0	interview	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	,|G__	,	,	1	NMOD	In	in	-3	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	Moore	NP	Moore	4	SUFFIX	,	,	-1	0	0	2	moore	a:Q3631684	person->artist	https://en.wikipedia.org/wiki/B._Clay_Moore	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/8/87/Bclaymooreatomik.jpg	B__Clay_Moore	Male	0	1950_01_01	0	0	comics_artist	American	coref	1
+6	notes	VVZ	note	4	SUFFIX	,	,	-2	0	0	0	notes	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	that	IN/that	that	4	SUFFIX	,	,	-3	0	0	0	that	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	'76	NN	'76	9	SBJ	is	be	+1	0	0	0	'76	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	is	VBZ	be	1	NMOD	In	in	-8	0	0	0	is	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	not	RB	not	9	ADV	is	be	-1	0	0	0	not	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	glossy	JJ	glossy	13	NMOD	satire	satire	+2	0	0	0	glossy	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	1970s	NNS	1970s	13	NMOD	satire	satire	+1	0	0	4.0	1970s	t:d189453721	date	0	0	1970	0	0	0	0	0	0	0	date	1
+13	satire	NN	satire	9	PRD	is	be	-4	0	0	0	satire	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	or	CC	or	13	COORD	satire	satire	-1	0	0	0	or	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	a	DT	a	19	NMOD	3	3	+4	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	Chuck	NP	Chuck	15	SUFFIX	a	a	-1	0	0	0	chuck	a:Q2673	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	Norris	NP	Norris	15	SUFFIX	a	a	-2	https://en.wikipedia.org/wiki/Chuck_Norris	2	4.1	norris	a:Q2673	person->artist	https://en.wikipedia.org/wiki/Chuck_Norris	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/9/93/ChuckNorris200611292256.jpg	Chuck_Norris	Male	Ryan__Oklahoma__U_S	1940_03_10	Ryan__Oklahoma	0	taekwondo_athlete|film_producer|anti_vaccine_activist|actor	0	kb	2
+18	[	SYM	[	19	NMOD	3	3	+1	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	3|G__	CD	3	14	CONJ	or	or	-5	0	0	0	3	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	]|G__	SYM	]	9	PRD	is	be	-11	0	0	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 36 wx36
+%%#SEN 45 wx45
+1	Los	NP	Los	0	ROOT	0	0	0	0	0	0	los	f:Q17634351	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Angeles	NP	Angeles	1	SUFFIX	Los	Los	-1	0	0	4.0	angeles	f:Q17634351	film	https://www.wikidata.org/wiki/Q17634351	0	Los_Angeles	0	0	0	0	0	0	0	kb	2
+3	:|G__	:	:	1	P	Los	Los	-2	0	0	0	:	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	``	``	``	5	P	Cool	cool	+1	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	Cool	JJ	cool	0	ROOT	0	0	0	0	0	0	cool	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	''	''	''	5	P	Cool	cool	-1	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 37 wx37
+%%#SEN 46 wx46
+1	Cool	NN	cool	2	SBJ	is	be	+1	0	0	0	cool	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	is	VBZ	be	0	ROOT	0	0	0	0	0	0	is	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	the	DT	the	4	NMOD	story	story	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	story	NN	story	2	PRD	is	be	-2	0	0	0	story	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	of	IN	of	4	NMOD	story	story	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	Pete	NP	Pete	4	SUFFIX	story	story	-2	0	0	0	pete	p:Q16208152	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	Walker	NP	Walker	4	SUFFIX	story	story	-3	0	0	4.0	walker	p:Q16208152	person	https://en.wikipedia.org/wiki/Pete_Walker	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/c/c1/Pete_Walker_in_2017_(34645928822).jpg	Pete_Walker	Male	Beverly	1969_04_08	0	0	baseball_player	0	kb	2
+8	and	CC	and	4	COORD	story	story	-4	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	Leon	NP	Leon	4	SUFFIX	story	story	-5	0	0	0	leon	p:Q6524558	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	Campbell	NP	Campbell	4	SUFFIX	story	story	-6	0	0	4.0	campbell	p:Q6524558	person	https://en.wikipedia.org/wiki/Leon_Campbell	0	Leon_Campbell	Male	Cambridge	1881_01_20	Cambridge	1951_05_10	astronomer	0	kb	2
+11	,|G__	,	,	2	P	is	be	-9	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	best	JJS	good	13	NMOD	friends	friend	+1	0	0	0	best	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	friends	NNS	friend	2	PRD	is	be	-11	0	0	0	friends	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	who	WP	who	19	AMOD	together	together	+5	0	0	2	who	p:Q6524558	person	https://en.wikipedia.org/wiki/Leon_Campbell	0	Leon_Campbell	Male	Cambridge	1881_01_20	Cambridge	1951_05_10	astronomer	0	coref	1
+15	initially	RB	initially	17	PMOD	in	in	+2	0	0	0	initially	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	served	VVD	serve	15	SUFFIX	initially	initially	-1	0	0	0	served	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	in	IN	in	19	AMOD	together	together	+2	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	Vietnam	NP	Vietnam	17	SUFFIX	in	in	-1	0	0	4.0	vietnam	l:Q881	location	https://en.wikipedia.org/wiki/Vietnam	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/b/b1/Río_Saigón,_Ciudad_Ho_Chi_Minh,_Vietnam,_2013-08-14,_DD_29.JPG	Vietnam	Vietnam	0	0	0	0	0	0	kb	1
+19	together	RB	together	2	ADV	is	be	-17	0	0	0	together	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	,|G__	,	,	2	P	is	be	-18	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	and	CC	and	2	COORD	is	be	-19	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	became	VVD	become	2	SUFFIX	is	be	-20	0	0	0	became	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	bounty	NN	bounty	24	NMOD	hunters	hunter	+1	0	0	0	bounty	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	hunters	NNS	hunter	2	PRD	is	be	-22	https://en.wikipedia.org/wiki/Bounty_hunter	2	0	hunters	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	when	WRB	when	2	NMOD	is	be	-23	0	0	0	when	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	they	PP	they	25	SUFFIX	when	when	-1	0	0	0	they	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	returned	VVD	return	25	SUFFIX	when	when	-2	0	0	4.0	returned	u:f4cbfd8e36	activity	0	0	0	0	0	0	0	0	0	0	activity	1
+28	to	TO	to	25	ADV	when	when	-3	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	the	DT	the	2	NMOD	is	be	-27	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+30	United	NP	United	29	SUFFIX	the	the	-1	0	0	0	united	l:Q30	0	0	0	0	0	0	0	0	0	0	0	0	0
+31	States	NPS	States	29	SUFFIX	the	the	-2	0	0	4.0	states	l:Q30	location	https://en.wikipedia.org/wiki/United_States	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/a/af/WhiteHouseSouthFacade.JPG	United_States_of_America	United_States	0	0	0	0	0	0	kb	2
+32	.|G__	SENT	.	29	SUFFIX	the	the	-3	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 47 wx47
+1	They	PP	they	0	ROOT	0	0	0	0	0	0	they	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	are	VBP	be	0	ROOT	0	0	0	0	0	0	are	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	hired	VVN	hire	2	SUFFIX	are	be	-1	0	0	0	hired	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	to	TO	to	3	AMOD	hired	hire	-1	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	find	VV	find	3	SUFFIX	hired	hire	-2	0	0	0	find	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	Cherry	NP	Cherry	3	SUFFIX	hired	hire	-3	0	0	4.0	cherry	f:Q16249259	film	https://en.wikipedia.org/wiki/Cherry_(disambiguation)	0	Cherry	0	0	0	0	0	0	0	kb	1
+7	Baum	NP	Baum	6	SUFFIX	Cherry	Cherry	-1	0	0	0	baum	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	,|G__	,	,	2	P	are	be	-6	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	an	DT	an	11	NMOD	dancer	dancer	+2	0	0	0	an	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	exotic	JJ	exotic	11	NMOD	dancer	dancer	+1	0	0	0	exotic	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	dancer	NN	dancer	2	PRD	are	be	-9	0	0	0	dancer	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	with	IN	with	11	NMOD	dancer	dancer	-1	0	0	0	with	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	a	DT	a	14	NMOD	suitcase	suitcase	+1	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	suitcase	NN	suitcase	12	PMOD	with	with	-2	0	0	0	suitcase	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	full	JJ	full	14	APPO	suitcase	suitcase	-1	0	0	0	full	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	of	IN	of	15	AMOD	full	full	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	drug	NN	drug	18	NMOD	money	money	+1	0	0	0	drug	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	money	NN	money	16	PMOD	of	of	-2	0	0	0	money	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	.|G__	SENT	.	18	SUFFIX	money	money	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 48 wx48
+1	Cherry’s	NP	Cherry’s	0	ROOT	0	0	0	0	0	0	cherry’s	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	boyfriend	NN	boyfriend	0	ROOT	0	0	0	0	0	0	boyfriend	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	was	VBD	be	0	ROOT	0	0	0	0	0	0	was	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	killed	VVN	kill	3	SUFFIX	was	be	-1	0	0	0	killed	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	in	IN	in	3	LOC	was	be	-2	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	a	DT	a	8	NMOD	deal	deal	+2	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	drug	NN	drug	8	NMOD	deal	deal	+1	0	0	0	drug	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	deal	NN	deal	5	PMOD	in	in	-3	0	0	0	deal	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	and	CC	and	3	COORD	was	be	-6	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	Cherry	NP	Cherry	3	SUFFIX	was	be	-7	0	0	4.0	cherry	f:Q16249259	film	https://en.wikipedia.org/wiki/Cherry_(disambiguation)	0	Cherry	0	0	0	0	0	0	0	kb	1
+11	made	VVD	make	10	SUFFIX	Cherry	Cherry	-1	0	0	0	made	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	off	RP	off	11	PRT	made	make	-1	0	0	0	off	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	with	IN	with	3	ADV	was	be	-10	0	0	0	with	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	the	DT	the	15	NMOD	cash	cash	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	cash	NN	cash	13	PMOD	with	with	-2	0	0	0	cash	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	,|G__	,	,	15	P	cash	cash	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	unaware	JJ	unaware	15	APPO	cash	cash	-2	0	0	0	unaware	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	of	IN	of	17	AMOD	unaware	unaware	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	how	WRB	how	22	DEP	are	be	+3	0	0	0	how	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	many	JJ	many	21	NMOD	people	people	+1	0	0	0	many	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	people	NNS	people	22	SBJ	are	be	+1	0	0	0	people	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	are	VBP	be	18	PMOD	of	of	-4	0	0	0	are	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	looking	VVG	look	22	P	are	be	-1	0	0	0	looking	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	for	IN	for	22	ADV	are	be	-2	0	0	0	for	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	her	PP	her	18	SUFFIX	of	of	-7	0	0	2	her	p:Q6524558	person	https://en.wikipedia.org/wiki/Leon_Campbell	0	Leon_Campbell	Male	Cambridge	1881_01_20	Cambridge	1951_05_10	astronomer	0	coref	1
+26	.|G__	SENT	.	18	SUFFIX	of	of	-8	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 38 wx38
+%%#SEN 49 wx49
+1	Seth	NP	Seth	0	ROOT	0	0	0	0	0	4.0	seth	f:Q12335067	film	https://www.wikidata.org/wiki/Q12335067	0	Seth	0	0	0	0	0	0	0	kb	1
+2	Peck	NP	Peck	1	SUFFIX	Seth	Seth	-1	0	0	0	peck	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	noted	VVD	note	1	SUFFIX	Seth	Seth	-2	0	0	0	noted	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	that	IN/that	that	1	SUFFIX	Seth	Seth	-3	0	0	0	that	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	he	PP	he	1	SUFFIX	Seth	Seth	-4	0	0	0	he	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	had	VHD	have	1	SUFFIX	Seth	Seth	-5	0	0	0	had	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	wanted	VVN	want	1	SUFFIX	Seth	Seth	-6	0	0	0	wanted	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	to	TO	to	1	ADV	Seth	Seth	-7	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	create	VV	create	1	SUFFIX	Seth	Seth	-8	0	0	0	create	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	a	DT	a	14	NMOD	story	story	+4	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	``	``	``	14	P	story	story	+3	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	kick-ass	NN	kick-ass	13	NMOD	crime	crime	+1	0	0	0	kick-ass	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	crime	NN	crime	14	NMOD	story	story	+1	0	0	0	crime	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	story	NN	story	0	ROOT	0	0	0	0	0	0	story	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	without	IN	without	14	NMOD	story	story	-1	0	0	0	without	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	playing	VVG	play	14	SUFFIX	story	story	-2	0	0	0	playing	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	off	RP	off	16	PRT	playing	play	-1	0	0	0	off	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	of	IN	of	14	NMOD	story	story	-4	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	the	DT	the	21	NMOD	clichés	cliché	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	1970s	NNS	1970s	21	NMOD	clichés	cliché	+1	0	0	4.0	1970s	t:ff147be09f	date	0	0	1970	0	0	0	0	0	0	0	date	1
+21	clichés	NNS	cliché	18	PMOD	of	of	-3	0	0	0	clichés	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	like	IN	like	21	NMOD	clichés	cliché	-1	0	0	0	like	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	disco	NN	disco	22	PMOD	like	like	-1	https://en.wikipedia.org/wiki/Disco	1	0	disco	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	and	CC	and	23	COORD	disco	disco	-1	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	pet	JJ	pet	26	NMOD	rocks	rock	+1	0	0	0	pet	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	rocks	NNS	rock	24	CONJ	and	and	-2	0	0	0	rocks	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	''	''	''	14	P	story	story	-13	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	,	,	,	14	P	story	story	-14	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	Peck	NP	Peck	14	SUFFIX	story	story	-15	0	0	0	peck	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+30	explains	VVZ	explain	14	SUFFIX	story	story	-16	0	0	0	explains	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+31	.|G__	SENT	.	14	SUFFIX	story	story	-17	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 50 wx50
+1	“Most	JJ	“Most	7	SBJ	would	would	+6	0	0	0	“most	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	of	IN	of	1	AMOD	“Most	“Most	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	the	DT	the	4	NMOD	characters	character	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	characters	NNS	character	2	PMOD	of	of	-2	0	0	0	characters	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	in	IN	in	1	LOC	“Most	“Most	-4	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	Cool	NP	Cool	1	SUFFIX	“Most	“Most	-5	0	0	0	cool	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	would	MD	would	0	ROOT	0	0	0	0	0	0	would	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	n't|G__	RB	n't	7	ADV	would	would	-1	0	0	0	n't	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	look	VV	look	7	SUFFIX	would	would	-2	0	0	0	look	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	out	RP	out	9	PRT	look	look	-1	0	0	0	out	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	of	IN	of	9	NMOD	look	look	-2	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	place	NN	place	11	PMOD	of	of	-1	0	0	0	place	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	walking	VVG	walk	11	SUFFIX	of	of	-2	0	0	0	walking	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	around	IN	around	7	LOC	would	would	-7	0	0	0	around	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	the	DT	the	7	NMOD	would	would	-8	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	Los	NP	Los	15	SUFFIX	the	the	-1	0	0	0	los	f:Q17634351	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	Angeles	NP	Angeles	15	SUFFIX	the	the	-2	0	0	4.0	angeles	f:Q17634351	film	https://www.wikidata.org/wiki/Q17634351	0	Los_Angeles	0	0	0	0	0	0	0	kb	2
+18	of	IN	of	15	NMOD	the	the	-3	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	today	NN	today	18	PMOD	of	of	-1	0	0	0	today	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	.|G__	SENT	.	15	SUFFIX	the	the	-5	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 51 wx51
+1	Fashion	NN	fashion	2	SBJ	is	be	+1	https://en.wikipedia.org/wiki/Fashion#Changes	1	0	fashion	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	is	VBZ	be	0	ROOT	0	0	0	0	0	0	is	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	cyclical	JJ	cyclical	2	PRD	is	be	-1	0	0	0	cyclical	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	and	CC	and	3	COORD	cyclical	cyclical	-1	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	drugs	NNS	drug	4	CONJ	and	and	-1	https://en.wikipedia.org/wiki/Drug	1	0	drugs	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	[	SYM	[	11	AMOD	]	]	+5	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	2|G__	CD	2	11	AMOD	]	]	+4	0	0	0	2	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	]|G__	SYM	]	11	AMOD	]	]	+3	0	0	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	[	SYM	[	11	AMOD	]	]	+2	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	4|G__	CD	4	11	AMOD	]	]	+1	0	0	0	4	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	]|G__	SYM	]	3	ADV	cyclical	cyclical	-8	0	0	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	While	IN	while	2	ADV	is	be	-10	0	0	0	while	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	he	PP	he	2	SUFFIX	is	be	-11	0	0	0	he	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	agrees	VVZ	agree	2	SUFFIX	is	be	-12	0	0	0	agrees	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	that	IN/that	that	2	SUFFIX	is	be	-13	0	0	0	that	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	his	PP$	his	2	SUFFIX	is	be	-14	0	0	0	his	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	story	NN	story	19	NMOD	elements	element	+2	0	0	0	story	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	has	VHZ	have	17	SUFFIX	story	story	-1	0	0	0	has	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	elements	NNS	element	2	PRD	is	be	-17	0	0	0	elements	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	of	IN	of	19	NMOD	elements	element	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	Elmore	NP	Elmore	19	SUFFIX	elements	element	-2	0	0	0	elmore	a:Q336519	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	Leonard	NP	Leonard	19	SUFFIX	elements	element	-3	https://en.wikipedia.org/wiki/Elmore_Leonard	2	4.1	leonard	a:Q336519	person->artist	https://en.wikipedia.org/wiki/Elmore_Leonard	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/4/4d/Elmore_Leonard.jpg	Elmore_Leonard	Male	New_Orleans	1925_10_11	Detroit	2013_08_20	novelist|film_producer|screenwriter|author	0	kb	2
+23	[	SYM	[	24	NMOD	4	4	+1	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	4|G__	CD	4	19	TMP	elements	element	-5	0	0	0	4	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	]|G__	SYM	]	2	TMP	is	be	-23	0	0	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 39 wx39
+%%#SEN 52 wx52
+1	[	SYM	[	2	NMOD	4	4	+1	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	4|G__	CD	4	3	AMOD	]	]	+1	0	0	0	4	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	]|G__	SYM	]	0	ROOT	0	0	0	0	0	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 40 wx40
+%%#SEN 53 wx53
+1	In	IN	in	0	ROOT	0	0	0	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	a	DT	a	4	NMOD	interview	interview	+2	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	podcast	JJ	podcast	4	NMOD	interview	interview	+1	0	0	0	podcast	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	interview	NN	interview	1	PMOD	In	in	-3	0	0	0	interview	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	with	IN	with	4	NMOD	interview	interview	-1	0	0	0	with	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	Moore	NP	Moore	4	SUFFIX	interview	interview	-2	0	0	2	moore	a:Q3631684	person->artist	https://en.wikipedia.org/wiki/B._Clay_Moore	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/8/87/Bclaymooreatomik.jpg	B__Clay_Moore	Male	0	1950_01_01	0	0	comics_artist	American	coref	1
+7	,|G__	,	,	1	P	In	in	-6	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	Peck	NP	Peck	1	SUFFIX	In	in	-7	0	0	0	peck	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	agrees	VVZ	agree	1	SUFFIX	In	in	-8	0	0	0	agrees	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	that	IN/that	that	1	SUFFIX	In	in	-9	0	0	0	that	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	the	DT	the	12	NMOD	story	story	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	story	NN	story	13	SBJ	is	be	+1	0	0	0	story	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	is	VBZ	be	1	SUB	In	in	-12	0	0	0	is	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	not	RB	not	13	ADV	is	be	-1	0	0	0	not	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	kitsch	NN	kitsch	13	PRD	is	be	-2	https://en.wikipedia.org/wiki/Kitsch	1	visual_art_genre	kitsch	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	[	SYM	[	15	AMOD	kitsch	kitsch	-1	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	3|G__	CD	3	18	AMOD	]	]	+1	0	0	0	3	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	]|G__	SYM	]	13	PRD	is	be	-5	0	0	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 41 wx41
+%%#SEN 54 wx54
+1	Influences	NNS	influence	0	ROOT	0	0	0	0	0	0	influences	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 42 wx42
+%%#SEN 55 wx55
+1	Moore	NP	Moore	0	ROOT	0	0	0	0	0	2	moore	a:Q3631684	person->artist	https://en.wikipedia.org/wiki/B._Clay_Moore	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/8/87/Bclaymooreatomik.jpg	B__Clay_Moore	Male	0	1950_01_01	0	0	comics_artist	American	coref	1
+2	and	CC	and	1	COORD	Moore	Moore	-1	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	Peck	NP	Peck	1	SUFFIX	Moore	Moore	-2	0	0	0	peck	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	both	CC	both	1	COORD	Moore	Moore	-3	0	0	0	both	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	credit	VV	credit	1	SUFFIX	Moore	Moore	-4	0	0	0	credit	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	the	DT	the	8	NMOD	books	book	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	comic	JJ	comic	8	NMOD	books	book	+1	0	0	0	comic	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	books	NNS	book	1	APPO	Moore	Moore	-7	0	0	0	books	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	of	IN	of	8	NMOD	books	book	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	the	DT	the	11	NMOD	1970s	1970s	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	1970s	NNS	1970s	9	PMOD	of	of	-2	0	0	4.0	1970s	t:e9cf348e54	date	0	0	1970	0	0	0	0	0	0	0	date	1
+12	as	IN	as	0	ROOT	0	0	0	0	0	0	as	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	heavily	RB	heavily	16	NMOD	view	view	+3	0	0	0	heavily	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	influencing	VVG	influence	13	SUFFIX	heavily	heavily	-1	0	0	0	influencing	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	their	PP$	their	13	SUFFIX	heavily	heavily	-2	0	0	0	their	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	view	NN	view	12	PMOD	as	as	-4	0	0	0	view	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	and	CC	and	16	COORD	view	view	-1	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	execution	NN	execution	17	CONJ	and	and	-1	0	0	0	execution	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	of	IN	of	18	NMOD	execution	execution	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	the	DT	the	21	NMOD	series	series	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	series	NN	series	19	PMOD	of	of	-2	0	0	0	series	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	.|G__	SENT	.	21	SUFFIX	series	series	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 56 wx56
+1	Moore	NP	Moore	0	ROOT	0	0	0	0	0	2	moore	a:Q3631684	person->artist	https://en.wikipedia.org/wiki/B._Clay_Moore	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/8/87/Bclaymooreatomik.jpg	B__Clay_Moore	Male	0	1950_01_01	0	0	comics_artist	American	coref	1
+2	notes	VVZ	note	1	SUFFIX	Moore	Moore	-1	0	0	0	notes	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	that	IN/that	that	1	SUFFIX	Moore	Moore	-2	0	0	0	that	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	the	DT	the	5	NMOD	stories	storey	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	stories	NNS	storey	8	SBJ	were	be	+3	0	0	0	stories	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	from	IN	from	5	NMOD	stories	storey	-1	0	0	0	from	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	Marvel	NP	Marvel	5	SUFFIX	stories	storey	-2	0	0	0	marvel	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	were	VBD	be	0	ROOT	0	0	0	0	0	0	were	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	writer-driven	JJ	writer-driven	8	PRD	were	be	-1	0	0	0	writer-driven	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	,|G__	,	,	8	P	were	be	-2	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	reflecting	VVG	reflect	8	SUFFIX	were	be	-3	0	0	0	reflecting	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	``	``	``	15	P	restlessness	restlessness	+3	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	America	NP	America	12	SUFFIX	``	``	-1	0	0	4.0	america	f:Q2828076	film	https://en.wikipedia.org/wiki/América_(2011_Portuguese_film)	0	America	0	0	0	0	0	0	0	kb	1
+14	's|G__	POS	's	13	SUFFIX	America	America	-1	0	0	0	's	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	restlessness	NN	restlessness	8	PRN	were	be	-7	0	0	0	restlessness	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	and	CC	and	8	COORD	were	be	-8	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	uncertainty	NN	uncertainty	27	NMOD	advantage	advantage	+10	0	0	0	uncertainty	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	about	IN	about	17	NMOD	uncertainty	uncertainty	-1	0	0	0	about	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	the	DT	the	20	NMOD	future	future	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	future	NN	future	18	PMOD	about	about	-2	0	0	0	future	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	,|G__	,	,	17	P	uncertainty	uncertainty	-4	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	but	CC	but	17	COORD	uncertainty	uncertainty	-5	0	0	0	but	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	they	PP	they	17	SUFFIX	uncertainty	uncertainty	-6	0	0	0	they	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	also	RB	also	27	NMOD	advantage	advantage	+3	0	0	0	also	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	took	VVD	take	24	SUFFIX	also	also	-1	0	0	0	took	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	full	JJ	full	27	NMOD	advantage	advantage	+1	0	0	0	full	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	advantage	NN	advantage	45	AMOD	[	[	+18	0	0	0	advantage	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	of	IN	of	27	NMOD	advantage	advantage	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	all	PDT	all	34	NMOD	obsessions	obsession	+5	0	0	0	all	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+30	the	DT	the	34	NMOD	obsessions	obsession	+4	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+31	groovy	JJ	groovy	34	NMOD	obsessions	obsession	+3	0	0	0	groovy	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+32	pop	NN	pop	33	NMOD	culture	culture	+1	0	0	0	pop	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+33	culture	NN	culture	34	NMOD	obsessions	obsession	+1	0	0	0	culture	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+34	obsessions	NNS	obsession	28	PMOD	of	of	-6	0	0	0	obsessions	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+35	of	IN	of	34	NMOD	obsessions	obsession	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+36	the	DT	the	37	NMOD	day	day	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+37	day	NN	day	35	PMOD	of	of	-2	0	0	0	day	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+38	,|G__	,	,	27	P	advantage	advantage	-11	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+39	from	IN	from	27	NMOD	advantage	advantage	-12	0	0	0	from	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+40	Kung-Fu	NP	Kung-Fu	27	SUFFIX	advantage	advantage	-13	0	0	0	kung-fu	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+41	to	TO	to	27	NMOD	advantage	advantage	-14	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+42	karate	NN	karate	41	PMOD	to	to	-1	https://en.wikipedia.org/wiki/Karate	1	0	karate	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+43	to	TO	to	27	NMOD	advantage	advantage	-16	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+44	horror	NN	horror	43	PMOD	to	to	-1	https://en.wikipedia.org/wiki/Horror_film	1	0	horror	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+45	[	SYM	[	8	ADV	were	be	-37	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+46	2|G__	CD	2	48	AMOD	Conversely	conversely	+2	0	0	0	2	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+47	]|G__	SYM	]	48	AMOD	Conversely	conversely	+1	0	0	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+48	Conversely	RB	conversely	8	ADV	were	be	-40	0	0	0	conversely	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+49	,|G__	,	,	8	P	were	be	-41	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+50	Moore	NP	Moore	8	SUFFIX	were	be	-42	0	0	2	moore	a:Q3631684	person->artist	https://en.wikipedia.org/wiki/B._Clay_Moore	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/8/87/Bclaymooreatomik.jpg	B__Clay_Moore	Male	0	1950_01_01	0	0	comics_artist	American	coref	1
+51	notes	NNS	note	8	PRD	were	be	-43	0	0	0	notes	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+52	how	WRB	how	54	SBJ	was	be	+2	0	0	0	how	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+53	DC	NP	DC	52	SUFFIX	how	how	-1	https://en.wikipedia.org/wiki/DC_Comics	1	0	dc	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+54	was	VBD	be	51	NMOD	notes	note	-3	0	0	0	was	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+55	moving	VVG	move	54	OBJ	was	be	-1	0	0	4.0	moving	u:e18c2448c5	activity	0	0	0	0	0	0	0	0	0	0	activity	1
+56	away	RB	away	55	DIR	moving	move	-1	0	0	0	away	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+57	from	IN	from	56	AMOD	away	away	-1	0	0	0	from	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+58	that	IN/that	that	56	SUFFIX	away	away	-2	0	0	0	that	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+59	into	IN	into	55	DIR	moving	move	-4	0	0	0	into	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+60	action	NN	action	61	NMOD	stories	storey	+1	0	0	0	action	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+61	stories	NNS	storey	59	PMOD	into	into	-2	0	0	0	stories	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+62	for	IN	for	61	NMOD	stories	storey	-1	0	0	0	for	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+63	all	DT	all	64	NMOD	ages	age	+1	0	0	0	all	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+64	ages	NNS	age	62	PMOD	for	for	-2	0	0	0	ages	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+65	.|G__	SENT	.	64	SUFFIX	ages	age	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 43 wx43
+%%#SEN 57 wx57
+1	Peck	NP	Peck	0	ROOT	0	0	0	0	0	0	peck	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	also	RB	also	5	NMOD	love	love	+3	0	0	0	also	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	notes	VVZ	note	2	SUFFIX	also	also	-1	0	0	0	notes	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	a	DT	a	5	NMOD	love	love	+1	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	love	NN	love	0	ROOT	0	0	0	0	0	0	love	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	the	DT	the	7	NMOD	comics	comic	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	comics	NNS	comic	5	NMOD	love	love	-2	0	0	0	comics	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	of	IN	of	7	NMOD	comics	comic	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	the	DT	the	10	NMOD	era	era	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	era	NN	era	8	PMOD	of	of	-2	0	0	0	era	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	.|G__	SENT	.	10	SUFFIX	era	era	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 58 wx58
+1	He	PP	he	0	ROOT	0	0	0	0	0	0	he	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	notes	VVZ	note	1	SUFFIX	He	he	-1	0	0	0	notes	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	that	IN/that	that	1	SUFFIX	He	he	-2	0	0	0	that	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	his	PP$	his	1	SUFFIX	He	he	-3	0	0	0	his	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	favorite	JJ	favorite	6	NMOD	superheroes	superhero	+1	0	0	0	favorite	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	superheroes	NNS	superhero	0	ROOT	0	0	0	0	0	0	superheroes	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	of	IN	of	6	NMOD	superheroes	superhero	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	the	DT	the	9	NMOD	period	period	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	period	NN	period	7	PMOD	of	of	-2	0	0	0	period	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	were	VBD	be	0	ROOT	0	0	0	0	0	0	were	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	Black	NP	Black	10	OBJ	were	be	-1	0	0	0	black	f:Q23780734	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	Panther	NP	Panther	11	SUFFIX	Black	Black	-1	https://en.wikipedia.org/wiki/Black_Panther_(Marvel_Comics)	2	4.2	panther	f:Q23780734	film	https://en.wikipedia.org/wiki/Black_Panther_(film)	0	Black_Panther	0	0	0	0	0	0	0	kb	2
+13	,|G__	,	,	10	P	were	be	-3	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	Iron	NP	Iron	10	SUFFIX	were	be	-4	0	0	0	iron	p:Q7085885	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	Fist	NP	Fist	10	SUFFIX	were	be	-5	https://en.wikipedia.org/wiki/Iron_Fist_(comics)	2	4.2	fist	p:Q7085885	person->artist	https://en.wikipedia.org/wiki/Ole_Laursen	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/5/5c/Ole_Laursen.jpg	Ole_Laursen	Male	Manila__Philippines	1977_08_21	0	0	kickboxer|mixed_martial_artist|Thai_boxer	Danish|Filipino	kb	2
+16	[	SYM	[	17	NMOD	2	2	+1	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	2|G__	CD	2	18	AMOD	]	]	+1	0	0	0	2	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	]|G__	SYM	]	10	ADV	were	be	-8	0	0	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 44 wx44
+%%#SEN 59 wx59
+1	Moore	NP	Moore	0	ROOT	0	0	0	0	0	2	moore	a:Q3631684	person->artist	https://en.wikipedia.org/wiki/B._Clay_Moore	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/8/87/Bclaymooreatomik.jpg	B__Clay_Moore	Male	0	1950_01_01	0	0	comics_artist	American	coref	1
+2	notes	VVZ	note	1	SUFFIX	Moore	Moore	-1	0	0	0	notes	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	that	IN/that	that	1	SUFFIX	Moore	Moore	-2	0	0	0	that	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	while	IN	while	0	ROOT	0	0	0	0	0	0	while	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	they	PP	they	4	SUFFIX	while	while	-1	0	0	0	they	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	had	VHD	have	4	SUFFIX	while	while	-2	0	0	0	had	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	initially	RB	initially	9	DEP	to	to	+2	0	0	0	initially	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	planned	VVN	plan	7	SUFFIX	initially	initially	-1	0	0	0	planned	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	to	TO	to	4	PMOD	while	while	-5	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	start	VV	start	9	SUFFIX	to	to	-1	0	0	0	start	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	the	DT	the	12	NMOD	series	series	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	series	NN	series	9	PMOD	to	to	-3	0	0	0	series	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	closer	RBR	closer	0	ROOT	0	0	0	0	0	0	closer	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	to	TO	to	13	AMOD	closer	closer	-1	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	the	DT	the	16	NMOD	start	start	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	start	NN	start	14	PMOD	to	to	-2	0	0	0	start	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	of	IN	of	16	NMOD	start	start	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	the	DT	the	19	NMOD	decade	decade	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	decade	NN	decade	17	PMOD	of	of	-2	0	0	0	decade	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	,|G__	,	,	22	P	was	be	+2	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	there	EX	there	22	SBJ	was	be	+1	0	0	0	there	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	was	VBD	be	0	ROOT	0	0	0	0	0	0	was	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	something	NN	something	22	PRD	was	be	-1	0	0	0	something	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	about	IN	about	23	NMOD	something	something	-1	0	0	0	about	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	'76	NN	'76	24	PMOD	about	about	-1	0	0	0	'76	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	``	``	``	22	NMOD	was	be	-4	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	that	WDT	that	22	NMOD	was	be	-5	0	0	0	that	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	resonates.The	NN	resonates.The	22	NMOD	was	be	-6	0	0	0	resonates.the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	Bicentennial	NP	Bicentennial	28	SUFFIX	resonates.The	resonates.The	-1	0	0	0	bicentennial	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+30	,|G__	,	,	22	NMOD	was	be	-8	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+31	the	DT	the	32	NMOD	beginning	beginning	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+32	beginning	NN	beginning	65	NMOD	movies	movie	+33	0	0	0	beginning	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+33	of	IN	of	32	NMOD	beginning	beginning	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+34	the	DT	the	35	NMOD	recovery	recovery	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+35	recovery	NN	recovery	33	PMOD	of	of	-2	0	0	0	recovery	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+36	from	IN	from	35	NMOD	recovery	recovery	-1	0	0	0	from	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+37	Watergate	NP	Watergate	35	SUFFIX	recovery	recovery	-2	0	0	4.0	watergate	s:Q26601997	structure	https://www.wikidata.org/wiki/Q26601997	0	Watergate	0	0	0	0	0	0	0	kb	1
+38	,|G__	,	,	35	P	recovery	recovery	-3	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+39	a	DT	a	40	NMOD	period	period	+1	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+40	period	NN	period	35	APPO	recovery	recovery	-5	0	0	0	period	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+41	of	IN	of	40	NMOD	period	period	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+42	national	JJ	national	43	NMOD	soul-searching	soul-searching	+1	0	0	0	national	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+43	soul-searching	NN	soul-searching	41	PMOD	of	of	-2	0	0	0	soul-searching	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+44	as	IN	as	32	NMOD	beginning	beginning	-12	0	0	0	as	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+45	the	DT	the	46	NMOD	dreams	dream	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+46	dreams	NNS	dream	44	PMOD	as	as	-2	0	0	0	dreams	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+47	of	IN	of	46	NMOD	dreams	dream	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+48	the	DT	the	49	NMOD	1960s	1960s	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+49	1960s	NNS	1960s	47	PMOD	of	of	-2	0	0	4.0	1960s	t:ed31bec40c	date	0	0	1960	0	0	0	0	0	0	0	date	1
+50	crashed	VVD	crash	49	SUFFIX	1960s	1960s	-1	0	0	0	crashed	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+51	and	CC	and	46	COORD	dreams	dream	-5	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+52	burned	VVD	burn	51	SUFFIX	and	and	-1	0	0	0	burned	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+53	,|G__	,	,	32	P	beginning	beginning	-21	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+54	and	CC	and	32	COORD	beginning	beginning	-22	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+55	an	DT	an	56	NMOD	explosion	explosion	+1	0	0	0	an	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+56	explosion	NN	explosion	54	CONJ	and	and	-2	0	0	0	explosion	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+57	of	IN	of	56	NMOD	explosion	explosion	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+58	exploitation	NN	exploitation	59	NMOD	pop	pop	+1	0	0	0	exploitation	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+59	pop	NN	pop	60	NMOD	culture	culture	+1	0	0	0	pop	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+60	culture	NN	culture	57	PMOD	of	of	-3	0	0	0	culture	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+61	,|G__	,	,	32	P	beginning	beginning	-29	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+62	(	(	(	63	P	like	like	+1	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+63	like|G__	JJ	like	32	APPO	beginning	beginning	-31	0	0	0	like	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+64	)|G__	)	)	63	P	like	like	-1	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+65	movies	NNS	movie	84	NMOD	influences	influence	+19	0	0	0	movies	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+66	,|G__	,	,	65	P	movies	movie	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+67	television	NN	television	65	COORD	movies	movie	-2	0	0	0	television	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+68	,|G__	,	,	67	P	television	television	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+69	comics	NNS	comic	67	COORD	television	television	-2	0	0	0	comics	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+70	,|G__	,	,	69	P	comics	comic	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+71	magazines	NNS	magazine	69	COORD	comics	comic	-2	0	0	0	magazines	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+72	that	WDT	that	77	DEP	to	to	+5	0	0	0	that	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+73	we	PP	we	72	SUFFIX	that	that	-1	0	0	0	we	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+74	knew	VVD	know	72	SUFFIX	that	that	-2	0	0	0	knew	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+75	we	PP	we	72	SUFFIX	that	that	-3	0	0	0	we	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+76	wanted	VVD	want	72	SUFFIX	that	that	-4	0	0	0	wanted	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+77	to	TO	to	65	NMOD	movies	movie	-12	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+78	tap	VV	tap	65	SUFFIX	movies	movie	-13	0	0	0	tap	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+79	into.”	NP	into.”	65	SUFFIX	movies	movie	-14	0	0	0	into.”	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+80	Moore	NP	Moore	65	SUFFIX	movies	movie	-15	0	0	2	moore	a:Q3631684	person->artist	https://en.wikipedia.org/wiki/B._Clay_Moore	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/8/87/Bclaymooreatomik.jpg	B__Clay_Moore	Male	0	1950_01_01	0	0	comics_artist	American	coref	1
+81	specifically	RB	specifically	84	NMOD	influences	influence	+3	0	0	0	specifically	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+82	notes	VVZ	note	81	SUFFIX	specifically	specifically	-1	0	0	0	notes	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+83	these	DT	these	84	NMOD	influences	influence	+1	0	0	0	these	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+84	influences	NNS	influence	87	NMOD	gamut	gamut	+3	0	0	0	influences	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+85	ran	VVD	run	84	SUFFIX	influences	influence	-1	0	0	0	ran	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+86	the	DT	the	87	NMOD	gamut	gamut	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+87	gamut	NN	gamut	95	NMOD	5	5	+8	0	0	0	gamut	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+88	from	IN	from	87	NMOD	gamut	gamut	-1	0	0	0	from	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+89	Bruce	NP	Bruce	87	SUFFIX	gamut	gamut	-2	0	0	0	bruce	a:Q16397	0	0	0	0	0	0	0	0	0	0	0	0	0
+90	Lee	NP	Lee	87	SUFFIX	gamut	gamut	-3	https://en.wikipedia.org/wiki/Bruce_Lee	2	4.1	lee	a:Q16397	person->artist	https://en.wikipedia.org/wiki/Bruce_Lee	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/c/cf/Bruce-Lee-as-Kato-1967-restored.jpg	Bruce_Lee	Male	Chinatown__San_Francisco__California__U_S	1940_11_27	Kowloon_Tong__Hong_Kong	1973_07_20	film_producer|stunt_performer|film_actor|actor	Hong_Kong	kb	2
+91	to	TO	to	87	NMOD	gamut	gamut	-4	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+92	Gordon	NP	Gordon	87	SUFFIX	gamut	gamut	-5	0	0	0	gordon	a:Q365682	0	0	0	0	0	0	0	0	0	0	0	0	0
+93	Parks	NPS	Parks	87	SUFFIX	gamut	gamut	-6	https://en.wikipedia.org/wiki/Gordon_Parks	2	4.1	parks	a:Q365682	person->artist	https://en.wikipedia.org/wiki/Gordon_Parks	http://athena3.fit.vutbr.cz/kb/images/freebase/04s495d.jpg|http://athena3.fit.vutbr.cz/kb/images/the-artists/parks.gif|http://athena3.fit.vutbr.cz/kb/images/freebase/02d283z.jpg|http://athena3.fit.vutbr.cz/kb/images/freebase/03t4_r0.jpg	Gordon_Parks	M	Fort_Scott	1912_11_30	New_York_City	2006_03_07	Shaft|Novelist|Life_photographic_essays|Author	American|African_American|USA	kb	2
+94	[	SYM	[	95	NMOD	5	5	+1	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+95	5|G__	CD	5	96	AMOD	]	]	+1	0	0	0	5	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+96	]|G__	SYM	]	22	NMOD	was	be	-74	0	0	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 45 wx45
+%%#SEN 60 wx60
+1	[	SYM	[	5	NMOD	5	5	+4	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	2|G__	CD	2	5	NMOD	5	5	+3	0	0	0	2	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	]|G__	SYM	]	5	NMOD	5	5	+2	0	0	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	[	SYM	[	5	NMOD	5	5	+1	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	5|G__	CD	5	6	AMOD	]	]	+1	0	0	0	5	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	]|G__	SYM	]	0	ROOT	0	0	0	0	0	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 46 wx46
+%%#SEN 61 wx61
+1	Moore	NP	Moore	0	ROOT	0	0	0	0	0	2	moore	a:Q3631684	person->artist	https://en.wikipedia.org/wiki/B._Clay_Moore	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/8/87/Bclaymooreatomik.jpg	B__Clay_Moore	Male	0	1950_01_01	0	0	comics_artist	American	coref	1
+2	notes	VVZ	note	1	SUFFIX	Moore	Moore	-1	0	0	0	notes	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	that	IN/that	that	1	SUFFIX	Moore	Moore	-2	0	0	0	that	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	they	PP	they	1	SUFFIX	Moore	Moore	-3	0	0	0	they	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	decided	VVD	decide	1	SUFFIX	Moore	Moore	-4	0	0	0	decided	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	to	TO	to	1	NMOD	Moore	Moore	-5	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	add	VV	add	1	SUFFIX	Moore	Moore	-6	0	0	0	add	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	pages	NNS	page	0	ROOT	0	0	0	0	0	0	pages	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	to	TO	to	8	NMOD	pages	page	-1	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	the	DT	the	12	NMOD	listing	listing	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	comic	JJ	comic	12	NMOD	listing	listing	+1	0	0	0	comic	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	listing	NN	listing	9	PMOD	to	to	-3	0	0	0	listing	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	the	DT	the	15	NMOD	games	game	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	sports	NNS	sport	15	NMOD	games	game	+1	0	0	0	sports	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	games	NNS	game	8	APPO	pages	page	-7	0	0	0	games	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	and	CC	and	15	COORD	games	game	-1	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	songs	NNS	song	16	CONJ	and	and	-1	0	0	0	songs	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	playing	VVG	play	16	SUFFIX	and	and	-2	0	0	0	playing	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	during	IN	during	15	TMP	games	game	-4	0	0	0	during	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	the	DT	the	21	NMOD	period	period	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	period	NN	period	19	PMOD	during	during	-2	0	0	0	period	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	so	RB	so	8	NMOD	pages	page	-14	0	0	0	so	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	as	RB	as	22	AMOD	so	so	-1	0	0	0	as	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	to	TO	to	8	NMOD	pages	page	-16	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	provide	VV	provide	8	SUFFIX	pages	page	-17	0	0	0	provide	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	a	DT	a	27	NMOD	backdrop	backdrop	+1	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	backdrop	NN	backdrop	0	ROOT	0	0	0	0	0	0	backdrop	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	and	CC	and	27	COORD	backdrop	backdrop	-1	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	soundtrack	NN	soundtrack	28	CONJ	and	and	-1	0	0	0	soundtrack	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+30	of	IN	of	29	NMOD	soundtrack	soundtrack	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+31	sorts	NNS	sort	30	PMOD	of	of	-1	0	0	0	sorts	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+32	to	TO	to	27	NMOD	backdrop	backdrop	-5	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+33	the	DT	the	34	NMOD	stories	storey	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+34	stories	NNS	storey	32	PMOD	to	to	-2	0	0	0	stories	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+35	.|G__	SENT	.	34	SUFFIX	stories	storey	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 62 wx62
+1	Peck	NP	Peck	0	ROOT	0	0	0	0	0	0	peck	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	notes	VVZ	note	1	SUFFIX	Peck	Peck	-1	0	0	0	notes	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	this	DT	this	13	NMOD	characters	character	+10	0	0	0	this	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	as	RB	as	3	COORD	this	this	-1	0	0	0	as	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	well	RB	well	4	DEP	as	as	-1	0	0	0	well	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	,|G__	,	,	4	P	as	as	-2	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	pointing	VVG	point	4	SUFFIX	as	as	-3	0	0	0	pointing	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	out	RP	out	7	PRT	pointing	point	-1	0	0	0	out	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	that	IN/that	that	7	SUFFIX	pointing	point	-2	0	0	0	that	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	one	CD	one	13	NMOD	characters	character	+3	0	0	0	one	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	of	IN	of	10	NMOD	one	one	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	his	PP$	his	10	SUFFIX	one	one	-2	0	0	2	his	a:Q3631684	person->artist	https://en.wikipedia.org/wiki/B._Clay_Moore	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/8/87/Bclaymooreatomik.jpg	B__Clay_Moore	Male	0	1950_01_01	0	0	comics_artist	American	coref	1
+13	characters	NNS	character	0	ROOT	0	0	0	0	0	0	characters	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	,|G__	,	,	13	P	characters	character	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	Peter	NP	Peter	13	SUFFIX	characters	character	-2	0	0	0	peter	p:Q7177554	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	Walker	NP	Walker	15	SUFFIX	Peter	Peter	-1	0	0	4.0	walker	p:Q7177554	person	https://en.wikipedia.org/wiki/Peter_Walker_(RAF_officer)	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/f/ff/Lieutenant_Governor_of_Guernsey_inspects_cadets_Saint_Peter_Port_2012_b.jpg	Peter_Walker	Male	Rowley_Regis	1949_09_29	0	2015_09_06	military_officer|fighter_pilot|military_personnel	0	kb	2
+17	,|G__	,	,	13	P	characters	character	-4	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	uses	VVZ	use	13	SUFFIX	characters	character	-5	0	0	0	uses	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	the	DT	the	20	NMOD	alias	alias	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	alias	NN	alias	0	ROOT	0	0	0	0	0	0	alias	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	of	IN	of	20	NMOD	alias	alias	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	``	``	``	28	P	homage	homage	+6	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	Edmund	NP	Edmund	22	SUFFIX	``	``	-1	0	0	0	edmund	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	Fitzgerald	NP	Fitzgerald	22	SUFFIX	``	``	-2	0	0	0	fitzgerald	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	''	''	''	22	P	``	``	-3	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	,	,	,	22	P	``	``	-4	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	an	DT	an	28	NMOD	homage	homage	+1	0	0	0	an	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	homage	NN	homage	21	PMOD	of	of	-7	0	0	0	homage	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	to	TO	to	20	NMOD	alias	alias	-9	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+30	the	DT	the	33	NMOD	song	song	+3	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+31	Gordon	NP	Gordon	30	SUFFIX	the	the	-1	0	0	0	gordon	a:Q359552	0	0	0	0	0	0	0	0	0	0	0	0	0
+32	Lightfoot	NP	Lightfoot	30	SUFFIX	the	the	-2	https://en.wikipedia.org/wiki/Gordon_Lightfoot	2	4.1	lightfoot	a:Q359552	person->artist	https://en.wikipedia.org/wiki/Gordon_Lightfoot	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/6/62/GordonLightfoot_Interlochen.jpg	Gordon_Lightfoot	Male	Orillia__Ontario__Canada	1938_11_17	Orillia__Ontario	0	poet|guitarist|singer_songwriter|actor	0	kb	2
+33	song	NN	song	29	PMOD	to	to	-4	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+34	,|G__	,	,	33	P	song	song	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+35	The	DT	the	52	AMOD	[	[	+17	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+36	Wreck	NP	Wreck	35	SUFFIX	The	the	-1	0	0	0	wreck	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+37	of	IN	of	35	NMOD	The	the	-2	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+38	the	DT	the	52	AMOD	[	[	+14	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+39	Edmund	NP	Edmund	38	SUFFIX	the	the	-1	0	0	0	edmund	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+40	Fitzgerald	NP	Fitzgerald	39	SUFFIX	Edmund	Edmund	-1	0	0	0	fitzgerald	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+41	,|G__	,	,	40	P	Fitzgerald	Fitzgerald	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+42	which	WDT	which	52	AMOD	[	[	+10	0	0	0	which	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+43	turns	VVZ	turn	42	SUFFIX	which	which	-1	0	0	0	turns	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+44	into	IN	into	42	DIR	which	which	-2	0	0	0	into	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+45	a	DT	a	47	NMOD	joke	joke	+2	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+46	running	VVG	run	45	SUFFIX	a	a	-1	0	0	0	running	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+47	joke	NN	joke	44	PMOD	into	into	-3	0	0	0	joke	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+48	,|G__	,	,	42	P	which	which	-6	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+49	as	IN	as	42	ADV	which	which	-7	0	0	0	as	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+50	the	DT	the	51	NMOD	mob	mob	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+51	mob	NN	mob	49	PMOD	as	as	-2	https://en.wikipedia.org/wiki/Crowd	1	0	mob	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+52	[	SYM	[	0	ROOT	0	0	0	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+53	3|G__	CD	3	56	NMOD	3	3	+3	0	0	0	3	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+54	]|G__	SYM	]	56	NMOD	3	3	+2	0	0	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+55	[	SYM	[	56	NMOD	3	3	+1	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+56	3|G__	CD	3	52	TMP	[	[	-4	0	0	0	3	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+57	]|G__	SYM	]	52	NMOD	[	[	-5	0	0	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 47 wx47
+%%#SEN 63 wx63
+1	Reception	NN	reception	0	ROOT	0	0	0	0	0	0	reception	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 48 wx48
+%%#SEN 64 wx64
+1	Ai	VVP	ai	0	ROOT	0	0	0	0	0	0	ai	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	n't|G__	RB	n't	1	ADV	Ai	ai	-1	0	0	0	n't	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	It	PP	it	1	SUFFIX	Ai	ai	-2	0	0	0	it	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	Cool	NP	Cool	1	SUFFIX	Ai	ai	-3	0	0	0	cool	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	News	NP	News	1	SUFFIX	Ai	ai	-4	https://en.wikipedia.org/wiki/Ain't_It_Cool_News	5	0	news	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	[	SYM	[	1	NMOD	Ai	ai	-5	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	6|G__	CD	6	1	NMOD	Ai	ai	-6	0	0	0	6	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	]|G__	SYM	]	1	NMOD	Ai	ai	-7	0	0	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	It	PP	it	8	SUFFIX	]	]	-1	0	0	0	it	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	further	RBR	further	14	PMOD	while	while	+4	0	0	0	further	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	notes	VVZ	note	10	SUFFIX	further	further	-1	0	0	0	notes	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	that	IN/that	that	10	SUFFIX	further	further	-2	0	0	0	that	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	the	DT	the	14	DEP	while	while	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	while	IN	while	8	TMP	]	]	-6	0	0	0	while	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	the	DT	the	17	NMOD	cartoony	cartoony	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	``	``	``	17	P	cartoony	cartoony	+1	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	cartoony	NN	cartoony	19	NMOD	aspects	aspect	+2	0	0	0	cartoony	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	''	''	''	17	P	cartoony	cartoony	-1	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	aspects	NNS	aspect	20	SBJ	are	be	+1	0	0	0	aspects	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	are	VBP	be	14	SUB	while	while	-6	0	0	0	are	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	balanced	VVN	balance	20	SUFFIX	are	be	-1	0	0	0	balanced	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	by	IN	by	20	EXT	are	be	-2	0	0	0	by	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	maintaining	VVG	maintain	20	SUFFIX	are	be	-3	0	0	0	maintaining	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	a	DT	a	25	NMOD	realism	realism	+1	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	realism	NN	realism	20	PRD	are	be	-5	0	0	4.0	realism	m:07sbg7f	movement	https://en.wikipedia.org/wiki/Realism_(arts)	http://athena3.fit.vutbr.cz/kb/images/freebase/059yp0v.jpg	Realism	0	0	0	0	0	0	0	kb	1
+26	that	WDT	that	1	NMOD	Ai	ai	-25	0	0	0	that	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	avoids	VVZ	avoid	26	SUFFIX	that	that	-1	0	0	0	avoids	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	making	VVG	make	26	SUFFIX	that	that	-2	0	0	0	making	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	the	DT	the	30	NMOD	story	story	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+30	story	NN	story	1	NMOD	Ai	ai	-29	0	0	0	story	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+31	too	RB	too	32	AMOD	topical	topical	+1	0	0	0	too	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+32	topical	JJ	topical	30	APPO	story	story	-2	0	0	0	topical	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+33	and	CC	and	32	COORD	topical	topical	-1	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+34	light	JJ	light	33	CONJ	and	and	-1	0	0	0	light	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+35	.|G__	SENT	.	33	SUFFIX	and	and	-2	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 49 wx49
+%%#SEN 65 wx65
+1	[	SYM	[	8	NMOD	feel	feel	+7	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	3|G__	CD	3	8	NMOD	feel	feel	+6	0	0	0	3	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	]|G__	SYM	]	8	NMOD	feel	feel	+5	0	0	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	further	RBR	further	8	NMOD	feel	feel	+4	0	0	0	further	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	noting	VVG	note	4	SUFFIX	further	further	-1	0	0	0	noting	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	that	IN/that	that	4	SUFFIX	further	further	-2	0	0	0	that	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	the	DT	the	8	NMOD	feel	feel	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	feel	NN	feel	0	ROOT	0	0	0	0	0	0	feel	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	to	TO	to	8	NMOD	feel	feel	-1	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	each	DT	each	11	NMOD	artist	artist	+1	0	0	0	each	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	artist	NN	artist	13	NMOD	handling	handling	+2	0	0	0	artist	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	's|G__	POS	's	11	SUFFIX	artist	artist	-1	0	0	0	's	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	handling	NN	handling	9	PMOD	to	to	-4	0	0	0	handling	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	of	IN	of	13	NMOD	handling	handling	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	the	DT	the	17	NMOD	cities	city	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	period	NN	period	17	NMOD	cities	city	+1	0	0	0	period	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	cities	NNS	city	14	PMOD	of	of	-3	0	0	0	cities	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	is	VBZ	be	0	ROOT	0	0	0	0	0	0	is	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	``	``	``	20	P	spot-on	spot-on	+1	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	spot-on	JJ	spot-on	18	PRD	is	be	-2	0	0	0	spot-on	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	''	''	''	20	P	spot-on	spot-on	-1	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	.	SENT	.	20	SUFFIX	spot-on	spot-on	-2	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 50 wx50
+%%#SEN 66 wx66
+1	[	SYM	[	2	NMOD	7	7	+1	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	7|G__	CD	7	3	AMOD	]	]	+1	0	0	0	7	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	]|G__	SYM	]	0	ROOT	0	0	0	0	0	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 51 wx51
+%%#SEN 67 wx67
+1	Notes	NNS	note	0	ROOT	0	0	0	0	0	0	notes	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 52 wx52
+%%#SEN 68 wx68
+1	Sullivan	NP	Sullivan	0	SUFFIX	0	0	0	0	0	0	sullivan	p:Q6834695	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	,|GGG	,	,	1	NMOD	Sullivan	Sullivan	-1	0	0	0	,	p:Q6834695	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	Michael	NP	Michael	2	SUFFIX	,	,	-1	0	0	4.0	michael	p:Q6834695	person	https://en.wikipedia.org/wiki/Michael_Sullivan_(art_historian)	0	Michael_Sullivan	Male	Toronto	1916_10_29	Oxford	2013_09_28	art_historian	0	kb	3
+4	Patrick	NP	Patrick	2	SUFFIX	,	,	-2	0	0	4.0	patrick	f:Q3369170	film	https://en.wikipedia.org/wiki/Patrick_(1978_film)	0	Patrick	0	0	0	0	0	0	0	kb	1
+5	.|G__	SENT	.	2	SUFFIX	,	,	-3	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 69 wx69
+1	``	``	``	0	ROOT	0	0	0	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Moore	NP	Moore	1	SUFFIX	``	``	-1	0	0	2	moore	a:Q3631684	person->artist	https://en.wikipedia.org/wiki/B._Clay_Moore	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/8/87/Bclaymooreatomik.jpg	B__Clay_Moore	Male	0	1950_01_01	0	0	comics_artist	American	coref	1
+3	Gives	NP	Gives	1	SUFFIX	``	``	-2	0	0	0	gives	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	Good	NP	Good	1	SUFFIX	``	``	-3	0	0	0	good	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	Karma	NP	Karma	1	SUFFIX	``	``	-4	0	0	4.0	karma	y:4aa26de83b	mythology	https://en.wikipedia.org/wiki/Karma	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/0/03/It_Shoots_Further_Than_He_Dreams.jpg	Karma	0	0	0	0	0	0	0	kb	1
+6	in	IN	in	1	LOC	``	``	-5	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	``	``	``	6	P	in	in	-1	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	'76	NP	'76	1	SUFFIX	``	``	-7	http://www.comicbookresources.com/?page=article&id=12125	8	0	'76	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	``	``	``	1	NMOD	``	``	-8	http://www.comicbookresources.com/?page=article&id=12125	1	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	``	``	``	1	NMOD	``	``	-9	http://www.comicbookresources.com/?page=article&id=12125	1	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	.|G__	SENT	.	10	SUFFIX	``	``	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 70 wx70
+1	Comic	JJ	comic	0	ROOT	0	0	0	0	0	0	comic	m:01vnb	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Book	NP	Book	1	SUFFIX	Comic	comic	-1	0	0	4.0	book	m:01vnb	movement	https://en.wikipedia.org/wiki/Comic_book	http://athena3.fit.vutbr.cz/kb/images/freebase/02cmrb1.jpg	Comic_book	0	0	0	0	0	0	0	kb	2
+3	Resources	NPS	Resources	1	SUFFIX	Comic	comic	-2	https://en.wikipedia.org/wiki/Comic_Book_Resources	3	0	resources	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	.|G__	SENT	.	1	SUFFIX	Comic	comic	-3	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 71 wx71
+1	Retrieved	VVN	retrieve	0	ROOT	0	0	0	0	0	0	retrieved	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	2009-04-15	CD	@card@	0	ROOT	0	0	0	0	0	4.0	2009-04-15	t:c4231a8396	date	0	0	2009	4	15	0	0	0	0	0	date	1
+3	.|G__	SENT	.	2	SUFFIX	2009-04-15	@card@	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 53 wx53
+%%#SEN 72 wx72
+1	McLelland	NP	McLelland	0	SUFFIX	0	0	0	0	0	0	mclelland	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	,|G__	,	,	1	NMOD	McLelland	McLelland	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	Ryan	NP	Ryan	2	SUFFIX	,	,	-1	0	0	4.0	ryan	l:Q7383805	location	https://en.wikipedia.org/wiki/Ryan,_New_South_Wales	0	Ryan	Australia	0	0	0	0	0	0	kb	1
+4	.|G__	SENT	.	2	SUFFIX	,	,	-2	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 73 wx73
+1	``	``	``	4	HMOD	07	@card@	+3	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Baltimore	NP	Baltimore	1	SUFFIX	``	``	-1	0	0	0	baltimore	e:Q4852834	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	Comic-Con	NP	Comic-Con	1	SUFFIX	``	``	-2	0	0	4.0	comic-con	e:Q4852834	event	https://en.wikipedia.org/wiki/Baltimore_Comic-Con	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/5/55/Baltimore_Comic-Con_2011_-_G.I._Joe_Team_(6844241697).jpg	Baltimore_Comic_Con	0	0	0	0	0	0	0	kb	2
+4	07	CD	@card@	0	ROOT	0	0	0	0	0	0	07	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	:|G__	:	:	4	NMOD	07	@card@	-1	0	0	0	:	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	Image	NN	image	4	NMOD	07	@card@	-2	0	0	0	image	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	's|G__	POS	's	6	SUFFIX	Image	image	-1	0	0	0	's	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	'76	NN	'76	4	NMOD	07	@card@	-4	0	0	0	'76	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	-	:	-	11	DEP	to	to	+2	0	0	0	-	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	Talking	VVG	talk	9	SUFFIX	-	-	-1	0	0	0	talking	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	to	TO	to	4	NMOD	07	@card@	-7	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	Moor	NN	Moor	11	PMOD	to	to	-1	0	0	4.0	moor	f:Q15983477	film	https://en.wikipedia.org/wiki/Moor_(film)	0	Moor	0	0	0	0	0	0	0	kb	1
+13	&	CC	&	12	COORD	Moor	Moor	-1	0	0	0	&	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	amp|G__	NN	amp	13	CONJ	&	&	-1	0	0	0	amp	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	;|G__	:	;	11	P	to	to	-4	0	0	0	;	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	Peck	NP	Peck	11	SUFFIX	to	to	-5	0	0	0	peck	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	''	''	''	11	P	to	to	-6	https://web.archive.org/web/20070914111524/http://forum.newsarama.com/showthread.php?t=128653	17	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	.|G__	SENT	.	11	SUFFIX	to	to	-7	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 74 wx74
+1	Newsarama	NP	Newsarama	0	ROOT	0	0	0	0	0	0	newsarama	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	.|G__	SENT	.	1	SUFFIX	Newsarama	Newsarama	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 75 wx75
+1	Archived	JJ	Archived	0	ROOT	0	0	0	0	0	0	archived	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	from	IN	from	1	AMOD	Archived	Archived	-1	0	0	0	from	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	the	DT	the	4	NMOD	original	original	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	original	JJ	original	2	PMOD	from	from	-2	http://forum.newsarama.com/showthread.php?t=128653	2	0	original	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	on	IN	on	1	AMOD	Archived	Archived	-4	0	0	0	on	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	2007-09-14	CD	@card@	5	PMOD	on	on	-1	0	0	4.0	2007-09-14	f:Q7711768	film	https://en.wikipedia.org/wiki/The_14	0	The_14	0	0	0	0	0	0	0	kb	1
+7	.|G__	SENT	.	5	SUFFIX	on	on	-2	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 76 wx76
+1	Retrieved	VVN	retrieve	0	ROOT	0	0	0	0	0	0	retrieved	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	2009-04-15	CD	@card@	0	ROOT	0	0	0	0	0	4.0	2009-04-15	t:5b044ac7cb	date	0	0	2009	4	15	0	0	0	0	0	date	1
+3	.|G__	SENT	.	2	SUFFIX	2009-04-15	@card@	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 54 wx54
+%%#SEN 77 wx77
+1	Ep	NN	Ep	9	NMOD	amp	amp	+8	0	0	0	ep	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	.|G__	SENT	.	1	SUFFIX	Ep	Ep	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	166	LS	@card@	9	DEP	amp	amp	+6	0	0	0	166	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	-	:	-	9	DEP	amp	amp	+5	0	0	0	-	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	B.	NP	B.	4	SUFFIX	-	-	-1	0	0	0	b.	a:Q3631684	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	Clay	NP	Clay	4	SUFFIX	-	-	-2	0	0	0	clay	a:Q3631684	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	Moore	NP	Moore	4	SUFFIX	-	-	-3	0	0	4.0	moore	a:Q3631684	person->artist	https://en.wikipedia.org/wiki/B._Clay_Moore	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/8/87/Bclaymooreatomik.jpg	B__Clay_Moore	Male	0	1950_01_01	0	0	comics_artist	American	kb	3
+8	&	CC	&	9	DEP	amp	amp	+1	0	0	0	&	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	amp|G__	NN	amp	0	ROOT	0	0	0	0	0	0	amp	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	;|G__	:	;	9	NMOD	amp	amp	-1	0	0	0	;	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	Seth	NP	Seth	10	SUFFIX	;	;	-1	0	0	4.0	seth	f:Q12335067	film	https://www.wikidata.org/wiki/Q12335067	0	Seth	0	0	0	0	0	0	0	kb	1
+12	Peck	NP	Peck	10	SUFFIX	;	;	-2	https://web.archive.org/web/20110707163819/http://www.aroundcomics.com/index.php/ep-166-b-clay-moore-seth-peck	12	0	peck	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	.|G__	SENT	.	10	SUFFIX	;	;	-3	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 78 wx78
+1	Around	IN	around	0	ROOT	0	0	0	0	0	0	around	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Comics.com	NP	Comics.com	1	SUFFIX	Around	around	-1	0	0	4.0	comics.com	g:012h24	genre	https://en.wikipedia.org/wiki/Comics	http://athena3.fit.vutbr.cz/kb/images/freebase/04pwv5c.jpg|http://athena3.fit.vutbr.cz/kb/images/freebase/02bzgq0.jpg	Comics	0	0	0	0	0	0	0	kb	1
+3	.|G__	SENT	.	1	SUFFIX	Around	around	-2	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 79 wx79
+1	January	NP	January	0	ROOT	0	0	0	0	0	0	january	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	14	CD	@card@	1	NMOD	January	January	-1	0	0	4.0	14	f:Q7711768	film	https://en.wikipedia.org/wiki/The_14	0	The_14	0	0	0	0	0	0	0	kb	1
+3	,|G__	,	,	4	P	2008	@card@	+1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	2008	CD	@card@	0	ROOT	0	0	0	0	0	0	2008	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	.|G__	SENT	.	4	SUFFIX	2008	@card@	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 80 wx80
+1	Archived	JJ	Archived	0	ROOT	0	0	0	0	0	0	archived	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	from	IN	from	1	AMOD	Archived	Archived	-1	0	0	0	from	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	the	DT	the	4	NMOD	original	original	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	original	NN	original	2	PMOD	from	from	-2	http://www.aroundcomics.com/index.php/ep-166-b-clay-moore-seth-peck	2	0	original	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	on	IN	on	9	NMOD	2011	@card@	+4	0	0	0	on	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	July	NP	July	5	SUFFIX	on	on	-1	0	0	0	july	f:Q28843427	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	7	CD	7	6	NMOD	July	July	-1	0	0	4.0	7	f:Q28843427	film	https://en.wikipedia.org/wiki/July_7_(film)	0	July_7	0	0	0	0	0	0	0	kb	2
+8	,|G__	,	,	9	P	2011	@card@	+1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	2011	CD	@card@	4	TMP	original	original	-5	0	0	0	2011	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	.|G__	SENT	.	4	SUFFIX	original	original	-6	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 81 wx81
+1	Retrieved	VVN	retrieve	0	ROOT	0	0	0	0	0	0	retrieved	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	December	NP	December	1	SUFFIX	Retrieved	retrieve	-1	0	0	0	december	t:68f9c2bd4a	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	3	CD	3	2	NMOD	December	December	-1	0	0	0	3	t:68f9c2bd4a	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	,|GGG	,	,	5	P	2010	@card@	+1	0	0	0	,	t:68f9c2bd4a	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	2010	CD	@card@	0	ROOT	0	0	0	0	0	4.0	2010	t:68f9c2bd4a	date	0	0	2010	12	3	0	0	0	0	0	date	4
+6	.|G__	SENT	.	5	SUFFIX	2010	@card@	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 55 wx55
+%%#SEN 82 wx82
+1	Smith	NP	Smith	0	SUFFIX	0	0	0	0	0	0	smith	p:Q139861	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	,|GGG	,	,	1	NMOD	Smith	Smith	-1	0	0	0	,	p:Q139861	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	Zack	NP	Zack	2	SUFFIX	,	,	-1	0	0	4.0	zack	p:Q139861	person	https://en.wikipedia.org/wiki/Zack_Smith	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/7/74/Zach_Smith_Ottawa_Senators.jpg	Zack_Smith	Male	Saskatchewan	1988_04_05	0	0	ice_hockey_player	0	kb	3
+4	.|G__	SENT	.	2	SUFFIX	,	,	-2	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 83 wx83
+1	``	``	``	9	NMOD	amp	amp	+8	https://archive.li/20070623103614/http://forum.newsarama.com/showthread.php?t=137795	1	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	'	POS	'	1	SUFFIX	``	``	-1	https://archive.li/20070623103614/http://forum.newsarama.com/showthread.php?t=137795	1	0	'	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	76	CD	@card@	4	DEP	II	II	+1	0	0	0	76	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	II	CD	II	9	NMOD	amp	amp	+5	0	0	0	ii	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	:|G__	:	:	4	P	II	II	-1	0	0	0	:	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	Seth	NP	Seth	4	SUFFIX	II	II	-2	0	0	4.0	seth	f:Q12335067	film	https://www.wikidata.org/wiki/Q12335067	0	Seth	0	0	0	0	0	0	0	kb	1
+7	Peck	NP	Peck	4	SUFFIX	II	II	-3	0	0	0	peck	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	&	CC	&	9	DEP	amp	amp	+1	0	0	0	&	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	amp|G__	NN	amp	0	ROOT	0	0	0	0	0	0	amp	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	;|G__	:	;	9	NMOD	amp	amp	-1	0	0	0	;	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	Tigh	NP	Tigh	10	SUFFIX	;	;	-1	0	0	0	tigh	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	Walker	NP	Walker	10	SUFFIX	;	;	-2	0	0	2	walker	p:Q7177554	person	https://en.wikipedia.org/wiki/Peter_Walker_(RAF_officer)	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/f/ff/Lieutenant_Governor_of_Guernsey_inspects_cadets_Saint_Peter_Port_2012_b.jpg	Peter_Walker	Male	Rowley_Regis	1949_09_29	0	2015_09_06	military_officer|fighter_pilot|military_personnel	0	coref	1
+13	''	''	''	10	P	;	;	-3	https://archive.li/20070623103614/http://forum.newsarama.com/showthread.php?t=137795	11	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	.|G__	SENT	.	10	SUFFIX	;	;	-4	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 84 wx84
+1	Newsarama	NP	Newsarama	0	ROOT	0	0	0	0	0	0	newsarama	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	.|G__	SENT	.	1	SUFFIX	Newsarama	Newsarama	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 85 wx85
+1	Archived	JJ	Archived	0	ROOT	0	0	0	0	0	0	archived	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	from	IN	from	1	AMOD	Archived	Archived	-1	0	0	0	from	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	the	DT	the	4	NMOD	original	original	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	original	JJ	original	2	PMOD	from	from	-2	http://forum.newsarama.com/showthread.php?t=137795	2	0	original	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	on	IN	on	1	AMOD	Archived	Archived	-4	0	0	0	on	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	2007-06-23	CD	@card@	5	PMOD	on	on	-1	0	0	4.0	2007-06-23	t:cb6fbbebf0	date	0	0	2007	6	23	0	0	0	0	0	date	1
+7	.|G__	SENT	.	5	SUFFIX	on	on	-2	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 86 wx86
+1	Retrieved	VVN	retrieve	0	ROOT	0	0	0	0	0	0	retrieved	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	2009-04-15	CD	@card@	0	ROOT	0	0	0	0	0	4.0	2009-04-15	t:602d2e1f9e	date	0	0	2009	4	15	0	0	0	0	0	date	1
+3	.|G__	SENT	.	2	SUFFIX	2009-04-15	@card@	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 56 wx56
+%%#SEN 87 wx87
+1	Smith	NP	Smith	0	SUFFIX	0	0	0	0	0	0	smith	p:Q139861	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	,|GGG	,	,	1	NMOD	Smith	Smith	-1	0	0	0	,	p:Q139861	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	Zack	NP	Zack	2	SUFFIX	,	,	-1	0	0	4.0	zack	p:Q139861	person	https://en.wikipedia.org/wiki/Zack_Smith	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/7/74/Zach_Smith_Ottawa_Senators.jpg	Zack_Smith	Male	Saskatchewan	1988_04_05	0	0	ice_hockey_player	0	kb	3
+4	.|G__	SENT	.	2	SUFFIX	,	,	-2	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 88 wx88
+1	``	``	``	4	NMOD	I	I	+3	https://archive.li/20070623103614/http://forum.newsarama.com/showthread.php?t=137680	1	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	'	POS	'	1	SUFFIX	``	``	-1	https://archive.li/20070623103614/http://forum.newsarama.com/showthread.php?t=137680	1	0	'	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	76	CD	@card@	4	NMOD	I	I	+1	0	0	0	76	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	I	NN	I	0	ROOT	0	0	0	0	0	0	i	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	:|G__	:	:	4	P	I	I	-1	0	0	0	:	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	Talking	VVG	talk	4	SUFFIX	I	I	-2	0	0	0	talking	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	to	TO	to	4	NMOD	I	I	-3	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	B.	NP	B.	4	SUFFIX	I	I	-4	0	0	0	b.	a:Q3631684	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	Clay	NP	Clay	4	SUFFIX	I	I	-5	0	0	0	clay	a:Q3631684	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	Moore	NP	Moore	4	SUFFIX	I	I	-6	0	0	4.0	moore	a:Q3631684	person->artist	https://en.wikipedia.org/wiki/B._Clay_Moore	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/8/87/Bclaymooreatomik.jpg	B__Clay_Moore	Male	0	1950_01_01	0	0	comics_artist	American	kb	3
+11	&	CC	&	12	DEP	amp	amp	+1	0	0	0	&	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	amp|G__	NN	amp	0	ROOT	0	0	0	0	0	0	amp	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	;|G__	:	;	12	P	amp	amp	-1	0	0	0	;	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	Ed	NP	Ed	12	SUFFIX	amp	amp	-2	0	0	0	ed	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	Tadem	NP	Tadem	12	SUFFIX	amp	amp	-3	0	0	0	tadem	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	''	''	''	12	P	amp	amp	-4	https://archive.li/20070623103614/http://forum.newsarama.com/showthread.php?t=137680	14	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	.|G__	SENT	.	12	SUFFIX	amp	amp	-5	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 89 wx89
+1	Newsarama	NP	Newsarama	0	ROOT	0	0	0	0	0	0	newsarama	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	.|G__	SENT	.	1	SUFFIX	Newsarama	Newsarama	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 90 wx90
+1	Archived	JJ	Archived	0	ROOT	0	0	0	0	0	0	archived	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	from	IN	from	1	AMOD	Archived	Archived	-1	0	0	0	from	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	the	DT	the	4	NMOD	original	original	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	original	JJ	original	2	PMOD	from	from	-2	http://forum.newsarama.com/showthread.php?t=137680	2	0	original	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	on	IN	on	1	AMOD	Archived	Archived	-4	0	0	0	on	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	2007-06-23	CD	@card@	5	PMOD	on	on	-1	0	0	4.0	2007-06-23	t:f0b11adfd2	date	0	0	2007	6	23	0	0	0	0	0	date	1
+7	.|G__	SENT	.	5	SUFFIX	on	on	-2	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 91 wx91
+1	Retrieved	VVN	retrieve	0	ROOT	0	0	0	0	0	0	retrieved	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	2009-04-15	CD	@card@	0	ROOT	0	0	0	0	0	4.0	2009-04-15	t:ba57e1d640	date	0	0	2009	4	15	0	0	0	0	0	date	1
+3	.|G__	SENT	.	2	SUFFIX	2009-04-15	@card@	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 57 wx57
+%%#SEN 92 wx92
+1	``	``	``	13	P	Will	Will	+12	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	AICN	NP	AICN	1	SUFFIX	``	``	-1	0	0	0	aicn	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	Comic	NP	Comic	1	SUFFIX	``	``	-2	0	0	4.0	comic	g:012h24	genre	https://en.wikipedia.org/wiki/Comics	http://athena3.fit.vutbr.cz/kb/images/freebase/04pwv5c.jpg|http://athena3.fit.vutbr.cz/kb/images/freebase/02bzgq0.jpg	Comics	0	0	0	0	0	0	0	kb	1
+4	Reviews	NPS	Reviews	1	SUFFIX	``	``	-3	0	0	0	reviews	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	Loeg	NP	Loeg	1	SUFFIX	``	``	-4	0	0	0	loeg	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	:|G__	:	:	1	P	``	``	-5	0	0	0	:	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	The|G__	DT	the	13	DEP	Will	Will	+6	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	Black	NP	Black	7	SUFFIX	The	the	-1	0	0	0	black	f:Q3222417	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	Dossier	NP	Dossier	7	SUFFIX	The	the	-2	0	0	4.0	dossier	f:Q3222417	film	https://en.wikipedia.org/wiki/Black_Dossier_(film)	0	Black_Dossier	0	0	0	0	0	0	0	kb	2
+10	!|G__	SENT	!	7	SUFFIX	The	the	-3	0	0	0	!	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	Soon	RB	soon	13	SBJ	Will	Will	+2	0	0	0	soon	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	I	PP	I	11	SUFFIX	Soon	soon	-1	0	0	0	i	f:Q19599033	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	Will	MD	Will	0	ROOT	0	0	0	0	0	4.0	will	f:Q19599033	film	https://en.wikipedia.org/wiki/I_Will_(film)	0	I_Will	0	0	0	0	0	0	0	kb	2
+14	Be	VB	be	13	VC	Will	Will	-1	0	0	0	be	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	Invincible	JJ	invincible	14	PRD	Be	be	-1	0	0	4.0	invincible	f:Q640762	film	https://en.wikipedia.org/wiki/Invincible_(2001_drama_film)	0	Invincible	0	0	0	0	0	0	0	kb	1
+16	!|G__	SENT	!	14	OBJ	Be	be	-2	0	0	0	!	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	All	DT	all	27	AMOD	More	more	+10	0	0	0	all	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	Star	NP	Star	17	SUFFIX	All	all	-1	0	0	0	star	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	Batman	NP	Batman	17	SUFFIX	All	all	-2	0	0	4.0	batman	f:Q116852	film	https://en.wikipedia.org/wiki/Batman_(1989_film)	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/e/e6/Batman_cossplay.JPG	Batman	0	0	0	0	0	0	0	kb	1
+20	!|G__	SENT	!	17	SUFFIX	All	all	-3	0	0	0	!	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	Iinfinite	NP	Iinfinite	17	SUFFIX	All	all	-4	0	0	0	iinfinite	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	Horizon	NP	Horizon	17	SUFFIX	All	all	-5	0	0	0	horizon	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	!|G__	SENT	!	17	SUFFIX	All	all	-6	0	0	0	!	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	&	CC	&	23	COORD	!	!	-1	0	0	0	&	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	amp|G__	NN	amp	24	CONJ	&	&	-1	0	0	0	amp	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	;|G__	:	;	17	P	All	all	-9	0	0	0	;	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	More	JJR	more	14	OPRD	Be	be	-13	0	0	0	more	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	!|G__	SENT	!	27	SUFFIX	More	more	-1	0	0	0	!	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	''	''	''	14	P	Be	be	-15	http://www.aintitcool.com/node/34973	29	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+30	.|G__	SENT	.	14	OBJ	Be	be	-16	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 93 wx93
+1	Ai	VVP	ai	0	ROOT	0	0	0	0	0	0	ai	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	n't|G__	RB	n't	1	ADV	Ai	ai	-1	0	0	0	n't	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	It	PP	it	1	SUFFIX	Ai	ai	-2	0	0	0	it	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	Cool	NP	Cool	1	SUFFIX	Ai	ai	-3	0	0	0	cool	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	News	NP	News	1	SUFFIX	Ai	ai	-4	https://en.wikipedia.org/wiki/Ain't_It_Cool_News	5	0	news	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	.|G__	SENT	.	1	SUFFIX	Ai	ai	-5	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 94 wx94
+1	Archived	JJ	Archived	0	ROOT	0	0	0	https://web.archive.org/web/20090410125531/http://www.aintitcool.com/node/34973	1	0	archived	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	from	IN	from	1	AMOD	Archived	Archived	-1	0	0	0	from	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	the	DT	the	4	NMOD	original	original	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	original	JJ	original	2	PMOD	from	from	-2	0	0	0	original	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	on	IN	on	1	AMOD	Archived	Archived	-4	0	0	0	on	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	2009-04-10	CD	@card@	5	PMOD	on	on	-1	0	0	4.0	2009-04-10	y:617dbe57b9	mythology	https://en.wikipedia.org/wiki/The_Ten	0	The_Ten	0	0	0	0	0	0	0	kb	1
+7	.|G__	SENT	.	5	SUFFIX	on	on	-2	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 95 wx95
+1	Retrieved	VVN	retrieve	0	ROOT	0	0	0	0	0	0	retrieved	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	2009-04-15	CD	@card@	0	ROOT	0	0	0	0	0	4.0	2009-04-15	t:92805b983e	date	0	0	2009	4	15	0	0	0	0	0	date	1
+3	.|G__	SENT	.	2	SUFFIX	2009-04-15	@card@	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 58 wx58
+%%#SEN 96 wx96
+1	Christian	NP	Christian	0	SUFFIX	0	0	0	0	0	0	christian	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	,|G__	,	,	1	P	Christian	Christian	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	Dustin	NP	Dustin	1	SUFFIX	Christian	Christian	-2	0	0	0	dustin	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	(	(	(	8	P	2008	@card@	+4	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	January|GGG	NP	January	4	SUFFIX	(	(	-1	0	0	0	january	t:7eeac681f7	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	25	CD	@card@	5	NMOD	January	January	-1	0	0	0	25	t:7eeac681f7	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	,|GGG	,	,	8	P	2008	@card@	+1	0	0	0	,	t:7eeac681f7	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	2008	CD	@card@	0	ROOT	0	0	0	0	0	4.0	2008	t:7eeac681f7	date	0	0	2008	1	25	0	0	0	0	0	date	4
+9	)|G__	)	)	8	P	2008	@card@	-1	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	.|G__	SENT	.	8	SUFFIX	2008	@card@	-2	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 97 wx97
+1	``	``	``	0	ROOT	0	0	0	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Friday	NP	Friday	1	SUFFIX	``	``	-1	0	0	0	friday	f:Q5503508	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	Night	NP	Night	1	SUFFIX	``	``	-2	0	0	4.0	night	f:Q5503508	film	https://en.wikipedia.org/wiki/Friday_Night_(2000_film)	0	Friday_Night	0	0	0	0	0	0	0	kb	2
+4	Fights	NP	Fights	1	SUFFIX	``	``	-3	0	0	0	fights	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	-	:	-	1	P	``	``	-4	0	0	0	-	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	You	PP	you	1	SUFFIX	``	``	-5	0	0	0	you	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	Never	RB	never	9	PMOD	To	To	+2	0	0	0	never	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	Step	VV	step	7	SUFFIX	Never	never	-1	0	0	0	step	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	To	TO	To	1	NMOD	``	``	-8	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	A	DT	a	1	NMOD	``	``	-9	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	Man	NP	Man	10	SUFFIX	A	a	-1	0	0	0	man	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	Named	NP	Named	10	SUFFIX	A	a	-2	0	0	0	named	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	Leon	NP	Leon	10	SUFFIX	A	a	-3	0	0	2	leon	p:Q6524558	person	https://en.wikipedia.org/wiki/Leon_Campbell	0	Leon_Campbell	Male	Cambridge	1881_01_20	Cambridge	1951_05_10	astronomer	0	coref	1
+14	''	''	''	10	P	A	a	-4	https://web.archive.org/web/20080128224704/http://www.fortheloveofcomics.com/2008/01/25/friday-night-fights-you-never-step-to-a-man-named-leon/	14	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	.|G__	SENT	.	10	SUFFIX	A	a	-5	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 98 wx98
+1	For	IN	for	0	ROOT	0	0	0	0	0	0	for	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	The	DT	the	3	NMOD	Love	love	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	Love	NN	love	1	PMOD	For	for	-2	0	0	0	love	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	Of	IN	of	3	NMOD	Love	love	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	Comics	NP	Comics	3	SUFFIX	Love	love	-2	0	0	4.0	comics	g:012h24	genre	https://en.wikipedia.org/wiki/Comics	http://athena3.fit.vutbr.cz/kb/images/freebase/04pwv5c.jpg|http://athena3.fit.vutbr.cz/kb/images/freebase/02bzgq0.jpg	Comics	0	0	0	0	0	0	0	kb	1
+6	.|G__	SENT	.	3	SUFFIX	Love	love	-3	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 99 wx99
+1	Archived	JJ	Archived	0	ROOT	0	0	0	0	0	0	archived	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	from	IN	from	1	AMOD	Archived	Archived	-1	0	0	0	from	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	the	DT	the	4	NMOD	original	original	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	original	JJ	original	2	PMOD	from	from	-2	http://www.fortheloveofcomics.com/2008/01/25/friday-night-fights-you-never-step-to-a-man-named-leon/	2	0	original	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	on	IN	on	1	AMOD	Archived	Archived	-4	0	0	0	on	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	2008-01-28	CD	@card@	5	PMOD	on	on	-1	0	0	4.0	2008-01-28	t:bf1293b539	date	0	0	2008	1	28	0	0	0	0	0	date	1
+7	.|G__	SENT	.	5	SUFFIX	on	on	-2	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 100 wx100
+1	Retrieved	VVN	retrieve	0	ROOT	0	0	0	0	0	0	retrieved	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	December	NP	December	1	SUFFIX	Retrieved	retrieve	-1	0	0	0	december	t:fc1d04690e	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	3	CD	3	2	NMOD	December	December	-1	0	0	0	3	t:fc1d04690e	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	,|GGG	,	,	5	P	2010	@card@	+1	0	0	0	,	t:fc1d04690e	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	2010	CD	@card@	0	ROOT	0	0	0	0	0	4.0	2010	t:fc1d04690e	date	0	0	2010	12	3	0	0	0	0	0	date	4
+6	.|G__	SENT	.	5	SUFFIX	2010	@card@	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 59 wx59
+%%#SEN 101 wx101
+1	References	NNS	reference	0	ROOT	0	0	0	0	0	0	references	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 60 wx60
+%%#SEN 102 wx102
+1	'	''	'	2	NMOD	76	@card@	+1	http://comicbookdb.com/title.php?ID=3383	1	0	'	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	76	CD	@card@	0	ROOT	0	0	0	http://comicbookdb.com/title.php?ID=3383	1	0	76	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	at	IN	at	2	LOC	76	@card@	-1	0	0	0	at	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	the	DT	the	2	NMOD	76	@card@	-2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	Comic	NP	Comic	4	SUFFIX	the	the	-1	0	0	0	comic	m:01vnb	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	Book	NP	Book	4	SUFFIX	the	the	-2	0	0	4.0	book	m:01vnb	movement	https://en.wikipedia.org/wiki/Comic_book	http://athena3.fit.vutbr.cz/kb/images/freebase/02cmrb1.jpg	Comic_book	0	0	0	0	0	0	0	kb	2
+7	DB	NP	DB	4	SUFFIX	the	the	-3	0	0	4.0	db	a:Q22094660	person->artist	https://www.wikidata.org/wiki/Q22094660	0	D__B	0	0	1812_00_00	0	0	painter	0	kb	1
+%%#PAR 61 wx61
+%%#SEN 103 wx103
+1	This	DT	this	2	NMOD	article	article	+1	0	0	0	this	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	article	NN	article	3	SBJ	is	be	+1	0	0	0	article	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	is	VBZ	be	0	ROOT	0	0	0	0	0	0	is	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	issued	VVN	issue	3	SUFFIX	is	be	-1	0	0	0	issued	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	from	IN	from	3	PRD	is	be	-2	0	0	0	from	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	Wikipedia	NP	Wikipedia	3	SUFFIX	is	be	-3	https://en.wikipedia.org/wiki/'76_(comics)?oldid=919418786	1	0	wikipedia	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	.|G__	SENT	.	3	SUFFIX	is	be	-4	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 104 wx104
+1	The	DT	the	2	NMOD	text	text	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	text	NN	text	3	SBJ	is	be	+1	0	0	0	text	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	is	VBZ	be	0	ROOT	0	0	0	0	0	0	is	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	licensed	VVN	license	3	SUFFIX	is	be	-1	0	0	0	licensed	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	under	IN	under	3	PRD	is	be	-2	0	0	0	under	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	Creative	NP	Creative	3	SUFFIX	is	be	-3	0	0	0	creative	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	Commons	NPS	Commons	3	SUFFIX	is	be	-4	0	0	0	commons	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	-	:	-	3	P	is	be	-5	0	0	0	-	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	Attribution	NP	Attribution	3	SUFFIX	is	be	-6	0	0	0	attribution	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	-	:	-	3	P	is	be	-7	0	0	0	-	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	Sharealike	JJ	Sharealike	3	PRD	is	be	-8	https://creativecommons.org/licenses/by-sa/4.0/	6	0	sharealike	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	.|G__	SENT	.	3	SUFFIX	is	be	-9	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 105 wx105
+1	Additional	JJ	additional	2	NMOD	terms	term	+1	0	0	0	additional	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	terms	NNS	term	3	SBJ	may	may	+1	0	0	0	terms	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	may	MD	may	0	ROOT	0	0	0	0	0	0	may	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	apply	VV	apply	3	SUFFIX	may	may	-1	0	0	0	apply	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	for	IN	for	3	ADV	may	may	-2	0	0	0	for	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	the	DT	the	8	NMOD	files	file	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	media	NNS	medium	8	NMOD	files	file	+1	0	0	0	media	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	files	NNS	file	5	PMOD	for	for	-3	0	0	0	files	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	.|G__	SENT	.	8	SUFFIX	files	file	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0

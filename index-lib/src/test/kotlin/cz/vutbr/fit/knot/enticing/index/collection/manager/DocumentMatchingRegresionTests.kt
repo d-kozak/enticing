@@ -11,6 +11,8 @@ import cz.vutbr.fit.knot.enticing.index.mg4j.Mg4jSingleFileDocumentCollection
 import cz.vutbr.fit.knot.enticing.index.testconfig.dummyMetadataConfiguration
 import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.io.File
 
@@ -50,10 +52,33 @@ class DocumentMatchingRegresionTests {
     }
 
     @Test
-    fun `1922 in literature with global contraints`(){
+    fun `1922 in literature with global contraints`() {
         val query = "a:=nertag:person b:=nertag:person ctx:sent && a.url != b.url"
         val doc = loadDocument("../data/regres/1922inLiterature.mg4j")
         val matchInfo = query(query, doc)
         println(matchInfo)
+    }
+
+    @Nested
+    @DisplayName("76 comics")
+    inner class Comics {
+
+        val document = loadDocument("../data/regres/76comics.mg4j")
+
+        @Test
+        fun person() {
+            val query = "a:=nertag:person < lemma:(influence | impact | (paid < tribute) ) < b:=nertag:person ctx:sent && a.url != b.url"
+            val matchInfo = query(query, document)
+            assertThat(matchInfo.intervals).hasSize(2)
+            println(matchInfo)
+        }
+
+        @Test
+        fun artist() {
+            val query = "document.uuid:'c9338c23-4580-5ab4-9d86-96de0c0dd15b' a:=nertag:artist < lemma:(influence | impact | (paid < tribute) ) < b:=nertag:person ctx:sent && a.url != b.url"
+            val matchInfo = query(query, document)
+            assertThat(matchInfo.intervals).hasSize(2)
+            println(matchInfo)
+        }
     }
 }
