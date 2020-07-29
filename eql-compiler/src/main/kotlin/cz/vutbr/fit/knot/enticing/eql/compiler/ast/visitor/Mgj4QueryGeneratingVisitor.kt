@@ -1,6 +1,11 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.*
+
+@Incomplete("Escape all possible problematic chars")
+fun escapeMg4jQueryChars(query: String): String = query
+        .replace("->", """\->""")
 
 class Mgj4QueryGeneratingVisitor : EqlVisitor<String> {
     override fun visitRootNode(node: RootNode): String {
@@ -18,7 +23,7 @@ class Mgj4QueryGeneratingVisitor : EqlVisitor<String> {
 
     override fun visitQueryElemAssignNode(node: QueryElemNode.AssignNode): String = node.elem.accept(this)
 
-    override fun visitQueryElemSimpleNode(node: QueryElemNode.SimpleNode): String = node.content
+    override fun visitQueryElemSimpleNode(node: QueryElemNode.SimpleNode): String = escapeMg4jQueryChars(node.content)
 
     override fun visitQueryElemIndexNode(node: QueryElemNode.IndexNode): String = "(${node.index}:(${node.elem.accept(this)}){{${node.index}->token}})"
 
