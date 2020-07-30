@@ -3,6 +3,7 @@ package cz.vutbr.fit.knot.enticing.index.client
 import com.github.kittinunf.fuel.httpGet
 import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.WebServer
+import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.utils.asJsonObject
 import cz.vutbr.fit.knot.enticing.dto.utils.toDto
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
@@ -13,6 +14,10 @@ import org.springframework.http.MediaType
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.web.client.RestTemplate
 
+/**
+ * Login to the server using given credentials
+ * @return WebserverApi object for further communication
+ */
 fun webserverLogin(address: String, username: String, password: String): WebserverApi {
     waitForWebserver(address)
     val api = WebserverApi(address)
@@ -20,17 +25,33 @@ fun webserverLogin(address: String, username: String, password: String): Webserv
     return api
 }
 
+/**
+ * Api for communicating with a webserver
+ */
 class WebserverApi(
+        /**
+         * Where the server is located
+         */
+        @Cleanup("use ComponentAddress")
         var address: String,
+        /**
+         * Whichc search settings to use
+         */
         var settingsId: Int = 2
 ) {
 
+    /**
+     * session id to identify me (when logged in)
+     */
     var sessionId: String? = null
 
     val queryEndpoint: String
         get() = "http://$address/api/v1/query?settings=$settingsId"
 
 
+    /**
+     * login to the webserver
+     */
     fun login(username: String, password: String) {
         val headers = HttpHeaders()
         headers.contentType = MediaType.MULTIPART_FORM_DATA
@@ -40,16 +61,25 @@ class WebserverApi(
         performRequest("http://$address/api/v1/login", HttpMethod.POST, headers, contentMap = map)
     }
 
+    /**
+     * get user info
+     */
     fun userInfo(): String {
         return performRequest("http://$address/api/v1/user", HttpMethod.GET, HttpHeaders())
     }
 
+    /**
+     * send given query and wait for results
+     */
     fun sendQuery(query: SearchQuery): WebServer.ResultList {
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
         return performRequest(queryEndpoint, HttpMethod.POST, headers, content = query.toJson()).toDto()
     }
 
+    /**
+     * import specified search settings
+     */
     fun importSearchSettings(searchSettings: String) {
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
@@ -88,6 +118,9 @@ class WebserverApi(
 
 }
 
+/**
+ * wait for the webserver become responsive after starting it remotely
+ */
 private fun waitForWebserver(address: String) {
     for (i in 0 until 10) {
         println("waiting for the webserver...$i")

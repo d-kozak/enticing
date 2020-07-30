@@ -29,7 +29,7 @@ fun QueryTarget.checkPagination(queries: List<String> = DEFAULT_QUERIES, snippet
     for (query in queries) {
         val resultCountPerSnippetCount = mutableMapOf<Int, Int>()
         for (snippetCount in snippetCounts) {
-            val (results, duration) = this.getAll(TEMPLATE_QUERY.copy(query = query, snippetCount = snippetCount))
+            val (results, duration) = this.collectAllResults(TEMPLATE_QUERY.copy(query = query, snippetCount = snippetCount))
             logger.info("Query '$query' snippetCount $snippetCount: returned ${results.size} results, took $duration")
             resultCountPerSnippetCount[snippetCount] = results.size
             cnt = results.size

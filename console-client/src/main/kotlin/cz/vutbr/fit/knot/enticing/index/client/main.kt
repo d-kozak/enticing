@@ -6,7 +6,8 @@ import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
 fun runConsoleClient(args: Array<String>) {
-    ConsoleClient(parseCliArgs(args), SimpleStdoutLoggerFactory).use { it.exec() }
+    ConsoleClient(parseCliArgs(args), SimpleStdoutLoggerFactory)
+            .use { it.exec() }
 }
 
 

@@ -46,10 +46,10 @@ abstract class QueryDispatcherPaginationTests(
         logger.info("Using servers $servers")
         val individualResults = serverTargets.map {
             scope.async {
-                it.getAll(query).value.size
+                it.collectAllResults(query).value.size
             }
         }.awaitAll()
-        val dispatcherResult = dispatcherTarget.getAll(query).value.size
+        val dispatcherResult = dispatcherTarget.collectAllResults(query).value.size
         logger.info("Individual server results: $individualResults")
         logger.info("QueryDispatcher returned $dispatcherResult")
         assertThat(dispatcherResult)

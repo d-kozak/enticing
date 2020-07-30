@@ -7,11 +7,29 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 import kotlin.time.ExperimentalTime
 
+/**
+ * Result of running one test
+ */
 data class BenchmarkResult(
+        /**
+         * How many results were returned
+         */
         val resultCount: Int,
+        /**
+         * Average time of one request
+         */
         val averageTime: Double,
+        /**
+         * Deviation from the average time
+         */
         val averageTimeDeviation: Double,
+        /**
+         * Minimal time
+         */
         val minTime: Long,
+        /**
+         * Maximal time
+         */
         val maxTime: Long
 ) {
     companion object {
@@ -31,6 +49,9 @@ data class BenchmarkResult(
     }
 }
 
+/**
+ * Perform a benchmark specified by the params
+ */
 @ExperimentalTime
 fun runBenchmark(query: String, target: QueryTarget, logger: Logger, collectAll: Boolean = false, iterations: Int = 100, snippetCount: Int = 1_000): BenchmarkResult {
     val searchQuery = SearchQuery(query, snippetCount = snippetCount, textFormat = TextFormat.PLAIN_TEXT)
@@ -38,7 +59,7 @@ fun runBenchmark(query: String, target: QueryTarget, logger: Logger, collectAll:
     val durations = mutableListOf<Long>()
     val resultCnt = mutableMapOf<Int, Int>().withDefault { 0 }
     repeat(iterations - 1) {
-        val (results, duration) = if (collectAll) target.getAll(searchQuery) else target.submit(searchQuery)
+        val (results, duration) = if (collectAll) target.collectAllResults(searchQuery) else target.submitQuery(searchQuery)
         resultCnt[results.size] = resultCnt.getValue(results.size) + 1
         durations.add(duration.toLongMilliseconds())
         logger.info("Round ${it + 1} finished, returned ${results.size} results in $duration")

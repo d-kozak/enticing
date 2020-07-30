@@ -5,10 +5,16 @@ import com.xenomachina.argparser.default
 import cz.vutbr.fit.knot.enticing.dto.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.TextFormat
 
+/**
+ * Parse the cli args and create ConsoleClientArgs object from them
+ */
 fun parseCliArgs(args: Array<String>): ConsoleClientArgs = ArgParser(args)
         .parseInto(::ConsoleClientArgs)
         .validateOrFail()
 
+/**
+ * Configuration of the console client
+ */
 class ConsoleClientArgs(parser: ArgParser) {
 
     val query by parser.storing("-q", "--query", help = "Query to execute")

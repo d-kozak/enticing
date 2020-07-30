@@ -8,6 +8,10 @@ import java.io.File
 import java.io.FileWriter
 import kotlin.time.ExperimentalTime
 
+/**
+ * Test setup used for the performance test in the thesis
+ * Run 100 iterations of 20 snippets size each over one index server
+ */
 @ExperimentalTime
 fun main() = FileWriter("./console-client/src/test/resources/knot01.benchmark7.csv").use { writer ->
     writer.appendln(BenchmarkResult.CSV_HEADER)
@@ -28,5 +32,4 @@ fun main() = FileWriter("./console-client/src/test/resources/knot01.benchmark7.c
         logger.info(res.toString())
         results[query] = res
     }
-
 }
