@@ -6,6 +6,9 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.util.Validator
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.util.ValidatorImpl
 import java.io.File
 
+/**
+ * Validates the EnticingConfiguration, collects all errors in the validator object
+ */
 class EnticingConfigurationValidator(validator: Validator) : EnticingConfigurationListener, Validator by validator {
 
     override fun enterEnticingConfiguration(configuration: EnticingConfiguration) {
@@ -40,7 +43,11 @@ class EnticingConfigurationValidator(validator: Validator) : EnticingConfigurati
 }
 
 
-fun MetadataConfiguration.validateOrFail():MetadataConfiguration{
+/**
+ * Validate given configuration unit
+ * @throws IllegalStateException if the configuration is invalid
+ */
+fun MetadataConfiguration.validateOrFail(): MetadataConfiguration {
     val validator = EnticingConfigurationValidator(ValidatorImpl())
     validator.enterMetadataConfiguration(this)
     if (validator.errors.isNotEmpty())
@@ -48,6 +55,10 @@ fun MetadataConfiguration.validateOrFail():MetadataConfiguration{
     return this
 }
 
+/**
+ * Validate given configuration unit
+ * @throws IllegalStateException if the configuration is invalid
+ */
 fun EnticingConfiguration.validateOrFail(): EnticingConfiguration {
     val validator = EnticingConfigurationValidator(ValidatorImpl())
     this.walk(validator)

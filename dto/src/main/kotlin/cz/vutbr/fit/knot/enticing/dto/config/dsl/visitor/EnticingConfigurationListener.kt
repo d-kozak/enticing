@@ -6,6 +6,10 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.EntityConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.IndexConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 
+/**
+ * Contains callback methods for all parts of the configuration DSL,
+ * usable when evens or checks should be executed only on specific fragments of the EnticingConfiguration object
+ */
 interface EnticingConfigurationListener {
     fun enterEnticingConfiguration(configuration: EnticingConfiguration) {
 

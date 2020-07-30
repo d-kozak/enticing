@@ -4,6 +4,13 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.AttributeConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.EntityConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 
+/**
+ * Validates the metadata configuration part of EnticingConfiguration.
+ * It consists of the following parts:
+ * 1) Cycle detection in the entity inheritance graph
+ * 2) Entity full name resolution ( person->artist->painter...)
+ * 3) Attribute inheritance
+ */
 fun EnticingConfigurationValidator.validateMetadataConfiguration(metadataConfiguration: MetadataConfiguration) {
     val cycleDetected = checkForCycle(metadataConfiguration)
     if (cycleDetected || this.hasErrors()) return
@@ -11,13 +18,18 @@ fun EnticingConfigurationValidator.validateMetadataConfiguration(metadataConfigu
     resolveAttributes(metadataConfiguration)
 }
 
-fun EnticingConfigurationValidator.resolveAttributes(metadataConfiguration: MetadataConfiguration) {
+/**
+ * For each entity, inherit all parent attributes by 'pulling them down the graph'
+ */
+private fun EnticingConfigurationValidator.resolveAttributes(metadataConfiguration: MetadataConfiguration) {
+    val seen = mutableSetOf<String>()
 
     fun resolve(entity: EntityConfiguration) {
+        seen.add(entity.name)
         val attributes = mutableMapOf<String, AttributeConfiguration>()
         if (entity.parentEntityName != null) {
             val parent = metadataConfiguration.entities.getValue(entity.parentEntityName!!)
-            if (!parent.attributesResolved())
+            if (parent.name !in seen)
                 resolve(parent)
             attributes.putAll(parent.allAttributes)
         }
@@ -26,12 +38,15 @@ fun EnticingConfigurationValidator.resolveAttributes(metadataConfiguration: Meta
     }
 
     for (entity in metadataConfiguration.entities.values) {
-        if (!entity.attributesResolved())
+        if (entity.name !in seen)
             resolve(entity)
     }
 }
 
-fun EnticingConfigurationValidator.resolveFullNames(metadataConfiguration: MetadataConfiguration) {
+/**
+ * Resolve full entity names by traversing the graph
+ */
+private fun EnticingConfigurationValidator.resolveFullNames(metadataConfiguration: MetadataConfiguration) {
     val seen = mutableSetOf<String>()
 
     fun resolve(entity: EntityConfiguration): String {
@@ -50,7 +65,13 @@ fun EnticingConfigurationValidator.resolveFullNames(metadataConfiguration: Metad
     }
 }
 
-fun EnticingConfigurationValidator.checkForCycle(metadataConfiguration: MetadataConfiguration): Boolean {
+/**
+ * Performs DFS based cycle detection on the entity graph.
+ * As a side effect, it also report invalid parent references,
+ * because they are discovered during the execution
+ * @return true if there is a cycle
+ */
+private fun EnticingConfigurationValidator.checkForCycle(metadataConfiguration: MetadataConfiguration): Boolean {
     val seen = mutableSetOf<String>()
     val active = mutableSetOf<String>()
 

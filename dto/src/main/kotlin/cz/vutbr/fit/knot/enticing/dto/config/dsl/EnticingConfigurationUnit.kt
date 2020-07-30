@@ -6,13 +6,16 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.visitor.EnticingConfigurationVi
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.visitor.EnticingConfigurationWalker
 
 /**
- * general configuration interface
+ * General configuration interface
  */
 interface EnticingConfigurationUnit : EnticingConfigurationVisitee {
 
 }
 
-
+/**
+ * Validate given configuration unit
+ * @throws IllegalStateException if the configuration is invalid
+ */
 fun <T : EnticingConfigurationUnit> T.validateOrFail(): T {
     val validator = EnticingConfigurationValidator(ValidatorImpl())
     val walker = EnticingConfigurationWalker(validator)

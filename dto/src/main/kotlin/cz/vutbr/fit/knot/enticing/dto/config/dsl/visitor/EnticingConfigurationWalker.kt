@@ -6,6 +6,9 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.EntityConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.IndexConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 
+/**
+ * Walks the structure of EnticingConfiguration and calls appropriate methods of the listener passed in
+ */
 class EnticingConfigurationWalker(val listener: EnticingConfigurationListener) : EnticingConfigurationVisitor {
 
     override fun visitEnticingConfiguration(configuration: EnticingConfiguration) {
@@ -46,7 +49,7 @@ class EnticingConfigurationWalker(val listener: EnticingConfigurationListener) :
             it.accept(this)
         }
         configuration.entities.values.forEach {
-            it.metadata = configuration
+            it.metadataConfiguration = configuration
             it.accept(this)
         }
     }
@@ -81,6 +84,9 @@ class EnticingConfigurationWalker(val listener: EnticingConfigurationListener) :
     }
 }
 
+/**
+ * Walks the structure of EnticingConfiguration and calls appropriate methods of the listener passed in
+ */
 fun EnticingConfiguration.walk(listener: EnticingConfigurationListener): EnticingConfigurationWalker {
     val walker = EnticingConfigurationWalker(listener)
     this.accept(walker)

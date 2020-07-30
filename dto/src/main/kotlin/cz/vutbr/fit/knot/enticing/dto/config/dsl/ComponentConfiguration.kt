@@ -2,7 +2,7 @@ package cz.vutbr.fit.knot.enticing.dto.config.dsl
 
 
 /**
- * Configuration for a deployable compoment
+ * Configuration for a deployable component
  */
 interface ComponentConfiguration : EnticingConfigurationUnit {
     /**

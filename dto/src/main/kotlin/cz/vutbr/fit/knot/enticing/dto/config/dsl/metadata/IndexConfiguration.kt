@@ -3,6 +3,9 @@ package cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfigurationUnit
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.visitor.EnticingConfigurationVisitor
 
+/**
+ * Configuration of one index
+ */
 data class IndexConfiguration(
         /**
          * name of the index
@@ -19,7 +22,14 @@ data class IndexConfiguration(
         var columnIndex: Int = 0
 ) : EnticingConfigurationUnit {
 
+    /**
+     * parent pointer back to the metadata configuration
+     */
     internal lateinit var metadata: MetadataConfiguration
+
+    /**
+     * synthetic == used only in the code to pass along some metadata, without actual representation in the mg4j files
+     */
     val isSynthetic: Boolean
         get() = name.startsWith('_')
 

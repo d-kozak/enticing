@@ -4,6 +4,9 @@ import cz.vutbr.fit.knot.enticing.dto.Entities
 import cz.vutbr.fit.knot.enticing.dto.Indexes
 import cz.vutbr.fit.knot.enticing.dto.TextMetadata
 
+/**
+ * Filters the metadata to only contains what was requested
+ */
 fun MetadataConfiguration.filterBy(metadata: TextMetadata, defaultIndex: String): MetadataConfiguration {
     val filtered = when (metadata) {
         is TextMetadata.Predefined -> filterPredefined(metadata, defaultIndex)

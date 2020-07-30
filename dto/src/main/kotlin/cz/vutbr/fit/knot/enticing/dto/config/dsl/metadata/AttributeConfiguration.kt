@@ -3,6 +3,9 @@ package cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfigurationUnit
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.visitor.EnticingConfigurationVisitor
 
+/**
+ * Configuration for on attribute of an entity
+ */
 data class AttributeConfiguration(
         /**
          * name of the index
@@ -19,6 +22,9 @@ data class AttributeConfiguration(
      */
     lateinit var index: IndexConfiguration
 
+    /**
+     * Index in the ordering of attributes(used for mapping them to the param* indexes)
+     */
     var attributeIndex: Int = 0
 
     override fun accept(visitor: EnticingConfigurationVisitor) {

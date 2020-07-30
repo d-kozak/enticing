@@ -3,6 +3,9 @@ package cz.vutbr.fit.knot.enticing.dto.config.dsl.util
 import java.io.File
 
 
+/**
+ * Implements checks used when validating enticing configuration
+ */
 interface Validator {
 
     /**

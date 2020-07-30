@@ -6,6 +6,10 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.EntityConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.IndexConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 
+/**
+ * Prints the configuration in a human readable format
+ * for console logging etc
+ */
 class PrettyPrintingVisitor : EnticingConfigurationVisitor {
 
     /**

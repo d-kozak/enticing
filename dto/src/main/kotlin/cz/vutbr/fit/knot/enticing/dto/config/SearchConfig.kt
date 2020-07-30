@@ -9,7 +9,7 @@ import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Positive
 
 /**
- * Search config for console client
+ * Search config for the console client
  */
 data class SearchConfig(
         @field:Positive

@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.api
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.log.*
 import cz.vutbr.fit.knot.enticing.mx.ServerStatus
 import cz.vutbr.fit.knot.enticing.mx.StaticServerInfo
@@ -10,9 +11,23 @@ import kotlinx.coroutines.launch
 
 
 /**
- * Wrapper around the api of the management service
+ * Proxy class for communicating with the management service
  */
-class ManagementServiceApi(private val remoteAddress: String, private val componentType: ComponentType, private val localAddress: String, loggerFactory: LoggerFactory)
+class ManagementServiceApi(
+        /**
+         * Address of the service in the format ip:port
+         */
+        @Cleanup("Use ComponentAddress class instead of primitive String")
+        private val remoteAddress: String,
+        /**
+         * Type of THIS component, it is sent in some messages
+         */
+        private val componentType: ComponentType,
+        /**
+         * Address of this component in the format ip:port
+         */
+        private val localAddress: String,
+        loggerFactory: LoggerFactory)
     : EnticingComponentApi(loggerFactory), RemoteLoggingApi, AutoCloseable {
 
     private val scope = CoroutineScope(Dispatchers.IO)
