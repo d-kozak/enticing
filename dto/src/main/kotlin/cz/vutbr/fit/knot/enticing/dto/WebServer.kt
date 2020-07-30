@@ -9,6 +9,9 @@ typealias ServerId = String
 typealias ErrorMessage = String
 typealias CollectionName = String
 
+/**
+ * contains DTOs used for communicating with a webserver
+ */
 object WebServer {
 
     /**

@@ -1,5 +1,8 @@
 package cz.vutbr.fit.knot.enticing.dto
 
+/**
+ * Represents the address of the a component, consisting of an IP/URL and a port
+ */
 data class ComponentAddress(val url: String, val port: Int) {
     companion object {
         fun parse(input: String): ComponentAddress {
@@ -14,4 +17,7 @@ data class ComponentAddress(val url: String, val port: Int) {
     override fun toString(): String = "$url:$port"
 }
 
+/**
+ * Parse a string into a ComponentAddress object
+ */
 fun String.toComponentAddress() = ComponentAddress.parse(this)

@@ -6,6 +6,9 @@ import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.PositiveOrZero
 import javax.validation.constraints.Size
 
+/**
+ * Internal representation of the perf log to pass around locally before finally being transformed into a LogDto (which needs more context) and sent to the management server
+ */
 data class PerfMessage(
         val className: String,
         val operationId: String,
@@ -17,6 +20,9 @@ data class PerfMessage(
 
 fun PerfMessage.toPerfDto(componentId: String, componentType: ComponentType) = PerfDto(className, operationId, arguments, duration, result, componentId, componentType, timestamp)
 
+/**
+ * Perf log message to be transmitted
+ */
 data class PerfDto(
         @field:NotBlank
         val sourceClass: String,

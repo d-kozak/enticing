@@ -5,11 +5,17 @@ import javax.validation.Valid
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Pattern
 
+/**
+ * Base interface for specifying offsets into IndexServers and Collections when querying
+ */
 interface RequestData<OffsetType> {
     val address: String
     val offset: OffsetType?
 }
 
+/**
+ * Offset specification for one IndexServer
+ */
 data class IndexServerRequestData(
         @field:NotEmpty
         @field:Pattern(regexp = urlRegexStr)
@@ -19,6 +25,9 @@ data class IndexServerRequestData(
 ) : RequestData<Map<CollectionName, Offset>>
 
 
+/**
+ * Offset specification for a single collection
+ */
 data class CollectionRequestData(
         @field:NotEmpty
         override val address:String,

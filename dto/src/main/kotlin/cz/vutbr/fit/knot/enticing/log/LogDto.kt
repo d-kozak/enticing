@@ -1,10 +1,14 @@
 package cz.vutbr.fit.knot.enticing.log
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.LogType
 import java.time.LocalDateTime
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Size
 
+/**
+ * Internal representation of the log to pass around locally before finally being transformed into a LogDto (which needs more context) and sent to the management server
+ */
 data class LogMessage(
         val logType: LogType,
         val className: String,
@@ -31,6 +35,7 @@ data class LogDto(
 )
 
 
+@Cleanup("seems like this enum should be located elsewhere - probably closer to the config dsl?")
 enum class ComponentType {
     WEBSERVER,
     INDEX_SERVER,

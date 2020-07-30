@@ -7,7 +7,11 @@ import cz.vutbr.fit.knot.enticing.log.logger
 import java.lang.management.ManagementFactory
 import java.time.LocalDateTime
 
-
+/**
+ * DTO representing static server data
+ * (that do not change as long as the component is running,
+ * or even longer in case of CPU, RAM, etc...)
+ */
 data class StaticServerInfo(
         val fullAddress: String,
         val componentType: ComponentType,
@@ -16,6 +20,9 @@ data class StaticServerInfo(
         val timestamp: LocalDateTime = LocalDateTime.now()
 )
 
+/**
+ * DTO representing current server status, sent with heartbeat messages
+ */
 data class ServerStatus(
         val freePhysicalMemorySize: Double,
         val processCpuLoad: Double,
@@ -23,6 +30,9 @@ data class ServerStatus(
         val timestamp: LocalDateTime = LocalDateTime.now()
 )
 
+/**
+ * Service responsible for probing the server this component is running on and collecting information about it
+ */
 open class ServerMonitoringService(val fullAddress: String, val componentType: ComponentType, loggerFactory: LoggerFactory) {
 
     private val logger = loggerFactory.logger { }
@@ -45,6 +55,9 @@ open class ServerMonitoringService(val fullAddress: String, val componentType: C
 }
 
 
+/**
+ * Encapsulates the methods for probing information about the server this component is running on
+ */
 class ServerProbe {
 
     data class Info(

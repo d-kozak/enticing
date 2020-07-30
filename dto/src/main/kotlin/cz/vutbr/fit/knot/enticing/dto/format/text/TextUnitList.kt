@@ -7,6 +7,9 @@ import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotEmpty
 
+/**
+ * Currently used representation for the annotated text, consisting of a list of TextUnit objects
+ */
 data class TextUnitList(
         @field:Valid
         @field:NotEmpty
@@ -14,7 +17,6 @@ data class TextUnitList(
 ) {
     constructor(vararg textUnits: TextUnit) : this(textUnits.toList())
 }
-
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,

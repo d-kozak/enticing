@@ -11,6 +11,9 @@ import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Positive
 
 
+/**
+ * create an empty snippet for a given text format
+ */
 fun emptySnippet(format: TextFormat): ResultFormat.Snippet = when (format) {
     TextFormat.PLAIN_TEXT -> ResultFormat.Snippet.PlainText("", 0, 0, false)
     TextFormat.HTML -> ResultFormat.Snippet.Html("", 0, 0, false)

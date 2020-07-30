@@ -6,6 +6,9 @@ import cz.vutbr.fit.knot.enticing.dto.utils.regex.urlRegexStr
 import javax.validation.Valid
 import javax.validation.constraints.*
 
+/**
+ * DTOs used for communicating with IndexServers
+ */
 object IndexServer {
 
     /**
