@@ -8,6 +8,9 @@ import org.springframework.scheduling.annotation.EnableScheduling
 @EnableScheduling
 class IndexServerApplication
 
+/**
+ * Start the component
+ */
 fun main(args: Array<String>) {
     require(args.isNotEmpty()) { "two arguments expected - config file and server address" }
     if (!args[0].startsWith("--config.file=")) {

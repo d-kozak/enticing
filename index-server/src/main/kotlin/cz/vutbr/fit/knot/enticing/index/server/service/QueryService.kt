@@ -13,6 +13,9 @@ import cz.vutbr.fit.knot.enticing.query.processor.flattenResults
 import org.springframework.stereotype.Service
 
 
+/**
+ * Takes care of dispatching search requests to individual collection managers
+ */
 @Service
 class QueryService(
         private val collectionManagers: Map<String, CollectionManager>,
@@ -23,7 +26,10 @@ class QueryService(
 
     private val logger = loggerFactory.logger { }
 
-    val queryDispatcher = QueryDispatcher(CollectionQueryExecutor(collectionManagers), ComponentType.INDEX_SERVER, loggerFactory)
+    /**
+     * Dispatches queries to collection managers
+     */
+    private val queryDispatcher = QueryDispatcher(CollectionQueryExecutor(collectionManagers), ComponentType.INDEX_SERVER, loggerFactory)
 
     fun processQuery(query: SearchQuery): IndexServer.IndexResultList {
         query.eqlAst = eqlCompiler.parseOrFail(query.query, metadataConfiguration)

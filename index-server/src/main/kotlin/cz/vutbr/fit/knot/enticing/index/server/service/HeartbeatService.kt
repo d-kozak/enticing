@@ -11,10 +11,19 @@ import org.springframework.stereotype.Service
 import java.time.Instant
 import javax.annotation.PostConstruct
 
+/**
+ * Periodically send heartbeats to the management server
+ */
 @Service
-class HeartbeatService(val scheduler: TaskScheduler, val configuration: EnticingConfiguration, val monitoringService: ServerMonitoringService, val api: ManagementServiceApi, loggerFactory: LoggerFactory) {
+class HeartbeatService(
+        val scheduler: TaskScheduler,
+        val configuration: EnticingConfiguration,
+        val monitoringService: ServerMonitoringService,
+        val api: ManagementServiceApi,
+        loggerFactory: LoggerFactory
+) {
 
-    val logger = loggerFactory.logger { }
+    private val logger = loggerFactory.logger { }
 
     @PostConstruct
     fun init() {
@@ -26,7 +35,10 @@ class HeartbeatService(val scheduler: TaskScheduler, val configuration: Enticing
         }
     }
 
-    fun enableHeartbeat(heartbeatConfiguration: HeartbeatConfiguration) {
+    /**
+     * Registers this component and then setups the periodic heartbeats
+     */
+    private fun enableHeartbeat(heartbeatConfiguration: HeartbeatConfiguration) {
         logger.info("Setting up heartbeat with period ${heartbeatConfiguration.period}")
         val info = monitoringService.getStaticServerInfo()
         var i = 1

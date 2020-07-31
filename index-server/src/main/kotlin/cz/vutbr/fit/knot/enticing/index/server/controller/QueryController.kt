@@ -8,6 +8,9 @@ import cz.vutbr.fit.knot.enticing.index.server.service.QueryService
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
+/**
+ * API for querying
+ */
 @RestController
 @RequestMapping("\${api.base.path}")
 class QueryController(

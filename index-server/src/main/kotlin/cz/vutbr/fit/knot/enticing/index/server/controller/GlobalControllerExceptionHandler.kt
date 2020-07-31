@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import javax.servlet.http.HttpServletResponse
 
 
+/**
+ * Translates exceptions to HTTP codes
+ */
 @ControllerAdvice
 class GlobalControllerExceptionHandler(loggerFactory: LoggerFactory) {
 
