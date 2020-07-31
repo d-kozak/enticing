@@ -16,6 +16,9 @@ import it.unimi.dsi.fastutil.io.FastBufferedInputStream
 import it.unimi.dsi.fastutil.objects.Reference2ObjectMap
 import java.io.InputStream
 
+/**
+ * Factory responsible for creating documents from raw input streams
+ */
 class Mg4jDocumentFactory(private val metadataConfiguration: MetadataConfiguration, val loggerFactory: LoggerFactory) : AbstractDocumentFactory() {
 
     private val logger = loggerFactory.logger { }

@@ -11,6 +11,7 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.matching.EqlMatchType
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import kotlin.math.abs
 
+@Cleanup("use constraint agnostic visitor?")
 class DocumentMatchingVisitor(
         val document: IndexedDocument,
         val metadataConfiguration: MetadataConfiguration,

@@ -16,7 +16,7 @@ import cz.vutbr.fit.knot.enticing.index.boundary.MatchInfo
 import cz.vutbr.fit.knot.enticing.log.Logger
 import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 
-private val log = SimpleStdoutLoggerFactory.namedLogger("EqlDocumentMatching")
+private val logger = SimpleStdoutLoggerFactory.namedLogger("EqlDocumentMatching")
 
 fun EqlAstNode.clearMatchInfo() {
     this.forEachNode { it.matchInfo.clear() }
@@ -69,9 +69,9 @@ fun matchDocument(ast: EqlAstNode, document: IndexedDocument, defaultIndex: Stri
 }
 
 internal fun evaluateQuery(ast: EqlAstNode, document: IndexedDocument, defaultIndex: String, metadataConfiguration: MetadataConfiguration, interval: Interval): Sequence<DocumentMatch> {
-    log.debug("Matching document '${document.title}' with query ${ast.toMgj4Query()} in interval $interval")
+    logger.debug("Matching document '${document.title}' with query ${ast.toMgj4Query()} in interval $interval")
     val nodesByIndex = groupNodesByIndex(ast, metadataConfiguration, defaultIndex)
-    log.dumpNodesByIndex(nodesByIndex, metadataConfiguration)
+    logger.dumpNodesByIndex(nodesByIndex, metadataConfiguration)
 
     ast.clearMatchInfo()
 

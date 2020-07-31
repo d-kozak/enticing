@@ -9,7 +9,10 @@ import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 
-class TextUnitListGeneratingVisitor(config: MetadataConfiguration, defaultIndexName: String, interval: Interval, document: IndexedDocument, loggerFactory: LoggerFactory) : TextFormatGeneratingVisitor(config, defaultIndexName, interval, document) {
+/**
+ * Generates the TextUnitList format
+ */
+class TextUnitListGeneratingListener(config: MetadataConfiguration, defaultIndexName: String, interval: Interval, document: IndexedDocument, loggerFactory: LoggerFactory) : TextFormatGeneratingListener(config, defaultIndexName, interval, document) {
 
     private val logger = loggerFactory.logger { }
 
@@ -24,7 +27,7 @@ class TextUnitListGeneratingVisitor(config: MetadataConfiguration, defaultIndexN
 
     private val selectedIndexes: Set<Int> = config.indexes.values.map { it.columnIndex }.toSet()
 
-    override fun visitMatchStart(queryInterval: Interval) {
+    override fun onMatchStart(queryInterval: Interval) {
         if (currentQueryInterval != null || unitsForQueryMatch != null) {
             logger.warn("matchStart called while some match interval metadata are still present inside the listener, they will be overwritten")
         }
@@ -32,7 +35,7 @@ class TextUnitListGeneratingVisitor(config: MetadataConfiguration, defaultIndexN
         unitsForQueryMatch = mutableListOf()
     }
 
-    override fun visitEntityStart(attributes: List<String>, entityClass: String) {
+    override fun onEntityStart(attributes: List<String>, entityClass: String) {
         if (this.attributes != null || this.entityClass != null || this.wordsForEntity?.isNotEmpty() == true) {
             logger.warn("entityStart called while some entity metadata are still present inside the listener, they will be overwritten")
         }
@@ -43,7 +46,7 @@ class TextUnitListGeneratingVisitor(config: MetadataConfiguration, defaultIndexN
         }
     }
 
-    override fun visitWord(indexes: List<String>) {
+    override fun onWord(indexes: List<String>) {
         val word = TextUnit.Word(indexes.filterIndexed { i, _ -> i in selectedIndexes })
         when {
             wordsForEntity != null -> wordsForEntity!!.add(word)
@@ -53,7 +56,7 @@ class TextUnitListGeneratingVisitor(config: MetadataConfiguration, defaultIndexN
 
     }
 
-    override fun visitEntityEnd() {
+    override fun onEntityEnd() {
         if (attributes != null && entityClass != null && wordsForEntity?.isNotEmpty() == true) {
             val newEntity = TextUnit.Entity(attributes!!, entityClass!!, wordsForEntity!!)
             if (unitsForQueryMatch != null) {
@@ -69,7 +72,7 @@ class TextUnitListGeneratingVisitor(config: MetadataConfiguration, defaultIndexN
         wordsForEntity = null
     }
 
-    override fun visitMatchEnd() {
+    override fun onMatchEnd() {
         if (currentQueryInterval != null && unitsForQueryMatch?.isNotEmpty() == true) {
             resultList.add(TextUnit.QueryMatch(currentQueryInterval!!, unitsForQueryMatch!!))
         } else {

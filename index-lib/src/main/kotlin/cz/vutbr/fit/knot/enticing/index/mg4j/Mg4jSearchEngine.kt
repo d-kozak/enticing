@@ -19,6 +19,9 @@ fun SelectedInterval.toEnticingInterval() = Interval.valueOf(this.interval.left,
 
 typealias Mg4jSearchResult = DocumentScoreInfo<Reference2ObjectMap<Index, Array<SelectedInterval>>>
 
+/**
+ * MG4J based implementation of the search engine
+ */
 class Mg4jSearchEngine(
         private val collection: Mg4jCompositeDocumentCollection,
         private val engineFactory: QueryEngine,

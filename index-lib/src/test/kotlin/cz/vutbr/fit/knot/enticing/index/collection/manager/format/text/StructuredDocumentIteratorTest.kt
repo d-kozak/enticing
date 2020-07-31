@@ -10,27 +10,27 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 
-private class TestVisitor : DocumentVisitor {
+private class TestListener : DocumentListener {
 
     val content: MutableList<Pair<String, Any?>> = mutableListOf()
 
-    override fun visitMatchStart(queryInterval: Interval) {
+    override fun onMatchStart(queryInterval: Interval) {
         content.add("ms" to queryInterval)
     }
 
-    override fun visitMatchEnd() {
+    override fun onMatchEnd() {
         content.add("me" to null)
     }
 
-    override fun visitEntityStart(attributes: List<String>, entityClass: String) {
+    override fun onEntityStart(attributes: List<String>, entityClass: String) {
         content.add("es" to Pair(attributes, entityClass))
     }
 
-    override fun visitEntityEnd() {
+    override fun onEntityEnd() {
         content.add("ee" to null)
     }
 
-    override fun visitWord(indexes: List<String>) {
+    override fun onWord(indexes: List<String>) {
         content.add("w" to indexes)
     }
 }
@@ -61,11 +61,11 @@ internal class StructuredDocumentIteratorTest {
                 "0 0 0 0 Jan_Novak 0 0 0",
                 "0 0 0 0 2 0 0 0"
         )
-        val visitor = TestVisitor()
+        val visitor = TestListener()
         iterator.iterateDocument(document,
                 matchStarts = mapOf(4 to Interval.valueOf(42)),
                 matchEnds = setOf(7),
-                visitor = visitor)
+                listener = visitor)
         assertThat(visitor.content)
                 .isEqualTo(listOf(
                         "w" to listOf("Country", "1", "0", "0", "0"),
@@ -93,11 +93,11 @@ internal class StructuredDocumentIteratorTest {
                 "0 0 0 0 Jan_Novak 0 0 0",
                 "0 0 0 0 2 0 0 0"
         )
-        val visitor = TestVisitor()
+        val visitor = TestListener()
         iterator.iterateDocument(document,
                 matchStarts = mapOf(1 to Interval.valueOf(42)),
                 matchEnds = setOf(6),
-                visitor = visitor)
+                listener = visitor)
         assertThat(visitor.content)
                 .isEqualTo(listOf(
                         "w" to listOf("Country", "1", "0", "0", "0"),
@@ -126,11 +126,11 @@ internal class StructuredDocumentIteratorTest {
                 "0 0 0 0 Jan_Novak 0 0 0",
                 "0 0 0 0 2 0 0 0"
         )
-        val visitor = TestVisitor()
+        val visitor = TestListener()
         iterator.iterateDocument(document,
                 matchStarts = mapOf(5 to Interval.valueOf(42)),
                 matchEnds = setOf(6),
-                visitor = visitor)
+                listener = visitor)
         assertThat(visitor.content)
                 .isEqualTo(listOf(
                         "w" to listOf("Country", "1", "0", "0", "0"),
@@ -160,11 +160,11 @@ internal class StructuredDocumentIteratorTest {
                 "Jan_Novak 0 0 0",
                 "2 0 0 0"
         )
-        val visitor = TestVisitor()
+        val visitor = TestListener()
         iterator.iterateDocument(document,
                 matchStarts = mapOf(0 to Interval.valueOf(42)),
                 matchEnds = setOf(0),
-                visitor = visitor)
+                listener = visitor)
         assertThat(visitor.content)
                 .isEqualTo(listOf(
                         "ms" to Interval.valueOf(from = 42, to = 42),
@@ -210,11 +210,11 @@ internal class StructuredDocumentIteratorTest {
                     "Jan_Novak 0 0 0",
                     "2 0 0 0"
             )
-            val visitor = TestVisitor()
+            val visitor = TestListener()
             iterator.iterateDocument(document,
                     matchStarts = mapOf(0 to Interval.valueOf(42)),
                     matchEnds = setOf(0),
-                    visitor = visitor)
+                    listener = visitor)
             assertThat(visitor.content)
                     .isEqualTo(listOf(
                             "ms" to Interval.valueOf(from = 42, to = 42),

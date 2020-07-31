@@ -60,6 +60,7 @@ abstract class EqlAstNode : AstNode {
      * Contains information how the query matched the document
      * Each item consists of indexes of node's children intervals and interval created using these subintervals
      */
+    @Cleanup("the matchinfo is currently used only in Simple nodes - rest of the 'state' of the search is stored in the 'sequence tree' created by the DocumentMatchingVisitor")
     var matchInfo: MutableSet<DocumentMatch> = mutableSetOf()
 
     /**

@@ -6,6 +6,9 @@ import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import cz.vutbr.fit.knot.enticing.index.boundary.TokenReader
 
+/**
+ * Generates the plain text format
+ */
 fun generatePlainText(document: IndexedDocument, filteredConfig: MetadataConfiguration, defaultIndex: String, interval: Interval?): ResultFormat.Snippet.PlainText {
     val defaultColumnIndex = filteredConfig.indexes[defaultIndex]?.columnIndex
             ?: throw IllegalArgumentException("Default index $defaultIndex not found")

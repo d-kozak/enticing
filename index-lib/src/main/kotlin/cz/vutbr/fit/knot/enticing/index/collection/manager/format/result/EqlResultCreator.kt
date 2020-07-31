@@ -16,6 +16,9 @@ import cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.*
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import java.lang.Math.min
 
+/**
+ * Generates result DTOs from the document and match info
+ */
 class EqlResultCreator(private val metadataConfiguration: MetadataConfiguration, val loggerFactory: LoggerFactory) : ResultCreator {
     override fun multipleResults(document: IndexedDocument, matchInfo: MatchInfo, formatInfo: GeneralFormatInfo, resultCount: Int, resultFormat: cz.vutbr.fit.knot.enticing.dto.ResultFormat): Pair<List<ResultFormat>, Boolean> {
         var intervals = matchInfo.intervals
@@ -49,9 +52,9 @@ class EqlResultCreator(private val metadataConfiguration: MetadataConfiguration,
 
         val visitor = when (formatInfo.textFormat) {
             TextFormat.PLAIN_TEXT -> return generatePlainText(document, filteredConfig, formatInfo.defaultIndex, interval)
-            TextFormat.HTML -> HtmlGeneratingVisitor(filteredConfig, formatInfo.defaultIndex, interval, document)
-            TextFormat.STRING_WITH_METADATA -> StringWithAnnotationsGeneratingVisitor(filteredConfig, formatInfo.defaultIndex, interval, document, loggerFactory)
-            TextFormat.TEXT_UNIT_LIST -> TextUnitListGeneratingVisitor(filteredConfig, formatInfo.defaultIndex, interval, document, loggerFactory)
+            TextFormat.HTML -> HtmlGeneratingListener(filteredConfig, formatInfo.defaultIndex, interval, document)
+            TextFormat.STRING_WITH_METADATA -> StringWithAnnotationsGeneratingListener(filteredConfig, formatInfo.defaultIndex, interval, document, loggerFactory)
+            TextFormat.TEXT_UNIT_LIST -> TextUnitListGeneratingListener(filteredConfig, formatInfo.defaultIndex, interval, document, loggerFactory)
         }
         val iterator = StructuredDocumentIterator(metadataConfiguration, loggerFactory)
         iterator.iterateDocument(document, matchStart, matchEnd, visitor, interval)

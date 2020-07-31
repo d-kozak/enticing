@@ -19,6 +19,9 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.objects.Object2ReferenceLinkedOpenHashMap
 import it.unimi.dsi.fastutil.objects.Reference2DoubleOpenHashMap
 
+/**
+ * Prepares MG4J based CollectionManager
+ */
 fun initMg4jCollectionManager(configuration: CollectionManagerConfiguration, loggerFactory: LoggerFactory): CollectionManager {
     val collection = Mg4jCompositeDocumentCollection(configuration.metadataConfiguration, configuration.mg4jDir.mg4jFiles, loggerFactory)
     val engine = initMg4jQueryEngine(configuration)

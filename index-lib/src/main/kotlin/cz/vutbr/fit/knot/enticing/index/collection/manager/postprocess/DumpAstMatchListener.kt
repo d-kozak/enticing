@@ -7,6 +7,9 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.EqlListener
 import cz.vutbr.fit.knot.enticing.eql.compiler.matching.DocumentMatch
 import cz.vutbr.fit.knot.enticing.log.Logger
 
+/**
+ * Dumps the matchinof for all AST nodes
+ */
 fun Logger.dumpAstMatch(ast: EqlAstNode) {
     val listener = DumpAstMatchListener()
     ast.walk(listener)
@@ -15,7 +18,7 @@ fun Logger.dumpAstMatch(ast: EqlAstNode) {
 }
 
 
-class DumpAstMatchListener : EqlListener {
+private class DumpAstMatchListener : EqlListener {
 
     private val builder = StringBuilder()
 

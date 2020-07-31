@@ -5,19 +5,22 @@ import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 
-class HtmlGeneratingVisitor(config: MetadataConfiguration, defaultIndexName: String, interval: Interval, document: IndexedDocument) : TextFormatGeneratingVisitor(config, defaultIndexName, interval, document) {
+/**
+ * Generates the HTML text format
+ */
+class HtmlGeneratingListener(config: MetadataConfiguration, defaultIndexName: String, interval: Interval, document: IndexedDocument) : TextFormatGeneratingListener(config, defaultIndexName, interval, document) {
 
     private val builder = StringBuilder()
 
-    override fun visitMatchStart(queryInterval: Interval) {
+    override fun onMatchStart(queryInterval: Interval) {
         builder.append("<b>")
     }
 
-    override fun visitMatchEnd() {
+    override fun onMatchEnd() {
         builder.append("</b>")
     }
 
-    override fun visitWord(indexes: List<String>) {
+    override fun onWord(indexes: List<String>) {
         with(builder) {
             append("<span eql-word")
             for (index in metaIndexes) {
@@ -35,7 +38,7 @@ class HtmlGeneratingVisitor(config: MetadataConfiguration, defaultIndexName: Str
 
     private var entityStarted = false
 
-    override fun visitEntityStart(attributes: List<String>, entityClass: String) {
+    override fun onEntityStart(attributes: List<String>, entityClass: String) {
         with(builder) {
             val entity = config.entities[entityClass]
             if (entity != null) {
@@ -53,7 +56,7 @@ class HtmlGeneratingVisitor(config: MetadataConfiguration, defaultIndexName: Str
         }
     }
 
-    override fun visitEntityEnd() {
+    override fun onEntityEnd() {
         if (entityStarted) {
             entityStarted = false
             builder.append("</span>")

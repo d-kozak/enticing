@@ -18,7 +18,7 @@ import cz.vutbr.fit.knot.enticing.log.logger
 import kotlin.math.min
 
 /**
- * Interface of the underlying mg4j indexing library, performs requests and processes results
+ * Core class of the module, performs requests and processes results.
  */
 class CollectionManager internal constructor(
         val collectionName: String,
@@ -32,6 +32,10 @@ class CollectionManager internal constructor(
 
     val logger = loggerFactory.logger { }
 
+    /**
+     * Submit a query with given offset
+     * @return all results found
+     */
     fun query(query: SearchQuery, offset: Offset = Offset(0, 0)): IndexServer.CollectionResultList {
         logger.info("Executing query $query")
         var (documentOffset, resultOffset) = offset
@@ -93,6 +97,9 @@ class CollectionManager internal constructor(
         )
     }
 
+    /**
+     * Get the specified document
+     */
     fun getDocument(query: IndexServer.DocumentQuery): IndexServer.FullDocument {
         val document = searchEngine.loadDocument(query.documentId)
         val matchInfo = if (query.query != null) {

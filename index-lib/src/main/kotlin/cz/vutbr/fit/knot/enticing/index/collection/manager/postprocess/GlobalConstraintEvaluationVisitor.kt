@@ -9,6 +9,9 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.matching.EqlMatch
 import cz.vutbr.fit.knot.enticing.eql.compiler.matching.EqlMatchType
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 
+/**
+ * Checks whether global constraint is satisfied
+ */
 class GlobalConstraintEvaluationVisitor(val ast: RootNode, val metadataConfiguration: MetadataConfiguration, val document: IndexedDocument, val match: DocumentMatch) : QueryAgnosticVisitor<Boolean>() {
 
     internal val identifierMatch: Map<String, EqlMatch> = match.eqlMatch.filter { it.type is EqlMatchType.Identifier }

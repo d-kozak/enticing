@@ -10,7 +10,10 @@ import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 
-class StringWithAnnotationsGeneratingVisitor(config: MetadataConfiguration, defaultIndexName: String, interval: Interval, document: IndexedDocument, loggerFactory: LoggerFactory) : TextFormatGeneratingVisitor(config, defaultIndexName, interval, document) {
+/**
+ * Generates the String with annotation text format
+ */
+class StringWithAnnotationsGeneratingListener(config: MetadataConfiguration, defaultIndexName: String, interval: Interval, document: IndexedDocument, loggerFactory: LoggerFactory) : TextFormatGeneratingListener(config, defaultIndexName, interval, document) {
 
     private val logger = loggerFactory.logger { }
 
@@ -23,12 +26,12 @@ class StringWithAnnotationsGeneratingVisitor(config: MetadataConfiguration, defa
     private var matchStartPosition = -1
     private var queryInterval: Interval? = null
 
-    override fun visitMatchStart(queryInterval: Interval) {
+    override fun onMatchStart(queryInterval: Interval) {
         this.matchStartPosition = if (builder.isNotEmpty()) builder.length + 1 else builder.length
         this.queryInterval = queryInterval
     }
 
-    override fun visitMatchEnd() {
+    override fun onMatchEnd() {
         if (matchStartPosition != -1 && queryInterval != null) {
             queryMapping.add(QueryMapping(matchStartPosition to builder.length - 1, queryInterval!!.from to queryInterval!!.to))
             matchStartPosition = -1
@@ -43,13 +46,13 @@ class StringWithAnnotationsGeneratingVisitor(config: MetadataConfiguration, defa
     private var entityClass: String? = null
     private var entityStartPosition = -1
 
-    override fun visitEntityStart(attributes: List<String>, entityClass: String) {
+    override fun onEntityStart(attributes: List<String>, entityClass: String) {
         this.entityStartPosition = if (builder.isNotEmpty()) builder.length + 1 else builder.length
         this.attributes = attributes
         this.entityClass = entityClass
     }
 
-    override fun visitEntityEnd() {
+    override fun onEntityEnd() {
         if (attributes != null && entityClass != null && entityStartPosition != -1) {
             val entityDescription = config.entities[entityClass!!]
             if (entityDescription != null) {
@@ -69,7 +72,7 @@ class StringWithAnnotationsGeneratingVisitor(config: MetadataConfiguration, defa
         }
     }
 
-    override fun visitWord(indexes: List<String>) {
+    override fun onWord(indexes: List<String>) {
         if (builder.isNotEmpty()) builder.append(' ')
         val word = indexes[defaultIndex.columnIndex]
         val annotationContent = metaIndexes.map { it.name to indexes[it.columnIndex] }.toMap()

@@ -4,7 +4,7 @@ package cz.vutbr.fit.knot.enticing.index.mg4j
 import cz.vutbr.fit.knot.enticing.dto.format.text.TextUnit
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.StructuredDocumentIterator
-import cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.TextUnitListGeneratingVisitor
+import cz.vutbr.fit.knot.enticing.index.collection.manager.format.text.TextUnitListGeneratingListener
 import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import it.unimi.dsi.fastutil.io.FastBufferedInputStream
 import it.unimi.dsi.fastutil.objects.Reference2ObjectArrayMap
@@ -92,7 +92,7 @@ internal class Mg4jDocumentFactoryTest {
         fun `with eql result creator`() {
             val document = initMockDocument()
             val iterator = StructuredDocumentIterator(fullTestMetadataConfig, SimpleStdoutLoggerFactory)
-            val visitor = TextUnitListGeneratingVisitor(fullTestMetadataConfig, "token", Interval.valueOf(0, document.size()), document, SimpleStdoutLoggerFactory)
+            val visitor = TextUnitListGeneratingListener(fullTestMetadataConfig, "token", Interval.valueOf(0, document.size()), document, SimpleStdoutLoggerFactory)
             iterator.iterateDocument(document, emptyMap(), emptySet(), visitor)
             val result = visitor.build() as cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat.Snippet.TextUnitList
             val elems = result.content.content

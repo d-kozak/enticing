@@ -6,7 +6,7 @@ import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.matching.EqlMatch
 
 /**
- * Creates generates serializable representation of the document
+ * Creates serializable representation of the document
  */
 interface ResultCreator {
     /**
@@ -14,5 +14,8 @@ interface ResultCreator {
      */
     fun multipleResults(document: IndexedDocument, matchInfo: MatchInfo, formatInfo: GeneralFormatInfo, resultCount: Int, resultFormat: cz.vutbr.fit.knot.enticing.dto.ResultFormat): Pair<List<ResultFormat>, Boolean>
 
+    /**
+     * @return a single result
+     */
     fun singleResult(document: IndexedDocument, formatInfo: GeneralFormatInfo, eqlMatch: List<EqlMatch>, interval: Interval = document.interval): ResultFormat.Snippet
 }

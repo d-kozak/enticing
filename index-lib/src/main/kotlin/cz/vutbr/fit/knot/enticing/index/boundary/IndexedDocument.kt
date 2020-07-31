@@ -1,8 +1,12 @@
 package cz.vutbr.fit.knot.enticing.index.boundary
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.annotation.Speed
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 
+/**
+ * Each word consists of multiple indexes
+ */
 typealias Word = List<String>
 
 /**
@@ -10,9 +14,10 @@ typealias Word = List<String>
  */
 interface IndexedDocument : Iterable<Word> {
 
+    @Cleanup("this is a redefinition, should be merged")
     companion object {
-        val PARAGRAPH_MARK = "§"
-        val SENTENCE_MARK = "¶"
+        const val PARAGRAPH_MARK = "§"
+        const val SENTENCE_MARK = "¶"
     }
 
     val id: DocumentId
@@ -22,7 +27,7 @@ interface IndexedDocument : Iterable<Word> {
     val size: Int
 
     @Speed("If necessary, char[] or MutableStrings or some else more low level abstraction can be used here")
-    val content: List<List<String>>
+    val content: List<Word>
 
     override fun iterator() = object : Iterator<Word> {
         var i = 0
@@ -40,6 +45,9 @@ interface IndexedDocument : Iterable<Word> {
 }
 
 
+/**
+ * Reads the document word after word opposed to the interval storing ( which is index by index)
+ */
 class WordReader(input: List<String>, private val separator: Char) {
     private val tokenReaders = input.map { TokenReader(it, separator) }
 
@@ -58,6 +66,9 @@ class WordReader(input: List<String>, private val separator: Char) {
 
 }
 
+/**
+ * Reads a single index token by token separated by separator char
+ */
 class TokenReader(private val input: String, private val separator: Char) : Iterable<String> {
     var pos = 0
 

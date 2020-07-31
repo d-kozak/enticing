@@ -8,12 +8,19 @@ import cz.vutbr.fit.knot.enticing.index.startIndexing
 import cz.vutbr.fit.knot.enticing.log.loggerFactoryFor
 import cz.vutbr.fit.knot.enticing.log.measure
 
+
+/**
+ * Parse the cli arguments and load the configuration dsl accordingly
+ */
 fun handleArguments(vararg args: String, loadConfig: (path: String) -> EnticingConfiguration = ::executeScript): Pair<EnticingConfiguration, String> {
     args.size == 2 || throw IllegalArgumentException("format: /path/to/config.kts serverAddress")
     val config = loadConfig(args[0]).validateOrFail()
     return config to args[1]
 }
 
+/**
+ * Build indexes necessary for querying according to the configuration provided as commandline args
+ */
 fun main(args: Array<String>) {
     val (enticingConfiguration, address) = handleArguments(*args)
     val config = enticingConfiguration.indexServerByAddress(address)
