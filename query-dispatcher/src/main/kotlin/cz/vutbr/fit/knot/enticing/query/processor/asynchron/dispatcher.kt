@@ -6,6 +6,9 @@ import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.actor
 import java.lang.Thread.sleep
 
+/**
+ * Just an example of how the asynchronous implementation could be structured
+ */
 sealed class DispatcherMessage
 data class InputMessage(val value: Int) : DispatcherMessage()
 data class ResultMessage(val result: Int) : DispatcherMessage()

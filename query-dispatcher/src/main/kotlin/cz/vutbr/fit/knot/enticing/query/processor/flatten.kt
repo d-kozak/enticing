@@ -5,6 +5,9 @@ import cz.vutbr.fit.knot.enticing.dto.utils.MResult
 import cz.vutbr.fit.knot.enticing.log.Logger
 import cz.vutbr.fit.knot.enticing.log.error
 
+/**
+ * Flattens results from multiple passes into a single one
+ */
 fun Map<String, List<MResult<IndexServer.CollectionResultList>>>.flattenResults(): IndexServer.IndexResultList {
     val matched = mutableListOf<IndexServer.SearchResult>()
     val errors = mutableMapOf<CollectionName, ErrorMessage>()
@@ -30,6 +33,9 @@ fun Map<String, List<MResult<IndexServer.CollectionResultList>>>.flattenResults(
     return IndexServer.IndexResultList(matched, if (offset.isNotEmpty()) offset else null, errors)
 }
 
+/**
+ * Flattens results from multiple passes into a single one
+ */
 fun Map<String, List<MResult<IndexServer.IndexResultList>>>.flattenResults(query: String, logger: Logger): Pair<WebServer.ResultList, MutableMap<String, Map<String, Offset>>> {
     val snippets = mutableListOf<WebServer.SearchResult>()
     val errors = mutableMapOf<ServerId, ErrorMessage>()
