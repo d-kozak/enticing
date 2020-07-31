@@ -25,7 +25,7 @@ class EqlQueryGeneratingVisitorTest {
         for (i in queries.indices) {
             if (queries[i].toLowerCase() != transformed[i]) {
                 System.err.println("Collision queries vs transformed at: ")
-                System.err.println("\t ${queries[i]} vs ${transformed[i]}")
+                System.err.println("\t '${queries[i]}' vs '${transformed[i]}'")
             }
         }
 

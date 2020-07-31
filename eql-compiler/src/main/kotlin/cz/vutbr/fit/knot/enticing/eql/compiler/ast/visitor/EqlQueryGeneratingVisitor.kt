@@ -42,7 +42,7 @@ class EqlQueryGeneratingVisitor : EqlVisitor<String> {
 
     override fun visitQueryElemAssignNode(node: QueryElemNode.AssignNode): String = "${node.identifier}:=${node.elem.accept(this)}"
 
-    override fun visitQueryElemSimpleNode(node: QueryElemNode.SimpleNode): String = node.content
+    override fun visitQueryElemSimpleNode(node: QueryElemNode.SimpleNode): String = node.canonicEqlValue
 
     override fun visitQueryElemIndexNode(node: QueryElemNode.IndexNode): String = "${node.index}:${node.elem.accept(this)}"
 

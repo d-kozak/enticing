@@ -204,6 +204,11 @@ sealed class QueryElemNode : EqlAstNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemSimpleNode(this)
 
         /**
+         * The content of this node in the canonic EQL form
+         */
+        var canonicEqlValue = content
+
+        /**
          * the index operator this leaf is under, already converted to the column index in the IndexDocument content for convenience
          */
         var index: Int = 0
@@ -215,6 +220,10 @@ sealed class QueryElemNode : EqlAstNode() {
 
     data class AttributeNode(val entityNode: SimpleNode, val attribute: String, val elem: QueryElemNode, override val location: Interval) : QueryElemNode() {
 
+        /**
+         * Name of the entity at the time of creation of this node.
+         * Therefore the 'prefix rewrites' don't affect this value.
+         */
         val entity: String = entityNode.content
 
         var correspondingIndex: String = "<<<Unknown>>>"

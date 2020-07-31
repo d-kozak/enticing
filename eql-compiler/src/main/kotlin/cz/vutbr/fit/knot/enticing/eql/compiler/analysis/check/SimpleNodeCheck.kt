@@ -12,7 +12,9 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.ast.SimpleQueryType
  */
 class SimpleNodeCheck(id: String) : EqlAstCheck<QueryElemNode.SimpleNode>(id, QueryElemNode.SimpleNode::class) {
     override fun execute(node: QueryElemNode.SimpleNode, symbolTable: SymbolTable, metadataConfiguration: MetadataConfiguration, reporter: Reporter) {
-        if (node.type == SimpleQueryType.STRING)
+        if (node.type == SimpleQueryType.STRING) {
+            node.canonicEqlValue = node.canonicEqlValue.toLowerCase()
             node.content = node.content.toLowerCase()
+        }
     }
 }
