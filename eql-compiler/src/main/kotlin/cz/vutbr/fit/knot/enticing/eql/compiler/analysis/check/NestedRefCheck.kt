@@ -10,8 +10,13 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.ast.BooleanOperator
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.QueryElemNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.ReferenceNode
 
+/**
+ * Checks
+ * 1) whether nested reference really corresponds to a query which evaluates to an entity or a list of entities
+ * 2) whether this list of entities really have requested attribute
+ */
 class NestedRefCheck(id: String) : EqlAstCheck<ReferenceNode.NestedReferenceNode>(id, ReferenceNode.NestedReferenceNode::class) {
-    override fun analyze(node: ReferenceNode.NestedReferenceNode, symbolTable: SymbolTable, metadataConfiguration: MetadataConfiguration, reporter: Reporter) {
+    override fun execute(node: ReferenceNode.NestedReferenceNode, symbolTable: SymbolTable, metadataConfiguration: MetadataConfiguration, reporter: Reporter) {
         val idLocation = Interval.valueOf(node.location.from, node.location.from + node.identifier.length - 1)
         val attrLocation = Interval.valueOf(node.location.from + node.identifier.length + 1, node.location.to)
         val source = symbolTable[node.identifier]
@@ -41,7 +46,6 @@ class NestedRefCheck(id: String) : EqlAstCheck<ReferenceNode.NestedReferenceNode
             } else {
                 reporter.error("This identifier should correspond to an entity-like subquery", idLocation, id)
             }
-
         } else {
             reporter.error("Identifier ${node.identifier} is not available", idLocation, id)
         }

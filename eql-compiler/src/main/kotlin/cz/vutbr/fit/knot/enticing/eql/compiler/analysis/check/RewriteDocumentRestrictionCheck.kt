@@ -8,8 +8,11 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.ast.BooleanOperator
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.DocumentRestriction
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.QueryElemNode
 
+/**
+ * Extract document restriction from the query and put it as an attribute to the root node.
+ */
 class RewriteDocumentRestrictionCheck(id: String) : EqlAstCheck<QueryElemNode.AttributeNode>(id, QueryElemNode.AttributeNode::class) {
-    override fun analyze(node: QueryElemNode.AttributeNode, symbolTable: SymbolTable, metadataConfiguration: MetadataConfiguration, reporter: Reporter) {
+    override fun execute(node: QueryElemNode.AttributeNode, symbolTable: SymbolTable, metadataConfiguration: MetadataConfiguration, reporter: Reporter) {
         if (node.entity !in setOf("doc", "document")) return
 
         if (node.elem !is QueryElemNode.SimpleNode) {

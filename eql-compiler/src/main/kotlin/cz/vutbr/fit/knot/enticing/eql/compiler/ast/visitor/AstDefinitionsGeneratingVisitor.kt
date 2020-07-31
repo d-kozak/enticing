@@ -1,18 +1,25 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.*
 
+
+/**
+ * Dumps the AST definitions of the tree
+ */
 fun EqlAstNode.dumpKotlinDefs() = println(accept(AstDefinitionsGeneratingVisitor()))
 
 /**
  * Creates a string that should contain a piece of valid Kotlin code that creates the AST nodes ( e.g. for bootstraping tests - manual AST creation is time consuming)
  */
-
-internal fun Interval.toKotlinDef() = "Interval.valueOf(${this.from},${this.to})"
-
 fun EqlAstNode.toKotlinDef() = this.accept(AstDefinitionsGeneratingVisitor())
 
+@WhatIf("""
+    This is very very fragile, as the generated strings are not checked for correctnes.
+    On top of that, they are not really readable anyways once the tree gets bigger, so maybe
+    it is not even a good way of debugging or testing...
+    """)
 class AstDefinitionsGeneratingVisitor : EqlVisitor<String> {
 
     override fun visitRootNode(node: RootNode): String {
@@ -120,3 +127,5 @@ class AstDefinitionsGeneratingVisitor : EqlVisitor<String> {
         return """ReferenceNode.NestedReferenceNode("${node.identifier}","${node.attribute}",${node.location.toKotlinDef()})"""
     }
 }
+
+internal fun Interval.toKotlinDef() = "Interval.valueOf(${this.from},${this.to})"

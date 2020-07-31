@@ -2,6 +2,10 @@ package cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener
 
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.*
 
+/**
+ * Contains callback methods for entering and leaving all nodes of the AST.
+ * Used be the EqlWalker
+ */
 interface EqlListener {
     fun <T : EqlAstNode> shouldContinue(node: T): Boolean = true
     fun enterRootNode(node: RootNode) {}
@@ -48,7 +52,10 @@ interface EqlListener {
 }
 
 
-class AgregatingListener(private val check: (node: EqlAstNode) -> Unit, val shouldContinueCheck: (node: EqlAstNode) -> Boolean = { true }) : EqlListener {
+/**
+ * Aggregates all the different callbacks into one check that is executed for every node.
+ */
+class AggregatingListener(private val check: (node: EqlAstNode) -> Unit, val shouldContinueCheck: (node: EqlAstNode) -> Boolean = { true }) : EqlListener {
     override fun <T : EqlAstNode> shouldContinue(node: T): Boolean = this.shouldContinueCheck(node)
 
     override fun enterRootNode(node: RootNode) = check(node)

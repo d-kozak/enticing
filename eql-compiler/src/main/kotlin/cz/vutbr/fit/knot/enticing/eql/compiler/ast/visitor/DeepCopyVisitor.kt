@@ -4,6 +4,9 @@ import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.eql.compiler.SymbolTable
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.*
 
+/**
+ * Makes a deep copy of the AST.
+ */
 @WhatIf("The parent pointers are not set for the new AST, are they?")
 class DeepCopyVisitor : EqlVisitor<EqlAstNode> {
 

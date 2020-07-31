@@ -8,9 +8,14 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.analysis.check.*
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.EqlAstNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.QueryElemNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.RootNode
-import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.AgregatingListener
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.AggregatingListener
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.CompilerError
 
+/**
+ * Checks are grouped into phases, because there are dependencies between them.
+ * Some rewrites have to be performed before other checks can be done and
+ * some checks are not meaningful if some simpler errors were already detected.
+ */
 val REWRITES = listOf(
         RewriteContextRestrictionCheck("CTX-1"),
         RewriteDocumentRestrictionCheck("DOC-1"),
@@ -44,10 +49,22 @@ val FOURTH_PASS = listOf(
         ComparisonCheck("COP-1")
 )
 
+/**
+ * Performs the semantic analysis by grouping the semantic checks and running them for the appropriate nodes of the AST.
+ */
 class SemanticAnalyzer(private val config: MetadataConfiguration, checks: List<List<EqlAstCheck<*>>> = listOf(REWRITES, FIRST_PASS, SECOND_PASS, THIRD_PASS, FOURTH_PASS)) {
 
+    /**
+     * Group the checks passed in by the AST node type they should be run on.
+     */
     private val checksByType = checks.map { it.groupBy { it.clazz } }
 
+
+    /**
+     * Perform the semantic analysis for the query represented by the root node passed in.
+     *
+     * @return list of found errors
+     */
     fun performAnalysis(root: RootNode): List<CompilerError> {
         checkParentRefs(root)
         val symbolTable = SymbolTable(root)
@@ -57,12 +74,12 @@ class SemanticAnalyzer(private val config: MetadataConfiguration, checks: List<L
         for (pass in checksByType) {
             val runChecks: (EqlAstNode) -> Unit = { currentNode ->
                 val checks = pass[currentNode::class]
-                checks?.forEach { it.doAnalyze(currentNode, symbolTable, reporter, config) }
+                checks?.forEach { it.performCheck(currentNode, symbolTable, reporter, config) }
             }
             val shouldContinue: (EqlAstNode) -> Boolean = { node ->
                 node !is QueryElemNode.NextNode // don't go deeper into the NextNode subtree, because it will be transformed in the QueryElemNextNodeCheck
             }
-            root.walk(AgregatingListener(runChecks, shouldContinue))
+            root.walk(AggregatingListener(runChecks, shouldContinue))
             if (reporter.reports.isNotEmpty()) break
         }
 
@@ -70,7 +87,7 @@ class SemanticAnalyzer(private val config: MetadataConfiguration, checks: List<L
     }
 
     /**
-     * Verify that all nodes except from the rootNode have valid parent references
+     * Verify that all nodes except the rootNode have valid parent references
      */
     @WhatIf("this check is not very precise, maybe move it into a test make more specific checks there?")
     private fun checkParentRefs(root: RootNode) {

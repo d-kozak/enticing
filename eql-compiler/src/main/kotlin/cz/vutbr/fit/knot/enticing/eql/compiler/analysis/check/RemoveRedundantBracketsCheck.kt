@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.analysis.check
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.eql.compiler.SymbolTable
 import cz.vutbr.fit.knot.enticing.eql.compiler.analysis.EqlAstCheck
@@ -8,8 +9,12 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.ast.QueryElemNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.RootNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.EqlListener
 
+/**
+ * Remove bracket nodes which are not necessary according to current operator precedence
+ */
+@WhatIf("Can this be done by simply having and INT pref for each node and then perform swaps based on this value? would be more generic")
 class RemoveRedundantBracketsCheck(id: String) : EqlAstCheck<RootNode>(id, RootNode::class) {
-    override fun analyze(node: RootNode, symbolTable: SymbolTable, metadataConfiguration: MetadataConfiguration, reporter: Reporter) {
+    override fun execute(node: RootNode, symbolTable: SymbolTable, metadataConfiguration: MetadataConfiguration, reporter: Reporter) {
         node.walk(RemoveRedundantBracketsListener())
     }
 

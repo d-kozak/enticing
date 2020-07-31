@@ -7,6 +7,8 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompilerException
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.*
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.EqlParser
 import cz.vutbr.fit.knot.enticing.eql.compiler.parser.EqlVisitor
+import cz.vutbr.fit.knot.enticing.eql.compiler.parser.SemanticError
+import cz.vutbr.fit.knot.enticing.eql.compiler.parser.Severity
 import org.antlr.v4.runtime.ParserRuleContext
 import org.antlr.v4.runtime.tree.ErrorNode
 import org.antlr.v4.runtime.tree.ParseTree
@@ -44,7 +46,7 @@ class EqlAstGeneratingVisitor : EqlVisitor<AstNode> {
             node.restriction = proximity
             proximity.parent = node
             return node
-        } else throw EqlCompilerException("Proximity cannot be applied to this node")
+        } else throw EqlCompilerException(listOf(SemanticError("Proximity cannot be applied to this node", proximity.location, Severity.ERROR, "PARSING")))
     }
 
     override fun visitProximity(ctx: EqlParser.ProximityContext): AstNode {

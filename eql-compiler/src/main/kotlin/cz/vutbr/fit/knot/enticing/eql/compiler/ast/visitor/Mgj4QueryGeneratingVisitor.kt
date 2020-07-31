@@ -3,10 +3,9 @@ package cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.*
 
-@Incomplete("Escape all possible problematic chars")
-fun escapeMg4jQueryChars(query: String): String = query
-        .replace("->", """\->""")
-
+/**
+ * Transforms the EQL AST into MG4J query in a string format
+ */
 class Mgj4QueryGeneratingVisitor : EqlVisitor<String> {
     override fun visitRootNode(node: RootNode): String {
         val query = node.query.accept(this)
@@ -62,3 +61,10 @@ class Mgj4QueryGeneratingVisitor : EqlVisitor<String> {
 
 
 }
+
+/**
+ * Escapes all characters in the simple nodes that mg4j might interpred as it's own operators
+ */
+@Incomplete("Escape all possible problematic chars")
+private fun escapeMg4jQueryChars(query: String): String = query
+        .replace("->", """\->""")

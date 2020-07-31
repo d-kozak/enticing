@@ -2,8 +2,14 @@ package cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor
 
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.*
 
+/**
+ * Transform the AST into a canonic string form that can be used for comparisons
+ */
 fun EqlAstNode.toEqlQuery(): String = this.accept(EqlQueryGeneratingVisitor())
 
+/**
+ * Transforms the AST into a canonic string form that can be used for comparisons
+ */
 class EqlQueryGeneratingVisitor : EqlVisitor<String> {
     override fun visitRootNode(node: RootNode) = buildString {
         if (node.documentRestriction != null) {

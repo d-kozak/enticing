@@ -2,6 +2,9 @@ package cz.vutbr.fit.knot.enticing.eql.compiler.matching
 
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 
+/**
+ * Describes how the document matched the query
+ */
 data class DocumentMatch(
         val interval: Interval,
         val eqlMatch: List<EqlMatch>,
@@ -9,7 +12,7 @@ data class DocumentMatch(
 )
 
 /**
- * One single match on the query
+ * One simple part of the match
  */
 data class EqlMatch(
         /**
@@ -23,6 +26,12 @@ data class EqlMatch(
         val type: EqlMatchType = EqlMatchType.Leaf
 )
 
+/**
+ * Type of a simple match - can be
+ * 1) single word
+ * 2) entity
+ * 3) identifier
+ */
 sealed class EqlMatchType {
     object Leaf : EqlMatchType()
     object Entity : EqlMatchType()

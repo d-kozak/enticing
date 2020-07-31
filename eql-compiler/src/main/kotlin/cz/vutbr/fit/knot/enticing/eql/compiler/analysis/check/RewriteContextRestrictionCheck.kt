@@ -8,8 +8,11 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.ast.BooleanOperator
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.ContextRestriction
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.QueryElemNode
 
+/**
+ * Extract context restriction from the query and put it as an attribute to the root node
+ */
 class RewriteContextRestrictionCheck(id: String) : EqlAstCheck<QueryElemNode.IndexNode>(id, QueryElemNode.IndexNode::class) {
-    override fun analyze(node: QueryElemNode.IndexNode, symbolTable: SymbolTable, metadataConfiguration: MetadataConfiguration, reporter: Reporter) {
+    override fun execute(node: QueryElemNode.IndexNode, symbolTable: SymbolTable, metadataConfiguration: MetadataConfiguration, reporter: Reporter) {
         if (node.index in ContextRestriction.indexNames) {
             if (node.elem is QueryElemNode.SimpleNode) {
                 val content = node.elem.content.toLowerCase()

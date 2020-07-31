@@ -7,8 +7,11 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.analysis.Reporter
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.QueryElemNode
 import java.util.*
 
+/**
+ * Flattens possibly nested NextNode tree into a single NextNode with multiple simple nodes as children.
+ */
 class QueryElemNextNodeCheck(id: String) : EqlAstCheck<QueryElemNode.NextNode>(id, QueryElemNode.NextNode::class) {
-    override fun analyze(node: QueryElemNode.NextNode, symbolTable: SymbolTable, metadataConfiguration: MetadataConfiguration, reporter: Reporter) {
+    override fun execute(node: QueryElemNode.NextNode, symbolTable: SymbolTable, metadataConfiguration: MetadataConfiguration, reporter: Reporter) {
         val queue = ArrayDeque(node.elems)
         val simpleNodes = mutableListOf<QueryElemNode.SimpleNode>()
         while (queue.isNotEmpty()) {

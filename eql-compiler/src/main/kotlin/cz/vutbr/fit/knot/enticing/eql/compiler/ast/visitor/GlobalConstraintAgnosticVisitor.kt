@@ -5,6 +5,11 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.ast.EqlVisitor
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.ReferenceNode
 
 
+/**
+ * Visitor which should only traverse the 'query' part of the AST.
+ *
+ * @throws IllegalStateException if it somehow arrives at a node from the 'global constraint' part of ast
+ */
 abstract class GlobalConstraintAgnosticVisitor<T> : EqlVisitor<T> {
     private fun fail(): Nothing = throw IllegalStateException("global constraint evaluation should never be called in this type of visitor")
 

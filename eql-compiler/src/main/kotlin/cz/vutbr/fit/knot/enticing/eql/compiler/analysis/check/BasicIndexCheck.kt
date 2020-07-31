@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.analysis.check
 
+import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
@@ -8,9 +9,16 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.analysis.EqlAstCheck
 import cz.vutbr.fit.knot.enticing.eql.compiler.analysis.Reporter
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.QueryElemNode
 
-
+/**
+ * Checks whether given index really exists.
+ *
+ * Additionally it also performs special checks for the entityIndex:
+ * 1) whether the requested entity really exists
+ * 2) updates the node to contains proper prefix string to match the entity
+ */
+@Cleanup("put the entity analysis into a separate node?")
 class BasicIndexCheck(id: String) : EqlAstCheck<QueryElemNode.IndexNode>(id, QueryElemNode.IndexNode::class) {
-    override fun analyze(node: QueryElemNode.IndexNode, symbolTable: SymbolTable, metadataConfiguration: MetadataConfiguration, reporter: Reporter) {
+    override fun execute(node: QueryElemNode.IndexNode, symbolTable: SymbolTable, metadataConfiguration: MetadataConfiguration, reporter: Reporter) {
         if (node.index !in metadataConfiguration.indexes) {
             val indexLocation = Interval.valueOf(node.location.from, node.location.from + node.index.length - 1)
             reporter.error("Index '${node.index}' is not available", indexLocation, id)

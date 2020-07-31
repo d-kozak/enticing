@@ -8,9 +8,13 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.ast.BooleanOperator
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.QueryElemNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor.toEqlQuery
 
+/**
+ * Remove redundant OR branches, because they resulted in duplicates in the search results
+ * a | a | a => a
+ */
 class RemoveRedundantOrBranchesCheck(id: String) : EqlAstCheck<QueryElemNode.BooleanNode>(id, QueryElemNode.BooleanNode::class) {
 
-    override fun analyze(node: QueryElemNode.BooleanNode, symbolTable: SymbolTable, metadataConfiguration: MetadataConfiguration, reporter: Reporter) {
+    override fun execute(node: QueryElemNode.BooleanNode, symbolTable: SymbolTable, metadataConfiguration: MetadataConfiguration, reporter: Reporter) {
         if (node.operator != BooleanOperator.OR) return
         val newChildren = mutableListOf<QueryElemNode>()
 

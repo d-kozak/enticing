@@ -5,8 +5,10 @@ import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.EntityConfiguration
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
-import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.AgregatingListener
+import cz.vutbr.fit.knot.enticing.eql.compiler.SymbolTable
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.AggregatingListener
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.EqlListener
+import cz.vutbr.fit.knot.enticing.eql.compiler.ast.listener.EqlWalker
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor.DeepCopyVisitor
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.visitor.Mgj4QueryGeneratingVisitor
 import cz.vutbr.fit.knot.enticing.eql.compiler.matching.DocumentMatch
@@ -17,12 +19,39 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.matching.DocumentMatch
     """)
 var counter = 0L
 
+/**
+ * Base class for all AST nodes.
+ *
+ */
 abstract class EqlAstNode : AstNode {
+
+    /**
+     * unique id of current node in his AST
+     *
+     * does NOT have to globally unique over multiple trees
+     */
     val id: Long = counter++
+
+    /**
+     * Parent node reference to allow for traversing up
+     */
     var parent: EqlAstNode? = null
+
+    /**
+     * What part of original query this node represents - for showing the results back to the user
+     */
     abstract val location: Interval
+
+    /**
+     * Most analysis are implemented as visitors or listeners over this tree
+     */
     abstract fun <T> accept(visitor: EqlVisitor<T>): T
-    fun walk(listener: EqlListener, walker: AstWalker = AstWalker(listener)) = this.accept(walker)
+
+    /**
+     * Walk down the tree and call the EqlListers callbacks
+     */
+    fun walk(listener: EqlListener, walker: EqlWalker = EqlWalker(listener)) = this.accept(walker)
+
     override fun toMgj4Query(): String = this.accept(Mgj4QueryGeneratingVisitor())
 
     override fun deepCopy(): AstNode = this.accept(DeepCopyVisitor())
@@ -37,10 +66,13 @@ abstract class EqlAstNode : AstNode {
      * Execute given piece of code for each node in the ast
      */
     fun forEachNode(fn: (EqlAstNode) -> Unit) {
-        this.walk(AgregatingListener(fn))
+        this.walk(AggregatingListener(fn))
     }
 }
 
+/**
+ * Visitor over the the AST
+ */
 interface EqlVisitor<T> {
     fun visitRootNode(node: RootNode): T
     fun visitQueryElemNotNode(node: QueryElemNode.NotNode): T
@@ -65,32 +97,88 @@ interface EqlVisitor<T> {
 
 }
 
+/**
+ * Root of the AST
+ */
 data class RootNode(var query: QueryElemNode, val constraint: ConstraintNode?, override val location: Interval) : EqlAstNode() {
-    var symbolTable: MutableMap<String, QueryElemNode.AssignNode>? = null
+    /**
+     * Contains references to all identifiers used in the query
+     */
+    var symbolTable: SymbolTable? = null
+
+    /**
+     * Context restriction of the query, if any
+     */
     var contextRestriction: ContextRestriction? = null
+
+    /**
+     * Document restriction of the query, if any
+     */
     var documentRestriction: DocumentRestriction? = null
 
+    /**
+     * The original string based query this AST was created from
+     */
     lateinit var originalQuery: String
 
     override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitRootNode(this)
 }
 
-enum class ContextRestriction(val restrictionNames: Set<String>) {
+/**
+ * Context restrictions of the query
+ */
+enum class ContextRestriction(
+        /**
+         * All the names that can be used to specify this type of restriction
+         */
+        val restrictionNames: Set<String>
+) {
+    /**
+     * Limit to a single sentence
+     */
     SENTENCE(setOf("sentence", "sent")),
+
+    /**
+     * Limit to a single paragraph
+     */
     PARAGRAPH(setOf("paragraph", "par"));
 
     companion object {
+        /**
+         * Which indexes in the query can be used to specify context restriction
+         */
         val indexNames = setOf("context", "ctx")
     }
 }
 
+/**
+ * Document restrictions of the query
+ */
 sealed class DocumentRestriction {
+    /**
+     * Only document with given id (interval id given by Enticing)
+     */
     data class Id(val text: String) : DocumentRestriction()
+
+    /**
+     * Only document with given title
+     */
     data class Title(val text: String) : DocumentRestriction()
+
+    /**
+     * Only document with given url
+     */
     data class Url(val text: String) : DocumentRestriction()
+
+    /**
+     * Only document with given uuid
+     */
     data class Uuid(val text: String) : DocumentRestriction()
 }
 
+/**
+ * Tags nodes which may contain proximity restrictions
+ */
 interface WithProximityRestriction {
     var restriction: ProximityRestrictionNode?
 }
@@ -110,8 +198,6 @@ sealed class QueryElemNode : EqlAstNode() {
 
     data class AssignNode(val identifier: String, val elem: QueryElemNode, override val location: Interval) : QueryElemNode() {
         override fun <T> accept(visitor: EqlVisitor<T>): T = visitor.visitQueryElemAssignNode(this)
-
-        var matchInfoIndex: Int = -1
     }
 
     data class SimpleNode(var content: String, val type: SimpleQueryType, override val location: Interval) : QueryElemNode() {
@@ -203,10 +289,12 @@ enum class SimpleQueryType {
 }
 
 @Cleanup("actually only EQ and NE should be enough")
+@Cleanup("the mg4j values should not be here, this part should be mg4j agnostic")
 enum class RelationalOperator(val mg4jValue: String) {
     EQ("="), NE("!="), LT("<"), LE("<="), GT(">"), GE(">=");
 }
 
+@Cleanup("the mg4j values should not be here, this part should be mg4j agnostic")
 enum class BooleanOperator(val mg4jValue: String) {
     AND("&"), OR("|")
 }

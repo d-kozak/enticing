@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.eql.compiler.analysis.check
 
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
+import cz.vutbr.fit.knot.enticing.dto.annotation.WhatIf
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.metadata.MetadataConfiguration
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
 import cz.vutbr.fit.knot.enticing.eql.compiler.SymbolTable
@@ -9,8 +10,12 @@ import cz.vutbr.fit.knot.enticing.eql.compiler.analysis.Reporter
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.ConstraintNode
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.ReferenceNode
 
+/**
+ * Looks for invalid comparisons: a.url = b
+ */
+@WhatIf("Maybe requests like a.url = b can actually be evaluated? Why not in the end?")
 class ComparisonCheck(id: String) : EqlAstCheck<ConstraintNode.BooleanExpressionNode.ComparisonNode>(id, ConstraintNode.BooleanExpressionNode.ComparisonNode::class) {
-    override fun analyze(node: ConstraintNode.BooleanExpressionNode.ComparisonNode, symbolTable: SymbolTable, metadataConfiguration: MetadataConfiguration, reporter: Reporter) {
+    override fun execute(node: ConstraintNode.BooleanExpressionNode.ComparisonNode, symbolTable: SymbolTable, metadataConfiguration: MetadataConfiguration, reporter: Reporter) {
         if ((node.left is ReferenceNode.SimpleReferenceNode) xor (node.right is ReferenceNode.SimpleReferenceNode)) {
             @Incomplete("the correct location is influenced by whitespaces, we might not be able to compute it correctly at this point")
             val operatorLocation = Interval.valueOf(node.left.location.to + 1, node.left.location.to + node.operator.name.length)
