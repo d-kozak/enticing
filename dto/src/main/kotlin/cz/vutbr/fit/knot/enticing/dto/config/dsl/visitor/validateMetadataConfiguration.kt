@@ -31,10 +31,16 @@ private fun EnticingConfigurationValidator.resolveAttributes(metadataConfigurati
             val parent = metadataConfiguration.entities.getValue(entity.parentEntityName!!)
             if (parent.name !in seen)
                 resolve(parent)
-            attributes.putAll(parent.allAttributes)
+            for ((name, info) in parent.allAttributes)
+                attributes[name] = info.copyOf()
         }
-        attributes.putAll(entity.ownAttributes)
+        for ((name, info) in entity.ownAttributes)
+            attributes[name] = info.copyOf()
+
         entity.allAttributes = attributes
+        // update attribute indexes
+        for ((i, attribute) in attributes.values.withIndex())
+            attribute.attributeIndex = i
     }
 
     for (entity in metadataConfiguration.entities.values) {

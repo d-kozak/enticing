@@ -30,6 +30,14 @@ data class AttributeConfiguration(
     override fun accept(visitor: EnticingConfigurationVisitor) {
         visitor.visitAttributeConfiguration(this)
     }
+
+    fun copyOf(): AttributeConfiguration {
+        val res = AttributeConfiguration(name, description)
+        if (this::index.isInitialized)
+            res.index = index
+        res.attributeIndex = attributeIndex
+        return res
+    }
 }
 
 class AttributeList(var metadataConfiguration: MetadataConfiguration, val attributes: MutableList<AttributeConfiguration> = mutableListOf()) {
