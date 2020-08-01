@@ -1,7 +1,7 @@
 import {isSearchSettingsContent, SearchSettings} from "../entities/SearchSettings";
 import {SearchSettingsState} from "../ApplicationState";
 import {createSlice, PayloadAction} from "redux-starter-kit";
-import {CorpusFormat, isCorpusFormat} from "../entities/CorpusFormat";
+import {CorpusFormat, EntityInfo, isCorpusFormat} from "../entities/CorpusFormat";
 import {ThunkResult} from "../actions/RootActions";
 import axios from "axios";
 import {API_BASE_PATH} from "../globals";
@@ -61,6 +61,7 @@ const {reducer, actions} = createSlice({
         loadCorpusFormat: (state: SearchSettingsState, {payload}: PayloadAction<{ id: number, format: CorpusFormat }>) => {
             const settings = state.settings[payload.id];
             if (settings) {
+                inheritAttributes(payload.format);
                 settings.corpusFormat = payload.format;
             } else {
                 throw new Error(`could save corpus format for settings with id ${payload.id}, not such settings found`)
@@ -259,6 +260,36 @@ export const changeDefaultSearchSettingsRequest = (settings: SearchSettings, onD
             onError({})
         })
 };
+
+/**
+ * Let descendants inherit attributes from their parents
+ */
+const inheritAttributes = (format: CorpusFormat) => {
+    const entities = format.entities;
+    const processed = new Set<string>();
+
+    const dfs = (name: string, info: EntityInfo) => {
+        if (processed.has(name)) return
+        processed.add(name)
+        if (info.parentEntityName !== null) {
+            const parent = entities[info.parentEntityName]!
+            const ownAttributes = info.attributes;
+            info.attributes = {};
+            if (parent) {
+                dfs(info.parentEntityName, parent)
+                for (let attribute of Object.keys(parent.attributes))
+                    info.attributes[attribute] = parent.attributes[attribute]
+            } else {
+                console.warn(`Entity ${name} is supposed to be a child of ${info.parentEntityName}, but the parent entity was not found in the corpus format`);
+            }
+            for (let attribute of Object.keys(ownAttributes))
+                info.attributes[attribute] = ownAttributes[attribute]
+        }
+    };
+
+    for (let entityName of Object.keys(entities))
+        dfs(entityName, entities[entityName])
+}
 
 
 

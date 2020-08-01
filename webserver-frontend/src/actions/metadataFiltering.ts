@@ -1,4 +1,4 @@
-import {AttributeInfo, CorpusFormat, EntityInfo, IndexInfo, String2StringObjectMap} from "../entities/CorpusFormat";
+import {AttributeInfo, CorpusFormat, EntityInfo, IndexInfo} from "../entities/CorpusFormat";
 import {SelectedMetadata} from "../entities/SelectedMetadata";
 import {
     ExactEntityDefinition,
@@ -41,6 +41,7 @@ export function filterCorpusFormat(corpusFormat: CorpusFormat, selectedMetadata:
         }
         entities[entityName] = {
             description: entityInfo.description,
+            parentEntityName: entityInfo.parentEntityName,
             attributes: wantedAttributes
         };
     }

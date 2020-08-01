@@ -71,10 +71,9 @@ fun CorpusFormat.toMetadataConfiguration(): MetadataConfiguration {
             .validateOrFail()
 }
 
+
 /**
- * Format of one attribute
- *
- * Basically kotlin's pair, only created to allow for custom names instead of first na second
+ * Format of one entity
  */
 data class EntityFormat(
         val description: Description,
@@ -82,6 +81,11 @@ data class EntityFormat(
         val attributes: Map<Attribute, AttributeInfo>
 )
 
+/**
+ * Format of one attribute
+ *
+ * Basically kotlin's pair, only created to allow for custom names instead of first na second
+ */
 data class AttributeInfo(
         val correspondingIndex: String,
         val description: Description

@@ -1,5 +1,4 @@
 import * as yup from "yup";
-import {mapValues} from "lodash";
 import {validateOrNull} from "./validationUtils";
 
 
@@ -11,6 +10,7 @@ export type AttributeInfo = { [key: string]: { description: string } };
 export type EntityInfo = {
     description: string
     attributes: AttributeInfo
+    parentEntityName: string | null
 }
 
 export interface CorpusFormat {
@@ -25,7 +25,8 @@ export const corpusFormatSchema = yup.object({
     indexes: yup.object(),
     entities: yup.object({
             description: yup.string(),
-        attributes: yup.object()
+            attributes: yup.object(),
+            parentEntityName: yup.string()
         }
     )
 });

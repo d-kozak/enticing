@@ -44,7 +44,7 @@ class HtmlGeneratingListener(config: MetadataConfiguration, defaultIndexName: St
             if (entity != null) {
                 entityStarted = true
                 append("<span eql-entity")
-                for (attribute in entity.ownAttributes.values) {
+                for (attribute in entity.allAttributes.values) {
                     append(" eql-")
                     append(attribute.name)
                     append("=\"")

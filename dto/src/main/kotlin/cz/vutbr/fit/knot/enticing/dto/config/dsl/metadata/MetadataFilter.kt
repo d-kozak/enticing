@@ -51,12 +51,13 @@ private fun MetadataConfiguration.filterEntities(entities: Entities): LinkedHash
                     val entity = getEntityOrDie(name)
                     val attributes = indexes.names
                             .map {
-                                it to (entity.ownAttributes[it]
+                                it to (entity.allAttributes[it]
                                         ?: throw IllegalArgumentException("Unknown attribute $it of entity $name"))
                             }
                             .toMap()
                             .toMutableMap()
                     entity.copy(ownAttributes = attributes)
+                            .also { it.allAttributes = attributes }
                 }
             }
         }
