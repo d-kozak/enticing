@@ -60,7 +60,12 @@ data class SearchQuery(
          * Unique id generated for eager fetching
          * https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
          */
-        val uuid: UUID? = null
+        val uuid: UUID? = null,
+
+        /**
+         * true iff overlapping intervals should be filtered out
+         */
+        val filterOverlaps: Boolean = true
 ) : GeneralFormatInfo, Query<SearchQuery> {
 
     @JsonIgnore

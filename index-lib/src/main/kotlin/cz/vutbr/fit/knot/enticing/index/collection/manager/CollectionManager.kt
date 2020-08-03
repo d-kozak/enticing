@@ -13,6 +13,7 @@ import cz.vutbr.fit.knot.enticing.index.boundary.MatchInfo
 import cz.vutbr.fit.knot.enticing.index.boundary.PostProcessor
 import cz.vutbr.fit.knot.enticing.index.boundary.ResultCreator
 import cz.vutbr.fit.knot.enticing.index.boundary.SearchEngine
+import cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess.filterOverlappingIntervals
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import kotlin.math.min
@@ -56,8 +57,11 @@ class CollectionManager internal constructor(
                 firstDocument = false
                 val document = searchEngine.loadDocument(result.documentId)
                 check(document.id == result.documentId) { "Invalid document id set in the search engine: ${result.documentId} vs ${document.id}" }
-                val matchInfo = postProcessor.process(ast.deepCopy(), document, query.defaultIndex, if (thisWasFirstDocument) resultOffset else 0, metadataConfiguration)
+                var matchInfo = postProcessor.process(ast.deepCopy(), document, query.defaultIndex, if (thisWasFirstDocument) resultOffset else 0, metadataConfiguration)
                 if (matchInfo == null || matchInfo.intervals.isEmpty()) continue
+                if (query.filterOverlaps) {
+                    matchInfo = filterOverlappingIntervals(document, matchInfo)
+                }
                 val (results, hasMore) = resultCreator.multipleResults(document, matchInfo, query, query.snippetCount - matched.size, query.resultFormat)
                 val searchResults = results.map {
                     IndexServer.SearchResult(
