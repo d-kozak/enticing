@@ -1,3 +1,4 @@
 export interface UserSettings {
-    resultsPerPage: number
+    resultsPerPage: number,
+    filterOverlaps: boolean
 }

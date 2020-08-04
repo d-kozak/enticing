@@ -36,11 +36,12 @@ fun UserEntity.toUser(): User = User(
 
 data class UserSettings(
         @field:Positive
-        val resultsPerPage: Int = 20
+        val resultsPerPage: Int = 20,
+        var filterOverlaps: Boolean = false
 )
 
-fun UserSettings.toEmbeddable() = cz.vutbr.fit.knot.enticing.webserver.entity.UserSettings(resultsPerPage)
-fun cz.vutbr.fit.knot.enticing.webserver.entity.UserSettings.toDto() = UserSettings(resultsPerPage)
+fun UserSettings.toEmbeddable() = cz.vutbr.fit.knot.enticing.webserver.entity.UserSettings(resultsPerPage, filterOverlaps)
+fun cz.vutbr.fit.knot.enticing.webserver.entity.UserSettings.toDto() = UserSettings(resultsPerPage, filterOverlaps)
 
 
 data class UserCredentials(

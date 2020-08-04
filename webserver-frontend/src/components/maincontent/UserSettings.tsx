@@ -8,7 +8,7 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import * as Yup from 'yup';
 import {Field, Form, Formik} from "formik";
-import {TextField} from "formik-material-ui";
+import {Switch, TextField} from "formik-material-ui";
 import Grid from "@material-ui/core/es/Grid";
 import Button from "@material-ui/core/es/Button";
 import ChangePasswordDialog from "../changepassworddialog/ChangePasswordDialog";
@@ -20,6 +20,7 @@ import Divider from "@material-ui/core/Divider";
 import LinearProgress from "@material-ui/core/es/LinearProgress";
 import * as H from "history";
 import LinkTo from "../utils/linkTo";
+import {FormControlLabel} from "@material-ui/core/es";
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -97,6 +98,18 @@ const UserSettings = (props: UserSettingsProps) => {
                            className={classes.formField}
                            component={TextField}
                            type="number"/>
+                    <Divider className={classes.divider}/>
+                    <FormControlLabel
+                        label="Filter overlapping snippets"
+                        className={classes.formField}
+                        control={
+                            <Field
+                                id="filterOverlaps"
+                                name="filterOverlaps"
+                                component={Switch}
+                            />
+                        }
+                    />
                     <Divider className={classes.divider}/>
                     <Grid container justify="flex-start" alignItems="center">
                         <Grid item>

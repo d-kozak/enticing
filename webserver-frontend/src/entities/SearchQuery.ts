@@ -5,7 +5,8 @@ export interface SearchQuery {
     resultFormat: "SNIPPET",
     textFormat: "TEXT_UNIT_LIST",
     defaultIndex: string,
-    uuid: string
+    uuid: string,
+    filterOverlaps: boolean
 }
 
 export type TextMetadata = Predefined | ExactFormatDefinition

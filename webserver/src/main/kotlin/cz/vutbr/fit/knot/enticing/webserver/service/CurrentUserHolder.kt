@@ -5,6 +5,7 @@ import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.webserver.dto.User
 import cz.vutbr.fit.knot.enticing.webserver.dto.toUser
 import cz.vutbr.fit.knot.enticing.webserver.entity.UserEntity
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 
@@ -24,5 +25,15 @@ class CurrentUserHolder(loggerFactory: LoggerFactory) {
         }
     }
 
+    /**
+     * Updates the current user stored in the security context. Does NOT change
+     * the database, therefore this change only lasts until the session expires.
+     * Database has to be changed separately.
+     */
+    fun updateCurrentUser(user: UserEntity) {
+        val oldAuth = SecurityContextHolder.getContext().authentication
+        val newToken = UsernamePasswordAuthenticationToken(user, oldAuth.credentials, user.authorities)
+        SecurityContextHolder.getContext().authentication = newToken
+    }
 }
 

@@ -65,7 +65,7 @@ data class SearchQuery(
         /**
          * true iff overlapping intervals should be filtered out
          */
-        val filterOverlaps: Boolean = true
+        val filterOverlaps: Boolean = false
 ) : GeneralFormatInfo, Query<SearchQuery> {
 
     @JsonIgnore

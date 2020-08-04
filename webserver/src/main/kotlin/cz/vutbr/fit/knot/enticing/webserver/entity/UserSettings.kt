@@ -8,10 +8,11 @@ import javax.validation.constraints.Positive
 class UserSettings(
         @field:Positive
         @field:Max(50)
-        var resultsPerPage: Int = 20
+        var resultsPerPage: Int = 20,
+        var filterOverlaps: Boolean = false
 ) {
     override fun toString(): String {
-        return "UserSettings(resultsPerPage=$resultsPerPage)"
+        return "UserSettings(resultsPerPage=$resultsPerPage, filterOverlaps=$filterOverlaps)"
     }
 
     override fun equals(other: Any?): Boolean = throw UnsupportedOperationException("This is just embedded data, cannot be tested for equality without the parent user entity")

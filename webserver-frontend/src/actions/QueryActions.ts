@@ -48,6 +48,7 @@ const prepareQuery: (query: string, user: User, searchSettings: SearchSettings, 
         resultFormat: "SNIPPET",
         textFormat: "TEXT_UNIT_LIST",
         snippetCount: user.userSettings.resultsPerPage,
+        filterOverlaps: user.userSettings.filterOverlaps,
         uuid: uuidv4()
     };
 

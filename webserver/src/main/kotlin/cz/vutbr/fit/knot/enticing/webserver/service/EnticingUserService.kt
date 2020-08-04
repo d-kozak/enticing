@@ -65,6 +65,12 @@ class EnticingUserService(
         updatedEntity.encryptedPassword = originalEntity.encryptedPassword
         updatedEntity.selectedSettings = originalEntity.selectedSettings
         userRepository.save(updatedEntity)
+
+        val currentUser = userHolder.requireLoggedInUser()
+        val editingMyself = currentUser.login == user.login
+        if (editingMyself) {
+            userHolder.updateCurrentUser(updatedEntity)
+        }
     }
 
     fun deleteUser(userId: Long) {
