@@ -18,6 +18,7 @@ import ShowRawDocumentButton from "./snippetbuttons/ShowRawDocumentButton";
 import LimitSearchButton from "./snippetbuttons/LimitSearchButton";
 import * as H from "history";
 import DownloadRawDocumentButton from "./snippetbuttons/DownloadRawDocumentButton";
+import BugReportButton from "./snippetbuttons/BugReportButton";
 
 
 const styles = createStyles({
@@ -52,6 +53,7 @@ const MinimizedSnippetView = (props: MinimizedSnippetViewEnhancedProps) => {
     return <Grid container direction="row" justify="flex-start" alignItems="center" className={classes.root}>
         {debugMode && <ShowRawDocumentButton searchResult={snippet}/>}
         {debugMode && <DownloadRawDocumentButton searchResult={snippet}/>}
+        {debugMode && <BugReportButton searchResult={snippet}/>}
         <EditContextButton searchResult={snippet} requestContextExtension={requestContextExtension}/>
         <EditAnnotationsButton/>
         <ShowDocumentButton openDocumentRequest={openDocumentRequest}/>
