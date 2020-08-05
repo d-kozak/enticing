@@ -102,3 +102,5 @@ fun findEnclosingInterval(intervals: List<List<Interval>>): Interval {
 
 
 fun String.substring(interval: Interval) = this.substring(interval.from, interval.to + 1)
+
+fun <T> List<T>.subList(interval: Interval) = this.subList(interval.from, interval.to + 1)

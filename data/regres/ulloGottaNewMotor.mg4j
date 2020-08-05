@@ -1,0 +1,2305 @@
+%%#DOC	86106f3a-3a34-5a5d-9814-8264c382e99b
+%%#PAGE 'Ullo John! Gotta New Motor?	http://en.wikipedia.org/wiki/'Ullo_John!_Gotta_New_Motor?
+1	'Ullo	NP	'Ullo	0	ROOT	0	0	0	0	0	0	'ullo	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	John	NP	John	1	SUFFIX	'Ullo	'Ullo	-1	0	0	0	john	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	!|G__	SENT	!	1	SUFFIX	'Ullo	'Ullo	-2	0	0	0	!	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	Got	VVN	get	1	SUFFIX	'Ullo	'Ullo	-3	0	0	0	got	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	ta|G__	JJ	ta	1	NMOD	'Ullo	'Ullo	-4	0	0	0	ta	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	New	NP	New	5	SUFFIX	ta	ta	-1	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	Motor	NP	Motor	5	SUFFIX	ta	ta	-2	0	0	0	motor	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	?|G__	SENT	?	5	SUFFIX	ta	ta	-3	0	0	0	?	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	;	:	;	1	NMOD	'Ullo	'Ullo	-8	0	0	0	;	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 1 wx1
+%%#SEN 1 wx1
+1	'Ullo	NP	'Ullo	0	ROOT	0	0	0	0	0	0	'ullo	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	John	NP	John	1	SUFFIX	'Ullo	'Ullo	-1	0	0	0	john	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	!|G__	SENT	!	1	SUFFIX	'Ullo	'Ullo	-2	0	0	0	!	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 2 wx2
+1	Got	VVN	get	0	ROOT	0	0	0	0	0	0	got	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	ta|G__	JJ	ta	1	NMOD	Got	get	-1	0	0	0	ta	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	New	NP	New	2	SUFFIX	ta	ta	-1	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	Motor	NP	Motor	2	SUFFIX	ta	ta	-2	0	0	0	motor	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	?|G__	SENT	?	2	SUFFIX	ta	ta	-3	0	0	0	?	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 2 wx2
+%%#SEN 3 wx3
+1	``	``	``	0	ROOT	0	0	0	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	'Ullo|G__	NP	'Ullo	1	SUFFIX	``	``	-1	0	0	0	'ullo	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	John	NP	John	1	SUFFIX	``	``	-2	0	0	0	john	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	!|G__	SENT	!	1	SUFFIX	``	``	-3	0	0	0	!	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 4 wx4
+1	Got	VVN	get	0	ROOT	0	0	0	0	0	0	got	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	ta|G__	JJ	ta	6	NMOD	''	''	+4	0	0	0	ta	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	New	NP	New	2	SUFFIX	ta	ta	-1	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	Motor	NP	Motor	2	SUFFIX	ta	ta	-2	0	0	0	motor	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	?|G__	SENT	?	2	SUFFIX	ta	ta	-3	0	0	0	?	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	''	''	''	1	P	Got	get	-5	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 5 wx5
+1	is	VBZ	be	0	ROOT	0	0	0	0	0	0	is	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	a	DT	a	3	NMOD	song	song	+1	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	song	NN	song	1	PRD	is	be	-2	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	written	VVN	write	3	SUFFIX	song	song	-1	0	0	0	written	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	by	IN	by	3	NMOD	song	song	-2	0	0	0	by	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	the	DT	the	7	NMOD	comedian	comedian	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	comedian	NN	comedian	5	PMOD	by	by	-2	https://en.wikipedia.org/wiki/Comedian	1	0	comedian	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	Alexei	NP	Alexei	7	SUFFIX	comedian	comedian	-1	0	0	0	alexei	a:Q970287	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	Sayle	NP	Sayle	7	SUFFIX	comedian	comedian	-2	https://en.wikipedia.org/wiki/Alexei_Sayle	2	4.1	sayle	a:Q970287	person->artist	https://en.wikipedia.org/wiki/Alexei_Sayle	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/c/ce/Alexei_Sayle_Cambridge_2016.jpg	Alexei_Sayle	Male	Anfield__Liverpool__England	1952_08_07	Anfield__Liverpool	0	film_actor|comedian|screenwriter|television_actor	0	kb	2
+10	,|G__	,	,	1	P	is	be	-9	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	originally	RB	originally	16	PMOD	in	in	+5	0	0	0	originally	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	released	VVN	release	11	SUFFIX	originally	originally	-1	0	0	0	released	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	as	IN	as	11	DEP	originally	originally	-2	0	0	0	as	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	a	DT	a	15	NMOD	single	single	+1	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	single	JJ	single	13	PMOD	as	as	-2	0	0	0	single	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	in	IN	in	1	LOC	is	be	-15	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	the	DT	the	1	NMOD	is	be	-16	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	UK	NP	UK	17	SUFFIX	the	the	-1	0	0	0	uk	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	in	IN	in	17	TMP	the	the	-2	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	1982	CD	@card@	19	PMOD	in	in	-1	0	0	4.0	1982	t:029160c1dd	date	0	0	1982	0	0	0	0	0	0	0	date	1
+21	.|G__	SENT	.	19	SUFFIX	in	in	-2	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 6 wx6
+1	The	DT	the	2	NMOD	single	single	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	single	NN	single	8	NMOD	success	success	+6	0	0	0	single	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	eventually	RB	eventually	8	NMOD	success	success	+5	0	0	0	eventually	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	achieved	VVD	achieve	3	SUFFIX	eventually	eventually	-1	0	0	0	achieved	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	UK	NP	UK	3	SUFFIX	eventually	eventually	-2	0	0	0	uk	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	Top	NP	Top	3	SUFFIX	eventually	eventually	-3	0	0	0	top	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	Twenty	CD	Twenty	8	NMOD	success	success	+1	0	0	0	twenty	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	success	NN	success	14	NMOD	reissue	reissue	+6	0	0	0	success	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	in	IN	in	8	LOC	success	success	-1	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	1984	CD	@card@	9	PMOD	in	in	-1	0	0	4.0	1984	t:6aec0bc7ff	date	0	0	1984	0	0	0	0	0	0	0	date	1
+11	,|G__	,	,	8	P	success	success	-3	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	following	VVG	follow	8	SUFFIX	success	success	-4	0	0	0	following	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	a	DT	a	14	NMOD	reissue	reissue	+1	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	reissue	NN	reissue	0	ROOT	0	0	0	0	0	0	reissue	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	.|G__	SENT	.	14	SUFFIX	reissue	reissue	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 3 wx3
+%%#SEN 7 wx7
+1	``	``	``	0	ROOT	0	0	0	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	'Ullo|G__	NP	'Ullo	1	SUFFIX	``	``	-1	0	0	0	'ullo	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	John	NP	John	1	SUFFIX	``	``	-2	0	0	0	john	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	!|G__	SENT	!	1	SUFFIX	``	``	-3	0	0	0	!	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 8 wx8
+1	Got	VVN	get	0	ROOT	0	0	0	0	0	0	got	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	ta|G__	JJ	ta	6	NMOD	''	''	+4	0	0	0	ta	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	New	NP	New	2	SUFFIX	ta	ta	-1	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	Motor	NP	Motor	2	SUFFIX	ta	ta	-2	0	0	0	motor	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	?|G__	SENT	?	2	SUFFIX	ta	ta	-3	0	0	0	?	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	''	''	''	1	P	Got	get	-5	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 4 wx4
+%%#SEN 9 wx9
+1	Single	JJ	single	0	ROOT	0	0	0	0	0	0	single	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	by	IN	by	1	NMOD	Single	single	-1	0	0	0	by	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	Alexei	NP	Alexei	2	SUFFIX	by	by	-1	0	0	0	alexei	a:Q970287	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	Sayle	NP	Sayle	2	SUFFIX	by	by	-2	https://en.wikipedia.org/wiki/Alexei_Sayle	2	4.1	sayle	a:Q970287	person->artist	https://en.wikipedia.org/wiki/Alexei_Sayle	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/c/ce/Alexei_Sayle_Cambridge_2016.jpg	Alexei_Sayle	Male	Anfield__Liverpool__England	1952_08_07	Anfield__Liverpool	0	film_actor|comedian|screenwriter|television_actor	0	kb	2
+%%#PAR 5 wx5
+%%#SEN 10 wx10
+1	from	IN	from	0	ROOT	0	0	0	0	0	0	from	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	the	DT	the	3	NMOD	album	album	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	album	NN	album	1	PMOD	from	from	-2	0	0	0	album	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	The	DT	the	1	NMOD	from	from	-3	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	Fish	NP	Fish	4	SUFFIX	The	the	-1	0	0	0	fish	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	People	NP	People	4	SUFFIX	The	the	-2	0	0	0	people	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	Tapes	NP	Tapes	4	SUFFIX	The	the	-3	0	0	0	tapes	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 6 wx6
+%%#SEN 11 wx11
+1	A-side	NP	A-side	0	ROOT	0	0	0	https://en.wikipedia.org/wiki/A-side_and_B-side	1	0	a-side	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 7 wx7
+%%#SEN 12 wx12
+1	'Ullo	NP	'Ullo	0	ROOT	0	0	0	0	0	0	'ullo	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	John	NP	John	1	SUFFIX	'Ullo	'Ullo	-1	0	0	0	john	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	!|G__	SENT	!	1	SUFFIX	'Ullo	'Ullo	-2	0	0	0	!	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 13 wx13
+1	Got	VVN	get	0	ROOT	0	0	0	0	0	0	got	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	ta|G__	JJ	ta	1	NMOD	Got	get	-1	0	0	0	ta	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	New	NP	New	2	SUFFIX	ta	ta	-1	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	Motor	NP	Motor	2	SUFFIX	ta	ta	-2	0	0	0	motor	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	?|G__	SENT	?	2	SUFFIX	ta	ta	-3	0	0	0	?	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 8 wx8
+%%#SEN 14 wx14
+1	(	(	(	3	P	I	I	+2	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Part|G__	NN	part	3	NMOD	I	I	+1	0	0	0	part	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	I	NN	I	0	ROOT	0	0	0	0	0	0	i	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	)|G__	)	)	3	P	I	I	-1	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 9 wx9
+%%#SEN 15 wx15
+1	B-side	NP	B-side	0	ROOT	0	0	0	https://en.wikipedia.org/wiki/A-side_and_B-side	1	0	b-side	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 10 wx10
+%%#SEN 16 wx16
+1	'Ullo	NP	'Ullo	0	ROOT	0	0	0	0	0	0	'ullo	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	John	NP	John	1	SUFFIX	'Ullo	'Ullo	-1	0	0	0	john	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	!|G__	SENT	!	1	SUFFIX	'Ullo	'Ullo	-2	0	0	0	!	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 17 wx17
+1	Got	VVN	get	0	ROOT	0	0	0	0	0	0	got	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	ta|G__	JJ	ta	1	NMOD	Got	get	-1	0	0	0	ta	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	New	NP	New	2	SUFFIX	ta	ta	-1	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	Motor	NP	Motor	2	SUFFIX	ta	ta	-2	0	0	0	motor	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	?|G__	SENT	?	2	SUFFIX	ta	ta	-3	0	0	0	?	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 11 wx11
+%%#SEN 18 wx18
+1	(	(	(	0	ROOT	0	0	0	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Part|G__	NP	Part	1	SUFFIX	(	(	-1	0	0	0	part	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	II	NP	II	1	SUFFIX	(	(	-2	0	0	0	ii	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	)|G__	)	)	1	P	(	(	-3	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 12 wx12
+%%#SEN 19 wx19
+1	Released	VVN	release	0	ROOT	0	0	0	0	0	0	released	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 13 wx13
+%%#SEN 20 wx20
+1	1982	CD	@card@	5	NMOD	re-issue	re-issue	+4	0	0	4.0	1982	t:fe5fbbf806	date	0	0	1982	0	0	0	0	0	0	0	date	1
+2	,|G__	,	,	5	P	re-issue	re-issue	+3	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	1983	CD	@card@	5	NMOD	re-issue	re-issue	+2	0	0	4.0	1983	t:1b66343005	date	0	0	1983	0	0	0	0	0	0	0	date	1
+4	(	(	(	5	P	re-issue	re-issue	+1	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	re-issue|G__	NN	re-issue	0	ROOT	0	0	0	0	0	0	re-issue	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	)|G__	)	)	5	P	re-issue	re-issue	-1	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 14 wx14
+%%#SEN 21 wx21
+1	Format	NN	format	0	ROOT	0	0	0	0	0	0	format	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 15 wx15
+%%#SEN 22 wx22
+1	7	CD	7	4	NMOD	amp	amp	+3	0	0	0	7	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	''	''	''	4	P	amp	amp	+2	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	&	CC	&	4	DEP	amp	amp	+1	0	0	0	&	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	amp|G__	NN	amp	6	NMOD	12	@card@	+2	0	0	0	amp	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	;|G__	:	;	6	P	12	@card@	+1	0	0	0	;	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	12	CD	@card@	0	ROOT	0	0	0	0	0	0	12	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	''	''	''	6	P	12	@card@	-1	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 16 wx16
+%%#SEN 23 wx23
+1	Recorded	VVN	record	0	ROOT	0	0	0	0	0	0	recorded	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 17 wx17
+%%#SEN 24 wx24
+1	1982	LS	@card@	0	ROOT	0	0	0	0	0	4.0	1982	t:6c0b2ab351	date	0	0	1982	0	0	0	0	0	0	0	date	1
+%%#PAR 18 wx18
+%%#SEN 25 wx25
+1	Length	NN	length	0	ROOT	0	0	0	0	0	0	length	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 19 wx19
+%%#SEN 26 wx26
+1	3:25	LS	@card@	0	ROOT	0	0	0	0	0	0	3:25	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 20 wx20
+%%#SEN 27 wx27
+1	Label	NN	label	0	ROOT	0	0	0	0	0	0	label	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 21 wx21
+%%#SEN 28 wx28
+1	Springtime/	NP	Springtime/	0	ROOT	0	0	0	0	0	0	springtime/	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Island	NP	Island	1	SUFFIX	Springtime/	Springtime/	-1	https://en.wikipedia.org/wiki/Island_Records	1	0	island	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 22 wx22
+%%#SEN 29 wx29
+1	Songwriter	NN	songwriter	3	NMOD	s	S	+2	0	0	4.0	songwriter	f:Q3281808	film	https://en.wikipedia.org/wiki/Songwriter_(1984_film)	0	Songwriter	0	0	0	0	0	0	0	kb	1
+2	(|G__	(	(	3	P	s	S	+1	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	s|G__	NN	S	0	ROOT	0	0	0	0	0	0	s	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	)|G__	)	)	3	P	s	S	-1	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 23 wx23
+%%#SEN 30 wx30
+1	Alexei	NP	Alexei	0	ROOT	0	0	0	0	0	0	alexei	a:Q970287	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Sayle	NP	Sayle	1	SUFFIX	Alexei	Alexei	-1	0	0	4.0	sayle	a:Q970287	person->artist	https://en.wikipedia.org/wiki/Alexei_Sayle	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/c/ce/Alexei_Sayle_Cambridge_2016.jpg	Alexei_Sayle	Male	Anfield__Liverpool__England	1952_08_07	Anfield__Liverpool	0	film_actor|comedian|screenwriter|television_actor	0	kb	2
+%%#PAR 24 wx24
+%%#SEN 31 wx31
+1	Producer	NN	producer	3	NMOD	s	S	+2	0	0	0	producer	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	(|G__	(	(	3	P	s	S	+1	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	s|G__	NN	S	0	ROOT	0	0	0	0	0	0	s	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	)|G__	)	)	3	P	s	S	-1	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 25 wx25
+%%#SEN 32 wx32
+1	Clive	NP	Clive	0	ROOT	0	0	0	0	0	0	clive	a:Q1101973	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Langer	NP	Langer	1	SUFFIX	Clive	Clive	-1	https://en.wikipedia.org/wiki/Clive_Langer	2	4.1	langer	a:Q1101973	person->artist	https://en.wikipedia.org/wiki/Clive_Langer	0	Clive_Langer	Male	Hampstead__London__England	1954_06_19	Hampstead__London	0	songwriter|film_score_composer|composer|record_producer	0	kb	2
+3	&	CC	&	2	COORD	Langer	Langer	-1	0	0	0	&	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	amp|G__	NN	amp	3	CONJ	&	&	-1	0	0	0	amp	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	;|G__	:	;	1	P	Clive	Clive	-4	0	0	0	;	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	Alan	NP	Alan	1	SUFFIX	Clive	Clive	-5	0	0	0	alan	p:Q20922233	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	Winstanley	NP	Winstanley	1	SUFFIX	Clive	Clive	-6	https://en.wikipedia.org/wiki/Alan_Winstanley	2	person->artist	winstanley	p:Q20922233	person	https://en.wikipedia.org/wiki/Alan_Winstanley_(bishop)	0	Alan_Winstanley	Male	0	1949_05_07	0	0	0	0	kb	2
+%%#PAR 26 wx26
+%%#SEN 33 wx33
+1	Alexei	NP	Alexei	0	ROOT	0	0	0	0	0	0	alexei	a:Q970287	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Sayle	NP	Sayle	1	SUFFIX	Alexei	Alexei	-1	https://en.wikipedia.org/wiki/Alexei_Sayle	2	4.1	sayle	a:Q970287	person->artist	https://en.wikipedia.org/wiki/Alexei_Sayle	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/c/ce/Alexei_Sayle_Cambridge_2016.jpg	Alexei_Sayle	Male	Anfield__Liverpool__England	1952_08_07	Anfield__Liverpool	0	film_actor|comedian|screenwriter|television_actor	0	kb	2
+3	singles	NNS	single	0	ROOT	0	0	0	0	0	0	singles	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	chronology	NN	chronology	0	ROOT	0	0	0	0	0	0	chronology	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 27 wx27
+%%#SEN 34 wx34
+1	``	``	``	2	P	Pop	pop	+1	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Pop|G__	NN	pop	0	ROOT	0	0	0	0	0	0	pop	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	Up	IN	up	2	NMOD	Pop	pop	-1	0	0	0	up	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	Toasters	NP	Toasters	2	SUFFIX	Pop	pop	-2	0	0	0	toasters	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	''	''	''	2	P	Pop	pop	-3	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 28 wx28
+%%#SEN 35 wx35
+1	(	(	(	2	P	1981	@card@	+1	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	1981|GGG	CD	@card@	0	ROOT	0	0	0	0	0	4.0	1981	t:45f924f310	date	0	0	1981	0	0	0	0	0	0	0	date	1
+3	)|G__	)	)	2	P	1981	@card@	-1	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 29 wx29
+%%#SEN 36 wx36
+1	``	``	``	0	ROOT	0	0	0	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	'Ullo|G__	NP	'Ullo	1	SUFFIX	``	``	-1	0	0	0	'ullo	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	John	NP	John	1	SUFFIX	``	``	-2	0	0	0	john	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	!|G__	SENT	!	1	SUFFIX	``	``	-3	0	0	0	!	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 37 wx37
+1	Got	VVN	get	0	ROOT	0	0	0	0	0	0	got	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	ta|G__	JJ	ta	6	NMOD	''	''	+4	0	0	0	ta	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	New	NP	New	2	SUFFIX	ta	ta	-1	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	Motor	NP	Motor	2	SUFFIX	ta	ta	-2	0	0	0	motor	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	?|G__	SENT	?	2	SUFFIX	ta	ta	-3	0	0	0	?	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	''	''	''	1	P	Got	get	-5	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 30 wx30
+%%#SEN 38 wx38
+1	(	(	(	2	P	1982	@card@	+1	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	1982|GGG	CD	@card@	0	ROOT	0	0	0	0	0	4.0	1982	t:7759f263bf	date	0	0	1982	0	0	0	0	0	0	0	date	1
+3	)|G__	)	)	2	P	1982	@card@	-1	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 31 wx31
+%%#SEN 39 wx39
+1	``	``	``	0	ROOT	0	0	0	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Did	VVD	do	1	SUFFIX	``	``	-1	0	0	0	did	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	n't|G__	RB	n't	2	ADV	Did	do	-1	0	0	0	n't	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	You	NP	You	2	SUFFIX	Did	do	-2	0	0	0	you	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	Kill	NP	Kill	2	SUFFIX	Did	do	-3	0	0	0	kill	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	My	NP	My	2	SUFFIX	Did	do	-4	0	0	0	my	f:Q6945111	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	Brother	NP	Brother	2	SUFFIX	Did	do	-5	0	0	4.0	brother	f:Q6945111	film	https://en.wikipedia.org/wiki/My_Brother_(2006_film)	0	My_Brother	0	0	0	0	0	0	0	kb	2
+8	?|G__	SENT	?	2	SUFFIX	Did	do	-6	https://en.wikipedia.org/wiki/Didn't_You_Kill_My_Brother%3F	7	0	?	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	``	``	``	1	NMOD	``	``	-8	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 32 wx32
+%%#SEN 40 wx40
+1	(	(	(	2	P	1985	@card@	+1	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	1985|GGG	CD	@card@	0	ROOT	0	0	0	0	0	4.0	1985	t:e46ddb2253	date	0	0	1985	0	0	0	0	0	0	0	date	1
+3	)|G__	)	)	2	P	1985	@card@	-1	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 33 wx33
+%%#SEN 41 wx41
+1	Audio	JJ	audio	2	NMOD	sample	sample	+1	0	0	0	audio	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	sample	NN	sample	0	ROOT	0	0	0	0	0	0	sample	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 34 wx34
+%%#SEN 42 wx42
+1	file	VV	file	0	ROOT	0	0	0	0	0	0	file	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 35 wx35
+%%#SEN 43 wx43
+1	help	VV	help	0	ROOT	0	0	0	0	0	0	help	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 36 wx36
+%%#SEN 44 wx44
+1	The	DT	the	2	NMOD	song	song	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	song	NN	song	5	NMOD	title	title	+3	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	and	CC	and	2	COORD	song	song	-1	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	its	PP$	its	2	SUFFIX	song	song	-2	0	0	0	its	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	title	NN	title	0	ROOT	0	0	0	0	0	0	title	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	have	VHP	have	5	SUFFIX	title	title	-1	0	0	0	have	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	subsequently	RB	subsequently	8	AMOD	been	be	+1	0	0	0	subsequently	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	been	VBN	be	5	APPO	title	title	-3	0	0	0	been	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	adapted	VVN	adapt	5	SUFFIX	title	title	-4	0	0	0	adapted	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	and	CC	and	5	COORD	title	title	-5	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	reused	VVN	reuse	5	SUFFIX	title	title	-6	0	0	0	reused	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	in	IN	in	5	LOC	title	title	-7	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	a	DT	a	14	NMOD	number	number	+1	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	number	NN	number	12	PMOD	in	in	-2	0	0	0	number	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	of	IN	of	14	NMOD	number	number	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	different	JJ	different	18	NMOD	contexts	context	+2	0	0	0	different	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	cultural	JJ	cultural	18	NMOD	contexts	context	+1	0	0	0	cultural	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	contexts	NNS	context	15	PMOD	of	of	-3	0	0	0	contexts	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	.|G__	SENT	.	18	SUFFIX	contexts	context	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 37 wx37
+%%#SEN 45 wx45
+1	Song	NN	song	2	NMOD	structure	structure	+1	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	structure	NN	structure	0	ROOT	0	0	0	0	0	0	structure	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 38 wx38
+%%#SEN 46 wx46
+1	The	DT	the	2	NMOD	song	song	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	song	NN	song	3	SBJ	is	be	+1	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	is	VBZ	be	0	ROOT	0	0	0	0	0	0	is	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	predominantly	RB	predominantly	3	TMP	is	be	-1	0	0	0	predominantly	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	a	DT	a	6	NMOD	rap	rap	+1	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	rap	NN	rap	3	PRD	is	be	-3	0	0	0	rap	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	comprising	VVG	comprise	6	SUFFIX	rap	rap	-1	0	0	0	comprising	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	a	DT	a	9	NMOD	mix	mix	+1	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	mix	NN	mix	6	APPO	rap	rap	-3	0	0	0	mix	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	of	IN	of	9	NMOD	mix	mix	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	banal	JJ	banal	17	NMOD	sentences	sentence	+6	0	0	0	banal	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	,|G__	,	,	11	P	banal	banal	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	absurd	JJ	absurd	11	COORD	banal	banal	-2	0	0	0	absurd	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	and	CC	and	13	COORD	absurd	absurd	-1	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	generally	RB	generally	16	AMOD	unconnected	unconnected	+1	0	0	0	generally	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	unconnected	JJ	unconnected	14	CONJ	and	and	-2	0	0	0	unconnected	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	sentences	NNS	sentence	10	PMOD	of	of	-7	0	0	0	sentences	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	(	(	(	23	P	title	title	+5	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	including|G__	VVG	include	18	SUFFIX	(	(	-1	0	0	0	including	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	the	DT	the	21	NMOD	song	song	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	song	NN	song	23	NMOD	title	title	+2	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	's|G__	POS	's	21	SUFFIX	song	song	-1	0	0	0	's	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	title	NN	title	17	APPO	sentences	sentence	-6	0	0	0	title	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	)|G__	)	)	23	P	title	title	-1	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	,|G__	,	,	17	P	sentences	sentence	-8	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	each	DT	each	27	NMOD	sentence	sentence	+1	0	0	0	each	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	sentence	NN	sentence	17	APPO	sentences	sentence	-10	0	0	0	sentence	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	being	VBG	be	27	APPO	sentence	sentence	-1	0	0	0	being	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	delivered	VVN	deliver	27	SUFFIX	sentence	sentence	-2	0	0	0	delivered	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+30	twice	RB	twice	31	PMOD	in	in	+1	0	0	0	twice	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+31	in	IN	in	9	LOC	mix	mix	-22	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+32	succession	NN	succession	31	PMOD	in	in	-1	0	0	0	succession	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+33	.|G__	SENT	.	32	SUFFIX	succession	succession	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 47 wx47
+1	Occasionally	RB	occasionally	0	ROOT	0	0	0	0	0	0	occasionally	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	,|G__	,	,	1	NMOD	Occasionally	occasionally	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	a	DT	a	5	NMOD	line	line	+2	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	succeeding	VVG	succeed	3	SUFFIX	a	a	-1	0	0	0	succeeding	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	line	NN	line	9	NMOD	line	line	+4	0	0	0	line	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	provides	VVZ	provide	5	SUFFIX	line	line	-1	0	0	0	provides	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	the	DT	the	9	NMOD	line	line	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	punch	NN	punch	9	NMOD	line	line	+1	0	0	0	punch	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	line	NN	line	1	NMOD	Occasionally	occasionally	-8	0	0	0	line	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	to	TO	to	9	NMOD	line	line	-1	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	the	DT	the	13	NMOD	one	one	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	preceding	JJ	preceding	13	NMOD	one	one	+1	0	0	0	preceding	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	one	CD	one	10	PMOD	to	to	-3	0	0	0	one	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	.|G__	SENT	.	13	SUFFIX	one	one	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 48 wx48
+1	These	DT	these	3	NMOD	passages	passage	+2	0	0	0	these	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	rap	NN	rap	3	NMOD	passages	passage	+1	0	0	0	rap	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	passages	NNS	passage	4	SBJ	are	be	+1	0	0	0	passages	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	are	VBP	be	0	ROOT	0	0	0	0	0	0	are	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	occasionally	RB	occasionally	4	ADV	are	be	-1	0	0	0	occasionally	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	interrupted	VVN	interrupt	4	SUFFIX	are	be	-2	0	0	0	interrupted	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	by	IN	by	4	MNR	are	be	-3	0	0	0	by	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	short	JJ	short	10	NMOD	monologues	monologue	+2	0	0	0	short	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	comic	JJ	comic	10	NMOD	monologues	monologue	+1	0	0	4.0	comic	m:01vnb	movement	https://en.wikipedia.org/wiki/Comic_book	http://athena3.fit.vutbr.cz/kb/images/freebase/02cmrb1.jpg	Comic_book	0	0	0	0	0	0	0	kb	1
+10	monologues	NNS	monologue	7	PMOD	by	by	-3	0	0	0	monologues	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	or	CC	or	10	COORD	monologues	monologue	-1	0	0	0	or	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	the	DT	the	14	NMOD	repetition	repetition	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	consecutive	JJ	consecutive	14	NMOD	repetition	repetition	+1	0	0	0	consecutive	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	repetition	NN	repetition	11	CONJ	or	or	-3	0	0	0	repetition	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	of	IN	of	14	NMOD	repetition	repetition	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	the	DT	the	17	NMOD	song	song	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	song	NN	song	19	NMOD	title	title	+2	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	's|G__	POS	's	17	SUFFIX	song	song	-1	0	0	0	's	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	title	NN	title	15	PMOD	of	of	-4	0	0	0	title	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	for	IN	for	19	NMOD	title	title	-1	0	0	0	for	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	an	DT	an	23	NMOD	period	period	+2	0	0	0	an	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	extended	JJ	extended	23	NMOD	period	period	+1	0	0	0	extended	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	period	NN	period	20	PMOD	for	for	-3	0	0	0	period	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	.|G__	SENT	.	23	SUFFIX	period	period	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 39 wx39
+%%#SEN 49 wx49
+1	The	DT	the	6	NMOD	versions	version	+5	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	UK	NP	UK	1	SUFFIX	The	the	-1	0	0	0	uk	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	single	NN	single	6	NMOD	versions	version	+3	0	0	0	single	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	features	VVZ	feature	3	SUFFIX	single	single	-1	0	0	0	features	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	four	CD	four	6	NMOD	versions	version	+1	0	0	0	four	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	versions	NNS	version	22	NMOD	I	I	+16	0	0	0	versions	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	of	IN	of	6	NMOD	versions	version	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	the	DT	the	9	NMOD	song	song	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	song	NN	song	7	PMOD	of	of	-2	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	spread	VVN	spread	9	SUFFIX	song	song	-1	0	0	0	spread	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	across	IN	across	6	LOC	versions	version	-5	0	0	0	across	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	the	DT	the	13	NMOD	7-	@card@	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	7-	CD	@card@	11	PMOD	across	across	-2	0	0	0	7-	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	and	CC	and	13	COORD	7-	@card@	-1	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	12-inch	JJ	12-inch	16	NMOD	formats	format	+1	0	0	0	12-inch	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	formats	NNS	format	14	CONJ	and	and	-2	0	0	0	formats	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	,|G__	,	,	6	P	versions	version	-11	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	and	CC	and	6	COORD	versions	version	-12	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	designated	VVD	designate	6	SUFFIX	versions	version	-13	0	0	0	designated	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	``	``	``	22	P	I	I	+2	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	Part	NN	part	22	NMOD	I	I	+1	0	0	0	part	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	I	NN	I	0	ROOT	0	0	0	0	0	0	i	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	''	''	''	22	P	I	I	-1	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	through	IN	through	22	NMOD	I	I	-2	0	0	0	through	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	``	``	``	28	P	''	''	+3	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	Part	NP	Part	25	SUFFIX	``	``	-1	0	0	0	part	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	IV	NP	IV	25	SUFFIX	``	``	-2	0	0	0	iv	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	''	''	''	22	P	I	I	-6	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	.	SENT	.	22	SUFFIX	I	I	-7	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 50 wx50
+1	All	DT	all	2	NMOD	versions	version	+1	0	0	0	all	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	versions	NNS	version	9	NMOD	backdrop	backdrop	+7	0	0	0	versions	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	feature	VVP	feature	2	SUFFIX	versions	version	-1	0	0	0	feature	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	the	DT	the	9	NMOD	backdrop	backdrop	+5	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	same	JJ	same	7	NMOD	funk	funk	+2	0	0	0	same	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	pop/	NN	pop/	7	NMOD	funk	funk	+1	0	0	0	pop/	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	funk	NN	funk	9	NMOD	backdrop	backdrop	+2	https://en.wikipedia.org/wiki/Funk	1	0	funk	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	musical	JJ	musical	9	NMOD	backdrop	backdrop	+1	0	0	0	musical	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	backdrop	NN	backdrop	0	ROOT	0	0	0	0	0	0	backdrop	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	,|G__	,	,	9	P	backdrop	backdrop	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	but	CC	but	9	COORD	backdrop	backdrop	-2	0	0	0	but	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	lyrically	RB	lyrically	15	ADV	are	be	+3	0	0	0	lyrically	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	the	DT	the	14	NMOD	versions	version	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	versions	NNS	version	15	SBJ	are	be	+1	0	0	0	versions	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	are	VBP	be	11	CONJ	but	but	-4	0	0	0	are	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	distinct	JJ	distinct	15	PRD	are	be	-1	0	0	0	distinct	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	from	IN	from	16	AMOD	distinct	distinct	-1	0	0	0	from	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	each	DT	each	19	NMOD	other	other	+1	0	0	0	each	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	other	JJ	other	17	PMOD	from	from	-2	0	0	0	other	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	.|G__	SENT	.	19	SUFFIX	other	other	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 40 wx40
+%%#SEN 51 wx51
+1	Lyrical	JJ	lyrical	2	NMOD	themes	theme	+1	0	0	0	lyrical	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	themes	NNS	theme	0	ROOT	0	0	0	0	0	0	themes	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 41 wx41
+%%#SEN 52 wx52
+1	All	DT	all	2	NMOD	versions	version	+1	0	0	0	all	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	versions	NNS	version	8	NMOD	phrasing	phrasing	+6	0	0	0	versions	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	of	IN	of	2	NMOD	versions	version	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	the	DT	the	6	NMOD	feature	feature	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	song	NN	song	6	NMOD	feature	feature	+1	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	feature	NN	feature	3	PMOD	of	of	-3	0	0	0	feature	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	Cockney	NP	Cockney	6	SUFFIX	feature	feature	-1	https://en.wikipedia.org/wiki/Cockney#Cockney_speech	1	0	cockney	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	phrasing	NN	phrasing	0	ROOT	0	0	0	0	0	0	phrasing	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	and	CC	and	8	COORD	phrasing	phrasing	-1	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	slang	NN	slang	9	CONJ	and	and	-1	0	0	0	slang	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	,|G__	,	,	8	P	phrasing	phrasing	-3	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	often	RB	often	15	PMOD	for	for	+3	0	0	0	often	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	heavily	RB	heavily	15	PMOD	for	for	+2	0	0	0	heavily	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	stylised	VVN	stylise	13	SUFFIX	heavily	heavily	-1	0	0	0	stylised	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	for	IN	for	8	NMOD	phrasing	phrasing	-7	0	0	0	for	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	comic	JJ	comic	17	NMOD	effect	effect	+1	0	0	4.0	comic	m:01vnb	movement	https://en.wikipedia.org/wiki/Comic_book	http://athena3.fit.vutbr.cz/kb/images/freebase/02cmrb1.jpg	Comic_book	0	0	0	0	0	0	0	kb	1
+17	effect	NN	effect	15	PMOD	for	for	-2	0	0	0	effect	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	.|G__	SENT	.	17	SUFFIX	effect	effect	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 53 wx53
+1	Hence	RB	hence	12	ADV	is	be	+11	0	0	0	hence	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	,|G__	,	,	12	P	is	be	+10	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	in	IN	in	12	LOC	is	be	+9	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	the	DT	the	5	NMOD	song	song	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	song	NN	song	7	NMOD	title	title	+2	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	's|G__	POS	's	5	SUFFIX	song	song	-1	0	0	0	's	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	title	NN	title	3	PMOD	in	in	-4	0	0	0	title	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	,|G__	,	,	3	P	in	in	-5	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	``	``	``	10	P	'ullo	'ullo	+1	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	'ullo	NN	'ullo	3	PMOD	in	in	-7	0	0	0	'ullo	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	''	''	''	10	P	'ullo	'ullo	-1	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	is	VBZ	be	0	ROOT	0	0	0	0	0	0	is	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	``	``	``	12	P	is	be	-1	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	hullo	NP	hullo	12	SUFFIX	is	be	-2	https://en.wikipedia.org/wiki/Hello#Hullo	1	0	hullo	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	``	``	``	14	P	hullo	hullo	-1	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	with	IN	with	14	ADV	hullo	hullo	-2	0	0	0	with	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	a	DT	a	18	NMOD	dropped-H	dropped-H	+1	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	dropped-H	NN	dropped-H	16	PMOD	with	with	-2	0	0	0	dropped-h	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	,|G__	,	,	12	P	is	be	-7	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	``	``	``	23	SBJ	is	be	+3	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	John	NP	John	20	SUFFIX	``	``	-1	0	0	0	john	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	''	''	''	20	P	``	``	-2	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	is	VBZ	be	12	COORD	is	be	-11	0	0	0	is	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	a	DT	a	27	NMOD	name	name	+3	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	colloquial	JJ	colloquial	27	NMOD	name	name	+2	0	0	0	colloquial	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	placeholder	NN	placeholder	27	NMOD	name	name	+1	0	0	0	placeholder	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	name	NN	name	23	PRD	is	be	-4	0	0	0	name	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	(	(	(	29	P	comparable	comparable	+1	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	comparable|G__	JJ	comparable	27	APPO	name	name	-2	0	0	0	comparable	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+30	to	TO	to	29	AMOD	comparable	comparable	-1	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+31	``	``	``	30	P	to	to	-1	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+32	mate	VV	mate	27	SUFFIX	name	name	-5	https://en.wikipedia.org/wiki/Friendship	1	0	mate	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+33	``	``	``	12	NMOD	is	be	-21	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+34	)	)	)	40	SBJ	is	be	+6	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+35	,|G__	,	,	34	P	)	)	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+36	and	CC	and	34	COORD	)	)	-2	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+37	``	``	``	38	P	motor	motor	+1	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+38	motor	NN	motor	36	CONJ	and	and	-2	0	0	0	motor	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+39	''	''	''	38	P	motor	motor	-1	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+40	is	VBZ	be	12	NMOD	is	be	-28	0	0	0	is	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+41	shortened	VVN	shorten	40	SUFFIX	is	be	-1	0	0	0	shortened	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+42	slang	NN	slang	40	PRD	is	be	-2	0	0	0	slang	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+43	for	IN	for	42	NMOD	slang	slang	-1	0	0	0	for	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+44	``	``	``	43	P	for	for	-1	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+45	motor	NN	motor	46	NMOD	car	car	+1	0	0	0	motor	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+46	car	NN	car	43	PMOD	for	for	-3	https://en.wikipedia.org/wiki/Car	2	0	car	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+47	``	``	``	12	NMOD	is	be	-35	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+48	.	SENT	.	47	SUFFIX	``	``	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 42 wx42
+%%#SEN 54 wx54
+1	Several	JJ	several	3	NMOD	placenames	placenames	+2	0	0	0	several	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	London	NP	London	1	SUFFIX	Several	several	-1	0	0	4.0	london	l:Q84	location	https://en.wikipedia.org/wiki/London	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/e/e9/Super_moon_over_City_of_London_from_Tate_Modern_2018-01-31_4.jpg	London	United_Kingdom	0	0	0	0	0	0	kb	1
+3	placenames	NNS	placenames	4	SBJ	are	be	+1	0	0	0	placenames	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	are	VBP	be	0	ROOT	0	0	0	0	0	0	are	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	mentioned	VVN	mention	4	SUFFIX	are	be	-1	0	0	0	mentioned	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	in	IN	in	4	LOC	are	be	-2	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	the	DT	the	8	NMOD	song	song	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	song	NN	song	6	PMOD	in	in	-2	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	,|G__	,	,	8	P	song	song	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	including	VVG	include	8	SUFFIX	song	song	-2	0	0	0	including	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	Peckham	NP	Peckham	8	SUFFIX	song	song	-3	0	0	0	peckham	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	,|G__	,	,	8	P	song	song	-4	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	Bermondsey	NP	Bermondsey	8	SUFFIX	song	song	-5	https://en.wikipedia.org/wiki/Bermondsey	1	0	bermondsey	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	and	CC	and	4	COORD	are	be	-10	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	Stanmore	NP	Stanmore	4	SUFFIX	are	be	-11	0	0	4.0	stanmore	l:Q2279685	location	https://en.wikipedia.org/wiki/Stanmore	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/6/63/Stanmore_tube_station.jpg	Stanmore	United_Kingdom	0	0	0	0	0	0	kb	1
+16	.|G__	SENT	.	4	SUFFIX	are	be	-12	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 55 wx55
+1	Originally	RB	originally	3	PMOD	in	in	+2	0	0	0	originally	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	released	VVN	release	1	SUFFIX	Originally	originally	-1	0	0	0	released	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	in	IN	in	0	ROOT	0	0	0	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	1982	CD	@card@	3	PMOD	in	in	-1	0	0	4.0	1982	t:4add1083de	date	0	0	1982	0	0	0	0	0	0	0	date	1
+5	,|G__	,	,	3	NMOD	in	in	-2	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	the	DT	the	8	NMOD	references	reference	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	song	NN	song	8	NMOD	references	reference	+1	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	references	NNS	reference	12	NMOD	themes	theme	+4	0	0	0	references	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	several	JJ	several	12	NMOD	themes	theme	+3	0	0	0	several	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	then	RB	then	11	AMOD	topical	topical	+1	0	0	0	then	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	topical	JJ	topical	12	NMOD	themes	theme	+1	0	0	0	topical	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	themes	NNS	theme	3	NMOD	in	in	-9	0	0	0	themes	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	,|G__	,	,	12	P	themes	theme	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	such	JJ	such	15	DEP	as	as	+1	0	0	0	such	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	as	IN	as	12	NMOD	themes	theme	-3	0	0	0	as	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	the	DT	the	18	NMOD	construction	construction	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	ongoing	JJ	ongoing	18	NMOD	construction	construction	+1	0	0	0	ongoing	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	construction	NN	construction	15	PMOD	as	as	-3	0	0	0	construction	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	of	IN	of	18	NMOD	construction	construction	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	the	DT	the	3	NMOD	in	in	-17	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	Thames	NP	Thames	20	SUFFIX	the	the	-1	0	0	0	thames	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	Barrier	NP	Barrier	20	SUFFIX	the	the	-2	0	0	0	barrier	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	.|G__	SENT	.	20	SUFFIX	the	the	-3	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 43 wx43
+%%#SEN 56 wx56
+1	Recurrent	JJ	recurrent	5	ADV	is	be	+4	0	0	0	recurrent	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	among	IN	among	5	LOC-PRD	is	be	+3	0	0	0	among	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	these	DT	these	4	NMOD	themes	theme	+1	0	0	0	these	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	themes	NNS	theme	2	PMOD	among	among	-2	0	0	0	themes	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	is	VBZ	be	0	ROOT	0	0	0	0	0	0	is	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	the	DT	the	12	NMOD	decision	decision	+6	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	Ford	NP	Ford	6	SUFFIX	the	the	-1	0	0	4.0	ford	l:Q3811439	location	https://en.wikipedia.org/wiki/Ford,_Shropshire	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/d/dd/Ford_Church_and_Yard_in_Shropshire_-_geograph.org.uk_-_344573.jpg	Ford	United_Kingdom	0	0	0	0	0	0	kb	1
+8	Motor	NP	Motor	6	SUFFIX	the	the	-2	0	0	0	motor	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	Company	NP	Company	6	SUFFIX	the	the	-3	https://en.wikipedia.org/wiki/Ford_of_Britain	3	0	company	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	's	POS	's	9	SUFFIX	Company	Company	-1	0	0	0	's	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	announced	VVN	announce	9	SUFFIX	Company	Company	-2	0	0	0	announced	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	decision	NN	decision	5	PRD	is	be	-7	0	0	0	decision	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	to	TO	to	12	NMOD	decision	decision	-1	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	replace	VV	replace	12	SUFFIX	decision	decision	-2	0	0	0	replace	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	the	DT	the	19	NMOD	brand	brand	+4	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	long-running	JJ	long-running	19	NMOD	brand	brand	+3	0	0	0	long-running	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	Ford	NP	Ford	16	SUFFIX	long-running	long-running	-1	0	0	4.0	ford	l:Q3811439	location	https://en.wikipedia.org/wiki/Ford,_Shropshire	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/d/dd/Ford_Church_and_Yard_in_Shropshire_-_geograph.org.uk_-_344573.jpg	Ford	United_Kingdom	0	0	0	0	0	0	kb	1
+18	Cortina	NP	Cortina	16	SUFFIX	long-running	long-running	-2	https://en.wikipedia.org/wiki/Ford_Cortina	2	0	cortina	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	brand	NN	brand	12	APPO	decision	decision	-7	0	0	0	brand	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	with	IN	with	19	NMOD	brand	brand	-1	0	0	0	with	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	the	DT	the	27	NMOD	1982	@card@	+6	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	new	JJ	new	27	NMOD	1982	@card@	+5	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	Ford	NP	Ford	22	SUFFIX	new	new	-1	0	0	4.0	ford	l:Q3811439	location	https://en.wikipedia.org/wiki/Ford,_Shropshire	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/d/dd/Ford_Church_and_Yard_in_Shropshire_-_geograph.org.uk_-_344573.jpg	Ford	United_Kingdom	0	0	0	0	0	0	kb	1
+24	Sierra	NP	Sierra	22	SUFFIX	new	new	-2	https://en.wikipedia.org/wiki/Ford_Sierra	2	4.2	sierra	f:Q2252577	film	https://en.wikipedia.org/wiki/Sierra_(film)	0	Sierra	0	0	0	0	0	0	0	kb	1
+25	by	IN	by	22	TMP	new	new	-3	0	0	0	by	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	September	NP	September	22	SUFFIX	new	new	-4	0	0	0	september	t:787f90305d	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	1982	CD	@card@	20	PMOD	with	with	-7	0	0	4.0	1982	t:787f90305d	date	0	0	1982	9	0	0	0	0	0	0	date	2
+28	.|G__	SENT	.	27	SUFFIX	1982	@card@	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 57 wx57
+1	The	DT	the	2	NMOD	song	song	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	song	NN	song	6	NMOD	poetry	poetry	+4	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	asserts	VVZ	assert	2	SUFFIX	song	song	-1	0	0	0	asserts	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	the	DT	the	6	NMOD	poetry	poetry	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	``	``	``	6	P	poetry	poetry	+1	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	poetry	NN	poetry	0	ROOT	0	0	0	0	0	0	poetry	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	''	''	''	6	P	poetry	poetry	-1	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	of	IN	of	6	NMOD	poetry	poetry	-2	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	the	DT	the	29	NMOD	degrees	degree	+20	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	Cortina	NP	Cortina	9	SUFFIX	the	the	-1	0	0	0	cortina	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	,|G__	,	,	9	P	the	the	-2	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	and	CC	and	9	COORD	the	the	-3	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	the	DT	the	15	NMOD	sound	sound	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	superior	JJ	superior	15	NMOD	sound	sound	+1	0	0	0	superior	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	sound	NN	sound	12	CONJ	and	and	-3	0	0	0	sound	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	of	IN	of	15	NMOD	sound	sound	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	the	DT	the	18	NMOD	name	name	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	name	NN	name	16	PMOD	of	of	-2	0	0	0	name	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	``	``	``	25	P	''	''	+6	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	Cortina	NP	Cortina	19	SUFFIX	``	``	-1	0	0	0	cortina	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	''	''	''	19	P	``	``	-2	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	to	TO	to	19	ADV	``	``	-3	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	``	``	``	25	NMOD	''	''	+2	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	Sierra	NP	Sierra	23	SUFFIX	``	``	-1	0	0	4.0	sierra	f:Q2252577	film	https://en.wikipedia.org/wiki/Sierra_(film)	0	Sierra	0	0	0	0	0	0	0	kb	1
+25	''	''	''	18	P	name	name	-7	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	,	,	,	9	P	the	the	-17	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	with	IN	with	9	NMOD	the	the	-18	0	0	0	with	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	varying	VVG	vary	9	SUFFIX	the	the	-19	0	0	0	varying	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	degrees	NNS	degree	8	PMOD	of	of	-21	0	0	0	degrees	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+30	of	IN	of	29	NMOD	degrees	degree	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+31	vigour	NN	vigour	30	PMOD	of	of	-1	0	0	0	vigour	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+32	,|G__	,	,	6	P	poetry	poetry	-26	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+33	during	IN	during	6	NMOD	poetry	poetry	-27	0	0	0	during	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+34	``	``	``	6	NMOD	poetry	poetry	-28	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+35	Part	NP	Part	34	SUFFIX	``	``	-1	0	0	0	part	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+36	II	NP	II	34	SUFFIX	``	``	-2	0	0	0	ii	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+37	''	''	''	34	P	``	``	-3	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+38	to	TO	to	34	ADV	``	``	-4	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+39	``	``	``	6	NMOD	poetry	poetry	-33	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+40	Part	NP	Part	39	SUFFIX	``	``	-1	0	0	0	part	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+41	IV	NP	IV	39	SUFFIX	``	``	-2	0	0	0	iv	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+42	''	''	''	41	P	IV	IV	-1	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+43	of	IN	of	41	NMOD	IV	IV	-2	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+44	the	DT	the	45	NMOD	song	song	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+45	song	NN	song	43	PMOD	of	of	-2	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+46	.|G__	SENT	.	45	SUFFIX	song	song	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 44 wx44
+%%#SEN 58 wx58
+1	This	DT	this	3	NMOD	theme	theme	+2	0	0	0	this	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	lyrical	JJ	lyrical	3	NMOD	theme	theme	+1	0	0	0	lyrical	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	theme	NN	theme	4	SBJ	was	be	+1	0	0	0	theme	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	was	VBD	be	0	ROOT	0	0	0	0	0	0	was	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	reflected	VVN	reflect	4	SUFFIX	was	be	-1	0	0	0	reflected	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	in	IN	in	4	LOC-PRD	was	be	-2	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	the	DT	the	8	NMOD	marketing	marketing	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	marketing	NN	marketing	6	PMOD	in	in	-2	0	0	0	marketing	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	of	IN	of	8	NMOD	marketing	marketing	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	the	DT	the	11	NMOD	single	single	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	single	JJ	single	9	PMOD	of	of	-2	0	0	0	single	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	:|G__	:	:	8	P	marketing	marketing	-4	0	0	0	:	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	the	DT	the	14	NMOD	single	single	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	single	NN	single	17	NMOD	cover	cover	+3	0	0	0	single	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	's|G__	POS	's	14	SUFFIX	single	single	-1	0	0	0	's	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	front	JJ	front	17	NMOD	cover	cover	+1	0	0	0	front	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	cover	NN	cover	8	APPO	marketing	marketing	-9	0	0	0	cover	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	features	VVZ	feature	8	SUFFIX	marketing	marketing	-10	0	0	0	features	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	Sayle	NP	Sayle	8	SUFFIX	marketing	marketing	-11	0	0	2	sayle	a:Q970287	person->artist	https://en.wikipedia.org/wiki/Alexei_Sayle	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/c/ce/Alexei_Sayle_Cambridge_2016.jpg	Alexei_Sayle	Male	Anfield__Liverpool__England	1952_08_07	Anfield__Liverpool	0	film_actor|comedian|screenwriter|television_actor	0	coref	1
+20	leaning	VVG	lean	8	SUFFIX	marketing	marketing	-12	0	0	0	leaning	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	against	IN	against	4	ADV	was	be	-17	0	0	0	against	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	a	DT	a	26	NMOD	V	V	+4	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	Ford	NP	Ford	22	SUFFIX	a	a	-1	0	0	4.0	ford	l:Q3811439	location	https://en.wikipedia.org/wiki/Ford,_Shropshire	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/d/dd/Ford_Church_and_Yard_in_Shropshire_-_geograph.org.uk_-_344573.jpg	Ford	United_Kingdom	0	0	0	0	0	0	kb	1
+24	Cortina	NP	Cortina	22	SUFFIX	a	a	-2	0	0	0	cortina	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	Mark	NP	Mark	22	SUFFIX	a	a	-3	0	0	0	mark	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	V	NN	V	21	PMOD	against	against	-5	0	0	0	v	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	,|G__	,	,	4	NMOD	was	be	-23	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	the	DT	the	30	NMOD	cover	cover	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	rear	JJ	rear	30	NMOD	cover	cover	+1	0	0	0	rear	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+30	cover	NN	cover	33	NMOD	reproduction	reproduction	+3	0	0	0	cover	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+31	features	VVZ	feature	30	SUFFIX	cover	cover	-1	0	0	0	features	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+32	a	DT	a	33	NMOD	reproduction	reproduction	+1	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+33	reproduction	NN	reproduction	54	NMOD	format	format	+21	0	0	0	reproduction	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+34	of	IN	of	33	NMOD	reproduction	reproduction	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+35	a	DT	a	38	NMOD	release	release	+3	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+36	Ford	NP	Ford	35	SUFFIX	a	a	-1	0	0	4.0	ford	l:Q3811439	location	https://en.wikipedia.org/wiki/Ford,_Shropshire	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/d/dd/Ford_Church_and_Yard_in_Shropshire_-_geograph.org.uk_-_344573.jpg	Ford	United_Kingdom	0	0	0	0	0	0	kb	1
+37	press	NN	press	38	NMOD	release	release	+1	0	0	0	press	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+38	release	NN	release	34	PMOD	of	of	-4	0	0	0	release	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+39	for	IN	for	33	NMOD	reproduction	reproduction	-6	0	0	0	for	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+40	the	DT	the	44	NMOD	model	model	+4	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+41	1973	CD	@card@	44	NMOD	model	model	+3	0	0	4.0	1973	t:61e8ef5bf3	date	0	0	1973	0	0	0	0	0	0	0	date	1
+42	Cortina	NP	Cortina	41	SUFFIX	1973	@card@	-1	0	0	0	cortina	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+43	2000E	JJ	2000E	44	NMOD	model	model	+1	0	0	0	2000e	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+44	model	NN	model	39	PMOD	for	for	-5	0	0	0	model	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+45	,|G__	,	,	33	P	reproduction	reproduction	-12	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+46	and	CC	and	33	COORD	reproduction	reproduction	-13	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+47	the	DT	the	49	NMOD	reissue	reissue	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+48	1983	CD	@card@	49	NMOD	reissue	reissue	+1	0	0	4.0	1983	t:55d62b0bc1	date	0	0	1983	0	0	0	0	0	0	0	date	1
+49	reissue	NN	reissue	46	CONJ	and	and	-3	0	0	0	reissue	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+50	included	VVD	include	49	SUFFIX	reissue	reissue	-1	0	0	0	included	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+51	a	DT	a	54	NMOD	format	format	+3	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+52	picture	NN	picture	53	NMOD	disc	disc	+1	0	0	0	picture	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+53	disc	NN	disc	54	NMOD	format	format	+1	0	0	0	disc	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+54	format	NN	format	4	NMOD	was	be	-50	0	0	0	format	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+55	featuring	VVG	feature	54	SUFFIX	format	format	-1	0	0	0	featuring	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+56	Sayle	NP	Sayle	54	SUFFIX	format	format	-2	0	0	2	sayle	a:Q970287	person->artist	https://en.wikipedia.org/wiki/Alexei_Sayle	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/c/ce/Alexei_Sayle_Cambridge_2016.jpg	Alexei_Sayle	Male	Anfield__Liverpool__England	1952_08_07	Anfield__Liverpool	0	film_actor|comedian|screenwriter|television_actor	0	coref	1
+57	reclining	VVG	recline	54	SUFFIX	format	format	-3	0	0	0	reclining	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+58	on	IN	on	54	NMOD	format	format	-4	0	0	0	on	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+59	the	DT	the	60	NMOD	bonnet	bonnet	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+60	bonnet	NN	bonnet	58	PMOD	on	on	-2	https://en.wikipedia.org/wiki/Hood_(car)	1	0	bonnet	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+61	of	IN	of	60	NMOD	bonnet	bonnet	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+62	a	DT	a	4	NMOD	was	be	-58	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+63	Cortina	NP	Cortina	62	SUFFIX	a	a	-1	0	0	0	cortina	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+64	Mark	NP	Mark	62	SUFFIX	a	a	-2	0	0	0	mark	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+65	III	NP	III	62	SUFFIX	a	a	-3	0	0	0	iii	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+66	.|G__	SENT	.	62	SUFFIX	a	a	-4	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 59 wx59
+1	[	SYM	[	2	NMOD	1	1	+1	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	1|G__	CD	1	3	AMOD	]	]	+1	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	]|G__	SYM	]	0	ROOT	0	0	0	https://en.wikipedia.org/wiki/'Ullo_John!_Gotta_New_Motor%3F#cite_note-BFI-1	3	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 45 wx45
+%%#SEN 60 wx60
+1	``	``	``	27	NMOD	onslaught	onslaught	+26	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Part|G__	NP	Part	1	SUFFIX	``	``	-1	0	0	0	part	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	IV	NP	IV	1	SUFFIX	``	``	-2	0	0	0	iv	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	''	''	''	3	P	IV	IV	-1	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	of	IN	of	3	NMOD	IV	IV	-2	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	the	DT	the	7	NMOD	song	song	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	song	NN	song	5	PMOD	of	of	-2	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	,|G__	,	,	1	P	``	``	-7	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	included	VVN	include	1	SUFFIX	``	``	-8	0	0	0	included	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	on	IN	on	1	ADV	``	``	-9	0	0	0	on	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	the	DT	the	13	NMOD	12-inch	12-inch	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	UK	NP	UK	11	SUFFIX	the	the	-1	0	0	0	uk	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	12-inch	JJ	12-inch	10	PMOD	on	on	-3	0	0	0	12-inch	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	,|G__	,	,	1	P	``	``	-13	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	differs	VVZ	differ	1	SUFFIX	``	``	-14	0	0	0	differs	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	significantly	RB	significantly	17	PMOD	from	from	+1	0	0	0	significantly	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	from	IN	from	1	TMP	``	``	-16	0	0	0	from	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	the	DT	the	21	NMOD	versions	version	+3	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	other	JJ	other	21	NMOD	versions	version	+2	0	0	0	other	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	three	CD	three	21	NMOD	versions	version	+1	0	0	0	three	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	versions	NNS	version	17	PMOD	from	from	-4	0	0	0	versions	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	lyrically	RB	lyrically	17	PMOD	from	from	-5	0	0	0	lyrically	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	,|G__	,	,	1	P	``	``	-22	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	featuring	VVG	feature	1	SUFFIX	``	``	-23	0	0	0	featuring	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	a	DT	a	27	NMOD	onslaught	onslaught	+2	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	sustained	JJ	sustained	27	NMOD	onslaught	onslaught	+1	0	0	0	sustained	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	onslaught	NN	onslaught	0	ROOT	0	0	0	0	0	0	onslaught	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	of	IN	of	27	NMOD	onslaught	onslaught	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	high-speed	JJ	high-speed	33	NMOD	coprolalia	coprolalia	+4	0	0	0	high-speed	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+30	profanity	NN	profanity	33	NMOD	coprolalia	coprolalia	+3	0	0	0	profanity	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+31	and	CC	and	30	COORD	profanity	profanity	-1	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+32	faux-	NN	faux-	31	CONJ	and	and	-1	0	0	0	faux-	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+33	coprolalia	NN	coprolalia	28	PMOD	of	of	-5	https://en.wikipedia.org/wiki/Coprolalia	1	0	coprolalia	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+34	,|G__	,	,	33	P	coprolalia	coprolalia	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+35	which	WDT	which	36	SBJ	was	be	+1	0	0	0	which	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+36	was	VBD	be	33	NMOD	coprolalia	coprolalia	-3	0	0	0	was	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+37	adapted	VVN	adapt	36	OBJ	was	be	-1	0	0	0	adapted	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+38	from	IN	from	36	ADV	was	be	-2	0	0	0	from	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+39	the	DT	the	44	NMOD	routine	routine	+5	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+40	``	``	``	43	P	''	''	+3	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+41	Mr.	NP	Mr.	40	SUFFIX	``	``	-1	0	0	0	mr.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+42	Sweary	NP	Sweary	40	SUFFIX	``	``	-2	0	0	0	sweary	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+43	''	''	''	44	NMOD	routine	routine	+1	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+44	routine	NN	routine	38	PMOD	from	from	-6	0	0	0	routine	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+45	then	RB	then	46	AMOD	current	current	+1	0	0	0	then	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+46	current	JJ	current	44	APPO	routine	routine	-2	0	0	0	current	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+47	in	IN	in	46	AMOD	current	current	-1	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+48	Sayle	NP	Sayle	44	SUFFIX	routine	routine	-4	0	0	2	sayle	a:Q970287	person->artist	https://en.wikipedia.org/wiki/Alexei_Sayle	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/c/ce/Alexei_Sayle_Cambridge_2016.jpg	Alexei_Sayle	Male	Anfield__Liverpool__England	1952_08_07	Anfield__Liverpool	0	film_actor|comedian|screenwriter|television_actor	0	coref	1
+49	's|G__	POS	's	44	SUFFIX	routine	routine	-5	0	0	0	's	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+50	live	JJ	live	52	NMOD	act	act	+2	0	0	0	live	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+51	stand-up	JJ	stand-up	52	NMOD	act	act	+1	0	0	0	stand-up	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+52	act	NN	act	36	PRD	was	be	-16	0	0	0	act	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+53	.|G__	SENT	.	52	SUFFIX	act	act	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 61 wx61
+1	``	``	``	0	ROOT	0	0	0	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Part|G__	NP	Part	1	SUFFIX	``	``	-1	0	0	0	part	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	IV	NP	IV	1	SUFFIX	``	``	-2	0	0	0	iv	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	''	''	''	1	P	``	``	-3	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	also	RB	also	8	NMOD	variations	variation	+3	0	0	0	also	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	contains	VVZ	contain	5	SUFFIX	also	also	-1	0	0	0	contains	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	profane	JJ	profane	8	NMOD	variations	variation	+1	0	0	0	profane	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	variations	NNS	variation	1	COORD	``	``	-7	0	0	0	variations	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	and	CC	and	8	COORD	variations	variation	-1	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	parodies	NNS	parody	9	CONJ	and	and	-1	0	0	0	parodies	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	of	IN	of	10	NMOD	parodies	parody	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	some	DT	some	11	PMOD	of	of	-1	0	0	0	some	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	of	IN	of	12	NMOD	some	some	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	the	DT	the	15	NMOD	lyrics	lyric	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	lyrics	NNS	lyric	13	PMOD	of	of	-2	0	0	0	lyrics	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	and	CC	and	15	COORD	lyrics	lyric	-1	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	monologues	NNS	monologue	16	CONJ	and	and	-1	0	0	0	monologues	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	featured	VVN	feature	16	SUFFIX	and	and	-2	0	0	0	featured	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	in	IN	in	1	TMP	``	``	-18	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	the	DT	the	22	NMOD	versions	version	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	other	JJ	other	22	NMOD	versions	version	+1	0	0	0	other	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	versions	NNS	version	19	PMOD	in	in	-3	0	0	0	versions	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	of	IN	of	22	NMOD	versions	version	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	the	DT	the	25	NMOD	song	song	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	song	NN	song	23	PMOD	of	of	-2	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	.|G__	SENT	.	25	SUFFIX	song	song	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 46 wx46
+%%#SEN 62 wx62
+1	Largely	RB	largely	2	DEP	as	as	+1	0	0	0	largely	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	as	IN	as	0	ROOT	0	0	0	0	0	0	as	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	a	DT	a	4	NMOD	consequence	consequence	+1	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	consequence	NN	consequence	2	PMOD	as	as	-2	0	0	0	consequence	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	of	IN	of	4	NMOD	consequence	consequence	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	``	``	``	2	NMOD	as	as	-4	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	Part	NP	Part	6	SUFFIX	``	``	-1	0	0	0	part	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	IV	NP	IV	6	SUFFIX	``	``	-2	0	0	0	iv	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	''	''	''	6	P	``	``	-3	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	,	,	,	2	NMOD	as	as	-8	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	the	DT	the	2	NMOD	as	as	-9	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	reissued	VVN	reissue	11	SUFFIX	the	the	-1	0	0	0	reissued	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	12-inch	JJ	12-inch	14	NMOD	sleeve	sleeve	+1	0	0	0	12-inch	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	sleeve	NN	sleeve	15	SBJ	was	be	+1	0	0	0	sleeve	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	was	VBD	be	2	NMOD	as	as	-13	0	0	0	was	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	labelled	VVN	label	15	SUFFIX	was	be	-1	0	0	0	labelled	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	with	IN	with	15	ADV	was	be	-2	0	0	0	with	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	a	DT	a	20	NMOD	sticker	sticker	+2	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	warning	NN	warning	20	NMOD	sticker	sticker	+1	0	0	0	warning	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	sticker	NN	sticker	17	PMOD	with	with	-3	0	0	0	sticker	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	that	WDT	that	2	NMOD	as	as	-19	0	0	0	that	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	read	VVD	read	21	SUFFIX	that	that	-1	0	0	0	read	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	:|G__	:	:	21	P	that	that	-2	0	0	0	:	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	``	``	``	21	P	that	that	-3	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	This	DT	this	26	NMOD	record	record	+1	0	0	0	this	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	record	NN	record	37	NMOD	Expletives	expletive	+11	0	0	0	record	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	contains	VVZ	contain	26	SUFFIX	record	record	-1	0	0	0	contains	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	explicit	JJ	explicit	30	NMOD	–	–	+2	0	0	0	explicit	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	language	NN	language	30	NMOD	–	–	+1	0	0	0	language	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+30	–	NN	–	37	NMOD	Expletives	expletive	+7	0	0	0	–	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+31	Abusive	JJ	abusive	37	NMOD	Expletives	expletive	+6	0	0	0	abusive	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+32	,|G__	,	,	31	P	Abusive	abusive	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+33	lewd	JJ	lewd	31	COORD	Abusive	abusive	-2	0	0	0	lewd	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+34	and	CC	and	33	COORD	lewd	lewd	-1	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+35	funny	JJ	funny	34	CONJ	and	and	-1	0	0	0	funny	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+36	–	JJ	–	37	NMOD	Expletives	expletive	+1	0	0	0	–	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+37	Expletives	NNS	expletive	2	NMOD	as	as	-35	0	0	0	expletives	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+38	not	RB	not	40	NMOD	''	''	+2	0	0	0	not	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+39	deleted	VVN	delete	38	SUFFIX	not	not	-1	0	0	0	deleted	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+40	''	''	''	37	P	Expletives	expletive	-3	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+41	.	SENT	.	40	SUFFIX	''	''	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 47 wx47
+%%#SEN 63 wx63
+1	Chart	NN	chart	2	NMOD	success	success	+1	0	0	0	chart	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	success	NN	success	0	ROOT	0	0	0	0	0	0	success	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 48 wx48
+%%#SEN 64 wx64
+1	The	DT	the	2	NMOD	single	single	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	single	JJ	single	3	SBJ	was	be	+1	0	0	0	single	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	was	VBD	be	0	ROOT	0	0	0	0	0	0	was	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	not	RB	not	3	ADV	was	be	-1	0	0	0	not	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	a	DT	a	6	NMOD	hit	hit	+1	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	hit	NN	hit	3	PRD	was	be	-3	0	0	0	hit	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	upon	IN	upon	6	NMOD	hit	hit	-1	0	0	0	upon	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	original	JJ	original	9	NMOD	release	release	+1	0	0	0	original	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	release	NN	release	7	PMOD	upon	upon	-2	0	0	0	release	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	,|G__	,	,	3	P	was	be	-7	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	but	CC	but	3	COORD	was	be	-8	0	0	0	but	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	it	PP	it	3	SUFFIX	was	be	-9	0	0	0	it	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	received	VVD	receive	3	SUFFIX	was	be	-10	0	0	0	received	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	a	DT	a	15	NMOD	reissue	reissue	+1	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	reissue	NN	reissue	3	PRD	was	be	-12	0	0	0	reissue	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	from	IN	from	15	NMOD	reissue	reissue	-1	0	0	0	from	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	Island	NP	Island	15	SUFFIX	reissue	reissue	-2	0	0	0	island	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	Records	NPS	Records	15	SUFFIX	reissue	reissue	-3	0	0	0	records	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	in	IN	in	3	TMP	was	be	-16	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	late	JJ	late	21	NMOD	1983	@card@	+1	0	0	0	late	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	1983	CD	@card@	19	PMOD	in	in	-2	0	0	4.0	1983	t:b86b1008c7	date	0	0	1983	0	0	0	0	0	0	0	date	1
+22	,|G__	,	,	21	P	1983	@card@	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	by	IN	by	3	NMOD	was	be	-20	0	0	0	by	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	which	WDT	which	23	PMOD	by	by	-1	0	0	0	which	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	time	NN	time	40	NMOD	series	series	+15	0	0	0	time	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	Sayle	NP	Sayle	25	SUFFIX	time	time	-1	0	0	2	sayle	a:Q970287	person->artist	https://en.wikipedia.org/wiki/Alexei_Sayle	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/c/ce/Alexei_Sayle_Cambridge_2016.jpg	Alexei_Sayle	Male	Anfield__Liverpool__England	1952_08_07	Anfield__Liverpool	0	film_actor|comedian|screenwriter|television_actor	0	coref	1
+27	had	VHD	have	25	SUFFIX	time	time	-2	0	0	0	had	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	appeared	VVN	appear	25	SUFFIX	time	time	-3	0	0	0	appeared	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	in	IN	in	25	TMP	time	time	-4	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+30	Gorky	NP	Gorky	25	SUFFIX	time	time	-5	0	0	0	gorky	f:Q594307	0	0	0	0	0	0	0	0	0	0	0	0	0
+31	Park	NP	Park	25	SUFFIX	time	time	-6	https://en.wikipedia.org/wiki/Gorky_Park_(film)	2	4.1	park	f:Q594307	film	https://en.wikipedia.org/wiki/Gorky_Park_(film)	0	Gorky_Park	0	0	0	0	0	0	0	kb	2
+32	and	CC	and	25	COORD	time	time	-7	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+33	several	JJ	several	35	NMOD	shows	show	+2	0	0	0	several	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+34	TV	NN	TV	35	NMOD	shows	show	+1	0	0	0	tv	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+35	shows	NNS	show	32	CONJ	and	and	-3	0	0	0	shows	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+36	,|G__	,	,	35	P	shows	show	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+37	including	VVG	include	35	SUFFIX	shows	show	-2	0	0	0	including	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+38	the	DT	the	40	NMOD	series	series	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+39	first	JJ	first	40	NMOD	series	series	+1	0	0	0	first	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+40	series	NN	series	3	NMOD	was	be	-37	0	0	0	series	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+41	of	IN	of	40	NMOD	series	series	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+42	the	DT	the	44	NMOD	sitcom	sitcom	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+43	BBC	NP	BBC	42	SUFFIX	the	the	-1	https://en.wikipedia.org/wiki/BBC	1	0	bbc	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+44	sitcom	NN	sitcom	41	PMOD	of	of	-3	0	0	0	sitcom	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+45	The	DT	the	3	NMOD	was	be	-42	0	0	0	the	f:Q7776794	0	0	0	0	0	0	0	0	0	0	0	0	0
+46	Young	NP	Young	45	SUFFIX	The	the	-1	0	0	0	young	f:Q7776794	0	0	0	0	0	0	0	0	0	0	0	0	0
+47	Ones	NP	Ones	46	SUFFIX	Young	Young	-1	0	0	4.0	ones	f:Q7776794	film	https://en.wikipedia.org/wiki/The_Young_Ones_(1961_film)	0	The_Young_Ones	0	0	0	0	0	0	0	kb	3
+48	,|G__	,	,	45	P	The	the	-3	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+49	and	CC	and	45	COORD	The	the	-4	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+50	the	DT	the	52	NMOD	sitcom	sitcom	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+51	ITV	NP	ITV	50	SUFFIX	the	the	-1	https://en.wikipedia.org/wiki/ITV_(TV_network)	1	0	itv	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+52	sitcom	NN	sitcom	49	CONJ	and	and	-3	0	0	0	sitcom	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+53	Whoops	NP	Whoops	52	SUFFIX	sitcom	sitcom	-1	0	0	0	whoops	f:Q7997632	0	0	0	0	0	0	0	0	0	0	0	0	0
+54	Apocalypse	NP	Apocalypse	52	SUFFIX	sitcom	sitcom	-2	0	0	4.0	apocalypse	f:Q7997632	film	https://en.wikipedia.org/wiki/Whoops_Apocalypse_(film)	0	Whoops_Apocalypse	0	0	0	0	0	0	0	kb	2
+55	.|G__	SENT	.	52	SUFFIX	sitcom	sitcom	-3	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 49 wx49
+%%#SEN 65 wx65
+1	The	DT	the	7	NMOD	15	@card@	+6	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	re-issued	VVN	re-issue	1	SUFFIX	The	the	-1	0	0	0	re-issued	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	single	JJ	single	7	NMOD	15	@card@	+4	0	0	0	single	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	eventually	RB	eventually	7	NMOD	15	@card@	+3	0	0	0	eventually	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	reached	VVN	reach	4	SUFFIX	eventually	eventually	-1	0	0	4.0	reached	z:139e2d3125	activity	0	0	0	0	0	0	0	0	0	0	activity	1
+6	number	NN	number	7	NMOD	15	@card@	+1	0	0	0	number	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	15	CD	@card@	0	ROOT	0	0	0	0	0	0	15	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	in	IN	in	7	LOC	15	@card@	-1	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	the	DT	the	16	NMOD	1984	@card@	+7	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	UK	NP	UK	9	SUFFIX	the	the	-1	0	0	0	uk	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	Singles	NP	Singles	9	SUFFIX	the	the	-2	0	0	0	singles	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	Chart	NP	Chart	9	SUFFIX	the	the	-3	0	0	0	chart	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	on	IN	on	9	NMOD	the	the	-4	0	0	0	on	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	24	CD	@card@	13	PMOD	on	on	-1	0	0	0	24	t:786c48e161	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	March	NP	March	9	SUFFIX	the	the	-6	0	0	0	march	t:786c48e161	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	1984	CD	@card@	8	PMOD	in	in	-8	0	0	4.0	1984	t:786c48e161	date	0	0	1984	3	24	0	0	0	0	0	date	3
+17	.|G__	SENT	.	16	SUFFIX	1984	@card@	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 66 wx66
+1	[	SYM	[	2	NMOD	2	2	+1	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	2|G__	CD	2	3	AMOD	]	]	+1	0	0	0	2	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	]|G__	SYM	]	0	ROOT	0	0	0	https://en.wikipedia.org/wiki/'Ullo_John!_Gotta_New_Motor%3F#cite_note-Guinness-2	3	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 50 wx50
+%%#SEN 67 wx67
+1	Cultural	JJ	cultural	2	NMOD	influence	influence	+1	0	0	0	cultural	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	influence	NN	influence	0	ROOT	0	0	0	0	0	0	influence	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 51 wx51
+%%#SEN 68 wx68
+1	The	DT	the	2	NMOD	song	song	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	song	NN	song	5	NMOD	title	title	+3	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	and	CC	and	2	COORD	song	song	-1	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	its	PP$	its	2	SUFFIX	song	song	-2	0	0	0	its	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	title	NN	title	12	NMOD	times	time	+7	0	0	0	title	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	have	VHP	have	5	SUFFIX	title	title	-1	0	0	0	have	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	been	VBN	be	5	APPO	title	title	-2	0	0	0	been	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	adapted	VVN	adapt	5	SUFFIX	title	title	-3	0	0	0	adapted	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	and	CC	and	5	COORD	title	title	-4	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	reused	VVN	reuse	5	SUFFIX	title	title	-5	0	0	0	reused	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	numerous	JJ	numerous	12	NMOD	times	time	+1	0	0	0	numerous	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	times	NNS	time	0	ROOT	0	0	0	0	0	0	times	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	in	IN	in	12	LOC	times	time	-1	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	a	DT	a	15	NMOD	variety	variety	+1	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	variety	NN	variety	13	PMOD	in	in	-2	0	0	0	variety	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	of	IN	of	15	NMOD	variety	variety	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	contexts	NNS	context	16	PMOD	of	of	-1	0	0	0	contexts	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	.|G__	SENT	.	15	SUFFIX	variety	variety	-3	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 52 wx52
+%%#SEN 69 wx69
+1	Around	IN	around	11	NMOD	1982	@card@	+10	0	0	0	around	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	the	DT	the	3	NMOD	time	time	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	time	NN	time	1	PMOD	Around	around	-2	0	0	0	time	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	of	IN	of	3	NMOD	time	time	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	the	DT	the	6	NMOD	single	single	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	single	NN	single	9	NMOD	release	release	+3	0	0	0	single	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	's|G__	POS	's	6	SUFFIX	single	single	-1	0	0	0	's	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	initial	JJ	initial	9	NMOD	release	release	+1	0	0	0	initial	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	release	NN	release	4	PMOD	of	of	-5	0	0	0	release	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	(	(	(	11	P	1982	@card@	+1	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	1982|GGG	CD	@card@	18	NMOD	programme	programme	+7	0	0	4.0	1982	t:0169421b45	date	0	0	1982	0	0	0	0	0	0	0	date	1
+12	)|G__	)	)	11	P	1982	@card@	-1	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	BBC2	NP	BBC2	11	SUFFIX	1982	@card@	-2	0	0	0	bbc2	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	Arena	NP	Arena	11	SUFFIX	1982	@card@	-3	0	0	0	arena	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	had	VHD	have	11	SUFFIX	1982	@card@	-4	0	0	0	had	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	made	VVN	make	11	SUFFIX	1982	@card@	-5	0	0	0	made	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	a	DT	a	18	NMOD	programme	programme	+1	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	programme	NN	programme	22	NMOD	influence	influence	+4	0	0	0	programme	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	detailing	VVG	detail	18	SUFFIX	programme	programme	-1	0	0	0	detailing	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	the	DT	the	22	NMOD	influence	influence	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	cultural	JJ	cultural	22	NMOD	influence	influence	+1	0	0	0	cultural	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	influence	NN	influence	0	ROOT	0	0	0	0	0	0	influence	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	of	IN	of	22	NMOD	influence	influence	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	the	DT	the	31	NMOD	demise	demise	+7	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	Ford	NP	Ford	24	SUFFIX	the	the	-1	0	0	4.0	ford	l:Q3811439	location	https://en.wikipedia.org/wiki/Ford,_Shropshire	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/d/dd/Ford_Church_and_Yard_in_Shropshire_-_geograph.org.uk_-_344573.jpg	Ford	United_Kingdom	0	0	0	0	0	0	kb	1
+26	Cortina	NP	Cortina	24	SUFFIX	the	the	-2	0	0	0	cortina	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	and	CC	and	24	COORD	the	the	-3	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	its	PP$	its	24	SUFFIX	the	the	-4	0	0	0	its	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	recently	RB	recently	31	NMOD	demise	demise	+2	0	0	0	recently	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+30	announced	VVN	announce	29	SUFFIX	recently	recently	-1	0	0	0	announced	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+31	demise	NN	demise	23	PMOD	of	of	-8	0	0	0	demise	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+32	;|G__	:	;	22	P	influence	influence	-10	0	0	0	;	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+33	``	``	``	22	NMOD	influence	influence	-11	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+34	The	DT	the	36	NMOD	Life	life	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+35	Private	JJ	private	36	NMOD	Life	life	+1	0	0	0	private	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+36	Life	NN	life	61	NMOD	classes	class	+25	0	0	0	life	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+37	of	IN	of	36	NMOD	Life	life	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+38	the	DT	the	49	NMOD	talks	talk	+11	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+39	Ford	NP	Ford	38	SUFFIX	the	the	-1	0	0	4.0	ford	l:Q3811439	location	https://en.wikipedia.org/wiki/Ford,_Shropshire	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/d/dd/Ford_Church_and_Yard_in_Shropshire_-_geograph.org.uk_-_344573.jpg	Ford	United_Kingdom	0	0	0	0	0	0	kb	1
+40	Cortina	NP	Cortina	38	SUFFIX	the	the	-2	0	0	0	cortina	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+41	''	''	''	38	P	the	the	-3	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+42	in	IN	in	49	NMOD	talks	talk	+7	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+43	which	WDT	which	42	PMOD	in	in	-1	0	0	0	which	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+44	Sayle	NP	Sayle	43	SUFFIX	which	which	-1	0	0	2	sayle	a:Q970287	person->artist	https://en.wikipedia.org/wiki/Alexei_Sayle	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/c/ce/Alexei_Sayle_Cambridge_2016.jpg	Alexei_Sayle	Male	Anfield__Liverpool__England	1952_08_07	Anfield__Liverpool	0	film_actor|comedian|screenwriter|television_actor	0	coref	1
+45	(	(	(	47	P	presenter	presenter	+2	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+46	the|G__	DT	the	47	NMOD	presenter	presenter	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+47	presenter	NN	presenter	49	NMOD	talks	talk	+2	0	0	0	presenter	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+48	)|G__	)	)	47	P	presenter	presenter	-1	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+49	talks	NNS	talk	37	PMOD	of	of	-12	0	0	0	talks	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+50	through	IN	through	36	TMP	Life	life	-14	0	0	0	through	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+51	the	DT	the	52	NMOD	influence	influence	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+52	influence	NN	influence	50	PMOD	through	through	-2	0	0	0	influence	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+53	of	IN	of	52	NMOD	influence	influence	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+54	the	DT	the	55	NMOD	car	car	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+55	car	NN	car	53	PMOD	of	of	-2	0	0	0	car	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+56	on	IN	on	52	NMOD	influence	influence	-4	0	0	0	on	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+57	the	DT	the	59	NMOD	war	war	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+58	post	NN	post	59	NMOD	war	war	+1	0	0	0	post	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+59	war	NN	war	56	PMOD	on	on	-3	0	0	0	war	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+60	working	VVG	work	59	SUFFIX	war	war	-1	0	0	0	working	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+61	classes	NNS	class	22	NMOD	influence	influence	-39	0	0	0	classes	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+62	and	CC	and	61	COORD	classes	class	-1	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+63	also	RB	also	22	NMOD	influence	influence	-41	0	0	0	also	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+64	features	VVZ	feature	63	SUFFIX	also	also	-1	0	0	0	features	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+65	villain	NN	villain	22	NMOD	influence	influence	-43	0	0	0	villain	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+66	John	NP	John	65	SUFFIX	villain	villain	-1	0	0	0	john	p:Q5982604	0	0	0	0	0	0	0	0	0	0	0	0	0
+67	McVicar	NP	McVicar	65	SUFFIX	villain	villain	-2	0	0	4.0	mcvicar	p:Q5982604	person	https://en.wikipedia.org/wiki/John_McVicar	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/3/3a/John_McVicar_(1981).jpg	John_McVicar	Male	0	1940_01_01	0	0	journalist	0	kb	2
+68	(	(	(	22	NMOD	influence	influence	-46	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+69	who|GGG	WP	who	83	NMOD	car	car	+14	0	0	2	who	p:Q5982604	person	https://en.wikipedia.org/wiki/John_McVicar	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/3/3a/John_McVicar_(1981).jpg	John_McVicar	Male	0	1940_01_01	0	0	journalist	0	coref	1
+70	appears	VVZ	appear	69	SUFFIX	who	who	-1	0	0	0	appears	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+71	on	IN	on	69	ADV	who	who	-2	0	0	0	on	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+72	the	DT	the	74	NMOD	artwork	artwork	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+73	cover	NN	cover	74	NMOD	artwork	artwork	+1	0	0	0	cover	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+74	artwork	NN	artwork	71	PMOD	on	on	-3	0	0	0	artwork	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+75	alongside	IN	alongside	83	NMOD	car	car	+8	0	0	0	alongside	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+76	Sayle	NP	Sayle	75	SUFFIX	alongside	alongside	-1	0	0	2	sayle	a:Q970287	person->artist	https://en.wikipedia.org/wiki/Alexei_Sayle	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/c/ce/Alexei_Sayle_Cambridge_2016.jpg	Alexei_Sayle	Male	Anfield__Liverpool__England	1952_08_07	Anfield__Liverpool	0	film_actor|comedian|screenwriter|television_actor	0	coref	1
+77	)|G__	)	)	75	P	alongside	alongside	-2	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+78	discussing	VVG	discuss	75	SUFFIX	alongside	alongside	-3	0	0	0	discussing	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+79	Britain	NP	Britain	75	SUFFIX	alongside	alongside	-4	0	0	0	britain	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+80	's|G__	POS	's	79	SUFFIX	Britain	Britain	-1	0	0	0	's	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+81	most	RBS	most	82	AMOD	stolen	stolen	+1	0	0	0	most	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+82	stolen	JJ	stolen	83	NMOD	car	car	+1	0	0	0	stolen	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+83	car	NN	car	22	NMOD	influence	influence	-61	0	0	0	car	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+84	of	IN	of	83	NMOD	car	car	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+85	the	DT	the	86	NMOD	period	period	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+86	period	NN	period	84	PMOD	of	of	-2	0	0	0	period	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+87	.|G__	SENT	.	86	SUFFIX	period	period	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 53 wx53
+%%#SEN 70 wx70
+1	In	IN	in	0	ROOT	0	0	0	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	1985	CD	@card@	1	PMOD	In	in	-1	0	0	4.0	1985	t:67a75fa6e0	date	0	0	1985	0	0	0	0	0	0	0	date	1
+3	,|G__	,	,	9	P	campaign	campaign	+6	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	Toshiba	NP	Toshiba	3	SUFFIX	,	,	-1	0	0	4.0	toshiba	t:Q22111663	taxon	https://www.wikidata.org/wiki/Q22111663	0	Toshiba	0	0	0	0	0	0	0	kb	1
+5	ran	VVD	run	3	SUFFIX	,	,	-2	0	0	0	ran	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	a	DT	a	9	NMOD	campaign	campaign	+3	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	TV	NN	TV	8	NMOD	advertising	advertising	+1	0	0	0	tv	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	advertising	NN	advertising	9	NMOD	campaign	campaign	+1	0	0	0	advertising	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	campaign	NN	campaign	1	NMOD	In	in	-8	0	0	0	campaign	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	that	WDT	that	1	NMOD	In	in	-9	0	0	0	that	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	featured	VVD	feature	10	SUFFIX	that	that	-1	0	0	0	featured	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	the	DT	the	13	NMOD	song	song	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	song	NN	song	1	NMOD	In	in	-12	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	with	IN	with	13	NMOD	song	song	-1	0	0	0	with	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	altered	JJ	altered	16	NMOD	lyrics	lyric	+1	0	0	0	altered	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	lyrics	NNS	lyric	17	NMOD	–	–	+1	0	0	0	lyrics	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	–	NN	–	14	PMOD	with	with	-3	0	0	0	–	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	``	``	``	1	NMOD	In	in	-17	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	'Ello	NP	'Ello	18	SUFFIX	``	``	-1	0	0	4.0	'ello	l:Q24628277	location	https://www.wikidata.org/wiki/Q24628277	0	Ello	0	0	0	0	0	0	0	kb	1
+20	Tosh	NP	Tosh	18	SUFFIX	``	``	-2	0	0	0	tosh	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	!|G__	SENT	!	18	SUFFIX	``	``	-3	0	0	0	!	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 71 wx71
+1	Got	VVN	get	0	ROOT	0	0	0	0	0	0	got	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	ta|G__	JJ	ta	5	NMOD	''	''	+3	0	0	0	ta	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	Toshiba	NP	Toshiba	2	SUFFIX	ta	ta	-1	0	0	4.0	toshiba	t:Q22111663	taxon	https://www.wikidata.org/wiki/Q22111663	0	Toshiba	0	0	0	0	0	0	0	kb	1
+4	?|G__	SENT	?	2	SUFFIX	ta	ta	-2	0	0	0	?	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	''	''	''	1	P	Got	get	-4	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 72 wx72
+1	–	NN	–	0	ROOT	0	0	0	0	0	0	–	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	performed	VVD	perform	1	SUFFIX	–	–	-1	0	0	0	performed	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	by	IN	by	1	NMOD	–	–	-2	0	0	0	by	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	Ian	NP	Ian	1	SUFFIX	–	–	-3	0	0	0	ian	a:Q354002	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	Dury	NP	Dury	1	SUFFIX	–	–	-4	https://en.wikipedia.org/wiki/Ian_Dury	2	4.1	dury	a:Q354002	person->artist	https://en.wikipedia.org/wiki/Ian_Dury	http://athena3.fit.vutbr.cz/kb/images/bbc/8398734e-0ee4-49dc-a61b-bb647939e022.jpg|http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/5/57/Ian_Dury_1.jpg	Ian_Dury	Male	Harrow__Middlesex__England__UK	1942_05_12	London	2000_03_27	singer|painter|film_actor|actor	0	kb	2
+6	.|G__	SENT	.	1	SUFFIX	–	–	-5	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 73 wx73
+1	[	SYM	[	2	NMOD	3	3	+1	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	3|G__	CD	3	3	AMOD	]	]	+1	0	0	0	3	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	]|G__	SYM	]	0	ROOT	0	0	0	https://en.wikipedia.org/wiki/'Ullo_John!_Gotta_New_Motor%3F#cite_note-MediaWeek-3	3	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 54 wx54
+%%#SEN 74 wx74
+1	Upon	IN	upon	7	NMOD	song	song	+6	0	0	0	upon	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	an	DT	an	4	NMOD	trial	trial	+2	0	0	0	an	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	obscenity	NN	obscenity	4	NMOD	trial	trial	+1	0	0	0	obscenity	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	trial	NN	trial	1	PMOD	Upon	upon	-3	0	0	0	trial	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	over	IN	over	4	NMOD	trial	trial	-1	0	0	0	over	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	their	PP$	their	4	SUFFIX	trial	trial	-2	0	0	0	their	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	song	NN	song	0	ROOT	0	0	0	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	``	``	``	7	NMOD	song	song	-1	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	Bata	NP	Bata	8	SUFFIX	``	``	-1	0	0	4.0	bata	y:c1d98da9f2	mythology	https://en.wikipedia.org/wiki/Bata_(god)	0	Bata	0	0	0	0	0	0	0	kb	1
+10	Motel	NP	Motel	8	SUFFIX	``	``	-2	0	0	4.0	motel	f:Q6917179	film	https://en.wikipedia.org/wiki/The_Bag_Man	0	Motel	0	0	0	0	0	0	0	kb	1
+11	''	''	''	8	P	``	``	-3	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	,	,	,	7	NMOD	song	song	-5	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	the	DT	the	16	NMOD	band	band	+3	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	anarchist	NN	anarchist	15	NMOD	punk	punk	+1	0	0	0	anarchist	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	punk	NN	punk	16	NMOD	band	band	+1	0	0	0	punk	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	band	NN	band	20	NMOD	b-side	b-side	+4	0	0	0	band	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	Crass	NP	Crass	16	SUFFIX	band	band	-1	https://en.wikipedia.org/wiki/Crass	1	0	crass	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	presented	VVD	present	16	SUFFIX	band	band	-2	0	0	0	presented	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	the	DT	the	20	NMOD	b-side	b-side	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	b-side	NN	b-side	7	NMOD	song	song	-13	0	0	0	b-side	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	to	TO	to	20	NMOD	b-side	b-side	-1	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	this	DT	this	23	NMOD	song	song	+1	0	0	0	this	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	song	NN	song	21	PMOD	to	to	-2	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	as	IN	as	20	NMOD	b-side	b-side	-4	0	0	0	as	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	an	DT	an	26	NMOD	example	example	+1	0	0	0	an	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	example	NN	example	24	PMOD	as	as	-2	0	0	0	example	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	that	IN/that	that	26	SUFFIX	example	example	-1	0	0	0	that	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	there	EX	there	29	SBJ	were	be	+1	0	0	0	there	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	were	VBD	be	26	NMOD	example	example	-3	0	0	0	were	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+30	much	RB	much	29	PRD	were	be	-1	0	0	0	much	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+31	more	RBR	more	30	AMOD	much	much	-1	0	0	0	more	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+32	obscene	JJ	obscene	30	AMOD	much	much	-2	0	0	0	obscene	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+33	records	NNS	record	29	PRD	were	be	-4	0	0	0	records	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+34	out	RB	out	29	LOC	were	be	-5	0	0	0	out	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+35	there	RB	there	34	AMOD	out	out	-1	0	0	0	there	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+36	than	IN	than	34	AMOD	out	out	-2	0	0	0	than	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+37	``	``	``	40	P	''	''	+3	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+38	Bata	NP	Bata	37	SUFFIX	``	``	-1	0	0	4.0	bata	y:c1d98da9f2	mythology	https://en.wikipedia.org/wiki/Bata_(god)	0	Bata	0	0	0	0	0	0	0	kb	1
+39	Motel	NP	Motel	37	SUFFIX	``	``	-2	0	0	4.0	motel	f:Q6917179	film	https://en.wikipedia.org/wiki/The_Bag_Man	0	Motel	0	0	0	0	0	0	0	kb	1
+40	''	''	''	29	P	were	be	-11	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+41	.	SENT	.	40	SUFFIX	''	''	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 75 wx75
+1	While	IN	while	3	SBJ	was	be	+2	0	0	0	while	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	it	PP	it	1	SUFFIX	While	while	-1	0	0	0	it	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	was	VBD	be	0	ROOT	0	0	0	0	0	0	was	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	being	VBG	be	3	VC	was	be	-1	0	0	0	being	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	played	VVN	play	4	SUFFIX	being	be	-1	0	0	0	played	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	,|G__	,	,	3	P	was	be	-3	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	much	RB	much	3	ADV	was	be	-4	0	0	0	much	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	of	IN	of	7	AMOD	much	much	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	the	DT	the	10	NMOD	court	court	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	court	NN	court	8	PMOD	of	of	-2	0	0	0	court	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	responded	VVD	respond	10	SUFFIX	court	court	-1	0	0	0	responded	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	with	IN	with	3	PRD	was	be	-9	0	0	0	with	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	uproarious	JJ	uproarious	14	NMOD	laughter	laughter	+1	0	0	0	uproarious	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	laughter	NN	laughter	12	PMOD	with	with	-2	0	0	0	laughter	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	.|G__	SENT	.	14	SUFFIX	laughter	laughter	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 76 wx76
+1	This	DT	this	4	NMOD	magistrates	magistrate	+3	0	0	0	this	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	outraged	VVD	outrage	1	SUFFIX	This	this	-1	0	0	0	outraged	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	the	DT	the	4	NMOD	magistrates	magistrate	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	magistrates	NNS	magistrate	0	ROOT	0	0	0	0	0	0	magistrates	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	,|G__	,	,	4	P	magistrates	magistrate	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	who	WP	who	8	NMOD	anyone	anyone	+2	0	0	0	who	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	threatened	VVD	threaten	6	SUFFIX	who	who	-1	0	0	0	threatened	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	anyone	NN	anyone	4	APPO	magistrates	magistrate	-4	0	0	0	anyone	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	who	WP	who	4	NMOD	magistrates	magistrate	-5	0	0	0	who	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	laughed	VVD	laugh	9	SUFFIX	who	who	-1	0	0	0	laughed	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	with	IN	with	9	ADV	who	who	-2	0	0	0	with	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	a	DT	a	13	NMOD	charge	charge	+1	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	charge	NN	charge	11	PMOD	with	with	-2	0	0	0	charge	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	for	IN	for	13	NMOD	charge	charge	-1	0	0	0	for	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	contempt	NN	contempt	14	PMOD	for	for	-1	0	0	0	contempt	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	of	IN	of	15	NMOD	contempt	contempt	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	court	NN	court	16	PMOD	of	of	-1	0	0	0	court	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	.|G__	SENT	.	15	SUFFIX	contempt	contempt	-3	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 77 wx77
+1	This	DT	this	0	ROOT	0	0	0	0	0	0	this	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	resulted	VVD	result	1	SUFFIX	This	this	-1	0	0	0	resulted	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	in	IN	in	1	LOC	This	this	-2	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	members	NNS	member	3	PMOD	in	in	-1	0	0	0	members	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	of	IN	of	4	NMOD	members	member	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	the	DT	the	7	NMOD	band	band	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	band	NN	band	5	PMOD	of	of	-2	0	0	0	band	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	reportedly	RB	reportedly	11	NMOD	lips	lip	+3	0	0	0	reportedly	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	biting	VVG	bite	8	SUFFIX	reportedly	reportedly	-1	0	0	0	biting	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	their	PP$	their	8	SUFFIX	reportedly	reportedly	-2	0	0	0	their	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	lips	NNS	lip	1	NMOD	This	this	-10	0	0	0	lips	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	so	RB	so	13	AMOD	hard	hard	+1	0	0	0	so	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	hard	JJ	hard	11	APPO	lips	lip	-2	0	0	0	hard	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	that	IN/that	that	11	SUFFIX	lips	lip	-3	0	0	0	that	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	they	PP	they	11	SUFFIX	lips	lip	-4	0	0	0	they	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	bled	VVD	bleed	15	SUFFIX	they	they	-1	0	0	0	bled	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	,|G__	,	,	11	P	lips	lip	-6	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	so	RB	so	11	NMOD	lips	lip	-7	0	0	0	so	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	as	RB	as	18	AMOD	so	so	-1	0	0	0	as	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	to	TO	to	11	NMOD	lips	lip	-9	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	prevent	VV	prevent	11	SUFFIX	lips	lip	-10	0	0	0	prevent	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	themselves	PP	themselves	11	SUFFIX	lips	lip	-11	0	0	0	themselves	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	from	IN	from	11	NMOD	lips	lip	-12	0	0	0	from	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	laughing	VVG	laugh	11	SUFFIX	lips	lip	-13	0	0	0	laughing	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	.|G__	SENT	.	11	SUFFIX	lips	lip	-14	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 78 wx78
+1	[	SYM	[	2	NMOD	4	4	+1	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	4|G__	CD	4	3	AMOD	]	]	+1	0	0	0	4	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	]|G__	SYM	]	0	ROOT	0	0	0	https://en.wikipedia.org/wiki/'Ullo_John!_Gotta_New_Motor%3F#cite_note-4	3	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 55 wx55
+%%#SEN 79 wx79
+1	The	DT	the	5	NMOD	single	single	+4	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	#	#	#	5	NMOD	single	single	+3	0	0	0	#	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	18|G__	CD	@card@	2	NMOD	#	#	-1	0	0	0	18	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	UK	NP	UK	2	SUFFIX	#	#	-2	0	0	0	uk	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	single	NN	single	39	NMOD	line	line	+34	0	0	0	single	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	Has	VHZ	have	5	SUFFIX	single	single	-1	0	0	0	has	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	it	PP	it	5	SUFFIX	single	single	-2	0	0	0	it	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	Come	VVN	come	5	SUFFIX	single	single	-3	0	0	0	come	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	To	TO	To	5	NMOD	single	single	-4	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	This	DT	this	12	NMOD	2001	@card@	+2	https://en.wikipedia.org/wiki/Has_It_Come_to_This%3F	5	0	this	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	(	(	(	12	P	2001	@card@	+1	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	2001|GGG	CD	@card@	9	PMOD	To	To	-3	0	0	4.0	2001	t:883d8a9dc9	date	0	0	2001	0	0	0	0	0	0	0	date	1
+13	)|G__	)	)	5	P	single	single	-8	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	from	IN	from	5	NMOD	single	single	-9	0	0	0	from	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	the	DT	the	27	NMOD	song	song	+12	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	ground-breaking	JJ	ground-breaking	27	NMOD	song	song	+11	0	0	0	ground-breaking	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	UK	NP	UK	16	SUFFIX	ground-breaking	ground-breaking	-1	0	0	0	uk	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	Hip-Hop/Rap	NP	Hip-Hop/Rap	16	SUFFIX	ground-breaking	ground-breaking	-2	0	0	0	hip-hop/rap	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	album	NN	album	27	NMOD	song	song	+8	0	0	0	album	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	Original	JJ	original	24	DEP	to	to	+4	0	0	0	original	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	Pirate	NP	Pirate	20	SUFFIX	Original	original	-1	0	0	4.0	pirate	f:Q960349	film	https://en.wikipedia.org/wiki/The_Pirate_(1948_film)	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/2/28/Gene_Kelly-Judy_Garland_in_The_Pirate_trailer.jpg	The_Pirate	0	0	0	0	0	0	0	kb	1
+22	Material	NP	Material	20	SUFFIX	Original	original	-2	0	0	0	material	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	appears	VVZ	appear	20	SUFFIX	Original	original	-3	0	0	0	appears	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	to	TO	to	27	NMOD	song	song	+3	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	reference	VV	reference	24	SUFFIX	to	to	-1	0	0	0	reference	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	the	DT	the	27	NMOD	song	song	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	song	NN	song	14	PMOD	from	from	-13	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	in	IN	in	27	LOC	song	song	-1	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	the	DT	the	30	NMOD	lyric	lyric	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+30	lyric	NN	lyric	28	PMOD	in	in	-2	0	0	0	lyric	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+31	``	``	``	39	P	line	line	+8	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+32	Bravery	NP	Bravery	31	SUFFIX	``	``	-1	0	0	0	bravery	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+33	in	IN	in	31	LOC	``	``	-2	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+34	the	DT	the	35	NMOD	face	face	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+35	face	NN	face	33	PMOD	in	in	-2	0	0	0	face	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+36	of	IN	of	35	NMOD	face	face	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+37	defeat	NN	defeat	36	PMOD	of	of	-1	0	0	0	defeat	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+38	All	DT	all	39	NMOD	line	line	+1	0	0	0	all	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+39	line	NN	line	54	NMOD	SR	SR	+15	0	0	0	line	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+40	up	RP	up	39	NMOD	line	line	-1	0	0	0	up	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+41	and	CC	and	39	COORD	line	line	-2	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+42	grab	VV	grab	39	SUFFIX	line	line	-3	0	0	0	grab	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+43	yer	JJ	yer	54	NMOD	SR	SR	+11	0	0	0	yer	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+44	seat	NN	seat	54	NMOD	SR	SR	+10	0	0	0	seat	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+45	-	:	-	44	P	seat	seat	-1	0	0	0	-	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+46	Cos	NP	Cos	44	SUFFIX	seat	seat	-2	0	0	0	cos	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+47	Tony	NP	Tony	44	SUFFIX	seat	seat	-3	0	0	4.0	tony	f:Q7821735	film	https://en.wikipedia.org/wiki/Tony_(2009_film)	0	Tony	0	0	0	0	0	0	0	kb	1
+48	's|G__	POS	's	44	SUFFIX	seat	seat	-4	0	0	0	's	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+49	got	VVD	get	44	SUFFIX	seat	seat	-5	0	0	0	got	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+50	a	DT	a	54	NMOD	SR	SR	+4	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+51	new	JJ	new	54	NMOD	SR	SR	+3	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+52	motor	NN	motor	54	NMOD	SR	SR	+2	0	0	0	motor	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+53	-	:	-	54	P	SR	SR	+1	0	0	0	-	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+54	SR	NN	SR	0	ROOT	0	0	0	0	0	0	sr	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+55	Nova	NP	Nova	54	SUFFIX	SR	SR	-1	0	0	4.0	nova	l:Q5662502	location	https://en.wikipedia.org/wiki/Nova,_East_Azerbaijan	0	Nova	Iran	0	0	0	0	0	0	kb	1
+56	driving	VVG	drive	54	SUFFIX	SR	SR	-2	0	0	0	driving	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+57	like	IN	like	54	NMOD	SR	SR	-3	0	0	0	like	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+58	a	DT	a	54	NMOD	SR	SR	-4	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+59	joyrider	NN	joyrider	54	NMOD	SR	SR	-5	0	0	0	joyrider	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+60	-	:	-	54	NMOD	SR	SR	-6	0	0	0	-	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+61	Speeding	VVG	speed	60	SUFFIX	-	-	-1	0	0	0	speeding	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+62	to	TO	to	60	ADV	-	-	-2	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+63	the	DT	the	54	NMOD	SR	SR	-9	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+64	corner	NN	corner	54	NMOD	SR	SR	-10	0	0	0	corner	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+65	-	:	-	54	NMOD	SR	SR	-11	0	0	0	-	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+66	Yer	NP	Yer	65	SUFFIX	-	-	-1	0	0	0	yer	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+67	mother	NN	mother	70	SBJ	'll	will	+3	0	0	0	mother	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+68	warned	VVD	warn	67	SUFFIX	mother	mother	-1	0	0	0	warned	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+69	it	PP	it	67	SUFFIX	mother	mother	-2	0	0	0	it	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+70	'll|G__	MD	will	54	NMOD	SR	SR	-16	0	0	0	'll	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+71	be	VB	be	70	VC	'll	will	-1	0	0	0	be	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+72	a	DT	a	75	NMOD	banger	banger	+3	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+73	sound	JJ	sound	75	NMOD	banger	banger	+2	0	0	0	sound	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+74	system	NN	system	75	NMOD	banger	banger	+1	0	0	0	system	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+75	banger	NN	banger	71	PRD	be	be	-4	0	0	0	banger	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+76	''	''	''	71	P	be	be	-5	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 56 wx56
+%%#SEN 80 wx80
+1	In	IN	in	6	LOC	was	be	+5	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	2005	CD	@card@	1	PMOD	In	in	-1	0	0	4.0	2005	t:240883d86e	date	0	0	2005	0	0	0	0	0	0	0	date	1
+3	,|G__	,	,	6	P	was	be	+3	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	the	DT	the	5	NMOD	song	song	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	song	NN	song	6	SBJ	was	be	+1	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	was	VBD	be	0	ROOT	0	0	0	0	0	0	was	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	revived	VVN	revive	6	SUFFIX	was	be	-1	0	0	0	revived	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	for	IN	for	6	ADV	was	be	-2	0	0	0	for	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	a	DT	a	20	NMOD	agency	agency	+11	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	new	JJ	new	20	NMOD	agency	agency	+10	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	Toshiba	NP	Toshiba	10	SUFFIX	new	new	-1	0	0	4.0	toshiba	t:Q22111663	taxon	https://www.wikidata.org/wiki/Q22111663	0	Toshiba	0	0	0	0	0	0	0	kb	1
+12	campaign	NN	campaign	14	NMOD	vocalist	vocalist	+2	0	0	0	campaign	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	featuring	VVG	feature	12	SUFFIX	campaign	campaign	-1	0	0	0	featuring	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	vocalist	NN	vocalist	20	NMOD	agency	agency	+6	0	0	0	vocalist	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	Suggs	NP	Suggs	14	SUFFIX	vocalist	vocalist	-1	0	0	0	suggs	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	,|G__	,	,	14	P	vocalist	vocalist	-2	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	Toshiba	NP	Toshiba	14	SUFFIX	vocalist	vocalist	-3	0	0	4.0	toshiba	t:Q22111663	taxon	https://www.wikidata.org/wiki/Q22111663	0	Toshiba	0	0	0	0	0	0	0	kb	1
+18	's|G__	POS	's	14	SUFFIX	vocalist	vocalist	-4	0	0	0	's	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	advertising	NN	advertising	20	NMOD	agency	agency	+1	0	0	0	advertising	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	agency	NN	agency	8	PMOD	for	for	-12	0	0	0	agency	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	claiming	VVG	claim	20	SUFFIX	agency	agency	-1	0	0	0	claiming	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	that	IN/that	that	20	SUFFIX	agency	agency	-2	0	0	0	that	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	``	``	``	43	P	today	today	+20	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	the	DT	the	27	NMOD	tagline	tagline	+3	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	'ello	NP	'ello	24	SUFFIX	the	the	-1	0	0	0	'ello	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	Tosh	NP	Tosh	24	SUFFIX	the	the	-2	0	0	0	tosh	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	tagline	NN	tagline	43	NMOD	today	today	+16	0	0	0	tagline	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	has	VHZ	have	27	SUFFIX	tagline	tagline	-1	0	0	0	has	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	gone	VVN	go	27	SUFFIX	tagline	tagline	-2	0	0	4.0	gone	s:cb1930a653	activity	0	0	0	0	0	0	0	0	0	0	activity	1
+30	down	RP	down	29	PRT	gone	go	-1	0	0	0	down	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+31	in	IN	in	27	LOC	tagline	tagline	-4	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+32	advertising	NN	advertising	33	NMOD	history	history	+1	0	0	0	advertising	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+33	history	NN	history	31	PMOD	in	in	-2	0	0	0	history	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+34	,|G__	,	,	27	P	tagline	tagline	-7	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+35	demonstrated	VVN	demonstrate	27	SUFFIX	tagline	tagline	-8	0	0	0	demonstrated	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+36	by	IN	by	27	NMOD	tagline	tagline	-9	0	0	0	by	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+37	the	DT	the	39	NMOD	people	people	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+38	fact	NN	fact	39	NMOD	people	people	+1	0	0	0	fact	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+39	people	NNS	people	36	PMOD	by	by	-3	0	0	0	people	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+40	still	RB	still	43	NMOD	today	today	+3	0	0	0	still	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+41	remember	VVP	remember	40	SUFFIX	still	still	-1	0	0	0	remember	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+42	it	PP	it	40	SUFFIX	still	still	-2	0	0	0	it	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+43	today	NN	today	6	PRD	was	be	-37	0	0	0	today	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+44	''	''	''	43	P	today	today	-1	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+45	.	SENT	.	43	SUFFIX	today	today	-2	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 81 wx81
+1	[	SYM	[	2	NMOD	5	5	+1	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	5|G__	CD	5	3	AMOD	]	]	+1	0	0	0	5	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	]|G__	SYM	]	0	ROOT	0	0	0	https://en.wikipedia.org/wiki/'Ullo_John!_Gotta_New_Motor%3F#cite_note-TechDigest-5	3	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 57 wx57
+%%#SEN 82 wx82
+1	The	DT	the	2	NMOD	song	song	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	song	NN	song	4	NMOD	title	title	+2	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	's|G__	POS	's	2	SUFFIX	song	song	-1	0	0	0	's	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	title	NN	title	5	SBJ	was	be	+1	0	0	0	title	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	was	VBD	be	0	ROOT	0	0	0	0	0	0	was	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	adapted	VVN	adapt	5	SUFFIX	was	be	-1	0	0	0	adapted	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	by	IN	by	5	LGS	was	be	-2	0	0	0	by	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	the	DT	the	11	NMOD	newspaper	newspaper	+3	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	British	JJ	British	11	NMOD	newspaper	newspaper	+2	0	0	4.0	british	n:07ssc	nationality	https://en.wikipedia.org/wiki/United_Kingdom	http://athena3.fit.vutbr.cz/kb/images/freebase/059h_0v.jpg|http://athena3.fit.vutbr.cz/kb/images/freebase/02nbhpy.jpg|http://athena3.fit.vutbr.cz/kb/images/freebase/0591mxq.jpg|http://athena3.fit.vutbr.cz/kb/images/freebase/05tyznp.jpg	British	United_Kingdom	0	0	0	0	0	0	kb	1
+10	tabloid	JJ	tabloid	11	NMOD	newspaper	newspaper	+1	0	0	0	tabloid	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	newspaper	NN	newspaper	7	PMOD	by	by	-4	0	0	0	newspaper	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	The	DT	the	14	DEP	to	to	+2	0	0	0	the	f:Q2656737	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	Sun	NP	Sun	12	SUFFIX	The	the	-1	0	0	4.0	sun	f:Q2656737	film	https://en.wikipedia.org/wiki/The_Sun_(film)	0	The_Sun	0	0	0	0	0	0	0	kb	2
+14	to	TO	to	5	ADV	was	be	-9	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	provide	VV	provide	14	SUFFIX	to	to	-1	0	0	0	provide	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	headlines	NNS	headline	14	PMOD	to	to	-2	0	0	0	headlines	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	at	IN	at	19	AMOD	twice	twice	+2	0	0	0	at	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	least	JJS	least	17	AMOD	at	at	-1	0	0	0	least	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	twice	RB	twice	5	TMP	was	be	-14	0	0	0	twice	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	during	IN	during	19	AMOD	twice	twice	-1	0	0	0	during	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	2009	CD	@card@	20	PMOD	during	during	-1	0	0	4.0	2009	t:4084500f44	date	0	0	2009	0	0	0	0	0	0	0	date	1
+22	:|G__	:	:	5	P	was	be	-17	0	0	0	:	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	``	``	``	5	P	was	be	-18	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	'Ello	NP	'Ello	5	SUFFIX	was	be	-19	0	0	4.0	'ello	l:Q24628277	location	https://www.wikidata.org/wiki/Q24628277	0	Ello	0	0	0	0	0	0	0	kb	1
+25	Rosie	NP	Rosie	24	SUFFIX	'Ello	'Ello	-1	0	0	4.0	rosie	f:Q56561742	film	https://en.wikipedia.org/wiki/Rosie_(2018_film)	0	Rosie	0	0	0	0	0	0	0	kb	1
+26	,|G__	,	,	5	P	was	be	-21	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	got	VVD	get	5	SUFFIX	was	be	-22	0	0	0	got	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	ta|G__	JJ	ta	30	NMOD	motor	motor	+2	0	0	0	ta	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	new	JJ	new	30	NMOD	motor	motor	+1	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+30	motor	NN	motor	5	PRD	was	be	-25	0	0	0	motor	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+31	?|G__	SENT	?	30	SUFFIX	motor	motor	-1	0	0	0	?	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+32	''	''	''	5	P	was	be	-27	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 83 wx83
+1	(	(	(	13	AMOD	]	]	+12	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	article|G__	VV	article	1	SUFFIX	(	(	-1	0	0	0	article	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	relating	VVG	relate	1	SUFFIX	(	(	-2	0	0	0	relating	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	to	TO	to	1	ADV	(	(	-3	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	a	DT	a	8	NMOD	storyline	storyline	+3	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	soap	NN	soap	7	NMOD	opera	opera	+1	0	0	0	soap	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	opera	NN	opera	8	NMOD	storyline	storyline	+1	0	0	0	opera	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	storyline	NN	storyline	4	PMOD	to	to	-4	0	0	0	storyline	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	)|G__	)	)	1	P	(	(	-8	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	;|G__	:	;	1	P	(	(	-9	0	0	0	;	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	[	SYM	[	13	AMOD	]	]	+2	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	6|G__	CD	6	13	AMOD	]	]	+1	0	0	0	6	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	]|G__	SYM	]	0	ROOT	0	0	0	https://en.wikipedia.org/wiki/'Ullo_John!_Gotta_New_Motor%3F#cite_note-Sun1-6	3	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	and	CC	and	13	COORD	]	]	-1	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	``	``	``	14	P	and	and	-1	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	'Ello	NP	'Ello	13	SUFFIX	]	]	-3	0	0	4.0	'ello	l:Q24628277	location	https://www.wikidata.org/wiki/Q24628277	0	Ello	0	0	0	0	0	0	0	kb	1
+17	Ron	NP	Ron	16	SUFFIX	'Ello	'Ello	-1	0	0	0	ron	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	,|G__	,	,	13	P	]	]	-5	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	got	VVD	get	13	SUFFIX	]	]	-6	0	0	0	got	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	ta|G__	JJ	ta	22	NMOD	motor	motor	+2	0	0	0	ta	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	new	JJ	new	22	NMOD	motor	motor	+1	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	motor	NN	motor	19	OBJ	got	get	-3	0	0	0	motor	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	?|G__	SENT	?	22	SUFFIX	motor	motor	-1	0	0	0	?	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	''	''	''	22	P	motor	motor	-2	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 84 wx84
+1	(	(	(	2	P	news	news	+1	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	news|G__	NN	news	8	NMOD	accident	accident	+6	0	0	0	news	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	of	IN	of	2	NMOD	news	news	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	Cristiano	NP	Cristiano	2	SUFFIX	news	news	-2	0	0	0	cristiano	p:Q11571	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	Ronaldo	NP	Ronaldo	2	SUFFIX	news	news	-3	https://en.wikipedia.org/wiki/Cristiano_Ronaldo	2	4.1	ronaldo	p:Q11571	person	https://en.wikipedia.org/wiki/Cristiano_Ronaldo	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/f/fd/Cristiano_Ronaldo_after_2018_UEFA_Champions_League_Final.jpg	Cristiano_Ronaldo	Male	Funchal	1985_02_05	0	0	model|association_football_player|fashion_entrepreneur	0	kb	2
+6	's	POS	's	2	SUFFIX	news	news	-4	0	0	0	's	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	car	NN	car	8	NMOD	accident	accident	+1	0	0	0	car	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	accident	NN	accident	0	ROOT	0	0	0	0	0	0	accident	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	)|G__	)	)	8	P	accident	accident	-1	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	.|G__	SENT	.	8	SUFFIX	accident	accident	-2	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 85 wx85
+1	[	SYM	[	2	NMOD	7	7	+1	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	7|G__	CD	7	3	AMOD	]	]	+1	0	0	0	7	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	]|G__	SYM	]	0	ROOT	0	0	0	https://en.wikipedia.org/wiki/'Ullo_John!_Gotta_New_Motor%3F#cite_note-Sun2-7	3	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 58 wx58
+%%#SEN 86 wx86
+1	Sayle	NP	Sayle	0	ROOT	0	0	0	0	0	2	sayle	a:Q970287	person->artist	https://en.wikipedia.org/wiki/Alexei_Sayle	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/c/ce/Alexei_Sayle_Cambridge_2016.jpg	Alexei_Sayle	Male	Anfield__Liverpool__England	1952_08_07	Anfield__Liverpool	0	film_actor|comedian|screenwriter|television_actor	0	coref	1
+2	himself	PP	himself	1	SUFFIX	Sayle	Sayle	-1	0	0	2	himself	a:Q970287	person->artist	https://en.wikipedia.org/wiki/Alexei_Sayle	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/c/ce/Alexei_Sayle_Cambridge_2016.jpg	Alexei_Sayle	Male	Anfield__Liverpool__England	1952_08_07	Anfield__Liverpool	0	film_actor|comedian|screenwriter|television_actor	0	coref	1
+3	has	VHZ	have	1	SUFFIX	Sayle	Sayle	-2	0	0	0	has	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	commented	VVN	comment	1	SUFFIX	Sayle	Sayle	-3	0	0	0	commented	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	on	IN	on	1	ADV	Sayle	Sayle	-4	0	0	0	on	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	the	DT	the	7	NMOD	longevity	longevity	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	longevity	NN	longevity	5	PMOD	on	on	-2	0	0	0	longevity	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	of	IN	of	7	NMOD	longevity	longevity	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	the	DT	the	10	NMOD	song	song	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	song	NN	song	12	NMOD	title	title	+2	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	's|G__	POS	's	10	SUFFIX	song	song	-1	0	0	0	's	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	title	NN	title	8	PMOD	of	of	-4	0	0	0	title	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	,|G__	,	,	1	P	Sayle	Sayle	-12	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	in	IN	in	1	LOC	Sayle	Sayle	-13	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	his	PP$	his	1	SUFFIX	Sayle	Sayle	-14	0	0	2	his	a:Q970287	person->artist	https://en.wikipedia.org/wiki/Alexei_Sayle	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/c/ce/Alexei_Sayle_Cambridge_2016.jpg	Alexei_Sayle	Male	Anfield__Liverpool__England	1952_08_07	Anfield__Liverpool	0	film_actor|comedian|screenwriter|television_actor	0	coref	1
+16	column	NN	column	0	ROOT	0	0	0	0	0	0	column	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	for	IN	for	16	NMOD	column	column	-1	0	0	0	for	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	The	DT	the	16	NMOD	column	column	-2	0	0	0	the	f:Q7741790	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	Independent	NP	Independent	18	SUFFIX	The	the	-1	0	0	4.0	independent	f:Q7741790	film	https://en.wikipedia.org/wiki/The_Independent_(2000_film)	0	The_Independent	0	0	0	0	0	0	0	kb	2
+20	:|G__	:	:	18	P	The	the	-2	0	0	0	:	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	``	``	``	18	P	The	the	-3	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	There	EX	there	23	SBJ	is	be	+1	0	0	0	there	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	is	VBZ	be	18	NMOD	The	the	-5	0	0	0	is	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	seldom	RB	seldom	23	TMP	is	be	-1	0	0	0	seldom	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	a	DT	a	26	NMOD	magazine	magazine	+1	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	magazine	NN	magazine	23	PRD	is	be	-3	0	0	0	magazine	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	or	CC	or	26	COORD	magazine	magazine	-1	0	0	0	or	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	newspaper	NN	newspaper	27	CONJ	or	or	-1	0	0	0	newspaper	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	article	NN	article	23	TMP	is	be	-6	0	0	0	article	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+30	even	RB	even	33	PMOD	with	with	+3	0	0	0	even	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+31	loosely	RB	loosely	30	AMOD	even	even	-1	0	0	0	loosely	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+32	connected	VVN	connect	30	SUFFIX	even	even	-2	0	0	0	connected	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+33	with	IN	with	23	PRD	is	be	-10	0	0	0	with	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+34	cars	NNS	car	33	PMOD	with	with	-1	0	0	0	cars	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+35	or	CC	or	34	COORD	cars	car	-1	0	0	0	or	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+36	the	DT	the	38	NMOD	industry	industry	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+37	transport	NN	transport	38	NMOD	industry	industry	+1	0	0	0	transport	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+38	industry	NN	industry	35	CONJ	or	or	-3	0	0	0	industry	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+39	in	IN	in	23	ADV	is	be	-16	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+40	general	NN	general	39	PMOD	in	in	-1	0	0	0	general	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+41	that	WDT	that	46	NMOD	variation	variation	+5	0	0	0	that	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+42	does	VVZ	do	41	SUFFIX	that	that	-1	0	0	0	does	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+43	n't|G__	RB	n't	42	ADV	does	do	-1	0	0	0	n't	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+44	use	VV	use	42	SUFFIX	does	do	-2	0	0	0	use	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+45	some	DT	some	46	NMOD	variation	variation	+1	0	0	0	some	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+46	variation	NN	variation	23	PRD	is	be	-23	0	0	0	variation	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+47	of	IN	of	46	NMOD	variation	variation	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+48	that	DT	that	49	NMOD	title	title	+1	0	0	0	that	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+49	title	NN	title	47	PMOD	of	of	-2	0	0	0	title	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+50	.|G__	SENT	.	49	SUFFIX	title	title	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 87 wx87
+1	Only	RB	only	3	NMOD	week	week	+2	0	0	0	only	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	last	JJ	last	3	NMOD	week	week	+1	0	0	0	last	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	week	NN	week	5	TMP	was	be	+2	0	0	0	week	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	there	EX	there	5	SBJ	was	be	+1	0	0	0	there	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	was	VBD	be	0	ROOT	0	0	0	0	0	0	was	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	a	DT	a	7	NMOD	piece	piece	+1	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	piece	NN	piece	5	PRD	was	be	-2	0	0	0	piece	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	in	IN	in	7	LOC	piece	piece	-1	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	the	DT	the	5	NMOD	was	be	-4	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	London	NP	London	9	SUFFIX	the	the	-1	0	0	4.0	london	l:Q84	location	https://en.wikipedia.org/wiki/London	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/e/e9/Super_moon_over_City_of_London_from_Tate_Modern_2018-01-31_4.jpg	London	United_Kingdom	0	0	0	0	0	0	kb	1
+11	Evening	NP	Evening	9	SUFFIX	the	the	-2	0	0	0	evening	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	Standard	NP	Standard	9	SUFFIX	the	the	-3	https://en.wikipedia.org/wiki/Evening_Standard	3	0	standard	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	about	IN	about	9	NMOD	the	the	-4	0	0	0	about	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	powerful	JJ	powerful	16	NMOD	stereos	stereo	+2	0	0	0	powerful	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	in-car	JJ	in-car	16	NMOD	stereos	stereo	+1	0	0	0	in-car	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	stereos	NNS	stereo	13	PMOD	about	about	-3	0	0	0	stereos	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	entitled	VVN	entitle	16	SUFFIX	stereos	stereo	-1	0	0	0	entitled	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	,|G__	,	,	9	P	the	the	-9	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	'Ullo	NP	'Ullo	9	SUFFIX	the	the	-10	0	0	0	'ullo	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	Jon	NP	Jon	19	SUFFIX	'Ullo	'Ullo	-1	0	0	4.0	jon	f:Q4121099	film	https://en.wikipedia.org/wiki/Jon_(film)	0	Jon	0	0	0	0	0	0	0	kb	1
+21	,|G__	,	,	9	P	the	the	-12	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	Got	VVD	get	9	SUFFIX	the	the	-13	0	0	0	got	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	ta|G__	NN	ta	27	NMOD	'	'	+4	0	0	0	ta	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	New	NP	New	23	SUFFIX	ta	ta	-1	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	Woofer	NP	Woofer	23	SUFFIX	ta	ta	-2	0	0	0	woofer	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	?|G__	SENT	?	23	SUFFIX	ta	ta	-3	0	0	0	?	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	'|G__	''	'	9	ROOT	the	the	-18	0	0	0	'	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 88 wx88
+1	In	IN	in	0	ROOT	0	0	0	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	fact	NN	fact	1	PMOD	In	in	-1	0	0	0	fact	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	sometimes	RB	sometimes	5	NMOD	articles	article	+2	0	0	0	sometimes	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	the	DT	the	5	NMOD	articles	article	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	articles	NNS	article	10	NMOD	anything	anything	+5	0	0	0	articles	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	do	VVP	do	5	SUFFIX	articles	article	-1	0	0	0	do	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	n't|G__	RB	n't	6	ADV	do	do	-1	0	0	0	n't	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	even	RB	even	6	ADV	do	do	-2	0	0	0	even	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	have	VH	have	6	SUFFIX	do	do	-3	0	0	0	have	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	anything	NN	anything	2	OBJ	fact	fact	-8	0	0	0	anything	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	to	TO	to	2	NMOD	fact	fact	-9	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	do	VV	do	2	SUFFIX	fact	fact	-10	0	0	0	do	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	with	IN	with	2	NMOD	fact	fact	-11	0	0	0	with	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	cars	NNS	car	13	PMOD	with	with	-1	0	0	0	cars	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	.|G__	SENT	.	2	SUFFIX	fact	fact	-13	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	''	''	''	2	P	fact	fact	-14	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 89 wx89
+1	[	SYM	[	2	NMOD	8	8	+1	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	8|G__	CD	8	3	AMOD	]	]	+1	0	0	0	8	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	]|G__	SYM	]	0	ROOT	0	0	0	https://en.wikipedia.org/wiki/'Ullo_John!_Gotta_New_Motor%3F#cite_note-Sayle1-8	3	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 59 wx59
+%%#SEN 90 wx90
+1	Looking	VVG	look	0	ROOT	0	0	0	0	0	0	looking	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	back	RB	back	1	ADV	Looking	look	-1	0	0	0	back	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	on	IN	on	1	ADV	Looking	look	-2	0	0	0	on	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	the	DT	the	5	NMOD	single	single	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	single	NN	single	3	PMOD	on	on	-2	0	0	0	single	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	itself	PP	itself	5	SUFFIX	single	single	-1	0	0	0	itself	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	almost	RB	almost	9	NMOD	years	year	+2	0	0	0	almost	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	twenty	CD	twenty	7	DEP	almost	almost	-1	0	0	0	twenty	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	years	NNS	year	10	ADV	after	after	+1	0	0	0	years	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	after	IN	after	1	TMP	Looking	look	-9	0	0	0	after	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	its	PP$	its	10	SUFFIX	after	after	-1	0	0	0	its	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	release	NN	release	10	PMOD	after	after	-2	0	0	0	release	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	,|G__	,	,	1	P	Looking	look	-12	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	Sayle	NP	Sayle	1	SUFFIX	Looking	look	-13	0	0	2	sayle	a:Q970287	person->artist	https://en.wikipedia.org/wiki/Alexei_Sayle	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/c/ce/Alexei_Sayle_Cambridge_2016.jpg	Alexei_Sayle	Male	Anfield__Liverpool__England	1952_08_07	Anfield__Liverpool	0	film_actor|comedian|screenwriter|television_actor	0	coref	1
+15	has	VHZ	have	1	SUFFIX	Looking	look	-14	0	0	0	has	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	also	RB	also	15	ADV	has	have	-1	0	0	0	also	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	stated	VVN	state	15	SUFFIX	has	have	-2	0	0	0	stated	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	:|G__	:	:	1	P	Looking	look	-17	0	0	0	:	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	``	``	``	1	P	Looking	look	-18	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	It	PP	it	1	SUFFIX	Looking	look	-19	0	0	0	it	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	is	VBZ	be	0	ROOT	0	0	0	0	0	0	is	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	a	DT	a	25	NMOD	song	song	+3	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	really	RB	really	24	AMOD	good	good	+1	0	0	0	really	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	good	JJ	good	25	NMOD	song	song	+1	0	0	0	good	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	song	NN	song	21	PRD	is	be	-4	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	!|G__	SENT	!	25	SUFFIX	song	song	-1	0	0	0	!	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 91 wx91
+1	Original	JJ	original	13	NMOD	fish	fish	+12	0	0	0	original	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	,|G__	,	,	1	P	Original	original	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	tuneful	JJ	tuneful	1	COORD	Original	original	-2	0	0	0	tuneful	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	and	CC	and	3	COORD	tuneful	tuneful	-1	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	the	DT	the	9	NMOD	record	record	+4	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	only	RB	only	7	AMOD	Top	top	+1	0	0	0	only	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	Top	JJ	top	9	NMOD	record	record	+2	0	0	0	top	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	20	CD	@card@	9	NMOD	record	record	+1	0	0	0	20	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	record	NN	record	4	CONJ	and	and	-5	0	0	0	record	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	to	TO	to	1	AMOD	Original	original	-9	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	mention	VV	mention	1	SUFFIX	Original	original	-10	0	0	0	mention	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	tropical	JJ	tropical	13	NMOD	fish	fish	+1	0	0	0	tropical	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	fish	NN	fish	0	ROOT	0	0	0	0	0	0	fish	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	and	CC	and	13	COORD	fish	fish	-1	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	Peckham	NP	Peckham	13	SUFFIX	fish	fish	-2	0	0	0	peckham	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	.|G__	SENT	.	13	SUFFIX	fish	fish	-3	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	''	''	''	13	P	fish	fish	-4	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 92 wx92
+1	[	SYM	[	2	NMOD	9	9	+1	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	9|G__	CD	9	3	AMOD	]	]	+1	0	0	0	9	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	]|G__	SYM	]	0	ROOT	0	0	0	https://en.wikipedia.org/wiki/'Ullo_John!_Gotta_New_Motor%3F#cite_note-Sayle2-9	3	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 60 wx60
+%%#SEN 93 wx93
+1	Other	JJ	other	2	NMOD	versions	version	+1	0	0	0	other	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	versions	NNS	version	0	ROOT	0	0	0	0	0	0	versions	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 61 wx61
+%%#SEN 94 wx94
+1	Upon	IN	upon	27	NMOD	track	track	+26	0	0	0	upon	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	release	NN	release	1	PMOD	Upon	upon	-1	0	0	0	release	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	of	IN	of	2	NMOD	release	release	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	the	DT	the	5	NMOD	single	single	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	single	JJ	single	3	PMOD	of	of	-2	0	0	0	single	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	,|G__	,	,	1	P	Upon	upon	-5	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	Sayle	NP	Sayle	1	SUFFIX	Upon	upon	-6	0	0	2	sayle	a:Q970287	person->artist	https://en.wikipedia.org/wiki/Alexei_Sayle	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/c/ce/Alexei_Sayle_Cambridge_2016.jpg	Alexei_Sayle	Male	Anfield__Liverpool__England	1952_08_07	Anfield__Liverpool	0	film_actor|comedian|screenwriter|television_actor	0	coref	1
+8	performed	VVD	perform	1	SUFFIX	Upon	upon	-7	0	0	0	performed	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	the	DT	the	10	NMOD	song	song	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	song	NN	song	21	NMOD	1982	@card@	+11	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	live	VVP	live	10	SUFFIX	song	song	-1	0	0	0	live	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	on	IN	on	10	NMOD	song	song	-2	0	0	0	on	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	the	DT	the	15	NMOD	series	series	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	TV	NN	TV	15	NMOD	series	series	+1	0	0	0	tv	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	series	NN	series	12	PMOD	on	on	-3	0	0	0	series	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	O.T.T.	NP	O.T.T.	15	SUFFIX	series	series	-1	0	0	0	o.t.t.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	,|G__	,	,	10	P	song	song	-7	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	broadcast	VVD	broadcast	10	SUFFIX	song	song	-8	0	0	0	broadcast	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	27	CD	@card@	21	DEP	1982	@card@	+2	0	0	0	27	t:3ec5e94762	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	February	NP	February	19	SUFFIX	27	@card@	-1	0	0	0	february	t:3ec5e94762	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	1982	CD	@card@	1	PMOD	Upon	upon	-20	0	0	4.0	1982	t:3ec5e94762	date	0	0	1982	2	27	0	0	0	0	0	date	3
+22	,|G__	,	,	1	P	Upon	upon	-21	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	using	VVG	use	1	SUFFIX	Upon	upon	-22	0	0	0	using	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	a	DT	a	27	NMOD	track	track	+3	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	musical	JJ	musical	27	NMOD	track	track	+2	0	0	0	musical	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	backing	NN	backing	27	NMOD	track	track	+1	0	0	0	backing	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	track	NN	track	0	ROOT	0	0	0	0	0	0	track	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	that	WDT	that	27	NMOD	track	track	-1	0	0	0	that	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	differed	VVD	differ	28	SUFFIX	that	that	-1	0	0	0	differed	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+30	from	IN	from	28	ADV	that	that	-2	0	0	0	from	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+31	the	DT	the	33	NMOD	single	single	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+32	released	VVN	release	31	SUFFIX	the	the	-1	0	0	0	released	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+33	single	JJ	single	30	PMOD	from	from	-3	0	0	0	single	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+34	.|G__	SENT	.	33	SUFFIX	single	single	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 62 wx62
+%%#SEN 95 wx95
+1	Sayle	NP	Sayle	0	ROOT	0	0	0	0	0	2	sayle	a:Q970287	person->artist	https://en.wikipedia.org/wiki/Alexei_Sayle	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/c/ce/Alexei_Sayle_Cambridge_2016.jpg	Alexei_Sayle	Male	Anfield__Liverpool__England	1952_08_07	Anfield__Liverpool	0	film_actor|comedian|screenwriter|television_actor	0	coref	1
+2	also	RB	also	5	NMOD	song	song	+3	0	0	0	also	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	performed	VVD	perform	2	SUFFIX	also	also	-1	0	0	0	performed	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	the	DT	the	5	NMOD	song	song	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	song	NN	song	1	OBJ	Sayle	Sayle	-4	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	on	IN	on	1	PUT	Sayle	Sayle	-5	0	0	0	on	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	the	DT	the	10	NMOD	album	album	+3	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	live	JJ	live	10	NMOD	album	album	+2	https://en.wikipedia.org/wiki/Album	1	0	live	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	comedy	NN	comedy	10	NMOD	album	album	+1	0	0	0	comedy	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	album	NN	album	6	PMOD	on	on	-4	https://en.wikipedia.org/wiki/Comedy_album	2	0	album	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	,|G__	,	,	10	P	album	album	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	Cak	NP	Cak	10	SUFFIX	album	album	-2	0	0	0	cak	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	!|G__	SENT	!	10	SUFFIX	album	album	-3	https://en.wikipedia.org/wiki/Cak!	2	0	!	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	,|G__	,	,	1	P	Sayle	Sayle	-13	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	released	VVN	release	1	SUFFIX	Sayle	Sayle	-14	0	0	0	released	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	later	RBR	later	1	NMOD	Sayle	Sayle	-15	0	0	0	later	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	in	IN	in	1	NMOD	Sayle	Sayle	-16	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	1982	CD	@card@	17	PMOD	in	in	-1	0	0	4.0	1982	t:1d3752aa0b	date	0	0	1982	0	0	0	0	0	0	0	date	1
+19	.|G__	SENT	.	17	SUFFIX	in	in	-2	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 96 wx96
+1	This	DT	this	2	NMOD	album	album	+1	0	0	0	this	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	album	NN	album	0	ROOT	0	0	0	0	0	0	album	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	also	RB	also	2	NMOD	album	album	-1	0	0	0	also	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	contained	VVD	contain	3	SUFFIX	also	also	-1	0	0	0	contained	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	``	``	``	2	NMOD	album	album	-3	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	Say	VV	say	5	SUFFIX	``	``	-1	0	0	0	say	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	Hello	UH	Hello	2	NMOD	album	album	-5	0	0	0	hello	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	Mr.	NP	Mr.	7	SUFFIX	Hello	Hello	-1	0	0	0	mr.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	Sweary	NP	Sweary	7	SUFFIX	Hello	Hello	-2	0	0	0	sweary	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	''	''	''	7	P	Hello	Hello	-3	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	,	,	,	2	NMOD	album	album	-9	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	an	DT	an	13	NMOD	example	example	+1	0	0	0	an	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	example	NN	example	21	NMOD	concept	concept	+8	0	0	0	example	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	of	IN	of	13	NMOD	example	example	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	the	DT	the	16	NMOD	routine	routine	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	routine	NN	routine	14	PMOD	of	of	-2	0	0	0	routine	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	that	WDT	that	21	NMOD	concept	concept	+4	0	0	0	that	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	provided	VVD	provide	17	SUFFIX	that	that	-1	0	0	0	provided	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	the	DT	the	21	NMOD	concept	concept	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	lyrical	JJ	lyrical	21	NMOD	concept	concept	+1	0	0	0	lyrical	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	concept	NN	concept	2	NMOD	album	album	-19	0	0	0	concept	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	for	IN	for	21	NMOD	concept	concept	-1	0	0	0	for	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	``	``	``	2	NMOD	album	album	-21	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	Part	NP	Part	23	SUFFIX	``	``	-1	0	0	0	part	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	IV	NP	IV	23	SUFFIX	``	``	-2	0	0	0	iv	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	''	''	''	25	P	IV	IV	-1	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	of	IN	of	25	NMOD	IV	IV	-2	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	``	``	``	27	P	of	of	-1	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	'Ullo	NP	'Ullo	25	SUFFIX	IV	IV	-4	0	0	0	'ullo	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+30	John	NP	John	25	SUFFIX	IV	IV	-5	0	0	2	john	p:Q5982604	person	https://en.wikipedia.org/wiki/John_McVicar	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/3/3a/John_McVicar_(1981).jpg	John_McVicar	Male	0	1940_01_01	0	0	journalist	0	coref	1
+31	!|G__	SENT	!	25	SUFFIX	IV	IV	-6	0	0	0	!	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 97 wx97
+1	Got	VVN	get	0	ROOT	0	0	0	0	0	0	got	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	ta|G__	JJ	ta	1	NMOD	Got	get	-1	0	0	0	ta	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	New	NP	New	2	SUFFIX	ta	ta	-1	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	Motor	NP	Motor	2	SUFFIX	ta	ta	-2	0	0	0	motor	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	?|G__	SENT	?	2	SUFFIX	ta	ta	-3	0	0	0	?	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 98 wx98
+1	``	``	``	0	ROOT	0	0	0	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	.|G__	SENT	.	1	SUFFIX	``	``	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 63 wx63
+%%#SEN 99 wx99
+1	Sayle	NP	Sayle	0	ROOT	0	0	0	0	0	2	sayle	a:Q970287	person->artist	https://en.wikipedia.org/wiki/Alexei_Sayle	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/c/ce/Alexei_Sayle_Cambridge_2016.jpg	Alexei_Sayle	Male	Anfield__Liverpool__England	1952_08_07	Anfield__Liverpool	0	film_actor|comedian|screenwriter|television_actor	0	coref	1
+2	performed	VVD	perform	1	SUFFIX	Sayle	Sayle	-1	0	0	0	performed	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	the	DT	the	4	NMOD	song	song	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	song	NN	song	0	ROOT	0	0	0	0	0	0	song	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	,|G__	,	,	4	P	song	song	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	with	IN	with	4	NMOD	song	song	-2	0	0	0	with	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	different	JJ	different	8	NMOD	lyrics	lyric	+1	0	0	0	different	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	lyrics	NNS	lyric	6	PMOD	with	with	-2	0	0	0	lyrics	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	(	(	(	4	NMOD	song	song	-5	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	``	``	``	4	NMOD	song	song	-6	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	out	RB	out	4	NMOD	song	song	-7	0	0	0	out	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	here	RB	here	11	AMOD	out	out	-1	0	0	0	here	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	it	PP	it	11	SUFFIX	out	out	-2	0	0	0	it	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	's|G__	VBZ	be	19	SBJ	'm	be	+5	0	0	0	's	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	really	RB	really	16	AMOD	breezy	breezy	+1	0	0	0	really	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	breezy	JJ	breezy	17	NMOD	coz	coz	+1	0	0	0	breezy	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	coz	NN	coz	14	PRD	's	be	-3	0	0	0	coz	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	I	PP	I	17	SUFFIX	coz	coz	-1	0	0	0	i	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	'm|G__	VBP	be	4	NMOD	song	song	-15	0	0	0	'm	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	riding	VVG	ride	19	SUFFIX	'm	be	-1	0	0	0	riding	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	free	JJ	free	46	NMOD	bicycles	bicycle	+25	0	0	0	free	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	and	CC	and	21	COORD	free	free	-1	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	easy/I	NN	easy/I	22	CONJ	and	and	-1	0	0	0	easy/i	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	got	VVD	get	22	SUFFIX	and	and	-2	0	0	0	got	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	a	DT	a	26	NMOD	brand	brand	+1	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	brand	NN	brand	46	NMOD	bicycles	bicycle	+20	0	0	0	brand	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	new	JJ	new	46	NMOD	bicycles	bicycle	+19	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	Morrison	NP	Morrison	27	SUFFIX	new	new	-1	0	0	4.0	morrison	l:Q14712893	location	https://en.wikipedia.org/wiki/Morrison,_Virginia	0	Morrison	United_States	0	0	0	0	0	0	kb	1
+29	,|G__	,	,	46	P	bicycles	bicycle	+17	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+30	a	DT	a	31	NMOD	brand	brand	+1	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+31	brand	NN	brand	46	NMOD	bicycles	bicycle	+15	0	0	0	brand	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+32	new	JJ	new	35	NMOD	''	''	+3	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+33	10-speed	NP	10-speed	32	SUFFIX	new	new	-1	0	0	4.0	10-speed	y:617dbe57b9	mythology	https://en.wikipedia.org/wiki/The_Ten	0	The_Ten	0	0	0	0	0	0	0	kb	1
+34	Morrison	NP	Morrison	32	SUFFIX	new	new	-2	0	0	4.0	morrison	l:Q14712893	location	https://en.wikipedia.org/wiki/Morrison,_Virginia	0	Morrison	United_States	0	0	0	0	0	0	kb	1
+35	''	''	''	31	P	brand	brand	-4	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+36	)	)	)	31	P	brand	brand	-5	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+37	on	IN	on	31	NMOD	brand	brand	-6	0	0	0	on	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+38	a	DT	a	40	NMOD	commercial	commercial	+2	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+39	TV	NN	TV	40	NMOD	commercial	commercial	+1	0	0	0	tv	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+40	commercial	NN	commercial	37	PMOD	on	on	-3	0	0	0	commercial	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+41	in	IN	in	40	LOC	commercial	commercial	-1	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+42	New	NP	New	40	SUFFIX	commercial	commercial	-2	0	0	0	new	n:0ctw_b	0	0	0	0	0	0	0	0	0	0	0	0	0
+43	Zealand	NP	Zealand	40	SUFFIX	commercial	commercial	-3	0	0	4.0	zealand	n:0ctw_b	nationality	https://en.wikipedia.org/wiki/New_Zealand	http://athena3.fit.vutbr.cz/kb/images/freebase/02fjrgw.jpg	New_Zealand	New_Zealand	0	0	0	0	0	0	kb	2
+44	for	IN	for	40	NMOD	commercial	commercial	-4	0	0	0	for	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+45	Morrison	NP	Morrison	40	SUFFIX	commercial	commercial	-5	0	0	4.0	morrison	l:Q14712893	location	https://en.wikipedia.org/wiki/Morrison,_Virginia	0	Morrison	United_States	0	0	0	0	0	0	kb	1
+46	bicycles	NNS	bicycle	19	OBJ	'm	be	-27	https://en.wikipedia.org/wiki/Bicycle	1	0	bicycles	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+47	.|G__	SENT	.	46	SUFFIX	bicycles	bicycle	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 100 wx100
+1	[	SYM	[	5	NMOD	11	@card@	+4	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	10|GGG	CD	@card@	5	NMOD	11	@card@	+3	0	0	4.0	10	y:617dbe57b9	mythology	https://en.wikipedia.org/wiki/The_Ten	0	The_Ten	0	0	0	0	0	0	0	kb	1
+3	]|G__	SYM	]	5	NMOD	11	@card@	+2	https://en.wikipedia.org/wiki/'Ullo_John!_Gotta_New_Motor%3F#cite_note-10	3	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	[	SYM	[	5	NMOD	11	@card@	+1	0	0	0	[	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	11|G__	CD	@card@	6	AMOD	]	]	+1	0	0	0	11	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	]|G__	SYM	]	0	ROOT	0	0	0	https://en.wikipedia.org/wiki/'Ullo_John!_Gotta_New_Motor%3F#cite_note-11	3	0	]	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 64 wx64
+%%#SEN 101 wx101
+1	Single	JJ	single	2	NMOD	releases	release	+1	0	0	0	single	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	releases	NNS	release	0	ROOT	0	0	0	0	0	0	releases	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 65 wx65
+%%#SEN 102 wx102
+1	All	DT	all	2	NMOD	tracks	track	+1	0	0	0	all	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	tracks	NNS	track	0	ROOT	0	0	0	0	0	0	tracks	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	written	VVN	write	2	SUFFIX	tracks	track	-1	0	0	0	written	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	by	IN	by	2	NMOD	tracks	track	-2	0	0	0	by	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	Alexei	NP	Alexei	2	SUFFIX	tracks	track	-3	0	0	0	alexei	a:Q970287	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	Sayle	NP	Sayle	2	SUFFIX	tracks	track	-4	0	0	4.0	sayle	a:Q970287	person->artist	https://en.wikipedia.org/wiki/Alexei_Sayle	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/c/ce/Alexei_Sayle_Cambridge_2016.jpg	Alexei_Sayle	Male	Anfield__Liverpool__England	1952_08_07	Anfield__Liverpool	0	film_actor|comedian|screenwriter|television_actor	0	kb	2
+7	except	IN	except	2	NMOD	tracks	track	-5	0	0	0	except	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	``	``	``	12	P	''	''	+4	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	Pop	NP	Pop	8	SUFFIX	``	``	-1	0	0	0	pop	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	Up	NP	Up	8	SUFFIX	``	``	-2	0	0	0	up	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	Toasters	NP	Toasters	8	SUFFIX	``	``	-3	0	0	0	toasters	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	''	''	''	2	P	tracks	track	-10	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	by	IN	by	2	NMOD	tracks	track	-11	0	0	0	by	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	Sayle/Harry	NP	Sayle/Harry	2	SUFFIX	tracks	track	-12	0	0	2	sayle/harry	a:Q970287	person->artist	https://en.wikipedia.org/wiki/Alexei_Sayle	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/c/ce/Alexei_Sayle_Cambridge_2016.jpg	Alexei_Sayle	Male	Anfield__Liverpool__England	1952_08_07	Anfield__Liverpool	0	film_actor|comedian|screenwriter|television_actor	0	coref	1
+15	Bogdanovs	NP	Bogdanovs	2	SUFFIX	tracks	track	-13	0	0	0	bogdanovs	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	.|G__	SENT	.	2	SUFFIX	tracks	track	-14	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 66 wx66
+%%#SEN 103 wx103
+1	All	DT	all	2	NMOD	tracks	track	+1	0	0	0	all	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	tracks	NNS	track	0	ROOT	0	0	0	0	0	0	tracks	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	produced	VVN	produce	2	SUFFIX	tracks	track	-1	0	0	0	produced	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	by	IN	by	2	NMOD	tracks	track	-2	0	0	0	by	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	Clive	NP	Clive	2	SUFFIX	tracks	track	-3	0	0	0	clive	a:Q1101973	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	Langer	NP	Langer	2	SUFFIX	tracks	track	-4	https://en.wikipedia.org/wiki/Clive_Langer	2	4.1	langer	a:Q1101973	person->artist	https://en.wikipedia.org/wiki/Clive_Langer	0	Clive_Langer	Male	Hampstead__London__England	1954_06_19	Hampstead__London	0	songwriter|film_score_composer|composer|record_producer	0	kb	2
+7	and	CC	and	2	COORD	tracks	track	-5	0	0	0	and	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	Alan	NP	Alan	2	SUFFIX	tracks	track	-6	0	0	0	alan	p:Q20922233	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	Winstanley	NP	Winstanley	2	SUFFIX	tracks	track	-7	https://en.wikipedia.org/wiki/Alan_Winstanley	2	person->artist	winstanley	p:Q20922233	person	https://en.wikipedia.org/wiki/Alan_Winstanley_(bishop)	0	Alan_Winstanley	Male	0	1949_05_07	0	0	0	0	kb	2
+10	except	IN	except	2	NMOD	tracks	track	-8	0	0	0	except	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	``	``	``	15	NMOD	''	''	+4	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	Pop	NP	Pop	11	SUFFIX	``	``	-1	0	0	0	pop	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	Up	NP	Up	11	SUFFIX	``	``	-2	0	0	0	up	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	Toasters	NP	Toasters	11	SUFFIX	``	``	-3	0	0	0	toasters	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	''	''	''	2	P	tracks	track	-13	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	produced	VVN	produce	15	SUFFIX	''	''	-1	0	0	0	produced	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	by	IN	by	2	NMOD	tracks	track	-15	0	0	0	by	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	Martin	NP	Martin	2	SUFFIX	tracks	track	-16	0	0	0	martin	p:Q6776001	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	Lewis	NP	Lewis	2	SUFFIX	tracks	track	-17	0	0	4.0	lewis	p:Q6776001	person	https://en.wikipedia.org/wiki/Martin_Lewis_(artist)	0	Martin_Lewis	Male	Castlemaine	1881_06_14	New_York_City	1962_02_22	printmaker|artist	0	kb	2
+20	.|G__	SENT	.	2	SUFFIX	tracks	track	-18	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 67 wx67
+%%#SEN 104 wx104
+1	UK	NP	UK	0	ROOT	0	0	0	0	0	0	uk	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	7-inch	JJ	7-inch	0	ROOT	0	0	0	0	0	0	7-inch	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 68 wx68
+%%#SEN 105 wx105
+1	``	``	``	0	ROOT	0	0	0	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	'Ullo|G__	NP	'Ullo	1	SUFFIX	``	``	-1	0	0	0	'ullo	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	John	NP	John	1	SUFFIX	``	``	-2	0	0	2	john	p:Q5982604	person	https://en.wikipedia.org/wiki/John_McVicar	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/3/3a/John_McVicar_(1981).jpg	John_McVicar	Male	0	1940_01_01	0	0	journalist	0	coref	1
+4	!|G__	SENT	!	1	SUFFIX	``	``	-3	0	0	0	!	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 106 wx106
+1	Got	VVN	get	0	ROOT	0	0	0	0	0	0	got	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	ta|G__	JJ	ta	6	NMOD	''	''	+4	0	0	0	ta	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	New	NP	New	2	SUFFIX	ta	ta	-1	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	Motor	NP	Motor	2	SUFFIX	ta	ta	-2	0	0	0	motor	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	?|G__	SENT	?	2	SUFFIX	ta	ta	-3	0	0	0	?	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	''	''	''	1	P	Got	get	-5	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 107 wx107
+1	(	(	(	6	P	3:25	@card@	+5	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Part|G__	NP	Part	1	SUFFIX	(	(	-1	0	0	0	part	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	I	NP	I	1	SUFFIX	(	(	-2	0	0	0	i	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	)|G__	)	)	1	P	(	(	-3	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	–	NP	–	1	SUFFIX	(	(	-4	0	0	0	–	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	3:25	CD	@card@	0	ROOT	0	0	0	0	0	0	3:25	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 69 wx69
+%%#SEN 108 wx108
+1	``	``	``	0	ROOT	0	0	0	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	'Ullo|G__	NP	'Ullo	1	SUFFIX	``	``	-1	0	0	0	'ullo	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	John	NP	John	1	SUFFIX	``	``	-2	0	0	2	john	p:Q5982604	person	https://en.wikipedia.org/wiki/John_McVicar	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/3/3a/John_McVicar_(1981).jpg	John_McVicar	Male	0	1940_01_01	0	0	journalist	0	coref	1
+4	!|G__	SENT	!	1	SUFFIX	``	``	-3	0	0	0	!	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 109 wx109
+1	Got	VVN	get	0	ROOT	0	0	0	0	0	0	got	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	ta|G__	JJ	ta	6	NMOD	''	''	+4	0	0	0	ta	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	New	NP	New	2	SUFFIX	ta	ta	-1	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	Motor	NP	Motor	2	SUFFIX	ta	ta	-2	0	0	0	motor	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	?|G__	SENT	?	2	SUFFIX	ta	ta	-3	0	0	0	?	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	''	''	''	1	P	Got	get	-5	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 110 wx110
+1	(	(	(	6	P	4:02	@card@	+5	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Part|G__	NP	Part	1	SUFFIX	(	(	-1	0	0	0	part	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	II	NP	II	1	SUFFIX	(	(	-2	0	0	0	ii	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	)|G__	)	)	1	P	(	(	-3	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	–	NP	–	1	SUFFIX	(	(	-4	0	0	0	–	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	4:02	CD	@card@	0	ROOT	0	0	0	0	0	0	4:02	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 70 wx70
+%%#SEN 111 wx111
+1	Original	JJ	original	2	NMOD	release	release	+1	0	0	0	original	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	release	NN	release	11	NMOD	1982	@card@	+9	0	0	0	release	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	by	IN	by	2	NMOD	release	release	-1	0	0	0	by	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	Springtime	NP	Springtime	2	SUFFIX	release	release	-2	0	0	0	springtime	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	Records	NPS	Records	2	SUFFIX	release	release	-3	0	0	0	records	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	,|G__	,	,	2	P	release	release	-4	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	distributed	VVN	distribute	2	SUFFIX	release	release	-5	0	0	0	distributed	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	by	IN	by	2	NMOD	release	release	-6	0	0	0	by	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	Island	NP	Island	2	SUFFIX	release	release	-7	https://en.wikipedia.org/wiki/Island_Records	1	0	island	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	(	(	(	11	P	1982	@card@	+1	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	1982|GGG	CD	@card@	0	ROOT	0	0	0	0	0	4.0	1982	t:71c353742c	date	0	0	1982	0	0	0	0	0	0	0	date	1
+12	,|G__	,	,	11	P	1982	@card@	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	WIP	NP	WIP	11	SUFFIX	1982	@card@	-2	0	0	0	wip	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	6768	CD	@card@	11	COORD	1982	@card@	-3	0	0	0	6768	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	)|G__	)	)	11	P	1982	@card@	-4	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 71 wx71
+%%#SEN 112 wx112
+1	Reissued	VVN	reissue	0	ROOT	0	0	0	0	0	0	reissued	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	by	IN	by	0	ROOT	0	0	0	0	0	0	by	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	Springtime/Island	NP	Springtime/Island	2	SUFFIX	by	by	-1	0	0	0	springtime/island	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	(	(	(	5	P	1983	@card@	+1	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	1983|GGG	CD	@card@	2	PMOD	by	by	-3	0	0	4.0	1983	t:4d5d81bf8c	date	0	0	1983	0	0	0	0	0	0	0	date	1
+6	,|G__	,	,	5	P	1983	@card@	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	IS	VBZ	be	0	ROOT	0	0	0	0	0	0	is	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	162	CD	@card@	7	NMOD	IS	be	-1	0	0	0	162	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	)|G__	)	)	7	P	IS	be	-2	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	,|G__	,	,	7	P	IS	be	-3	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	also	RB	also	13	PMOD	as	as	+2	0	0	0	also	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	issued	VVN	issue	11	SUFFIX	also	also	-1	0	0	0	issued	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	as	IN	as	7	ADV	IS	be	-6	0	0	0	as	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	a	DT	a	17	NMOD	disc	disc	+3	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	shaped	JJ	shaped	17	NMOD	disc	disc	+2	0	0	0	shaped	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	picture	NN	picture	17	NMOD	disc	disc	+1	0	0	0	picture	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	disc	NN	disc	13	PMOD	as	as	-4	0	0	0	disc	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	(	(	(	20	P	162	@card@	+2	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	ISP|G__	NP	ISP	18	SUFFIX	(	(	-1	0	0	0	isp	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	162	CD	@card@	0	ROOT	0	0	0	0	0	0	162	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	)|G__	)	)	20	P	162	@card@	-1	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 72 wx72
+%%#SEN 113 wx113
+1	UK	NP	UK	0	ROOT	0	0	0	0	0	0	uk	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	12-inch	JJ	12-inch	0	ROOT	0	0	0	0	0	0	12-inch	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 73 wx73
+%%#SEN 114 wx114
+1	``	``	``	0	ROOT	0	0	0	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	'Ullo|G__	NP	'Ullo	1	SUFFIX	``	``	-1	0	0	0	'ullo	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	John	NP	John	1	SUFFIX	``	``	-2	0	0	2	john	p:Q5982604	person	https://en.wikipedia.org/wiki/John_McVicar	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/3/3a/John_McVicar_(1981).jpg	John_McVicar	Male	0	1940_01_01	0	0	journalist	0	coref	1
+4	!|G__	SENT	!	1	SUFFIX	``	``	-3	0	0	0	!	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 115 wx115
+1	Got	VVN	get	0	ROOT	0	0	0	0	0	0	got	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	ta|G__	JJ	ta	6	NMOD	''	''	+4	0	0	0	ta	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	New	NP	New	2	SUFFIX	ta	ta	-1	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	Motor	NP	Motor	2	SUFFIX	ta	ta	-2	0	0	0	motor	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	?|G__	SENT	?	2	SUFFIX	ta	ta	-3	0	0	0	?	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	''	''	''	1	P	Got	get	-5	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 116 wx116
+1	(	(	(	6	P	8:43	@card@	+5	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Part|G__	NP	Part	1	SUFFIX	(	(	-1	0	0	0	part	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	III	NP	III	1	SUFFIX	(	(	-2	0	0	0	iii	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	)|G__	)	)	1	P	(	(	-3	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	–	NP	–	1	SUFFIX	(	(	-4	0	0	0	–	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	8:43	CD	@card@	0	ROOT	0	0	0	0	0	0	8:43	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 74 wx74
+%%#SEN 117 wx117
+1	``	``	``	0	ROOT	0	0	0	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	'Ullo|G__	NP	'Ullo	1	SUFFIX	``	``	-1	0	0	0	'ullo	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	John	NP	John	1	SUFFIX	``	``	-2	0	0	2	john	p:Q5982604	person	https://en.wikipedia.org/wiki/John_McVicar	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/3/3a/John_McVicar_(1981).jpg	John_McVicar	Male	0	1940_01_01	0	0	journalist	0	coref	1
+4	!|G__	SENT	!	1	SUFFIX	``	``	-3	0	0	0	!	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 118 wx118
+1	Got	VVN	get	0	ROOT	0	0	0	0	0	0	got	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	ta|G__	JJ	ta	6	NMOD	''	''	+4	0	0	0	ta	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	New	NP	New	2	SUFFIX	ta	ta	-1	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	Motor	NP	Motor	2	SUFFIX	ta	ta	-2	0	0	0	motor	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	?|G__	SENT	?	2	SUFFIX	ta	ta	-3	0	0	0	?	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	''	''	''	1	P	Got	get	-5	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 119 wx119
+1	(	(	(	6	P	4:45	@card@	+5	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Part|G__	NP	Part	1	SUFFIX	(	(	-1	0	0	0	part	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	IV	NP	IV	1	SUFFIX	(	(	-2	0	0	0	iv	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	)|G__	)	)	1	P	(	(	-3	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	–	NP	–	1	SUFFIX	(	(	-4	0	0	0	–	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	4:45	CD	@card@	0	ROOT	0	0	0	0	0	0	4:45	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 75 wx75
+%%#SEN 120 wx120
+1	Original	JJ	original	2	NMOD	release	release	+1	0	0	0	original	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	release	NN	release	11	NMOD	1982	@card@	+9	0	0	0	release	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	by	IN	by	2	NMOD	release	release	-1	0	0	0	by	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	Springtime	NP	Springtime	2	SUFFIX	release	release	-2	0	0	0	springtime	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	Records	NPS	Records	2	SUFFIX	release	release	-3	0	0	0	records	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	,|G__	,	,	2	P	release	release	-4	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	distributed	VVN	distribute	2	SUFFIX	release	release	-5	0	0	0	distributed	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	by	IN	by	2	NMOD	release	release	-6	0	0	0	by	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	Island	NP	Island	2	SUFFIX	release	release	-7	0	0	0	island	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	(	(	(	11	P	1982	@card@	+1	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	1982|GGG	CD	@card@	0	ROOT	0	0	0	0	0	4.0	1982	t:54682e9a51	date	0	0	1982	0	0	0	0	0	0	0	date	1
+12	,|G__	,	,	11	P	1982	@card@	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	12	CD	@card@	15	HMOD	6768	@card@	+2	0	0	0	12	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	WIP	NP	WIP	13	SUFFIX	12	@card@	-1	0	0	0	wip	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	6768	CD	@card@	11	COORD	1982	@card@	-4	0	0	0	6768	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	)|G__	)	)	11	P	1982	@card@	-5	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 76 wx76
+%%#SEN 121 wx121
+1	Reissued	VVN	reissue	0	ROOT	0	0	0	0	0	0	reissued	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	by	IN	by	0	ROOT	0	0	0	0	0	0	by	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	Springtime/Island	NP	Springtime/Island	2	SUFFIX	by	by	-1	0	0	0	springtime/island	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	(	(	(	5	P	1983	@card@	+1	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	1983|GGG	CD	@card@	2	PMOD	by	by	-3	0	0	4.0	1983	t:1e1f540e49	date	0	0	1983	0	0	0	0	0	0	0	date	1
+6	,|G__	,	,	5	P	1983	@card@	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	12	CD	@card@	8	SBJ	IS	be	+1	0	0	0	12	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	IS	VBZ	be	5	NMOD	1983	@card@	-3	0	0	0	is	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	162	CD	@card@	8	OBJ	IS	be	-1	0	0	0	162	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	)|G__	)	)	5	P	1983	@card@	-5	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 77 wx77
+%%#SEN 122 wx122
+1	Australian	JJ	Australian	2	NMOD	12-inch	12-inch	+1	0	0	4.0	australian	n:0chghy	nationality	https://en.wikipedia.org/wiki/Australia	http://athena3.fit.vutbr.cz/kb/images/freebase/04y2b2y.jpg|http://athena3.fit.vutbr.cz/kb/images/freebase/044vsg1.jpg	Australian	Australia	0	0	0	0	0	0	kb	1
+2	12-inch	JJ	12-inch	0	ROOT	0	0	0	0	0	0	12-inch	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 78 wx78
+%%#SEN 123 wx123
+1	``	``	``	0	ROOT	0	0	0	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	'Ullo|G__	NP	'Ullo	1	SUFFIX	``	``	-1	0	0	0	'ullo	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	John	NP	John	1	SUFFIX	``	``	-2	0	0	2	john	p:Q5982604	person	https://en.wikipedia.org/wiki/John_McVicar	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/3/3a/John_McVicar_(1981).jpg	John_McVicar	Male	0	1940_01_01	0	0	journalist	0	coref	1
+4	!|G__	SENT	!	1	SUFFIX	``	``	-3	0	0	0	!	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 124 wx124
+1	Got	VVN	get	0	ROOT	0	0	0	0	0	0	got	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	ta|G__	JJ	ta	6	NMOD	''	''	+4	0	0	0	ta	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	New	NP	New	2	SUFFIX	ta	ta	-1	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	Motor	NP	Motor	2	SUFFIX	ta	ta	-2	0	0	0	motor	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	?|G__	SENT	?	2	SUFFIX	ta	ta	-3	0	0	0	?	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	''	''	''	1	P	Got	get	-5	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 125 wx125
+1	(	(	(	6	P	8:43	@card@	+5	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Part|G__	NP	Part	1	SUFFIX	(	(	-1	0	0	0	part	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	III	NP	III	1	SUFFIX	(	(	-2	0	0	0	iii	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	)|G__	)	)	1	P	(	(	-3	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	–	NP	–	1	SUFFIX	(	(	-4	0	0	0	–	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	8:43	CD	@card@	0	ROOT	0	0	0	0	0	0	8:43	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 79 wx79
+%%#SEN 126 wx126
+1	``	``	``	2	P	Pop	pop	+1	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Pop|G__	NN	pop	0	ROOT	0	0	0	0	0	0	pop	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	Up	IN	up	2	NMOD	Pop	pop	-1	0	0	0	up	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	Toasters	NP	Toasters	2	SUFFIX	Pop	pop	-2	0	0	0	toasters	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	''	''	''	2	P	Pop	pop	-3	0	0	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	–	NP	–	2	SUFFIX	Pop	pop	-4	0	0	0	–	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	2:26	CD	@card@	2	NMOD	Pop	pop	-5	0	0	0	2:26	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 80 wx80
+%%#SEN 127 wx127
+1	Limited	JJ	limited	3	NMOD	release	release	+2	0	0	0	limited	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	edition	NN	edition	3	NMOD	release	release	+1	0	0	0	edition	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	release	NN	release	0	ROOT	0	0	0	0	0	0	release	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	by	IN	by	3	NMOD	release	release	-1	0	0	0	by	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	Island	NP	Island	3	SUFFIX	release	release	-2	0	0	0	island	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	Records	NPS	Records	3	SUFFIX	release	release	-3	0	0	0	records	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	(	(	(	3	NMOD	release	release	-4	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	1984|GGG	NP	@card@	7	SUFFIX	(	(	-1	0	0	4.0	1984	t:4e795740d5	date	0	0	1984	0	0	0	0	0	0	0	date	1
+9	,|G__	,	,	7	P	(	(	-2	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	X-13159	NP	X-13159	7	SUFFIX	(	(	-3	0	0	0	x-13159	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	)|G__	)	)	7	P	(	(	-4	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 81 wx81
+%%#SEN 128 wx128
+1	References	NNS	reference	0	ROOT	0	0	0	0	0	0	references	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 82 wx82
+%%#SEN 129 wx129
+1	Later	RBR	Later	6	DEP	would	would	+5	0	0	0	later	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	in	IN	in	6	SBJ	would	would	+4	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	1982	CD	@card@	2	PMOD	in	in	-1	0	0	4.0	1982	t:d88ce25786	date	0	0	1982	0	0	0	0	0	0	0	date	1
+4	,|G__	,	,	2	P	in	in	-2	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	Sayle	NP	Sayle	2	SUFFIX	in	in	-3	0	0	2	sayle	a:Q970287	person->artist	https://en.wikipedia.org/wiki/Alexei_Sayle	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/c/ce/Alexei_Sayle_Cambridge_2016.jpg	Alexei_Sayle	Male	Anfield__Liverpool__England	1952_08_07	Anfield__Liverpool	0	film_actor|comedian|screenwriter|television_actor	0	coref	1
+6	would	MD	would	0	ROOT	0	0	0	0	0	0	would	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	participate	VV	participate	6	SUFFIX	would	would	-1	0	0	0	participate	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	in	IN	in	6	LOC	would	would	-2	0	0	0	in	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	a	DT	a	12	NMOD	documentary	documentary	+3	0	0	0	a	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	BBC	NP	BBC	9	SUFFIX	a	a	-1	https://en.wikipedia.org/wiki/BBC	1	0	bbc	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	Arena	NP	Arena	9	SUFFIX	a	a	-2	https://en.wikipedia.org/wiki/Arena_(British_TV_series)	1	0	arena	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	documentary	NN	documentary	8	PMOD	in	in	-4	0	0	0	documentary	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	,|G__	,	,	12	P	documentary	documentary	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	The	DT	the	16	NMOD	Life	life	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	Private	JJ	private	16	NMOD	Life	life	+1	0	0	0	private	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	Life	NN	life	12	APPO	documentary	documentary	-4	0	0	0	life	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	of	IN	of	16	NMOD	Life	life	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	the	DT	the	6	NMOD	would	would	-12	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	Ford	NP	Ford	18	SUFFIX	the	the	-1	0	0	4.0	ford	l:Q3811439	location	https://en.wikipedia.org/wiki/Ford,_Shropshire	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/d/dd/Ford_Church_and_Yard_in_Shropshire_-_geograph.org.uk_-_344573.jpg	Ford	United_Kingdom	0	0	0	0	0	0	kb	1
+20	Cortina	NP	Cortina	19	SUFFIX	Ford	Ford	-1	0	0	0	cortina	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	,|G__	,	,	20	P	Cortina	Cortina	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	which	WDT	which	33	NMOD	Life	life	+11	0	0	0	which	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	reflected	VVD	reflect	22	SUFFIX	which	which	-1	0	0	0	reflected	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	on	IN	on	22	ADV	which	which	-2	0	0	0	on	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	the	DT	the	27	NMOD	model	model	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	car	NN	car	27	NMOD	model	model	+1	0	0	0	car	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	model	NN	model	29	NMOD	demise	demise	+2	0	0	0	model	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	's|G__	POS	's	27	SUFFIX	model	model	-1	0	0	0	's	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	demise	NN	demise	24	PMOD	on	on	-5	0	0	0	demise	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+30	:|G__	:	:	22	P	which	which	-8	0	0	0	:	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+31	The	DT	the	33	NMOD	Life	life	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+32	Private	JJ	private	33	NMOD	Life	life	+1	0	0	0	private	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+33	Life	NN	life	20	APPO	Cortina	Cortina	-13	0	0	0	life	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+34	of	IN	of	33	NMOD	Life	life	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+35	the	DT	the	6	NMOD	would	would	-29	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+36	Ford	NP	Ford	35	SUFFIX	the	the	-1	0	0	4.0	ford	l:Q3811439	location	https://en.wikipedia.org/wiki/Ford,_Shropshire	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/d/dd/Ford_Church_and_Yard_in_Shropshire_-_geograph.org.uk_-_344573.jpg	Ford	United_Kingdom	0	0	0	0	0	0	kb	1
+37	Cortina	NP	Cortina	36	SUFFIX	Ford	Ford	-1	http://ftvdb.bfi.org.uk/sift/title/136796	7	0	cortina	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+38	,|G__	,	,	35	P	the	the	-3	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+39	British	NP	British	35	SUFFIX	the	the	-4	0	0	0	british	c:93add39686	0	0	0	0	0	0	0	0	0	0	0	0	0
+40	Film	NP	Film	35	SUFFIX	the	the	-5	0	0	0	film	c:93add39686	0	0	0	0	0	0	0	0	0	0	0	0	0
+41	Institute	NP	Institute	35	SUFFIX	the	the	-6	https://en.wikipedia.org/wiki/British_Film_Institute	3	4.2	institute	c:93add39686	museum	http://www.getty.edu/vow/ULANFullDisplay?find=&role=&nation=&subjectid=500301638	0	British_Film_Institute	repository	0	0	0	0	0	0	kb	3
+42	.|G__	SENT	.	35	SUFFIX	the	the	-7	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 130 wx130
+1	Accessed	VVN	access	0	ROOT	0	0	0	0	0	0	accessed	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	19	CD	@card@	4	HMOD	2009	@card@	+2	0	0	0	19	t:836703e1b1	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	July	NP	July	2	SUFFIX	19	@card@	-1	0	0	0	july	t:836703e1b1	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	2009	CD	@card@	0	ROOT	0	0	0	0	0	4.0	2009	t:836703e1b1	date	0	0	2009	7	19	0	0	0	0	0	date	3
+5	.|G__	SENT	.	4	SUFFIX	2009	@card@	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 131 wx131
+1	Archived	NP	Archived	0	ROOT	0	0	0	https://www.webcitation.org/5iRRGzame?url=http://ftvdb.bfi.org.uk/sift/title/136796	1	0	archived	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	2009-07-21	CD	@card@	0	ROOT	0	0	0	0	0	4.0	2009-07-21	t:a79a379e7f	date	0	0	2009	7	21	0	0	0	0	0	date	1
+3	.|G__	SENT	.	2	SUFFIX	2009-07-21	@card@	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 83 wx83
+%%#SEN 132 wx132
+1	Gambaccini	NP	Gambaccini	0	SUFFIX	0	0	0	0	0	0	gambaccini	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	,|G__	,	,	6	P	,	,	+4	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	Paul	NP	Paul	2	SUFFIX	,	,	-1	0	0	4.0	paul	f:Q1164753	film	https://en.wikipedia.org/wiki/Paul_(film)	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/5/5f/SimonPegg&NickFrostByTrentClarke2011.jpg	Paul	0	0	0	0	0	0	0	kb	1
+4	;|G__	:	;	2	P	,	,	-2	0	0	0	;	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	Rice	NP	Rice	4	SUFFIX	;	;	-1	0	0	0	rice	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	,|G__	,	,	0	ROOT	0	0	0	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	Tim	NP	Tim	6	SUFFIX	,	,	-1	0	0	4.0	tim	f:Q546256	film	https://en.wikipedia.org/wiki/Tim_(film)	0	Tim	0	0	0	0	0	0	0	kb	1
+8	;|G__	:	;	6	P	,	,	-2	0	0	0	;	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	Rice	NP	Rice	8	SUFFIX	;	;	-1	0	0	0	rice	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	,|G__	,	,	6	P	,	,	-4	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	Jo	NP	Jo	6	SUFFIX	,	,	-5	0	0	4.0	jo	f:Q1588181	film	https://en.wikipedia.org/wiki/Jo_(film)	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/4/41/Hasch_mich_ich_bin_der_moerder.svg	Jo	0	0	0	0	0	0	0	kb	1
+12	(	(	(	13	P	1989	@card@	+1	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	1989|GGG	CD	@card@	0	ROOT	0	0	0	0	0	4.0	1989	t:00881b89b7	date	0	0	1989	0	0	0	0	0	0	0	date	1
+14	)|G__	)	)	13	P	1989	@card@	-1	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	.|G__	SENT	.	13	NMOD	1989	@card@	-2	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 133 wx133
+1	British	NPS	British	0	ROOT	0	0	0	0	0	4.0	british	n:07ssc	nationality	https://en.wikipedia.org/wiki/United_Kingdom	http://athena3.fit.vutbr.cz/kb/images/freebase/059h_0v.jpg|http://athena3.fit.vutbr.cz/kb/images/freebase/02nbhpy.jpg|http://athena3.fit.vutbr.cz/kb/images/freebase/0591mxq.jpg|http://athena3.fit.vutbr.cz/kb/images/freebase/05tyznp.jpg	British	United_Kingdom	0	0	0	0	0	0	kb	1
+2	Hit	VVP	hit	1	SUFFIX	British	British	-1	0	0	0	hit	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	Singles	NP	Singles	1	SUFFIX	British	British	-2	https://en.wikipedia.org/wiki/British_Hit_Singles_&_Albums	3	0	singles	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	(	(	(	6	P	ed.	editor	+2	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	7|G__	CD	7	6	NMOD	ed.	editor	+1	0	0	0	7	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	ed.	NN	editor	1	NMOD	British	British	-5	0	0	0	ed.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	)|G__	)	)	6	P	ed.	editor	-1	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	.|G__	SENT	.	6	SUFFIX	ed.	editor	-2	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 134 wx134
+1	Guinness	NP	Guinness	0	ROOT	0	0	0	0	0	0	guinness	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	.|G__	SENT	.	1	SUFFIX	Guinness	Guinness	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 135 wx135
+1	ISBN	NP	ISBN	0	ROOT	0	0	0	https://en.wikipedia.org/wiki/International_Standard_Book_Number	1	0	isbn	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	0-85112-339-2	CD	@card@	0	ROOT	0	0	0	0	0	0	0-85112-339-2	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	.|G__	SENT	.	2	SUFFIX	0-85112-339-2	@card@	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 84 wx84
+%%#SEN 136 wx136
+1	Brand	NN	brand	2	NMOD	Barometer	barometer	+1	0	0	0	brand	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Barometer	NN	barometer	8	NMOD	echoes	echo	+6	0	0	4.0	barometer	l:Q31709082	location	https://www.wikidata.org/wiki/Q31709082	0	Barometer	0	0	0	0	0	0	0	kb	1
+3	-	:	-	8	NMOD	echoes	echo	+5	0	0	0	-	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	New	NP	New	3	SUFFIX	-	-	-1	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	Toshiba	NP	Toshiba	3	SUFFIX	-	-	-2	0	0	4.0	toshiba	t:Q22111663	taxon	https://www.wikidata.org/wiki/Q22111663	0	Toshiba	0	0	0	0	0	0	0	kb	1
+6	ad	NN	ad	8	NMOD	echoes	echo	+2	0	0	0	ad	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	has	VHZ	have	6	SUFFIX	ad	ad	-1	0	0	0	has	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	echoes	NNS	echo	0	ROOT	0	0	0	0	0	0	echoes	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	of	IN	of	8	NMOD	echoes	echo	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	the	DT	the	20	NMOD	2008	@card@	+10	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	past	JJ	past	20	NMOD	2008	@card@	+9	http://www.mediaweek.co.uk/news/783282/Brand-Barometer---New-Toshiba-ad-echoes-past/	11	0	past	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	Media	NP	Media	11	SUFFIX	past	past	-1	0	0	0	media	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	Week	NP	Week	11	SUFFIX	past	past	-2	0	0	0	week	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	(	(	(	20	NMOD	2008	@card@	+6	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	UK|G__	NP	UK	14	SUFFIX	(	(	-1	0	0	0	uk	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	)|G__	)	)	14	P	(	(	-2	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	,|G__	,	,	20	P	2008	@card@	+3	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	12	CD	@card@	20	HMOD	2008	@card@	+2	0	0	0	12	t:ea669914dd	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	February	NP	February	18	SUFFIX	12	@card@	-1	0	0	0	february	t:ea669914dd	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	2008	CD	@card@	9	PMOD	of	of	-11	0	0	4.0	2008	t:ea669914dd	date	0	0	2008	2	12	0	0	0	0	0	date	3
+21	.|G__	SENT	.	20	SUFFIX	2008	@card@	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 137 wx137
+1	Accessed	VVN	access	0	ROOT	0	0	0	0	0	0	accessed	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	18	CD	@card@	4	HMOD	2009	@card@	+2	0	0	0	18	t:14f8eb9a0f	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	July	NP	July	2	SUFFIX	18	@card@	-1	0	0	0	july	t:14f8eb9a0f	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	2009	CD	@card@	0	ROOT	0	0	0	0	0	4.0	2009	t:14f8eb9a0f	date	0	0	2009	7	18	0	0	0	0	0	date	3
+5	.|G__	SENT	.	4	SUFFIX	2009	@card@	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 138 wx138
+1	Archived	NP	Archived	0	ROOT	0	0	0	https://www.webcitation.org/5iPvjQ84e?url=http://www.mediaweek.co.uk/news/783282/Brand-Barometer---New-Toshiba-ad-echoes-past/	1	0	archived	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	2009-07-20	CD	@card@	0	ROOT	0	0	0	0	0	4.0	2009-07-20	t:9ab7a8bbb0	date	0	0	2009	7	20	0	0	0	0	0	date	1
+3	.|G__	SENT	.	2	SUFFIX	2009-07-20	@card@	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 85 wx85
+%%#SEN 139 wx139
+1	Berger	NP	Berger	0	SUFFIX	0	0	0	0	0	0	berger	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	,|G__	,	,	1	P	Berger	Berger	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	George	NP	George	1	SUFFIX	Berger	Berger	-2	0	0	4.0	george	s:Q26568581	structure	https://www.wikidata.org/wiki/Q26568581	0	The_George	0	0	0	0	0	0	0	kb	1
+4	(	(	(	5	P	2009	@card@	+1	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	2009|GGG	CD	@card@	1	NMOD	Berger	Berger	-4	0	0	4.0	2009	t:c2a132d592	date	0	0	2009	0	0	0	0	0	0	0	date	1
+6	)|G__	)	)	5	P	2009	@card@	-1	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	.|G__	SENT	.	5	SUFFIX	2009	@card@	-2	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 140 wx140
+1	The	DT	the	2	NMOD	Story	story	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Story	NN	story	0	ROOT	0	0	0	0	0	0	story	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	of	IN	of	2	NMOD	Story	story	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	Crass	NP	Crass	2	SUFFIX	Story	story	-2	0	0	0	crass	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	.|G__	SENT	.	2	SUFFIX	Story	story	-3	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 141 wx141
+1	PM	NP	PM	0	ROOT	0	0	0	0	0	0	pm	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Press	NP	Press	1	SUFFIX	PM	PM	-1	0	0	0	press	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	.|G__	SENT	.	1	SUFFIX	PM	PM	-2	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 142 wx142
+1	ISBN	NP	ISBN	0	ROOT	0	0	0	https://en.wikipedia.org/wiki/International_Standard_Book_Number	1	0	isbn	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	1604860375	CD	@card@	0	ROOT	0	0	0	0	0	0	1604860375	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	.|G__	SENT	.	2	SUFFIX	1604860375	@card@	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 86 wx86
+%%#SEN 143 wx143
+1	Ello	NP	Ello	0	ROOT	0	0	0	0	0	4.0	ello	l:Q24628277	location	https://www.wikidata.org/wiki/Q24628277	0	Ello	0	0	0	0	0	0	0	kb	1
+2	Tosh	NP	Tosh	1	SUFFIX	Ello	Ello	-1	0	0	0	tosh	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	ads	NNS	ad	4	SBJ	are	be	+1	0	0	0	ads	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	are	VBP	be	0	ROOT	0	0	0	0	0	0	are	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	back	RB	back	4	ADV	are	be	-1	http://www.techdigest.tv/2005/10/ello_tosh_ads_a.html	5	0	back	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	Tech	NP	Tech	4	SUFFIX	are	be	-2	0	0	0	tech	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	Digest	NP	Digest	6	SUFFIX	Tech	Tech	-1	0	0	0	digest	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	,|G__	,	,	11	P	2005	@card@	+3	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	17	CD	@card@	11	HMOD	2005	@card@	+2	0	0	0	17	t:eebc4e091a	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	October	NP	October	9	SUFFIX	17	@card@	-1	0	0	0	october	t:eebc4e091a	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	2005	CD	@card@	4	PRD	are	be	-7	0	0	4.0	2005	t:eebc4e091a	date	0	0	2005	10	17	0	0	0	0	0	date	3
+12	.|G__	SENT	.	11	SUFFIX	2005	@card@	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 144 wx144
+1	Accessed	VVN	access	0	ROOT	0	0	0	0	0	0	accessed	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	18	CD	@card@	4	HMOD	2009	@card@	+2	0	0	0	18	t:4c07986957	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	July	NP	July	2	SUFFIX	18	@card@	-1	0	0	0	july	t:4c07986957	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	2009	CD	@card@	0	ROOT	0	0	0	0	0	4.0	2009	t:4c07986957	date	0	0	2009	7	18	0	0	0	0	0	date	3
+5	.|G__	SENT	.	4	SUFFIX	2009	@card@	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 145 wx145
+1	Archived	NP	Archived	0	ROOT	0	0	0	https://www.webcitation.org/5iPvkBhEA?url=http://www.techdigest.tv/2005/10/ello_tosh_ads_a.html	1	0	archived	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	2009-07-20	CD	@card@	0	ROOT	0	0	0	0	0	4.0	2009-07-20	t:d9fda327f1	date	0	0	2009	7	20	0	0	0	0	0	date	1
+3	.|G__	SENT	.	2	SUFFIX	2009-07-20	@card@	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 87 wx87
+%%#SEN 146 wx146
+1	'Ello	NP	'Ello	0	ROOT	0	0	0	0	0	4.0	'ello	l:Q24628277	location	https://www.wikidata.org/wiki/Q24628277	0	Ello	0	0	0	0	0	0	0	kb	1
+2	Rosie	NP	Rosie	1	SUFFIX	'Ello	'Ello	-1	0	0	4.0	rosie	f:Q56561742	film	https://en.wikipedia.org/wiki/Rosie_(2018_film)	0	Rosie	0	0	0	0	0	0	0	kb	1
+3	,|G__	,	,	1	P	'Ello	'Ello	-2	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	got	VVD	get	1	SUFFIX	'Ello	'Ello	-3	0	0	0	got	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	ta|G__	JJ	ta	7	NMOD	motor	motor	+2	0	0	0	ta	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	new	JJ	new	7	NMOD	motor	motor	+1	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	motor	NN	motor	0	ROOT	0	0	0	0	0	0	motor	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	?|G__	SENT	?	7	SUFFIX	motor	motor	-1	http://www.thesun.co.uk/sol/homepage/showbiz/tv/soaps/2503648/Corrie-minx-Rosie-hits-road-in-flash-motor.html	8	0	?	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	The	DT	the	17	NMOD	2009	@card@	+8	0	0	0	the	f:Q2656737	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	Sun	NP	Sun	9	SUFFIX	The	the	-1	0	0	4.0	sun	f:Q2656737	film	https://en.wikipedia.org/wiki/The_Sun_(film)	0	The_Sun	0	0	0	0	0	0	0	kb	2
+11	(	(	(	17	NMOD	2009	@card@	+6	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	UK|G__	NP	UK	11	SUFFIX	(	(	-1	0	0	0	uk	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	)|G__	)	)	11	P	(	(	-2	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	,|G__	,	,	17	P	2009	@card@	+3	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	27	CD	@card@	17	HMOD	2009	@card@	+2	0	0	0	27	t:6e964002f3	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	June	NP	June	15	SUFFIX	27	@card@	-1	0	0	0	june	t:6e964002f3	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	2009	CD	@card@	7	TMP	motor	motor	-10	0	0	4.0	2009	t:6e964002f3	date	0	0	2009	6	27	0	0	0	0	0	date	3
+18	.|G__	SENT	.	7	SUFFIX	motor	motor	-11	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 147 wx147
+1	Accessed	VVN	access	0	ROOT	0	0	0	0	0	0	accessed	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	18	CD	@card@	4	HMOD	2009	@card@	+2	0	0	0	18	t:7aa4f3c99f	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	July	NP	July	2	SUFFIX	18	@card@	-1	0	0	0	july	t:7aa4f3c99f	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	2009	CD	@card@	0	ROOT	0	0	0	0	0	4.0	2009	t:7aa4f3c99f	date	0	0	2009	7	18	0	0	0	0	0	date	3
+5	.|G__	SENT	.	4	SUFFIX	2009	@card@	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 148 wx148
+1	Archived	NP	Archived	0	ROOT	0	0	0	https://www.webcitation.org/5iPvq7F2e?url=http://www.thesun.co.uk/sol/homepage/showbiz/tv/soaps/2503648/Corrie-minx-Rosie-hits-road-in-flash-motor.html	1	0	archived	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	2009-07-20	CD	@card@	0	ROOT	0	0	0	0	0	4.0	2009-07-20	t:c7661744c4	date	0	0	2009	7	20	0	0	0	0	0	date	1
+3	.|G__	SENT	.	2	SUFFIX	2009-07-20	@card@	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 88 wx88
+%%#SEN 149 wx149
+1	'Ello	NP	'Ello	0	ROOT	0	0	0	0	0	4.0	'ello	l:Q24628277	location	https://www.wikidata.org/wiki/Q24628277	0	Ello	0	0	0	0	0	0	0	kb	1
+2	Ron	NP	Ron	1	SUFFIX	'Ello	'Ello	-1	0	0	0	ron	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	,|G__	,	,	1	P	'Ello	'Ello	-2	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	got	VVD	get	1	SUFFIX	'Ello	'Ello	-3	0	0	0	got	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	ta|G__	JJ	ta	7	NMOD	motor	motor	+2	0	0	0	ta	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	new	JJ	new	7	NMOD	motor	motor	+1	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	motor	NN	motor	0	ROOT	0	0	0	0	0	0	motor	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	?|G__	SENT	?	7	SUFFIX	motor	motor	-1	http://www.thesun.co.uk/sol/homepage/news/article2112919.ece	8	0	?	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	The	DT	the	17	NMOD	2009	@card@	+8	0	0	0	the	f:Q2656737	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	Sun	NP	Sun	9	SUFFIX	The	the	-1	0	0	4.0	sun	f:Q2656737	film	https://en.wikipedia.org/wiki/The_Sun_(film)	0	The_Sun	0	0	0	0	0	0	0	kb	2
+11	(	(	(	17	P	2009	@card@	+6	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	UK|G__	NP	UK	11	SUFFIX	(	(	-1	0	0	0	uk	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	)|G__	)	)	11	P	(	(	-2	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	,|G__	,	,	17	P	2009	@card@	+3	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	9	CD	9	17	DEP	2009	@card@	+2	0	0	0	9	t:ebad3d91ce	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	January	NP	January	15	SUFFIX	9	9	-1	0	0	0	january	t:ebad3d91ce	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	2009	CD	@card@	7	NMOD	motor	motor	-10	0	0	4.0	2009	t:ebad3d91ce	date	0	0	2009	1	9	0	0	0	0	0	date	3
+%%#PAR 89 wx89
+%%#SEN 150 wx150
+1	Sayle	NP	Sayle	0	SUFFIX	0	0	0	0	0	2	sayle	a:Q970287	person->artist	https://en.wikipedia.org/wiki/Alexei_Sayle	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/c/ce/Alexei_Sayle_Cambridge_2016.jpg	Alexei_Sayle	Male	Anfield__Liverpool__England	1952_08_07	Anfield__Liverpool	0	film_actor|comedian|screenwriter|television_actor	0	coref	1
+2	,|G__	,	,	1	P	Sayle	Sayle	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	Alexei	NP	Alexei	1	SUFFIX	Sayle	Sayle	-2	0	0	2	alexei	a:Q970287	person->artist	https://en.wikipedia.org/wiki/Alexei_Sayle	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/c/ce/Alexei_Sayle_Cambridge_2016.jpg	Alexei_Sayle	Male	Anfield__Liverpool__England	1952_08_07	Anfield__Liverpool	0	film_actor|comedian|screenwriter|television_actor	0	coref	1
+4	(	(	(	7	P	1995	@card@	+3	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	5|GGG	CD	5	7	HMOD	1995	@card@	+2	0	0	0	5	t:01412e44bd	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	September	NP	September	5	SUFFIX	5	5	-1	0	0	0	september	t:01412e44bd	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	1995	CD	@card@	0	ROOT	0	0	0	0	0	4.0	1995	t:01412e44bd	date	0	0	1995	9	5	0	0	0	0	0	date	3
+8	)|G__	)	)	7	P	1995	@card@	-1	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	.|G__	SENT	.	7	SUFFIX	1995	@card@	-2	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 151 wx151
+1	``	``	``	0	ROOT	0	0	0	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	The	DT	the	4	NMOD	wonder	wonder	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	one-hit	NN	one-hit	4	NMOD	wonder	wonder	+1	0	0	0	one-hit	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	wonder	NN	wonder	5	SBJ	is	be	+1	0	0	0	wonder	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	is	VBZ	be	1	NMOD	``	``	-4	0	0	0	is	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	common	JJ	common	5	PRD	is	be	-1	0	0	0	common	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	to	TO	to	6	AMOD	common	common	-1	0	0	0	to	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	most	JJS	most	9	NMOD	fields	field	+1	0	0	0	most	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	fields	NNS	field	7	PMOD	to	to	-2	0	0	0	fields	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	of	IN	of	9	NMOD	fields	field	-1	0	0	0	of	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	endeavour	NN	endeavour	10	PMOD	of	of	-1	0	0	0	endeavour	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	.|G__	SENT	.	9	SUFFIX	fields	field	-3	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	Charles	NP	Charles	9	SUFFIX	fields	field	-4	0	0	0	charles	a:Q1035	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	Darwin	NP	Darwin	9	SUFFIX	fields	field	-5	0	0	4.0	darwin	a:Q1035	person->artist	https://en.wikipedia.org/wiki/Charles_Darwin	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/4/45/Charles_Darwin_1880.jpg|http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/3/3f/Emma_Darwin_with_Charles_Waring_Darwin.jpg	Charles_Darwin	Male	The_Mount	1809_02_12	Down_House	1882_04_19	entomologist|geologist|carcinologist|botanist	0	kb	2
+15	came	VVD	come	9	SUFFIX	fields	field	-6	0	0	0	came	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+16	up	RP	up	15	PRT	came	come	-1	0	0	0	up	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+17	with	IN	with	6	AMOD	common	common	-11	0	0	0	with	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+18	the	DT	the	20	NMOD	thing	thing	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+19	evolution	NN	evolution	20	NMOD	thing	thing	+1	0	0	0	evolution	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+20	thing	NN	thing	17	PMOD	with	with	-3	0	0	0	thing	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+21	,|G__	,	,	5	P	is	be	-16	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+22	but	CC	but	5	COORD	is	be	-17	0	0	0	but	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+23	after	IN	after	1	NMOD	``	``	-22	0	0	0	after	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+24	that	DT	that	23	PMOD	after	after	-1	0	0	0	that	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+25	,|G__	,	,	1	NMOD	``	``	-24	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+26	what	WP	what	28	NMOD	''	''	+2	0	0	0	what	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+27	?|G__	SENT	?	26	SUFFIX	what	what	-1	0	0	0	?	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+28	''	''	''	1	NMOD	``	``	-27	https://www.independent.co.uk/life-style/the-onehit-wonder-is-common-to-most-fields-of-endeavour-charles-darwin-came-up-with-the-evolution-thing-but-after-that-what-1599504.html	28	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29	.|G__	SENT	.	28	SUFFIX	''	''	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 152 wx152
+1	The	DT	the	0	ROOT	0	0	0	0	0	0	the	f:Q7741790	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Independent	NP	Independent	1	SUFFIX	The	the	-1	0	0	4.0	independent	f:Q7741790	film	https://en.wikipedia.org/wiki/The_Independent_(2000_film)	0	The_Independent	0	0	0	0	0	0	0	kb	2
+3	.|G__	SENT	.	1	SUFFIX	The	the	-2	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 153 wx153
+1	Archived	JJ	Archived	0	ROOT	0	0	0	https://www.webcitation.org/5iPw0ODWr?url=https://www.independent.co.uk/life-style/the-onehit-wonder-is-common-to-most-fields-of-endeavour-charles-darwin-came-up-with-the-evolution-thing-but-after-that-what-1599504.html	1	0	archived	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	from	IN	from	1	AMOD	Archived	Archived	-1	0	0	0	from	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	the	DT	the	4	NMOD	original	original	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	original	JJ	original	2	PMOD	from	from	-2	0	0	0	original	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	on	IN	on	1	AMOD	Archived	Archived	-4	0	0	0	on	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	20	CD	@card@	8	HMOD	2009	@card@	+2	0	0	0	20	t:f1f1d4083c	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	July	NP	July	6	SUFFIX	20	@card@	-1	0	0	0	july	t:f1f1d4083c	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	2009	CD	@card@	5	PMOD	on	on	-3	0	0	4.0	2009	t:f1f1d4083c	date	0	0	2009	7	20	0	0	0	0	0	date	3
+9	.|G__	SENT	.	8	SUFFIX	2009	@card@	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 154 wx154
+1	Retrieved	VVN	retrieve	0	ROOT	0	0	0	0	0	0	retrieved	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	18	CD	@card@	4	HMOD	2009	@card@	+2	0	0	0	18	t:b7eb07b60d	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	July	NP	July	2	SUFFIX	18	@card@	-1	0	0	0	july	t:b7eb07b60d	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	2009	CD	@card@	0	ROOT	0	0	0	0	0	4.0	2009	t:b7eb07b60d	date	0	0	2009	7	18	0	0	0	0	0	date	3
+5	.|G__	SENT	.	4	SUFFIX	2009	@card@	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 90 wx90
+%%#SEN 155 wx155
+1	Sayle	NP	Sayle	0	SUFFIX	0	0	0	0	0	2	sayle	a:Q970287	person->artist	https://en.wikipedia.org/wiki/Alexei_Sayle	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/c/ce/Alexei_Sayle_Cambridge_2016.jpg	Alexei_Sayle	Male	Anfield__Liverpool__England	1952_08_07	Anfield__Liverpool	0	film_actor|comedian|screenwriter|television_actor	0	coref	1
+2	,|G__	,	,	1	P	Sayle	Sayle	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	Alexei	NP	Alexei	1	SUFFIX	Sayle	Sayle	-2	0	0	2	alexei	a:Q970287	person->artist	https://en.wikipedia.org/wiki/Alexei_Sayle	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/c/ce/Alexei_Sayle_Cambridge_2016.jpg	Alexei_Sayle	Male	Anfield__Liverpool__England	1952_08_07	Anfield__Liverpool	0	film_actor|comedian|screenwriter|television_actor	0	coref	1
+4	(	(	(	7	P	2001	@card@	+3	0	0	0	(	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	24|GGG	CD	@card@	7	HMOD	2001	@card@	+2	0	0	0	24	t:a9dca958d8	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	April	NP	April	5	SUFFIX	24	@card@	-1	0	0	0	april	t:a9dca958d8	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	2001	CD	@card@	0	ROOT	0	0	0	0	0	4.0	2001	t:a9dca958d8	date	0	0	2001	4	24	0	0	0	0	0	date	3
+8	)|G__	)	)	7	P	2001	@card@	-1	0	0	0	)	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	.|G__	SENT	.	7	SUFFIX	2001	@card@	-2	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 156 wx156
+1	``	``	``	8	NMOD	show	show	+7	0	0	0	``	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Ullo	NP	Ullo	1	SUFFIX	``	``	-1	0	0	0	ullo	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	John	NP	John	1	SUFFIX	``	``	-2	0	0	2	john	p:Q5982604	person	https://en.wikipedia.org/wiki/John_McVicar	http://athena3.fit.vutbr.cz/kb/images/wikimedia/commons/3/3a/John_McVicar_(1981).jpg	John_McVicar	Male	0	1940_01_01	0	0	journalist	0	coref	1
+4	!|G__	SENT	!	1	SUFFIX	``	``	-3	0	0	0	!	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	Got	VVN	get	1	SUFFIX	``	``	-4	0	0	0	got	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	ta|G__	JJ	ta	8	NMOD	show	show	+2	0	0	0	ta	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	new	JJ	new	8	NMOD	show	show	+1	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	show	NN	show	0	ROOT	0	0	0	0	0	0	show	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	about	IN	about	8	NMOD	show	show	-1	0	0	0	about	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	the	DT	the	12	NMOD	days	day	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	old	JJ	old	12	NMOD	days	day	+1	0	0	0	old	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	days	NNS	day	9	PMOD	about	about	-3	0	0	0	days	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	?|G__	SENT	?	12	SUFFIX	days	day	-1	0	0	0	?	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	''	''	''	12	P	days	day	-2	https://www.independent.co.uk/opinion/commentators/ullo-john-gotta-new-show-about-the-old-days-682403.html	14	0	''	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	.|G__	SENT	.	12	SUFFIX	days	day	-3	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 157 wx157
+1	The	DT	the	0	ROOT	0	0	0	0	0	0	the	f:Q7741790	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	Independent	NP	Independent	1	SUFFIX	The	the	-1	0	0	4.0	independent	f:Q7741790	film	https://en.wikipedia.org/wiki/The_Independent_(2000_film)	0	The_Independent	0	0	0	0	0	0	0	kb	2
+3	.|G__	SENT	.	1	SUFFIX	The	the	-2	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 158 wx158
+1	Archived	JJ	Archived	0	ROOT	0	0	0	https://www.webcitation.org/5iQCoqxgC?url=https://www.independent.co.uk/opinion/commentators/ullo-john-gotta-new-show-about-the-old-days-682403.html	1	0	archived	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	from	IN	from	1	AMOD	Archived	Archived	-1	0	0	0	from	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	the	DT	the	4	NMOD	original	original	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	original	JJ	original	2	PMOD	from	from	-2	0	0	0	original	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	on	IN	on	1	AMOD	Archived	Archived	-4	0	0	0	on	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	21	CD	@card@	8	HMOD	2009	@card@	+2	0	0	0	21	t:b85d110514	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	July	NP	July	6	SUFFIX	21	@card@	-1	0	0	0	july	t:b85d110514	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	2009	CD	@card@	5	PMOD	on	on	-3	0	0	4.0	2009	t:b85d110514	date	0	0	2009	7	21	0	0	0	0	0	date	3
+9	.|G__	SENT	.	8	SUFFIX	2009	@card@	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 159 wx159
+1	Retrieved	VVN	retrieve	0	ROOT	0	0	0	0	0	0	retrieved	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	18	CD	@card@	4	HMOD	2009	@card@	+2	0	0	0	18	t:fed3d97c86	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	July	NP	July	2	SUFFIX	18	@card@	-1	0	0	0	july	t:fed3d97c86	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	2009	CD	@card@	0	ROOT	0	0	0	0	0	4.0	2009	t:fed3d97c86	date	0	0	2009	7	18	0	0	0	0	0	date	3
+5	.|G__	SENT	.	4	SUFFIX	2009	@card@	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#PAR 91 wx91
+%%#SEN 160 wx160
+1	'	''	'	8	P	website	website	+7	0	0	0	'	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	About	RB	about	5	PMOD	on	on	+3	0	0	0	about	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	Morrison	NP	Morrison	2	SUFFIX	About	about	-1	http://www.morrisonoutdoor.co.nz/about/about-morrison	2	4.2	morrison	l:Q14712893	location	https://en.wikipedia.org/wiki/Morrison,_Virginia	0	Morrison	United_States	0	0	0	0	0	0	kb	1
+4	'	POS	'	3	SUFFIX	Morrison	Morrison	-1	0	0	0	'	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	on	IN	on	8	NMOD	website	website	+3	0	0	0	on	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	Morrison	NP	Morrison	5	SUFFIX	on	on	-1	0	0	4.0	morrison	l:Q14712893	location	https://en.wikipedia.org/wiki/Morrison,_Virginia	0	Morrison	United_States	0	0	0	0	0	0	kb	1
+7	Industries	NPS	Industries	5	SUFFIX	on	on	-2	0	0	0	industries	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	website	NN	website	0	ROOT	0	0	0	0	0	0	website	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	,|G__	,	,	8	P	website	website	-1	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	viewed	VVD	view	8	SUFFIX	website	website	-2	0	0	0	viewed	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	2013-12-12	CD	@card@	8	NMOD	website	website	-3	0	0	4.0	2013-12-12	t:44fbe0e700	date	0	0	2013	12	12	0	0	0	0	0	date	1
+%%#PAR 92 wx92
+%%#SEN 161 wx161
+1	'	''	'	15	NMOD	2013-12-12	@card@	+14	0	0	0	'	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	I	PP	I	1	SUFFIX	'	'	-1	0	0	0	i	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	Got	VVD	get	1	SUFFIX	'	'	-2	0	0	0	got	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	A	DT	a	15	NMOD	2013-12-12	@card@	+11	0	0	0	a	p:Q67439949	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	Brand	NP	Brand	4	SUFFIX	A	a	-1	0	0	4.0	brand	p:Q67439949	person	https://www.wikidata.org/wiki/Q67439949	0	Brand_A	0	0	0	0	0	researcher	0	kb	2
+6	New	NP	New	4	SUFFIX	A	a	-2	0	0	0	new	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	Morrison	NP	Morrison	4	SUFFIX	A	a	-3	0	0	4.0	morrison	l:Q14712893	location	https://en.wikipedia.org/wiki/Morrison,_Virginia	0	Morrison	United_States	0	0	0	0	0	0	kb	1
+8	!|G__	SENT	!	4	SUFFIX	A	a	-4	http://www.vorb.org.nz/got-brand-new-morrison-t124836.html	7	0	!	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	'	''	'	4	P	A	a	-5	0	0	0	'	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	on	IN	on	4	NMOD	A	a	-6	0	0	0	on	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	vorb.org.nz	NN	vorb.org.nz	12	NMOD	website	website	+1	0	0	0	vorb.org.nz	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	website	NN	website	10	PMOD	on	on	-2	0	0	0	website	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+13	,|G__	,	,	4	P	A	a	-9	0	0	0	,	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+14	viewed	VVD	view	4	SUFFIX	A	a	-10	0	0	0	viewed	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+15	2013-12-12	CD	@card@	0	ROOT	0	0	0	0	0	4.0	2013-12-12	t:cecaa8b74a	date	0	0	2013	12	12	0	0	0	0	0	date	1
+%%#PAR 93 wx93
+%%#SEN 162 wx162
+1	This	DT	this	2	NMOD	article	article	+1	0	0	0	this	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	article	NN	article	3	SBJ	is	be	+1	0	0	0	article	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	is	VBZ	be	0	ROOT	0	0	0	0	0	0	is	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	issued	VVN	issue	3	SUFFIX	is	be	-1	0	0	0	issued	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	from	IN	from	3	PRD	is	be	-2	0	0	0	from	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	Wikipedia	NP	Wikipedia	3	SUFFIX	is	be	-3	https://en.wikipedia.org/wiki/'Ullo_John!_Gotta_New_Motor%3F?oldid=915362170	1	0	wikipedia	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	.|G__	SENT	.	3	SUFFIX	is	be	-4	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 163 wx163
+1	The	DT	the	2	NMOD	text	text	+1	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	text	NN	text	3	SBJ	is	be	+1	0	0	0	text	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	is	VBZ	be	0	ROOT	0	0	0	0	0	0	is	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	licensed	VVN	license	3	SUFFIX	is	be	-1	0	0	0	licensed	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	under	IN	under	3	PRD	is	be	-2	0	0	0	under	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	Creative	NP	Creative	3	SUFFIX	is	be	-3	0	0	0	creative	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	Commons	NPS	Commons	3	SUFFIX	is	be	-4	0	0	0	commons	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	-	:	-	3	P	is	be	-5	0	0	0	-	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	Attribution	NP	Attribution	3	SUFFIX	is	be	-6	0	0	0	attribution	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+10	-	:	-	3	P	is	be	-7	0	0	0	-	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+11	Sharealike	JJ	Sharealike	3	PRD	is	be	-8	https://creativecommons.org/licenses/by-sa/4.0/	6	0	sharealike	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+12	.|G__	SENT	.	3	SUFFIX	is	be	-9	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+%%#SEN 164 wx164
+1	Additional	JJ	additional	2	NMOD	terms	term	+1	0	0	0	additional	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+2	terms	NNS	term	3	SBJ	may	may	+1	0	0	0	terms	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+3	may	MD	may	0	ROOT	0	0	0	0	0	0	may	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+4	apply	VV	apply	3	SUFFIX	may	may	-1	0	0	0	apply	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+5	for	IN	for	3	ADV	may	may	-2	0	0	0	for	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+6	the	DT	the	8	NMOD	files	file	+2	0	0	0	the	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+7	media	NNS	medium	8	NMOD	files	file	+1	0	0	0	media	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+8	files	NNS	file	5	PMOD	for	for	-3	0	0	0	files	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+9	.|G__	SENT	.	8	SUFFIX	files	file	-1	0	0	0	.	0	0	0	0	0	0	0	0	0	0	0	0	0	0

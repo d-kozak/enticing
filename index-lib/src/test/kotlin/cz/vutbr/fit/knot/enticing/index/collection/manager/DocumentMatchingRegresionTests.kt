@@ -1,8 +1,10 @@
 package cz.vutbr.fit.knot.enticing.index.collection.manager
 
 import cz.vutbr.fit.knot.enticing.dto.interval.Interval
+import cz.vutbr.fit.knot.enticing.dto.interval.subList
 import cz.vutbr.fit.knot.enticing.eql.compiler.EqlCompiler
 import cz.vutbr.fit.knot.enticing.eql.compiler.ast.EqlAstNode
+import cz.vutbr.fit.knot.enticing.eql.compiler.matching.DocumentMatch
 import cz.vutbr.fit.knot.enticing.index.boundary.IndexedDocument
 import cz.vutbr.fit.knot.enticing.index.boundary.MatchInfo
 import cz.vutbr.fit.knot.enticing.index.collection.manager.postprocess.matchDocument
@@ -22,6 +24,10 @@ fun loadDocument(path: String): IndexedDocument {
     val collection = Mg4jSingleFileDocumentCollection(File(path), factory, SimpleStdoutLoggerFactory)
     return collection.document(0)
 }
+
+fun IndexedDocument.getText(match: DocumentMatch) = this.content[dummyMetadataConfiguration.indexes.getValue(dummyMetadataConfiguration.defaultIndex).columnIndex]
+        .subList(match.interval)
+        .joinToString(" ")
 
 //@Disabled
 class DocumentMatchingRegresionTests {
@@ -44,7 +50,7 @@ class DocumentMatchingRegresionTests {
     }
 
     @Test
-    fun `1922 in literature`(){
+    fun `1922 in literature`() {
         val query = "nertag:artist"
         val doc = loadDocument("../data/regres/1922inLiterature.mg4j")
         val matchInfo = query(query, doc)
@@ -79,6 +85,25 @@ class DocumentMatchingRegresionTests {
             val matchInfo = query(query, document)
             assertThat(matchInfo.intervals).hasSize(2)
             println(matchInfo)
+        }
+    }
+
+    @Nested
+    @DisplayName("'Ullo John! Gotta New Motor? ")
+    inner class Ullo {
+
+        val document = loadDocument("../data/regres/ulloGottaNewMotor.mg4j")
+
+        @Test
+        fun query() {
+            val query = "a:=nertag:person < lemma:(influence | impact | (paid < tribute) ) < b:=nertag:person ctx:sent && a.url != b.url"
+            val (intervals) = query(query, document)
+            assertThat(intervals.size).isEqualTo(2)
+            assertThat(document.getText(intervals[0]))
+                    .isEqualTo("Sayle ( the presenter ) talks through the influence of the car on the post war working classes and also features villain John McVicar")
+            assertThat(document.getText(intervals[1]))
+                    .isEqualTo("Sayle ( the presenter ) talks through the influence of the car on the post war working classes and also features villain John McVicar ( who")
+
         }
     }
 }
