@@ -17,6 +17,7 @@ import {getSelectedMetadataForCurrentSettings, isDebugMode} from "../../reducers
 import ShowRawDocumentButton from "./snippetbuttons/ShowRawDocumentButton";
 import LimitSearchButton from "./snippetbuttons/LimitSearchButton";
 import * as H from "history";
+import DownloadRawDocumentButton from "./snippetbuttons/DownloadRawDocumentButton";
 
 
 const styles = createStyles({
@@ -48,6 +49,7 @@ const ComplexSnippetView = (props: ComplexSnippetViewEnhanedProps) => {
             <Grid container direction="row" justify="space-between" alignItems="center" className={classes.root}>
                 <Grid item>
                     {debugMode && <ShowRawDocumentButton searchResult={snippet}/>}
+                    {debugMode && <DownloadRawDocumentButton searchResult={snippet}/>}
                     <EditContextButton searchResult={snippet} requestContextExtension={requestContextExtension}/>
                     <EditAnnotationsButton/>
                     <ShowDocumentButton openDocumentRequest={openDocumentRequest}/>

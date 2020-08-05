@@ -7,6 +7,7 @@ import {consoleDump} from "../../components/utils/dump";
 import {ThunkResult} from "../../actions/RootActions";
 import {RawDocumentRequest} from "../../entities/RawDocumentRequest";
 import {openSnackbar} from "../SnackBarReducer";
+import {downloadFile} from "../../utils/file";
 
 const {reducer, actions} = createSlice({
     slice: 'rawDocumentDialog',
@@ -27,14 +28,28 @@ export const {openRawDocumentDialog, closeRawDocumentDialog} = actions;
 export default reducer;
 
 
-export const loadRawDocumentRequest = (searchResult: SearchResult): ThunkResult<void> => async dispatch => {
+const getDocumentContent = async (searchResult: SearchResult) => {
     const request: RawDocumentRequest = {
         server: searchResult.host,
         collection: searchResult.collection,
         documentId: searchResult.documentId
     };
+    return axios.post<string>(`${API_BASE_PATH}/query/raw-document/`, request, {withCredentials: true});
+}
+
+export const downloadRawDocumentRequest = (searchResult: SearchResult): ThunkResult<void> => async dispatch => {
     try {
-        const response = await axios.post(`${API_BASE_PATH}/query/raw-document/`, request, {withCredentials: true});
+        const response = await getDocumentContent(searchResult);
+        downloadFile(searchResult.documentTitle + ".mg4j", response.data);
+    } catch (e) {
+        dispatch(openSnackbar("Could not download raw document"));
+        consoleDump(e);
+    }
+};
+
+export const loadRawDocumentRequest = (searchResult: SearchResult): ThunkResult<void> => async dispatch => {
+    try {
+        const response = await getDocumentContent(searchResult);
         dispatch(openRawDocumentDialog({
             info: {
                 host: searchResult.host,
