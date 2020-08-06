@@ -19,6 +19,9 @@ class BugReportController(private val bugReportService: BugReportService) {
     @DeleteMapping("/{id}")
     fun delete(@PathVariable id: Long) = bugReportService.deleteById(id)
 
+    @GetMapping("/document/{reportId}")
+    fun getRawDocument(@PathVariable reportId: Long) = bugReportService.getRawMg4jDocument(reportId)
+
 }
 
 

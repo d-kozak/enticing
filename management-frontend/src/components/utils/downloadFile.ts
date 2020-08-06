@@ -12,11 +12,3 @@ export const downloadFile = (filename: string, data: string, type: string = 'app
         document.body.removeChild(elem);
     }
 };
-
-export const uploadFile = (file: File, onLoad: (content: string) => void) => {
-    const fileReader = new FileReader();
-    fileReader.onload = () => {
-        onLoad(fileReader.result as string)
-    }
-    fileReader.readAsText(file);
-}
