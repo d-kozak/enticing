@@ -8,6 +8,7 @@ All source code related to the Enticing project.
 
 ## Thesis
 Enticing was developed by David Kozak in his [master's thesis](./documentation/thesis.pdf).
+Poster presenting the project can be found [here](./documentation/poster.pdf).
 
 ## Documentation
 Documentation can be found [here](./documentation/README.md).
