@@ -6,7 +6,7 @@ import {dateTimeToString} from "../utils/dateUtils";
 export type AlignOptions = 'inherit' | 'left' | 'center' | 'right' | 'justify'
 
 export interface PaginatedTableColumn<ItemType, ColType> {
-    type: "string" | "float" | "int" | "custom" | "date"
+    type: "string" | "boolean" | "float" | "int" | "custom" | "date"
     id: string,
     label: string,
     align: AlignOptions,
@@ -42,6 +42,18 @@ export function IntColumn(id: string, label: string, extra?: Partial<ExtraColumn
     const renderContent = (input: number) => input.toString()
     return {
         type: "int",
+        id,
+        label,
+        renderContent,
+        ...ExtraColumnParamsDefaults,
+        ...extra,
+    }
+}
+
+export function BooleanColumn(id: string, label: string, extra?: Partial<ExtraColumnParams>): PaginatedTableColumn<any, boolean> {
+    const renderContent = (input: boolean) => input ? "YES" : "NO"
+    return {
+        type: "boolean",
         id,
         label,
         renderContent,

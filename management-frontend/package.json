@@ -2,7 +2,7 @@
   "name": "management-frontend",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:8080",
+  "proxy": "http://athena11.fit.vutbr.cz:5628/",
   "dependencies": {
     "@material-ui/core": "^4.9.11",
     "@material-ui/icons": "^4.0.0",

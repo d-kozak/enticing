@@ -39,6 +39,8 @@ class SecurityConfig(
                 .hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "$apiBasePath/search-settings")
                 .hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "$apiBasePath/bug-report")
+                .hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "$apiBasePath/user")
                 .permitAll()
                 .antMatchers("/*",

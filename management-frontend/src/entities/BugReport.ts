@@ -1,9 +1,8 @@
-import {Interval} from "../components/annotations/TextUnitList";
-
 /**
  * Contains necessary information to replicate invalid match
  */
 export interface BugReport {
+    id: string
     query: string
     filterOverlaps: boolean
     host: string
@@ -12,4 +11,9 @@ export interface BugReport {
     documentTitle: string
     matchInterval: Interval
     description: string
+}
+
+export interface Interval {
+    from: number,
+    to: number
 }

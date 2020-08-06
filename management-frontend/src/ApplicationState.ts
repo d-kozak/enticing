@@ -6,6 +6,7 @@ import {LogDto} from "./entities/LogDto";
 import {PerfDto} from "./entities/PerfDto";
 import {GeneralOperationStatistics} from "./entities/GeneralOperationStatistics";
 import {CommandDto} from "./entities/CommandDto";
+import {BugReport} from "./entities/BugReport";
 
 export interface ApplicationState {
     userDetails: UserState
@@ -14,6 +15,7 @@ export interface ApplicationState {
     components: PaginatedCollection<ComponentInfo>
     commands: PaginatedCollection<CommandDto>
     builds: PaginatedCollection<CommandDto>
+    bugReports: PaginatedCollection<BugReport>
     logs: PaginatedCollection<LogDto>
     perfLogs: PaginatedCollection<PerfDto>
     operationStats: OperationsStatsState

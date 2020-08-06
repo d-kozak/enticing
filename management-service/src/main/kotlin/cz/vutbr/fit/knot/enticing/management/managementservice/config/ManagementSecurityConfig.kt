@@ -41,6 +41,8 @@ class SecurityConfig(
                 .permitAll()
                 .antMatchers(HttpMethod.POST, "$apiBasePath/user/add")
                 .hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "$apiBasePath/bug-report/**")
+                .hasRole("PLATFORM_MAINTAINER")
                 .antMatchers("/*",
                         "/static/**",
                         "$apiBasePath/dashboard/**",
@@ -49,6 +51,7 @@ class SecurityConfig(
                         "$apiBasePath/perf/**",
                         "$apiBasePath/heartbeat/**",
                         "$apiBasePath/server/**",
+                        "$apiBasePath/bug-report/**",
                         "$apiBasePath/component/**",
                         "$apiBasePath/command/**"
                 )

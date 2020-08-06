@@ -2,6 +2,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
+import BugReportIcon from "@material-ui/icons/BugReport";
 import ComputerIcon from "@material-ui/icons/Computer";
 import PersonIcon from "@material-ui/icons/Person";
 import DashboardIcon from "@material-ui/icons/Dashboard";
@@ -102,6 +103,13 @@ export default function EnticingDrawer() {
                 <ListItem button onClick={() => history.push("/build")}>
                     <ListItemIcon><BuildIcon/></ListItemIcon>
                     <ListItemText primary="Builds"/>
+                </ListItem>
+            </List>
+            <Divider/>
+            <List>
+                <ListItem button onClick={() => history.push("/bug-reports")}>
+                    <ListItemIcon><BugReportIcon/></ListItemIcon>
+                    <ListItemText primary="Bug Reports"/>
                 </ListItem>
             </List>
         </div>

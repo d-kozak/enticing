@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.api
 
+import cz.vutbr.fit.knot.enticing.dto.BugReport
 import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.log.*
 import cz.vutbr.fit.knot.enticing.mx.ServerStatus
@@ -49,4 +50,6 @@ class ManagementServiceApi(
     override fun close() {
         scope.cancel()
     }
+
+    fun bugReport(report: BugReport): Boolean = httpPost<Any>(remoteAddress, "/bug-report", report) != null
 }

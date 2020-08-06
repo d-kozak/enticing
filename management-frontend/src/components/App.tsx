@@ -21,6 +21,7 @@ import Logs from "./maincontent/logs/Logs";
 import Perf from "./maincontent/perf/Perf";
 import Commands from "./maincontent/commands/Commands";
 import Builds from "./maincontent/builds/Builds";
+import BugReports from "./maincontent/bugreports/BugReports";
 import AuthenticatedOnly from "./protectors/AuthenticatedOnly";
 import {getRequest} from "../network/requests";
 import {User} from "../entities/user";
@@ -79,6 +80,7 @@ const App = (props: AppProps) => {
                     <AuthenticatedRoute path={"/perf"} exact={false}> <Perf/> </AuthenticatedRoute>
                     <AuthenticatedRoute path={"/command"} exact={false}> <Commands/> </AuthenticatedRoute>
                     <AuthenticatedRoute path={"/build"} exact={false}> <Builds/> </AuthenticatedRoute>
+                    <AuthenticatedRoute path={"/bug-reports"} exact={false}> <BugReports/> </AuthenticatedRoute>
                 </Switch>
             </main>
         </Router>

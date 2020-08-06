@@ -24,7 +24,7 @@ type BugReportDialogDialogProps = typeof mapDispatchToProps
 }
 
 const BugReportDialog = (props: BugReportDialogDialogProps) => {
-    const {query, open, onSubmit, searchResult, openSnackbar, onClose} = props;
+    const {query, filterOverlaps, open, onSubmit, searchResult, openSnackbar, onClose} = props;
 
     const [description, setDescription] = useState("");
     const [progress, setProgress] = useState(false);
@@ -39,11 +39,13 @@ const BugReportDialog = (props: BugReportDialogDialogProps) => {
             host: searchResult.host,
             collection: searchResult.collection,
             documentId: searchResult.documentId,
+            documentTitle: searchResult.documentTitle,
             matchInterval: {
                 from: searchResult.payload.location,
                 to: searchResult.payload.location + searchResult.payload.size - 1
             },
             query,
+            filterOverlaps,
             description
         };
 
@@ -94,7 +96,8 @@ const BugReportDialog = (props: BugReportDialogDialogProps) => {
 
 
 const mapStateToProps = (state: ApplicationState) => ({
-    query: state.searchResult.query
+    query: state.searchResult.query,
+    filterOverlaps: state.userState.user.userSettings.filterOverlaps
 });
 
 const mapDispatchToProps = {
