@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver
 
+import cz.vutbr.fit.knot.enticing.api.ManagementServiceApi
 import cz.vutbr.fit.knot.enticing.mx.ServerMonitoringService
 import cz.vutbr.fit.knot.enticing.webserver.service.*
 import cz.vutbr.fit.knot.enticing.webserver.testconfig.LogServiceTestConfig
@@ -35,6 +36,9 @@ internal class ApiBasePathTest(
 
     @MockBean
     lateinit var monitoringService: ServerMonitoringService
+
+    @MockBean
+    lateinit var managementServiceApi: ManagementServiceApi
 
     @Test
     fun `Property api base path is set`() {

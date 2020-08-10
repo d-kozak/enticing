@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.webserver.controller
 
+import cz.vutbr.fit.knot.enticing.api.ManagementServiceApi
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import cz.vutbr.fit.knot.enticing.mx.ServerMonitoringService
 import cz.vutbr.fit.knot.enticing.webserver.dto.QueryValidationReply
@@ -47,6 +48,9 @@ internal class EqlCompilerControllerTest(
     @MockBean
     lateinit var monitoringService: ServerMonitoringService
 
+    @MockBean
+    lateinit var managementServiceApi: ManagementServiceApi
+
     @Test
     fun `get calls compiler service`() {
         Mockito.`when`(queryService.validateQuery("nertag:person (killed|visited)", 5))
@@ -54,8 +58,8 @@ internal class EqlCompilerControllerTest(
 
         val query = QueryValidationRequest("nertag:person (killed|visited)", 5)
         mockMvc.perform(MockMvcRequestBuilders.post("$apiBasePath/compiler")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(query.toJson()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(query.toJson()))
                 .andExpect(MockMvcResultMatchers.status().isOk)
 
         Mockito.verify(queryService).validateQuery("nertag:person (killed|visited)", 5)

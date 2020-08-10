@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 /**
  * Proxy class for communicating with the management service
  */
-class ManagementServiceApi(
+open class ManagementServiceApi(
         /**
          * Address of the service in the format ip:port
          */

@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.webserver.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import cz.vutbr.fit.knot.enticing.api.ManagementServiceApi
 import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.TextMetadata
 import cz.vutbr.fit.knot.enticing.dto.WebServer
@@ -58,6 +59,9 @@ internal class SecurityConfigTest(
 
     @MockBean
     lateinit var monitoringService: ServerMonitoringService
+
+    @MockBean
+    lateinit var managementServiceApi: ManagementServiceApi
 
     @Nested
     inner class Login {

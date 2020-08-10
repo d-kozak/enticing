@@ -2,6 +2,7 @@ package cz.vutbr.fit.knot.enticing.webserver.controller
 
 
 import com.nhaarman.mockitokotlin2.*
+import cz.vutbr.fit.knot.enticing.api.ManagementServiceApi
 import cz.vutbr.fit.knot.enticing.dto.CorpusFormat
 import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.TextMetadata
@@ -53,6 +54,9 @@ internal class QueryControllerTest(
 
     @MockBean
     lateinit var monitoringService: ServerMonitoringService
+
+    @MockBean
+    lateinit var managementServiceApi: ManagementServiceApi
 
     @Test
     fun query() {
