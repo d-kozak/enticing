@@ -10,6 +10,7 @@ import cz.vutbr.fit.knot.enticing.management.managementservice.apiBasePath
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.ComponentInfo
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.GeneralOperationStatistics
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.ServerInfo
+import cz.vutbr.fit.knot.enticing.management.managementservice.entity.ComponentStatus
 import cz.vutbr.fit.knot.enticing.management.managementservice.extractPaginatedItems
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ComponentRepository
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.LogRepository
@@ -57,14 +58,14 @@ class ComponentTests {
 
     private val timestamp1 = LocalDateTime.now().minusDays(1)
     private var serverOne = ServerInfo(1, "athena10.fit.vutbr.cz", 12, 6_000, null)
-    private var componentOne = ComponentInfo(2, 1, "athena10.fit.vutbr.cz", 8080, ComponentType.WEBSERVER, timestamp1)
+    private var componentOne = ComponentInfo(2, 1, "athena10.fit.vutbr.cz", 8080, ComponentType.WEBSERVER, timestamp1, ComponentStatus.ALIVE)
 
     private val timestamp2 = LocalDateTime.now()
-    private var componentTwo = ComponentInfo(3, 1, "athena10.fit.vutbr.cz", 5627, ComponentType.INDEX_SERVER, timestamp2)
+    private var componentTwo = ComponentInfo(3, 1, "athena10.fit.vutbr.cz", 5627, ComponentType.INDEX_SERVER, timestamp2, ComponentStatus.ALIVE)
 
     private val timestamp3 = LocalDateTime.now()
     private var serverTwo = ServerInfo(4, "knot01.fit.vutbr.cz", 11, 5555, null)
-    private var componentThree = ComponentInfo(5, 4, "knot01.fit.vutbr.cz", 5627, ComponentType.INDEX_SERVER, timestamp3)
+    private var componentThree = ComponentInfo(5, 4, "knot01.fit.vutbr.cz", 5627, ComponentType.INDEX_SERVER, timestamp3, ComponentStatus.ALIVE)
 
 
     @BeforeAll

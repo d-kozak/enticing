@@ -28,6 +28,7 @@ class DebugInitRunner(
         private val perfRepository: PerfRepository,
         private val userRepository: UserRepository,
         private val commandRepository: CommandRepository,
+        private val corpusRepository: CorpusRepository,
         private val encoder: PasswordEncoder,
         @Value("\${debug.runner.start}")
         private val runDebug: Boolean,
@@ -95,6 +96,10 @@ class DebugInitRunner(
         componentRepository.saveAll(components)
         logRepository.saveAll(logs)
         perfRepository.saveAll(perfLogs)
+
+        // ids of components have to be set before inserting into set
+        val corpus = CorpusEntity(0, "wiki-19", components.toMutableSet())
+        corpusRepository.save(corpus)
         logger.info("Finished...")
     }
 }

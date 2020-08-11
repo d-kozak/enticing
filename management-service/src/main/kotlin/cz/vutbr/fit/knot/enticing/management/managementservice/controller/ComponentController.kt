@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("\${api.base.path}/component")
 class ComponentController(
-        val componentService: ComponentService
+        private val componentService: ComponentService
 ) {
 
     @GetMapping

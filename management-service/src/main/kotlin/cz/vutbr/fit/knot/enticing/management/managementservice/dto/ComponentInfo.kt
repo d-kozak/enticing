@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.dto
 
 import cz.vutbr.fit.knot.enticing.log.ComponentType
+import cz.vutbr.fit.knot.enticing.management.managementservice.entity.ComponentStatus
 import java.time.LocalDateTime
 import javax.validation.constraints.Positive
 
@@ -13,4 +14,6 @@ data class ComponentInfo(
         @field:Positive
         val port: Int,
         val type: ComponentType,
-        val lastHeartbeat: LocalDateTime)
+        val lastHeartbeat: LocalDateTime,
+        val status: ComponentStatus
+)

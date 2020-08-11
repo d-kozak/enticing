@@ -6,12 +6,16 @@ import java.time.LocalDateTime
 import javax.persistence.*
 import javax.validation.constraints.Positive
 
+enum class ComponentStatus {
+    ALIVE,
+    DEAD
+}
 
-fun ComponentEntity.toComponentInfo() = ComponentInfo(id, server.id, server.address, port, type, lastHeartbeat)
+fun ComponentEntity.toComponentInfo() = ComponentInfo(id, server.id, server.address, port, type, lastHeartbeat, status)
 
 @Entity
 @Table(uniqueConstraints = [UniqueConstraint(name = "one component at one address", columnNames = ["server_id", "port"])])
-class ComponentEntity(
+data class ComponentEntity(
         @field:Id
         @field:GeneratedValue
         var id: Long,
@@ -24,7 +28,9 @@ class ComponentEntity(
         @field:OneToMany(mappedBy = "component")
         var logs: List<LogEntity>,
         @field:OneToMany(mappedBy = "component")
-        var perfLog: List<PerfEntity>
+        var perfLog: List<PerfEntity>,
+        @Enumerated(EnumType.STRING)
+        var status: ComponentStatus = ComponentStatus.ALIVE
 ) {
 
     val fullAddress: String
@@ -43,10 +49,5 @@ class ComponentEntity(
     override fun hashCode(): Int {
         return id.hashCode()
     }
-
-    override fun toString(): String {
-        return "ComponentEntity(id=$id, type=$type)"
-    }
-
 
 }

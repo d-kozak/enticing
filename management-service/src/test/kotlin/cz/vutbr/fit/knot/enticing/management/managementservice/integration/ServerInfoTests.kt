@@ -6,6 +6,7 @@ import cz.vutbr.fit.knot.enticing.log.HeartbeatDto
 import cz.vutbr.fit.knot.enticing.management.managementservice.apiBasePath
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.ComponentInfo
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.ServerInfo
+import cz.vutbr.fit.knot.enticing.management.managementservice.entity.ComponentStatus
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toComponentInfo
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toServerInfo
 import cz.vutbr.fit.knot.enticing.management.managementservice.extractPaginatedItems
@@ -55,9 +56,9 @@ class ServerInfoTests {
     private val serverInfo = ServerInfo(1, "athena10.fit.vutbr.cz", 12, 6_000, null)
 
     private val timestamp = LocalDateTime.now()
-    private val componentOne = ComponentInfo(2, 1, "athena10.fit.vutbr.cz", 8080, ComponentType.WEBSERVER, timestamp)
+    private val componentOne = ComponentInfo(2, 1, "athena10.fit.vutbr.cz", 8080, ComponentType.WEBSERVER, timestamp, ComponentStatus.ALIVE)
     private val timestamp2 = LocalDateTime.now()
-    private val componentTwo = ComponentInfo(3, 1, "athena10.fit.vutbr.cz", 5627, ComponentType.INDEX_SERVER, timestamp2)
+    private val componentTwo = ComponentInfo(3, 1, "athena10.fit.vutbr.cz", 5627, ComponentType.INDEX_SERVER, timestamp2, ComponentStatus.ALIVE)
 
     @BeforeAll
     fun `register server and component`() {
