@@ -36,6 +36,7 @@ class CorpusService(
         val component = componentRepository.findByIdOrNull(componentId)
                 ?: throw IllegalArgumentException("No component with id $componentId found")
         corpus.components.add(component)
+        component.corpuses.add(corpus)
     }
 
     fun removeComponentFromCorpus(componentId: Long, corpusId: Long): Boolean {
@@ -43,7 +44,7 @@ class CorpusService(
                 ?: throw IllegalArgumentException("No corpus with id $corpusId found")
         val component = componentRepository.findByIdOrNull(componentId)
                 ?: throw IllegalArgumentException("No component with id $componentId found")
-        return corpus.components.remove(component)
+        return corpus.components.remove(component) && component.corpuses.remove(corpus)
     }
 
     fun deleteById(id: Long) = corpusRepository.deleteById(id)

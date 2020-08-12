@@ -12,7 +12,8 @@ class ComponentController(
 ) {
 
     @GetMapping
-    fun getComponents(pageable: Pageable, @RequestParam type: ComponentType?) = componentService.getComponents(type, pageable)
+    fun getComponents(pageable: Pageable, @RequestParam type: ComponentType?, @RequestParam corpusId: Long?) =
+            if (corpusId != null) componentService.getComponentsOfCorpus(corpusId, pageable) else componentService.getComponents(type, pageable)
 
     @GetMapping("/{componentId}")
     fun getComponent(@PathVariable componentId: Long) = componentService.getComponent(componentId)

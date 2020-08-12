@@ -3,6 +3,7 @@ import {clearCollection, emptyPaginatedCollection, PaginatedCollection, Paginate
 import {Corpus} from "../entities/Corpus";
 import {ThunkResult} from "../utils/ThunkResult";
 import {getRequest} from "../network/requests";
+import {ComponentInfo} from "../entities/ComponentInfo";
 
 const {reducer, actions} = createSlice({
     slice: 'corpuses',
@@ -14,7 +15,7 @@ const {reducer, actions} = createSlice({
             for (let i = 0; i < payload.content.length; i++) {
                 const elem = payload.content[i];
                 elem.id = elem.id.toString(); // (in case it was parsed as a number, transform it back to string)
-                elem.components = elem.components.map(c => c.toString()) // map numbers back to strings
+                elem.components = emptyPaginatedCollection();
                 state.index[offset + i] = elem.id;
                 state.elements[elem.id] = elem;
             }
@@ -23,16 +24,42 @@ const {reducer, actions} = createSlice({
         addCorpus: (state: PaginatedCollection<Corpus>, action: PayloadAction<Corpus>) => {
             const corpus = action.payload;
             corpus.id = corpus.id.toString();
-            corpus.components = corpus.components.map(c => c.toString()) // map numbers back to strings
+            const prev = state.elements[corpus.id];
+            corpus.components = prev?.components || emptyPaginatedCollection();
             state.elements[corpus.id] = corpus;
         },
         clearAll: (state: PaginatedCollection<Corpus>) => {
             clearCollection(state);
+        },
+        addComponentsToCorpus: (state: PaginatedCollection<Corpus>, action: PayloadAction<PaginatedResult<ComponentInfo> & { corpusId: string }>) => {
+            const payload = action.payload;
+            const server = state.elements[payload.corpusId];
+            if (!server) {
+                console.error(`unknown corpus ${payload.corpusId}`)
+                return;
+            }
+            const offset = payload.number * payload.size;
+            for (let i = 0; i < payload.content.length; i++) {
+                const elem = payload.content[i];
+                elem.id = elem.id.toString(); // (in case it was parsed as a number, transform it back to string)
+                server.components.index[offset + i] = elem.id;
+                server.components.elements[elem.id] = elem;
+            }
+            server.components.totalElements = payload.totalElements
+        },
+        clearComponentsFromCorpus: (state: PaginatedCollection<Corpus>, action: PayloadAction<string>) => {
+            const id = action.payload;
+            const corpus = state.elements[id];
+            if (!corpus) {
+                console.error(`unknown corpus ${id}`)
+                return;
+            }
+            clearCollection(corpus.components);
         }
     }
 });
 
-export const {addNewItems, addCorpus, clearAll} = actions;
+export const {addNewItems, addComponentsToCorpus, clearComponentsFromCorpus, addCorpus, clearAll} = actions;
 
 export default reducer;
 

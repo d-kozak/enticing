@@ -30,7 +30,12 @@ data class ComponentEntity(
         @field:OneToMany(mappedBy = "component")
         var perfLog: List<PerfEntity>,
         @Enumerated(EnumType.STRING)
-        var status: ComponentStatus = ComponentStatus.ALIVE
+        var status: ComponentStatus = ComponentStatus.ALIVE,
+        /**
+         * Since it is a set, be careful to set component ids before inserting
+         */
+        @ManyToMany
+        var corpuses: MutableSet<CorpusEntity> = mutableSetOf()
 ) {
 
     val fullAddress: String

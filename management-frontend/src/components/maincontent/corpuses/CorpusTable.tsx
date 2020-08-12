@@ -36,7 +36,7 @@ const CorpusesTable = (props: CorpusesTableProps) => {
             sortId: "name",
         }),
         CustomColumn<Corpus, undefined>("components", "Components",
-            (prop, corpus) => corpus.components.length
+            (prop, corpus) => Object.values(corpus.components.elements).length
             , {sortId: "components"}),
         CustomColumn<Corpus, undefined>("corpusDetails", "Corpus details",
             (prop, corpus) => <Tooltip title="Corpus details">

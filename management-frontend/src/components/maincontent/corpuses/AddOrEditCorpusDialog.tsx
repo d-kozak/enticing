@@ -67,9 +67,12 @@ const AddOrEditCorpusDialog = (props: AddOrEditCorpusDialogProps) => {
 
     const classes = useStyles();
 
-    const [selectedComponents, setSelectedComponents] = useState<Array<string>>(editedCorpus?.components || [])
+    const previouslySelectedComponents = Object.values(editedCorpus?.components?.elements || {})
+        .map(it => it.id);
 
-    const allSelected = selectedComponents.length == components.totalElements;
+    const [selectedComponents, setSelectedComponents] = useState<Array<string>>(previouslySelectedComponents)
+
+    const allSelected = selectedComponents.length === components.totalElements;
 
     const updateComponents = useCallback(() => {
         if (open)
@@ -107,7 +110,7 @@ const AddOrEditCorpusDialog = (props: AddOrEditCorpusDialogProps) => {
                         validationSchema={AddNewCorpusSchema}
                         onSubmit={({name}, actions) => {
                             setProgress(true)
-                            const req: Corpus = {
+                            const req = {
                                 id: editedCorpus?.id || "0",
                                 components: selectedComponents,
                                 name
@@ -118,6 +121,7 @@ const AddOrEditCorpusDialog = (props: AddOrEditCorpusDialogProps) => {
                                     setProgress(false)
                                     setOpen(false)
                                     actions.setSubmitting(false)
+                                    openSnackbarAction(`Corpus ${name} created`);
                                 })
                                 .catch(err => {
                                     setProgress(false)

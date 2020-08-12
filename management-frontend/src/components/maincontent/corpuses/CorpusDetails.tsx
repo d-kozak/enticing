@@ -9,6 +9,7 @@ import {useInterval} from "../../../utils/useInterval";
 import {requestCorpus} from "../../../reducers/corpusesReducer";
 import MaintainerOnly from "../../protectors/MaintainerOnly";
 import AddOrEditCorpusDialog from "./AddOrEditCorpusDialog";
+import CorpusComponentsTable from "./CorpusComponentsTable";
 
 
 export type CorpusDetailsProps = typeof mapDispatchToProps
@@ -19,7 +20,7 @@ const CorpusDetails = (props: CorpusDetailsProps) => {
     const history = useHistory();
     const refresh = useCallback(() => requestCorpus(corpusId!), [requestCorpus, corpusId])
     const corpus = corpuses.elements[corpusId];
-    useInterval(refresh);
+    useInterval(refresh, 2_000);
     if (!corpus) {
         refresh();
         return <Centered>
@@ -48,6 +49,7 @@ const CorpusDetails = (props: CorpusDetailsProps) => {
             </List>
             <Divider/>
         </MaintainerOnly>
+        <CorpusComponentsTable corpusId={corpus.id}/>
     </div>
 };
 
