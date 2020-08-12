@@ -21,7 +21,7 @@ class CorpusService(
 
     fun getAll(pageable: Pageable) = corpusRepository.findAll(pageable).map { it.toCorpus() }
 
-    fun addNew(corpus: Corpus): Corpus {
+    fun addOrUpdate(corpus: Corpus): Corpus {
         val components = corpus.components.map {
             componentRepository.findByIdOrNull(it) ?: throw IllegalArgumentException("No component with id $it found")
         }.toMutableSet()

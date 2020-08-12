@@ -4,6 +4,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import BugReportIcon from "@material-ui/icons/BugReport";
 import ComputerIcon from "@material-ui/icons/Computer";
+import MenuBookIcon from "@material-ui/icons/MenuBook";
 import PersonIcon from "@material-ui/icons/Person";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import ScheduleIcon from "@material-ui/icons/Schedule";
@@ -81,6 +82,10 @@ export default function EnticingDrawer() {
                 <ListItem button onClick={() => history.push("/component")}>
                     <ListItemIcon><ComputerIcon/></ListItemIcon>
                     <ListItemText primary="Components"/>
+                </ListItem>
+                <ListItem button onClick={() => history.push("/corpus")}>
+                    <ListItemIcon><MenuBookIcon/></ListItemIcon>
+                    <ListItemText primary="Corpuses"/>
                 </ListItem>
             </List>
             <Divider/>

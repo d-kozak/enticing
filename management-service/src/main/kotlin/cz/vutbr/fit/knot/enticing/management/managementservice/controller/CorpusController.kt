@@ -15,7 +15,10 @@ class CorpusController(
     fun getAll(pageable: Pageable) = corpusService.getAll(pageable)
 
     @PostMapping
-    fun addNew(@RequestBody corpus: Corpus) = corpusService.addNew(corpus)
+    fun addNew(@RequestBody corpus: Corpus) = corpusService.addOrUpdate(corpus)
+
+    @PutMapping
+    fun update(@RequestBody corpus: Corpus) = corpusService.addOrUpdate(corpus)
 
     @GetMapping("/{corpusId}")
     fun getOne(@PathVariable corpusId: Long) = corpusService.getOne(corpusId)

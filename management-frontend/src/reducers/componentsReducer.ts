@@ -5,6 +5,7 @@ import {ThunkResult} from "../utils/ThunkResult";
 import {getRequest} from "../network/requests";
 import {LogDto} from "../entities/LogDto";
 import {generate} from "shortid";
+import {snackbarOnError} from "../request/userRequests";
 
 const {reducer, actions} = createSlice({
     slice: 'components',
@@ -57,11 +58,21 @@ const {reducer, actions} = createSlice({
                 return;
             }
             clearCollection(component.logs);
-        }
+        },
+        refresh: (state: PaginatedCollection<ComponentInfo>, action: PayloadAction<Array<ComponentInfo>>) => {
+            clearCollection(state)
+            for (let i = 0; i < action.payload.length; i++) {
+                const component = action.payload[i];
+                component.id = component.id.toString();
+                state.elements[component.id] = component
+                state.index[i] = component.id
+            }
+            state.totalElements = action.payload.length;
+        },
     }
 });
 
-export const {addNewItems, addComponent, clearAll, addLogsToComponent, clearComponentLogs} = actions;
+export const {addNewItems, addComponent, clearAll, addLogsToComponent, refresh, clearComponentLogs} = actions;
 
 export const requestComponentInfo = (id: string): ThunkResult<void> => async (dispatch) => {
     try {
@@ -70,6 +81,20 @@ export const requestComponentInfo = (id: string): ThunkResult<void> => async (di
     } catch (e) {
         console.error(e);
     }
+}
+
+export const requestAllComponents = (): ThunkResult<void> => async (dispatch) => {
+    await snackbarOnError(dispatch, 'Failed to load components', async () => {
+        let page = 0
+        const pageSize = 100
+        let res = await getRequest<PaginatedResult<ComponentInfo>>(`/component/`, [["page", page], ["size", pageSize]])
+        const results = res.content
+        while (res.totalElements > results.length) {
+            res = await getRequest<PaginatedResult<ComponentInfo>>(`/component/`, [["page", ++page], ["size", pageSize]])
+            results.push(...res.content)
+        }
+        dispatch(refresh(results))
+    });
 }
 
 export default reducer;

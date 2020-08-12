@@ -10,6 +10,7 @@ import commandsReducer from "./commandsReducer";
 import buildsReducer from "./buildsReducer";
 import operationStatsReducer from "./operationStatsReducer";
 import bugReportsReducer from "./bugReportReducer";
+import corpusesReducer from "./corpusesReducer";
 
 const reducers = {
     userDetails: userDetailsReducer,
@@ -22,7 +23,8 @@ const reducers = {
     perfLogs: perfsReducer,
     commands: commandsReducer,
     builds: buildsReducer,
-    bugReports: bugReportsReducer
+    bugReports: bugReportsReducer,
+    corpuses: corpusesReducer
 };
 
 

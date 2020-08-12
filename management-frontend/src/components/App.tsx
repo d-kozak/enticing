@@ -13,6 +13,7 @@ import Servers from "./maincontent/servers/Servers";
 import Login from "./login/Login";
 import AuthenticatedRoute from "./routes/AuthenticatedRoute";
 import Components from "./maincontent/components/Components";
+import Corpuses from "./maincontent/corpuses/Corpuses";
 import Dashboard from "./maincontent/dashboard/Dashboard";
 import AdminRoute from "./routes/AdminRoute";
 import Users from "./maincontent/users/Users";
@@ -76,6 +77,7 @@ const App = (props: AppProps) => {
                                         render={({match}) => <UserDetails userId={match.params['userId']}/>}/>
                     <AuthenticatedRoute path={"/server"} exact={false}> <Servers/> </AuthenticatedRoute>
                     <AuthenticatedRoute path={"/component"} exact={false}> <Components/> </AuthenticatedRoute>
+                    <AuthenticatedRoute path={"/corpus"} exact={false}> <Corpuses/> </AuthenticatedRoute>
                     <AuthenticatedRoute path={"/log"} exact={false}> <Logs/> </AuthenticatedRoute>
                     <AuthenticatedRoute path={"/perf"} exact={false}> <Perf/> </AuthenticatedRoute>
                     <AuthenticatedRoute path={"/command"} exact={false}> <Commands/> </AuthenticatedRoute>
