@@ -1,7 +1,12 @@
 import {createSlice, PayloadAction} from "redux-starter-kit";
-import {clearCollection, emptyPaginatedCollection, PaginatedCollection, PaginatedResult} from "../entities/pagination";
+import {
+    addNewItemsToCollection,
+    clearCollection,
+    emptyPaginatedCollection,
+    PaginatedCollection,
+    PaginatedResult
+} from "../entities/pagination";
 import {LogDto} from "../entities/LogDto";
-import {generate} from "shortid";
 
 
 const {reducer, actions} = createSlice({
@@ -9,15 +14,7 @@ const {reducer, actions} = createSlice({
     initialState: emptyPaginatedCollection<LogDto>(),
     reducers: {
         addNewItems: (state: PaginatedCollection<LogDto>, actions: PayloadAction<PaginatedResult<LogDto>>) => {
-            const payload = actions.payload;
-            const offset = payload.number * payload.size;
-            for (let i = 0; i < payload.content.length; i++) {
-                const elem = payload.content[i];
-                elem.id = generate();
-                state.index[offset + i] = elem.id;
-                state.elements[elem.id] = elem;
-            }
-            state.totalElements = payload.totalElements
+            addNewItemsToCollection(state, actions.payload, {generateId: true})
         },
         clearAll: (state: PaginatedCollection<LogDto>) => {
             clearCollection(state);

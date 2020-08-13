@@ -1,5 +1,11 @@
 import {createSlice, PayloadAction} from "redux-starter-kit";
-import {clearCollection, emptyPaginatedCollection, PaginatedCollection, PaginatedResult} from "../entities/pagination";
+import {
+    addNewItemsToCollection,
+    clearCollection,
+    emptyPaginatedCollection,
+    PaginatedCollection,
+    PaginatedResult
+} from "../entities/pagination";
 import {Corpus} from "../entities/Corpus";
 import {ThunkResult} from "../utils/ThunkResult";
 import {getRequest} from "../network/requests";
@@ -10,16 +16,10 @@ const {reducer, actions} = createSlice({
     initialState: emptyPaginatedCollection<Corpus>(),
     reducers: {
         addNewItems: (state: PaginatedCollection<Corpus>, actions: PayloadAction<PaginatedResult<Corpus>>) => {
-            const payload = actions.payload;
-            const offset = payload.number * payload.size;
-            for (let i = 0; i < payload.content.length; i++) {
-                const elem = payload.content[i];
-                elem.id = elem.id.toString(); // (in case it was parsed as a number, transform it back to string)
-                elem.components = emptyPaginatedCollection();
-                state.index[offset + i] = elem.id;
-                state.elements[elem.id] = elem;
-            }
-            state.totalElements = payload.totalElements;
+            addNewItemsToCollection(state, actions.payload, {
+                stringifyId: true,
+                nestedCollectionName: "components"
+            })
         },
         addCorpus: (state: PaginatedCollection<Corpus>, action: PayloadAction<Corpus>) => {
             const corpus = action.payload;
@@ -45,6 +45,11 @@ const {reducer, actions} = createSlice({
                 server.components.index[offset + i] = elem.id;
                 server.components.elements[elem.id] = elem;
             }
+
+            for (let i = payload.content.length; i < payload.size; i++) {
+                delete server.components.index[offset + i]
+            }
+
             server.components.totalElements = payload.totalElements
         },
         clearComponentsFromCorpus: (state: PaginatedCollection<Corpus>, action: PayloadAction<string>) => {

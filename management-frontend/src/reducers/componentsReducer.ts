@@ -1,5 +1,11 @@
 import {createSlice, PayloadAction} from "redux-starter-kit";
-import {clearCollection, emptyPaginatedCollection, PaginatedCollection, PaginatedResult} from "../entities/pagination";
+import {
+    addNewItemsToCollection,
+    clearCollection,
+    emptyPaginatedCollection,
+    PaginatedCollection,
+    PaginatedResult
+} from "../entities/pagination";
 import {ComponentInfo} from "../entities/ComponentInfo";
 import {ThunkResult} from "../utils/ThunkResult";
 import {getRequest} from "../network/requests";
@@ -12,17 +18,13 @@ const {reducer, actions} = createSlice({
     initialState: emptyPaginatedCollection<ComponentInfo>(),
     reducers: {
         addNewItems: (state: PaginatedCollection<ComponentInfo>, actions: PayloadAction<PaginatedResult<ComponentInfo>>) => {
-            const payload = actions.payload;
-            const offset = payload.number * payload.size;
-            for (let i = 0; i < payload.content.length; i++) {
-                const elem = payload.content[i];
-                elem.id = elem.id.toString(); // (in case it was parsed as a number, transform it back to string)
-                elem.serverId = elem.serverId.toString();
-                elem.logs = emptyPaginatedCollection();
-                state.index[offset + i] = elem.id;
-                state.elements[elem.id] = elem;
-            }
-            state.totalElements = payload.totalElements;
+            addNewItemsToCollection(state, actions.payload, {
+                stringifyId: true,
+                nestedCollectionName: "logs",
+                forEachElem: (elem) => {
+                    elem.serverId = elem.serverId.toString();
+                }
+            })
         },
         addComponent: (state: PaginatedCollection<ComponentInfo>, action: PayloadAction<ComponentInfo>) => {
             const component = action.payload;

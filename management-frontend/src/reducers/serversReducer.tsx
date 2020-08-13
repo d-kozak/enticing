@@ -1,5 +1,11 @@
 import {createSlice, PayloadAction} from "redux-starter-kit";
-import {clearCollection, emptyPaginatedCollection, PaginatedCollection, PaginatedResult} from "../entities/pagination";
+import {
+    addNewItemsToCollection,
+    clearCollection,
+    emptyPaginatedCollection,
+    PaginatedCollection,
+    PaginatedResult
+} from "../entities/pagination";
 import {ServerInfo} from "../entities/ServerInfo";
 import {ThunkResult} from "../utils/ThunkResult";
 import {getRequest} from "../network/requests";
@@ -11,16 +17,10 @@ const {reducer, actions} = createSlice({
     initialState: emptyPaginatedCollection<ServerInfo>(),
     reducers: {
         addNewItems: (state: PaginatedCollection<ServerInfo>, action: PayloadAction<PaginatedResult<ServerInfo>>) => {
-            const payload = action.payload;
-            const offset = payload.number * payload.size;
-            for (let i = 0; i < payload.content.length; i++) {
-                const elem = payload.content[i];
-                elem.id = elem.id.toString(); // (in case it was parsed as a number, transform it back to string)
-                elem.components = emptyPaginatedCollection();
-                state.index[offset + i] = elem.id;
-                state.elements[elem.id] = elem;
-            }
-            state.totalElements = payload.totalElements
+            addNewItemsToCollection(state, action.payload, {
+                stringifyId: true,
+                nestedCollectionName: 'components'
+            })
         },
         addServer: (state: PaginatedCollection<ServerInfo>, action: PayloadAction<ServerInfo>) => {
             const server = action.payload;
