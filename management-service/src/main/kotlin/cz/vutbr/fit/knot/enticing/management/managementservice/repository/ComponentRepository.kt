@@ -10,6 +10,9 @@ import java.time.LocalDateTime
 
 interface ComponentRepository : JpaRepository<ComponentEntity, Long> {
 
+    fun findByIdIn(ids: List<Long>): List<ComponentEntity>
+    fun findByIdNotIn(ids: List<Long>): List<ComponentEntity>
+
     fun findByLastHeartbeatBefore(limit: LocalDateTime): List<ComponentEntity>
     fun findByServerId(id: Long, pageable: Pageable): Page<ComponentEntity>
     fun findByServerAddressAndPort(serverAddress: String, port: Int): ComponentEntity?

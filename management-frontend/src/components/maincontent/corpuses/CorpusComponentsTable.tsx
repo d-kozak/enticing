@@ -3,13 +3,15 @@ import {connect} from "react-redux";
 import React from "react";
 import PaginatedTable from "../../pagination/PaginatedTable";
 import {CustomColumn, IntColumn, PaginatedTableColumn, StringColumn} from "../../pagination/PaginatedTableColumn"
-import {getRequest} from "../../../network/requests";
+import {deleteRequest, getRequest} from "../../../network/requests";
 import {PaginatedResult} from "../../../entities/pagination";
 import {IconButton, Tooltip} from "@material-ui/core";
 import {useHistory} from "react-router";
 import InfoIcon from "@material-ui/icons/Info";
+import DeleteIcon from "@material-ui/icons/Delete";
 import {ComponentInfo} from "../../../entities/ComponentInfo";
 import {LastHeartbeatColumn} from "../components/LastHeartbeatColumn";
+import {openSnackbarAction} from "../../../reducers/snackbarReducer";
 import {addComponentsToCorpus, clearComponentsFromCorpus} from "../../../reducers/corpusesReducer";
 
 type SimpleProps = {
@@ -19,7 +21,7 @@ type SimpleProps = {
 type CorpusComponentsTableProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & SimpleProps
 
 const CorpusComponentsTable = (props: CorpusComponentsTableProps) => {
-    const {corpus, addComponentsToCorpus, clearComponentsFromCorpus, corpusId} = props;
+    const {corpus, openSnackbarAction, addComponentsToCorpus, clearComponentsFromCorpus, corpusId} = props;
 
     const history = useHistory();
 
@@ -37,6 +39,17 @@ const CorpusComponentsTable = (props: CorpusComponentsTableProps) => {
             })
     }
 
+    const removeComponentFromCorpus = (component: ComponentInfo) => {
+        deleteRequest(`/corpus/${corpus.id}/${component.id}`)
+            .then(() => {
+                openSnackbarAction("Component removed");
+            })
+            .catch(err => {
+                console.error(err);
+                openSnackbarAction("Failed to delete component from corpus");
+            })
+    };
+
     const columns: Array<PaginatedTableColumn<any, any>> = [
         IntColumn("port", "Port", {sortId: "port"}),
         StringColumn("type", "Component Type", {sortId: "type"}),
@@ -45,6 +58,13 @@ const CorpusComponentsTable = (props: CorpusComponentsTableProps) => {
             (prop, component) => <Tooltip title="Component details">
                 <IconButton onClick={() => history.push(`/component/${component.id}`)}>
                     <InfoIcon/>
+                </IconButton>
+            </Tooltip>
+        ),
+        CustomColumn<ComponentInfo, undefined>("removeComponent", "Remove Component from Corpus",
+            (prop, component) => <Tooltip title="Remove Component from Corpus">
+                <IconButton onClick={() => removeComponentFromCorpus(component)}>
+                    <DeleteIcon/>
                 </IconButton>
             </Tooltip>
         )
@@ -64,6 +84,7 @@ const mapStateToProps = (state: ApplicationState, props: SimpleProps) => ({
 });
 
 const mapDispatchToProps = {
+    openSnackbarAction,
     addComponentsToCorpus,
     clearComponentsFromCorpus
 };
