@@ -1,11 +1,5 @@
 import {createSlice, PayloadAction} from "redux-starter-kit";
-import {
-    addNewItemsToCollection,
-    clearCollection,
-    emptyPaginatedCollection,
-    PaginatedCollection,
-    PaginatedResult
-} from "../entities/pagination";
+import {PaginatedCollection, PaginatedCollections, PaginatedResult} from "../entities/pagination";
 import {User} from "../entities/user";
 import {loginSuccessAction} from "./userDetailsReducer";
 import {ThunkResult} from "../utils/ThunkResult";
@@ -14,30 +8,30 @@ import {getRequest} from "../network/requests";
 
 const {reducer, actions} = createSlice({
     slice: 'users',
-    initialState: emptyPaginatedCollection<User>(),
+    initialState: PaginatedCollections.emptyCollection<User>(),
     reducers: {
         addNewItems: (state: PaginatedCollection<User>, actions: PayloadAction<PaginatedResult<User>>) => {
-            addNewItemsToCollection(state, actions.payload, {
+            PaginatedCollections.addAll(state, actions.payload, {
                 forEachElem: (elem) => {
                     elem.id = elem.login;
                 }
             })
         },
         addUser: (state: PaginatedCollection<User>, action: PayloadAction<User>) => {
-            const user = action.payload;
-            user.id = user.login
-            state.elements[user.id] = user;
+            PaginatedCollections.add(state, action.payload, {
+                forEachElem: elem => elem.id = elem.login
+            })
         }
         ,
         clearAll: (state: PaginatedCollection<User>) => {
-            clearCollection(state);
+            PaginatedCollections.clear(state);
         }
     },
     extraReducers: {
         [loginSuccessAction.type]: (state: PaginatedCollection<User>, action: PayloadAction<User>) => {
-            const user = action.payload;
-            user.id = user.login;
-            state.elements[user.id] = user;
+            PaginatedCollections.add(state, action.payload, {
+                forEachElem: elem => elem.id = elem.login
+            })
         }
     }
 });

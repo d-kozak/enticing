@@ -1,33 +1,27 @@
 import {createSlice, PayloadAction} from "redux-starter-kit";
-import {
-    addNewItemsToCollection,
-    clearCollection,
-    emptyPaginatedCollection,
-    PaginatedCollection,
-    PaginatedResult
-} from "../entities/pagination";
+import {PaginatedCollection, PaginatedCollections, PaginatedResult,} from "../entities/pagination";
 import {ServerInfo} from "../entities/ServerInfo";
 import {ThunkResult} from "../utils/ThunkResult";
 import {getRequest} from "../network/requests";
 import {ComponentInfo} from "../entities/ComponentInfo";
 import {snackbarOnError} from "../request/userRequests";
 
+
 const {reducer, actions} = createSlice({
     slice: 'servers',
-    initialState: emptyPaginatedCollection<ServerInfo>(),
+    initialState: PaginatedCollections.emptyCollection<ServerInfo>(),
     reducers: {
         addNewItems: (state: PaginatedCollection<ServerInfo>, action: PayloadAction<PaginatedResult<ServerInfo>>) => {
-            addNewItemsToCollection(state, action.payload, {
+            PaginatedCollections.addAll(state, action.payload, {
                 stringifyId: true,
                 nestedCollectionName: 'components'
             })
         },
         addServer: (state: PaginatedCollection<ServerInfo>, action: PayloadAction<ServerInfo>) => {
-            const server = action.payload;
-            server.id = server.id.toString();
-            const prev = state.elements[server.id];
-            server.components = prev?.components || emptyPaginatedCollection();
-            state.elements[server.id] = server;
+            PaginatedCollections.add(state, action.payload, {
+                stringifyId: true,
+                nestedCollectionName: 'components'
+            })
         },
         addComponentsToServer: (state: PaginatedCollection<ServerInfo>, action: PayloadAction<PaginatedResult<ComponentInfo> & { serverId: string }>) => {
             const payload = action.payload;
@@ -36,14 +30,9 @@ const {reducer, actions} = createSlice({
                 console.error(`unknown server ${payload.serverId}`)
                 return;
             }
-            const offset = payload.number * payload.size;
-            for (let i = 0; i < payload.content.length; i++) {
-                const elem = payload.content[i];
-                elem.id = elem.id.toString(); // (in case it was parsed as a number, transform it back to string)
-                server.components.index[offset + i] = elem.id;
-                server.components.elements[elem.id] = elem;
-            }
-            server.components.totalElements = payload.totalElements
+            PaginatedCollections.addAll(server.components, action.payload, {
+                stringifyId: true
+            })
         },
         clearComponentsFromServer: (state: PaginatedCollection<ServerInfo>, action: PayloadAction<string>) => {
             const id = action.payload;
@@ -52,20 +41,16 @@ const {reducer, actions} = createSlice({
                 console.error(`unknown server ${id}`)
                 return;
             }
-            clearCollection(server.components);
+            PaginatedCollections.clear(server.components);
         },
         refresh: (state: PaginatedCollection<ServerInfo>, action: PayloadAction<Array<ServerInfo>>) => {
-            clearCollection(state)
-            for (let i = 0; i < action.payload.length; i++) {
-                const server = action.payload[i];
-                server.id = server.id.toString();
-                server.components = emptyPaginatedCollection();
-                state.elements[server.id] = server
-                state.index[i] = server.id
-            }
+            PaginatedCollections.refresh(state, action.payload, {
+                stringifyId: true,
+                nestedCollectionName: 'components'
+            });
         },
         clearAll: (state: PaginatedCollection<ServerInfo>) => {
-            clearCollection(state);
+            PaginatedCollections.clear(state);
         }
     }
 });

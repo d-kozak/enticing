@@ -36,9 +36,6 @@ const CorpusDetails = (props: CorpusDetailsProps) => {
             <ListItem>
                 <ListItemText primary={`Name: ${corpus.name}`}/>
             </ListItem>
-            <ListItem>
-                <ListItemText primary={`Components: ${corpus.components}`}/>
-            </ListItem>
         </List>
         <Divider/>
         <MaintainerOnly>

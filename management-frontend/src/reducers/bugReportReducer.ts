@@ -1,30 +1,22 @@
 import {createSlice, PayloadAction} from "redux-starter-kit";
-import {
-    addNewItemsToCollection,
-    clearCollection,
-    emptyPaginatedCollection,
-    PaginatedCollection,
-    PaginatedResult
-} from "../entities/pagination";
+import {PaginatedCollection, PaginatedCollections, PaginatedResult,} from "../entities/pagination";
 import {BugReport} from "../entities/BugReport";
 
 
 const {reducer, actions} = createSlice({
     slice: 'bugReports',
-    initialState: emptyPaginatedCollection<BugReport>(),
+    initialState: PaginatedCollections.emptyCollection<BugReport>(),
     reducers: {
         addNewItems: (state: PaginatedCollection<BugReport>, actions: PayloadAction<PaginatedResult<BugReport>>) => {
-            addNewItemsToCollection(state, actions.payload, {
+            PaginatedCollections.addAll(state, actions.payload, {
                 stringifyId: true
             })
         },
         removeReport: (state: PaginatedCollection<BugReport>, action: PayloadAction<BugReport>) => {
-            const report = action.payload;
-            delete state.elements[report.id];
-            state.totalElements--;
+            PaginatedCollections.remove(state, action.payload);
         },
         clearAll: (state: PaginatedCollection<BugReport>) => {
-            clearCollection(state);
+            PaginatedCollections.clear(state);
         }
     }
 });

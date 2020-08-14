@@ -1,24 +1,17 @@
 import {createSlice, PayloadAction} from "redux-starter-kit";
-import {
-    addNewItemsToCollection,
-    clearCollection,
-    emptyPaginatedCollection,
-    PaginatedCollection,
-    PaginatedResult
-} from "../entities/pagination";
+import {PaginatedCollection, PaginatedCollections, PaginatedResult} from "../entities/pagination";
 import {ComponentInfo} from "../entities/ComponentInfo";
 import {ThunkResult} from "../utils/ThunkResult";
 import {getRequest} from "../network/requests";
 import {LogDto} from "../entities/LogDto";
-import {generate} from "shortid";
 import {snackbarOnError} from "../request/userRequests";
 
 const {reducer, actions} = createSlice({
     slice: 'components',
-    initialState: emptyPaginatedCollection<ComponentInfo>(),
+    initialState: PaginatedCollections.emptyCollection<ComponentInfo>(),
     reducers: {
         addNewItems: (state: PaginatedCollection<ComponentInfo>, actions: PayloadAction<PaginatedResult<ComponentInfo>>) => {
-            addNewItemsToCollection(state, actions.payload, {
+            PaginatedCollections.addAll(state, actions.payload, {
                 stringifyId: true,
                 nestedCollectionName: "logs",
                 forEachElem: (elem) => {
@@ -27,14 +20,16 @@ const {reducer, actions} = createSlice({
             })
         },
         addComponent: (state: PaginatedCollection<ComponentInfo>, action: PayloadAction<ComponentInfo>) => {
-            const component = action.payload;
-            const prev = state.elements[component.id];
-            component.id = component.id.toString();
-            component.logs = prev?.logs || emptyPaginatedCollection();
-            state.elements[component.id] = component;
+            PaginatedCollections.add(state, action.payload, {
+                stringifyId: true,
+                nestedCollectionName: "logs",
+                forEachElem: (elem) => {
+                    elem.serverId = elem.serverId.toString();
+                }
+            })
         },
         clearAll: (state: PaginatedCollection<ComponentInfo>) => {
-            clearCollection(state);
+            PaginatedCollections.clear(state);
         },
         addLogsToComponent: (state: PaginatedCollection<ComponentInfo>, action: PayloadAction<PaginatedResult<LogDto> & { componentId: string }>) => {
             const payload = action.payload;
@@ -43,14 +38,9 @@ const {reducer, actions} = createSlice({
                 console.error(`unknown component ${payload.componentId}`)
                 return;
             }
-            const offset = payload.number * payload.size;
-            for (let i = 0; i < payload.content.length; i++) {
-                const elem = payload.content[i];
-                elem.id = generate()
-                component.logs.index[offset + i] = elem.id;
-                component.logs.elements[elem.id] = elem;
-            }
-            component.logs.totalElements = payload.totalElements
+            PaginatedCollections.addAll(component.logs, action.payload, {
+                generateId: true
+            })
         },
         clearComponentLogs: (state: PaginatedCollection<ComponentInfo>, action: PayloadAction<string>) => {
             const id = action.payload;
@@ -59,17 +49,12 @@ const {reducer, actions} = createSlice({
                 console.error(`unknown component ${id}`)
                 return;
             }
-            clearCollection(component.logs);
+            PaginatedCollections.clear(component.logs);
         },
         refresh: (state: PaginatedCollection<ComponentInfo>, action: PayloadAction<Array<ComponentInfo>>) => {
-            clearCollection(state)
-            for (let i = 0; i < action.payload.length; i++) {
-                const component = action.payload[i];
-                component.id = component.id.toString();
-                state.elements[component.id] = component
-                state.index[i] = component.id
-            }
-            state.totalElements = action.payload.length;
+            PaginatedCollections.refresh(state, action.payload, {
+                stringifyId: true
+            })
         },
     }
 });

@@ -1,31 +1,25 @@
 import {createSlice, PayloadAction} from "redux-starter-kit";
-import {
-    addNewItemsToCollection,
-    clearCollection,
-    emptyPaginatedCollection,
-    PaginatedCollection,
-    PaginatedResult
-} from "../entities/pagination";
+import {PaginatedCollection, PaginatedCollections, PaginatedResult} from "../entities/pagination";
 import {CommandDto} from "../entities/CommandDto";
 import {ThunkResult} from "../utils/ThunkResult";
 import {getRequest} from "../network/requests";
 
 const {reducer, actions} = createSlice({
     slice: 'commands',
-    initialState: emptyPaginatedCollection<CommandDto>(),
+    initialState: PaginatedCollections.emptyCollection<CommandDto>(),
     reducers: {
         addNewItems: (state: PaginatedCollection<CommandDto>, actions: PayloadAction<PaginatedResult<CommandDto>>) => {
-            addNewItemsToCollection(state, actions.payload, {
+            PaginatedCollections.addAll(state, actions.payload, {
                 stringifyId: true
             })
         },
         addCommand: (state: PaginatedCollection<CommandDto>, action: PayloadAction<CommandDto>) => {
-            const command = action.payload;
-            command.id = command.id.toString();
-            state.elements[command.id] = command;
+            PaginatedCollections.add(state, action.payload, {
+                stringifyId: true
+            })
         },
         clearAll: (state: PaginatedCollection<CommandDto>) => {
-            clearCollection(state);
+            PaginatedCollections.clear(state);
         }
     }
 });
