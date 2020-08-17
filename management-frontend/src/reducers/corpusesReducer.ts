@@ -1,9 +1,10 @@
 import {createSlice, PayloadAction} from "redux-starter-kit";
-import {PaginatedCollection, PaginatedCollections, PaginatedResult} from "../entities/pagination";
+import {PaginatedCollection, PaginatedResult} from "../entities/pagination";
 import {Corpus} from "../entities/Corpus";
 import {ThunkResult} from "../utils/ThunkResult";
 import {getRequest} from "../network/requests";
 import {ComponentInfo} from "../entities/ComponentInfo";
+import PaginatedCollections from "../entities/PaginatedCollections";
 
 const {reducer, actions} = createSlice({
     slice: 'corpuses',

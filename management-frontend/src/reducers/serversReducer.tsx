@@ -1,10 +1,11 @@
 import {createSlice, PayloadAction} from "redux-starter-kit";
-import {PaginatedCollection, PaginatedCollections, PaginatedResult,} from "../entities/pagination";
+import {PaginatedCollection, PaginatedResult,} from "../entities/pagination";
 import {ServerInfo} from "../entities/ServerInfo";
 import {ThunkResult} from "../utils/ThunkResult";
 import {getRequest} from "../network/requests";
 import {ComponentInfo} from "../entities/ComponentInfo";
 import {snackbarOnError} from "../request/userRequests";
+import PaginatedCollections from "../entities/PaginatedCollections";
 
 
 const {reducer, actions} = createSlice({

@@ -1,8 +1,9 @@
 import {createSlice, PayloadAction} from "redux-starter-kit";
-import {PaginatedCollection, PaginatedCollections, PaginatedResult} from "../entities/pagination";
+import {PaginatedCollection, PaginatedResult} from "../entities/pagination";
 import {CommandDto} from "../entities/CommandDto";
 import {ThunkResult} from "../utils/ThunkResult";
 import {getRequest} from "../network/requests";
+import PaginatedCollections from "../entities/PaginatedCollections";
 
 const {reducer, actions} = createSlice({
     slice: 'commands',

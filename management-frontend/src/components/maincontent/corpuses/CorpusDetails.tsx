@@ -1,7 +1,6 @@
 import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import React, {useCallback} from 'react';
-import {useHistory} from "react-router";
 import {BackButton} from "../../button/BackButton";
 import {CircularProgress, Divider, List, ListItem, ListItemText, ListSubheader, Typography} from "@material-ui/core";
 import {Centered} from "../../Centered";
@@ -17,7 +16,6 @@ export type CorpusDetailsProps = typeof mapDispatchToProps
 
 const CorpusDetails = (props: CorpusDetailsProps) => {
     const {corpuses, requestCorpus, corpusId} = props;
-    const history = useHistory();
     const refresh = useCallback(() => requestCorpus(corpusId!), [requestCorpus, corpusId])
     const corpus = corpuses.elements[corpusId];
     useInterval(refresh, 2_000);

@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from "redux-starter-kit";
-import {PaginatedCollection, PaginatedCollections, PaginatedResult,} from "../entities/pagination";
+import {PaginatedCollection, PaginatedResult,} from "../entities/pagination";
 import {BugReport} from "../entities/BugReport";
-
+import PaginatedCollections from "../entities/PaginatedCollections";
 
 const {reducer, actions} = createSlice({
     slice: 'bugReports',

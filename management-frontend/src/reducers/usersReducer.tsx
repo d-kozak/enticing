@@ -1,9 +1,10 @@
 import {createSlice, PayloadAction} from "redux-starter-kit";
-import {PaginatedCollection, PaginatedCollections, PaginatedResult} from "../entities/pagination";
+import {PaginatedCollection, PaginatedResult} from "../entities/pagination";
 import {User} from "../entities/user";
 import {loginSuccessAction} from "./userDetailsReducer";
 import {ThunkResult} from "../utils/ThunkResult";
 import {getRequest} from "../network/requests";
+import PaginatedCollections from "../entities/PaginatedCollections";
 
 
 const {reducer, actions} = createSlice({
@@ -21,8 +22,7 @@ const {reducer, actions} = createSlice({
             PaginatedCollections.add(state, action.payload, {
                 forEachElem: elem => elem.id = elem.login
             })
-        }
-        ,
+        },
         clearAll: (state: PaginatedCollection<User>) => {
             PaginatedCollections.clear(state);
         }
