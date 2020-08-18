@@ -1,36 +1,35 @@
 package cz.vutbr.fit.knot.enticing.management.command.concrete
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
-import cz.vutbr.fit.knot.enticing.management.command.CorpusSpecificCommandContext
-import cz.vutbr.fit.knot.enticing.management.command.ManagementCommand
+import cz.vutbr.fit.knot.enticing.management.command.NewManagementCommand
 import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
 import cz.vutbr.fit.knot.enticing.management.shell.loadFiles
 import cz.vutbr.fit.knot.enticing.management.shell.loadMg4jFiles
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 
-data class ShowDistributedFiles(val corpusName: String) : ManagementCommand<ShowDistributedFilesContext>() {
-    override fun buildContext(configuration: EnticingConfiguration, executor: ShellCommandExecutor, loggerFactory: LoggerFactory): ShowDistributedFilesContext = ShowDistributedFilesContext(corpusName, configuration, executor, loggerFactory)
-}
-
-class ShowDistributedFilesContext(corpusName: String, configuration: EnticingConfiguration, executor: ShellCommandExecutor, loggerFactory: LoggerFactory) : CorpusSpecificCommandContext(corpusName, configuration, executor, loggerFactory) {
+class ShowDistributedFilesCommand(
+        val corpus: CorpusConfiguration,
+        loggerFactory: LoggerFactory
+) : NewManagementCommand() {
 
     private val logger = loggerFactory.logger { }
 
-    override suspend fun execute() = coroutineScope {
-        val totalStats = corpusConfiguration.indexServers.map { server ->
+    override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) = coroutineScope {
+        val totalStats = corpus.indexServers.map { server ->
             async {
                 val collectionDir = server.collectionsDir ?: server.corpus.collectionsDir
-                val collections = shellExecutor.loadFiles(username, server.address, collectionDir)
+                val collections = executor.loadFiles(server.address, collectionDir)
 
                 logger.info("server ${server.address}, collections $collections")
 
                 val collectionsContent = collections.map { collection ->
                     async {
-                        val files = shellExecutor.loadMg4jFiles(username, server.address, "$collectionDir/$collection/mg4j")
+                        val files = executor.loadMg4jFiles(server.address, "$collectionDir/$collection/mg4j")
                         for (file in files) {
                             logger.info("server ${server.address}, collection $collection, files: $files")
                         }

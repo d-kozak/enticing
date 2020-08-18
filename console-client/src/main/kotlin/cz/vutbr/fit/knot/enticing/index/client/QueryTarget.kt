@@ -53,7 +53,7 @@ sealed class QueryTarget(val name: String) {
     /**
      * Submits requests to a webserver
      */
-    class WebserverTarget(val address: String, val settingsId: Int, loggerFactory: LoggerFactory) : QueryTarget("Webserver") {
+    class WebserverTarget(val address: ComponentAddress, val settingsId: Int, loggerFactory: LoggerFactory) : QueryTarget("Webserver") {
 
         private val api = WebserverApi(address, settingsId)
 

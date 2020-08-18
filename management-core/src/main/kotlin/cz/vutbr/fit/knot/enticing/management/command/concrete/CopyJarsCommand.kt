@@ -1,23 +1,24 @@
 package cz.vutbr.fit.knot.enticing.management.command.concrete
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.DeploymentConfiguration
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
-import cz.vutbr.fit.knot.enticing.management.command.ManagementCommand
-import cz.vutbr.fit.knot.enticing.management.command.ManagementCommandContext
+import cz.vutbr.fit.knot.enticing.management.command.NewManagementCommand
 import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
 import cz.vutbr.fit.knot.enticing.management.shell.copyJars
+import kotlinx.coroutines.CoroutineScope
 
-object CopyJarsCommand : ManagementCommand<CopyJarsCommandContext>() {
-    override fun buildContext(configuration: EnticingConfiguration, executor: ShellCommandExecutor, loggerFactory: LoggerFactory): CopyJarsCommandContext = CopyJarsCommandContext(configuration, executor, loggerFactory)
-}
 
-class CopyJarsCommandContext(configuration: EnticingConfiguration, executor: ShellCommandExecutor, loggerFactory: LoggerFactory) : ManagementCommandContext(configuration, executor, loggerFactory) {
+class CopyJarsCommand(
+        val localHome: String,
+        val deploymentConfiguration: DeploymentConfiguration,
+        loggerFactory: LoggerFactory
+) : NewManagementCommand() {
 
     private val logger = loggerFactory.logger { }
 
-    override suspend fun execute() {
+    override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) {
         logger.info("Copying jars...")
-        shellExecutor.copyJars(username, deploymentConfiguration.server, enticingConfiguration.localHome, deploymentConfiguration.repository)
+        executor.copyJars(deploymentConfiguration.server, localHome, deploymentConfiguration.repository)
     }
 }

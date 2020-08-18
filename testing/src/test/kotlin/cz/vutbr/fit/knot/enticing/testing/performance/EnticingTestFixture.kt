@@ -9,6 +9,7 @@ import cz.vutbr.fit.knot.enticing.index.client.webserverLogin
 import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import cz.vutbr.fit.knot.enticing.management.ManagementService
 import cz.vutbr.fit.knot.enticing.management.command.concrete.*
+import kotlinx.coroutines.runBlocking
 import java.io.File
 
 interface FixtureConfiguration {
@@ -59,19 +60,26 @@ class EnticingTestFixture(private val fixtureConfig: FixtureConfiguration, reboo
     fun buildLocally() {
         // todo fix local build
 //        managementService.executeCommand(LocalBuildCommand)
-        managementService.executeCommand(CopyJarsCommand)
+        runBlocking {
+            managementService.executeCommand(CopyJarsCommand(config.localHome, config.deploymentConfiguration, SimpleStdoutLoggerFactory))
+        }
     }
 
     fun startTestSetup() {
-        managementService.executeCommand(StartManagementServiceCommand)
-        managementService.executeCommand(StartIndexServersCommand(fixtureConfig.corpusName))
-        managementService.executeCommand(StartWebserverCommand)
+        runBlocking {
+            managementService.executeCommand(StartManagementServiceCommand(config.managementServiceConfiguration.fullAddress, config.deploymentConfiguration))
+            managementService.executeCommand(StartIndexServersCommand(config.corpuses.getValue(fixtureConfig.corpusName), config.deploymentConfiguration))
+            managementService.executeCommand(StartWebserverCommand(config.webserverConfiguration.fullAddress, config.deploymentConfiguration))
+        }
     }
 
     fun killTestSetup() {
-        managementService.executeCommand(KillManagementServiceCommand)
-        managementService.executeCommand(KillIndexServersCommand(fixtureConfig.corpusName))
-        managementService.executeCommand(KillWebserverCommand)
+        runBlocking {
+            managementService.executeCommand(KillManagementServiceCommand(config.managementServiceConfiguration.address))
+            managementService.executeCommand(KillIndexServersCommand(config.corpuses.getValue(fixtureConfig.corpusName)))
+            managementService.executeCommand(KillWebserverCommand(config.webserverConfiguration.address))
+        }
+
     }
 
     override fun close() {

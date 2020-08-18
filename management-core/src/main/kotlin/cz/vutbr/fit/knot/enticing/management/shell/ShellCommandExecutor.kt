@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.management.shell
 
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.log.measure
@@ -10,9 +11,16 @@ import java.io.File
 import java.io.FileWriter
 import java.io.InputStream
 
-class ShellCommandExecutor(loggerFactory: LoggerFactory, val scope: CoroutineScope, logfile: String? = null) : AutoCloseable {
+class ShellCommandExecutor(
+        configuration: EnticingConfiguration,
+        val scope: CoroutineScope,
+        loggerFactory: LoggerFactory,
+        logfile: String? = null
+) : AutoCloseable {
 
     private val logger = loggerFactory.logger { }
+
+    val username = configuration.authentication.username
 
     private val outputWriter = logfile?.let { FileWriter(it) }
 

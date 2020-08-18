@@ -65,37 +65,37 @@ sealed class ManagementCommand(val configuration: EnticingConfiguration, val com
         class StartIndexServerCommand(configuration: EnticingConfiguration, id: String, args: String) : ManagementCommand.ServerGroupCommand(configuration, id, args) {
 
             override suspend fun executeForServer(shellCommandExecutor: ShellCommandExecutor, ip: String, port: Int) {
-                shellCommandExecutor.startIndexServer(username, ip, enticingHome, configFile, port)
+                shellCommandExecutor.startIndexServer(ip, enticingHome, configFile, port, username)
             }
         }
 
         class KillIndexServerCommand(configuration: EnticingConfiguration, id: String, args: String) : ManagementCommand.ServerGroupCommand(configuration, id, args) {
             override suspend fun executeForServer(shellCommandExecutor: ShellCommandExecutor, ip: String, port: Int) {
-                shellCommandExecutor.killIndexServer(username, ip)
+                shellCommandExecutor.killIndexServer(ip, username)
             }
         }
 
         class StartWebserver(configuration: EnticingConfiguration, id: String, args: String) : ManagementCommand.ServerGroupCommand(configuration, id, args) {
             override suspend fun executeForServer(shellCommandExecutor: ShellCommandExecutor, ip: String, port: Int) {
-                shellCommandExecutor.startWebserver(username, ip, enticingHome, configFile, port)
+                shellCommandExecutor.startWebserver(ip, enticingHome, configFile, port, username)
             }
         }
 
         class KillWebserver(configuration: EnticingConfiguration, id: String, args: String) : ManagementCommand.ServerGroupCommand(configuration, id, args) {
             override suspend fun executeForServer(shellCommandExecutor: ShellCommandExecutor, ip: String, port: Int) {
-                shellCommandExecutor.killWebserver(username, ip)
+                shellCommandExecutor.killWebserver(ip, username)
             }
         }
 
         class StartManagementServer(configuration: EnticingConfiguration, id: String, args: String) : ManagementCommand.ServerGroupCommand(configuration, id, args) {
             override suspend fun executeForServer(shellCommandExecutor: ShellCommandExecutor, ip: String, port: Int) {
-                shellCommandExecutor.startManagementService(username, ip, enticingHome, configFile, port)
+                shellCommandExecutor.startManagementService(ip, enticingHome, configFile, port, username)
             }
         }
 
         class KillManagementServer(configuration: EnticingConfiguration, id: String, args: String) : ManagementCommand.ServerGroupCommand(configuration, id, args) {
             override suspend fun executeForServer(shellCommandExecutor: ShellCommandExecutor, ip: String, port: Int) {
-                shellCommandExecutor.killManagementService(username, ip)
+                shellCommandExecutor.killManagementService(ip, username)
             }
         }
     }

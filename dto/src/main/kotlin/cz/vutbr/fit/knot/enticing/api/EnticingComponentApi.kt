@@ -26,7 +26,7 @@ open class EnticingComponentApi(loggerFactory: LoggerFactory) {
 
     protected val logger = loggerFactory.logger { }
 
-    protected inline fun <reified T> httpPost(address: String, endpoint: String, dto: Any): T? {
+    protected inline fun <reified T> httpPost(address: ComponentAddress, endpoint: String, dto: Any): T? {
         val fullAddress = "http://$address$API_BASE_PATH$endpoint"
         logger.debug("Http POST $fullAddress $dto")
         return fullAddress.httpPost()

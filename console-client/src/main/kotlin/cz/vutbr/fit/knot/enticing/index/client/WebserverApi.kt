@@ -1,9 +1,9 @@
 package cz.vutbr.fit.knot.enticing.index.client
 
 import com.github.kittinunf.fuel.httpGet
+import cz.vutbr.fit.knot.enticing.dto.ComponentAddress
 import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.WebServer
-import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.dto.utils.asJsonObject
 import cz.vutbr.fit.knot.enticing.dto.utils.toDto
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate
  * Login to the server using given credentials
  * @return WebserverApi object for further communication
  */
-fun webserverLogin(address: String, username: String, password: String): WebserverApi {
+fun webserverLogin(address: ComponentAddress, username: String, password: String): WebserverApi {
     waitForWebserver(address)
     val api = WebserverApi(address)
     api.login(username, password)
@@ -32,8 +32,7 @@ class WebserverApi(
         /**
          * Where the server is located
          */
-        @Cleanup("use ComponentAddress")
-        var address: String,
+        var address: ComponentAddress,
         /**
          * Whichc search settings to use
          */
@@ -121,7 +120,7 @@ class WebserverApi(
 /**
  * wait for the webserver become responsive after starting it remotely
  */
-private fun waitForWebserver(address: String) {
+private fun waitForWebserver(address: ComponentAddress) {
     for (i in 0 until 10) {
         println("waiting for the webserver...$i")
         try {

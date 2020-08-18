@@ -9,56 +9,64 @@ suspend fun ShellCommandExecutor.localBuild(buildId: String, enticingHome: Strin
     return this.execute(SimpleCommand("$enticingHome/bin/local-build $buildId"), workingDirectory = enticingHome)
 }
 
-suspend fun ShellCommandExecutor.copyJars(username: String, server: String, localRepository: String, remoteRepository: String) = this.execute(SimpleCommand("scp $localRepository/lib/*.jar $username@$server:$remoteRepository/lib"))
+suspend fun ShellCommandExecutor.copyJars(server: String, localRepository: String, remoteRepository: String, username: String? = null) = this.execute(SimpleCommand("scp $localRepository/lib/*.jar ${username ?: this.username}@$server:$remoteRepository/lib"))
 
 @Incomplete("specify ports...")
-suspend fun ShellCommandExecutor.startWebserver(username: String, server: String, enticingHome: String, configFile: String, port: Int) = this.execute(SshCommand(username, server,
+suspend fun ShellCommandExecutor.startWebserver(server: String, enticingHome: String, configFile: String, port: Int, username: String? = null) = this.execute(SshCommand(username
+        ?: this.username, server,
         StartScreenCommand("enticing-webserver", SimpleCommand("$enticingHome/bin/webserver $configFile $server --server.port=$port"))))
 
-suspend fun ShellCommandExecutor.killWebserver(username: String, server: String) =
-        this.execute(SshCommand(username, server, KillScreenCommand("enticing-webserver")), checkReturnCode = false)
+suspend fun ShellCommandExecutor.killWebserver(server: String, username: String? = null) =
+        this.execute(SshCommand(username
+                ?: this.username, server, KillScreenCommand("enticing-webserver")), checkReturnCode = false)
 
-suspend fun ShellCommandExecutor.startManagementService(username: String, server: String, enticingHome: String, configFile: String, port: Int) = this.execute(SshCommand(username, server,
+suspend fun ShellCommandExecutor.startManagementService(server: String, enticingHome: String, configFile: String, port: Int, username: String? = null) = this.execute(SshCommand(username
+        ?: this.username, server,
         StartScreenCommand("enticing-management", SimpleCommand("$enticingHome/bin/management-service $configFile $server --debug.runner.start=false --server.port=$port"))))
 
-suspend fun ShellCommandExecutor.killManagementService(username: String, server: String) =
-        this.execute(SshCommand(username, server, KillScreenCommand("enticing-management")), checkReturnCode = false)
+suspend fun ShellCommandExecutor.killManagementService(server: String, username: String? = null) =
+        this.execute(SshCommand(username
+                ?: this.username, server, KillScreenCommand("enticing-management")), checkReturnCode = false)
 
-suspend fun ShellCommandExecutor.startIndexServer(username: String, server: String, enticingHome: String, configFile: String, port: Int) = this.execute(SshCommand(username, server,
+suspend fun ShellCommandExecutor.startIndexServer(server: String, enticingHome: String, configFile: String, port: Int, username: String? = null) = this.execute(SshCommand(username
+        ?: this.username, server,
         StartScreenCommand("enticing-index-server", SimpleCommand("$enticingHome/bin/index-server $configFile $server --server.port=$port"))))
 
-suspend fun ShellCommandExecutor.killIndexServer(username: String, server: String) =
-        this.execute(SshCommand(username, server, KillScreenCommand("enticing-index-server")), checkReturnCode = false)
+suspend fun ShellCommandExecutor.killIndexServer(server: String, username: String? = null) =
+        this.execute(SshCommand(username
+                ?: this.username, server, KillScreenCommand("enticing-index-server")), checkReturnCode = false)
 
-suspend fun ShellCommandExecutor.preprocessCollections(username: String, server: String, enticingHome: String, configFile: String) = this.execute(
-        SshCommand(username, server,
+suspend fun ShellCommandExecutor.preprocessCollections(server: String, enticingHome: String, configFile: String, username: String? = null) = this.execute(
+        SshCommand(username ?: this.username, server,
 //                SimpleCommand("screen -S index-builder $enticingHome/bin/index-builder $configFile $server"), forcePseudoTerminal = true), logPrefix = server)
                 SimpleCommand("$enticingHome/bin/index-builder $configFile $server")), logPrefix = server)
 
-suspend fun ShellCommandExecutor.probeServer(username: String, server: String, enticingHome: String) = this.execute(
-        SshCommand(username, server, SimpleCommand("$enticingHome/bin/server-probe"), forcePseudoTerminal = true)
+suspend fun ShellCommandExecutor.probeServer(server: String, enticingHome: String, username: String? = null) = this.execute(
+        SshCommand(username
+                ?: this.username, server, SimpleCommand("$enticingHome/bin/server-probe"), forcePseudoTerminal = true)
 ).toDto<ServerProbe.Info>()
 
 /**
  * connects to the given server, git pulls for new changes and builds the project
  */
-suspend fun ShellCommandExecutor.pullAndBuild(username: String, sourceServer: String, repository: String) {
+suspend fun ShellCommandExecutor.pullAndBuild(sourceServer: String, repository: String, username: String? = null) {
     val local = SimpleCommand("cd $repository") and SimpleCommand("git pull") and SimpleCommand("gradle buildAll")
-    this.execute(SshCommand(username, sourceServer, local))
+    this.execute(SshCommand(username ?: this.username, sourceServer, local))
 }
 
 /**
  * copies files from source server to the destination server using scp
  */
-suspend fun ShellCommandExecutor.copyFiles(username: String, sourceServer: String, files: List<Mg4jFile>, destinationServer: String, destinationDirectory: String) {
-    this.execute(SshCommand(username, sourceServer, SimpleCommand("scp ${files.joinToString(" ") { it.path }} $username@$destinationServer:$destinationDirectory")))
+suspend fun ShellCommandExecutor.copyFiles(sourceServer: String, files: List<Mg4jFile>, destinationServer: String, destinationDirectory: String, username: String? = null) {
+    this.execute(SshCommand(username
+            ?: this.username, sourceServer, SimpleCommand("scp ${files.joinToString(" ") { it.path }} $username@$destinationServer:$destinationDirectory")))
 }
 
 /**
  * creates a directory on a specified server using mkdir -p
  */
-suspend fun ShellCommandExecutor.createRemoteDirectory(username: String, server: String, path: String) {
-    this.execute(SshCommand(username, server, SimpleCommand("mkdir -p $path")))
+suspend fun ShellCommandExecutor.createRemoteDirectory(server: String, path: String, username: String? = null) {
+    this.execute(SshCommand(username ?: this.username, server, SimpleCommand("mkdir -p $path")))
 }
 
 private val whitespaceRegex = """\s+""".toRegex()
@@ -69,8 +77,8 @@ private val pathColumn = 8
 /**
  * Load mg4j files located in a given directory
  */
-suspend fun ShellCommandExecutor.loadMg4jFiles(username: String, server: String, directory: String, fileLimit: Int = Int.MAX_VALUE): List<Mg4jFile> {
-    val stdout = this.dumpMgj4Files(username, server, directory, fileLimit)
+suspend fun ShellCommandExecutor.loadMg4jFiles(server: String, directory: String, fileLimit: Int = Int.MAX_VALUE, username: String? = null): List<Mg4jFile> {
+    val stdout = this.dumpMgj4Files(server, directory, fileLimit, username)
     return stdout.split("\n").mapNotNull {
         val line = it.split(whitespaceRegex)
         if (line.size < 9) return@mapNotNull null
@@ -79,12 +87,14 @@ suspend fun ShellCommandExecutor.loadMg4jFiles(username: String, server: String,
 }
 
 
-suspend fun ShellCommandExecutor.recursiveRemove(username: String, server: String, directory: String) {
-    this.execute(SshCommand(username, server, SimpleCommand("rm -rf $directory")), checkReturnCode = false)
+suspend fun ShellCommandExecutor.recursiveRemove(server: String, directory: String, username: String? = null) {
+    this.execute(SshCommand(username
+            ?: this.username, server, SimpleCommand("rm -rf $directory")), checkReturnCode = false)
 }
 
-suspend fun ShellCommandExecutor.loadFiles(username: String, server: String, directory: String): List<String> {
-    val stdout = this.execute(SshCommand(username, server, SimpleCommand("ls -l $directory")), printStdout = false, checkReturnCode = false)
+suspend fun ShellCommandExecutor.loadFiles(server: String, directory: String, username: String? = null): List<String> {
+    val stdout = this.execute(SshCommand(username
+            ?: this.username, server, SimpleCommand("ls -l $directory")), printStdout = false, checkReturnCode = false)
     return stdout.split("\n").mapNotNull {
         val line = it.split(whitespaceRegex)
         if (line.size < 9) return@mapNotNull null
@@ -96,7 +106,7 @@ suspend fun ShellCommandExecutor.loadFiles(username: String, server: String, dir
 /**
  * Dumps specified directory for mg4j files using ls
  */
-private suspend fun ShellCommandExecutor.dumpMgj4Files(username: String, server: String, directory: String, fileLimit: Int) =
+private suspend fun ShellCommandExecutor.dumpMgj4Files(server: String, directory: String, fileLimit: Int, username: String? = null) =
         this.execute(
-                SshCommand(username, server,
+                SshCommand(username ?: this.username, server,
                         SimpleCommand("ls -l $directory/*.mg4j | head -n $fileLimit")), printStdout = false, checkReturnCode = false)

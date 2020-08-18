@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.index.client
 
+import cz.vutbr.fit.knot.enticing.dto.ComponentAddress
 import cz.vutbr.fit.knot.enticing.dto.IndexServer
 import cz.vutbr.fit.knot.enticing.dto.SearchQuery
 import cz.vutbr.fit.knot.enticing.dto.format.result.ResultFormat
@@ -23,7 +24,7 @@ class ConsoleClient(val args: ConsoleClientArgs, loggerFactory: LoggerFactory) :
      */
     private val target: QueryTarget = when {
         args.indexServer != null -> QueryTarget.IndexServerTarget(args.indexServer!!, loggerFactory)
-        args.webserver != null -> QueryTarget.WebserverTarget(args.webserver!!, args.searchSettingsId, loggerFactory)
+        args.webserver != null -> QueryTarget.WebserverTarget(ComponentAddress.parse(args.webserver!!), args.searchSettingsId, loggerFactory)
         args.queryDispatcher != null -> QueryTarget.QueryDispatcherTarget(args.queryDispatcher!!, loggerFactory)
         else -> error("One of targets has to be enabled")
     }.also {

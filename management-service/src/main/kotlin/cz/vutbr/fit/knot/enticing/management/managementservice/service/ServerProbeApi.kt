@@ -6,18 +6,25 @@ import cz.vutbr.fit.knot.enticing.management.managementservice.dto.AddServerRequ
 import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
 import cz.vutbr.fit.knot.enticing.management.shell.probeServer
 import cz.vutbr.fit.knot.enticing.mx.ServerProbe
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.springframework.stereotype.Service
 
 @Service
 class ServerProbeApi(
         private val configuration: EnticingConfiguration,
-        private val loggerFactory: LoggerFactory
-) {
+        loggerFactory: LoggerFactory
+) : AutoCloseable {
+
+
+    private val shellExecutor = ShellCommandExecutor(configuration, CoroutineScope(Dispatchers.IO), loggerFactory)
 
     fun request(request: AddServerRequest): ServerProbe.Info = runBlocking {
-        ShellCommandExecutor(loggerFactory, this).use {
-            it.probeServer(configuration.authentication.username, request.url, configuration.deploymentConfiguration.repository)
-        }
+        shellExecutor.probeServer(configuration.authentication.username, request.url, configuration.deploymentConfiguration.repository)
+    }
+
+    override fun close() {
+        shellExecutor.close()
     }
 }

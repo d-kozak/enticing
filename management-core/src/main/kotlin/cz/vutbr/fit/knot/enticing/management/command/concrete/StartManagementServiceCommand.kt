@@ -1,19 +1,19 @@
 package cz.vutbr.fit.knot.enticing.management.command.concrete
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
-import cz.vutbr.fit.knot.enticing.log.LoggerFactory
-import cz.vutbr.fit.knot.enticing.management.command.ManagementCommand
-import cz.vutbr.fit.knot.enticing.management.command.ManagementCommandContext
+import cz.vutbr.fit.knot.enticing.dto.ComponentAddress
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.DeploymentConfiguration
+import cz.vutbr.fit.knot.enticing.management.command.NewManagementCommand
 import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
 import cz.vutbr.fit.knot.enticing.management.shell.startManagementService
+import kotlinx.coroutines.CoroutineScope
 
-object StartManagementServiceCommand : ManagementCommand<StartManagementServiceCommandContext>() {
-    override fun buildContext(configuration: EnticingConfiguration, executor: ShellCommandExecutor, loggerFactory: LoggerFactory): StartManagementServiceCommandContext = StartManagementServiceCommandContext(configuration, executor, loggerFactory)
-}
 
-class StartManagementServiceCommandContext(configuration: EnticingConfiguration, executor: ShellCommandExecutor, loggerFactory: LoggerFactory) : ManagementCommandContext(configuration, executor, loggerFactory) {
+class StartManagementServiceCommand(
+        val address: ComponentAddress,
+        val deployment: DeploymentConfiguration
+) : NewManagementCommand() {
 
-    override suspend fun execute() {
-        shellExecutor.startManagementService(username, managementConfiguration.address, deploymentConfiguration.repository, deploymentConfiguration.configurationScript, managementConfiguration.port)
+    override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) {
+        executor.startManagementService(address.url, deployment.repository, deployment.configurationScript, address.port)
     }
 }

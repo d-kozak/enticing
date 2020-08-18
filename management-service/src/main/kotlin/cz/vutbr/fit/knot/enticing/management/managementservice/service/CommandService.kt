@@ -94,7 +94,7 @@ class CommandService(
         commandRepository.save(entity)
         try {
             val logFile = commandLogDirectory.resolve("${entity.id}.log").toString()
-            val executor = ShellCommandExecutor(loggerFactory, scope, logFile)
+            val executor = ShellCommandExecutor(configuration, scope, loggerFactory, logFile)
             executor.use {
                 val commandDto = entity.type.init(configuration, entity.id.toString(), entity.arguments)
                 commandDto.execute(scope, executor)

@@ -1,20 +1,19 @@
 package cz.vutbr.fit.knot.enticing.management.command.concrete
 
-import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
-import cz.vutbr.fit.knot.enticing.log.LoggerFactory
-import cz.vutbr.fit.knot.enticing.management.command.ManagementCommand
-import cz.vutbr.fit.knot.enticing.management.command.ManagementCommandContext
+import cz.vutbr.fit.knot.enticing.dto.ComponentAddress
+import cz.vutbr.fit.knot.enticing.dto.config.dsl.DeploymentConfiguration
+import cz.vutbr.fit.knot.enticing.management.command.NewManagementCommand
 import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
 import cz.vutbr.fit.knot.enticing.management.shell.startWebserver
-
-object StartWebserverCommand : ManagementCommand<StartWebserverCommandContext>() {
-    override fun buildContext(configuration: EnticingConfiguration, executor: ShellCommandExecutor, loggerFactory: LoggerFactory): StartWebserverCommandContext = StartWebserverCommandContext(configuration, executor, loggerFactory)
-}
+import kotlinx.coroutines.CoroutineScope
 
 
-class StartWebserverCommandContext(configuration: EnticingConfiguration, executor: ShellCommandExecutor, loggerFactory: LoggerFactory) : ManagementCommandContext(configuration, executor, loggerFactory) {
+class StartWebserverCommand(
+        val address: ComponentAddress,
+        val deployment: DeploymentConfiguration
+) : NewManagementCommand() {
 
-    override suspend fun execute() {
-        shellExecutor.startWebserver(username, webserverConfiguration.address, enticingConfiguration.deploymentConfiguration.repository, enticingConfiguration.deploymentConfiguration.configurationScript, webserverConfiguration.port)
+    override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) {
+        executor.startWebserver(address.url, deployment.repository, deployment.configurationScript, address.port)
     }
 }

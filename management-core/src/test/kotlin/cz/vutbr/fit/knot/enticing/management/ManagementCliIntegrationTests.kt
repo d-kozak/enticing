@@ -1,9 +1,13 @@
 package cz.vutbr.fit.knot.enticing.management
 
 import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import java.util.concurrent.Executors
 
 /**
  * Tests triggering the whole machinery in the management service including starting remote services.
@@ -15,9 +19,12 @@ class ManagementCliIntegrationTests {
     private fun runCliApp(args: String) {
         val cliArgs = parseCliArgs(args.split("""\s+""".toRegex()).toTypedArray()).validateOrFail()
         val config = cliArgs.configuration
-        val engine = ManagementEngine(config, SimpleStdoutLoggerFactory)
+        val scope = CoroutineScope(Executors.newFixedThreadPool(4).asCoroutineDispatcher())
+        val engine = ManagementEngine(config, scope, SimpleStdoutLoggerFactory)
         engine.use {
-            engine.execute(cliArgs)
+            runBlocking(scope.coroutineContext) {
+                engine.execute(cliArgs, config, SimpleStdoutLoggerFactory)
+            }
         }
     }
 

@@ -7,10 +7,11 @@ data class ComponentAddress(val url: String, val port: Int) {
     companion object {
         fun parse(input: String): ComponentAddress {
             val parts = input.split(":")
-            require(parts.size == 2) { "Invalid input $input, could not be split into server and port" }
-            val url = parts[0]
-            val port = requireNotNull(parts[1].toIntOrNull()) { "Invalid port number in $input, ${parts[1]}" }
-            return ComponentAddress(url, port)
+            return when (parts.size) {
+                1 -> ComponentAddress(parts[0], 8080)
+                2 -> ComponentAddress(parts[0], requireNotNull(parts[1].toIntOrNull()) { "Invalid port number in $input, ${parts[1]}" })
+                else -> error("Invalid input $input, could not be split into server and port")
+            }
         }
     }
 

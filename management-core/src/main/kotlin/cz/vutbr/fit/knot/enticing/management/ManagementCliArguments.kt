@@ -6,9 +6,35 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.util.Validator
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.util.ValidatorImpl
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.validateOrFail
 import cz.vutbr.fit.knot.enticing.dto.config.executeScript
+import cz.vutbr.fit.knot.enticing.log.LoggerFactory
+import cz.vutbr.fit.knot.enticing.management.command.concrete.*
 
 
 fun parseCliArgs(args: Array<String>): ManagementCliArguments = ArgParser(args).parseInto(::ManagementCliArguments)
+
+suspend fun ManagementEngine.execute(args: ManagementCliArguments, configuration: EnticingConfiguration, loggerFactory: LoggerFactory) = with(args) {
+    if (remoteBuild)
+        executeCommand(RemoteBuildCommand(configuration.deploymentConfiguration))
+    if (copyJars)
+        executeCommand(CopyJarsCommand(configuration.localHome, configuration.deploymentConfiguration, loggerFactory))
+    if (removeFiles) corpuses.executeAll { RemoveDistributedFilesCommand(configuration.corpuses.getValue(it)) }
+    if (distribute) corpuses.executeAll { DistributeCorpusCommand(configuration.corpuses.getValue(it), loggerFactory) }
+    if (printFiles) corpuses.executeAll { ShowDistributedFilesCommand(configuration.corpuses.getValue(it), loggerFactory) }
+    if (startIndexing) corpuses.executeAll { StartIndexingCommand(configuration.corpuses.getValue(it), configuration.deploymentConfiguration, loggerFactory) }
+    if (management) {
+        if (kill) executeCommand(KillManagementServiceCommand(configuration.managementServiceConfiguration.address))
+        else executeCommand(StartManagementServiceCommand(configuration.managementServiceConfiguration.fullAddress, configuration.deploymentConfiguration))
+    }
+    if (webserver) {
+        if (kill) executeCommand(KillWebserverCommand(configuration.webserverConfiguration.address))
+        else executeCommand(StartWebserverCommand(configuration.webserverConfiguration.fullAddress, configuration.deploymentConfiguration))
+    }
+    if (indexServers) {
+        if (kill)
+            corpuses.executeAll { KillIndexServersCommand(configuration.corpuses.getValue(it)) }
+        else corpuses.executeAll { StartIndexServersCommand(configuration.corpuses.getValue(it), configuration.deploymentConfiguration) }
+    }
+}
 
 class ManagementCliArguments(parser: ArgParser) : Validator by ValidatorImpl() {
     /**

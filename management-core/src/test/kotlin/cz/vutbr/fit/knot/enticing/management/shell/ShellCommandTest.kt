@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.management.shell
 
 import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
+import cz.vutbr.fit.knot.enticing.management.config
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -11,7 +12,7 @@ import org.junit.jupiter.api.Test
 
 class ShellCommandTest {
 
-    val executor = ShellCommandExecutor(SimpleStdoutLoggerFactory, CoroutineScope(Dispatchers.IO))
+    val executor = ShellCommandExecutor(config, CoroutineScope(Dispatchers.IO), SimpleStdoutLoggerFactory)
 
     @Nested
     inner class LocalCommandTest {
@@ -64,8 +65,7 @@ class ShellCommandTest {
         @Test
         fun `parallel ssh test`() {
             val cmd = ParallelSshCommand(
-                    "xkozak15"
-                    , listOf("123", "456", "789"),
+                    "xkozak15", listOf("123", "456", "789"),
                     SimpleCommand("rm foo")
             )
             assertThat(cmd.value)
@@ -89,8 +89,7 @@ class ShellCommandTest {
         @Test
         fun `parallel screen`() {
             val cmd = ParallelSshCommand(
-                    "xkozak15"
-                    , listOf("123", "456", "789"),
+                    "xkozak15", listOf("123", "456", "789"),
                     StartScreenCommand("screen1", SimpleCommand("run-run-long"))
             )
             assertThat(cmd.value).isEqualTo("parallel-ssh -l xkozak15 -H 123 -H 456 -H 789 -i screen -S screen1 -d -m run-run-long")
@@ -98,13 +97,13 @@ class ShellCommandTest {
     }
 
     @Nested
-    inner class DumpMg4jFilesTest{
+    inner class DumpMg4jFilesTest {
 
         @Test
-        fun `dump new wiki limited`() = runBlocking{
+        fun `dump new wiki limited`() = runBlocking {
             // ssh xkozak15@minerva3.fit.vutbr.cz ls -l /var/xdolez52/Zpracovani_Wikipedie/html_from_wikipedia_en_all_nopic_2019-10.zim/6-mg4j/old-2020-01-03/*.mg4j | head -n 50
-            val files = executor.loadMg4jFiles("xkozak15","minerva3.fit.vutbr.cz",
-                    "/var/xdolez52/Zpracovani_Wikipedie/html_from_wikipedia_en_all_nopic_2019-10.zim/6-mg4j/old-2020-01-03",50)
+            val files = executor.loadMg4jFiles("minerva3.fit.vutbr.cz",
+                    "/var/xdolez52/Zpracovani_Wikipedie/html_from_wikipedia_en_all_nopic_2019-10.zim/6-mg4j/old-2020-01-03", 50, "xkozak15")
             println(files)
         }
     }

@@ -1,5 +1,7 @@
 package cz.vutbr.fit.knot.enticing.dto.config.dsl
 
+import cz.vutbr.fit.knot.enticing.dto.ComponentAddress
+
 
 /**
  * Configuration for a deployable component
@@ -13,7 +15,7 @@ interface ComponentConfiguration : EnticingConfigurationUnit {
 
     var port: Int
 
-    val fullAddress: String
-        get() = "$address:$port"
+    val fullAddress: ComponentAddress
+        get() = ComponentAddress(address, port)
 }
 

@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.api
 
 import cz.vutbr.fit.knot.enticing.dto.BugReport
-import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
+import cz.vutbr.fit.knot.enticing.dto.ComponentAddress
 import cz.vutbr.fit.knot.enticing.log.*
 import cz.vutbr.fit.knot.enticing.mx.ServerStatus
 import cz.vutbr.fit.knot.enticing.mx.StaticServerInfo
@@ -18,8 +18,7 @@ open class ManagementServiceApi(
         /**
          * Address of the service in the format ip:port
          */
-        @Cleanup("Use ComponentAddress class instead of primitive String")
-        private val remoteAddress: String,
+        private val remoteAddress: ComponentAddress,
         /**
          * Type of THIS component, it is sent in some messages
          */
