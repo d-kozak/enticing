@@ -10,13 +10,16 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 
 
-class ManagementEngine(val configuration: EnticingConfiguration, private val scope: CoroutineScope, val loggerFactory: LoggerFactory) : AutoCloseable {
+class ManagementEngine(
+        configuration: EnticingConfiguration,
+        private val scope: CoroutineScope,
+        loggerFactory: LoggerFactory) : AutoCloseable {
 
     private val logger = loggerFactory.logger { }
 
-    private val executor = ShellCommandExecutor(configuration, scope, loggerFactory)
+    private val defaultShellExecutor = ShellCommandExecutor(configuration, scope, loggerFactory)
 
-    suspend fun executeCommand(command: NewManagementCommand) {
+    suspend fun executeCommand(command: NewManagementCommand, executor: ShellCommandExecutor = defaultShellExecutor) {
         command.beforeStart()
         try {
             logger.measure("ExecuteCommand", command.toString()) {

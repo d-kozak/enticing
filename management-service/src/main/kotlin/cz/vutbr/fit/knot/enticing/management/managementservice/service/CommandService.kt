@@ -3,6 +3,7 @@ package cz.vutbr.fit.knot.enticing.management.managementservice.service
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
+import cz.vutbr.fit.knot.enticing.management.ManagementEngine
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.CommandRequest
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.CommandState
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.CommandType
@@ -20,12 +21,15 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.nio.file.Path
 import java.time.LocalDateTime
+import java.util.concurrent.Executors
 import javax.transaction.Transactional
 
 @Service
 class CommandService(
         private val configuration: EnticingConfiguration,
         private val commandRepository: CommandRepository,
+        private val corpusService: CorpusService,
+        private val componentService: ComponentService,
         private val userService: ManagementUserService,
         private val userRepository: UserRepository,
         private val loggerFactory: LoggerFactory,
@@ -36,6 +40,8 @@ class CommandService(
     private val logger = loggerFactory.logger { }
 
     private val scope = CoroutineScope(Dispatchers.IO)
+
+    private val engine = ManagementEngine(configuration, CoroutineScope(Executors.newFixedThreadPool(4).asCoroutineDispatcher()), loggerFactory)
 
     private val commandLogDirectory = Path.of(configuration.loggingConfiguration.rootDirectory, "commands")
 
@@ -96,8 +102,8 @@ class CommandService(
             val logFile = commandLogDirectory.resolve("${entity.id}.log").toString()
             val executor = ShellCommandExecutor(configuration, scope, loggerFactory, logFile)
             executor.use {
-                val commandDto = entity.type.init(configuration, entity.id.toString(), entity.arguments)
-                commandDto.execute(scope, executor)
+                val commandDto = entity.type.init(entity.id.toString(), configuration, corpusService, componentService, entity.arguments)
+                engine.executeCommand(commandDto, executor)
             }
             entity.finishedAt = LocalDateTime.now()
             entity.state = CommandState.FINISHED
@@ -115,6 +121,7 @@ class CommandService(
 
     override fun close() {
         scope.cancel()
+        engine.close()
     }
 
     fun getCommands(type: CommandType?, state: CommandState?, pageable: Pageable): Page<CommandDto> {

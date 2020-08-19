@@ -8,7 +8,7 @@ import cz.vutbr.fit.knot.enticing.management.shell.startManagementService
 import kotlinx.coroutines.CoroutineScope
 
 
-class StartManagementServiceCommand(
+open class StartManagementServiceCommand(
         val address: ComponentAddress,
         val deployment: DeploymentConfiguration
 ) : NewManagementCommand() {

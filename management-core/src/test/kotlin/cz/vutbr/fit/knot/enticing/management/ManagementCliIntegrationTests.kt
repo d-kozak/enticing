@@ -23,7 +23,7 @@ class ManagementCliIntegrationTests {
         val engine = ManagementEngine(config, scope, SimpleStdoutLoggerFactory)
         engine.use {
             runBlocking(scope.coroutineContext) {
-                engine.execute(cliArgs, config, SimpleStdoutLoggerFactory)
+                engine.runCliApp(cliArgs, config, SimpleStdoutLoggerFactory)
             }
         }
     }

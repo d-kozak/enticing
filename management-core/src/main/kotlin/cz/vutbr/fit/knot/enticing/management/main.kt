@@ -23,7 +23,7 @@ fun runManagementCli(args: Array<String>) {
     logger.measure("executeCliApp", args.toString()) {
         runBlocking(scope.coroutineContext) {
             engine.use {
-                engine.execute(args, configuration, loggerFactory)
+                engine.runCliApp(args, configuration, loggerFactory)
             }
         }
     }

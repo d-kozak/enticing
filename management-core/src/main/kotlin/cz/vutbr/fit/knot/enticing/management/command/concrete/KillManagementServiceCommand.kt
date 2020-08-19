@@ -5,7 +5,7 @@ import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
 import cz.vutbr.fit.knot.enticing.management.shell.killManagementService
 import kotlinx.coroutines.CoroutineScope
 
-class KillManagementServiceCommand(
+open class KillManagementServiceCommand(
         val address: String
 ) : NewManagementCommand() {
 

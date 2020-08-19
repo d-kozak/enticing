@@ -2,12 +2,12 @@ package cz.vutbr.fit.knot.enticing.management.managementservice.dto
 
 import cz.vutbr.fit.knot.enticing.dto.ComponentAddress
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
-import cz.vutbr.fit.knot.enticing.dto.toComponentAddress
-import cz.vutbr.fit.knot.enticing.management.managementservice.dto.ManagementCommand.ServerGroupCommand.*
+import cz.vutbr.fit.knot.enticing.management.command.NewManagementCommand
+import cz.vutbr.fit.knot.enticing.management.command.concrete.LocalBuildCommand
+import cz.vutbr.fit.knot.enticing.management.managementservice.service.ComponentService
+import cz.vutbr.fit.knot.enticing.management.managementservice.service.CorpusService
 import cz.vutbr.fit.knot.enticing.management.shell.*
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.joinAll
-import kotlinx.coroutines.launch
 
 data class CommandRequest(
         val type: CommandType,
@@ -21,84 +21,75 @@ enum class CommandState {
     FAILED
 }
 
-enum class CommandType(private val factory: (EnticingConfiguration, String, String) -> ManagementCommand) {
-    BUILD(::BuildCommand),
-    START_INDEX_SERVER(::StartIndexServerCommand),
-    KILL_INDEX_SERVER(::KillIndexServerCommand),
-    START_WEBSERVER(::StartWebserver),
-    KILL_WEBSERVER(::KillWebserver),
-    START_MANAGEMENT_SERVER(::StartManagementServer),
-    KILL_MANAGEMENT_SERVER(::KillManagementServer);
+typealias CommandFactory = (String, EnticingConfiguration, CorpusService, ComponentService, String) -> NewManagementCommand
 
-    fun init(configuration: EnticingConfiguration, id: String, args: String): ManagementCommand = factory(configuration, id, args)
+enum class CommandType(private val factory: CommandFactory) {
+    BUILD(localBuildCommandFactory),
+    START_INDEX_SERVER(startIndexServerCommandFactory),
+    KILL_INDEX_SERVER(killIndexServerCommandFactory),
+    START_WEBSERVER(startWebserverCommandFactory),
+    KILL_WEBSERVER(killWebserverCommandFactory),
+    START_MANAGEMENT_SERVER(startManagementServerCommandFactory),
+    KILL_MANAGEMENT_SERVER(killManagementServerCommandFactory);
+
+    fun init(id: String, configuration: EnticingConfiguration, corpusService: CorpusService, componentService: ComponentService, args: String): NewManagementCommand = factory(id, configuration, corpusService, componentService, args)
 }
 
 
-sealed class ManagementCommand(val configuration: EnticingConfiguration, val commandId: String) {
+private val localBuildCommandFactory: CommandFactory = { _, configuration, _, _, args ->
+    LocalBuildCommand(args, configuration.localHome)
+}
 
-    val username = configuration.authentication.username
-    val enticingHome = configuration.deploymentConfiguration.repository
-    val configFile = configuration.deploymentConfiguration.configurationScript
-
-    abstract suspend fun execute(scope: CoroutineScope, shellCommandExecutor: ShellCommandExecutor)
-
-    sealed class ServerGroupCommand(configuration: EnticingConfiguration, id: String, val addresses: List<ComponentAddress>) : ManagementCommand(configuration, id) {
-
-        constructor(configuration: EnticingConfiguration, id: String, args: String) : this(configuration, id, args.split(",").map { it.toComponentAddress() })
-
-
-        override suspend fun execute(scope: CoroutineScope, shellCommandExecutor: ShellCommandExecutor) {
-            addresses.map { (ip, port) -> scope.launch { executeForServer(shellCommandExecutor, ip, port) } }
-                    .joinAll()
-
-        }
-
-        abstract suspend fun executeForServer(shellCommandExecutor: ShellCommandExecutor, ip: String, port: Int)
-
-
-        class BuildCommand(configuration: EnticingConfiguration, id: String, val args: String) : ManagementCommand(configuration, id) {
-            override suspend fun execute(scope: CoroutineScope, shellCommandExecutor: ShellCommandExecutor) {
-                shellCommandExecutor.localBuild(commandId, configuration.localHome)
-            }
-        }
-
-        class StartIndexServerCommand(configuration: EnticingConfiguration, id: String, args: String) : ManagementCommand.ServerGroupCommand(configuration, id, args) {
-
-            override suspend fun executeForServer(shellCommandExecutor: ShellCommandExecutor, ip: String, port: Int) {
-                shellCommandExecutor.startIndexServer(ip, enticingHome, configFile, port, username)
-            }
-        }
-
-        class KillIndexServerCommand(configuration: EnticingConfiguration, id: String, args: String) : ManagementCommand.ServerGroupCommand(configuration, id, args) {
-            override suspend fun executeForServer(shellCommandExecutor: ShellCommandExecutor, ip: String, port: Int) {
-                shellCommandExecutor.killIndexServer(ip, username)
-            }
-        }
-
-        class StartWebserver(configuration: EnticingConfiguration, id: String, args: String) : ManagementCommand.ServerGroupCommand(configuration, id, args) {
-            override suspend fun executeForServer(shellCommandExecutor: ShellCommandExecutor, ip: String, port: Int) {
-                shellCommandExecutor.startWebserver(ip, enticingHome, configFile, port, username)
-            }
-        }
-
-        class KillWebserver(configuration: EnticingConfiguration, id: String, args: String) : ManagementCommand.ServerGroupCommand(configuration, id, args) {
-            override suspend fun executeForServer(shellCommandExecutor: ShellCommandExecutor, ip: String, port: Int) {
-                shellCommandExecutor.killWebserver(ip, username)
-            }
-        }
-
-        class StartManagementServer(configuration: EnticingConfiguration, id: String, args: String) : ManagementCommand.ServerGroupCommand(configuration, id, args) {
-            override suspend fun executeForServer(shellCommandExecutor: ShellCommandExecutor, ip: String, port: Int) {
-                shellCommandExecutor.startManagementService(ip, enticingHome, configFile, port, username)
-            }
-        }
-
-        class KillManagementServer(configuration: EnticingConfiguration, id: String, args: String) : ManagementCommand.ServerGroupCommand(configuration, id, args) {
-            override suspend fun executeForServer(shellCommandExecutor: ShellCommandExecutor, ip: String, port: Int) {
-                shellCommandExecutor.killManagementService(ip, username)
-            }
+private val startIndexServerCommandFactory: CommandFactory = { _, configuration, _, _, args ->
+    object : NewManagementCommand() {
+        override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) {
+            val address = ComponentAddress.parse(args)
+            executor.startIndexServer(address.url, configuration.deploymentConfiguration.repository, configuration.deploymentConfiguration.configurationScript, address.port)
         }
     }
 }
 
+private val killIndexServerCommandFactory: CommandFactory = { _, _, _, _, args ->
+    object : NewManagementCommand() {
+        override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) {
+            val address = ComponentAddress.parse(args)
+            executor.killIndexServer(address.url)
+        }
+    }
+}
 
+private val startWebserverCommandFactory: CommandFactory = { _, configuration, _, _, args ->
+    object : NewManagementCommand() {
+        override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) {
+            val address = ComponentAddress.parse(args)
+            executor.startWebserver(address.url, configuration.deploymentConfiguration.repository, configuration.deploymentConfiguration.configurationScript, address.port)
+        }
+    }
+}
+
+private val killWebserverCommandFactory: CommandFactory = { _, _, _, _, args ->
+    object : NewManagementCommand() {
+        override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) {
+            val address = ComponentAddress.parse(args)
+            executor.killWebserver(address.url)
+        }
+    }
+}
+
+private val startManagementServerCommandFactory: CommandFactory = { _, configuration, _, _, args ->
+    object : NewManagementCommand() {
+        override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) {
+            val address = ComponentAddress.parse(args)
+            executor.startManagementService(address.url, configuration.deploymentConfiguration.repository, configuration.deploymentConfiguration.configurationScript, address.port)
+        }
+    }
+}
+
+private val killManagementServerCommandFactory: CommandFactory = { _, _, _, _, args ->
+    object : NewManagementCommand() {
+        override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) {
+            val address = ComponentAddress.parse(args)
+            executor.killManagementService(address.url)
+        }
+    }
+}

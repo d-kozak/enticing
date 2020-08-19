@@ -6,7 +6,7 @@ import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
 import kotlinx.coroutines.CoroutineScope
 
 
-class KillIndexingCommand(
+open class KillIndexingCommand(
         val corpus: CorpusConfiguration
 ) : NewManagementCommand() {
 

@@ -17,7 +17,7 @@ import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicInteger
 
-class DistributeCorpusCommand(
+open class DistributeCorpusCommand(
         val corpus: CorpusConfiguration,
         loggerFactory: LoggerFactory
 ) : NewManagementCommand() {

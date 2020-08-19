@@ -8,7 +8,7 @@ import cz.vutbr.fit.knot.enticing.management.shell.startWebserver
 import kotlinx.coroutines.CoroutineScope
 
 
-class StartWebserverCommand(
+open class StartWebserverCommand(
         val address: ComponentAddress,
         val deployment: DeploymentConfiguration
 ) : NewManagementCommand() {

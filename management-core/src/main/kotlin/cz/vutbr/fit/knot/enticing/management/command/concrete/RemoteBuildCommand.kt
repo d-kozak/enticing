@@ -6,7 +6,7 @@ import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
 import cz.vutbr.fit.knot.enticing.management.shell.pullAndBuild
 import kotlinx.coroutines.CoroutineScope
 
-class RemoteBuildCommand(
+open class RemoteBuildCommand(
         val deploymentConfiguration: DeploymentConfiguration
 ) : NewManagementCommand() {
 

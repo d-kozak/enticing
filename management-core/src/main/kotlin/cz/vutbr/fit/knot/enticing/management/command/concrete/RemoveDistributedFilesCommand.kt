@@ -8,7 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
-class RemoveDistributedFilesCommand(
+open class RemoveDistributedFilesCommand(
         val corpus: CorpusConfiguration
 ) : NewManagementCommand() {
 

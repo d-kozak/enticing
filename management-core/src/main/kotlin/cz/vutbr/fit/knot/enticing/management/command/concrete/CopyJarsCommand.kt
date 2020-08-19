@@ -9,7 +9,7 @@ import cz.vutbr.fit.knot.enticing.management.shell.copyJars
 import kotlinx.coroutines.CoroutineScope
 
 
-class CopyJarsCommand(
+open class CopyJarsCommand(
         val localHome: String,
         val deploymentConfiguration: DeploymentConfiguration,
         loggerFactory: LoggerFactory

@@ -8,7 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
-class KillIndexServersCommand(
+open class KillIndexServersCommand(
         val corpus: CorpusConfiguration
 ) : NewManagementCommand() {
     override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) = coroutineScope<Unit> {

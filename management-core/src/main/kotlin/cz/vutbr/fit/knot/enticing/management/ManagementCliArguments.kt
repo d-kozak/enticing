@@ -12,7 +12,7 @@ import cz.vutbr.fit.knot.enticing.management.command.concrete.*
 
 fun parseCliArgs(args: Array<String>): ManagementCliArguments = ArgParser(args).parseInto(::ManagementCliArguments)
 
-suspend fun ManagementEngine.execute(args: ManagementCliArguments, configuration: EnticingConfiguration, loggerFactory: LoggerFactory) = with(args) {
+suspend fun ManagementEngine.runCliApp(args: ManagementCliArguments, configuration: EnticingConfiguration, loggerFactory: LoggerFactory) = with(args) {
     if (remoteBuild)
         executeCommand(RemoteBuildCommand(configuration.deploymentConfiguration))
     if (copyJars)

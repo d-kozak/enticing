@@ -12,7 +12,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 
-class ShowDistributedFilesCommand(
+open class ShowDistributedFilesCommand(
         val corpus: CorpusConfiguration,
         loggerFactory: LoggerFactory
 ) : NewManagementCommand() {

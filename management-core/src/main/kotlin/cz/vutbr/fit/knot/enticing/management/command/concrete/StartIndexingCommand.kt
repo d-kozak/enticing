@@ -12,7 +12,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 
-class StartIndexingCommand(
+open class StartIndexingCommand(
         val corpus: CorpusConfiguration,
         val deployment: DeploymentConfiguration,
         loggerFactory: LoggerFactory

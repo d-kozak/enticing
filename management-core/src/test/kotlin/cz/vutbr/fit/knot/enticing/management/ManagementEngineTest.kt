@@ -18,7 +18,7 @@ class ManagementEngineTest {
                 .validateOrFail()
         val scope = CoroutineScope(Executors.newFixedThreadPool(4).asCoroutineDispatcher())
         val executor = ManagementEngine(args.configuration, scope, SimpleStdoutLoggerFactory)
-        runBlocking(scope.coroutineContext) { executor.execute(args, args.configuration, SimpleStdoutLoggerFactory) }
+        runBlocking(scope.coroutineContext) { executor.runCliApp(args, args.configuration, SimpleStdoutLoggerFactory) }
 
     }
 

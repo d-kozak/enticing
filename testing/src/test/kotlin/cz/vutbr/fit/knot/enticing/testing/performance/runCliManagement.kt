@@ -2,8 +2,8 @@ package cz.vutbr.fit.knot.enticing.testing.performance
 
 import cz.vutbr.fit.knot.enticing.log.SimpleStdoutLoggerFactory
 import cz.vutbr.fit.knot.enticing.management.ManagementEngine
-import cz.vutbr.fit.knot.enticing.management.execute
 import cz.vutbr.fit.knot.enticing.management.parseCliArgs
+import cz.vutbr.fit.knot.enticing.management.runCliApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -14,7 +14,7 @@ fun runManagementCli(args: String) {
     val engine = ManagementEngine(config, CoroutineScope(Dispatchers.IO), SimpleStdoutLoggerFactory)
     engine.use {
         runBlocking {
-            engine.execute(cliArgs, config, SimpleStdoutLoggerFactory)
+            engine.runCliApp(cliArgs, config, SimpleStdoutLoggerFactory)
         }
     }
 }
