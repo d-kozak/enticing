@@ -4,7 +4,7 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.DeploymentConfiguration
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
-import cz.vutbr.fit.knot.enticing.management.command.NewManagementCommand
+import cz.vutbr.fit.knot.enticing.management.command.ManagementCommand
 import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
 import cz.vutbr.fit.knot.enticing.management.shell.preprocessCollections
 import kotlinx.coroutines.CoroutineScope
@@ -16,7 +16,7 @@ open class StartIndexingCommand(
         val corpus: CorpusConfiguration,
         val deployment: DeploymentConfiguration,
         loggerFactory: LoggerFactory
-) : NewManagementCommand() {
+) : ManagementCommand() {
     private val logger = loggerFactory.logger { }
 
 

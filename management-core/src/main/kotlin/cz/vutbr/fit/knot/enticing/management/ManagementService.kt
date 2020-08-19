@@ -3,7 +3,7 @@ package cz.vutbr.fit.knot.enticing.management
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
-import cz.vutbr.fit.knot.enticing.management.command.NewManagementCommand
+import cz.vutbr.fit.knot.enticing.management.command.ManagementCommand
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.cancel
@@ -19,7 +19,7 @@ class ManagementService(configuration: EnticingConfiguration, loggerFactory: Log
 
     private val engine = ManagementEngine(configuration, scope, loggerFactory)
 
-    suspend fun executeCommand(command: NewManagementCommand) {
+    suspend fun executeCommand(command: ManagementCommand) {
         engine.executeCommand(command)
     }
 

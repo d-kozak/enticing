@@ -4,7 +4,7 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
 import cz.vutbr.fit.knot.enticing.log.measure
-import cz.vutbr.fit.knot.enticing.management.command.NewManagementCommand
+import cz.vutbr.fit.knot.enticing.management.command.ManagementCommand
 import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
@@ -19,19 +19,19 @@ class ManagementEngine(
 
     private val defaultShellExecutor = ShellCommandExecutor(configuration, scope, loggerFactory)
 
-    suspend fun executeCommand(command: NewManagementCommand, executor: ShellCommandExecutor = defaultShellExecutor) {
+    suspend fun executeCommand(command: ManagementCommand, executor: ShellCommandExecutor = defaultShellExecutor) {
         command.beforeStart()
         try {
             logger.measure("ExecuteCommand", command.toString()) {
                 command.execute(scope, executor)
             }
-            command.onFinish()
+            command.onSuccess()
         } catch (ex: Exception) {
             command.onFail(ex)
         }
     }
 
-    suspend fun Collection<String>.executeAll(factory: (String) -> NewManagementCommand) {
+    suspend fun Collection<String>.executeAll(factory: (String) -> ManagementCommand) {
         for (name in this) executeCommand(factory(name))
     }
 

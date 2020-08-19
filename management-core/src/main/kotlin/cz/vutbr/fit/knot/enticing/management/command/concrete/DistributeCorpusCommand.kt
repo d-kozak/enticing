@@ -5,7 +5,7 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.CorpusSourceConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.IndexServerConfiguration
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
-import cz.vutbr.fit.knot.enticing.management.command.NewManagementCommand
+import cz.vutbr.fit.knot.enticing.management.command.ManagementCommand
 import cz.vutbr.fit.knot.enticing.management.model.Mg4jFile
 import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
 import cz.vutbr.fit.knot.enticing.management.shell.copyFiles
@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger
 open class DistributeCorpusCommand(
         val corpus: CorpusConfiguration,
         loggerFactory: LoggerFactory
-) : NewManagementCommand() {
+) : ManagementCommand() {
 
     private val logger = loggerFactory.logger { }
 
