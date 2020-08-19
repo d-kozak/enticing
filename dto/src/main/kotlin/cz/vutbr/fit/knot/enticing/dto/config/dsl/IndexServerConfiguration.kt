@@ -35,7 +35,7 @@ data class IndexServerConfiguration(
 
     fun loadCollections(): Sequence<Triple<File, File, File>> = sequence {
         val inputDir = File(collectionsDir ?: corpus.collectionsDir)
-        for (dir in inputDir.listFiles() ?: emptyArray()) {
+        for (dir in inputDir.listFiles() ?: emptyArray<File>()) {
             if (!dir.isDirectory || !dir.name.startsWith("col")) continue
             val mg4jDir = File(dir.path + File.separatorChar + "mg4j")
             check(mg4jDir.exists()) { "mg4j ${mg4jDir.path} directory does not exist" }

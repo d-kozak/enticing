@@ -4,6 +4,7 @@ package cz.vutbr.fit.knot.enticing.log.util
  * Resolves the name of a class based on the function that is being passed in.
  * It is a little hacky, but thanks to this it is possible to infer the name without having to pass it into the logger
  */
+@Suppress("NOTHING_TO_INLINE")
 inline fun resolveName(noinline func: () -> Unit): String {
     val name = func.javaClass.name
     return when {

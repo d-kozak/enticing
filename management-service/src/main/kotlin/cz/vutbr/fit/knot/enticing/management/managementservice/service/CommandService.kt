@@ -14,6 +14,7 @@ import cz.vutbr.fit.knot.enticing.management.managementservice.repository.Comman
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.UserRepository
 import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
 import kotlinx.coroutines.*
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -29,7 +30,6 @@ class CommandService(
         private val configuration: EnticingConfiguration,
         private val commandRepository: CommandRepository,
         private val corpusService: CorpusService,
-        private val componentService: ComponentService,
         private val userService: ManagementUserService,
         private val userRepository: UserRepository,
         private val loggerFactory: LoggerFactory,
@@ -38,6 +38,10 @@ class CommandService(
 ) : AutoCloseable {
 
     private val logger = loggerFactory.logger { }
+
+
+    @Autowired
+    lateinit var componentService: ComponentService
 
     private val scope = CoroutineScope(Dispatchers.IO)
 

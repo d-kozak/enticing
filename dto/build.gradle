@@ -38,7 +38,7 @@ dependencies {
     /**
      * Kotlin scripting
      */
-    implementation("org.jetbrains.kotlin:kotlin-scripting-jsr223-embeddable")
+    implementation("org.jetbrains.kotlin:kotlin-scripting-jsr223")
 
     /**
      * Testing & mocking

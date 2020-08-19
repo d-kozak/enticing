@@ -36,7 +36,7 @@ private class DumpAstMatchListener : EqlListener {
             }
             append(prefix)
             append(" = ")
-            appendln(matchInfo.joinToString { it.interval.toString() })
+            appendLine(matchInfo.joinToString { it.interval.toString() })
         }
     }
 

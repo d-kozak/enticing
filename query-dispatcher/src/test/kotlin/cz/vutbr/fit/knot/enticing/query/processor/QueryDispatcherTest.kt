@@ -41,7 +41,7 @@ internal class QueryDispatcherTest {
     fun `servers should be called with specific offsets`() {
         val servers = listOf(IndexServerRequestData("yahoo.com", mapOf("one" to Offset(1, 2))), IndexServerRequestData("google.com", mapOf("two" to Offset(3, 4))), IndexServerRequestData("foo.bar", mapOf("three" to Offset(5, 6))))
 
-        val queryExecutor: QueryExecutor<SearchQuery, Map<CollectionName, Offset>, IndexServer.IndexResultList> = dummyDispatcher { query, server ->
+        val queryExecutor: QueryExecutor<SearchQuery, Map<CollectionName, Offset>, IndexServer.IndexResultList> = dummyDispatcher { _, server ->
             when (server.address) {
                 "yahoo.com" -> assertThat(server.offset)
                         .isEqualTo(mapOf("one" to Offset(1, 2)))

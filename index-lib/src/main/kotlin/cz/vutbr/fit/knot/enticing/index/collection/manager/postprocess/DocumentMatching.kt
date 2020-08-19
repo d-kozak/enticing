@@ -26,7 +26,7 @@ fun Logger.dumpNodesByIndex(nodeByIndex: Array<List<QueryElemNode.SimpleNode>>, 
     val msg = buildString {
         for (index in metadataConfiguration.indexes.values) {
             if (nodeByIndex[index.columnIndex].isNotEmpty()) {
-                appendln("\t${index.name}=${nodeByIndex[index.columnIndex].map { it.content }}")
+                appendLine("\t${index.name}=${nodeByIndex[index.columnIndex].map { it.content }}")
             }
         }
     }

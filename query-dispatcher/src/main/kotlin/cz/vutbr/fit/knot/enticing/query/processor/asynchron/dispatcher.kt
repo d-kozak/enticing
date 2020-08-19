@@ -1,3 +1,5 @@
+@file:Suppress("EXPERIMENTAL_API_USAGE")
+
 package cz.vutbr.fit.knot.enticing.query.processor.asynchron
 
 import kotlinx.coroutines.*

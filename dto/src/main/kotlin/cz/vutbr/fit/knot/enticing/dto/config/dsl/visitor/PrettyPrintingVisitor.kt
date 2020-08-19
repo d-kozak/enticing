@@ -167,7 +167,7 @@ class PrettyPrintingVisitor : EnticingConfigurationVisitor {
         putIdent()
         stringBuilder.append(name)
         stringBuilder.append(" = ")
-        stringBuilder.appendln(value)
+        stringBuilder.appendLine(value)
     }
 
     /**
@@ -189,7 +189,7 @@ class PrettyPrintingVisitor : EnticingConfigurationVisitor {
      */
     private fun appendLine(line: String) {
         putIdent()
-        stringBuilder.appendln(line)
+        stringBuilder.appendLine(line)
     }
 
     /**

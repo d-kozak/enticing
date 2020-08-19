@@ -39,11 +39,13 @@ interface LoggerFactory : AutoCloseable {
 /**
  * Create a new logger with name inferred from the encapsulating class
  */
+@Suppress("NOTHING_TO_INLINE")
 inline fun LoggerFactory.logger(noinline func: () -> Unit): Logger = namedLogger(resolveName(func))
 
 /**
  * Create a simple stdout logger using SimpleStdoutLoggerFactory
  */
+@Suppress("NOTHING_TO_INLINE")
 inline fun stdoutLogger(noinline func: () -> Unit) = SimpleStdoutLoggerFactory.logger(func)
 
 /**
@@ -186,11 +188,11 @@ private class FileBasedLoggerNode(val file: File, config: LoggingConfiguration) 
     private val writer = FileWriter(file, true)
 
     override fun log(logMessage: LogMessage) {
-        writer.appendln(logMessage.toPrintableString(formatter))
+        writer.appendLine(logMessage.toPrintableString(formatter))
     }
 
     override fun perf(perfMessage: PerfMessage) {
-        writer.appendln(perfMessage.toPrintableString(formatter))
+        writer.appendLine(perfMessage.toPrintableString(formatter))
     }
 
     override fun close() {

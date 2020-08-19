@@ -28,6 +28,7 @@ data class MResult<T> internal constructor(val value: T) {
     companion object {
         fun <T> success(value: T): MResult<T> = MResult(value)
 
+        @Suppress("UNCHECKED_CAST")
         fun <T> failure(throwable: Throwable): MResult<T> = MResult(createFailure(throwable)) as MResult<T>
 
         inline fun <T> runCatching(block: () -> T): MResult<T> =
