@@ -1,12 +1,9 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.service
 
 import cz.vutbr.fit.knot.enticing.api.EnticingComponentApi
+import cz.vutbr.fit.knot.enticing.dto.ExtendedComponentInfo
 import cz.vutbr.fit.knot.enticing.dto.toComponentAddress
 import cz.vutbr.fit.knot.enticing.log.ComponentType
-import cz.vutbr.fit.knot.enticing.management.managementservice.dto.CommandRequest
-import cz.vutbr.fit.knot.enticing.management.managementservice.dto.CommandType
-import cz.vutbr.fit.knot.enticing.management.managementservice.dto.ComponentInfo
-import cz.vutbr.fit.knot.enticing.management.managementservice.entity.ComponentEntity
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toComponentInfo
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ComponentRepository
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.CorpusRepository
@@ -30,28 +27,15 @@ class ComponentService(
         private val componentApi: EnticingComponentApi
 ) {
 
-    fun deleteComponent(component: ComponentEntity): ComponentInfo {
-        logRepository.deleteByComponent(component)
-        perfRepository.deleteByComponent(component)
-        componentRepository.delete(component)
-        val commandType = when (component.type) {
-            ComponentType.WEBSERVER -> CommandType.KILL_WEBSERVER
-            ComponentType.INDEX_SERVER -> CommandType.KILL_INDEX_SERVER
-            else -> error("cant kill this type of component $component")
-        }
-        commandService.enqueue(CommandRequest(commandType, component.fullAddress))
-        return component.toComponentInfo()
-    }
-
-    fun getComponentsOfCorpus(corpusId: Long, pageable: Pageable): Page<ComponentInfo> {
+    fun getComponentsOfCorpus(corpusId: Long, pageable: Pageable): Page<ExtendedComponentInfo> {
         val corpus = corpusRepository.findByIdOrNull(corpusId)
                 ?: throw IllegalArgumentException("No corpus with id $corpusId")
         return componentRepository.findByCorpusesContains(corpus, pageable).map { it.toComponentInfo() }
     }
 
-    fun getComponentsOnServer(serverId: Long, pageable: Pageable): Page<ComponentInfo> = componentRepository.findByServerId(serverId, pageable).map { it.toComponentInfo() }
+    fun getComponentsOnServer(serverId: Long, pageable: Pageable): Page<ExtendedComponentInfo> = componentRepository.findByServerId(serverId, pageable).map { it.toComponentInfo() }
 
-    fun getComponents(componentType: ComponentType?, pageable: Pageable): Page<ComponentInfo> {
+    fun getComponents(componentType: ComponentType?, pageable: Pageable): Page<ExtendedComponentInfo> {
         val entities = when {
             componentType != null -> componentRepository.findByType(componentType, pageable)
             else -> componentRepository.findAll(pageable)
@@ -61,10 +45,12 @@ class ComponentService(
 
     fun getComponent(componentId: Long) = componentRepository.findByIdOrNull(componentId)?.toComponentInfo()
 
-    fun deleteComponent(componentId: Long): ComponentInfo {
+    fun removeComponent(componentId: Long) {
         val component = componentRepository.findByIdOrNull(componentId)
                 ?: throw IllegalArgumentException("No component with id $componentId")
-        return deleteComponent(component)
+        logRepository.deleteByComponent(component)
+        perfRepository.deleteByComponent(component)
+        componentRepository.delete(component)
     }
 
     fun pingComponent(componentId: Long): StaticServerInfo? {

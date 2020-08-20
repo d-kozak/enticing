@@ -1,17 +1,14 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.entity
 
+import cz.vutbr.fit.knot.enticing.dto.ComponentStatus
+import cz.vutbr.fit.knot.enticing.dto.ExtendedComponentInfo
 import cz.vutbr.fit.knot.enticing.log.ComponentType
-import cz.vutbr.fit.knot.enticing.management.managementservice.dto.ComponentInfo
 import java.time.LocalDateTime
 import javax.persistence.*
 import javax.validation.constraints.Positive
 
-enum class ComponentStatus {
-    ALIVE,
-    DEAD
-}
 
-fun ComponentEntity.toComponentInfo() = ComponentInfo(id, server.id, server.address, port, type, lastHeartbeat, status)
+fun ComponentEntity.toComponentInfo() = ExtendedComponentInfo(id, server.id, server.address, port, type, lastHeartbeat, status)
 
 @Entity
 @Table(uniqueConstraints = [UniqueConstraint(name = "one component at one address", columnNames = ["server_id", "port"])])
@@ -30,7 +27,7 @@ data class ComponentEntity(
         @field:OneToMany(mappedBy = "component")
         var perfLog: List<PerfEntity>,
         @Enumerated(EnumType.STRING)
-        var status: ComponentStatus = ComponentStatus.ALIVE,
+        var status: ComponentStatus = ComponentStatus.RUNNING,
         /**
          * Since it is a set, be careful to set component ids before inserting
          */

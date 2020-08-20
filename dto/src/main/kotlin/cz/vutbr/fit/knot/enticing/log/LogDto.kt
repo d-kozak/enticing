@@ -37,6 +37,7 @@ data class LogDto(
 
 @Cleanup("seems like this enum should be located elsewhere - probably closer to the config dsl?")
 enum class ComponentType {
+    MANAGEMENT_SERVER,
     WEBSERVER,
     INDEX_SERVER,
     INDEX_BUILDER,

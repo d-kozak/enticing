@@ -1,12 +1,12 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.integration
 
+import cz.vutbr.fit.knot.enticing.dto.ComponentStatus
+import cz.vutbr.fit.knot.enticing.dto.ExtendedComponentInfo
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.HeartbeatDto
 import cz.vutbr.fit.knot.enticing.management.managementservice.apiBasePath
-import cz.vutbr.fit.knot.enticing.management.managementservice.dto.ComponentInfo
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.ServerInfo
-import cz.vutbr.fit.knot.enticing.management.managementservice.entity.ComponentStatus
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toComponentInfo
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toServerInfo
 import cz.vutbr.fit.knot.enticing.management.managementservice.extractPaginatedItems
@@ -56,9 +56,9 @@ class ServerInfoTests {
     private val serverInfo = ServerInfo(1, "athena10.fit.vutbr.cz", 12, 6_000, null)
 
     private val timestamp = LocalDateTime.now()
-    private val componentOne = ComponentInfo(2, 1, "athena10.fit.vutbr.cz", 8080, ComponentType.WEBSERVER, timestamp, ComponentStatus.ALIVE)
+    private val componentOne = ExtendedComponentInfo(2, 1, "athena10.fit.vutbr.cz", 8080, ComponentType.WEBSERVER, timestamp, ComponentStatus.RUNNING)
     private val timestamp2 = LocalDateTime.now()
-    private val componentTwo = ComponentInfo(3, 1, "athena10.fit.vutbr.cz", 5627, ComponentType.INDEX_SERVER, timestamp2, ComponentStatus.ALIVE)
+    private val componentTwo = ExtendedComponentInfo(3, 1, "athena10.fit.vutbr.cz", 5627, ComponentType.INDEX_SERVER, timestamp2, ComponentStatus.RUNNING)
 
     @BeforeAll
     fun `register server and component`() {
@@ -156,7 +156,7 @@ class ServerInfoTests {
     fun `two components should be available`() {
         val components = mvc.perform(get("$apiBasePath/server/1/component"))
                 .andExpect(status().isOk)
-                .extractPaginatedItems<ComponentInfo>()
+                .extractPaginatedItems<ExtendedComponentInfo>()
         assertThat(components.map { it.id }).containsExactlyInAnyOrder(componentOne.id, componentTwo.id)
     }
 }

@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.dto
 
+import cz.vutbr.fit.knot.enticing.dto.ExtendedComponentInfo
 import cz.vutbr.fit.knot.enticing.log.LogDto
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.CommandDto
 
@@ -19,7 +20,7 @@ data class DashboardServersInfo(
 
 data class DashboardComponentsInfo(
         val total: Int,
-        val unresponsive: List<ComponentInfo>
+        val unresponsive: List<ExtendedComponentInfo>
 )
 
 data class DashboardLogsInfo(

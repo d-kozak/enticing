@@ -1,17 +1,27 @@
 import {PaginatedCollection} from "./pagination";
 import {LogDto} from "./LogDto";
 
+export interface BasicComponentInfo {
+    id: number,
+    serverAddress: string,
+    port: number,
+    type: ComponentKeys
+}
+
 export interface ComponentInfo {
     id: string,
     serverId: string,
     serverAddress: string,
     port: number,
     type: ComponentKeys,
-    lastHeartbeat: Date
+    lastHeartbeat: Date,
+    status: ComponentStatus,
 
     // this HAS to be initialized in the frontend
     logs: PaginatedCollection<LogDto>
 }
+
+export type ComponentStatus = "RUNNING" | "DEAD";
 
 export enum ComponentType {
     WEBSERVER,

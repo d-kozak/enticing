@@ -1,12 +1,15 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.dto
 
-import cz.vutbr.fit.knot.enticing.dto.ComponentAddress
+import cz.vutbr.fit.knot.enticing.dto.BasicComponentInfo
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
+import cz.vutbr.fit.knot.enticing.dto.utils.toDto
 import cz.vutbr.fit.knot.enticing.management.command.ManagementCommand
 import cz.vutbr.fit.knot.enticing.management.command.concrete.LocalBuildCommand
 import cz.vutbr.fit.knot.enticing.management.managementservice.service.ComponentService
 import cz.vutbr.fit.knot.enticing.management.managementservice.service.CorpusService
-import cz.vutbr.fit.knot.enticing.management.shell.*
+import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
+import cz.vutbr.fit.knot.enticing.management.shell.killComponent
+import cz.vutbr.fit.knot.enticing.management.shell.startComponent
 import kotlinx.coroutines.CoroutineScope
 
 data class CommandRequest(
@@ -25,12 +28,10 @@ typealias CommandFactory = (String, EnticingConfiguration, CorpusService, Compon
 
 enum class CommandType(private val factory: CommandFactory) {
     BUILD(localBuildCommandFactory),
-    START_INDEX_SERVER(startIndexServerCommandFactory),
-    KILL_INDEX_SERVER(killIndexServerCommandFactory),
-    START_WEBSERVER(startWebserverCommandFactory),
-    KILL_WEBSERVER(killWebserverCommandFactory),
-    START_MANAGEMENT_SERVER(startManagementServerCommandFactory),
-    KILL_MANAGEMENT_SERVER(killManagementServerCommandFactory);
+    ADD_COMPONENT(addComponentCommandFactory),
+    START_COMPONENT(addComponentCommandFactory),
+    KILL_COMPONENT(killComponentCommandFactory),
+    REMOVE_COMPONENT(removeComponentCommandFactory);
 
     fun init(id: String, configuration: EnticingConfiguration, corpusService: CorpusService, componentService: ComponentService, args: String): ManagementCommand = factory(id, configuration, corpusService, componentService, args)
 }
@@ -40,56 +41,33 @@ private val localBuildCommandFactory: CommandFactory = { _, configuration, _, _,
     LocalBuildCommand(args, configuration.localHome)
 }
 
-private val startIndexServerCommandFactory: CommandFactory = { _, configuration, _, _, args ->
+private val addComponentCommandFactory: CommandFactory = { _, configuration, _, _, args ->
+    val component = args.toDto<BasicComponentInfo>()
     object : ManagementCommand() {
         override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) {
-            val address = ComponentAddress.parse(args)
-            executor.startIndexServer(address.url, configuration.deploymentConfiguration.repository, configuration.deploymentConfiguration.configurationScript, address.port)
+            executor.startComponent(component, configuration.deploymentConfiguration)
         }
     }
 }
 
-private val killIndexServerCommandFactory: CommandFactory = { _, _, _, _, args ->
+private val killComponentCommandFactory: CommandFactory = { _, _, _, _, args ->
+    val component = args.toDto<BasicComponentInfo>()
     object : ManagementCommand() {
         override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) {
-            val address = ComponentAddress.parse(args)
-            executor.killIndexServer(address.url)
+            executor.killComponent(component)
         }
     }
 }
 
-private val startWebserverCommandFactory: CommandFactory = { _, configuration, _, _, args ->
+private val removeComponentCommandFactory: CommandFactory = { _, _, _, componentService, args ->
+    val component = args.toDto<BasicComponentInfo>()
     object : ManagementCommand() {
         override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) {
-            val address = ComponentAddress.parse(args)
-            executor.startWebserver(address.url, configuration.deploymentConfiguration.repository, configuration.deploymentConfiguration.configurationScript, address.port)
+            executor.killComponent(component)
         }
-    }
-}
 
-private val killWebserverCommandFactory: CommandFactory = { _, _, _, _, args ->
-    object : ManagementCommand() {
-        override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) {
-            val address = ComponentAddress.parse(args)
-            executor.killWebserver(address.url)
-        }
-    }
-}
-
-private val startManagementServerCommandFactory: CommandFactory = { _, configuration, _, _, args ->
-    object : ManagementCommand() {
-        override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) {
-            val address = ComponentAddress.parse(args)
-            executor.startManagementService(address.url, configuration.deploymentConfiguration.repository, configuration.deploymentConfiguration.configurationScript, address.port)
-        }
-    }
-}
-
-private val killManagementServerCommandFactory: CommandFactory = { _, _, _, _, args ->
-    object : ManagementCommand() {
-        override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) {
-            val address = ComponentAddress.parse(args)
-            executor.killManagementService(address.url)
+        override fun onSuccess() {
+            componentService.removeComponent(component.id)
         }
     }
 }

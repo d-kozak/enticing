@@ -57,7 +57,7 @@ class ServerInfoService(
         check(server != null) { "no server with id $serverId found" }
         serverStatusRepository.deleteByServer(server)
         for (component in server.components) {
-            componentService.deleteComponent(component)
+            componentService.removeComponent(component.id)
         }
         serverInfoRepository.delete(server)
         return server.toServerInfo(null)
