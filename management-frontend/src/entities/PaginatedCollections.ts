@@ -17,6 +17,14 @@ function processElement<T extends WithId>(elem: T, options: Partial<AddNewItemOp
 
 function add<T extends WithId>(collection: PaginatedCollection<T>, item: T, options: Partial<AddNewItemOptions<T>> = {}) {
     processElement(item, options);
+    if (options.nestedCollectionName) {
+        const prev = collection.elements[item.id];
+        // @ts-ignore
+        if (prev) {
+            // @ts-ignore
+            item[options.nestedCollectionName] = prev[options.nestedCollectionName]
+        }
+    }
     collection.elements[item.id] = item;
     collection.totalElements++;
 }
