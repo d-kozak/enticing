@@ -18,12 +18,15 @@ fun runManagementCli(args: Array<String>) {
     val loggerFactory = configuration.loggingConfiguration.loggerFactoryFor("management-cli")
     val logger = loggerFactory.namedLogger("Management-cli")
     val pool = Executors.newFixedThreadPool(4)
-    val scope = CoroutineScope(pool.asCoroutineDispatcher())
+    val dispatcher = pool.asCoroutineDispatcher()
+    val scope = CoroutineScope(dispatcher)
     val engine = ManagementEngine(configuration, scope, loggerFactory)
-    logger.measure("executeCliApp", args.toString()) {
-        runBlocking(scope.coroutineContext) {
-            engine.use {
-                engine.runCliApp(args, configuration, loggerFactory)
+    dispatcher.use {
+        engine.use {
+            logger.measure("executeCliApp", args.toString()) {
+                runBlocking(scope.coroutineContext) {
+                    engine.runCliApp(args, configuration, loggerFactory)
+                }
             }
         }
     }
