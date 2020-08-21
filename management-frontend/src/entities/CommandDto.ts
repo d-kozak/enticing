@@ -1,5 +1,6 @@
 // todo dates have to be parsed manually
-import {ComponentKeys} from "./ComponentInfo";
+
+import {BasicComponentInfo} from "./ComponentInfo";
 
 export interface CommandDto {
     id: string
@@ -13,38 +14,11 @@ export interface CommandDto {
 }
 
 export interface CommandRequest {
-    type: CommandKeys,
-    arguments: string
+    type: CommandType,
+    arguments: string | BasicComponentInfo
 }
 
-export enum CommandType {
-    ADD_INDEX_SERVER,
-    REMOVE_INDEX_SERVER,
-    START_INDEX_SERVER,
-    KILL_INDEX_SERVER,
-    ADD_WEBSERVER,
-    REMOVE_WEBSERVER,
-    START_WEBSERVER,
-    KILL_WEBSERVER,
-    ADD_MANAGEMENT_SERVER,
-    REMOVE_MANAGEMENT_SERVER,
-    START_MANAGEMENT_SERVER,
-    KILL_MANAGEMENT_SERVER,
-    BUILD
-}
-
-export type CommandKeys = keyof typeof CommandType;
-
-export function startCommandFor(type: ComponentKeys): CommandKeys {
-    switch (type) {
-        case "WEBSERVER":
-            return CommandType[CommandType.START_WEBSERVER] as CommandKeys;
-        case "INDEX_SERVER":
-            return CommandType[CommandType.START_INDEX_SERVER] as CommandKeys;
-        default:
-            throw new Error(`wrong component type ${type}`);
-    }
-}
+export type CommandType = "ADD_COMPONENT" | "START_COMPONENT" | "KILL_COMPONENT" | "REMOVE_COMPONENT" | "BUILD"
 
 
 export enum CommandState {

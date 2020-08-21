@@ -2,10 +2,10 @@ import {PaginatedCollection} from "./pagination";
 import {LogDto} from "./LogDto";
 
 export interface BasicComponentInfo {
-    id: number,
+    id: string,
     serverAddress: string,
     port: number,
-    type: ComponentKeys
+    type: ComponentType
 }
 
 export interface ComponentInfo {
@@ -13,7 +13,7 @@ export interface ComponentInfo {
     serverId: string,
     serverAddress: string,
     port: number,
-    type: ComponentKeys,
+    type: ComponentType,
     lastHeartbeat: Date,
     status: ComponentStatus,
 
@@ -23,14 +23,7 @@ export interface ComponentInfo {
 
 export type ComponentStatus = "RUNNING" | "DEAD";
 
-export enum ComponentType {
-    WEBSERVER,
-    INDEX_SERVER,
-    INDEX_BUILDER,
-    CONSOLE_CLIENT
-}
-
-export type ComponentKeys = keyof typeof ComponentType;
+export type ComponentType = "WEBSERVER" | "INDEX_SERVER" | "INDEX_BUILDER" | "CONSOLE_CLIENT"
 
 export function isComponentProbablyDead(component: ComponentInfo, limitSecond: number = 30): boolean {
     const prev = new Date(Date.now() - limitSecond * 1000);

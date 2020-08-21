@@ -15,8 +15,9 @@ import {FormControl, InputLabel, LinearProgress, MenuItem, Select} from "@materi
 import {makeStyles} from "@material-ui/core/styles";
 import {postRequest} from "../../../network/requests";
 import {requestAllServers} from "../../../reducers/serversReducer";
-import {CommandDto, CommandKeys, CommandRequest, CommandType} from "../../../entities/CommandDto";
+import {CommandDto, CommandRequest} from "../../../entities/CommandDto";
 import {useInterval} from "../../../utils/useInterval";
+import {ComponentType} from "../../../entities/ComponentInfo";
 
 type AddNewComponentDialogProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {
     predefinedServer?: ServerInfo
@@ -45,7 +46,7 @@ const AddNewComponentDialog = (props: AddNewComponentDialogProps) => {
 
     const classes = useStyles();
 
-    const [commandType, setCommandType] = useState<CommandType>(CommandType.START_INDEX_SERVER);
+    const [componentType, setComponentType] = useState<ComponentType>("INDEX_SERVER");
 
     const [server, setServer] = useState(predefinedServer)
 
@@ -92,8 +93,13 @@ const AddNewComponentDialog = (props: AddNewComponentDialogProps) => {
                             }
                             setProgress(true)
                             const req: CommandRequest = {
-                                type: CommandType[commandType] as CommandKeys,
-                                arguments: `${server.address}:${port}`
+                                type: "START_COMPONENT",
+                                arguments: {
+                                    id: "0",
+                                    type: componentType,
+                                    serverAddress: server.address,
+                                    port
+                                }
                             }
                             postRequest<CommandDto>("/command", req)
                                 .then(server => {
@@ -129,11 +135,11 @@ const AddNewComponentDialog = (props: AddNewComponentDialogProps) => {
                                 <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
-                                    value={commandType}
-                                    onChange={(e) => setCommandType(e.target.value as number)}
+                                    value={componentType}
+                                    onChange={(e) => setComponentType(e.target.value as ComponentType)}
                                 >
-                                    <MenuItem value={CommandType.START_INDEX_SERVER}>INDEX_SERVER</MenuItem>
-                                    <MenuItem value={CommandType.START_WEBSERVER}>WEBSERVER</MenuItem>
+                                    <MenuItem value="INDEX_SERVER">Index server</MenuItem>
+                                    <MenuItem value="WEBSERVER">Webserver</MenuItem>
                                 </Select>
                             </FormControl>
 

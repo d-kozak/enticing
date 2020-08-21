@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
 import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
-import {deleteRequest} from "../../../network/requests";
+import {postRequest} from "../../../network/requests";
 import {openSnackbarAction} from "../../../reducers/snackbarReducer";
 import {useHistory} from "react-router";
 import ConfirmationDialog from "../../dialog/ConfirmationDialog";
 import {ComponentInfo} from "../../../entities/ComponentInfo";
+import {CommandRequest} from "../../../entities/CommandDto";
 
 export type KillComponentDialogProps = typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps> & { component: ComponentInfo }
@@ -17,7 +18,16 @@ const KillComponentDialog = (props: KillComponentDialogProps) => {
     const componentDesc = `${component.type}:${component.serverAddress}:${component.port}`;
 
     const killComponentRequest = () => {
-        deleteRequest(`/component/${component.id}`)
+        const req: CommandRequest = {
+            type: "KILL_COMPONENT",
+            arguments: {
+                id: component.id,
+                serverAddress: component.serverAddress,
+                port: component.port,
+                type: component.type
+            }
+        }
+        postRequest("/command", req)
             .then(() => {
                 openSnackbarAction(`Request submitted`)
                 history.goBack()

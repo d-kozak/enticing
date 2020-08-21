@@ -7,7 +7,7 @@ import {ApplicationState} from "../../../ApplicationState";
 import {connect} from "react-redux";
 import {openSnackbarAction} from "../../../reducers/snackbarReducer";
 import ConfirmationDialog from "../../dialog/ConfirmationDialog";
-import {CommandDto, CommandRequest, startCommandFor} from "../../../entities/CommandDto";
+import {CommandDto, CommandRequest} from "../../../entities/CommandDto";
 
 
 export type PingComponentButtonProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {
@@ -32,8 +32,13 @@ const PingComponentButton = ({component, openSnackbarAction}: PingComponentButto
     const rebootComponent = () => {
 
         const req: CommandRequest = {
-            type: startCommandFor(component.type),
-            arguments: `${component.serverAddress}:${component.port}`
+            type: "START_COMPONENT",
+            arguments: {
+                id: component.id,
+                port: component.port,
+                serverAddress: component.serverAddress,
+                type: component.type
+            }
         };
         postRequest<CommandDto>("/command", req)
             .then(dto => {
