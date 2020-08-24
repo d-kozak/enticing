@@ -41,8 +41,14 @@ echo "Triggering local build"
 echo "Triggering tests"
 ./gradlew test --info || error "Tests failed"
 echo "Tests passed"
-echo "Build was successful, resulting jars are available at $build_dir/libs"
-ls libs
 
+deploy_dir=$ENTICING_HOME/builds/$build_id/
+cd lib
+mkdir -p $deploy_dir || error "Failed to create deploy dir $deploy_dir"
+cp *.jar  $deploy_dir
+echo "Resulting jars are available at $deploy_dir"
+ls $deploy_dir
+
+rm -rf $build_dir
 
 

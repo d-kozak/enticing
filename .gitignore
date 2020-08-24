@@ -1,3 +1,4 @@
+builds/**
 logs/**
 data/indexed/**
 data/integration/*/indexed/**
