@@ -9,6 +9,7 @@ data class CorpusEntity(
         var id: Long,
         @Column(unique = true)
         var name: String,
+        var running: Boolean,
         /**
          * Since it is a set, be careful to set componentEntity ids before inserting
          */

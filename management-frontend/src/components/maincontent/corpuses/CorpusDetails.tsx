@@ -9,6 +9,8 @@ import {requestCorpus} from "../../../reducers/corpusesReducer";
 import MaintainerOnly from "../../protectors/MaintainerOnly";
 import AddOrEditCorpusDialog from "./AddOrEditCorpusDialog";
 import CorpusComponentsTable from "./CorpusComponentsTable";
+import StartCorpusDialog from "./StartCorpusDialog";
+import KillCorpusDialog from "./KillCorpusDialog";
 
 
 export type CorpusDetailsProps = typeof mapDispatchToProps
@@ -40,6 +42,9 @@ const CorpusDetails = (props: CorpusDetailsProps) => {
             <List component="nav" subheader={<ListSubheader component="div">Actions</ListSubheader>}>
                 <ListItem>
                     <AddOrEditCorpusDialog editedCorpus={corpus}/>
+                </ListItem>
+                <ListItem>
+                    {corpus.running ? <KillCorpusDialog corpus={corpus}/> : <StartCorpusDialog corpus={corpus}/>}
                 </ListItem>
             </List>
             <Divider/>

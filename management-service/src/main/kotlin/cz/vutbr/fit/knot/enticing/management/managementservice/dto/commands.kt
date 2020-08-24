@@ -31,7 +31,9 @@ enum class CommandType(private val factory: CommandFactory) {
     ADD_COMPONENT(addComponentCommandFactory),
     START_COMPONENT(addComponentCommandFactory),
     KILL_COMPONENT(killComponentCommandFactory),
-    REMOVE_COMPONENT(removeComponentCommandFactory);
+    REMOVE_COMPONENT(removeComponentCommandFactory),
+    START_CORPUS(startCorpusCommandFactory),
+    KILL_CORPUS(killCorpusCommandFactory);
 
     fun init(id: String, configuration: EnticingConfiguration, corpusService: CorpusService, componentService: ComponentService, args: String): ManagementCommand = factory(id, configuration, corpusService, componentService, args)
 }
@@ -68,6 +70,36 @@ private val removeComponentCommandFactory: CommandFactory = { _, _, _, component
 
         override fun onSuccess() {
             componentService.removeComponent(component.id)
+        }
+    }
+}
+
+private val startCorpusCommandFactory: CommandFactory = { _, configuration, corpusService, _, args ->
+    val corpusId = args.toLong()
+    val components = corpusService.getComponentsFor(corpusId)
+    object : ManagementCommand() {
+        override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) {
+            for (component in components)
+                executor.startComponent(component, configuration.deploymentConfiguration)
+        }
+
+        override fun onSuccess() {
+            corpusService.markRunning(corpusId, true)
+        }
+    }
+}
+
+private val killCorpusCommandFactory: CommandFactory = { _, _, corpusService, _, args ->
+    val corpusId = args.toLong()
+    val components = corpusService.getComponentsFor(corpusId)
+    object : ManagementCommand() {
+        override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) {
+            for (component in components)
+                executor.killComponent(component)
+        }
+
+        override fun onSuccess() {
+            corpusService.markRunning(corpusId, false)
         }
     }
 }

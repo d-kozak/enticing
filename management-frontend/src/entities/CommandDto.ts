@@ -18,7 +18,14 @@ export interface CommandRequest {
     arguments: string | BasicComponentInfo
 }
 
-export type CommandType = "ADD_COMPONENT" | "START_COMPONENT" | "KILL_COMPONENT" | "REMOVE_COMPONENT" | "BUILD"
+export type CommandType =
+    "ADD_COMPONENT"
+    | "START_COMPONENT"
+    | "KILL_COMPONENT"
+    | "REMOVE_COMPONENT"
+    | "BUILD"
+    | "START_CORPUS"
+    | "KILL_CORPUS"
 
 
 export enum CommandState {

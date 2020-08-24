@@ -98,7 +98,7 @@ class DebugInitRunner(
         perfRepository.saveAll(perfLogs)
 
         // ids of components have to be set before inserting into set
-        val corpus = CorpusEntity(0, "wiki-19", components.toMutableSet())
+        val corpus = CorpusEntity(0, "wiki-19", false, components.toMutableSet())
         corpusRepository.save(corpus)
         for (component in components)
             component.corpuses.add(corpus)

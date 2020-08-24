@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.entity
 
+import cz.vutbr.fit.knot.enticing.dto.BasicComponentInfo
 import cz.vutbr.fit.knot.enticing.dto.ComponentStatus
 import cz.vutbr.fit.knot.enticing.dto.ExtendedComponentInfo
 import cz.vutbr.fit.knot.enticing.log.ComponentType
@@ -9,6 +10,7 @@ import javax.validation.constraints.Positive
 
 
 fun ComponentEntity.toComponentInfo() = ExtendedComponentInfo(id, server.id, server.address, port, type, lastHeartbeat, status)
+fun ComponentEntity.toBasicComponentInfo() = BasicComponentInfo(id, server.address, port, type)
 
 @Entity
 @Table(uniqueConstraints = [UniqueConstraint(name = "one component at one address", columnNames = ["server_id", "port"])])

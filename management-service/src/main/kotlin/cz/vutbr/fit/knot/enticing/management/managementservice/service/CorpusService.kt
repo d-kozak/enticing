@@ -1,8 +1,10 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.service
 
+import cz.vutbr.fit.knot.enticing.dto.BasicComponentInfo
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.Corpus
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.toCorpus
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.CorpusEntity
+import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toBasicComponentInfo
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ComponentRepository
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.CorpusRepository
 import org.springframework.data.domain.Pageable
@@ -28,7 +30,7 @@ class CorpusService(
             throw IllegalArgumentException("No components with ids $missing")
         }
         val excludedComponents = componentRepository.findByIdNotIn(corpus.components)
-        val corpusEntity = corpusRepository.save(CorpusEntity(corpus.id, corpus.name, includedComponents.toMutableSet()))
+        val corpusEntity = corpusRepository.save(CorpusEntity(corpus.id, corpus.name, false, includedComponents.toMutableSet()))
         for (component in includedComponents)
             component.corpuses.add(corpusEntity)
         for (component in excludedComponents)
@@ -56,4 +58,16 @@ class CorpusService(
     }
 
     fun deleteById(id: Long) = corpusRepository.deleteById(id)
+
+    fun getComponentsFor(corpusId: Long): List<BasicComponentInfo> {
+        val corpus = corpusRepository.findByIdOrNull(corpusId)
+                ?: throw IllegalArgumentException("No corpus with id $corpusId found")
+        return corpus.components.map { it.toBasicComponentInfo() }
+    }
+
+    fun markRunning(corpusId: Long, running: Boolean) {
+        val corpus = corpusRepository.findByIdOrNull(corpusId)
+                ?: throw IllegalArgumentException("No corpus with id $corpusId found")
+        corpus.running = running
+    }
 }
