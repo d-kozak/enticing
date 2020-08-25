@@ -5,6 +5,7 @@ import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
 import cz.vutbr.fit.knot.enticing.dto.utils.toDto
 import cz.vutbr.fit.knot.enticing.management.command.ManagementCommand
 import cz.vutbr.fit.knot.enticing.management.command.concrete.LocalBuildCommand
+import cz.vutbr.fit.knot.enticing.management.managementservice.service.BuildService
 import cz.vutbr.fit.knot.enticing.management.managementservice.service.ComponentService
 import cz.vutbr.fit.knot.enticing.management.managementservice.service.CorpusService
 import cz.vutbr.fit.knot.enticing.management.shell.ShellCommandExecutor
@@ -24,7 +25,16 @@ enum class CommandState {
     FAILED
 }
 
-typealias CommandFactory = (String, EnticingConfiguration, CorpusService, ComponentService, String) -> ManagementCommand
+class CommandContext(
+        val id: String,
+        val configuration: EnticingConfiguration,
+        val corpusService: CorpusService,
+        val componentService: ComponentService,
+        val buildService: BuildService,
+        val args: String
+)
+
+typealias CommandFactory = CommandContext.() -> ManagementCommand
 
 enum class CommandType(private val factory: CommandFactory) {
     BUILD(localBuildCommandFactory),
@@ -35,15 +45,19 @@ enum class CommandType(private val factory: CommandFactory) {
     START_CORPUS(startCorpusCommandFactory),
     KILL_CORPUS(killCorpusCommandFactory);
 
-    fun init(id: String, configuration: EnticingConfiguration, corpusService: CorpusService, componentService: ComponentService, args: String): ManagementCommand = factory(id, configuration, corpusService, componentService, args)
+    fun init(id: String, configuration: EnticingConfiguration, corpusService: CorpusService, componentService: ComponentService, buildService: BuildService, args: String): ManagementCommand = CommandContext(id, configuration, corpusService, componentService, buildService, args).factory()
 }
 
 
-private val localBuildCommandFactory: CommandFactory = { _, configuration, _, _, args ->
-    LocalBuildCommand(args, configuration.localHome)
+private val localBuildCommandFactory: CommandFactory = {
+    object : LocalBuildCommand(args, configuration.localHome) {
+        override fun onSuccess() {
+            buildService.save(args)
+        }
+    }
 }
 
-private val addComponentCommandFactory: CommandFactory = { _, configuration, _, _, args ->
+private val addComponentCommandFactory: CommandFactory = {
     val component = args.toDto<BasicComponentInfo>()
     object : ManagementCommand() {
         override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) {
@@ -52,7 +66,7 @@ private val addComponentCommandFactory: CommandFactory = { _, configuration, _, 
     }
 }
 
-private val killComponentCommandFactory: CommandFactory = { _, _, _, _, args ->
+private val killComponentCommandFactory: CommandFactory = {
     val component = args.toDto<BasicComponentInfo>()
     object : ManagementCommand() {
         override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) {
@@ -61,7 +75,7 @@ private val killComponentCommandFactory: CommandFactory = { _, _, _, _, args ->
     }
 }
 
-private val removeComponentCommandFactory: CommandFactory = { _, _, _, componentService, args ->
+private val removeComponentCommandFactory: CommandFactory = {
     val component = args.toDto<BasicComponentInfo>()
     object : ManagementCommand() {
         override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) {
@@ -74,7 +88,7 @@ private val removeComponentCommandFactory: CommandFactory = { _, _, _, component
     }
 }
 
-private val startCorpusCommandFactory: CommandFactory = { _, configuration, corpusService, _, args ->
+private val startCorpusCommandFactory: CommandFactory = {
     val corpusId = args.toLong()
     val components = corpusService.getComponentsFor(corpusId)
     object : ManagementCommand() {
@@ -89,7 +103,7 @@ private val startCorpusCommandFactory: CommandFactory = { _, configuration, corp
     }
 }
 
-private val killCorpusCommandFactory: CommandFactory = { _, _, corpusService, _, args ->
+private val killCorpusCommandFactory: CommandFactory = {
     val corpusId = args.toLong()
     val components = corpusService.getComponentsFor(corpusId)
     object : ManagementCommand() {

@@ -32,6 +32,7 @@ class CommandService(
         @param:Lazy
         private val componentService: ComponentService,
         private val corpusService: CorpusService,
+        private val buildService: BuildService,
         private val userService: ManagementUserService,
         private val userRepository: UserRepository,
         private val loggerFactory: LoggerFactory,
@@ -106,7 +107,7 @@ class CommandService(
             val logFile = commandLogDirectory.resolve("${entity.id}.log").toString()
             val executor = ShellCommandExecutor(configuration, scope, loggerFactory, logFile)
             executor.use {
-                val commandDto = entity.type.init(entity.id.toString(), configuration, corpusService, componentService, entity.arguments)
+                val commandDto = entity.type.init(entity.id.toString(), configuration, corpusService, componentService, buildService, entity.arguments)
                 engine.executeCommand(commandDto, executor)
             }
             entity.finishedAt = LocalDateTime.now()
