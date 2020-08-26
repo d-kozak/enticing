@@ -1,6 +1,8 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.dto
 
+import com.fasterxml.jackson.databind.JsonNode
 import cz.vutbr.fit.knot.enticing.dto.BasicComponentInfo
+import cz.vutbr.fit.knot.enticing.dto.Status
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
 import cz.vutbr.fit.knot.enticing.dto.utils.toDto
 import cz.vutbr.fit.knot.enticing.management.command.ManagementCommand
@@ -15,7 +17,7 @@ import kotlinx.coroutines.CoroutineScope
 
 data class CommandRequest(
         val type: CommandType,
-        val arguments: String
+        val arguments: JsonNode
 )
 
 enum class CommandState {
@@ -38,8 +40,7 @@ typealias CommandFactory = CommandContext.() -> ManagementCommand
 
 enum class CommandType(private val factory: CommandFactory) {
     BUILD(localBuildCommandFactory),
-    ADD_COMPONENT(addComponentCommandFactory),
-    START_COMPONENT(addComponentCommandFactory),
+    START_COMPONENT(startComponentCommandFactory),
     KILL_COMPONENT(killComponentCommandFactory),
     REMOVE_COMPONENT(removeComponentCommandFactory),
     START_CORPUS(startCorpusCommandFactory),
@@ -57,20 +58,38 @@ private val localBuildCommandFactory: CommandFactory = {
     }
 }
 
-private val addComponentCommandFactory: CommandFactory = {
+private val startComponentCommandFactory: CommandFactory = {
     val component = args.toDto<BasicComponentInfo>()
     object : ManagementCommand() {
+
+        override fun beforeStart() {
+            componentService.update(component.id) {
+                status = Status.STARTING
+            }
+        }
+
         override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) {
             executor.startComponent(component, configuration.deploymentConfiguration)
         }
+
+        override fun onFail(ex: Exception) {
+            componentService.update(component.id) {
+                status = Status.DEAD
+            }
+        }
     }
 }
-
 private val killComponentCommandFactory: CommandFactory = {
     val component = args.toDto<BasicComponentInfo>()
     object : ManagementCommand() {
         override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) {
             executor.killComponent(component)
+        }
+
+        override fun onSuccess() {
+            componentService.update(component.id) {
+                status = Status.DEAD
+            }
         }
     }
 }
@@ -92,13 +111,34 @@ private val startCorpusCommandFactory: CommandFactory = {
     val corpusId = args.toLong()
     val components = corpusService.getComponentsFor(corpusId)
     object : ManagementCommand() {
+
+        override fun beforeStart() {
+            corpusService.update(corpusId) {
+                status = Status.RUNNING
+            }
+        }
+
         override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) {
             for (component in components)
-                executor.startComponent(component, configuration.deploymentConfiguration)
+                if (component.status == Status.DEAD)
+                    executor.startComponent(component, configuration.deploymentConfiguration)
+        }
+
+        override fun onFail(ex: Exception) {
+            corpusService.update(corpusId) {
+                status = Status.DEAD
+            }
         }
 
         override fun onSuccess() {
-            corpusService.markRunning(corpusId, true)
+            corpusService.update(corpusId) {
+                status = Status.RUNNING
+            }
+            for (component in components) {
+                componentService.update(component.id) {
+                    status = Status.RUNNING
+                }
+            }
         }
     }
 }
@@ -109,11 +149,19 @@ private val killCorpusCommandFactory: CommandFactory = {
     object : ManagementCommand() {
         override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) {
             for (component in components)
-                executor.killComponent(component)
+                if (component.status == Status.RUNNING)
+                    executor.killComponent(component)
         }
 
         override fun onSuccess() {
-            corpusService.markRunning(corpusId, false)
+            corpusService.update(corpusId) {
+                status = Status.DEAD
+            }
+            for (component in components) {
+                componentService.update(component.id) {
+                    status = Status.DEAD
+                }
+            }
         }
     }
 }

@@ -35,6 +35,9 @@ const CorpusesTable = (props: CorpusesTableProps) => {
         StringColumn("name", "Corpus name", {
             sortId: "name",
         }),
+        StringColumn("status", "Status", {
+            sortId: "status",
+        }),
         CustomColumn<Corpus, undefined>("components", "Components",
             (prop, corpus) => Object.values(corpus.components.elements).length
             , {sortId: "components"}),

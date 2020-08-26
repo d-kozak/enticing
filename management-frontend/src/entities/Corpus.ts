@@ -1,10 +1,10 @@
 import {PaginatedCollection} from "./pagination";
-import {ComponentInfo} from "./ComponentInfo";
+import {ComponentInfo, Status} from "./ComponentInfo";
 
 export interface Corpus {
     id: string,
     name: string,
-    running: boolean,
+    status: Status,
 
     // this HAS to be initialized in the frontend
     components: PaginatedCollection<ComponentInfo>

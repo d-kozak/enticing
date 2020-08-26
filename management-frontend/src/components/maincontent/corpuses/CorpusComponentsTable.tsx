@@ -53,6 +53,9 @@ const CorpusComponentsTable = (props: CorpusComponentsTableProps) => {
     const columns: Array<PaginatedTableColumn<any, any>> = [
         IntColumn("port", "Port", {sortId: "port"}),
         StringColumn("type", "Component Type", {sortId: "type"}),
+        StringColumn("status", "Status", {
+            sortId: "status"
+        }),
         LastHeartbeatColumn("lastHeartbeat", "Last heartbeat", {sortId: "lastHeartbeat"}),
         CustomColumn<ComponentInfo, undefined>("componentDetails", "Component Details",
             (prop, component) => <Tooltip title="Component details">

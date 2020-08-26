@@ -1,8 +1,8 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.entity
 
 import cz.vutbr.fit.knot.enticing.dto.BasicComponentInfo
-import cz.vutbr.fit.knot.enticing.dto.ComponentStatus
 import cz.vutbr.fit.knot.enticing.dto.ExtendedComponentInfo
+import cz.vutbr.fit.knot.enticing.dto.Status
 import cz.vutbr.fit.knot.enticing.log.ComponentType
 import java.time.LocalDateTime
 import javax.persistence.*
@@ -23,13 +23,13 @@ data class ComponentEntity(
         @field:Positive
         var port: Int,
         var type: ComponentType,
-        var lastHeartbeat: LocalDateTime,
+        var lastHeartbeat: LocalDateTime?,
         @field:OneToMany(mappedBy = "component")
         var logs: List<LogEntity>,
         @field:OneToMany(mappedBy = "component")
         var perfLog: List<PerfEntity>,
         @Enumerated(EnumType.STRING)
-        var status: ComponentStatus = ComponentStatus.RUNNING,
+        var status: Status = Status.RUNNING,
         /**
          * Since it is a set, be careful to set component ids before inserting
          */

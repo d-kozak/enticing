@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.debug
 
+import cz.vutbr.fit.knot.enticing.dto.Status
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.LogType
 import cz.vutbr.fit.knot.enticing.log.ComponentType
@@ -98,7 +99,7 @@ class DebugInitRunner(
         perfRepository.saveAll(perfLogs)
 
         // ids of components have to be set before inserting into set
-        val corpus = CorpusEntity(0, "wiki-19", false, components.toMutableSet())
+        val corpus = CorpusEntity(0, "wiki-19", Status.DEAD, components.toMutableSet())
         corpusRepository.save(corpus)
         for (component in components)
             component.corpuses.add(corpus)

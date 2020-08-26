@@ -24,6 +24,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import {postRequest, putRequest} from "../../../network/requests";
 import {useInterval} from "../../../utils/useInterval";
 import {requestAllComponents} from "../../../reducers/componentsReducer";
+import {clearComponentsFromCorpus} from "../../../reducers/corpusesReducer";
 import {Corpus} from "../../../entities/Corpus";
 
 type AddOrEditCorpusDialogProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {
@@ -59,7 +60,7 @@ const AddNewCorpusSchema = Yup.object().shape({
 });
 
 const AddOrEditCorpusDialog = (props: AddOrEditCorpusDialogProps) => {
-    const {requestAllComponents, components, editedCorpus, openSnackbarAction} = props;
+    const {requestAllComponents, clearComponentsFromCorpus, components, editedCorpus, openSnackbarAction} = props;
     const [open, setOpen] = useState(false);
     const [progress, setProgress] = useState(false);
 
@@ -90,7 +91,6 @@ const AddOrEditCorpusDialog = (props: AddOrEditCorpusDialogProps) => {
     };
 
     const handleGlobalSelection = () => {
-        console.log("here");
         if (allSelected) setSelectedComponents([])
         else setSelectedComponents(Object.values(components.elements).map(component => component.id))
     };
@@ -122,6 +122,9 @@ const AddOrEditCorpusDialog = (props: AddOrEditCorpusDialogProps) => {
                                     setOpen(false)
                                     actions.setSubmitting(false)
                                     openSnackbarAction(`Corpus ${name} created`);
+                                    if (!addingNew) {
+                                        clearComponentsFromCorpus(corpus.id);
+                                    }
                                 })
                                 .catch(err => {
                                     setProgress(false)
@@ -166,7 +169,7 @@ const AddOrEditCorpusDialog = (props: AddOrEditCorpusDialogProps) => {
                                     Cancel
                                 </Button>
                                 <Button disabled={isSubmitting} type="submit" color="primary" variant="contained">
-                                    Add
+                                    {addingNew ? "Add" : "Edit"}
                                 </Button>
                             </DialogActions>
                         </Form>}
@@ -180,8 +183,10 @@ const AddOrEditCorpusDialog = (props: AddOrEditCorpusDialogProps) => {
 const mapStateToProps = (state: ApplicationState) => ({
     components: state.components
 });
+
 const mapDispatchToProps = {
     openSnackbarAction,
+    clearComponentsFromCorpus: clearComponentsFromCorpus as (corpusId: string) => void,
     requestAllComponents: requestAllComponents as () => void
 };
 

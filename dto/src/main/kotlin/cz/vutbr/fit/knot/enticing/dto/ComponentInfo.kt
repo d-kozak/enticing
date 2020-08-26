@@ -6,31 +6,39 @@ import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Positive
 import javax.validation.constraints.PositiveOrZero
 
+interface ComponentInfo {
+    val id: Long
+    val serverAddress: String
+    val port: Int
+    val type: ComponentType
+}
+
 data class BasicComponentInfo(
         @field:PositiveOrZero
-        val id: Long,
+        override val id: Long,
         @field:NotBlank
-        val serverAddress: String,
+        override val serverAddress: String,
         @field:Positive
-        val port: Int,
-        val type: ComponentType
-)
+        override val port: Int,
+        override val type: ComponentType
+) : ComponentInfo
 
 data class ExtendedComponentInfo(
         @field:Positive
-        val id: Long,
+        override val id: Long,
         @field:Positive
         val serverId: Long,
         @field:NotBlank
-        val serverAddress: String,
+        override val serverAddress: String,
         @field:Positive
-        val port: Int,
-        val type: ComponentType,
-        val lastHeartbeat: LocalDateTime,
-        val status: ComponentStatus
-)
+        override val port: Int,
+        override val type: ComponentType,
+        val lastHeartbeat: LocalDateTime?,
+        val status: Status
+) : ComponentInfo
 
-enum class ComponentStatus {
+enum class Status {
+    STARTING,
     RUNNING,
     DEAD
 }

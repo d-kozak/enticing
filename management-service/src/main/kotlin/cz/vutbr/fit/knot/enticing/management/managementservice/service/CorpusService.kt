@@ -1,10 +1,12 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.service
 
-import cz.vutbr.fit.knot.enticing.dto.BasicComponentInfo
+import cz.vutbr.fit.knot.enticing.dto.ExtendedComponentInfo
+import cz.vutbr.fit.knot.enticing.dto.Status
+import cz.vutbr.fit.knot.enticing.dto.annotation.Warning
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.Corpus
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.toCorpus
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.CorpusEntity
-import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toBasicComponentInfo
+import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toComponentInfo
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ComponentRepository
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.CorpusRepository
 import org.springframework.data.domain.Pageable
@@ -23,6 +25,7 @@ class CorpusService(
 
     fun getAll(pageable: Pageable) = corpusRepository.findAll(pageable).map { it.toCorpus() }
 
+    @Warning("invalid update of components, fix it")
     fun addOrUpdate(corpus: Corpus): Corpus {
         val includedComponents = componentRepository.findByIdIn(corpus.components)
         if (includedComponents.size != corpus.components.size) {
@@ -30,7 +33,7 @@ class CorpusService(
             throw IllegalArgumentException("No components with ids $missing")
         }
         val excludedComponents = componentRepository.findByIdNotIn(corpus.components)
-        val corpusEntity = corpusRepository.save(CorpusEntity(corpus.id, corpus.name, false, includedComponents.toMutableSet()))
+        val corpusEntity = corpusRepository.save(CorpusEntity(corpus.id, corpus.name, Status.DEAD, includedComponents.toMutableSet()))
         for (component in includedComponents)
             component.corpuses.add(corpusEntity)
         for (component in excludedComponents)
@@ -59,15 +62,15 @@ class CorpusService(
 
     fun deleteById(id: Long) = corpusRepository.deleteById(id)
 
-    fun getComponentsFor(corpusId: Long): List<BasicComponentInfo> {
+    fun getComponentsFor(corpusId: Long): List<ExtendedComponentInfo> {
         val corpus = corpusRepository.findByIdOrNull(corpusId)
                 ?: throw IllegalArgumentException("No corpus with id $corpusId found")
-        return corpus.components.map { it.toBasicComponentInfo() }
+        return corpus.components.map { it.toComponentInfo() }
     }
 
-    fun markRunning(corpusId: Long, running: Boolean) {
+    fun update(corpusId: Long, block: CorpusEntity.() -> Unit) {
         val corpus = corpusRepository.findByIdOrNull(corpusId)
                 ?: throw IllegalArgumentException("No corpus with id $corpusId found")
-        corpus.running = running
+        corpus.block()
     }
 }

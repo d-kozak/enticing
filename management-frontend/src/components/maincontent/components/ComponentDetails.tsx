@@ -12,6 +12,7 @@ import KillComponentDialog from "./KillComponentDialog";
 import MaintainerOnly from "../../protectors/MaintainerOnly";
 import {useInterval} from "../../../utils/useInterval";
 import LastheartbeatInfo from "./LastheartbeatInfo";
+import StartComponentDialog from "./StartComponentDialog";
 
 
 export type ComponentDetailsProps = typeof mapDispatchToProps
@@ -51,6 +52,9 @@ const ComponentDetails = (props: ComponentDetailsProps) => {
             <ListItem>
                 <ListItemText primary={`Type: ${component.type}`}/>
             </ListItem>
+            <ListItem>
+                <ListItemText primary={`Status: ${component.status}`}/>
+            </ListItem>
         </List>
         <Divider/>
         <List component="nav" subheader={<ListSubheader component="div">Last heartbeat</ListSubheader>}>
@@ -62,7 +66,8 @@ const ComponentDetails = (props: ComponentDetailsProps) => {
         <MaintainerOnly>
             <List component="nav" subheader={<ListSubheader component="div">Actions</ListSubheader>}>
                 <ListItem>
-                    <KillComponentDialog component={component}/>
+                    {component.status === "RUNNING" ? <KillComponentDialog component={component}/> :
+                        <StartComponentDialog component={component}/>}
                 </ListItem>
             </List>
             <Divider/>

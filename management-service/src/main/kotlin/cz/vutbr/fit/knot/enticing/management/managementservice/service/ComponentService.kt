@@ -4,6 +4,7 @@ import cz.vutbr.fit.knot.enticing.api.EnticingComponentApi
 import cz.vutbr.fit.knot.enticing.dto.ExtendedComponentInfo
 import cz.vutbr.fit.knot.enticing.dto.toComponentAddress
 import cz.vutbr.fit.knot.enticing.log.ComponentType
+import cz.vutbr.fit.knot.enticing.management.managementservice.entity.ComponentEntity
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toComponentInfo
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.ComponentRepository
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.CorpusRepository
@@ -56,5 +57,11 @@ class ComponentService(
     fun pingComponent(componentId: Long): StaticServerInfo? {
         val component = requireNotNull(componentRepository.findByIdOrNull(componentId)) { "component with id $componentId not found" }
         return componentApi.ping(component.fullAddress.toComponentAddress())
+    }
+
+    fun update(componentId: Long, block: ComponentEntity.() -> Unit) {
+        val component = componentRepository.findByIdOrNull(componentId)
+                ?: throw IllegalArgumentException("No component with id $componentId found")
+        component.block()
     }
 }

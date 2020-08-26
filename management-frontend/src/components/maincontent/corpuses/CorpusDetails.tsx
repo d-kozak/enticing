@@ -11,7 +11,14 @@ import AddOrEditCorpusDialog from "./AddOrEditCorpusDialog";
 import CorpusComponentsTable from "./CorpusComponentsTable";
 import StartCorpusDialog from "./StartCorpusDialog";
 import KillCorpusDialog from "./KillCorpusDialog";
+import {makeStyles} from "@material-ui/core/styles";
 
+
+const useStyles = makeStyles({
+    formField: {
+        margin: '10px 30px'
+    }
+})
 
 export type CorpusDetailsProps = typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps> & { corpusId: string }
@@ -20,6 +27,7 @@ const CorpusDetails = (props: CorpusDetailsProps) => {
     const {corpuses, requestCorpus, corpusId} = props;
     const refresh = useCallback(() => requestCorpus(corpusId!), [requestCorpus, corpusId])
     const corpus = corpuses.elements[corpusId];
+    const styles = useStyles();
     useInterval(refresh, 2_000);
     if (!corpus) {
         refresh();
@@ -36,15 +44,21 @@ const CorpusDetails = (props: CorpusDetailsProps) => {
             <ListItem>
                 <ListItemText primary={`Name: ${corpus.name}`}/>
             </ListItem>
+            <ListItem>
+                <ListItemText primary={`Status: ${corpus.status}`}/>
+            </ListItem>
         </List>
         <Divider/>
         <MaintainerOnly>
             <List component="nav" subheader={<ListSubheader component="div">Actions</ListSubheader>}>
                 <ListItem>
-                    <AddOrEditCorpusDialog editedCorpus={corpus}/>
-                </ListItem>
-                <ListItem>
-                    {corpus.running ? <KillCorpusDialog corpus={corpus}/> : <StartCorpusDialog corpus={corpus}/>}
+                    <span className={styles.formField}>
+                        {corpus.status === "RUNNING" ? <KillCorpusDialog corpus={corpus}/> :
+                            <StartCorpusDialog corpus={corpus}/>}
+                    </span>
+                    <span className={styles.formField}>
+                        <AddOrEditCorpusDialog editedCorpus={corpus}/>
+                    </span>
                 </ListItem>
             </List>
             <Divider/>

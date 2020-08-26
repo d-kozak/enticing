@@ -1,7 +1,11 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.service
 
+import cz.vutbr.fit.knot.enticing.dto.BasicComponentInfo
+import cz.vutbr.fit.knot.enticing.dto.Status
+import cz.vutbr.fit.knot.enticing.dto.annotation.Cleanup
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
+import cz.vutbr.fit.knot.enticing.management.managementservice.dto.AddComponentRequest
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.AddServerRequest
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.ServerInfo
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.*
@@ -19,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Transactional
 @Service
+@Cleanup("clean the tight coupling between ServerInfoService and ComponentService")
 class ServerInfoService(
         private val serverInfoRepository: ServerInfoRepository,
         private val serverStatusRepository: ServerStatusRepository,
@@ -73,6 +78,12 @@ class ServerInfoService(
         return entity.toServerInfo(ServerStatus(info.freeRam.toDouble() / info.ramSize, info.processCpuLoad, info.systemCpuLoad))
     }
 
+
+    fun addComponent(request: AddComponentRequest): BasicComponentInfo {
+        val server = serverInfoRepository.findByIdOrNull(request.serverId)
+                ?: throw IllegalArgumentException("No server with id ${request.serverId} found")
+        return componentRepository.save(ComponentEntity(0, server, request.port, request.type, null, listOf(), listOf(), Status.DEAD, mutableSetOf())).toBasicComponentInfo()
+    }
 }
 
 

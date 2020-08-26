@@ -19,8 +19,7 @@ export interface CommandRequest {
 }
 
 export type CommandType =
-    "ADD_COMPONENT"
-    | "START_COMPONENT"
+    "START_COMPONENT"
     | "KILL_COMPONENT"
     | "REMOVE_COMPONENT"
     | "BUILD"

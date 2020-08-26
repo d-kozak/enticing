@@ -1,5 +1,6 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.entity
 
+import cz.vutbr.fit.knot.enticing.dto.Status
 import javax.persistence.*
 
 @Entity
@@ -9,7 +10,7 @@ data class CorpusEntity(
         var id: Long,
         @Column(unique = true)
         var name: String,
-        var running: Boolean,
+        var status: Status,
         /**
          * Since it is a set, be careful to set componentEntity ids before inserting
          */

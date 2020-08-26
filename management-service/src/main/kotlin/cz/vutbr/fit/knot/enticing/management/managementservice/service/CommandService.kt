@@ -70,8 +70,7 @@ class CommandService(
         val userEntity = userRepository.findByIdOrNull(userDto.login)
                 ?: error("User $userDto should be found in the database")
         val (type, arguments) = request
-        val commandEntity = commandRepository.save(CommandEntity(0, type, CommandState.ENQUED, arguments, userEntity))
-
+        val commandEntity = commandRepository.save(CommandEntity(0, type, CommandState.ENQUED, if (arguments.isTextual) arguments.textValue() else arguments.toString(), userEntity))
         return commandEntity.toDto()
     }
 

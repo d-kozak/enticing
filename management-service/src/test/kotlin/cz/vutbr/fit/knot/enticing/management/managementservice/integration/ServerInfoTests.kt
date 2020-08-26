@@ -1,7 +1,7 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.integration
 
-import cz.vutbr.fit.knot.enticing.dto.ComponentStatus
 import cz.vutbr.fit.knot.enticing.dto.ExtendedComponentInfo
+import cz.vutbr.fit.knot.enticing.dto.Status
 import cz.vutbr.fit.knot.enticing.dto.utils.toJson
 import cz.vutbr.fit.knot.enticing.log.ComponentType
 import cz.vutbr.fit.knot.enticing.log.HeartbeatDto
@@ -56,9 +56,9 @@ class ServerInfoTests {
     private val serverInfo = ServerInfo(1, "athena10.fit.vutbr.cz", 12, 6_000, null)
 
     private val timestamp = LocalDateTime.now()
-    private val componentOne = ExtendedComponentInfo(2, 1, "athena10.fit.vutbr.cz", 8080, ComponentType.WEBSERVER, timestamp, ComponentStatus.RUNNING)
+    private val componentOne = ExtendedComponentInfo(2, 1, "athena10.fit.vutbr.cz", 8080, ComponentType.WEBSERVER, timestamp, Status.RUNNING)
     private val timestamp2 = LocalDateTime.now()
-    private val componentTwo = ExtendedComponentInfo(3, 1, "athena10.fit.vutbr.cz", 5627, ComponentType.INDEX_SERVER, timestamp2, ComponentStatus.RUNNING)
+    private val componentTwo = ExtendedComponentInfo(3, 1, "athena10.fit.vutbr.cz", 5627, ComponentType.INDEX_SERVER, timestamp2, Status.RUNNING)
 
     @BeforeAll
     fun `register server and component`() {

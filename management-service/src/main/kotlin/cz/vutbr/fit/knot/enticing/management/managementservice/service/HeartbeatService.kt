@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.service
 
 import cz.vutbr.fit.knot.enticing.api.EnticingComponentApi
+import cz.vutbr.fit.knot.enticing.dto.Status
 import cz.vutbr.fit.knot.enticing.dto.toComponentAddress
 import cz.vutbr.fit.knot.enticing.log.HeartbeatDto
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
@@ -40,6 +41,7 @@ class HeartbeatService(
             }
         }
         component.lastHeartbeat = dto.status.timestamp
+        component.status = Status.RUNNING
         serverStatusRepository.save(dto.status.toEntity(component.server))
     }
 

@@ -15,9 +15,9 @@ import {FormControl, InputLabel, LinearProgress, MenuItem, Select} from "@materi
 import {makeStyles} from "@material-ui/core/styles";
 import {postRequest} from "../../../network/requests";
 import {requestAllServers} from "../../../reducers/serversReducer";
-import {CommandDto, CommandRequest} from "../../../entities/CommandDto";
 import {useInterval} from "../../../utils/useInterval";
-import {ComponentType} from "../../../entities/ComponentInfo";
+import {BasicComponentInfo, ComponentType} from "../../../entities/ComponentInfo";
+import {AddComponentRequest} from "../../../entities/AddComponentRequest";
 
 type AddNewComponentDialogProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & {
     predefinedServer?: ServerInfo
@@ -92,25 +92,23 @@ const AddNewComponentDialog = (props: AddNewComponentDialogProps) => {
                                 return
                             }
                             setProgress(true)
-                            const req: CommandRequest = {
-                                type: "START_COMPONENT",
-                                arguments: {
-                                    id: "0",
-                                    type: componentType,
-                                    serverAddress: server.address,
-                                    port
-                                }
+                            const req: AddComponentRequest = {
+                                type: componentType,
+                                serverId: server.id,
+                                port
                             }
-                            postRequest<CommandDto>("/command", req)
-                                .then(server => {
+                            postRequest<BasicComponentInfo>("/component", req)
+                                .then(component => {
                                     setProgress(false)
                                     setOpen(false)
                                     actions.setSubmitting(false)
+                                    openSnackbarAction("Component added")
                                 })
                                 .catch(err => {
                                     setProgress(false)
                                     console.error(err)
                                     actions.setSubmitting(false)
+                                    openSnackbarAction("Failed to add component")
                                 })
                         }}
                     >

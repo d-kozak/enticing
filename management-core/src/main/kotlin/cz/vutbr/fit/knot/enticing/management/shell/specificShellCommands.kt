@@ -1,6 +1,6 @@
 package cz.vutbr.fit.knot.enticing.management.shell
 
-import cz.vutbr.fit.knot.enticing.dto.BasicComponentInfo
+import cz.vutbr.fit.knot.enticing.dto.ComponentInfo
 import cz.vutbr.fit.knot.enticing.dto.annotation.Incomplete
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.DeploymentConfiguration
 import cz.vutbr.fit.knot.enticing.dto.utils.toDto
@@ -9,14 +9,14 @@ import cz.vutbr.fit.knot.enticing.management.model.Mg4jFile
 import cz.vutbr.fit.knot.enticing.mx.ServerProbe
 
 
-suspend fun ShellCommandExecutor.startComponent(component: BasicComponentInfo, deploymentConfiguration: DeploymentConfiguration): String = when (component.type) {
+suspend fun ShellCommandExecutor.startComponent(component: ComponentInfo, deploymentConfiguration: DeploymentConfiguration): String = when (component.type) {
     ComponentType.INDEX_SERVER -> startIndexServer(component.serverAddress, deploymentConfiguration.repository, deploymentConfiguration.configurationScript, component.port)
     ComponentType.WEBSERVER -> startWebserver(component.serverAddress, deploymentConfiguration.repository, deploymentConfiguration.configurationScript, component.port)
     ComponentType.MANAGEMENT_SERVER -> startManagementService(component.serverAddress, deploymentConfiguration.repository, deploymentConfiguration.configurationScript, component.port)
     else -> error("Cannot start component of type ${component.type}")
 }
 
-suspend fun ShellCommandExecutor.killComponent(component: BasicComponentInfo): String = when (component.type) {
+suspend fun ShellCommandExecutor.killComponent(component: ComponentInfo): String = when (component.type) {
     ComponentType.INDEX_SERVER -> killIndexServer(component.serverAddress)
     ComponentType.WEBSERVER -> killWebserver(component.serverAddress)
     ComponentType.MANAGEMENT_SERVER -> killManagementService(component.serverAddress)
