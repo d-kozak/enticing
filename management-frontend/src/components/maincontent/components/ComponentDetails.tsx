@@ -52,6 +52,9 @@ const ComponentDetails = (props: ComponentDetailsProps) => {
             <ListItem>
                 <ListItemText primary={`Type: ${component.type}`}/>
             </ListItem>
+            <ListItem button onClick={() => history.push(`/build/${component.buildId}`)}>
+                <ListItemText primary={`Build: ${component.buildId}`}/>
+            </ListItem>
             <ListItem>
                 <ListItemText primary={`Status: ${component.status}`}/>
             </ListItem>

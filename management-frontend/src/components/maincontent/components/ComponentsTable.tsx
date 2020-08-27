@@ -43,6 +43,9 @@ const ComponentsTable = (props: ComponentsTableProps) => {
             sortId: "type",
             filterOptions: ["WEBSERVER", "INDEX_SERVER", "INDEX_BUILDER", "CONSOLE_CLIENT"]
         }),
+        StringColumn("buildId", "Build", {
+            sortId: "buildId"
+        }),
         StringColumn("status", "Status", {
             sortId: "status"
         }),

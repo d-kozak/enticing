@@ -15,6 +15,7 @@ import {FormControl, InputLabel, LinearProgress, MenuItem, Select} from "@materi
 import {makeStyles} from "@material-ui/core/styles";
 import {postRequest} from "../../../network/requests";
 import {requestAllServers} from "../../../reducers/serversReducer";
+import {requestAllBuilds} from "../../../reducers/buildsReducer";
 import {useInterval} from "../../../utils/useInterval";
 import {BasicComponentInfo, ComponentType} from "../../../entities/ComponentInfo";
 import {AddComponentRequest} from "../../../entities/AddComponentRequest";
@@ -40,7 +41,7 @@ const AddNewComponentSchema = Yup.object().shape({
 });
 
 const AddNewComponentDialog = (props: AddNewComponentDialogProps) => {
-    const {requestAllServers, servers, predefinedServer, openSnackbarAction} = props;
+    const {requestAllServers, servers, builds, predefinedServer, openSnackbarAction} = props;
     const [open, setOpen] = useState(false);
     const [progress, setProgress] = useState(false);
 
@@ -48,11 +49,15 @@ const AddNewComponentDialog = (props: AddNewComponentDialogProps) => {
 
     const [componentType, setComponentType] = useState<ComponentType>("INDEX_SERVER");
 
+    const [buildId, setBuildId] = useState<string>("")
+
     const [server, setServer] = useState(predefinedServer)
 
     const updateServers = useCallback(() => {
-        if (open)
+        if (open) {
             requestAllServers();
+            requestAllBuilds();
+        }
     }, [open, requestAllServers])
 
     useInterval(updateServers, 1_000);
@@ -95,7 +100,8 @@ const AddNewComponentDialog = (props: AddNewComponentDialogProps) => {
                             const req: AddComponentRequest = {
                                 type: componentType,
                                 serverId: server.id,
-                                port
+                                port,
+                                buildId
                             }
                             postRequest<BasicComponentInfo>("/component", req)
                                 .then(component => {
@@ -131,13 +137,26 @@ const AddNewComponentDialog = (props: AddNewComponentDialogProps) => {
                             <FormControl className={classes.formField}>
                                 <InputLabel>Component Type</InputLabel>
                                 <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
+                                    labelId="component-type-label"
+                                    id="component-type-id"
                                     value={componentType}
                                     onChange={(e) => setComponentType(e.target.value as ComponentType)}
                                 >
                                     <MenuItem value="INDEX_SERVER">Index server</MenuItem>
                                     <MenuItem value="WEBSERVER">Webserver</MenuItem>
+                                </Select>
+                            </FormControl>
+
+                            <FormControl className={classes.formField}>
+                                <InputLabel>Build</InputLabel>
+                                <Select
+                                    labelId="build-label"
+                                    id="build-id"
+                                    value={buildId}
+                                    onChange={(e) => setBuildId(e.target.value as string)}
+                                >
+                                    {Object.values(builds.elements).map(build => <MenuItem key={build.id}
+                                                                                           value={build.arguments}>{build.arguments}</MenuItem>)}
                                 </Select>
                             </FormControl>
 
@@ -149,7 +168,8 @@ const AddNewComponentDialog = (props: AddNewComponentDialogProps) => {
                                 <Button onClick={handleClose} color="primary">
                                     Cancel
                                 </Button>
-                                <Button disabled={isSubmitting} type="submit" color="primary" variant="contained">
+                                <Button disabled={isSubmitting || buildId.length == 0} type="submit" color="primary"
+                                        variant="contained">
                                     Add
                                 </Button>
                             </DialogActions>
@@ -162,11 +182,13 @@ const AddNewComponentDialog = (props: AddNewComponentDialogProps) => {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-    servers: state.servers
+    servers: state.servers,
+    builds: state.builds
 });
 const mapDispatchToProps = {
     openSnackbarAction,
-    requestAllServers: requestAllServers as () => void
+    requestAllServers: requestAllServers as () => void,
+    requestAllBuilds: requestAllBuilds as () => void
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNewComponentDialog);

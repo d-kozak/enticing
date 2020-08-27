@@ -5,7 +5,8 @@ export interface BasicComponentInfo {
     id: string,
     serverAddress: string,
     port: number,
-    type: ComponentType
+    type: ComponentType,
+    buildId: string
 }
 
 export interface ComponentInfo {
@@ -14,6 +15,7 @@ export interface ComponentInfo {
     serverAddress: string,
     port: number,
     type: ComponentType,
+    buildId: string,
     lastHeartbeat: Date,
     status: Status,
 

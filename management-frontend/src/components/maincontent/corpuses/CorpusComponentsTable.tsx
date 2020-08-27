@@ -53,6 +53,9 @@ const CorpusComponentsTable = (props: CorpusComponentsTableProps) => {
     const columns: Array<PaginatedTableColumn<any, any>> = [
         IntColumn("port", "Port", {sortId: "port"}),
         StringColumn("type", "Component Type", {sortId: "type"}),
+        StringColumn("buildId", "Build", {
+            sortId: "buildId"
+        }),
         StringColumn("status", "Status", {
             sortId: "status"
         }),
