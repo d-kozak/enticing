@@ -14,6 +14,6 @@ open class StartManagementServiceCommand(
 ) : ManagementCommand() {
 
     override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) {
-        executor.startManagementService(address.url, deployment.repository, deployment.configurationScript, address.port)
+        executor.startManagementService(address.url, deployment.repository, deployment.configurationScript, address.port, deployment.buildId)
     }
 }

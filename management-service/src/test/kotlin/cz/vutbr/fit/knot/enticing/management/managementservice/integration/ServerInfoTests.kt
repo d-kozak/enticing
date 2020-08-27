@@ -56,23 +56,23 @@ class ServerInfoTests {
     private val serverInfo = ServerInfo(1, "athena10.fit.vutbr.cz", 12, 6_000, null)
 
     private val timestamp = LocalDateTime.now()
-    private val componentOne = ExtendedComponentInfo(2, 1, "athena10.fit.vutbr.cz", 8080, ComponentType.WEBSERVER, timestamp, Status.RUNNING)
+    private val componentOne = ExtendedComponentInfo(2, 1, "athena10.fit.vutbr.cz", 8080, ComponentType.WEBSERVER, "release", timestamp, Status.RUNNING)
     private val timestamp2 = LocalDateTime.now()
-    private val componentTwo = ExtendedComponentInfo(3, 1, "athena10.fit.vutbr.cz", 5627, ComponentType.INDEX_SERVER, timestamp2, Status.RUNNING)
+    private val componentTwo = ExtendedComponentInfo(3, 1, "athena10.fit.vutbr.cz", 5627, ComponentType.INDEX_SERVER, "release", timestamp2, Status.RUNNING)
 
     @BeforeAll
     fun `register server and component`() {
 
         mvc.perform(post("$apiBasePath/server")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(StaticServerInfo("athena10.fit.vutbr.cz:8080", ComponentType.WEBSERVER, 12, 6_000, timestamp).toJson()))
+                .content(StaticServerInfo("athena10.fit.vutbr.cz:8080", ComponentType.WEBSERVER, "release", 12, 6_000, timestamp).toJson()))
                 .andExpect(status().isOk)
                 .andExpect(content().json(serverInfo.toJson()))
 
 
         mvc.perform(post("$apiBasePath/server")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(StaticServerInfo("athena10.fit.vutbr.cz:5627", ComponentType.INDEX_SERVER, 12, 6_000, timestamp2).toJson()))
+                .content(StaticServerInfo("athena10.fit.vutbr.cz:5627", ComponentType.INDEX_SERVER, "release", 12, 6_000, timestamp2).toJson()))
                 .andExpect(status().isOk)
                 .andExpect(content().json(serverInfo.toJson()))
 

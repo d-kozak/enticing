@@ -5,4 +5,13 @@ if [[ "$retval" -ne "0" ]] ; then
   exit $retval
 fi
 echo "repository found at: $ENTICING_HOME"
-java -jar "${ENTICING_HOME}"/lib/index-server-0.0.1-SNAPSHOT.jar "$@"
+
+build_id=$1
+if [[ -z "$build_id" ]] ; then
+  echo "No build id specified"
+  exit 1
+fi
+echo "Starting using build $build_id"
+deploy_dir=$ENTICING_HOME/builds/$build_id/
+
+java -jar "${deploy_dir}/index-server-0.0.1-SNAPSHOT.jar" "$@"

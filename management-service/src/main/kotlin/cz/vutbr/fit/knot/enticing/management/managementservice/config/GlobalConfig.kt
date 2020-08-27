@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class GlobalConfig(
         @Value("\${config.file}") private val configFile: String,
+        @Value("\${build.id}") private val buildId: String,
         @Value("\${service.id}") private val address: String
 ) {
 
@@ -25,6 +26,8 @@ class GlobalConfig(
         log.info("Loading configuration from $configFile")
         val config = executeScript<EnticingConfiguration>(configFile)
         log.info("Loaded config")
+        // update build id, the one in the file might not be accurate
+        config.deploymentConfiguration.buildId = buildId
         config.validateOrFail()
         config.prettyPrint()
         return config

@@ -16,7 +16,7 @@ open class StartIndexServersCommand(
     override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) = coroutineScope<Unit> {
         corpus.indexServers.map { server ->
             launch {
-                executor.startIndexServer(server.address, deployment.repository, deployment.configurationScript, server.port)
+                executor.startIndexServer(server.address, deployment.repository, deployment.configurationScript, server.port, deployment.buildId)
             }
         }
     }

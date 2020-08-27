@@ -37,6 +37,7 @@ class EnticingConfigurationValidator(validator: Validator) : EnticingConfigurati
         checkNotEmpty(deploymentConfiguration.server, "deployment server")
         checkNotEmpty(deploymentConfiguration.repository, "deployment repository")
         checkNotEmpty(deploymentConfiguration.configurationScript, "configuration script")
+        checkNotEmpty(deploymentConfiguration.buildId, "Build id")
     }
 
     override fun enterMetadataConfiguration(configuration: MetadataConfiguration) = validateMetadataConfiguration(configuration)

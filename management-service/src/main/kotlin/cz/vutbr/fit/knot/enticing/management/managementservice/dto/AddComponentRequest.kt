@@ -1,6 +1,7 @@
 package cz.vutbr.fit.knot.enticing.management.managementservice.dto
 
 import cz.vutbr.fit.knot.enticing.log.ComponentType
+import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Positive
 
 data class AddComponentRequest(
@@ -8,6 +9,8 @@ data class AddComponentRequest(
         val serverId: Long,
         @field:Positive
         val port: Int,
-        val type: ComponentType
+        val type: ComponentType,
+        @field:NotBlank
+        val buildId: String
 )
 

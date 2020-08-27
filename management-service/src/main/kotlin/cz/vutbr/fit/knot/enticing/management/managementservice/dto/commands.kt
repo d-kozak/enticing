@@ -5,6 +5,7 @@ import cz.vutbr.fit.knot.enticing.dto.BasicComponentInfo
 import cz.vutbr.fit.knot.enticing.dto.Status
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
 import cz.vutbr.fit.knot.enticing.dto.utils.toDto
+import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.management.command.ManagementCommand
 import cz.vutbr.fit.knot.enticing.management.command.concrete.LocalBuildCommand
 import cz.vutbr.fit.knot.enticing.management.managementservice.service.BuildService
@@ -33,6 +34,7 @@ class CommandContext(
         val corpusService: CorpusService,
         val componentService: ComponentService,
         val buildService: BuildService,
+        val loggerFactory: LoggerFactory,
         val args: String
 )
 
@@ -46,7 +48,7 @@ enum class CommandType(private val factory: CommandFactory) {
     START_CORPUS(startCorpusCommandFactory),
     KILL_CORPUS(killCorpusCommandFactory);
 
-    fun init(id: String, configuration: EnticingConfiguration, corpusService: CorpusService, componentService: ComponentService, buildService: BuildService, args: String): ManagementCommand = CommandContext(id, configuration, corpusService, componentService, buildService, args).factory()
+    fun init(id: String, configuration: EnticingConfiguration, corpusService: CorpusService, componentService: ComponentService, buildService: BuildService, loggerFactory: LoggerFactory, args: String): ManagementCommand = CommandContext(id, configuration, corpusService, componentService, buildService, loggerFactory, args).factory()
 }
 
 

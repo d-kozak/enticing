@@ -34,6 +34,7 @@ enticingConfiguration {
         server = "athena10.fit.vutbr.cz"
         repository = "/mnt/minerva1/nlp/projects/corpproc_search/corpproc_search"
         configurationScript = "$repository/deploy/3.0_inheritance/config.kts"
+        buildId = "release"
     }
 
     corpusConfig {

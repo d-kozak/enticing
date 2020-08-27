@@ -58,10 +58,10 @@ class DebugInitRunner(
             .filter { it.isNotEmpty() }
             .mapIndexed { i, address -> ServerInfoEntity(0, address, Random.nextInt(15), Random.nextLong(20_000), mutableListOf(), mutableListOf()) }
 
-    private val indexServers = servers.map { ComponentEntity(0, it, 5627, ComponentType.INDEX_SERVER, LocalDateTime.now(), mutableListOf(), mutableListOf()) }
+    private val indexServers = servers.map { ComponentEntity(0, it, 5627, ComponentType.INDEX_SERVER, "release", LocalDateTime.now(), mutableListOf(), mutableListOf()) }
 
     private val webservers = servers.filterIndexed { i, _ -> i % 300 == 0 }
-            .map { ComponentEntity(0, it, 8080, ComponentType.WEBSERVER, LocalDateTime.now(), mutableListOf(), mutableListOf()) }
+            .map { ComponentEntity(0, it, 8080, ComponentType.WEBSERVER, "release", LocalDateTime.now(), mutableListOf(), mutableListOf()) }
 
     private val components = indexServers + webservers
 

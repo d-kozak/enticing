@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class ServerMonitoringServiceTest {
 
-    private val service = ServerMonitoringService("foo.bar", ComponentType.INDEX_SERVER, SimpleStdoutLoggerFactory)
+    private val service = ServerMonitoringService("foo.bar", ComponentType.INDEX_SERVER, "release", SimpleStdoutLoggerFactory)
 
     @Test
     fun `get current info`() {

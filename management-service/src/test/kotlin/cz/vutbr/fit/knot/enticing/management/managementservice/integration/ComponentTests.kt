@@ -58,21 +58,21 @@ class ComponentTests {
 
     private val timestamp1 = LocalDateTime.now().minusDays(1)
     private var serverOne = ServerInfo(1, "athena10.fit.vutbr.cz", 12, 6_000, null)
-    private var componentOne = ExtendedComponentInfo(2, 1, "athena10.fit.vutbr.cz", 8080, ComponentType.WEBSERVER, timestamp1, Status.RUNNING)
+    private var componentOne = ExtendedComponentInfo(2, 1, "athena10.fit.vutbr.cz", 8080, ComponentType.WEBSERVER, "release", timestamp1, Status.RUNNING)
 
     private val timestamp2 = LocalDateTime.now()
-    private var componentTwo = ExtendedComponentInfo(3, 1, "athena10.fit.vutbr.cz", 5627, ComponentType.INDEX_SERVER, timestamp2, Status.RUNNING)
+    private var componentTwo = ExtendedComponentInfo(3, 1, "athena10.fit.vutbr.cz", 5627, ComponentType.INDEX_SERVER, "release", timestamp2, Status.RUNNING)
 
     private val timestamp3 = LocalDateTime.now()
     private var serverTwo = ServerInfo(4, "knot01.fit.vutbr.cz", 11, 5555, null)
-    private var componentThree = ExtendedComponentInfo(5, 4, "knot01.fit.vutbr.cz", 5627, ComponentType.INDEX_SERVER, timestamp3, Status.RUNNING)
+    private var componentThree = ExtendedComponentInfo(5, 4, "knot01.fit.vutbr.cz", 5627, ComponentType.INDEX_SERVER, "release", timestamp3, Status.RUNNING)
 
 
     @BeforeAll
     fun `three components on two servers`() {
         var res = mvc.perform(post("$apiBasePath/server")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(StaticServerInfo("athena10.fit.vutbr.cz:8080", ComponentType.WEBSERVER, 12, 6_000, timestamp1).toJson()))
+                .content(StaticServerInfo("athena10.fit.vutbr.cz:8080", ComponentType.WEBSERVER, "release", 12, 6_000, timestamp1).toJson()))
                 .andExpect(status().isOk)
                 .andReturn().response.contentAsString.toDto<ServerInfo>()
         serverOne = serverOne.copy(res.id)
@@ -82,13 +82,13 @@ class ComponentTests {
 
         mvc.perform(post("$apiBasePath/server")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(StaticServerInfo("athena10.fit.vutbr.cz:5627", ComponentType.INDEX_SERVER, 12, 6_000, timestamp2).toJson()))
+                .content(StaticServerInfo("athena10.fit.vutbr.cz:5627", ComponentType.INDEX_SERVER, "release", 12, 6_000, timestamp2).toJson()))
                 .andExpect(status().isOk)
                 .andExpect(content().json(serverOne.toJson()))
 
         res = mvc.perform(post("$apiBasePath/server")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(StaticServerInfo("knot01.fit.vutbr.cz:5627", ComponentType.INDEX_SERVER, 11, 5555, timestamp3).toJson()))
+                .content(StaticServerInfo("knot01.fit.vutbr.cz:5627", ComponentType.INDEX_SERVER, "release", 11, 5555, timestamp3).toJson()))
                 .andExpect(status().isOk)
                 .andReturn().response.contentAsString.toDto<ServerInfo>()
         serverTwo = serverTwo.copy(res.id)

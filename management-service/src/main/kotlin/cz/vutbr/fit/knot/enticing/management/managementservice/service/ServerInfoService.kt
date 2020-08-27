@@ -49,7 +49,7 @@ class ServerInfoService(
         serverEntity.totalPhysicalMemorySize = serverInfo.totalPhysicalMemorySize
         val previous = serverEntity.components.find { it.fullAddress == serverInfo.fullAddress }
         if (previous == null) {
-            componentRepository.save(ComponentEntity(0, serverEntity, port.toInt(), serverInfo.componentType, serverInfo.timestamp, listOf(), listOf()))
+            componentRepository.save(ComponentEntity(0, serverEntity, port.toInt(), serverInfo.componentType, serverInfo.buildId, serverInfo.timestamp, listOf(), listOf()))
         } else {
             previous.lastHeartbeat = serverInfo.timestamp
         }
@@ -82,7 +82,7 @@ class ServerInfoService(
     fun addComponent(request: AddComponentRequest): BasicComponentInfo {
         val server = serverInfoRepository.findByIdOrNull(request.serverId)
                 ?: throw IllegalArgumentException("No server with id ${request.serverId} found")
-        return componentRepository.save(ComponentEntity(0, server, request.port, request.type, null, listOf(), listOf(), Status.DEAD, mutableSetOf())).toBasicComponentInfo()
+        return componentRepository.save(ComponentEntity(0, server, request.port, request.type, request.buildId, null, listOf(), listOf(), Status.DEAD, mutableSetOf())).toBasicComponentInfo()
     }
 }
 

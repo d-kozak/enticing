@@ -8,16 +8,19 @@ import org.springframework.boot.runApplication
 class ManagementServiceApplication
 
 fun main(args: Array<String>) {
-    require(args.isNotEmpty()) { "two arguments expected - config file and server address" }
+    require(args.isNotEmpty()) { "at least 2 arguments expected" }
     when (val type = args[0]) {
         "cli" -> runManagementCli(args.copyOfRange(1, args.size))
         "server" -> {
-            require(args.size >= 3) { "at least three arguments expected - component type config file service id, got '${args.contentToString()}'" }
-            if (!args[1].startsWith("--config.file=")) {
-                args[1] = "--config.file=" + args[1]
+            require(args.size >= 4) { "at least three arguments expected - component type, build id, config file and service id, got '${args.contentToString()}'" }
+            if (!args[1].startsWith("--build.id=")) {
+                args[1] = "--build.id=" + args[1]
             }
-            if (!args[2].startsWith("--service.id=")) {
-                args[2] = "--service.id=" + args[2]
+            if (!args[2].startsWith("--config.file=")) {
+                args[2] = "--config.file=" + args[2]
+            }
+            if (!args[3].startsWith("--service.id=")) {
+                args[3] = "--service.id=" + args[3]
             }
             runApplication<ManagementServiceApplication>(*args)
         }

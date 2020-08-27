@@ -23,7 +23,7 @@ open class StartIndexingCommand(
     override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) = coroutineScope {
         val outputs = corpus.indexServers.map { server ->
             async {
-                executor.preprocessCollections(server.address, deployment.repository, deployment.configurationScript)
+                executor.preprocessCollections(server.address, deployment.repository, deployment.configurationScript, deployment.buildId)
             }
         }.awaitAll()
 

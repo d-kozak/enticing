@@ -3,6 +3,7 @@ package cz.vutbr.fit.knot.enticing.management.managementservice.service
 import cz.vutbr.fit.knot.enticing.dto.config.dsl.EnticingConfiguration
 import cz.vutbr.fit.knot.enticing.log.LoggerFactory
 import cz.vutbr.fit.knot.enticing.log.logger
+import cz.vutbr.fit.knot.enticing.log.withExtraFileLogger
 import cz.vutbr.fit.knot.enticing.management.ManagementEngine
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.CommandRequest
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.CommandState
@@ -104,9 +105,10 @@ class CommandService(
         commandRepository.save(entity)
         try {
             val logFile = commandLogDirectory.resolve("${entity.id}.log").toString()
+            val loggerFactory = loggerFactory.withExtraFileLogger(logFile)
             val executor = ShellCommandExecutor(configuration, scope, loggerFactory, logFile)
             executor.use {
-                val commandDto = entity.type.init(entity.id.toString(), configuration, corpusService, componentService, buildService, entity.arguments)
+                val commandDto = entity.type.init(entity.id.toString(), configuration, corpusService, componentService, buildService, loggerFactory, entity.arguments)
                 engine.executeCommand(commandDto, executor)
             }
             entity.finishedAt = LocalDateTime.now()

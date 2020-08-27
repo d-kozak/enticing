@@ -10,10 +10,15 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
+interface LoggerPipeLineNode {
+    fun log(logMessage: LogMessage)
+    fun perf(perfMessage: PerfMessage)
+}
+
 /**
  * Base interface for a logger
  */
-interface Logger {
+interface Logger : LoggerPipeLineNode {
     fun debug(message: String)
     fun info(message: String)
     fun warn(message: String)
@@ -72,6 +77,30 @@ fun LoggingConfiguration.loggerFactoryFor(serviceId: String, remoteLoggingApi: R
     }
 }
 
+fun LoggerFactory.withExtraFileLogger(path: String) = withExtraFileLogger(File(path))
+
+fun LoggerFactory.withExtraFileLogger(file: File): LoggerFactory {
+    val fileLogger = FileBasedLoggerNode(file, LoggingConfiguration())
+    val parent = this
+
+    return object : LoggerFactory {
+
+        override fun namedLogger(name: String): Logger {
+            val parentLogger = parent.namedLogger(name)
+            return NamedLogger(name, listOf(fileLogger, parentLogger))
+        }
+
+        override fun addRemoteApi(remoteLoggingApi: RemoteLoggingApi) {
+            throw UnsupportedOperationException("adding loggers not supported here")
+        }
+
+        override fun close() {
+            parent.close()
+            fileLogger.close()
+        }
+    }
+}
+
 /**
  * Simple logger factory printing logs to stdout
  */
@@ -81,7 +110,6 @@ object SimpleStdoutLoggerFactory : LoggerFactory {
         pattern = "dd-MM-yyyy HH:mm:ss"
         stdoutLogs.remove(LogType.DEBUG)
     }
-
 
     override fun namedLogger(name: String): Logger = NamedLogger(name, listOf(FilteringLoggerNode(config.stdoutLogs, StdoutLoggerNode(config))))
 
@@ -133,29 +161,27 @@ private fun readableTimestamp(timestamp: LocalDateTime, formatter: DateTimeForma
 
 
 private class NamedLogger(val componentName: String, val pipelines: List<LoggerPipeLineNode>) : Logger {
-    override fun debug(message: String) = onLog(LogMessage(LogType.DEBUG, componentName, message))
+    override fun debug(message: String) = log(LogMessage(LogType.DEBUG, componentName, message))
 
-    override fun info(message: String) = onLog(LogMessage(LogType.INFO, componentName, message))
+    override fun info(message: String) = log(LogMessage(LogType.INFO, componentName, message))
 
-    override fun warn(message: String) = onLog(LogMessage(LogType.WARN, componentName, message))
+    override fun warn(message: String) = log(LogMessage(LogType.WARN, componentName, message))
 
-    override fun error(message: String) = onLog(LogMessage(LogType.ERROR, componentName, message))
+    override fun error(message: String) = log(LogMessage(LogType.ERROR, componentName, message))
 
-    private fun onLog(logMessage: LogMessage) {
+    override fun log(logMessage: LogMessage) {
         pipelines.forEach { it.log(logMessage) }
     }
 
-    override fun perf(operationId: String, arguments: String?, duration: Long, outcome: String) {
-        val perfMessage = PerfMessage(componentName, operationId, arguments, duration, outcome)
+    override fun perf(perfMessage: PerfMessage) {
         pipelines.forEach { it.perf(perfMessage) }
+    }
+
+    override fun perf(operationId: String, arguments: String?, duration: Long, outcome: String) {
+        perf(PerfMessage(componentName, operationId, arguments, duration, outcome))
     }
 }
 
-
-interface LoggerPipeLineNode {
-    fun log(logMessage: LogMessage)
-    fun perf(perfMessage: PerfMessage)
-}
 
 private class FilteringLoggerNode(val filter: EnumSet<LogType>, val next: LoggerPipeLineNode) : LoggerPipeLineNode {
     override fun log(logMessage: LogMessage) {

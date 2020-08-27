@@ -6,11 +6,12 @@ import cz.vutbr.fit.knot.enticing.dto.Status
 import cz.vutbr.fit.knot.enticing.log.ComponentType
 import java.time.LocalDateTime
 import javax.persistence.*
+import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Positive
 
 
-fun ComponentEntity.toComponentInfo() = ExtendedComponentInfo(id, server.id, server.address, port, type, lastHeartbeat, status)
-fun ComponentEntity.toBasicComponentInfo() = BasicComponentInfo(id, server.address, port, type)
+fun ComponentEntity.toComponentInfo() = ExtendedComponentInfo(id, server.id, server.address, port, type, buildId, lastHeartbeat, status)
+fun ComponentEntity.toBasicComponentInfo() = BasicComponentInfo(id, server.address, port, type, buildId)
 
 @Entity
 @Table(uniqueConstraints = [UniqueConstraint(name = "one component at one address", columnNames = ["server_id", "port"])])
@@ -23,6 +24,8 @@ data class ComponentEntity(
         @field:Positive
         var port: Int,
         var type: ComponentType,
+        @field:NotBlank
+        var buildId: String,
         var lastHeartbeat: LocalDateTime?,
         @field:OneToMany(mappedBy = "component")
         var logs: List<LogEntity>,

@@ -13,6 +13,6 @@ class LogServiceTestConfig {
     fun testLoggerFactory() = SimpleStdoutLoggerFactory
 
     @Bean
-    fun testMonitoringService() = ServerMonitoringService("foo.bar", ComponentType.INDEX_SERVER, SimpleStdoutLoggerFactory)
+    fun testMonitoringService() = ServerMonitoringService("foo.bar", ComponentType.INDEX_SERVER, "release", SimpleStdoutLoggerFactory)
 
 }

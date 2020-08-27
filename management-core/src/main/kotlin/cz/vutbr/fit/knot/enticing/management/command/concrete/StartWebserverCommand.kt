@@ -14,6 +14,6 @@ open class StartWebserverCommand(
 ) : ManagementCommand() {
 
     override suspend fun execute(scope: CoroutineScope, executor: ShellCommandExecutor) {
-        executor.startWebserver(address.url, deployment.repository, deployment.configurationScript, address.port)
+        executor.startWebserver(address.url, deployment.repository, deployment.configurationScript, address.port, deployment.buildId)
     }
 }

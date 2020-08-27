@@ -15,6 +15,7 @@ import java.time.LocalDateTime
 data class StaticServerInfo(
         val fullAddress: String,
         val componentType: ComponentType,
+        val buildId: String,
         val availableProcessors: Int,
         val totalPhysicalMemorySize: Long,
         val timestamp: LocalDateTime = LocalDateTime.now()
@@ -33,7 +34,7 @@ data class ServerStatus(
 /**
  * Service responsible for probing the server this component is running on and collecting information about it
  */
-open class ServerMonitoringService(val fullAddress: String, val componentType: ComponentType, loggerFactory: LoggerFactory) {
+open class ServerMonitoringService(val fullAddress: String, val componentType: ComponentType, val buildId: String, loggerFactory: LoggerFactory) {
 
     private val logger = loggerFactory.logger { }
 
@@ -48,7 +49,7 @@ open class ServerMonitoringService(val fullAddress: String, val componentType: C
 
     fun getStaticServerInfo(): StaticServerInfo {
         val info = probe.scan()
-        val dto = StaticServerInfo(fullAddress, componentType, info.processorCount, info.ramSize)
+        val dto = StaticServerInfo(fullAddress, componentType, buildId, info.processorCount, info.ramSize)
         logger.debug("Static server info requested $dto")
         return dto
     }

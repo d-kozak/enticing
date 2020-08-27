@@ -10,9 +10,9 @@ import cz.vutbr.fit.knot.enticing.mx.ServerProbe
 
 
 suspend fun ShellCommandExecutor.startComponent(component: ComponentInfo, deploymentConfiguration: DeploymentConfiguration): String = when (component.type) {
-    ComponentType.INDEX_SERVER -> startIndexServer(component.serverAddress, deploymentConfiguration.repository, deploymentConfiguration.configurationScript, component.port)
-    ComponentType.WEBSERVER -> startWebserver(component.serverAddress, deploymentConfiguration.repository, deploymentConfiguration.configurationScript, component.port)
-    ComponentType.MANAGEMENT_SERVER -> startManagementService(component.serverAddress, deploymentConfiguration.repository, deploymentConfiguration.configurationScript, component.port)
+    ComponentType.INDEX_SERVER -> startIndexServer(component.serverAddress, deploymentConfiguration.repository, deploymentConfiguration.configurationScript, component.port, deploymentConfiguration.buildId)
+    ComponentType.WEBSERVER -> startWebserver(component.serverAddress, deploymentConfiguration.repository, deploymentConfiguration.configurationScript, component.port, deploymentConfiguration.buildId)
+    ComponentType.MANAGEMENT_SERVER -> startManagementService(component.serverAddress, deploymentConfiguration.repository, deploymentConfiguration.configurationScript, component.port, deploymentConfiguration.buildId)
     else -> error("Cannot start component of type ${component.type}")
 }
 
@@ -30,38 +30,38 @@ suspend fun ShellCommandExecutor.localBuild(buildId: String, enticingHome: Strin
 suspend fun ShellCommandExecutor.copyJars(server: String, localRepository: String, remoteRepository: String, username: String? = null) = this.execute(SimpleCommand("scp $localRepository/lib/*.jar ${username ?: this.username}@$server:$remoteRepository/lib"))
 
 @Incomplete("specify ports...")
-suspend fun ShellCommandExecutor.startWebserver(server: String, enticingHome: String, configFile: String, port: Int, username: String? = null) = this.execute(SshCommand(username
+suspend fun ShellCommandExecutor.startWebserver(server: String, enticingHome: String, configFile: String, port: Int, buildId: String, username: String? = null) = this.execute(SshCommand(username
         ?: this.username, server,
-        StartScreenCommand("enticing-webserver", SimpleCommand("$enticingHome/bin/webserver $configFile $server --server.port=$port"))))
+        StartScreenCommand("enticing-webserver", SimpleCommand("$enticingHome/bin/webserver $buildId $configFile $server --server.port=$port"))))
 
 suspend fun ShellCommandExecutor.killWebserver(server: String, username: String? = null) =
         this.execute(SshCommand(username
                 ?: this.username, server, KillScreenCommand("enticing-webserver")), checkReturnCode = false)
 
-suspend fun ShellCommandExecutor.startManagementService(server: String, enticingHome: String, configFile: String, port: Int, username: String? = null) = this.execute(SshCommand(username
+suspend fun ShellCommandExecutor.startManagementService(server: String, enticingHome: String, configFile: String, port: Int, buildId: String, username: String? = null) = this.execute(SshCommand(username
         ?: this.username, server,
-        StartScreenCommand("enticing-management", SimpleCommand("$enticingHome/bin/management-service $configFile $server --debug.runner.start=false --server.port=$port"))))
+        StartScreenCommand("enticing-management", SimpleCommand("$enticingHome/bin/management-service $buildId $configFile $server --debug.runner.start=false --server.port=$port"))))
 
 suspend fun ShellCommandExecutor.killManagementService(server: String, username: String? = null) =
         this.execute(SshCommand(username
                 ?: this.username, server, KillScreenCommand("enticing-management")), checkReturnCode = false)
 
-suspend fun ShellCommandExecutor.startIndexServer(server: String, enticingHome: String, configFile: String, port: Int, username: String? = null) = this.execute(SshCommand(username
+suspend fun ShellCommandExecutor.startIndexServer(server: String, enticingHome: String, configFile: String, port: Int, buildId: String, username: String? = null) = this.execute(SshCommand(username
         ?: this.username, server,
-        StartScreenCommand("enticing-index-server", SimpleCommand("$enticingHome/bin/index-server $configFile $server --server.port=$port"))))
+        StartScreenCommand("enticing-index-server", SimpleCommand("$enticingHome/bin/index-server $buildId $configFile $server --server.port=$port"))))
 
 suspend fun ShellCommandExecutor.killIndexServer(server: String, username: String? = null) =
         this.execute(SshCommand(username
                 ?: this.username, server, KillScreenCommand("enticing-index-server")), checkReturnCode = false)
 
-suspend fun ShellCommandExecutor.preprocessCollections(server: String, enticingHome: String, configFile: String, username: String? = null) = this.execute(
+suspend fun ShellCommandExecutor.preprocessCollections(server: String, enticingHome: String, configFile: String, buildId: String, username: String? = null) = this.execute(
         SshCommand(username ?: this.username, server,
 //                SimpleCommand("screen -S index-builder $enticingHome/bin/index-builder $configFile $server"), forcePseudoTerminal = true), logPrefix = server)
-                SimpleCommand("$enticingHome/bin/index-builder $configFile $server")), logPrefix = server)
+                SimpleCommand("$enticingHome/bin/index-builder $buildId $configFile $server")), logPrefix = server)
 
-suspend fun ShellCommandExecutor.probeServer(server: String, enticingHome: String, username: String? = null) = this.execute(
+suspend fun ShellCommandExecutor.probeServer(server: String, enticingHome: String, buildId: String, username: String? = null) = this.execute(
         SshCommand(username
-                ?: this.username, server, SimpleCommand("$enticingHome/bin/server-probe"), forcePseudoTerminal = true)
+                ?: this.username, server, SimpleCommand("$enticingHome/bin/server-probe $buildId"), forcePseudoTerminal = true)
 ).toDto<ServerProbe.Info>()
 
 /**

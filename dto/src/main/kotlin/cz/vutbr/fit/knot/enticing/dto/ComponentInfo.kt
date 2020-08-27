@@ -11,6 +11,7 @@ interface ComponentInfo {
     val serverAddress: String
     val port: Int
     val type: ComponentType
+    val buildId: String
 }
 
 data class BasicComponentInfo(
@@ -20,7 +21,9 @@ data class BasicComponentInfo(
         override val serverAddress: String,
         @field:Positive
         override val port: Int,
-        override val type: ComponentType
+        override val type: ComponentType,
+        @field:NotBlank
+        override val buildId: String,
 ) : ComponentInfo
 
 data class ExtendedComponentInfo(
@@ -33,6 +36,8 @@ data class ExtendedComponentInfo(
         @field:Positive
         override val port: Int,
         override val type: ComponentType,
+        @field:NotBlank
+        override val buildId: String,
         val lastHeartbeat: LocalDateTime?,
         val status: Status
 ) : ComponentInfo

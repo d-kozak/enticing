@@ -18,7 +18,8 @@ data class DeploymentConfiguration(
          * location of the configuration script
          * (has to be accessible from all components (shared on nfs)
          */
-        var configurationScript: String = ""
+        var configurationScript: String = "",
+        var buildId: String = ""
 ) : EnticingConfigurationUnit {
 
     val indexBuilderScript: String

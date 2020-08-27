@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Primary
 class GlobalConfig(
         @Value("\${config.file}") private val configFile: String,
         @Value("\${service.id}") private val address: String,
+        @Value("\${build.id}") private val buildId: String,
         @Value("\${server.port}") private val port: Int
 ) {
 
@@ -40,6 +41,8 @@ class GlobalConfig(
         log.info("Loading configuration from $configFile")
         val config = executeScript<EnticingConfiguration>(configFile)
         log.info("Loaded config")
+        // update build id, the one in the file might not be accurate
+        config.deploymentConfiguration.buildId = buildId
         config.validateOrFail()
         config.prettyPrint()
         return config
@@ -77,6 +80,6 @@ class GlobalConfig(
      * Service for monitoring of the underlying server
      */
     @Bean
-    fun monitoringService(loggerFactory: LoggerFactory) = ServerMonitoringService(fullAddress, ComponentType.INDEX_SERVER, loggerFactory)
+    fun monitoringService(loggerFactory: LoggerFactory) = ServerMonitoringService(fullAddress, ComponentType.INDEX_SERVER, buildId, loggerFactory)
 
 }
