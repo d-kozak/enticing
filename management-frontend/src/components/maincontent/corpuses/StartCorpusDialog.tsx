@@ -14,7 +14,7 @@ const StartCorpusDialog = ({corpus}: StartCorpusDialogProps) => {
         type: "START_CORPUS",
         arguments: corpus.id
     }
-    return <SubmitCommandDialog title="Start corpus"
+    return <SubmitCommandDialog title="Start components"
                                 message={`Are you sure that you want to start corpus ${corpus.name}?`}
                                 request={request}/>
 }

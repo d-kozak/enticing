@@ -16,7 +16,7 @@ import {makeStyles} from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
     formField: {
-        margin: '10px 30px'
+        margin: '10px 20px'
     }
 })
 
@@ -44,17 +44,16 @@ const CorpusDetails = (props: CorpusDetailsProps) => {
             <ListItem>
                 <ListItemText primary={`Name: ${corpus.name}`}/>
             </ListItem>
-            <ListItem>
-                <ListItemText primary={`Status: ${corpus.status}`}/>
-            </ListItem>
         </List>
         <Divider/>
         <MaintainerOnly>
             <List component="nav" subheader={<ListSubheader component="div">Actions</ListSubheader>}>
                 <ListItem>
                     <span className={styles.formField}>
-                        {corpus.status === "RUNNING" ? <KillCorpusDialog corpus={corpus}/> :
-                            <StartCorpusDialog corpus={corpus}/>}
+                        <StartCorpusDialog corpus={corpus}/>
+                    </span>
+                    <span className={styles.formField}>
+                        <KillCorpusDialog corpus={corpus}/>
                     </span>
                     <span className={styles.formField}>
                         <AddOrEditCorpusDialog editedCorpus={corpus}/>

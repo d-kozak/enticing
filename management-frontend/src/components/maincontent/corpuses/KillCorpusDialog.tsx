@@ -14,7 +14,7 @@ const KillCorpusDialog = ({corpus}: StartCorpusDialogProps) => {
         type: "KILL_CORPUS",
         arguments: corpus.id
     }
-    return <SubmitCommandDialog title="Kill corpus"
+    return <SubmitCommandDialog title="Kill components"
                                 message={`Are you sure that you want to kill corpus ${corpus.name}?`}
                                 request={request}
     />
