@@ -27,9 +27,4 @@ export type CommandType =
     | "KILL_CORPUS"
 
 
-export enum CommandState {
-    ENQUED,
-    RUNNING,
-    FINISHED,
-    FAILED
-}
+export type CommandState = "ENQUED" | "RUNNING" | "FINISHED" | "FAILED"

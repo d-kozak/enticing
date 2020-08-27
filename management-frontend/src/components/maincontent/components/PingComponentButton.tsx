@@ -37,7 +37,8 @@ const PingComponentButton = ({component, openSnackbarAction}: PingComponentButto
                 id: component.id,
                 port: component.port,
                 serverAddress: component.serverAddress,
-                type: component.type
+                type: component.type,
+                buildId: component.buildId
             }
         };
         postRequest<CommandDto>("/command", req)

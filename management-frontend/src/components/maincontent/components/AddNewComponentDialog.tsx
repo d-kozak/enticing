@@ -155,8 +155,10 @@ const AddNewComponentDialog = (props: AddNewComponentDialogProps) => {
                                     value={buildId}
                                     onChange={(e) => setBuildId(e.target.value as string)}
                                 >
-                                    {Object.values(builds.elements).map(build => <MenuItem key={build.id}
-                                                                                           value={build.arguments}>{build.arguments}</MenuItem>)}
+                                    {Object.values(builds.elements)
+                                        .filter(build => build.state === "FINISHED")
+                                        .map(build => <MenuItem key={build.id}
+                                                                value={build.arguments}>{build.arguments}</MenuItem>)}
                                 </Select>
                             </FormControl>
 

@@ -16,7 +16,8 @@ const KillComponentDialog = ({component}: KillComponentDialogProps) => {
             id: component.id,
             serverAddress: component.serverAddress,
             port: component.port,
-            type: component.type
+            type: component.type,
+            buildId: component.buildId
         }
     }
     const componentDesc = `${component.type}:${component.serverAddress}:${component.port}`;
