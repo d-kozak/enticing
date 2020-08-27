@@ -170,7 +170,7 @@ const AddNewComponentDialog = (props: AddNewComponentDialogProps) => {
                                 <Button onClick={handleClose} color="primary">
                                     Cancel
                                 </Button>
-                                <Button disabled={isSubmitting || buildId.length == 0} type="submit" color="primary"
+                                <Button disabled={isSubmitting || buildId.length === 0} type="submit" color="primary"
                                         variant="contained">
                                     Add
                                 </Button>
