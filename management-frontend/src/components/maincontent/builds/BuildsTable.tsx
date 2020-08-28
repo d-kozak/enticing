@@ -34,6 +34,7 @@ const BuildsTable = (props: BuildsTableProps) => {
     }
 
     const columns: Array<PaginatedTableColumn<any, any>> = [
+        DateTimeColumn("arguments", "Build id", {sortId: "arguments"}),
         StringColumn("state", "Command State", {
             sortId: "state",
             filterOptions: ["ENQUED", "RUNNING", "FINISHED", "FAILED"]

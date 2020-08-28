@@ -24,6 +24,7 @@ const RemoveComponentDialog = ({component}: RemoveComponentDialogProps) => {
 
     return <SubmitCommandDialog title="Remove component"
                                 message={`Are you sure that you want to remove component ${componentDesc}?`}
+                                popHistory={true}
                                 request={request}/>
 }
 

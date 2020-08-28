@@ -14,7 +14,13 @@ import {useInterval} from "../../../utils/useInterval";
 import LastheartbeatInfo from "./LastheartbeatInfo";
 import StartComponentDialog from "./StartComponentDialog";
 import RemoveComponentDialog from "./RemoveComponentDialog";
+import {makeStyles} from "@material-ui/core/styles";
 
+const useStyles = makeStyles({
+    formField: {
+        margin: '10px 20px'
+    }
+})
 
 export type ComponentDetailsProps = typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps> & { componentId: string }
@@ -22,6 +28,7 @@ export type ComponentDetailsProps = typeof mapDispatchToProps
 const ComponentDetails = (props: ComponentDetailsProps) => {
     const {components, componentId, servers, requestComponentInfo, requestServerInfo} = props;
     const history = useHistory();
+    const styles = useStyles();
     const refresh = useCallback(() => requestComponentInfo(componentId), [requestComponentInfo, componentId]);
     useInterval(refresh, 1_000);
     const component = components.elements[componentId];
@@ -70,9 +77,13 @@ const ComponentDetails = (props: ComponentDetailsProps) => {
         <MaintainerOnly>
             <List component="nav" subheader={<ListSubheader component="div">Actions</ListSubheader>}>
                 <ListItem>
-                    {component.status === "RUNNING" ? <KillComponentDialog component={component}/> :
-                        <StartComponentDialog component={component}/>}
-                    <RemoveComponentDialog component={component}/>
+                    <span className={styles.formField}>
+                        {component.status === "RUNNING" ? <KillComponentDialog component={component}/> :
+                            <StartComponentDialog component={component}/>}
+                    </span>
+                    <span className={styles.formField}>
+                        <RemoveComponentDialog component={component}/>
+                    </span>
                 </ListItem>
             </List>
             <Divider/>

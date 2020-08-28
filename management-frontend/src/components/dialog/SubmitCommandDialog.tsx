@@ -5,22 +5,28 @@ import {postRequest} from "../../network/requests";
 import ConfirmationDialog from "./ConfirmationDialog";
 import {ApplicationState} from "../../ApplicationState";
 import {openSnackbarAction} from "../../reducers/snackbarReducer"
+import {useHistory} from "react-router";
 
 export type SubmitCommandDialogProps = typeof mapDispatchToProps
     & ReturnType<typeof mapStateToProps> & {
     title: string
     message: string
-    request: CommandRequest
+    request: CommandRequest,
+    popHistory?: boolean
 }
 
 const SubmitCommandDialog = (props: SubmitCommandDialogProps) => {
-    const {openSnackbarAction, request, message, title} = props;
+    const {openSnackbarAction, popHistory, request, message, title} = props;
     const [open, setOpen] = useState(false);
+
+    const history = useHistory();
 
     const onConfirm = () => {
         postRequest("/command", request)
             .then(() => {
                 openSnackbarAction("Command submitted")
+                if (popHistory)
+                    history.goBack();
             })
             .catch(err => {
                 console.error(err);
