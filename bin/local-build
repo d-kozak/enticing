@@ -37,9 +37,6 @@ echo "Preparing to clone the repository"
 git clone "xkozak15@minerva3.fit.vutbr.cz:/mnt/minerva1/nlp/projects/corpproc_search/corpproc_search.git/" || error "Failed to clone the release repository"
 cd corpproc_search || error "Failed to enter the project repository root"
 
-# TODO TEMPORARY
-git checkout feature/newCommands
-
 echo "Triggering local build"
 ./gradlew buildAll || error "Build failed..."
 echo "Triggering tests"
