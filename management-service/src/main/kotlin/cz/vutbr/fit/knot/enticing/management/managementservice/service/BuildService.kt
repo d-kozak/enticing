@@ -4,6 +4,7 @@ import cz.vutbr.fit.knot.enticing.management.managementservice.dto.CommandState
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.CommandType
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.User
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.toEntity
+import cz.vutbr.fit.knot.enticing.management.managementservice.entity.CommandDto
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.CommandEntity
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.CommandRepository
 import org.springframework.stereotype.Service
@@ -13,8 +14,7 @@ import javax.transaction.Transactional
 @Service
 @Transactional
 class BuildService(
-        private val commandRepository: CommandRepository,
-        private val userService: ManagementUserService
+        private val commandRepository: CommandRepository
 ) {
 
     fun isFree(name: String) = !commandRepository.existsByTypeAndArguments(CommandType.BUILD, name)
@@ -23,4 +23,7 @@ class BuildService(
             CommandEntity(0, CommandType.BUILD, CommandState.FINISHED, name, user.toEntity(),
                     LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now())
     )
+
+    fun getOne(buildId: String): CommandDto = commandRepository.findByTypeAndArguments(CommandType.BUILD, buildId)
+            ?: throw IllegalArgumentException("Unknown build with id $buildId")
 }

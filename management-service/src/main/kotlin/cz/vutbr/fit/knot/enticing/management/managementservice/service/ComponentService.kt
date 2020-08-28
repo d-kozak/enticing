@@ -51,6 +51,8 @@ class ComponentService(
                 ?: throw IllegalArgumentException("No component with id $componentId")
         logRepository.deleteByComponent(component)
         perfRepository.deleteByComponent(component)
+        for (corpus in component.corpuses)
+            corpus.components.remove(component)
         componentRepository.delete(component)
     }
 

@@ -114,7 +114,7 @@ private val startCorpusCommandFactory: CommandFactory = {
 
         override fun beforeStart() {
             corpusService.update(corpusId) {
-                status = Status.RUNNING
+                status = Status.STARTING
             }
         }
 

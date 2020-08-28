@@ -13,6 +13,7 @@ import MaintainerOnly from "../../protectors/MaintainerOnly";
 import {useInterval} from "../../../utils/useInterval";
 import LastheartbeatInfo from "./LastheartbeatInfo";
 import StartComponentDialog from "./StartComponentDialog";
+import RemoveComponentDialog from "./RemoveComponentDialog";
 
 
 export type ComponentDetailsProps = typeof mapDispatchToProps
@@ -71,6 +72,7 @@ const ComponentDetails = (props: ComponentDetailsProps) => {
                 <ListItem>
                     {component.status === "RUNNING" ? <KillComponentDialog component={component}/> :
                         <StartComponentDialog component={component}/>}
+                    <RemoveComponentDialog component={component}/>
                 </ListItem>
             </List>
             <Divider/>

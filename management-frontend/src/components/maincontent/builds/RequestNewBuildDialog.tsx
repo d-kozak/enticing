@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import {TextField} from "formik-material-ui";
 import {connect} from "react-redux";
 import {CommandDto, CommandRequest} from "../../../entities/CommandDto";
-import {postRequest} from "../../../network/requests";
+import {getRequest, postRequest} from "../../../network/requests";
 import {openSnackbarAction} from "../../../reducers/snackbarReducer";
 import {ApplicationState} from "../../../ApplicationState";
 import {useHistory} from "react-router";
@@ -54,7 +54,15 @@ const RequestNewBuildDialogSchema = Yup.object({
     buildId: Yup.string()
         .required('Please specify a unique build id')
         .min(5, minLenText)
-        .max(64, maxLenText),
+        .max(64, maxLenText)
+        .test('buildNameUnique', 'Build name should be unique', function (value) {
+            const {path, createError} = this;
+            return getRequest(`/build/${value}`)
+                .then(() => createError({
+                    path,
+                    message: 'Build name should be unique'
+                })).catch(() => true)
+        }),
 })
 
 const RequestNewBuildDialog = (props: RequestNewBuildDialogProps) => {

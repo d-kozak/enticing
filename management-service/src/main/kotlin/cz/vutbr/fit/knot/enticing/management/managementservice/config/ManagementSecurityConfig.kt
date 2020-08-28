@@ -53,7 +53,8 @@ class SecurityConfig(
                         "$apiBasePath/server/**",
                         "$apiBasePath/bug-report/**",
                         "$apiBasePath/component/**",
-                        "$apiBasePath/command/**"
+                        "$apiBasePath/command/**",
+                        "$apiBasePath/build/**"
                 )
                 .permitAll()
                 .anyRequest()
