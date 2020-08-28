@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling
 class WebserverApplication
 
 fun main(args: Array<String>) {
-    require(args.size == 3) { "thee arguments expected - build id, config file and server address" }
+    require(args.size >= 3) { "thee arguments expected - build id, config file and server address" }
     if (!args[0].startsWith("--build.id=")) {
         args[0] = "--build.id=" + args[0]
     }
