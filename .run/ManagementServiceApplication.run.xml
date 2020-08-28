@@ -5,7 +5,7 @@
         <option name="SPRING_BOOT_MAIN_CLASS"
                 value="cz.vutbr.fit.knot.enticing.management.managementservice.ManagementServiceApplication"/>
         <option name="PROGRAM_PARAMETERS"
-                value="server --config.file=../deploy/big-wiki/config.kts --service.id=localhost"/>
+                value="server release --config.file=../deploy/big-wiki/config.kts --service.id=localhost"/>
         <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/management-service"/>
         <option name="ALTERNATIVE_JRE_PATH"/>
         <envs>

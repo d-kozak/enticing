@@ -54,9 +54,7 @@ enum class CommandType(private val factory: CommandFactory) {
 
 private val localBuildCommandFactory: CommandFactory = {
     object : LocalBuildCommand(args, configuration.localHome) {
-        override fun onSuccess() {
-            buildService.save(args)
-        }
+
     }
 }
 

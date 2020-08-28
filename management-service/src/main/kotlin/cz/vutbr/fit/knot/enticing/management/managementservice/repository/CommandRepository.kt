@@ -15,4 +15,5 @@ interface CommandRepository : JpaRepository<CommandEntity, Long> {
     fun findByTypeAndState(type: CommandType, state: CommandState, pageable: Pageable): Page<CommandEntity>
     fun findTopByTypeAndStateOrderBySubmittedAtDesc(type: CommandType, state: CommandState): CommandEntity?
     fun findTopByTypeAndStateInOrderBySubmittedAtDesc(type: CommandType, state: List<CommandState>): CommandEntity?
+    fun existsByTypeAndArguments(type: CommandType, arguments: String): Boolean
 }

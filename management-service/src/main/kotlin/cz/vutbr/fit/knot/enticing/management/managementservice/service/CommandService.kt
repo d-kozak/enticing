@@ -75,7 +75,6 @@ class CommandService(
         return commandEntity.toDto()
     }
 
-    // todo error recovery and timeout
     internal suspend fun commandExecutionLoop() {
         logger.info("Starting the execution loop")
         while (true) {

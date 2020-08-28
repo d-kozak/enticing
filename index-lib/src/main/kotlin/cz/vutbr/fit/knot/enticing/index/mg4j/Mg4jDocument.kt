@@ -65,5 +65,9 @@ class Mg4jDocument(
 
     override fun toString(): String = "Mg4jDocument(id=$id,title=$title)"
 
+    override fun finalize() {
+        // do nothing, since there is no resource do close in this implementation
+    }
+
 }
 

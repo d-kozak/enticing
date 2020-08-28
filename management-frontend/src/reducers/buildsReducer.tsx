@@ -32,10 +32,10 @@ export const requestAllBuilds = (): ThunkResult<void> => async (dispatch) => {
     await snackbarOnError(dispatch, 'Failed to load builds', async () => {
         let page = 0
         const pageSize = 100
-        let res = await getRequest<PaginatedResult<CommandDto>>(`/build/`, [["page", page], ["size", pageSize]])
+        let res = await getRequest<PaginatedResult<CommandDto>>(`/command`, [["type", "BUILD"], ["page", page], ["size", pageSize]])
         const results = res.content
         while (res.totalElements > results.length) {
-            res = await getRequest<PaginatedResult<CommandDto>>(`/build/`, [["page", ++page], ["size", pageSize]])
+            res = await getRequest<PaginatedResult<CommandDto>>(`/command`, [["type", "BUILD"], ["page", ++page], ["size", pageSize]])
             results.push(...res.content)
         }
         dispatch(refresh(results))

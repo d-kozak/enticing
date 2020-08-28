@@ -7,10 +7,12 @@ import cz.vutbr.fit.knot.enticing.management.managementservice.repository.UserRe
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
+import org.springframework.core.annotation.Order
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
 
 @Component
+@Order(0)
 class AddAdminRunner(
         val userRepository: UserRepository,
         val encoder: PasswordEncoder,
