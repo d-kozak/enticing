@@ -77,7 +77,7 @@ suspend fun ShellCommandExecutor.pullAndBuild(sourceServer: String, repository: 
  */
 suspend fun ShellCommandExecutor.copyFiles(sourceServer: String, files: List<Mg4jFile>, destinationServer: String, destinationDirectory: String, username: String? = null) {
     this.execute(SshCommand(username
-            ?: this.username, sourceServer, SimpleCommand("scp ${files.joinToString(" ") { it.path }} $username@$destinationServer:$destinationDirectory")))
+            ?: this.username, sourceServer, SimpleCommand("scp ${files.joinToString(" ") { it.path }} ${username ?: this.username}@$destinationServer:$destinationDirectory")))
 }
 
 /**
@@ -96,7 +96,7 @@ private val pathColumn = 8
  * Load mg4j files located in a given directory
  */
 suspend fun ShellCommandExecutor.loadMg4jFiles(server: String, directory: String, fileLimit: Int = Int.MAX_VALUE, username: String? = null): List<Mg4jFile> {
-    val stdout = this.dumpMgj4Files(server, directory, fileLimit, username)
+    val stdout = this.dumpMgj4Files(server, directory, fileLimit, username ?: this.username)
     return stdout.split("\n").mapNotNull {
         val line = it.split(whitespaceRegex)
         if (line.size < 9) return@mapNotNull null
