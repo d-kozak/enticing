@@ -37,6 +37,9 @@ suspend fun ManagementEngine.runCliApp(args: ManagementCliArguments, configurati
 }
 
 class ManagementCliArguments(parser: ArgParser) : Validator by ValidatorImpl() {
+
+    val buildId by parser.positional("build id")
+
     /**
      * Path to the configuration scripts
      */

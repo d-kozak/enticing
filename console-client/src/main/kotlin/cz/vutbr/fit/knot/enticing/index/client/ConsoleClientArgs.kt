@@ -17,6 +17,8 @@ fun parseCliArgs(args: Array<String>): ConsoleClientArgs = ArgParser(args)
  */
 class ConsoleClientArgs(parser: ArgParser) {
 
+    val buildId by parser.positional("build id")
+
     val query by parser.storing("-q", "--query", help = "Query to execute")
             .default<String?>(null)
 

@@ -15,6 +15,7 @@ fun runManagementCli(args: Array<String>) {
     println("Management-cli: starting with args ${args.contentToString()}")
     val args = parseCliArgs(args).validateOrFail()
     val configuration = args.configuration
+    configuration.deploymentConfiguration.buildId = args.buildId
     val loggerFactory = configuration.loggingConfiguration.loggerFactoryFor("management-cli")
     val logger = loggerFactory.namedLogger("Management-cli")
     val pool = Executors.newFixedThreadPool(4)

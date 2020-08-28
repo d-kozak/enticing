@@ -8,7 +8,7 @@ internal class ManagementCliArgumentsTest {
 
     @Test
     fun `just config script`() {
-        val conf = parseCliArgs(arrayOf("../dto/src/test/resources/config.kts"))
+        val conf = parseCliArgs(arrayOf("release", "../dto/src/test/resources/config.kts"))
                 .validateOrFail()
         assertThat(conf.toString()).isEqualTo("ManagementCliArguments(scriptPath='../dto/src/test/resources/config.kts',corpuses=[wiki-2018])")
         assertThat(conf.webserver).isFalse()
@@ -18,7 +18,7 @@ internal class ManagementCliArgumentsTest {
 
     @Test
     fun `kill webserver`() {
-        val conf = parseCliArgs(arrayOf("../dto/src/test/resources/config.kts", "-kw"))
+        val conf = parseCliArgs(arrayOf("release", "../dto/src/test/resources/config.kts", "-kw"))
                 .validateOrFail()
         assertThat(conf.webserver).isTrue()
         assertThat(conf.kill).isTrue()
@@ -27,7 +27,7 @@ internal class ManagementCliArgumentsTest {
 
     @Test
     fun `specified corpuses`() {
-        val conf = parseCliArgs(arrayOf("../dto/src/test/resources/config.kts", "-c", "wiki", "-c", "CC"))
+        val conf = parseCliArgs(arrayOf("release", "../dto/src/test/resources/config.kts", "-c", "wiki", "-c", "CC"))
                 .validateOrFail()
         assertThat(conf.corpuses)
                 .contains("wiki", "CC")
