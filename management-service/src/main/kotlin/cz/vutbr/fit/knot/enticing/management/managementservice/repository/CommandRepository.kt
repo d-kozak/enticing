@@ -2,7 +2,6 @@ package cz.vutbr.fit.knot.enticing.management.managementservice.repository
 
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.CommandState
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.CommandType
-import cz.vutbr.fit.knot.enticing.management.managementservice.entity.CommandDto
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.CommandEntity
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -17,5 +16,5 @@ interface CommandRepository : JpaRepository<CommandEntity, Long> {
     fun findTopByTypeAndStateOrderBySubmittedAtDesc(type: CommandType, state: CommandState): CommandEntity?
     fun findTopByTypeAndStateInOrderBySubmittedAtDesc(type: CommandType, state: List<CommandState>): CommandEntity?
     fun existsByTypeAndArguments(type: CommandType, arguments: String): Boolean
-    fun findByTypeAndArguments(build: CommandType, buildId: String): CommandDto?
+    fun findByTypeAndArguments(build: CommandType, buildId: String): CommandEntity?
 }

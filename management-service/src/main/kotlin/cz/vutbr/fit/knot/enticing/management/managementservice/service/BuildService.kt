@@ -6,6 +6,7 @@ import cz.vutbr.fit.knot.enticing.management.managementservice.dto.User
 import cz.vutbr.fit.knot.enticing.management.managementservice.dto.toEntity
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.CommandDto
 import cz.vutbr.fit.knot.enticing.management.managementservice.entity.CommandEntity
+import cz.vutbr.fit.knot.enticing.management.managementservice.entity.toDto
 import cz.vutbr.fit.knot.enticing.management.managementservice.repository.CommandRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -24,6 +25,6 @@ class BuildService(
                     LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now())
     )
 
-    fun getOne(buildId: String): CommandDto = commandRepository.findByTypeAndArguments(CommandType.BUILD, buildId)
+    fun getOne(buildId: String): CommandDto = commandRepository.findByTypeAndArguments(CommandType.BUILD, buildId)?.toDto()
             ?: throw IllegalArgumentException("Unknown build with id $buildId")
 }
