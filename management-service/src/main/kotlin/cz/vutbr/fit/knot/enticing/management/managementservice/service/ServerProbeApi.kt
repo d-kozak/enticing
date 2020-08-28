@@ -21,7 +21,7 @@ class ServerProbeApi(
     private val shellExecutor = ShellCommandExecutor(configuration, CoroutineScope(Dispatchers.IO), loggerFactory)
 
     fun request(request: AddServerRequest): ServerProbe.Info = runBlocking {
-        shellExecutor.probeServer(configuration.authentication.username, request.url, configuration.deploymentConfiguration.repository)
+        shellExecutor.probeServer(request.url, configuration.deploymentConfiguration.repository, configuration.deploymentConfiguration.buildId)
     }
 
     override fun close() {
